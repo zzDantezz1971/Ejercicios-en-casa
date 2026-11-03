@@ -3,6 +3,7 @@ import type { ExerciseDef } from '../domain/types';
 import { MannequinScene, type Mood, type Palette } from './Mannequin';
 import type { Side } from './poses';
 import type { SkinData } from './SkinnedFigure';
+import { getSkin } from './skinAsset';
 
 function makeRenderer(canvas: HTMLCanvasElement | OffscreenCanvas, preserve = false): THREE.WebGLRenderer {
   const r = new THREE.WebGLRenderer({ canvas: canvas as HTMLCanvasElement, antialias: true, alpha: true, preserveDrawingBuffer: preserve });
@@ -22,7 +23,7 @@ export class FigureView {
   private frozenAt: number | null = null;
   private mood: Mood = 'relaxed';
 
-  constructor(private readonly canvas: HTMLCanvasElement, exercise: ExerciseDef, palette?: Palette, private readonly skin?: SkinData) {
+  constructor(private readonly canvas: HTMLCanvasElement, exercise: ExerciseDef, palette?: Palette, private readonly skin: SkinData | undefined = getSkin()) {
     this.renderer = makeRenderer(canvas);
     this.renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
     this.scene = new MannequinScene(exercise.motion, palette, undefined, skin);
@@ -170,7 +171,7 @@ export class Thumbnails {
       this.renderer.setPixelRatio(1);
       this.renderer.setSize(this.w * 2, this.h * 2, false);
     }
-    const sc = new MannequinScene(ex.motion, this.palette);
+    const sc = new MannequinScene(ex.motion, this.palette, undefined, getSkin());
     sc.mood = 'relaxed';
     sc.setAspect(this.w / this.h);
     sc.update(sc.motion.total * 0.45);

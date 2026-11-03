@@ -20,6 +20,8 @@ export interface SkinData {
   shoes?: boolean;
   /** Parte del cuerpo de cada vértice: 0 tronco/cabeza, 1-2 brazo L/R, 3-4 pierna L/R, 5 pie, 6 mano, 7 labios. */
   part?: string;
+  /** Mano cerrada (puño) como forma alternativa: vértices que cambian y su desplazamiento. */
+  fist?: { idx: string; d: string };
   /** Cortes de la ropa en la postura de reposo. */
   clothes?: { collarY: number; waistY: number; sleeve: number; shorts: number; sock: number; shoeTop: number; sleeveStripe?: number };
 }
@@ -93,6 +95,14 @@ export class SkinnedFigure {
     g.setAttribute('skinWeight', new THREE.BufferAttribute(swf, 4));
     g.setIndex(new THREE.BufferAttribute(idx, 1));
     g.computeVertexNormals();
+    if (data.fist) {
+      const fi = new Uint16Array(b64(data.fist.idx));
+      const fd = new Float32Array(b64(data.fist.d));
+      const delta = new Float32Array(n * 3);
+      fi.forEach((v, k) => delta.set(fd.subarray(k * 3, k * 3 + 3), v * 3));
+      g.morphAttributes.position = [new THREE.BufferAttribute(delta, 3)];
+      g.morphTargetsRelative = true;
+    }
 
     const mat = data.part && data.clothes
       ? this.clothesMaterial(g, data, palette)
@@ -101,6 +111,7 @@ export class SkinnedFigure {
     this.mesh.castShadow = true;
     this.mesh.receiveShadow = true;
     this.mesh.frustumCulled = false;
+    if (data.fist) this.mesh.updateMorphTargets();
 
     // Huesos "planos": cada uno recibe directamente la transformación reposo → postura actual.
     for (const name of data.bones) {
@@ -207,6 +218,11 @@ vec3 clothes() {
     return mat;
   }
 
+  /** Cierra la mano (0 abierta, 1 puño). */
+  setFist(amount: number): void {
+    if (this.mesh.morphTargetInfluences) this.mesh.morphTargetInfluences[0] = amount;
+  }
+
   /** Lateral de reposo (del lado L al R anatómico): -x en los datos. */
   private restLateral(_name: string): V3 {
     return V(-1, 0, 0);
@@ -275,10 +291,10 @@ vec3 clothes() {
       const c = an.clone().addScaledVector(d, 4.2).addScaledVector(upDir, -0.6);
       sh.upper.position.copy(c);
       sh.upper.quaternion.setFromRotationMatrix(basis);
-      sh.upper.scale.set(4.0, 3.6, 8.2);
-      sh.sole.position.copy(c).addScaledVector(upDir, -2.3);
+      sh.upper.scale.set(3.5, 3.1, 7.4);
+      sh.sole.position.copy(c).addScaledVector(upDir, -2.0);
       sh.sole.quaternion.setFromRotationMatrix(basis);
-      sh.sole.scale.set(4.3, 1.4, 8.6);
+      sh.sole.scale.set(3.8, 1.2, 7.8);
     });
 
     // ojos: siguen a la cabeza

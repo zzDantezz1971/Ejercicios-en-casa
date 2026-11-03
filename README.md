@@ -32,7 +32,7 @@ npm run build    # comprobación de tipos y versión final en dist/
 | `src/domain` | Lógica sin pantallas: tipos, `WorkoutPlan` (rutina → lista de pasos), `WorkoutSession` (máquina de estados del entrenamiento), `RoutineEditor`, `Store` (guardado con versión: tablas, ajustes e historial). |
 | `src/services` | `Sounds` (pitidos), `Voice` (voz en castellano), `ScreenAwake` (pantalla encendida), `Coach` (une la sesión con sonido y voz). |
 | `src/data` | Catálogo de ejercicios (`rawExercises.ts`), descripciones y qué ejercicios van por lados (`catalog.ts`). |
-| `src/figure` | Motor de posturas (`poses.ts`), maniquí 3D con Three.js (`Mannequin.ts`) y lienzos/miniaturas (`FigureView.ts`). |
+| `src/figure` | Motor de posturas (`poses.ts`), escena 3D (`Mannequin.ts`), maniquí con piel (`SkinnedFigure.ts`) y lienzos/miniaturas (`FigureView.ts`). |
 | `src/ui` | `App` (navegación y botón atrás) y una clase por pantalla en `screens/`. |
 | `tests` | Pruebas con Vitest. |
 
@@ -40,3 +40,10 @@ npm run build    # comprobación de tipos y versión final en dist/
 
 Añade una entrada en `src/data/rawExercises.ts` dentro de su apartado (nombre, zona y fotogramas del movimiento),
 su descripción en `src/data/descriptions.ts` y, si se hace por lados, su id en `ONE_SIDED` de `src/data/catalog.ts`.
+
+## Maniquí
+
+El cuerpo del maniquí (`public/maniqui.json`) parte del modelo base de [MakeHuman](http://www.makehumancommunity.org)
+(malla, esqueleto, pesos y ajustes de forma), publicado con licencia **CC0**. Se genera con
+`tools/maniqui/build_mh.py`: hombre joven atlético, calvo, con la ropa de la app y la mano en puño como forma
+alternativa para agarrar mancuernas. Si el archivo no se puede cargar, la app usa el maniquí de piezas.

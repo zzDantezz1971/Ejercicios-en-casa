@@ -4,7 +4,7 @@ Salida: JSON con huesos de reposo (15 huesos propios), ojos y binario en base64:
 posiciones (float32), índices (uint16), skinIndex/skinWeight (uint8 x4) y región (uint8).
 Coordenadas de salida: x = lateral (lado R anatómico en -x), y = arriba, z = adelante; unidades del motor.
 """
-import base64, json, sys
+import base64, json, os, sys
 import numpy as np
 
 W_MUSCLE = float(sys.argv[1]) if len(sys.argv) > 1 else 0.6
@@ -31,12 +31,14 @@ def apply(fname, w):
         V[int(i)] += w * np.array([float(dx), float(dy), float(dz)])
 apply('caucasian-male-young.target', 1.0)
 # más ancho y fuerte de hombros, pecho y brazos
-for f, w in [('t_torso_torso-scale-horiz-incr.target', 0.55), ('t_torso_torso-vshape-incr.target', 0.8),
-             ('t_measure_measure-shoulder-dist-incr.target', 0.6), ('t_torso_torso-scale-depth-incr.target', 0.3),
-             ('t_armslegs_r-upperarm-scale-horiz-incr.target', 0.45), ('t_armslegs_l-upperarm-scale-horiz-incr.target', 0.45),
-             ('t_armslegs_r-upperarm-muscle-incr.target', 0.8), ('t_armslegs_l-upperarm-muscle-incr.target', 0.8),
-             ('t_neck_neck-scale-horiz-incr.target', 0.5)]:
-    apply(f, w)
+import os
+WIDE = float(os.environ.get('WIDE', '0.15'))
+for f, w in [('t_torso_torso-scale-horiz-incr.target', 0.3), ('t_torso_torso-vshape-incr.target', 0.9),
+             ('t_measure_measure-shoulder-dist-incr.target', 0.5), ('t_torso_torso-scale-depth-incr.target', 0.0),
+             ('t_armslegs_r-upperarm-scale-horiz-incr.target', 0.1), ('t_armslegs_l-upperarm-scale-horiz-incr.target', 0.1),
+             ('t_armslegs_r-upperarm-muscle-incr.target', 0.6), ('t_armslegs_l-upperarm-muscle-incr.target', 0.6),
+             ('t_neck_neck-scale-horiz-incr.target', 0.3)]:
+    apply(f, w * WIDE / 0.35)
 apply('universal-male-young-maxmuscle-averageweight.target', W_MUSCLE * 0.5)
 apply('universal-male-young-maxmuscle-minweight.target', W_MUSCLE * 0.5)
 
@@ -44,6 +46,36 @@ skel = json.load(open('default.mhskel'))
 J = skel['joints']
 def jp(name):
     return V[J[name]].mean(axis=0)
+
+# ── Mano en puño suave: se doblan las falanges de cada dedo sobre su articulación ──
+_wfile = json.load(open('w.mhw'))['weights']
+def _rot(axis, ang):
+    axis = axis / np.linalg.norm(axis)
+    K = np.array([[0, -axis[2], axis[1]], [axis[2], 0, -axis[0]], [-axis[1], axis[0], 0]])
+    return np.eye(3) + np.sin(ang) * K + (1 - np.cos(ang)) * K @ K
+V_OPEN = V.copy()
+for side in 'LR':
+    across = jp(f'finger5-1.{side}____head') - jp(f'finger2-1.{side}____head')
+    for f, angs in ((2, (80, 95, 60)), (3, (82, 95, 60)), (4, (84, 95, 60)), (5, (86, 95, 60)), (1, (25, 45, 35))):
+        for k in (1, 2, 3):
+            # vértices de esta falange y las siguientes
+            w = np.zeros(len(V))
+            for kk in range(k, 4):
+                for vi, wt in _wfile.get(f'finger{f}-{kk}.{side}', []):
+                    w[vi] += wt
+            idx = np.nonzero(w > 0)[0]
+            if not len(idx):
+                continue
+            head = jp(f'finger{f}-{k}____head'.replace('____', f'.{side}____'))
+            tail = jp(f'finger{f}-{k}.{side}____tail')
+            d = tail - head
+            # eje = línea de los nudillos: el dedo se dobla hacia la palma
+            axis = across * (1 if side == 'L' else -1) * float(os.environ.get('CURLSIGN', '1'))
+            for j, vi in enumerate(idx):
+                R = _rot(axis, np.radians(angs[k - 1]) * min(1.0, w[vi]))
+                V[vi] = head + R @ (V[vi] - head)
+V_FIST = V.copy()
+V[:] = V_OPEN
 
 # Huesos propios: segmentos (a, b) en reposo
 pel = jp('spine05____head')
@@ -168,6 +200,9 @@ data = {
     'eyeRadius': 0.13 * SCALE,
     'shoes': True,
     'part': base64.b64encode(part.tobytes()).decode(),
+    'fist': (lambda d, m: {'idx': base64.b64encode(np.nonzero(m)[0].astype('<u2').tobytes()).decode(),
+                           'd': base64.b64encode((d[m] * SCALE).astype('<f4').tobytes()).decode()})(
+        (V_FIST - V_OPEN)[used], np.abs((V_FIST - V_OPEN)[used]).sum(axis=1) > 1e-6),
     'clothes': {'collarY': float((neck[1] - 0.28) * SCALE), 'waistY': float((pel[1] + 0.55) * SCALE),
                 'sleeve': 0.42, 'shorts': 0.24, 'sock': 0.9, 'shoeTop': -1e4},
     'count': len(P2),
@@ -177,7 +212,7 @@ data = {
     'sw': base64.b64encode(wq.astype(np.uint8).tobytes()).decode(),
     'reg': base64.b64encode(region.tobytes()).decode(),
 }
-json.dump(data, open('skin_b.json', 'w'))
+json.dump(data, open(os.environ.get('OUT', 'skin_b.json'), 'w'))
 print('verts', len(P2), 'tris', len(tris), 'kb', round(len(json.dumps(data)) / 1024), 'height', P2[:, 1].min(), P2[:, 1].max())
 print({k: round(float(np.linalg.norm(np.array(b) - np.array(a))), 1) for k, (a, b) in rest.items()})
 print('regions', np.bincount(region, minlength=7))
