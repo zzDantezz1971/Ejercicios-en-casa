@@ -1,0 +1,69 @@
+<title>Comparativa de maniquís</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: columna de móvil; un selector de ejercicio y una tarjeta por maniquí, uno debajo de otro */
+:root{
+  --bg:#0A0D12; --surface:#141A23; --surface-2:#1B2330; --line:#242E3B; --fg:#F1F4F8; --muted:#8D99AA;
+  --accent:#3D6BFF; --accent-2:#6E8FFF; --good:#2BD46F; --warn:#F5A524;
+  --stage:radial-gradient(120% 90% at 50% 15%,#1C2533 0%,#121821 55%,#0D1218 100%);
+  --display:"Barlow Condensed","Arial Narrow",system-ui,sans-serif; --body:"Barlow",system-ui,-apple-system,sans-serif;
+  color-scheme:dark;
+}
+body{background:var(--bg);color:var(--fg);font:16px/1.45 var(--body);margin:0}
+.wrap{max-width:760px;margin:0 auto;padding-block:22px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:16px}
+h1,h2{font-family:var(--display);margin:0;text-transform:uppercase;text-wrap:balance;letter-spacing:.01em}
+h1{font-size:2.3rem;line-height:1}
+.lead{color:var(--muted);max-width:62ch;margin:6px 0 0}
+#chips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;position:sticky;top:0;z-index:5;background:var(--bg);padding:8px 0}
+.chip-btn{flex:none;border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:12px;padding:9px 13px;font:700 .95rem var(--body);cursor:pointer}
+.chip-btn.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.chip-btn:focus-visible{outline:2px solid var(--accent-2);outline-offset:2px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.card.pick{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.tag{font:700 .78rem var(--body);text-transform:uppercase;letter-spacing:.12em;color:var(--accent-2)}
+h2{font-size:1.6rem;line-height:1.05}
+.stage{position:relative;aspect-ratio:3/2;max-width:100%;border-radius:16px;overflow:hidden;background:var(--stage)}
+.stage canvas{display:block;width:100%;height:100%;touch-action:pan-y;cursor:grab}
+.hint{position:absolute;right:10px;bottom:6px;font-size:.72rem;color:var(--muted);pointer-events:none}
+ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:3px;font-size:.95rem}
+li.pro::marker{color:var(--good)} li.con::marker{color:var(--warn)}
+.meta{color:var(--muted);font-size:.88rem}
+.note{color:var(--muted);font-size:.85rem}
+</style>
+<div class="wrap">
+  <header>
+    <h1>Comparativa de maniquís</h1>
+    <p class="lead">Los tres hacen exactamente los mismos movimientos. Elige un ejercicio arriba y arrastra el dedo sobre cualquier figura para girarla.</p>
+  </header>
+  <nav id="chips" aria-label="Ejercicio"></nav>
+  <article class="card">
+    <div class="head"><span class="tag">Ahora</span><h2>Maniquí actual</h2></div>
+    <div class="stage"><canvas data-fig="classic" aria-label="Maniquí actual"></canvas><span class="hint">Arrastra para girar</span></div>
+    <p class="meta">Piezas sueltas (esferas y cilindros). Es el que tiene la app ahora.</p>
+  </article>
+  <article class="card">
+    <div class="head"><span class="tag">Opción A</span><h2>Cuerpo propio de una pieza</h2></div>
+    <div class="stage"><canvas data-fig="a" aria-label="Opción A"></canvas><span class="hint">Arrastra para girar</span></div>
+    <ul>
+      <li class="pro">Un solo cuerpo con piel: hombros, codos y rodillas se doblan sin juntas.</li>
+      <li class="pro">Hecho por mí: se puede retocar cualquier forma.</li>
+      <li class="con">Aspecto de muñeco estilizado, menos realista que la B.</li>
+    </ul>
+    <p class="meta">Añade unos 600 KB a la app (descarga única).</p>
+  </article>
+  <article class="card">
+    <div class="head"><span class="tag">Opción B</span><h2>Personaje realista</h2></div>
+    <div class="stage"><canvas data-fig="b" aria-label="Opción B"></canvas><span class="hint">Arrastra para girar</span></div>
+    <ul>
+      <li class="pro">Cuerpo humano real: cara con facciones, manos con dedos, musculatura natural.</li>
+      <li class="pro">Hombre atlético y calvo, con la ropa de la app.</li>
+      <li class="con">La ropa va pintada sobre el cuerpo; los bordes no son perfectos.</li>
+    </ul>
+    <p class="meta">Añade unos 300 KB a la app (descarga única). Modelo base de MakeHuman, licencia CC0 (uso libre).</p>
+  </article>
+  <p class="note">Las dos opciones nuevas son una primera versión: la que elijas la pulo antes de ponerla en la app con los 74 ejercicios.</p>
+</div>

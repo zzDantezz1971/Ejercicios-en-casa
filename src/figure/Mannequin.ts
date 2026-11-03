@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import type { MotionSpec, PropOp } from '../domain/types';
 import { Motion, type Joints, type Pose, type Side } from './poses';
+import { SkinnedFigure, type SkinData } from './SkinnedFigure';
 
 /* Maniquí 3D. Convierte las articulaciones del motor de posturas a 3D:
    X = adelante (vista lateral) o lateral (vista de frente), Y = arriba, Z = lado del cuerpo / profundidad. */
@@ -115,16 +116,24 @@ export class MannequinScene {
   private parts: Record<string, THREE.Mesh> = {};
   private dumbbells: Array<{ hand: 'L' | 'R'; bar: THREE.Mesh; p1: THREE.Mesh; p2: THREE.Mesh }> = [];
   private disposables: Array<{ dispose(): void }> = [];
+  private skinData?: SkinData;
 
-  constructor(spec: MotionSpec, private readonly pal: Palette = DEFAULT_PALETTE, side: Side = undefined) {
+  /** Maniquí de una sola pieza con piel (si se le pasan datos de malla). */
+  private skinned: SkinnedFigure | null = null;
+
+  constructor(spec: MotionSpec, private readonly pal: Palette = DEFAULT_PALETTE, side: Side = undefined, skin?: SkinData) {
     this.motion = new Motion(spec, side);
+    this.skinData = skin;
     const view = this.motion.view;
     this.azimuth = spec.az ?? (view === 'side' ? 32 : view === 'top' ? 12 : 18);
     // De lado, el lado 2 se ve mejor desde el otro costado (si no, el brazo o pierna que trabaja queda oculto).
     if (view === 'side' && this.motion.mirrored) this.azimuth = 180 - this.azimuth;
     this.elevation = spec.el ?? (view === 'top' ? 58 : 14);
     this.buildLights();
-    this.buildBody();
+    if (this.skinData) {
+      this.skinned = new SkinnedFigure(this.skinData, undefined, this.scene);
+      this.buildDumbbells();
+    } else this.buildBody();
     this.buildStage();
     this.placeCamera();
   }
@@ -209,9 +218,14 @@ export class MannequinScene {
     P.nose = this.add(G.sph, M.skin, false);
     P.mouthFlat = this.add(G.box, M.mouth, false);
     P.mouthSmile = this.add(this.geo.smile, M.mouth, false);
+    this.buildDumbbells(M.iron);
+  }
+
+  private buildDumbbells(iron: THREE.Material = this.mat(this.pal.iron, 0.35, 0.6)): void {
+    const G = this.geo;
     const db = this.motion.spec.db;
     const hands: Array<'L' | 'R'> = db === 'both' ? ['L', 'R'] : db ? [db] : [];
-    for (const hand of hands) this.dumbbells.push({ hand, bar: this.add(G.cyl, M.iron), p1: this.add(G.cyl, M.iron), p2: this.add(G.cyl, M.iron) });
+    for (const hand of hands) this.dumbbells.push({ hand, bar: this.add(G.cyl, iron), p1: this.add(G.cyl, iron), p2: this.add(G.cyl, iron) });
   }
 
   private buildStage(): void {
@@ -335,6 +349,12 @@ export class MannequinScene {
     const { motion } = this, P = this.parts, view = motion.view, side = view === 'side', T = view === 'top';
     const { pose, J: J2 } = motion.jointsAt(ms);
     const J = to3D(motion.spec, view, J2, pose);
+    if (this.skinned) {
+      // de frente y desde arriba (boca arriba) el lado "R" del motor es el izquierdo anatómico
+      this.skinned.update(J, !side && !(T && motion.spec.prone));
+      this.updateDumbbells(J, side);
+      return;
+    }
     const lateralAxis = side ? V(0, 0, 1) : T ? V(0, 1, 0) : V(0, 0, 1);
     const sec = now / 1000;
 
@@ -488,7 +508,10 @@ export class MannequinScene {
       this.smileAt(P.mouthSmile, mouthAt.clone().addScaledVector(up, R * curve), lat, up, face, R, curve);
     }
 
-    // Mancuernas
+    this.updateDumbbells(J, side);
+  }
+
+  private updateDumbbells(J: Record<string, V3>, side: boolean): void {
     for (const d of this.dumbbells) {
       const h = J['ha' + d.hand], u = h.clone().sub(J['el' + d.hand]).normalize();
       const grip = h.clone().addScaledVector(u, 3.4);
@@ -517,6 +540,7 @@ export class MannequinScene {
   }
 
   dispose(): void {
+    this.skinned?.dispose();
     this.disposables.forEach((d) => d.dispose());
     Object.values(this.geo).forEach((g) => g.dispose());
   }

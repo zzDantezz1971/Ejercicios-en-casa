@@ -3,6 +3,7 @@
 import * as THREE from 'three';
 import { SECTIONS } from '../src/data/catalog';
 import { MannequinScene } from '../src/figure/Mannequin';
+import type { SkinData } from '../src/figure/SkinnedFigure';
 
 const q = new URLSearchParams(location.search);
 const ids = q.get('ids')?.split(',');
@@ -17,13 +18,15 @@ const r = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, preser
 r.shadowMap.enabled = true;
 r.setSize(W, (W * 2) / 3, false);
 const out = document.getElementById('out')!;
+const skinName = q.get('skin');
+const skin: SkinData | undefined = skinName ? await (await fetch(`./skin_${skinName}.json`)).json() : undefined;
 for (const ex of list) {
   const row = document.createElement('div');
   row.className = 'row';
   row.innerHTML = `<b>${ex.id}</b>`;
   out.append(row);
   for (const t of times) {
-    const sc = new MannequinScene(ex.motion, undefined, side);
+    const sc = new MannequinScene(ex.motion, undefined, side, skin);
     sc.setAspect(1.5);
     sc.mood = mood;
     sc.update(sc.motion.total * t);
