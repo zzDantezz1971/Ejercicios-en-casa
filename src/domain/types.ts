@@ -39,6 +39,8 @@ export interface MotionSpec {
   lift?: number;
   /** En vista desde arriba, las rodillas bajan en vez de subir (pies en el suelo junto al banco). */
   legsDown?: boolean;
+  /** En vista desde arriba, la figura está boca abajo. */
+  prone?: boolean;
   mark?: string[];
   props?: (j: Record<string, [number, number]>, p: PropHelpers) => PropOp[];
   /** Ángulo de cámara preferido en 3D (grados). */

@@ -188,11 +188,27 @@ export const RAW_SECTIONS: RawSection[] = [
    [{tl:-70,ua:-15,fa:-15,thR:60,snR:100,thL:113,snL:113},1300,1000],[{tl:-66,ua:-12,fa:-12,thR:55,snR:105,thL:115,snL:115},1300,1000]]},
  {n:'Flexores de cadera (rodilla en el suelo)',z:'Cadera y lumbar',mat:1,f:[
    [{ua:110,fa:-20,thR:0,snR:90,thL:104,snL:180,ftL:180},500,1100],[{ua:110,fa:-20,thR:0,snR:105,thL:110,snL:180,ftL:180},1500,1100]]},
+ {n:'Pinza sentado (piernas estiradas)',z:'Espalda y piernas',mat:1,b:['caution'],f:[
+   [{th:-6,sn:4,ft:-90,ua:-60,fa:-60},300,1200],[{tl:-42,tu:-26,hd:-12,th:-6,sn:4,ft:-90,ua:5,fa:5},1500,1200]]},
+ {g:'Aductores (ingles)'},
  {n:'Mariposa (aductores)',z:'Ingles y cadera',v:'front',noGround:1,mat:'top',f:[
    [{thL:172,snL:20,thR:8,snR:160,ftL:0,ftR:180,uaL:110,faL:75,uaR:70,faR:105},150,700],
    [{thL:160,snL:30,thR:20,snR:150,ftL:0,ftR:180,uaL:110,faL:75,uaR:70,faR:105},150,700]]},
- {n:'Pinza sentado (piernas estiradas)',z:'Espalda y piernas',mat:1,b:['caution'],f:[
-   [{th:-6,sn:4,ft:-90,ua:-60,fa:-60},300,1200],[{tl:-42,tu:-26,hd:-12,th:-6,sn:4,ft:-90,ua:5,fa:5},1500,1200]]},
+ {n:'Zancada lateral',z:'Aductores',v:'front',plant:'anR',f:[
+   [{thL:128,snL:128,thR:62,snR:100,tl:-84,uaL:55,faL:75,uaR:80,faR:100},1400,1100],
+   [{thL:122,snL:122,thR:55,snR:104,tl:-80,uaL:55,faL:75,uaR:80,faR:100},1400,1100]]},
+ {n:'Sentadilla sumo profunda',z:'Aductores y cadera',v:'front',f:[
+   [{thL:150,snL:95,thR:30,snR:85,ftL:170,ftR:10,uaL:60,faL:-40,uaR:120,faR:220},1400,1100],
+   [{thL:158,snL:97,thR:22,snR:83,ftL:170,ftR:10,uaL:50,faL:-45,uaR:130,faR:225},1400,1100]]},
+ {n:'Apertura de piernas sentado',z:'Aductores e isquios',v:'front',noGround:1,mat:'top',b:['caution'],f:[
+   [{thL:165,snL:165,thR:15,snR:15,ft:-90,uaL:110,faL:95,uaR:70,faR:85},1300,1200],
+   [{thL:168,snL:168,thR:12,snR:12,ft:-90,tu:-92,uaL:100,faL:90,uaR:80,faR:90},1300,1200]]},
+ {n:'Rana',z:'Aductores y cadera',v:'top',prone:true,mat:'top',top:'Vista desde arriba',f:[
+   [{uaL:-115,faL:-85,uaR:-65,faR:-95,thL:180,snL:90,thR:0,snR:90,sTh:.95},1300,1300],
+   [{uaL:-125,faL:-88,uaR:-55,faR:-92,thL:176,snL:92,thR:4,snR:88,sTh:.95},1300,1300]]},
+ {n:'Mariposa tumbado',z:'Aductores',v:'top',mat:'top',top:'Vista desde arriba',b:['lumbar'],f:[
+   [{uaL:150,faL:150,uaR:30,faR:30,thL:140,snL:50,thR:40,snR:130,sTh:.85,sSh:.95},1400,1200],
+   [{uaL:150,faL:150,uaR:30,faR:30,thL:150,snL:40,thR:30,snR:140,sTh:.75,sSh:.95},1400,1200]]},
  {g:'Fortalecer zona lumbar (espalda sana)'},
  {n:'Bird-dog (perro de caza)',z:'Lumbar y core',mat:1,b:['lumbar'],f:[
    [QUAD,200,900],[{...QUAD,uaL:-5,faL:-5,thR:182,snR:182},1200,900],

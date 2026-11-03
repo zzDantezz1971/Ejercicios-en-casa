@@ -25,6 +25,7 @@ const ONE_SIDED = new Set([
   'gemelos-contra-la-pared',
   'flexores-de-cadera-rodilla-en-el-suelo',
   'puente-a-una-pierna',
+  'zancada-lateral',
 ]);
 
 export function slug(name: string): string {

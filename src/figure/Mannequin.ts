@@ -294,7 +294,7 @@ export class MannequinScene {
     }
 
     // tronco
-    const wC = side ? [9, 13.5] : [13.5, 9], wB = side ? [6.8, 10.5] : [10.5, 6.8], wP = side ? [8, 12] : [12, 8];
+    const wC = side ? [9, 13.5] : [13.5, 9], wB = side ? [6.8, 10.5] : [9.6, 6.2], wP = side ? [8, 12] : [12, 8];
     const ell = (mesh: THREE.Mesh, a: V3, b: V3, rx: number, rz: number) => {
       this.seg(mesh, a, b, 1);
       const L = mesh.scale.y;
@@ -309,7 +309,7 @@ export class MannequinScene {
     const up = J.head.clone().sub(J.neck).normalize();
     let face: V3;
     if (side) face = V(up.y, -up.x, 0);
-    else if (T) face = V(0, 1, 0);
+    else if (T) face = V(0, motion.spec.prone ? -1 : 1, 0);
     else face = V(0, 0, 1);
     face.sub(up.clone().multiplyScalar(face.dot(up))).normalize();
     const lat = up.clone().cross(face).normalize();
