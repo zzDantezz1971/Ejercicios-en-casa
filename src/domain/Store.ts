@@ -5,6 +5,7 @@ import {
   type HistoryEntry,
   type Routine,
   type SavedRoutine,
+  type SectionId,
   type Settings,
 } from './types';
 
@@ -17,6 +18,8 @@ export interface SavedData {
   history: HistoryEntry[];
   /** Ejercicios que el usuario ha eliminado de la lista (se pueden recuperar). */
   hidden: string[];
+  /** Orden personalizado de la lista de ejercicios de cada apartado (si no hay, el original). */
+  order: Partial<Record<SectionId, string[]>>;
 }
 
 export const STORAGE_KEY = 'ejercicios-en-casa';
@@ -145,6 +148,23 @@ export class Store {
   get settings(): Settings {
     return this.data.settings;
   }
+  /* ── Orden de la lista de ejercicios ── */
+
+  /** Orden personalizado de un apartado, o undefined si se usa el original. */
+  customOrder(section: SectionId): readonly string[] | undefined {
+    return this.data.order[section];
+  }
+
+  setOrder(section: SectionId, ids: string[]): void {
+    this.data.order[section] = [...ids];
+    this.persist();
+  }
+
+  resetOrder(section: SectionId): void {
+    delete this.data.order[section];
+    this.persist();
+  }
+
   /* ── Ejercicios eliminados ── */
 
   get hidden(): ReadonlySet<string> {
@@ -236,7 +256,13 @@ export class Store {
     const activeId = routines.some((r) => r.id === input.activeId) ? (input.activeId as string) : routines[0].id;
 
     const hidden = Array.isArray(input.hidden) ? (input.hidden as unknown[]).filter((x): x is string => typeof x === 'string') : [];
-    return { version: DATA_VERSION, routines, activeId, settings, history, hidden };
+    const order: SavedData['order'] = {};
+    const rawOrder = (input.order ?? {}) as Record<string, unknown>;
+    for (const s of SECTION_IDS) {
+      const o = rawOrder[s];
+      if (Array.isArray(o)) order[s] = o.filter((x): x is string => typeof x === 'string');
+    }
+    return { version: DATA_VERSION, routines, activeId, settings, history, hidden, order };
   }
 
   private persist(): void {

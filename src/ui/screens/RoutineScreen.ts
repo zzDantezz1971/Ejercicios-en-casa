@@ -4,6 +4,8 @@ import type { App, Screen } from '../App';
 import { append, clear, h, humanDuration, plural } from '../dom';
 import { icon, SECTION_STYLE } from '../icons';
 import { badgeList } from '../components/badges';
+import { sortableList } from '../components/sortable';
+import { applyOrder, moveItem } from '../../domain/ordering';
 import { DetailScreen } from './DetailScreen';
 
 /** Preparar rutina: elegir ejercicios por apartado (se numeran en el orden en que se marcan) y su duración. */
@@ -11,6 +13,11 @@ export class RoutineScreen implements Screen {
   readonly el = h('main', { class: 'screen routine' });
   private editor: RoutineEditor;
   private section: SectionId = 'calentamiento';
+  /** Todos los ejercicios, solo los elegidos (en su orden) o reordenando la lista. */
+  private mode: 'all' | 'chosen' | 'sorting' = 'all';
+  private toolbar = h('div', { class: 'routine-toolbar' });
+  private searchBox: HTMLElement;
+  private hint = h('p', { class: 'hint' });
   private tabs = h('div', { class: 'tabs', role: 'tablist' });
   private list = h('div', { class: 'ex-grid' });
   private footer = h('div', { class: 'routine-footer' });
@@ -31,8 +38,9 @@ export class RoutineScreen implements Screen {
         h('button', { class: 'icon-btn', 'aria-label': 'Volver', onclick: () => app.back() }, icon('back')),
         this.title),
       this.tabs,
-      h('label', { class: 'search', for: 'ex-search' }, icon('search'), this.search),
-      h('p', { class: 'hint' }, 'Toca un ejercicio para añadirlo: se harán en el orden en que los marques. Pulsa ', icon('info', 'ico inline'), ' para ver cómo se hace.'),
+      this.toolbar,
+      (this.searchBox = h('label', { class: 'search', for: 'ex-search' }, icon('search'), this.search)),
+      this.hint,
       this.list,
       this.footer,
     );
@@ -54,8 +62,101 @@ export class RoutineScreen implements Screen {
 
   private render(): void {
     this.renderTabs();
+    this.renderToolbar();
     this.renderList();
     this.renderFooter();
+  }
+
+  /** Selector Todos / Elegidos y botón para ordenar la lista. */
+  private renderToolbar(): void {
+    clear(this.toolbar);
+    const n = this.editor.value[this.section].length;
+    const title = this.app.sections.find((s) => s.id === this.section)!.title;
+    this.searchBox.hidden = this.mode !== 'all';
+    if (this.mode === 'sorting') {
+      this.toolbar.append(
+        h('div', { class: 'sorting-bar' },
+          h('span', { class: 'sorting-title' }, icon('tables'), `Ordenando ${title}`),
+          this.app.store.customOrder(this.section)
+            ? h('button', { class: 'btn ghost small', onclick: () => { this.app.store.resetOrder(this.section); this.refresh(); } }, 'Restablecer')
+            : null,
+          h('button', { class: 'btn primary small', onclick: () => { this.mode = 'all'; this.refresh(); } }, icon('check'), 'Listo')),
+      );
+      this.hint.replaceChildren('Arrastra cada ejercicio por el asa ', icon('tables', 'ico inline'), ' o usa las flechas para colocarlo donde quieras. Este orden es el de la lista, igual para todas tus tablas.');
+      return;
+    }
+    const seg = (m: 'all' | 'chosen', label: string) =>
+      h('button', { class: 'seg' + (this.mode === m ? ' on' : ''), 'aria-pressed': String(this.mode === m), onclick: () => { this.mode = m; this.clearSearch(); window.scrollTo(0, 0); this.render(); } }, label);
+    append(this.toolbar,
+      h('div', { class: 'segmented' }, seg('all', 'Todos'), seg('chosen', `Elegidos (${n})`)),
+      this.mode === 'all'
+        ? h('button', { class: 'btn ghost small', onclick: () => { this.mode = 'sorting'; this.clearSearch(); window.scrollTo(0, 0); this.render(); } }, icon('tables'), 'Ordenar lista')
+        : null,
+    );
+    if (this.mode === 'chosen') {
+      this.hint.replaceChildren(n
+        ? h('span', {}, 'Este es el orden en que se harán. Arrastra por el asa ', icon('tables', 'ico inline'), ' o usa las flechas para cambiarlo.')
+        : 'Aún no has elegido ejercicios en este apartado. Márcalos en "Todos".');
+    } else {
+      this.hint.replaceChildren('Toca un ejercicio para añadirlo al final de la tabla. Pulsa ', icon('info', 'ico inline'), ' para ver cómo se hace.');
+    }
+  }
+
+  /** Ejercicios visibles de un apartado, en el orden elegido por el usuario. */
+  private ordered(sectionId: SectionId): ExerciseDef[] {
+    const sec = this.app.sections.find((s) => s.id === sectionId)!;
+    const hidden = this.app.store.hidden;
+    return applyOrder(sec.exercises, this.app.store.customOrder(sectionId)).filter((e) => !hidden.has(e.id));
+  }
+
+  /** Miniatura pequeña para las filas ordenables. */
+  private miniThumb(ex: ExerciseDef): HTMLElement {
+    const img = h('img', { alt: '', class: 'thumb', 'data-id': ex.id });
+    const fig = h('div', { class: 'thumb-box mini' }, img);
+    this.io.observe(fig);
+    return fig;
+  }
+
+  /** Lista de la tabla en orden de ejecución, para reordenar. */
+  private renderChosen(): void {
+    const items = this.editor.value[this.section];
+    if (!items.length) return;
+    const rows = items.map((it, i) => {
+      const ex = this.app.catalog.get(it.exerciseId)!;
+      const content = h('div', { class: 'row-ex' },
+        h('span', { class: 'order' }, i + 1),
+        this.miniThumb(ex),
+        h('div', { class: 'row-text' },
+          h('strong', {}, ex.name),
+          h('div', { class: 'stepper inline' },
+            h('button', { 'aria-label': 'Menos tiempo', onclick: () => this.adjust(ex, -STEP_SECONDS) }, '−'),
+            h('span', { class: 'secs' }, `${it.seconds} s`),
+            h('button', { 'aria-label': 'Más tiempo', onclick: () => this.adjust(ex, STEP_SECONDS) }, '+'),
+            h('button', { class: 'remove-btn', 'aria-label': `Quitar ${ex.name} de la tabla`, onclick: () => this.toggle(ex) }, icon('close')))));
+      content.style.setProperty('--sec', SECTION_STYLE[ex.section].color);
+      return { content, label: ex.name };
+    });
+    this.list.append(sortableList(rows, (from, to) => {
+      this.editor.move(this.section, from, to);
+      this.save();
+      this.refresh();
+    }));
+  }
+
+  /** Lista del apartado para cambiar su orden (sin subgrupos). */
+  private renderSorting(): void {
+    const exs = this.ordered(this.section);
+    const rows = exs.map((ex) => ({
+      content: h('div', { class: 'row-ex' }, this.miniThumb(ex), h('div', { class: 'row-text' }, h('strong', {}, ex.name), h('span', { class: 'muted small' }, ex.zone))),
+      label: ex.name,
+    }));
+    this.list.append(sortableList(rows, (from, to) => {
+      // el orden guardado incluye también los eliminados, en su sitio relativo al final
+      const ids = moveItem(exs.map((e) => e.id), from, to);
+      const all = this.app.sections.find((s) => s.id === this.section)!.exercises.map((e) => e.id);
+      this.app.store.setOrder(this.section, [...ids, ...all.filter((id) => !ids.includes(id))]);
+      this.refresh();
+    }));
   }
 
   private renderTabs(): void {
@@ -82,13 +183,15 @@ export class RoutineScreen implements Screen {
   private renderList(): void {
     this.io.disconnect();
     clear(this.list);
+    this.list.className = this.mode === 'all' ? 'ex-grid' : 'ex-rows';
+    if (this.mode === 'chosen') return this.renderChosen();
+    if (this.mode === 'sorting') return this.renderSorting();
     const q = normalize(this.query.trim());
     if (q) {
       // Búsqueda en todos los apartados
       let found = 0;
       for (const sec of this.app.sections) {
-        const hidden = this.app.store.hidden;
-        const hits = sec.exercises.filter((e) => !hidden.has(e.id) && normalize(`${e.name} ${e.zone} ${e.group ?? ''}`).includes(q));
+        const hits = this.ordered(sec.id).filter((e) => normalize(`${e.name} ${e.zone} ${e.group ?? ''}`).includes(q));
         if (!hits.length) continue;
         found += hits.length;
         this.list.append(h('h2', { class: 'group-title' }, sec.title));
@@ -97,12 +200,11 @@ export class RoutineScreen implements Screen {
       if (!found) this.list.append(h('p', { class: 'empty-state' }, `No hay ejercicios que coincidan con "${this.query.trim()}".`));
       return;
     }
-    const sec = this.app.sections.find((s) => s.id === this.section)!;
+    // con orden personalizado no hay subgrupos: la lista es libre
+    const custom = !!this.app.store.customOrder(this.section);
     let group: string | undefined;
-    const hidden = this.app.store.hidden;
-    for (const ex of sec.exercises) {
-      if (hidden.has(ex.id)) continue;
-      if (ex.group && ex.group !== group) {
+    for (const ex of this.ordered(this.section)) {
+      if (!custom && ex.group && ex.group !== group) {
         group = ex.group;
         this.list.append(h('h2', { class: 'group-title' }, group));
       }
@@ -164,6 +266,11 @@ export class RoutineScreen implements Screen {
     const count = SECTION_IDS.reduce((n, s) => n + r[s].length, 0);
     const secs = SECTION_IDS.reduce((n, s) => n + r[s].reduce((m, i) => m + i.seconds, 0), 0);
     const inSection = r[this.section].length;
+    if (this.mode === 'sorting') {
+      this.footer.hidden = true;
+      return;
+    }
+    this.footer.hidden = false;
     append(this.footer,
       h('div', { class: 'footer-info' },
         h('strong', {}, count ? `${plural(count, 'ejercicio', 'ejercicios')} · ${humanDuration(secs)}` : 'Ningún ejercicio elegido'),

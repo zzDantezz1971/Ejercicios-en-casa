@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { DEFAULT_ROUTINE_NAME, STORAGE_KEY, Store, type KeyValue } from '../src/domain/Store';
 import { RoutineEditor } from '../src/domain/RoutineEditor';
 import { DEFAULT_SETTINGS, emptyRoutine } from '../src/domain/types';
+import { applyOrder, moveItem } from '../src/domain/ordering';
 
 function memory(initial?: string): KeyValue & { data: Map<string, string> } {
   const data = new Map<string, string>();
@@ -152,5 +153,32 @@ describe('RoutineEditor', () => {
     expect(ed.seconds('abdominales', 'a')).toBe(5);
     ed.setSeconds('abdominales', 'a', 9999);
     expect(ed.seconds('abdominales', 'a')).toBe(600);
+  });
+});
+
+describe('Orden de ejercicios', () => {
+  it('guarda y restablece el orden personalizado de un apartado', () => {
+    const kv = memory();
+    const store = new Store(kv);
+    store.setOrder('estiramientos', ['b', 'a']);
+    expect(new Store(kv).customOrder('estiramientos')).toEqual(['b', 'a']);
+    store.resetOrder('estiramientos');
+    expect(new Store(kv).customOrder('estiramientos')).toBeUndefined();
+  });
+
+  it('aplica el orden y deja al final los ejercicios nuevos', () => {
+    const ex = (id: string) => ({ id, name: id, section: 'pesas' as const, zone: '', motion: {} });
+    const list = [ex('a'), ex('b'), ex('c'), ex('d')];
+    expect(applyOrder(list, ['c', 'x', 'a']).map((e) => e.id)).toEqual(['c', 'a', 'b', 'd']);
+    expect(applyOrder(list, undefined).map((e) => e.id)).toEqual(['a', 'b', 'c', 'd']);
+    expect(moveItem(['a', 'b', 'c'], 0, 2)).toEqual(['b', 'c', 'a']);
+  });
+
+  it('mueve los ejercicios elegidos de una tabla', () => {
+    const ed = new RoutineEditor(emptyRoutine());
+    for (const id of ['x', 'y', 'z']) ed.toggle('pesas', id, 30);
+    ed.move('pesas', 2, 0);
+    expect(ed.value.pesas.map((i) => i.exerciseId)).toEqual(['z', 'x', 'y']);
+    expect(ed.position('pesas', 'x')).toBe(2);
   });
 });

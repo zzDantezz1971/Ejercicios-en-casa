@@ -43,6 +43,16 @@ export class RoutineEditor {
     if (s !== undefined) this.setSeconds(section, exerciseId, s + delta);
   }
 
+  /** Cambia de sitio un ejercicio elegido (de la posición `from` a `to`, empezando en 0). */
+  move(section: SectionId, from: number, to: number): void {
+    const list = [...this.routine[section]];
+    if (from < 0 || from >= list.length) return;
+    const t = Math.max(0, Math.min(list.length - 1, to));
+    const [item] = list.splice(from, 1);
+    list.splice(t, 0, item);
+    this.routine = { ...this.routine, [section]: list };
+  }
+
   clearSection(section: SectionId): void {
     this.routine = { ...this.routine, [section]: [] };
   }
