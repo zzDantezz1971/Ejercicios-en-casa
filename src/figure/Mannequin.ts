@@ -16,7 +16,7 @@ export interface Palette {
 
 export const DEFAULT_PALETTE: Palette = {
   skin: '#E2A983', shirt: '#2F5BEA', shorts: '#243244', shoe: '#F2A516', sole: '#F4F1EA', brow: '#6B4A3A',
-  iron: '#5A6573', bench: '#3A4250', benchLeg: '#9AA3AF', mat: '#8FA9EE', wall: '#D9DEE5',
+  iron: '#3B4452', bench: '#2B323D', benchLeg: '#8893A3', mat: '#26365C', wall: '#262E39',
 };
 
 const SIDE_W = { arm: 13, leg: 8.5 };
@@ -174,7 +174,7 @@ export class MannequinScene {
 
   private buildStage(): void {
     const { motion } = this, spec = motion.spec, G = this.geo, view = motion.view;
-    const floor = new THREE.Mesh(new THREE.PlaneGeometry(1400, 1400), new THREE.ShadowMaterial({ opacity: 0.16 }));
+    const floor = new THREE.Mesh(new THREE.PlaneGeometry(1400, 1400), new THREE.ShadowMaterial({ opacity: 0.38 }));
     floor.rotation.x = -Math.PI / 2;
     floor.receiveShadow = true;
     this.scene.add(floor);

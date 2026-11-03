@@ -1,15 +1,15 @@
 import { WorkoutPlan } from '../../domain/WorkoutPlan';
-import { SECTION_IDS, SECTION_TITLES } from '../../domain/types';
+import { SECTION_IDS, SECTION_TITLES, type SectionId } from '../../domain/types';
 import type { App, Screen } from '../App';
+import { addDays, dayKey, greeting, startOfWeek, streak, trainedDays, WEEKDAY_LETTERS } from '../dates';
 import { clear, h, humanDuration, plural } from '../dom';
-import { HistoryScreen } from './HistoryScreen';
+import { icon, SECTION_STYLE } from '../icons';
 import { RoutineScreen } from './RoutineScreen';
-import { SettingsScreen } from './SettingsScreen';
-import { TablesScreen } from './TablesScreen';
 import { WorkoutScreen } from './WorkoutScreen';
 
 export class HomeScreen implements Screen {
   readonly el = h('main', { class: 'screen home' });
+  readonly tab = 'inicio' as const;
 
   constructor(private readonly app: App) {}
 
@@ -19,44 +19,87 @@ export class HomeScreen implements Screen {
 
   private render(): void {
     const { app } = this;
-    const plan = WorkoutPlan.build(app.store.routine, app.catalog, app.store.settings);
-    const last = app.store.history[0];
+    const table = app.store.active;
+    const plan = WorkoutPlan.build(table.routine, app.catalog, app.store.settings);
+    const now = new Date();
     clear(this.el);
 
-    const rows = SECTION_IDS.map((s) => {
-      const items = app.store.routine[s].filter((i) => app.catalog.has(i.exerciseId));
-      const secs = items.reduce((n, i) => n + i.seconds, 0);
-      return h('li', { class: items.length ? '' : 'empty' },
-        h('span', { class: 'sec-name' }, SECTION_TITLES[s]),
-        h('span', { class: 'sec-meta' }, items.length ? `${plural(items.length, 'ejercicio', 'ejercicios')} · ${humanDuration(secs)}` : 'Sin ejercicios'));
-    });
-
+    // Cabecera
+    const date = now.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' });
     this.el.append(
       h('header', { class: 'home-head' },
-        h('h1', {}, 'Ejercicios en casa'),
-        h('p', { class: 'muted' }, last ? `Último entrenamiento: ${formatDate(last.date)}` : 'Prepara tu rutina y empieza cuando quieras.')),
-      h('section', { class: 'card routine-card' },
-        h('div', { class: 'active-routine' },
-          h('span', { class: 'label' }, 'Tabla'),
-          h('h2', {}, app.store.active.name)),
-        h('div', { class: 'routine-total' },
-          h('span', { class: 'big' }, plan.isEmpty ? '—' : humanDuration(plan.estimatedSeconds)),
-          h('span', { class: 'muted' }, plan.isEmpty ? 'Rutina vacía' : plural(plan.exerciseCount, 'ejercicio', 'ejercicios'))),
-        h('ul', { class: 'section-list' }, ...rows),
-        h('button', { class: 'btn primary block', disabled: plan.isEmpty, onclick: () => this.start(plan) }, 'Empezar'),
-        h('button', { class: 'btn ghost block', onclick: () => app.push(new RoutineScreen(app)) }, plan.isEmpty ? 'Elegir ejercicios' : 'Editar tabla'),
-        h('button', { class: 'btn ghost block', onclick: () => app.push(new TablesScreen(app)) },
-          app.store.routines.length > 1 ? `Cambiar de tabla (${app.store.routines.length})` : 'Mis tablas')),
-      h('nav', { class: 'home-nav' },
-        h('button', { class: 'btn ghost', onclick: () => app.push(new HistoryScreen(app)) }, 'Historial'),
-        h('button', { class: 'btn ghost', onclick: () => app.push(new SettingsScreen(app)) }, 'Ajustes')),
+        h('p', { class: 'eyebrow' }, date),
+        h('h1', {}, greeting(now))),
     );
+
+    // Tarjeta principal con la tabla en uso
+    const art = h('img', { class: 'hero-art', alt: '' });
+    const first = plan.steps.find((s) => s.kind === 'exercise');
+    if (first && first.kind === 'exercise') void app.thumbs.get(first.exercise).then((u) => (art.src = u));
+    this.el.append(
+      h('section', { class: 'hero' },
+        art,
+        h('div', { class: 'hero-body' },
+          h('span', { class: 'hero-label' }, 'Tabla en uso'),
+          h('h2', { class: 'hero-title' }, table.name),
+          h('div', { class: 'chips' },
+            h('span', { class: 'chip' }, icon('clock'), plan.isEmpty ? '—' : humanDuration(plan.estimatedSeconds)),
+            h('span', { class: 'chip' }, icon('bolt'), plural(plan.exerciseCount, 'ejercicio', 'ejercicios'))),
+          plan.isEmpty
+            ? h('button', { class: 'btn light block big', onclick: () => app.push(new RoutineScreen(app)) }, icon('plus'), 'Elegir ejercicios')
+            : h('button', { class: 'btn light block big', onclick: () => this.start(plan) }, icon('play'), 'Empezar'),
+          h('div', { class: 'hero-actions' },
+            h('button', { class: 'btn glass small', onclick: () => app.push(new RoutineScreen(app)) }, icon('edit'), 'Editar'),
+            h('button', { class: 'btn glass small', onclick: () => app.openTab('tablas') }, icon('swap'), 'Cambiar tabla')))),
+    );
+
+    // Semana y racha
+    const days = trainedDays(app.store.history);
+    const monday = startOfWeek(now);
+    const todayKey = dayKey(now);
+    const run = streak(app.store.history, now);
+    const weekCount = WEEKDAY_LETTERS.filter((_, i) => days.has(dayKey(addDays(monday, i)))).length;
+    this.el.append(
+      h('section', { class: 'card week' },
+        h('div', { class: 'week-head' },
+          h('div', {}, h('h3', {}, 'Esta semana'), h('p', { class: 'muted small' }, plural(weekCount, 'día entrenado', 'días entrenados'))),
+          h('div', { class: 'streak' + (run ? ' on' : '') }, icon('flame'), h('strong', {}, String(run)), h('span', {}, run === 1 ? 'día seguido' : 'días seguidos'))),
+        h('div', { class: 'week-days' },
+          ...WEEKDAY_LETTERS.map((l, i) => {
+            const d = addDays(monday, i), k = dayKey(d);
+            return h('div', { class: 'wd' + (days.has(k) ? ' done' : '') + (k === todayKey ? ' today' : '') + (d > now ? ' future' : '') },
+              h('span', { class: 'wd-letter' }, l),
+              h('span', { class: 'wd-dot' }, days.has(k) ? icon('check') : String(d.getDate())));
+          }))),
+    );
+
+    // Apartados de la tabla
+    this.el.append(
+      h('section', { class: 'sections' },
+        h('h3', { class: 'block-title' }, 'Contenido de la tabla'),
+        ...SECTION_IDS.map((s) => this.sectionRow(s))),
+    );
+  }
+
+  private sectionRow(s: SectionId): HTMLElement {
+    const items = this.app.store.routine[s].filter((i) => this.app.catalog.has(i.exerciseId));
+    const secs = items.reduce((n, i) => n + i.seconds, 0);
+    const st = SECTION_STYLE[s];
+    const row = h('button', { class: 'sec-row' + (items.length ? '' : ' empty'), onclick: () => this.app.push(new RoutineScreen(this.app, s)) },
+      h('span', { class: 'sec-icon' }, icon(st.icon)),
+      h('span', { class: 'sec-text' },
+        h('strong', {}, SECTION_TITLES[s]),
+        h('span', { class: 'muted small' }, items.length ? `${plural(items.length, 'ejercicio', 'ejercicios')} · ${humanDuration(secs)}` : 'Sin ejercicios · toca para añadir')),
+      icon('chevron', 'ico chev'));
+    row.style.setProperty('--sec', st.color);
+    return row;
   }
 
   private start(plan: WorkoutPlan): void {
     // El sonido y la voz solo se activan desde un toque del usuario.
     this.app.sounds.unlock();
     this.app.voice.unlock();
+    this.app.haptics.tap();
     this.app.push(new WorkoutScreen(this.app, plan, this.app.store.active));
   }
 }

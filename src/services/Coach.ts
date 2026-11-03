@@ -1,5 +1,6 @@
 import type { WorkoutSession } from '../domain/WorkoutSession';
 import { SECTION_TITLES } from '../domain/types';
+import type { Haptics } from './Haptics';
 import type { Sounds } from './Sounds';
 import type { Voice } from './Voice';
 
@@ -7,7 +8,7 @@ import type { Voice } from './Voice';
 export class Coach {
   private off: Array<() => void> = [];
 
-  constructor(session: WorkoutSession, sounds: Sounds, voice: Voice) {
+  constructor(session: WorkoutSession, sounds: Sounds, voice: Voice, haptics?: Haptics) {
     this.off.push(
       session.on('cue', (cue) => {
         switch (cue.type) {
@@ -16,12 +17,15 @@ export class Coach {
             break;
           case 'start':
             sounds.start();
+            haptics?.start();
             break;
           case 'end':
             sounds.end();
+            haptics?.end();
             break;
           case 'switch':
             sounds.switchSide();
+            haptics?.switchSide();
             voice.say('Cambia de lado');
             break;
         }
@@ -45,6 +49,7 @@ export class Coach {
       session.on('finished', (s) => {
         if (s.completed) {
           sounds.finish();
+          haptics?.finish();
           voice.say('Entrenamiento terminado. ¡Buen trabajo!');
         }
       }),

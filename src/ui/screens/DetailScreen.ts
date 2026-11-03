@@ -4,6 +4,7 @@ import { FigureView } from '../../figure/FigureView';
 import type { App, Screen } from '../App';
 import { badgeList } from '../components/badges';
 import { clear, h } from '../dom';
+import { icon, SECTION_STYLE } from '../icons';
 
 /** Ficha de un ejercicio: animación grande que se puede girar y la explicación. */
 export class DetailScreen implements Screen {
@@ -14,24 +15,25 @@ export class DetailScreen implements Screen {
 
   constructor(private readonly app: App, private readonly ex: ExerciseDef) {
     const d = ex.description;
+    this.el.style.setProperty('--sec', SECTION_STYLE[ex.section].color);
     const sectionTitle = app.sections.find((s) => s.id === ex.section)?.title ?? '';
     this.el.append(
       h('header', { class: 'bar sticky' },
-        h('button', { class: 'icon-btn', 'aria-label': 'Volver', onclick: () => app.back() }, '‹'),
-        h('h1', {}, sectionTitle)),
-      h('div', { class: 'stage' }, this.canvas, h('span', { class: 'stage-hint' }, 'Arrastra para girar')),
+        h('button', { class: 'icon-btn', 'aria-label': 'Volver', onclick: () => app.back() }, icon('back')),
+        h('span', { class: 'w-sec-chip' }, icon(SECTION_STYLE[ex.section].icon), sectionTitle)),
+      h('div', { class: 'stage' }, this.canvas, h('span', { class: 'stage-hint' }, icon('sides'), 'Arrastra para girar')),
       h('section', { class: 'detail-body' },
         h('h2', {}, ex.name),
         h('p', { class: 'muted' }, ex.zone, ex.viewLabel ? ` · ${ex.viewLabel.toLowerCase()}` : ''),
         badgeList(ex.badges),
-        ex.oneSided ? h('p', { class: 'note' }, 'Se hace por lados: a mitad del tiempo oirás el aviso para cambiar de lado.') : null,
+        ex.oneSided ? h('p', { class: 'note' }, icon('sides'), 'Se hace por lados: a mitad del tiempo oirás el aviso para cambiar de lado.') : null,
         d
-          ? h('dl', { class: 'howto' },
-              h('dt', {}, 'Posición inicial'), h('dd', {}, d.start),
-              h('dt', {}, 'Movimiento'), h('dd', {}, d.move),
-              h('dt', {}, 'Consejo'), h('dd', {}, d.tip),
-              d.mistakes ? h('dt', {}, 'Errores comunes') : null, d.mistakes ? h('dd', {}, d.mistakes) : null,
-              d.easier ? h('dt', {}, 'Versión fácil') : null, d.easier ? h('dd', {}, d.easier) : null)
+          ? h('div', { class: 'howto' },
+              how('target', 'Posición inicial', d.start),
+              how('bolt', 'Movimiento', d.move),
+              how('check', 'Consejo', d.tip),
+              d.mistakes ? how('close', 'Errores comunes', d.mistakes) : null,
+              d.easier ? how('chevron', 'Versión fácil', d.easier) : null)
           : h('p', { class: 'muted' }, 'Descripción en preparación.'),
         this.action),
     );
@@ -64,7 +66,11 @@ export class DetailScreen implements Screen {
           this.app.store.saveRoutine(editor.value);
           this.renderAction();
         },
-      }, pos ? `Quitar de la rutina (n.º ${pos})` : 'Añadir a la rutina'),
+      }, pos ? icon('check') : icon('plus'), pos ? `En la tabla (n.º ${pos}) · Quitar` : 'Añadir a la tabla'),
     );
   }
+}
+
+function how(ic: Parameters<typeof icon>[0], title: string, text: string): HTMLElement {
+  return h('div', { class: 'how' }, h('span', { class: 'how-icon' }, icon(ic)), h('div', {}, h('h4', {}, title), h('p', {}, text)));
 }

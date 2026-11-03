@@ -2,27 +2,52 @@ import type { SessionSummary } from '../../domain/WorkoutSession';
 import { SECTION_TITLES } from '../../domain/types';
 import type { App, Screen } from '../App';
 import { h, humanDuration } from '../dom';
-import { HomeScreen } from './HomeScreen';
+import { icon, SECTION_STYLE } from '../icons';
 
+/** Resumen al terminar, con una pequeña celebración si se completó. */
 export class SummaryScreen implements Screen {
   readonly el = h('main', { class: 'screen summary' });
 
-  constructor(private readonly app: App, s: SessionSummary) {
+  constructor(private readonly app: App, s: SessionSummary, tableName: string) {
+    const win = s.completed;
+    const confetti = win ? h('div', { class: 'confetti', 'aria-hidden': 'true' }, ...Array.from({ length: 36 }, (_, i) => {
+      const p = h('i', {});
+      p.style.setProperty('--x', `${Math.round(Math.random() * 100)}%`);
+      p.style.setProperty('--d', `${(Math.random() * 0.8).toFixed(2)}s`);
+      p.style.setProperty('--r', `${Math.round(Math.random() * 360)}deg`);
+      p.style.setProperty('--c', ['var(--accent)', 'var(--sec-warm)', 'var(--sec-abs)', 'var(--sec-stretch)', '#FFFFFF'][i % 5]);
+      return p;
+    })) : null;
+
     this.el.append(
+      ...(confetti ? [confetti] : []),
       h('div', { class: 'summary-card' },
-        h('p', { class: 'eyebrow' }, s.completed ? 'Entrenamiento completado' : 'Entrenamiento terminado antes'),
-        h('h1', {}, s.completed ? '¡Buen trabajo!' : s.exercisesDone ? 'Bien hecho' : 'Sin ejercicios completados'),
-        h('dl', { class: 'stats' },
-          h('div', {}, h('dt', {}, 'Tiempo'), h('dd', {}, humanDuration(s.durationSec))),
-          h('div', {}, h('dt', {}, 'Ejercicios'), h('dd', {}, `${s.exercisesDone} de ${s.exercisesPlanned}`))),
-        s.sections.length ? h('p', { class: 'muted' }, s.sections.map((x) => SECTION_TITLES[x]).join(' · ')) : null,
-        s.exercisesDone ? h('p', { class: 'muted' }, 'Guardado en el historial.') : null,
-        h('button', { class: 'btn primary block', onclick: () => this.app.home(new HomeScreen(this.app)) }, 'Volver al inicio')),
+        h('div', { class: 'trophy' + (win ? ' win' : '') }, icon(win ? 'trophy' : 'check')),
+        h('p', { class: 'eyebrow' }, win ? 'Entrenamiento completado' : 'Entrenamiento terminado antes'),
+        h('h1', {}, win ? '¡Buen trabajo!' : s.exercisesDone ? 'Bien hecho' : 'Sin ejercicios completados'),
+        h('p', { class: 'muted' }, tableName),
+        h('div', { class: 'stats' },
+          stat('clock', humanDuration(s.durationSec), 'Tiempo'),
+          stat('bolt', `${s.exercisesDone}/${s.exercisesPlanned}`, 'Ejercicios'),
+          stat('target', String(s.sections.length), s.sections.length === 1 ? 'Apartado' : 'Apartados')),
+        s.sections.length
+          ? h('div', { class: 'summary-secs' }, ...s.sections.map((x) => {
+              const c = h('span', { class: 'sec-pill' }, icon(SECTION_STYLE[x].icon), SECTION_TITLES[x]);
+              c.style.setProperty('--sec', SECTION_STYLE[x].color);
+              return c;
+            }))
+          : null,
+        s.exercisesDone ? h('p', { class: 'muted small' }, 'Guardado en el historial.') : null,
+        h('button', { class: 'btn primary block big', onclick: () => this.app.openTab('inicio') }, 'Volver al inicio')),
     );
   }
 
   onBack(): boolean {
-    this.app.home(new HomeScreen(this.app));
+    this.app.openTab('inicio');
     return true;
   }
+}
+
+function stat(ic: 'clock' | 'bolt' | 'target', value: string, label: string): HTMLElement {
+  return h('div', { class: 'stat' }, icon(ic), h('span', { class: 'stat-value' }, value), h('span', { class: 'muted small' }, label));
 }

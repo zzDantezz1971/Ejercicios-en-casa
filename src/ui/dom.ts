@@ -8,7 +8,12 @@ export function h<K extends keyof HTMLElementTagNameMap>(tag: K, attrs: Attrs = 
     if (v === undefined || v === null || v === false) continue;
     if (k.startsWith('on') && typeof v === 'function') el.addEventListener(k.slice(2), v as EventListener);
     else if (k === 'class') el.className = String(v);
-    else if (k === 'style' && typeof v === 'object') Object.assign(el.style, v);
+    else if (k === 'style' && typeof v === 'object') {
+      for (const [sk, sv] of Object.entries(v as Record<string, string>)) {
+        if (sk.startsWith('--')) el.style.setProperty(sk, sv);
+        else (el.style as unknown as Record<string, string>)[sk] = sv;
+      }
+    }
     else if (k === 'html') el.innerHTML = String(v);
     else el.setAttribute(k, v === true ? '' : String(v));
   }
@@ -67,24 +72,6 @@ export function append(el: Element, ...children: Child[]): void {
 /** "1 ejercicio", "3 ejercicios". */
 export function plural(n: number, one: string, many: string): string {
   return `${n} ${n === 1 ? one : many}`;
-}
-
-const ICONS: Record<string, string> = {
-  prev: 'M6 5h2.5v14H6zM20 5v14L9.5 12z',
-  next: 'M15.5 5H18v14h-2.5zM4 5l10.5 7L4 19z',
-  pause: 'M6.5 5h4v14h-4zm7 0h4v14h-4z',
-  play: 'M7 4.5v15l12.5-7.5z',
-};
-
-/** Icono SVG sencillo (los símbolos de texto se ven distintos en cada móvil). */
-export function icon(name: keyof typeof ICONS): SVGSVGElement {
-  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  svg.setAttribute('viewBox', '0 0 24 24');
-  svg.setAttribute('aria-hidden', 'true');
-  const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-  path.setAttribute('d', ICONS[name]);
-  svg.append(path);
-  return svg;
 }
 
 /** Diálogo para escribir un texto (por ejemplo, el nombre de una tabla). Devuelve null si se cancela. */
