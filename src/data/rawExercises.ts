@@ -154,6 +154,8 @@ export const RAW_SECTIONS: RawSection[] = [
  {n:'Apertura de pecho con manos atrás',z:'Pecho y hombros',f:[[{ua:140,fa:140},300,900],[{ua:160,fa:162,tu:-96,hd:-104},1400,900]]},
  {n:'Estiramiento de antebrazos',z:'Antebrazos y muñecas',f:[
    [{uaR:0,faR:0,uaL:30,faL:-20},1200,900],[{uaR:0,faR:0,uaL:28,faL:-14,tu:-88},1200,900]]},
+ {n:'Círculos de brazos hacia delante',z:'Hombros',per:2600,fn:t=>{const a=90-360*t;return {thL:91,snL:89,thR:91,snR:89,ua:a,fa:a+8};}},
+ {n:'Círculos de brazos hacia atrás',z:'Hombros y pecho',per:2600,fn:t=>{const a=90+360*t;return {thL:91,snL:89,thR:91,snR:89,ua:a,fa:a-8};}},
  {g:'Espalda y zona lumbar'},
  {n:'Gato-camello',z:'Columna',mat:1,f:[[{...QUAD,tl:-38,tu:8,hd:70},400,1300],[{...QUAD,tl:2,tu:-34,hd:-45},400,1300]]},
  {n:'Postura del niño',z:'Espalda y lumbar',mat:1,f:[
@@ -188,6 +190,8 @@ export const RAW_SECTIONS: RawSection[] = [
    [{ua:110,fa:-20,thR:0,snR:90,thL:104,snL:180,ftL:180},500,1100],[{ua:110,fa:-20,thR:0,snR:105,thL:110,snL:180,ftL:180},1500,1100]]},
  {n:'Pinza sentado (piernas estiradas)',z:'Espalda y piernas',mat:1,b:['caution'],f:[
    [{th:-6,sn:4,ft:-90,ua:-60,fa:-60},300,1200],[{tl:-42,tu:-26,hd:-12,th:-6,sn:4,ft:-90,ua:5,fa:5},1500,1200]]},
+ {n:'Flexión hacia delante de pie',z:'Isquiotibiales y espalda',plant:'anR',anchor:{j:'anR',y:-3},b:['caution'],f:[
+   [{},500,1300],[{tl:35,tu:48,hd:100,ua:115,fa:150,th:84,sn:95},1600,1300]]},
  {g:'Aductores (ingles)'},
  {n:'Mariposa (aductores)',z:'Ingles y cadera',v:'front',noGround:1,mat:'top',f:[
    [{thL:172,snL:20,thR:8,snR:160,ftL:0,ftR:180,uaL:110,faL:75,uaR:70,faR:105},150,700],

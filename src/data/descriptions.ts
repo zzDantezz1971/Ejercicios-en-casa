@@ -345,6 +345,20 @@ export const DESCRIPTIONS: Record<string, ExerciseDescription> = {
     mistakes: 'Doblar el codo.',
     easier: 'Menos tirón.',
   },
+  'circulos-de-brazos-hacia-delante': {
+    start: 'De pie, pies a la anchura de las caderas, rodillas sueltas y brazos estirados a los lados.',
+    move: 'Dibuja círculos grandes con los brazos estirados: hacia delante, arriba, atrás y abajo. Movimiento lento y amplio.',
+    tip: 'Espalda recta y hombros lejos de las orejas. Respira con calma, sin aguantar el aire.',
+    mistakes: 'Arquear la zona lumbar al subir los brazos o hacerlo con prisa.',
+    easier: 'Círculos más pequeños o un brazo cada vez.',
+  },
+  'circulos-de-brazos-hacia-atras': {
+    start: 'De pie, pies a la anchura de las caderas, rodillas sueltas y brazos estirados al frente.',
+    move: 'Dibuja círculos grandes hacia atrás: arriba, atrás, abajo y de nuevo al frente. Nota cómo se abre el pecho.',
+    tip: 'Abdomen y glúteos firmes, pies bien apoyados. Respira con calma.',
+    mistakes: 'Echar el tronco hacia atrás al pasar los brazos por detrás.',
+    easier: 'Círculos más pequeños o un brazo cada vez.',
+  },
   'gato-camello': {
     start: 'A cuatro patas: manos bajo los hombros y rodillas bajo las caderas.',
     move: 'Redondea la espalda hacia el techo metiendo la cabeza (gato). Después hunde la espalda y mira al frente (camello). Alterna despacio.',
@@ -435,6 +449,13 @@ export const DESCRIPTIONS: Record<string, ExerciseDescription> = {
     tip: 'Ojo con la lumbar: rodillas algo dobladas y sin rebotes.',
     mistakes: 'Redondear mucho la espalda o forzar.',
     easier: 'Rodillas dobladas o una toalla en los pies.',
+  },
+  'flexion-hacia-delante-de-pie': {
+    start: 'De pie, pies paralelos a la anchura de las caderas y rodillas algo flexionadas.',
+    move: 'Inclínate hacia delante desde la cadera y deja caer el tronco y los brazos hacia los pies. Mantén y sube despacio, vértebra a vértebra.',
+    tip: 'Relaja el cuello y deja colgar la cabeza. Nota el estiramiento detrás de los muslos, sin dolor.',
+    mistakes: 'Bloquear las rodillas o rebotar para llegar más abajo. Ojo con la lumbar: sube siempre despacio.',
+    easier: 'Más flexión de rodillas o apoya las manos en los muslos o en una silla.',
   },
   'mariposa-aductores': {
     start: 'Sentado, junta las plantas de los pies y deja caer las rodillas a los lados.',
