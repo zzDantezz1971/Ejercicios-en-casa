@@ -11,11 +11,29 @@ const UP = V(0, 1, 0);
 
 export interface Palette {
   skin: string; shirt: string; shorts: string; shoe: string; sole: string; brow: string;
+  stripe: string; band: string;
   iron: string; bench: string; benchLeg: string; mat: string; wall: string;
 }
 
+/** Expresión de la cara. */
+export type Mood = 'neutral' | 'effort' | 'relaxed' | 'happy';
+
+const SMILE_ARC = Math.PI * 0.75;
+
+/** Componente de `v` perpendicular a `axis`, normalizada. */
+function ortho(v: THREE.Vector3, axis: THREE.Vector3): THREE.Vector3 {
+  const a = axis.clone().normalize();
+  const o = v.clone().sub(a.multiplyScalar(v.dot(a)));
+  if (o.lengthSq() < 1e-6) {
+    const alt = Math.abs(axis.x) < 0.9 ? new THREE.Vector3(1, 0, 0) : new THREE.Vector3(0, 1, 0);
+    return alt.sub(axis.clone().normalize().multiplyScalar(alt.dot(axis.clone().normalize()))).normalize();
+  }
+  return o.normalize();
+}
+
 export const DEFAULT_PALETTE: Palette = {
-  skin: '#E2A983', shirt: '#2F5BEA', shorts: '#243244', shoe: '#F2A516', sole: '#F4F1EA', brow: '#6B4A3A',
+  skin: '#E2A983', shirt: '#2F5BEA', shorts: '#1E2633', shoe: '#F2A516', sole: '#F4F1EA', brow: '#6B4A3A',
+  stripe: '#F3F5F8', band: '#FF7A33',
   iron: '#3B4452', bench: '#2B323D', benchLeg: '#8893A3', mat: '#26365C', wall: '#262E39',
 };
 
@@ -136,7 +154,11 @@ export class MannequinScene {
     cyl: new THREE.CylinderGeometry(1, 1, 1, 20, 1),
     tap: new THREE.CylinderGeometry(0.82, 1, 1, 20, 1),
     box: new THREE.BoxGeometry(1, 1, 1),
+    ring: new THREE.TorusGeometry(1, 0.13, 8, 28),
+    smile: new THREE.TorusGeometry(1, 0.17, 8, 18, SMILE_ARC),
   };
+  /** Desfase del parpadeo para que no parpadeen todos a la vez. */
+  private blinkOffset = Math.random() * 4000;
 
   private add(g: THREE.BufferGeometry, m: THREE.Material, cast = true): THREE.Mesh {
     const x = new THREE.Mesh(g, m);
@@ -152,21 +174,41 @@ export class MannequinScene {
       skin: this.mat(p.skin, 0.55), shirt: this.mat(p.shirt, 0.7), shorts: this.mat(p.shorts, 0.75),
       shoe: this.mat(p.shoe, 0.5), sole: this.mat(p.sole, 0.8), brow: this.mat(p.brow, 0.8),
       eye: this.mat('#FFFFFF', 0.3), pupil: this.mat('#1C1C1C', 0.3), iron: this.mat(p.iron, 0.35, 0.6),
+      stripe: this.mat(p.stripe, 0.6), band: this.mat(p.band, 0.6), watch: this.mat('#15181D', 0.3, 0.3),
+      watchFace: this.mat('#9FB4FF', 0.2, 0.2), mouth: this.mat('#7A3B32', 0.6),
     };
     for (const s of ['L', 'R']) {
+      // piernas: muslo con pantalón, músculos, rodilla, gemelo, calcetín y zapatilla
       P['th' + s] = this.add(G.tap, M.shorts); P['ths' + s] = this.add(G.tap, M.skin);
-      P['sh' + s] = this.add(G.tap, M.skin); P['ua' + s] = this.add(G.tap, M.skin); P['fa' + s] = this.add(G.tap, M.skin);
-      P['sl' + s] = this.add(G.tap, M.shirt);
-      for (const j of ['kn', 'el', 'an']) P[j + s] = this.add(G.sph, M.skin);
-      P['palm' + s] = this.add(G.sph, M.skin); P['fing' + s] = this.add(G.sph, M.skin); P['thumb' + s] = this.add(G.cyl, M.skin);
+      P['quad' + s] = this.add(G.sph, M.skin); P['calf' + s] = this.add(G.sph, M.skin);
+      P['sh' + s] = this.add(G.tap, M.skin);
+      P['hem' + s] = this.add(G.cyl, M.stripe); P['sideStripe' + s] = this.add(G.box, M.stripe, false);
+      P['sock' + s] = this.add(G.cyl, M.stripe);
       P['shoe' + s] = this.add(G.sph, M.shoe); P['sole' + s] = this.add(G.sph, M.sole);
-      P['shoB' + s] = this.add(G.sph, M.shirt); P['hipB' + s] = this.add(G.sph, M.shorts);
+      P['lace1' + s] = this.add(G.box, M.stripe, false); P['lace2' + s] = this.add(G.box, M.stripe, false);
+      // brazos: manga con franja, bíceps, tríceps, antebrazo, muñequera o reloj
+      P['ua' + s] = this.add(G.tap, M.skin); P['fa' + s] = this.add(G.tap, M.skin);
+      P['bic' + s] = this.add(G.sph, M.skin); P['tri' + s] = this.add(G.sph, M.skin); P['fore' + s] = this.add(G.sph, M.skin);
+      P['sl' + s] = this.add(G.tap, M.shirt); P['slStripe' + s] = this.add(G.cyl, M.stripe);
+      P['wrist' + s] = this.add(G.cyl, s === 'L' ? M.watch : M.band);
+      for (const j of ['kn', 'el', 'an']) P[j + s] = this.add(G.sph, M.skin);
+      // mano: palma, cuatro dedos y pulgar
+      P['palm' + s] = this.add(G.sph, M.skin);
+      for (let f = 0; f < 4; f++) P[`fing${f}${s}`] = this.add(G.cyl, M.skin);
+      P['thumb' + s] = this.add(G.cyl, M.skin);
+      P['shoB' + s] = this.add(G.sph, M.shirt); P['hipB' + s] = this.add(G.sph, M.shorts); P['pec' + s] = this.add(G.sph, M.shirt);
+      // cara
       P['ear' + s] = this.add(G.sph, M.skin); P['eye' + s] = this.add(G.sph, M.eye, false);
       P['pupil' + s] = this.add(G.sph, M.pupil, false); P['brow' + s] = this.add(G.box, M.brow, false);
     }
+    P.watchFace = this.add(G.cyl, M.watchFace, false);
     P.chest = this.add(G.sph, M.shirt); P.belly = this.add(G.sph, M.shirt); P.pelvis = this.add(G.sph, M.shorts);
+    P.traps = this.add(G.sph, M.shirt); P.glutes = this.add(G.sph, M.shorts);
+    P.collar = this.add(this.geo.ring, M.stripe, false);
     P.neck = this.add(G.cyl, M.skin); P.head = this.add(G.sph, M.skin); P.jaw = this.add(G.sph, M.skin);
-    P.nose = this.add(G.sph, M.skin, false); P.mouth = this.add(G.box, M.brow, false);
+    P.nose = this.add(G.sph, M.skin, false);
+    P.mouthFlat = this.add(G.box, M.mouth, false);
+    P.mouthSmile = this.add(this.geo.smile, M.mouth, false);
     const db = this.motion.spec.db;
     const hands: Array<'L' | 'R'> = db === 'both' ? ['L', 'R'] : db ? [db] : [];
     for (const hand of hands) this.dumbbells.push({ hand, bar: this.add(G.cyl, M.iron), p1: this.add(G.cyl, M.iron), p2: this.add(G.cyl, M.iron) });
@@ -281,78 +323,172 @@ export class MannequinScene {
     mesh.scale.set(rAcross, rAlong, rThick);
   }
 
-  /** Coloca el maniquí en el instante `ms` del movimiento. */
-  update(ms: number): void {
-    const { motion } = this, P = this.parts, view = motion.view, side = view === 'side';
+  /** Expresión de la cara: concentrado al hacer fuerza, relajado en el descanso, contento al prepararse. */
+  mood: Mood = 'neutral';
+
+  /**
+   * Coloca el maniquí en el instante `ms` del movimiento.
+   * `now` es el reloj real: la respiración, el parpadeo y los pequeños movimientos de cabeza siguen
+   * aunque el ejercicio esté en pausa.
+   */
+  update(ms: number, now: number = performance.now()): void {
+    const { motion } = this, P = this.parts, view = motion.view, side = view === 'side', T = view === 'top';
     const { pose, J: J2 } = motion.jointsAt(ms);
     const J = to3D(motion.spec, view, J2, pose);
-    const lateralAxis = side ? V(0, 0, 1) : view === 'top' ? V(0, 1, 0) : V(0, 0, 1);
+    const lateralAxis = side ? V(0, 0, 1) : T ? V(0, 1, 0) : V(0, 0, 1);
+    const sec = now / 1000;
+
+    // Ejes del tronco: arriba, adelante (hacia donde mira el pecho) y lateral (hacia el lado R)
+    const tUp = J.neck.clone().sub(J.pel).normalize();
+    let fwd = side ? V(tUp.y, -tUp.x, 0) : T ? V(0, motion.spec.prone ? -1 : 1, 0) : V(0, 0, 1);
+    fwd = ortho(fwd, tUp);
+    const bodyLat = ortho(side ? V(0, 0, 1) : V(1, 0, 0), tUp);
 
     for (const s of ['L', 'R']) {
+      const sg = s === 'L' ? -1 : 1;
       const hip = J['hip' + s], kn = J['kn' + s], an = J['an' + s], ti = J['ti' + s];
       const sho = J['sho' + s], el = J['el' + s], ha = J['ha' + s];
-      this.seg(P['ths' + s], hip, kn, 5.2);
-      this.seg(P['th' + s], hip, hip.clone().lerp(kn, 0.55), 6.3);
-      this.seg(P['sh' + s], kn, an, 4.4);
-      this.ball(P['kn' + s], kn, 4.6);
-      this.ball(P['an' + s], an, 3.3);
-      // zapatilla con suela
+
+      // Pierna
+      const tDir = kn.clone().sub(hip), sDir = an.clone().sub(kn);
+      const tLen = tDir.length();
+      tDir.normalize();
+      // la parte delantera del muslo/rodilla: contraria a donde se dobla la espinilla
+      let legFront = sDir.clone().sub(tDir.clone().multiplyScalar(sDir.dot(tDir))).multiplyScalar(-1);
+      legFront = legFront.lengthSq() > 4 ? legFront.normalize() : ortho(fwd, tDir);
+      const legOut = ortho(bodyLat.clone().multiplyScalar(sg), tDir);
+      this.seg(P['ths' + s], hip, kn, 5.1);
+      this.seg(P['th' + s], hip, hip.clone().lerp(kn, 0.55), 6.4);
+      this.seg(P['hem' + s], hip.clone().lerp(kn, 0.52), hip.clone().lerp(kn, 0.56), 6.5);
+      this.oriented(P['sideStripe' + s], hip.clone().lerp(kn, 0.27).addScaledVector(legOut, 6.15), tDir, legOut, tLen * 0.5, 0.6, 1.8);
+      this.oriented(P['quad' + s], hip.clone().lerp(kn, 0.66).addScaledVector(legFront, 1.7), tDir, legOut, 7.5, 4.4, 4.2);
+      this.seg(P['sh' + s], kn, an, 4.0);
+      const sLen = sDir.length();
+      sDir.normalize();
+      this.oriented(P['calf' + s], kn.clone().lerp(an, 0.32).addScaledVector(ortho(legFront, sDir), -1.8), sDir, legOut, sLen * 0.24, 3.7, 4.1);
+      this.ball(P['kn' + s], kn, 4.5);
+      this.ball(P['an' + s], an, 3.2);
+      this.seg(P['sock' + s], an.clone().lerp(kn, -0.02), an.clone().lerp(kn, 0.17), 3.75);
+      // zapatilla con suela y cordones
       const footDir = ti.clone().sub(an);
       if (footDir.lengthSq() < 0.01) footDir.set(1, 0, 0);
-      const fc = an.clone().addScaledVector(footDir.clone().normalize(), 3.2);
+      footDir.normalize();
+      const fc = an.clone().addScaledVector(footDir, 3.2);
+      const shoeUp = ortho(V(0, 1, 0).sub(footDir.clone().multiplyScalar(footDir.y)), footDir);
       this.oriented(P['shoe' + s], fc, footDir, lateralAxis, 6.4, 3.6, 3.4);
-      this.oriented(P['sole' + s], fc.clone().addScaledVector(V(0, -1, 0), 1.6), footDir, lateralAxis, 6.6, 3.8, 1.4);
-      // brazo
-      this.seg(P['ua' + s], sho, el, 4.1);
-      this.seg(P['sl' + s], sho, sho.clone().lerp(el, 0.5), 5.1);
-      this.seg(P['fa' + s], el, ha, 3.4);
-      this.ball(P['el' + s], el, 3.6);
-      // mano: palma, dedos juntos y pulgar
-      const u = ha.clone().sub(el).normalize();
+      this.oriented(P['sole' + s], fc.clone().addScaledVector(shoeUp, -1.6), footDir, lateralAxis, 6.6, 3.8, 1.4);
+      for (const [k, off] of [['lace1', 0.3], ['lace2', 2.4]] as const) {
+        this.oriented(P[k + s], fc.clone().addScaledVector(footDir, off).addScaledVector(shoeUp, 3.05), footDir, lateralAxis, 0.6, 2.4, 0.5);
+      }
+
+      // Brazo
+      const aDir = el.clone().sub(sho), fDir = ha.clone().sub(el);
+      aDir.normalize();
+      const u = fDir.clone().normalize();
+      // interior del codo (donde está el bíceps): hacia donde se dobla el antebrazo
+      let inner = fDir.clone().sub(aDir.clone().multiplyScalar(fDir.dot(aDir)));
+      inner = inner.lengthSq() > 9 ? inner.normalize() : ortho(fwd, aDir);
+      const armOut = ortho(bodyLat.clone().multiplyScalar(sg), aDir);
+      this.seg(P['ua' + s], sho, el, 3.8);
+      this.oriented(P['bic' + s], sho.clone().lerp(el, 0.58).addScaledVector(inner, 1.5), aDir, armOut, 7, 3.5, 3.4);
+      this.oriented(P['tri' + s], sho.clone().lerp(el, 0.5).addScaledVector(inner, -1.4), aDir, armOut, 7.5, 3.4, 3.3);
+      this.seg(P['sl' + s], sho, sho.clone().lerp(el, 0.5), 5.2);
+      this.seg(P['slStripe' + s], sho.clone().lerp(el, 0.43), sho.clone().lerp(el, 0.49), 5.35);
+      this.seg(P['fa' + s], el, ha, 3.2);
+      this.oriented(P['fore' + s], el.clone().lerp(ha, 0.3), u, armOut, 6, 3.7, 3.4);
+      this.ball(P['el' + s], el, 3.4);
+      this.seg(P['wrist' + s], ha.clone().lerp(el, 0.05), ha.clone().lerp(el, 0.15), 3.55);
+
+      // Mano: palma, dedos y pulgar
       const across = side ? V(0, 0, 1) : V(0, 0, 1).cross(u).normalize();
-      this.oriented(P['palm' + s], ha.clone().addScaledVector(u, 2.6), u, across, 3.4, 2.9, 1.7);
-      this.oriented(P['fing' + s], ha.clone().addScaledVector(u, 6.4), u, across, 2.8, 2.6, 1.5);
-      const thumbSide = across.clone().multiplyScalar(s === 'L' ? -1 : 1);
-      this.seg(P['thumb' + s], ha.clone().addScaledVector(u, 1.6).addScaledVector(thumbSide, 2.2), ha.clone().addScaledVector(u, 5.2).addScaledVector(thumbSide, 3.4), 1.05);
+      const acrossO = ortho(across, u);
+      const palmN = acrossO.clone().cross(u).normalize();
+      this.oriented(P['palm' + s], ha.clone().addScaledVector(u, 2.5), u, acrossO, 3.1, 2.9, 1.6);
+      for (let f = 0; f < 4; f++) {
+        const off = (f - 1.5) * 1.35;
+        const base = ha.clone().addScaledVector(u, 4.6).addScaledVector(acrossO, off);
+        const len = f === 0 || f === 3 ? 3.1 : 3.7;
+        this.seg(P[`fing${f}${s}`], base, base.clone().addScaledVector(u, len).addScaledVector(palmN, 0.9), 0.68);
+      }
+      const thumbSide = acrossO.clone().multiplyScalar(sg);
+      this.seg(P['thumb' + s], ha.clone().addScaledVector(u, 1.4).addScaledVector(thumbSide, 2.5),
+        ha.clone().addScaledVector(u, 4.6).addScaledVector(thumbSide, 3.5).addScaledVector(palmN, 0.8), 0.95);
+      if (s === 'L') {
+        // esfera del reloj sobre la muñeca izquierda
+        const wc = ha.clone().lerp(el, 0.1).addScaledVector(palmN, -3.3);
+        this.seg(P.watchFace, wc, wc.clone().addScaledVector(palmN, -0.9), 1.9);
+      }
+
       this.ball(P['shoB' + s], sho, 6.2);
-      this.ball(P['hipB' + s], hip, 6.6);
+      this.ball(P['hipB' + s], hip, 6.5);
     }
 
-    // tronco
-    const wC = side ? [9, 13.5] : [13.5, 9], wB = side ? [6.8, 10.5] : [9.6, 6.2], wP = side ? [8, 12] : [12, 8];
+    // Tronco con respiración
+    const breath = 1 + 0.035 * Math.sin(sec * (2 * Math.PI / 3.8));
+    const wC = side ? [8.8, 13.2] : [13.2, 8.8], wB = side ? [6.6, 10.8] : [11, 6.6], wP = side ? [8, 11.5] : [11.4, 8];
     const ell = (mesh: THREE.Mesh, a: V3, b: V3, rx: number, rz: number) => {
       this.seg(mesh, a, b, 1);
       const L = mesh.scale.y;
       mesh.scale.set(rx, L / 2, rz);
     };
-    const T = view === 'top';
-    ell(P.chest, J.mid.clone().lerp(J.neck, 0.15), J.neck.clone().lerp(J.mid, -0.08), T ? wC[1] : wC[0], T ? 9 : wC[1]);
-    ell(P.belly, J.pel.clone().lerp(J.mid, 0.3), J.mid.clone().lerp(J.neck, 0.35), T ? wB[1] : wB[0], T ? 7 : wB[1]);
+    ell(P.chest, J.mid.clone().lerp(J.pel, 0.12), J.neck.clone().lerp(J.mid, -0.08), (T ? wC[1] : wC[0]) * breath, (T ? 9 : wC[1]) * (1 + (breath - 1) * 0.5));
+    ell(P.belly, J.pel.clone().lerp(J.mid, 0.3), J.mid.clone().lerp(J.neck, 0.35), T ? wB[1] : wB[0], T ? 6.5 : wB[1]);
     ell(P.pelvis, J.pel.clone().lerp(J.mid, -0.25), J.pel.clone().lerp(J.mid, 0.55), T ? wP[1] : wP[0], T ? 8 : wP[1]);
-
-    // cabeza: calvo, con orejas, ojos, cejas, nariz y boca
-    const up = J.head.clone().sub(J.neck).normalize();
-    let face: V3;
-    if (side) face = V(up.y, -up.x, 0);
-    else if (T) face = V(0, motion.spec.prone ? -1 : 1, 0);
-    else face = V(0, 0, 1);
-    face.sub(up.clone().multiplyScalar(face.dot(up))).normalize();
-    const lat = up.clone().cross(face).normalize();
-    this.seg(P.neck, J.neck.clone().addScaledVector(up, -3), J.neck.clone().addScaledVector(up, 6), 3.4);
-    this.oriented(P.head, J.head, up, lat, 10, 8.6, 9.2);
-    this.oriented(P.jaw, J.head.clone().addScaledVector(up, -4.5).addScaledVector(face, 2), up, lat, 5.2, 6.4, 6.4);
+    const chestC = J.mid.clone().lerp(J.neck, 0.68);
     for (const s of ['L', 'R']) {
       const sg = s === 'L' ? -1 : 1;
-      this.oriented(P['ear' + s], J.head.clone().addScaledVector(lat, 8.5 * sg).addScaledVector(face, -0.5).addScaledVector(up, -0.5), up, face, 2.6, 1.8, 1.1);
-      const eye = J.head.clone().addScaledVector(face, 7.6).addScaledVector(up, 1.4).addScaledVector(lat, 3.1 * sg);
-      this.ball(P['eye' + s], eye, 1.55);
-      this.ball(P['pupil' + s], eye.clone().addScaledVector(face, 1.05), 0.85);
-      this.oriented(P['brow' + s], J.head.clone().addScaledVector(face, 7.9).addScaledVector(up, 4).addScaledVector(lat, 3.2 * sg), lat, up, 1.6, 0.55, 0.55);
+      this.oriented(P['pec' + s], chestC.clone().addScaledVector(fwd, 5.7 * breath).addScaledVector(bodyLat, 4.9 * sg), tUp, bodyLat, 3.3, 6.2, 2.6);
     }
-    this.oriented(P.nose, J.head.clone().addScaledVector(face, 9.3).addScaledVector(up, -1.2), up, lat, 2.0, 1.3, 1.6);
-    this.oriented(P.mouth, J.head.clone().addScaledVector(face, 8.2).addScaledVector(up, -5.2), lat, up, 2.2, 0.4, 0.4);
+    this.oriented(P.traps, J.neck.clone().addScaledVector(tUp, -3).addScaledVector(fwd, -1.5), bodyLat, tUp, 9.5, 3.6, 4.6);
+    this.oriented(P.glutes, J.pel.clone().addScaledVector(fwd, -4.6).addScaledVector(tUp, -1.5), bodyLat, tUp, 10.5, 6, 5);
 
-    // mancuernas
+    // Cabeza con pequeños movimientos naturales
+    const up0 = J.head.clone().sub(J.neck).normalize();
+    let face0 = side ? V(up0.y, -up0.x, 0) : T ? V(0, motion.spec.prone ? -1 : 1, 0) : V(0, 0, 1);
+    face0 = ortho(face0, up0);
+    const lat0 = up0.clone().cross(face0).normalize();
+    const up = up0.clone()
+      .addScaledVector(face0, 0.035 * Math.sin(sec * 0.9))
+      .addScaledVector(lat0, 0.03 * Math.sin(sec * 0.63 + 1.3))
+      .normalize();
+    const face = ortho(face0, up);
+    const lat = up.clone().cross(face).normalize();
+    const head = J.neck.clone().addScaledVector(up, 14);
+    this.seg(P.neck, J.neck.clone().addScaledVector(up0, -3), J.neck.clone().addScaledVector(up0, 6), 3.4);
+    // cuello de la camiseta
+    this.ringAround(P.collar, J.neck.clone().addScaledVector(tUp, -1.2), tUp, 4.6);
+    this.oriented(P.head, head, up, lat, 10, 8.6, 9.2);
+    this.oriented(P.jaw, head.clone().addScaledVector(up, -4.2).addScaledVector(face, 3.4), up, lat, 4.6, 5.4, 5.6);
+
+    // Cara: parpadeo, cejas y boca según la expresión
+    const blinkT = (now + this.blinkOffset) % 4300;
+    const blink = blinkT < 140 ? 0.12 : 1;
+    const mood = this.mood;
+    const browH = mood === 'effort' ? 3.6 : mood === 'happy' ? 4.5 : 4.1;
+    const browTilt = mood === 'effort' ? 0.45 : mood === 'happy' ? -0.15 : 0;
+    for (const s of ['L', 'R']) {
+      const sg = s === 'L' ? -1 : 1;
+      this.oriented(P['ear' + s], head.clone().addScaledVector(lat, 8.5 * sg).addScaledVector(face, -0.5).addScaledVector(up, -0.5), up, face, 2.6, 1.8, 1.1);
+      const eye = head.clone().addScaledVector(face, 7.6).addScaledVector(up, 1.4).addScaledVector(lat, 3.1 * sg);
+      const squint = mood === 'effort' ? 0.75 : mood === 'happy' ? 0.85 : 1;
+      this.oriented(P['eye' + s], eye, up, lat, 1.55 * blink * squint, 1.55, 1.55);
+      this.oriented(P['pupil' + s], eye.clone().addScaledVector(face, 1.05), up, lat, 0.85 * Math.max(blink, 0.3) * squint, 0.85, 0.85);
+      const browAlong = lat.clone().addScaledVector(up, sg * browTilt);
+      this.oriented(P['brow' + s], head.clone().addScaledVector(face, 7.9).addScaledVector(up, browH).addScaledVector(lat, 3.2 * sg), browAlong, up, 1.7, 0.55, 0.6);
+    }
+    this.oriented(P.nose, head.clone().addScaledVector(face, 9.3).addScaledVector(up, -1.2), up, lat, 2.0, 1.3, 1.6);
+    const mouthAt = head.clone().addScaledVector(face, 8.3).addScaledVector(up, -4.9);
+    P.mouthFlat.visible = mood === 'effort';
+    P.mouthSmile.visible = mood !== 'effort';
+    if (mood === 'effort') {
+      this.oriented(P.mouthFlat, mouthAt, lat, up, 2.7, 0.55, 0.6);
+    } else {
+      const R = mood === 'happy' ? 2.7 : mood === 'relaxed' ? 2.3 : 2.0;
+      const curve = mood === 'neutral' ? 0.6 : 1;
+      this.smileAt(P.mouthSmile, mouthAt.clone().addScaledVector(up, R * curve), lat, up, face, R, curve);
+    }
+
+    // Mancuernas
     for (const d of this.dumbbells) {
       const h = J['ha' + d.hand], u = h.clone().sub(J['el' + d.hand]).normalize();
       const grip = h.clone().addScaledVector(u, 3.4);
@@ -362,6 +498,22 @@ export class MannequinScene {
       this.seg(d.p1, a.clone().addScaledVector(ax, -1.6), a.clone().addScaledVector(ax, 1.6), 5);
       this.seg(d.p2, b.clone().addScaledVector(ax, -1.6), b.clone().addScaledVector(ax, 1.6), 5);
     }
+  }
+
+  /** Anillo plano alrededor de un eje (cuello de la camiseta). */
+  private ringAround(mesh: THREE.Object3D, center: V3, axis: V3, r: number): void {
+    mesh.position.copy(center);
+    mesh.quaternion.setFromUnitVectors(V(0, 0, 1), axis.clone().normalize());
+    mesh.scale.set(r, r, r);
+  }
+
+  /** Sonrisa: arco de toro en el plano de la cara, con la parte baja en `center - up·R`. */
+  private smileAt(mesh: THREE.Object3D, center: V3, lat: V3, up: V3, face: V3, R: number, curve: number): void {
+    const basis = new THREE.Matrix4().makeBasis(lat, up, face);
+    mesh.quaternion.setFromRotationMatrix(basis);
+    mesh.rotateZ(-Math.PI / 2 - SMILE_ARC / 2);
+    mesh.position.copy(center);
+    mesh.scale.set(R, R * curve, R);
   }
 
   dispose(): void {

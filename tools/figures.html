@@ -7,10 +7,12 @@
       body { margin: 0; font: 12px system-ui; background: #F2F4F7; }
       .row { display: flex; gap: 4px; align-items: center; border-bottom: 1px solid #ccc; padding: 2px; }
       .row b { width: 140px; }
-      .row img { width: 240px; height: 160px; background: #E9EDF2; }
+      .row img { width: 240px; height: 160px; background: #161C25; }
+      body.big .row img { width: 480px; height: 320px; }
     </style>
   </head>
   <body>
+    <script>if (new URLSearchParams(location.search).get("w")) document.body.classList.add("big");</script>
     <div id="out"></div>
     <script type="module" src="./figures.ts"></script>
   </body>

@@ -184,6 +184,7 @@ export class WorkoutScreen implements Screen {
         u.name.textContent = step.next.name;
         u.next.textContent = 'Primer ejercicio del apartado';
         this.showFigure(step.next);
+        this.view?.setMood('happy');
         break;
       case 'exercise':
         this.setSection(step.section);
@@ -194,6 +195,7 @@ export class WorkoutScreen implements Screen {
         if (step.switchAt !== undefined) this.setSide(1);
         u.next.textContent = nextText(this.session.plan.steps, index);
         this.showFigure(step.exercise, 1);
+        this.view?.setMood(step.section === 'pesas' || step.section === 'abdominales' ? 'effort' : 'neutral');
         this.view?.restart();
         break;
       case 'rest':
@@ -203,6 +205,7 @@ export class WorkoutScreen implements Screen {
         u.name.textContent = step.next.name;
         u.next.textContent = 'Prepárate para el siguiente';
         this.showFigure(step.next);
+        this.view?.setMood('relaxed');
         break;
       case 'sectionBreak': {
         const done = SECTION_STYLE[step.finished], next = SECTION_STYLE[step.next];

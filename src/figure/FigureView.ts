@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import type { ExerciseDef } from '../domain/types';
-import { MannequinScene, type Palette } from './Mannequin';
+import { MannequinScene, type Mood, type Palette } from './Mannequin';
 import type { Side } from './poses';
 
 function makeRenderer(canvas: HTMLCanvasElement | OffscreenCanvas, preserve = false): THREE.WebGLRenderer {
@@ -19,11 +19,13 @@ export class FigureView {
   private resizeObs: ResizeObserver;
   private drag: { x: number; az: number } | null = null;
   private frozenAt: number | null = null;
+  private mood: Mood = 'relaxed';
 
   constructor(private readonly canvas: HTMLCanvasElement, exercise: ExerciseDef, palette?: Palette) {
     this.renderer = makeRenderer(canvas);
     this.renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
     this.scene = new MannequinScene(exercise.motion, palette);
+    this.scene.mood = this.mood;
     this.resizeObs = new ResizeObserver(() => this.resize());
     this.resizeObs.observe(canvas);
     canvas.addEventListener('pointerdown', this.onDown);
@@ -58,12 +60,19 @@ export class FigureView {
     }
   }
 
+  /** Expresión de la cara del maniquí. */
+  setMood(mood: Mood): void {
+    this.mood = mood;
+    this.scene.mood = mood;
+  }
+
   /** Cambia de ejercicio reutilizando el mismo lienzo 3D. */
   setExercise(exercise: ExerciseDef, side: Side = undefined, palette?: Palette): void {
     const az = this.scene.azimuth;
     const keepAngle = this.scene.motion.spec === exercise.motion;
     this.scene.dispose();
     this.scene = new MannequinScene(exercise.motion, palette, side);
+    this.scene.mood = this.mood;
     if (keepAngle) this.scene.azimuth = az;
     const w = this.canvas.clientWidth, h = this.canvas.clientHeight;
     if (w && h) this.scene.setAspect(w / h);
@@ -161,6 +170,7 @@ export class Thumbnails {
       this.renderer.setSize(this.w * 2, this.h * 2, false);
     }
     const sc = new MannequinScene(ex.motion, this.palette);
+    sc.mood = 'relaxed';
     sc.setAspect(this.w / this.h);
     sc.update(sc.motion.total * 0.45);
     this.renderer.render(sc.scene, sc.camera);
