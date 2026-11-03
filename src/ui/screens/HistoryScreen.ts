@@ -1,7 +1,7 @@
 import { SECTION_TITLES, type HistoryEntry } from '../../domain/types';
 import type { App, Screen } from '../App';
 import { addDays, dayKey, minutesPerWeek, startOfWeek, streak, trainedDays, WEEKDAY_LETTERS } from '../dates';
-import { clear, confirmDialog, h, humanDuration, plural } from '../dom';
+import { actionSheet, clear, confirmDialog, h, humanDuration, plural } from '../dom';
 import { icon, SECTION_STYLE, type IconName } from '../icons';
 
 const NS = 'http://www.w3.org/2000/svg';
@@ -42,17 +42,18 @@ export class HistoryScreen implements Screen {
       this.chart(list),
       this.calendar(list),
       h('h3', { class: 'block-title' }, 'Entrenamientos'),
+      h('p', { class: 'muted small' }, 'Toca un entrenamiento para borrarlo.'),
     );
 
     let month = '';
-    for (const e of list) {
+    for (const [index, e] of list.entries()) {
       const d = new Date(e.date);
       const m = d.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' });
       if (m !== month) {
         month = m;
         this.body.append(h('h4', { class: 'group-title' }, m));
       }
-      this.body.append(row(e));
+      this.body.append(row(e, () => void this.entryMenu(e, index)));
     }
     this.body.append(
       h('button', {
@@ -63,8 +64,23 @@ export class HistoryScreen implements Screen {
             this.render();
           }
         },
-      }, icon('trash'), 'Borrar historial'),
+      }, icon('trash'), 'Borrar todo el historial'),
     );
+  }
+
+  /** Menú de un entrenamiento: permite borrarlo solo a él. */
+  private async entryMenu(e: HistoryEntry, index: number): Promise<void> {
+    const d = new Date(e.date);
+    const when = `${d.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })}, ${d.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}`;
+    const title = e.routineName ? `${e.routineName} · ${when}` : when;
+    const choice = await actionSheet(title, [{ id: 'delete', label: 'Borrar este entrenamiento', danger: true }]);
+    if (choice !== 'delete') return;
+    if (await confirmDialog(`¿Borrar el entrenamiento del ${when}? No se puede deshacer.`, 'Borrar')) {
+      this.app.store.deleteHistoryAt(index);
+      const y = window.scrollY;
+      this.render();
+      window.scrollTo(0, y);
+    }
   }
 
   /** Barras con los minutos de las últimas 8 semanas. */
@@ -140,9 +156,9 @@ function stat(ic: IconName, value: string, label: string): HTMLElement {
   return h('div', { class: 'stat' }, icon(ic), h('span', { class: 'stat-value' }, value), h('span', { class: 'muted small' }, label));
 }
 
-function row(e: HistoryEntry): HTMLElement {
+function row(e: HistoryEntry, onOpen: () => void): HTMLElement {
   const d = new Date(e.date);
-  return h('article', { class: 'card history-row' },
+  return h('button', { class: 'card history-row', 'aria-label': `Opciones del entrenamiento del ${d.toLocaleDateString('es-ES')}`, onclick: onOpen },
     h('div', { class: 'h-date' },
       h('span', { class: 'h-day' }, d.toLocaleDateString('es-ES', { day: 'numeric' })),
       h('span', { class: 'h-wd' }, d.toLocaleDateString('es-ES', { weekday: 'short' }))),

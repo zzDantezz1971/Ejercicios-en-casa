@@ -157,6 +157,13 @@ export class Store {
     this.persist();
   }
 
+  /** Borra un entrenamiento concreto (posición en la lista, del más reciente al más antiguo). */
+  deleteHistoryAt(index: number): void {
+    if (index < 0 || index >= this.data.history.length) return;
+    this.data.history = this.data.history.filter((_, i) => i !== index);
+    this.persist();
+  }
+
   clearHistory(): void {
     this.data.history = [];
     this.persist();

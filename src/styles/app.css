@@ -464,3 +464,5 @@ button:focus-visible, input:focus-visible, label:focus-within { outline: 2px sol
 .mq-thumb:not([src]) { visibility: hidden; }
 .mq-check { position: absolute; top: 14px; right: 16px; width: 26px; height: 26px; border-radius: 50%; background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center; }
 .mq-check .ico { width: 16px; height: 16px; }
+.history-row { width: 100%; text-align: left; cursor: pointer; color: inherit; font: inherit; }
+.history-row:active { transform: scale(.99); }

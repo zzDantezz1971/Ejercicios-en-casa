@@ -88,6 +88,19 @@ describe('Store', () => {
     expect(store.routine).toEqual(emptyRoutine());
   });
 
+  it('borra un solo entrenamiento del historial', () => {
+    const kv = memory();
+    const store = new Store(kv);
+    const e = (d: string) => ({ date: d, durationSec: 60, exercisesDone: 1, exercisesPlanned: 1, sections: [], completed: true });
+    store.addHistory(e('2026-11-01T10:00:00Z'));
+    store.addHistory(e('2026-11-02T10:00:00Z'));
+    store.addHistory(e('2026-11-03T10:00:00Z'));
+    store.deleteHistoryAt(1);
+    expect(new Store(kv).history.map((x) => x.date)).toEqual(['2026-11-03T10:00:00Z', '2026-11-01T10:00:00Z']);
+    store.deleteHistoryAt(9);
+    expect(store.history).toHaveLength(2);
+  });
+
   it('recuerda la última vez que se usó una tabla', () => {
     const store = new Store(memory());
     store.markUsed(store.active.id, new Date('2026-11-03T09:00:00Z'));
