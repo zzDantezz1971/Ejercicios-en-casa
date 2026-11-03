@@ -228,7 +228,18 @@ for b, name in enumerate(BONES):
     D[:, b] = np.linalg.norm(verts - a - h[:, None] * ba, axis=1)
 # no mezclar mano con muslo, ni brazo con tronco bajo
 dmin = D.min(axis=1, keepdims=True)
-Wt = np.exp(-(D - dmin) / 1.8)
+# solo se mezcla con los huesos vecinos del más cercano (evita tirones entre partes alejadas)
+ADJ = {'hips': {'chest', 'thL', 'thR'}, 'chest': {'hips', 'head', 'uaL', 'uaR'}, 'head': {'chest'}}
+for s in 'LR':
+    ADJ['ua' + s] = {'chest', 'fa' + s}; ADJ['fa' + s] = {'ua' + s, 'hand' + s}; ADJ['hand' + s] = {'fa' + s}
+    ADJ['th' + s] = {'hips', 'sh' + s}; ADJ['sh' + s] = {'th' + s, 'foot' + s}; ADJ['foot' + s] = {'sh' + s}
+near = np.argmin(D, axis=1)
+allowed = np.zeros_like(D, dtype=bool)
+for b, name in enumerate(BONES):
+    ok = [BONES.index(n) for n in ADJ[name] | {name}]
+    allowed[np.ix_(near == b, ok)] = True
+SIG = np.array([3.4 if n in ('chest', 'hips') or n.startswith(('ua', 'th')) else 2.4 for n in BONES])
+Wt = np.where(allowed, np.exp(-(D - dmin) / SIG[None, :]), 0)
 order = np.argsort(-Wt, axis=1)[:, :4]
 wts = np.take_along_axis(Wt, order, axis=1)
 wts[:, 3] *= 0  # 3 huesos bastan
@@ -266,15 +277,19 @@ for i, p in enumerate(verts):
     elif r == 2:
         region[i] = 2
 
+PART = {'hips': 0, 'chest': 0, 'head': 0, 'uaL': 1, 'faL': 1, 'uaR': 2, 'faR': 2, 'thL': 3, 'shL': 3, 'thR': 4, 'shR': 4,
+        'footL': 5, 'footR': 5, 'handL': 6, 'handR': 6}
+part = np.array([PART[b] for b in dom], dtype=np.uint8)
+part[vreg == 3] = 5
 from smooth_regions import smooth_regions
 region = smooth_regions(region, tris, 3, keep=(3,))
-eyes = {s: [3.0 * (1 if s == 'L' else -1), 135.4, 7.4] for s in 'LR'}
+eyes = {s: [2.9 * (1 if s == 'L' else -1), 135.3, 7.0] for s in 'LR'}
 data = {
     'license': 'Modelo propio de Ejercicios en casa',
     'bones': BONES,
     'rest': {k: [a.tolist(), b.tolist()] for k, (a, b) in segs.items()},
     'eyes': eyes,
-    'eyeRadius': 1.25,
+    'eyeRadius': 1.0,
     'count': nv,
     'pos': base64.b64encode(verts.astype('<f4').tobytes()).decode(),
     'idx': base64.b64encode(tris.astype('<u2' if nv < 65536 else '<u4').tobytes()).decode(),
@@ -282,6 +297,8 @@ data = {
     'si': base64.b64encode(order.astype(np.uint8).tobytes()).decode(),
     'sw': base64.b64encode(wq.astype(np.uint8).tobytes()).decode(),
     'reg': base64.b64encode(region.tobytes()).decode(),
+    'part': base64.b64encode(part.tobytes()).decode(),
+    'clothes': {'collarY': 115.6, 'waistY': 77.5, 'sleeve': 0.42, 'shorts': 0.24, 'sock': 0.86, 'shoeTop': 6.4, 'sleeveStripe': 0},
 }
 json.dump(data, open('skin_a.json', 'w'))
 print('verts', nv, 'tris', len(tris), 'kb', round(len(json.dumps(data)) / 1024), 'regions', np.bincount(region, minlength=7))

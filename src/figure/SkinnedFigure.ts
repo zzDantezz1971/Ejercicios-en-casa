@@ -18,6 +18,10 @@ export interface SkinData {
   reg: string;
   /** Añadir zapatillas encima del pie (si la malla tiene el pie descalzo). */
   shoes?: boolean;
+  /** Parte del cuerpo de cada vértice: 0 tronco/cabeza, 1-2 brazo L/R, 3-4 pierna L/R, 5 pie, 6 mano, 7 labios. */
+  part?: string;
+  /** Cortes de la ropa en la postura de reposo. */
+  clothes?: { collarY: number; waistY: number; sleeve: number; shorts: number; sock: number; shoeTop: number; sleeveStripe?: number };
 }
 
 export interface SkinPalette {
@@ -90,7 +94,9 @@ export class SkinnedFigure {
     g.setIndex(new THREE.BufferAttribute(idx, 1));
     g.computeVertexNormals();
 
-    const mat = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.62, metalness: 0 });
+    const mat = data.part && data.clothes
+      ? this.clothesMaterial(g, data, palette)
+      : new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.62, metalness: 0 });
     this.mesh = new THREE.SkinnedMesh(g, mat);
     this.mesh.castShadow = true;
     this.mesh.receiveShadow = true;
@@ -135,6 +141,70 @@ export class SkinnedFigure {
       this.eyes.push(e);
       this.pupils.push(p);
     }
+  }
+
+  /**
+   * Material con la ropa calculada en cada píxel a partir de la posición de reposo:
+   * cortes rectos (manga, cuello, cintura, bajo del pantalón, calcetín) que se mueven con la piel.
+   */
+  private clothesMaterial(g: THREE.BufferGeometry, data: SkinData, pal: SkinPalette): THREE.MeshStandardMaterial {
+    const part = new Uint8Array(b64(data.part!));
+    g.setAttribute('aPart', new THREE.BufferAttribute(Float32Array.from(part), 1));
+    const c = data.clothes!;
+    const P = (k: string, i: 0 | 1) => V(...(data.rest[k][i] as [number, number, number]));
+    const armDir = (s: string) => P('fa' + s, 1).sub(P('ua' + s, 0));
+    const legDir = (s: string) => P('sh' + s, 1).sub(P('th' + s, 0));
+    const col = (h: string) => new THREE.Color(h);
+    const uniforms = {
+      uSkin: { value: col(pal.skin) }, uShirt: { value: col(pal.shirt) }, uShorts: { value: col(pal.shorts) },
+      uShoe: { value: col(pal.shoe) }, uSock: { value: col(pal.sock) }, uLips: { value: col(pal.lips) }, uStripe: { value: col(pal.stripe) },
+      uCollarY: { value: c.collarY }, uWaistY: { value: c.waistY }, uShoeTop: { value: c.shoeTop },
+      uSleeve: { value: c.sleeve }, uSleeveStripe: { value: c.sleeveStripe ?? 0.05 }, uShortsT: { value: c.shorts }, uSockT: { value: c.sock },
+      uShoL: { value: P('uaL', 0) }, uShoR: { value: P('uaR', 0) }, uArmL: { value: armDir('L') }, uArmR: { value: armDir('R') },
+      uHipL: { value: P('thL', 0) }, uHipR: { value: P('thR', 0) }, uLegL: { value: legDir('L') }, uLegR: { value: legDir('R') },
+    };
+    const mat = new THREE.MeshStandardMaterial({ roughness: 0.62, metalness: 0 });
+    mat.onBeforeCompile = (sh) => {
+      Object.assign(sh.uniforms, uniforms);
+      sh.vertexShader = sh.vertexShader
+        .replace('#include <common>', '#include <common>\nattribute float aPart;\nvarying vec3 vRest;\nflat varying float vPart;')
+        .replace('#include <begin_vertex>', '#include <begin_vertex>\nvRest = position;\nvPart = aPart;');
+      sh.fragmentShader = sh.fragmentShader
+        .replace('#include <common>', `#include <common>
+varying vec3 vRest;
+flat varying float vPart;
+uniform vec3 uSkin, uShirt, uShorts, uShoe, uSock, uLips, uStripe;
+uniform float uCollarY, uWaistY, uShoeTop, uSleeve, uSleeveStripe, uShortsT, uSockT;
+uniform vec3 uShoL, uShoR, uArmL, uArmR, uHipL, uHipR, uLegL, uLegR;
+// paso suave de 1 píxel para que los bordes salgan nítidos pero sin dientes de sierra
+float edge(float d) { float w = max(fwidth(d), 1e-4); return smoothstep(-w, w, d); }
+float along(vec3 p, vec3 a, vec3 dir) { return dot(p - a, dir) / dot(dir, dir); }
+vec3 band(vec3 base, vec3 stripe, float t, float t0, float t1) { return mix(base, mix(stripe, base, edge(t - t1)), edge(t - t0)); }
+vec3 clothes() {
+  int part = int(floor(vPart + 0.5));
+  vec3 p = vRest;
+  if (part == 7) return uLips;
+  if (p.y < uShoeTop) return uShoe;
+  if (part == 5) return uSock;
+  if (part == 6) return uSkin;
+  if (part == 1 || part == 2) {
+    float t = part == 1 ? along(p, uShoL, uArmL) : along(p, uShoR, uArmR);
+    vec3 sleeve = uSleeveStripe > 0.0 ? band(uShirt, uStripe, t, uSleeve - uSleeveStripe, uSleeve) : uShirt;
+    return mix(sleeve, uSkin, edge(t - uSleeve));
+  }
+  if (part == 3 || part == 4) {
+    float t = part == 3 ? along(p, uHipL, uLegL) : along(p, uHipR, uLegR);
+    vec3 c = mix(band(uShorts, uStripe, t, uShortsT - 0.022, uShortsT), uSkin, edge(t - uShortsT));
+    return mix(c, uSock, edge(t - uSockT));
+  }
+  // tronco y cabeza: pantalón, camiseta con cuello blanco y piel
+  vec3 c = mix(uShorts, uShirt, edge(p.y - uWaistY));
+  c = band(c, uStripe, p.y, uCollarY - 1.0, uCollarY);
+  return mix(c, uSkin, edge(p.y - uCollarY));
+}`)
+        .replace('vec4 diffuseColor = vec4( diffuse, opacity );', 'vec4 diffuseColor = vec4( clothes(), opacity );');
+    };
+    return mat;
   }
 
   /** Lateral de reposo (del lado L al R anatómico): -x en los datos. */

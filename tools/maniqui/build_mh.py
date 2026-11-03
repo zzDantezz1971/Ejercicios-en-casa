@@ -30,6 +30,13 @@ def apply(fname, w):
         i, dx, dy, dz = line.split()
         V[int(i)] += w * np.array([float(dx), float(dy), float(dz)])
 apply('caucasian-male-young.target', 1.0)
+# más ancho y fuerte de hombros, pecho y brazos
+for f, w in [('t_torso_torso-scale-horiz-incr.target', 0.55), ('t_torso_torso-vshape-incr.target', 0.8),
+             ('t_measure_measure-shoulder-dist-incr.target', 0.6), ('t_torso_torso-scale-depth-incr.target', 0.3),
+             ('t_armslegs_r-upperarm-scale-horiz-incr.target', 0.45), ('t_armslegs_l-upperarm-scale-horiz-incr.target', 0.45),
+             ('t_armslegs_r-upperarm-muscle-incr.target', 0.8), ('t_armslegs_l-upperarm-muscle-incr.target', 0.8),
+             ('t_neck_neck-scale-horiz-incr.target', 0.5)]:
+    apply(f, w)
 apply('universal-male-young-maxmuscle-averageweight.target', W_MUSCLE * 0.5)
 apply('universal-male-young-maxmuscle-minweight.target', W_MUSCLE * 0.5)
 
@@ -138,6 +145,11 @@ for i, p in enumerate(P):
     elif b == 'head' and lipW[i] > 0.6:
         region[i] = 5
 
+# parte del cuerpo de cada vértice: 0 tronco/cabeza, 1-2 brazo L/R, 3-4 pierna L/R, 5 pie, 6 mano, 7 labios
+PART = {'hips': 0, 'chest': 0, 'head': 0, 'uaL': 1, 'faL': 1, 'uaR': 2, 'faR': 2, 'thL': 3, 'shL': 3, 'thR': 4, 'shR': 4,
+        'footL': 5, 'footR': 5, 'handL': 6, 'handR': 6}
+part = np.array([PART[BONES[d]] for d in dom], dtype=np.uint8)
+part[region == 5] = 7
 from smooth_regions import smooth_regions
 region = smooth_regions(region, np.array(tris), 3)
 
@@ -155,6 +167,9 @@ data = {
     'eyes': eyes,
     'eyeRadius': 0.13 * SCALE,
     'shoes': True,
+    'part': base64.b64encode(part.tobytes()).decode(),
+    'clothes': {'collarY': float((neck[1] - 0.28) * SCALE), 'waistY': float((pel[1] + 0.55) * SCALE),
+                'sleeve': 0.42, 'shorts': 0.24, 'sock': 0.9, 'shoeTop': -1e4},
     'count': len(P2),
     'pos': base64.b64encode(P2.astype('<f4').tobytes()).decode(),
     'idx': base64.b64encode(np.array(tris, dtype='<u2').tobytes()).decode(),

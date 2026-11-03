@@ -5,8 +5,8 @@ import type { SkinData } from '../src/figure/SkinnedFigure';
 import skinA from './skin_a.json';
 import skinB from './skin_b.json';
 
-const IDS = ['curl-de-biceps', 'sentadillas-sin-peso', 'bird-dog-perro-de-caza', 'plancha-lateral', 'isquiotibiales-tumbado'];
-const LABELS = ['Curl de bíceps', 'Sentadillas', 'Bird-dog', 'Plancha lateral', 'Isquiotibiales'];
+const IDS = ['curl-de-biceps', 'saltos-de-tijera-jumping-jacks', 'bird-dog-perro-de-caza'];
+const LABELS = ['Curl de bíceps', 'Saltos de tijera', 'Bird-dog'];
 
 const views: FigureView[] = [];
 const canvases = [...document.querySelectorAll<HTMLCanvasElement>('canvas[data-fig]')];
