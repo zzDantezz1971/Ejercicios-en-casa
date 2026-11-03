@@ -97,6 +97,8 @@ export interface Settings {
   sectionCountdown: number;
   sound: boolean;
   voice: boolean;
+  /** Maniquí: 1 = de piezas (con expresiones), 2 = realista. */
+  mannequin: 1 | 2;
 }
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -105,6 +107,7 @@ export const DEFAULT_SETTINGS: Settings = {
   sectionCountdown: 10,
   sound: true,
   voice: true,
+  mannequin: 2,
 };
 
 export interface HistoryEntry {

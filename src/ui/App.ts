@@ -1,6 +1,7 @@
 import { CATALOG, SECTIONS } from '../data/catalog';
 import { Store } from '../domain/Store';
 import { Thumbnails } from '../figure/FigureView';
+import { useSkin } from '../figure/skinAsset';
 import { Haptics } from '../services/Haptics';
 import { ScreenAwake } from '../services/ScreenAwake';
 import { Sounds } from '../services/Sounds';
@@ -43,6 +44,7 @@ export class App {
   readonly awake = new ScreenAwake();
   readonly thumbs = new Thumbnails();
   private stack: Screen[] = [];
+  private realistic: boolean | null = null;
   private scroll = new WeakMap<Screen, number>();
   private view = h('div', { class: 'view' });
   private tabbar = h('nav', { class: 'tabbar', 'aria-label': 'Secciones' });
@@ -78,6 +80,12 @@ export class App {
   }
 
   applySettings(): void {
+    const realistic = this.store.settings.mannequin !== 1;
+    if (this.realistic !== realistic) {
+      this.realistic = realistic;
+      useSkin(realistic);
+      this.thumbs.clear();
+    }
     this.sounds.enabled = this.store.settings.sound;
     this.voice.enabled = this.store.settings.voice;
     this.haptics.enabled = this.store.settings.sound;
