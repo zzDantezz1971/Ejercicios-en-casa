@@ -3,7 +3,7 @@ import type { ExerciseDef } from '../../domain/types';
 import { FigureView } from '../../figure/FigureView';
 import type { App, Screen } from '../App';
 import { badgeList } from '../components/badges';
-import { clear, h } from '../dom';
+import { clear, confirmDialog, h } from '../dom';
 import { icon, SECTION_STYLE } from '../icons';
 
 /** Ficha de un ejercicio: animación grande que se puede girar y la explicación. */
@@ -67,8 +67,21 @@ export class DetailScreen implements Screen {
           this.renderAction();
         },
       }, pos ? icon('check') : icon('plus'), pos ? `En la tabla (n.º ${pos}) · Quitar` : 'Añadir a la tabla'),
+      h('button', { class: 'btn danger block delete-ex', onclick: () => void this.remove() }, icon('trash'), 'Eliminar ejercicio'),
     );
   }
+
+  /** Elimina el ejercicio de la lista y de todas las tablas (se puede recuperar en Ajustes). */
+  private async remove(): Promise<void> {
+    const ok = await confirmDialog(
+      `¿Eliminar "${this.ex.name}"? Desaparecerá de la lista y de todas tus tablas. Podrás recuperarlo en Ajustes.`,
+      'Eliminar',
+    );
+    if (!ok) return;
+    this.app.store.hideExercise(this.ex.id);
+    this.app.back();
+  }
+
 }
 
 function how(ic: Parameters<typeof icon>[0], title: string, text: string): HTMLElement {

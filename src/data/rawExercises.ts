@@ -106,8 +106,9 @@ export const RAW_SECTIONS: RawSection[] = [
 ]},
 
 {id:'abdominales',title:'Abdominales',note:'Has pedido unos 12. Te propongo 14, cinco de ellos para los oblicuos (laterales).',items:[
- {n:'Crunch abdominal',z:'Abdomen',mat:1,f:[
-   [{tl:180,...KNEES,ua:-5,fa:175,sa:.8},150,900],[{tl:180,tu:210,...KNEES,ua:25,fa:205,sa:.8},150,900]]},
+ {n:'Crunch abdominal',z:'Abdomen',mat:1,az:20,el:18,f:[
+   [{tl:180,tu:180,hd:184,...KNEES,ua:2,fa:2},350,850],
+   [{tl:181,tu:226,hd:240,...KNEES,ua:-14,fa:-14},450,850]]},
  {n:'Crunch inverso',z:'Abdomen inferior',mat:1,f:[
    [{...SUP,th:-80,sn:10},150,900],[{...SUP,tl:168,th:-130,sn:-50},150,900]]},
  {n:'Crunch con piernas a 90°',z:'Abdomen',mat:1,f:[

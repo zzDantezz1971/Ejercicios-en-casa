@@ -466,3 +466,6 @@ button:focus-visible, input:focus-visible, label:focus-within { outline: 2px sol
 .mq-check .ico { width: 16px; height: 16px; }
 .history-row { width: 100%; text-align: left; cursor: pointer; color: inherit; font: inherit; }
 .history-row:active { transform: scale(.99); }
+.removed { display: flex; flex-direction: column; gap: 8px; }
+.removed-row { display: flex; align-items: center; gap: 12px; padding: 12px 14px; }
+.delete-ex { margin-top: 10px; }

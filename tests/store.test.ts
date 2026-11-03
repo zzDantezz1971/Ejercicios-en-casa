@@ -101,6 +101,23 @@ describe('Store', () => {
     expect(store.history).toHaveLength(2);
   });
 
+  it('elimina un ejercicio de la lista y de todas las tablas, y se puede recuperar', () => {
+    const kv = memory();
+    const store = new Store(kv);
+    const r = emptyRoutine();
+    r.pesas = [{ exerciseId: 'x', seconds: 30 }, { exerciseId: 'y', seconds: 30 }];
+    store.saveRoutine(r);
+    const other = store.createRoutine('Otra');
+    store.saveRoutine({ ...emptyRoutine(), pesas: [{ exerciseId: 'x', seconds: 40 }] });
+    store.hideExercise('x');
+    const again = new Store(kv);
+    expect(again.hidden.has('x')).toBe(true);
+    expect(again.routines.flatMap((t) => t.routine.pesas.map((i) => i.exerciseId))).toEqual(['y']);
+    again.restoreExercise('x');
+    expect(new Store(kv).hidden.has('x')).toBe(false);
+    expect(other.name).toBe('Otra');
+  });
+
   it('recuerda la última vez que se usó una tabla', () => {
     const store = new Store(memory());
     store.markUsed(store.active.id, new Date('2026-11-03T09:00:00Z'));

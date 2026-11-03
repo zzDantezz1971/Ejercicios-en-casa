@@ -15,6 +15,8 @@ export interface SavedData {
   activeId: string;
   settings: Settings;
   history: HistoryEntry[];
+  /** Ejercicios que el usuario ha eliminado de la lista (se pueden recuperar). */
+  hidden: string[];
 }
 
 export const STORAGE_KEY = 'ejercicios-en-casa';
@@ -143,6 +145,27 @@ export class Store {
   get settings(): Settings {
     return this.data.settings;
   }
+  /* ── Ejercicios eliminados ── */
+
+  get hidden(): ReadonlySet<string> {
+    return new Set(this.data.hidden);
+  }
+
+  /** Quita un ejercicio de la lista y de todas las tablas. */
+  hideExercise(id: string): void {
+    if (!this.data.hidden.includes(id)) this.data.hidden.push(id);
+    for (const r of this.data.routines) {
+      for (const s of SECTION_IDS) r.routine[s] = r.routine[s].filter((i) => i.exerciseId !== id);
+    }
+    this.persist();
+  }
+
+  /** Vuelve a mostrar un ejercicio eliminado (no lo añade a ninguna tabla). */
+  restoreExercise(id: string): void {
+    this.data.hidden = this.data.hidden.filter((x) => x !== id);
+    this.persist();
+  }
+
   get history(): readonly HistoryEntry[] {
     return this.data.history;
   }
@@ -212,7 +235,8 @@ export class Store {
     if (routines.length === 0) routines = [newRoutine(DEFAULT_ROUTINE_NAME)];
     const activeId = routines.some((r) => r.id === input.activeId) ? (input.activeId as string) : routines[0].id;
 
-    return { version: DATA_VERSION, routines, activeId, settings, history };
+    const hidden = Array.isArray(input.hidden) ? (input.hidden as unknown[]).filter((x): x is string => typeof x === 'string') : [];
+    return { version: DATA_VERSION, routines, activeId, settings, history, hidden };
   }
 
   private persist(): void {

@@ -87,7 +87,8 @@ export class RoutineScreen implements Screen {
       // Búsqueda en todos los apartados
       let found = 0;
       for (const sec of this.app.sections) {
-        const hits = sec.exercises.filter((e) => normalize(`${e.name} ${e.zone} ${e.group ?? ''}`).includes(q));
+        const hidden = this.app.store.hidden;
+        const hits = sec.exercises.filter((e) => !hidden.has(e.id) && normalize(`${e.name} ${e.zone} ${e.group ?? ''}`).includes(q));
         if (!hits.length) continue;
         found += hits.length;
         this.list.append(h('h2', { class: 'group-title' }, sec.title));
@@ -98,7 +99,9 @@ export class RoutineScreen implements Screen {
     }
     const sec = this.app.sections.find((s) => s.id === this.section)!;
     let group: string | undefined;
+    const hidden = this.app.store.hidden;
     for (const ex of sec.exercises) {
+      if (hidden.has(ex.id)) continue;
       if (ex.group && ex.group !== group) {
         group = ex.group;
         this.list.append(h('h2', { class: 'group-title' }, group));
