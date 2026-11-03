@@ -287,6 +287,13 @@ export const DESCRIPTIONS: Record<string, ExerciseDescription> = {
     mistakes: 'Dejar caer las piernas de golpe.',
     easier: 'Rodillas dobladas.',
   },
+  'toques-de-talon': {
+    start: 'Tumbado boca arriba, rodillas dobladas y pies apoyados algo separados. Despega un poco la cabeza y los hombros del suelo, brazos estirados junto al cuerpo.',
+    move: 'Inclina el tronco hacia un lado hasta tocar (o casi) el talón con la mano de ese lado. Vuelve al centro y repite hacia el otro lado, sin bajar los hombros.',
+    tip: 'Aprieta el abdomen y nota el trabajo en los costados (oblicuos). Cuello relajado, mirada hacia las rodillas. Respira de forma continua.',
+    mistakes: 'Tirar del cuello, encoger los hombros o apoyar los hombros en cada repetición.',
+    easier: 'Separa más los pies del cuerpo o deja la cabeza apoyada en el suelo.',
+  },
   'rodillas-al-pecho-sentado': {
     start: 'Sentado, manos apoyadas detrás y piernas estiradas algo levantadas.',
     move: 'Lleva las rodillas hacia el pecho y vuelve a estirar las piernas.',

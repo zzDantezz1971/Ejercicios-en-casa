@@ -134,6 +134,9 @@ export const RAW_SECTIONS: RawSection[] = [
    [{tl:180,tu:188,ua:0,fa:0,thL:-10,snL:-10,thR:-28,snR:-28},0,320],[{tl:180,tu:188,ua:0,fa:0,thR:-10,snR:-10,thL:-28,snL:-28},0,320]]},
  {n:'Elevaciones de piernas',z:'Abdomen inferior',mat:1,b:['caution'],f:[
    [{...SUP,th:-8,sn:-8},150,1100],[{...SUP,th:-88,sn:-88},150,1100]]},
+ {n:'Toques de talón',z:'Oblicuos',v:'top',mat:'top',top:'Vista desde arriba',f:[
+   [{thL:102,snL:96,thR:78,snR:84,sTh:.55,sSh:.5,tu:-72,hd:-74,uaL:96,faL:94,uaR:76,faR:80,saR:1.12},180,520],[{thL:102,snL:96,thR:78,snR:84,sTh:.55,sSh:.5,uaL:96,faL:94,uaR:84,faR:86},60,520],
+   [{thL:102,snL:96,thR:78,snR:84,sTh:.55,sSh:.5,tu:-108,hd:-106,uaL:104,faL:100,saL:1.12,uaR:84,faR:86},180,520],[{thL:102,snL:96,thR:78,snR:84,sTh:.55,sSh:.5,uaL:96,faL:94,uaR:84,faR:86},60,520]]},
  {n:'Rodillas al pecho sentado',z:'Abdomen',mat:1,f:[
    [{tl:-125,ua:135,fa:115,th:-15,sn:-15,ft:-60},100,800],[{tl:-125,tu:-112,ua:135,fa:115,th:-60,sn:45},100,800]]},
  {n:'Inclinaciones laterales con mancuerna',z:'Oblicuos',v:'front',db:'R',b:['caution'],f:[
