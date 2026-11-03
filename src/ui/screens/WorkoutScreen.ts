@@ -1,6 +1,6 @@
 import type { Step, WorkoutPlan } from '../../domain/WorkoutPlan';
 import { WorkoutSession, type SessionSummary } from '../../domain/WorkoutSession';
-import { SECTION_TITLES, type ExerciseDef } from '../../domain/types';
+import { SECTION_TITLES, type ExerciseDef, type SavedRoutine } from '../../domain/types';
 import { FigureView } from '../../figure/FigureView';
 import { Coach } from '../../services/Coach';
 import type { App, Screen } from '../App';
@@ -31,7 +31,7 @@ export class WorkoutScreen implements Screen {
     breakPanel: h('div', { class: 'w-break', hidden: true }),
   };
 
-  constructor(private readonly app: App, plan: WorkoutPlan) {
+  constructor(private readonly app: App, plan: WorkoutPlan, private readonly table: SavedRoutine) {
     this.session = new WorkoutSession(plan);
     this.coach = new Coach(this.session, app.sounds, app.voice);
     const u = this.ui;
@@ -180,7 +180,9 @@ export class WorkoutScreen implements Screen {
         exercisesPlanned: s.exercisesPlanned,
         sections: s.sections,
         completed: s.completed,
+        routineName: this.table.name,
       });
+      this.app.store.markUsed(this.table.id, s.startedAt);
     }
     this.app.replace(new SummaryScreen(this.app, s));
   }

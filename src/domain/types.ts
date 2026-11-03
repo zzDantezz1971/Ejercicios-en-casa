@@ -116,6 +116,18 @@ export interface HistoryEntry {
   exercisesPlanned: number;
   sections: SectionId[];
   completed: boolean;
+  /** Nombre de la tabla con la que se hizo. */
+  routineName?: string;
+}
+
+/** Una tabla de ejercicios guardada con nombre. */
+export interface SavedRoutine {
+  id: string;
+  name: string;
+  routine: Routine;
+  createdAt: string;
+  /** Última vez que se entrenó con ella (ISO). */
+  lastUsed?: string;
 }
 
 export function emptyRoutine(): Routine {

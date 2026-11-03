@@ -86,3 +86,57 @@ export function icon(name: keyof typeof ICONS): SVGSVGElement {
   svg.append(path);
   return svg;
 }
+
+/** Diálogo para escribir un texto (por ejemplo, el nombre de una tabla). Devuelve null si se cancela. */
+export function promptDialog(title: string, initial: string, ok: string): Promise<string | null> {
+  return new Promise((resolve) => {
+    const input = h('input', { type: 'text', id: 'prompt-input', class: 'text-input', value: initial, maxlength: '40', autocomplete: 'off', enterkeyhint: 'done' });
+    const close = (v: string | null) => {
+      wrap.remove();
+      resolve(v);
+    };
+    const submit = () => {
+      const v = input.value.trim();
+      if (v) close(v);
+      else input.focus();
+    };
+    const wrap = h(
+      'div',
+      { class: 'dialog-wrap', onclick: (e: Event) => e.target === wrap && close(null) },
+      h(
+        'form',
+        { class: 'dialog', role: 'dialog', 'aria-modal': 'true', onsubmit: (e: Event) => { e.preventDefault(); submit(); } },
+        h('label', { for: 'prompt-input', class: 'dialog-title' }, title),
+        input,
+        h('div', { class: 'dialog-actions' },
+          h('button', { type: 'button', class: 'btn ghost', onclick: () => close(null) }, 'Cancelar'),
+          h('button', { type: 'submit', class: 'btn primary' }, ok)),
+      ),
+    );
+    document.body.append(wrap);
+    input.focus();
+    input.select();
+  });
+}
+
+/** Menú de opciones que sube desde abajo. Devuelve la opción elegida o null. */
+export function actionSheet<T extends string>(title: string, options: Array<{ id: T; label: string; danger?: boolean }>): Promise<T | null> {
+  return new Promise((resolve) => {
+    const close = (v: T | null) => {
+      wrap.remove();
+      resolve(v);
+    };
+    const wrap = h(
+      'div',
+      { class: 'dialog-wrap sheet-wrap', onclick: (e: Event) => e.target === wrap && close(null) },
+      h(
+        'div',
+        { class: 'sheet', role: 'dialog', 'aria-modal': 'true', 'aria-label': title },
+        h('p', { class: 'sheet-title' }, title),
+        ...options.map((o) => h('button', { class: 'sheet-btn' + (o.danger ? ' danger' : ''), onclick: () => close(o.id) }, o.label)),
+        h('button', { class: 'sheet-btn cancel', onclick: () => close(null) }, 'Cancelar'),
+      ),
+    );
+    document.body.append(wrap);
+  });
+}

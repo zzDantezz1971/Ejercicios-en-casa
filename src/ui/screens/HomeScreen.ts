@@ -5,6 +5,7 @@ import { clear, h, humanDuration, plural } from '../dom';
 import { HistoryScreen } from './HistoryScreen';
 import { RoutineScreen } from './RoutineScreen';
 import { SettingsScreen } from './SettingsScreen';
+import { TablesScreen } from './TablesScreen';
 import { WorkoutScreen } from './WorkoutScreen';
 
 export class HomeScreen implements Screen {
@@ -35,12 +36,17 @@ export class HomeScreen implements Screen {
         h('h1', {}, 'Ejercicios en casa'),
         h('p', { class: 'muted' }, last ? `Último entrenamiento: ${formatDate(last.date)}` : 'Prepara tu rutina y empieza cuando quieras.')),
       h('section', { class: 'card routine-card' },
+        h('div', { class: 'active-routine' },
+          h('span', { class: 'label' }, 'Tabla'),
+          h('h2', {}, app.store.active.name)),
         h('div', { class: 'routine-total' },
           h('span', { class: 'big' }, plan.isEmpty ? '—' : humanDuration(plan.estimatedSeconds)),
           h('span', { class: 'muted' }, plan.isEmpty ? 'Rutina vacía' : plural(plan.exerciseCount, 'ejercicio', 'ejercicios'))),
         h('ul', { class: 'section-list' }, ...rows),
         h('button', { class: 'btn primary block', disabled: plan.isEmpty, onclick: () => this.start(plan) }, 'Empezar'),
-        h('button', { class: 'btn ghost block', onclick: () => app.push(new RoutineScreen(app)) }, plan.isEmpty ? 'Preparar rutina' : 'Cambiar rutina')),
+        h('button', { class: 'btn ghost block', onclick: () => app.push(new RoutineScreen(app)) }, plan.isEmpty ? 'Elegir ejercicios' : 'Editar tabla'),
+        h('button', { class: 'btn ghost block', onclick: () => app.push(new TablesScreen(app)) },
+          app.store.routines.length > 1 ? `Cambiar de tabla (${app.store.routines.length})` : 'Mis tablas')),
       h('nav', { class: 'home-nav' },
         h('button', { class: 'btn ghost', onclick: () => app.push(new HistoryScreen(app)) }, 'Historial'),
         h('button', { class: 'btn ghost', onclick: () => app.push(new SettingsScreen(app)) }, 'Ajustes')),
@@ -51,7 +57,7 @@ export class HomeScreen implements Screen {
     // El sonido y la voz solo se activan desde un toque del usuario.
     this.app.sounds.unlock();
     this.app.voice.unlock();
-    this.app.push(new WorkoutScreen(this.app, plan));
+    this.app.push(new WorkoutScreen(this.app, plan, this.app.store.active));
   }
 }
 

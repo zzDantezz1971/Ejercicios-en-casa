@@ -13,6 +13,7 @@ export class RoutineScreen implements Screen {
   private tabs = h('div', { class: 'tabs', role: 'tablist' });
   private list = h('div', { class: 'ex-grid' });
   private footer = h('div', { class: 'routine-footer' });
+  private title = h('div', { class: 'titles' });
   private io = new IntersectionObserver((entries) => entries.forEach((e) => e.isIntersecting && this.loadThumb(e.target as HTMLElement)), { rootMargin: '300px' });
 
   constructor(private readonly app: App) {
@@ -20,7 +21,7 @@ export class RoutineScreen implements Screen {
     this.el.append(
       h('header', { class: 'bar sticky' },
         h('button', { class: 'icon-btn', 'aria-label': 'Volver', onclick: () => app.back() }, '‹'),
-        h('h1', {}, 'Preparar rutina')),
+        this.title),
       this.tabs,
       h('p', { class: 'hint' }, 'Toca un ejercicio para añadirlo. Se harán en el orden en que los marques. Pulsa ⓘ para ver cómo se hace.'),
       this.list,
@@ -30,6 +31,7 @@ export class RoutineScreen implements Screen {
 
   enter(): void {
     this.editor = new RoutineEditor(this.app.store.routine);
+    this.title.replaceChildren(h('span', { class: 'subtitle' }, 'Editar tabla'), h('h1', {}, this.app.store.active.name));
     this.render();
   }
 

@@ -71,6 +71,7 @@ function row(e: HistoryEntry): HTMLElement {
       h('span', { class: 'h-day' }, d.toLocaleDateString('es-ES', { day: 'numeric' })),
       h('span', { class: 'h-wd' }, d.toLocaleDateString('es-ES', { weekday: 'short' }))),
     h('div', { class: 'h-main' },
+      e.routineName ? h('span', { class: 'h-name' }, e.routineName) : null,
       h('strong', {}, `${humanDuration(e.durationSec)} · ${plural(e.exercisesDone, 'ejercicio', 'ejercicios')}`),
       h('span', { class: 'muted' }, e.sections.map((s) => SECTION_TITLES[s]).join(' · ')),
       !e.completed ? h('span', { class: 'badge warn' }, 'Terminado antes') : null),

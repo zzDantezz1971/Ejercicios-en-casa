@@ -8,7 +8,8 @@ con un maniquí 3D que enseña cada ejercicio.
 - Entre apartados espera a que toques la pantalla.
 - Ejercicios por lados: aviso de cambio de lado a mitad del tiempo.
 - Pitidos, avisos por voz, pantalla siempre encendida, botones de anterior, pausa y saltar.
-- Guarda la última rutina y un historial sencillo. Funciona sin conexión una vez instalada.
+- Tablas de ejercicios guardadas con nombre (crear, editar, cambiar de nombre, duplicar y borrar).
+- Historial sencillo con la tabla usada. Funciona sin conexión una vez instalada.
 
 ## Uso
 
@@ -28,7 +29,7 @@ npm run build    # comprobación de tipos y versión final en dist/
 
 | Carpeta | Contenido |
 |---|---|
-| `src/domain` | Lógica sin pantallas: tipos, `WorkoutPlan` (rutina → lista de pasos), `WorkoutSession` (máquina de estados del entrenamiento), `RoutineEditor`, `Store` (guardado con versión). |
+| `src/domain` | Lógica sin pantallas: tipos, `WorkoutPlan` (rutina → lista de pasos), `WorkoutSession` (máquina de estados del entrenamiento), `RoutineEditor`, `Store` (guardado con versión: tablas, ajustes e historial). |
 | `src/services` | `Sounds` (pitidos), `Voice` (voz en castellano), `ScreenAwake` (pantalla encendida), `Coach` (une la sesión con sonido y voz). |
 | `src/data` | Catálogo de ejercicios (`rawExercises.ts`), descripciones y qué ejercicios van por lados (`catalog.ts`). |
 | `src/figure` | Motor de posturas (`poses.ts`), maniquí 3D con Three.js (`Mannequin.ts`) y lienzos/miniaturas (`FigureView.ts`). |

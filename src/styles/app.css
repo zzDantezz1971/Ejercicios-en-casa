@@ -255,3 +255,42 @@ button:focus-visible, input:focus-visible { outline: 3px solid var(--accent); ou
 .dialog-wrap { position: fixed; inset: 0; z-index: 50; background: rgb(0 0 0 / .45); display: flex; align-items: center; justify-content: center; padding: 24px; }
 .dialog { background: var(--surface); border-radius: 18px; padding: 20px; max-width: 380px; width: 100%; display: flex; flex-direction: column; gap: 18px; }
 .dialog-actions { display: flex; gap: 10px; justify-content: flex-end; }
+
+/* Diálogo con texto y menú de opciones */
+.dialog-title { font-weight: 600; font-size: 1.05rem; }
+.text-input {
+  width: 100%; font: inherit; font-size: 1.1rem; padding: 12px 14px; border-radius: 12px;
+  border: 1px solid var(--line); background: var(--bg); color: var(--fg);
+}
+.text-input:focus { outline: 2px solid var(--accent); border-color: var(--accent); }
+.sheet-wrap { align-items: flex-end; padding: 0; }
+.sheet {
+  width: 100%; max-width: 560px; background: var(--surface); border-radius: 20px 20px 0 0;
+  padding: 12px 12px calc(12px + env(safe-area-inset-bottom, 0px)); display: flex; flex-direction: column; gap: 4px;
+}
+.sheet-title { color: var(--muted); font-size: .9rem; text-align: center; padding: 6px 0 8px; }
+.sheet-btn {
+  border: 0; background: transparent; padding: 15px 12px; border-radius: 12px; font-weight: 600; font-size: 1.05rem;
+  text-align: left; cursor: pointer; color: var(--fg);
+}
+.sheet-btn:hover, .sheet-btn:focus-visible { background: var(--accent-soft); }
+.sheet-btn.danger { color: var(--danger); }
+.sheet-btn.cancel { text-align: center; color: var(--muted); margin-top: 4px; border-top: 1px solid var(--line); border-radius: 0; }
+
+/* Mis tablas */
+.tables-body { display: flex; flex-direction: column; gap: 10px; }
+.table-card { display: flex; flex-direction: column; gap: 10px; }
+.table-card.active { border: 2px solid var(--accent); }
+.table-head { display: flex; align-items: flex-start; gap: 8px; }
+.table-head h2 { font-size: 1.5rem; line-height: 1.1; flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.active-pill { flex: none; font-size: .72rem; font-weight: 600; color: var(--accent); background: var(--accent-soft); border-radius: 999px; padding: 3px 9px; margin-top: 4px; }
+.table-meta { color: var(--muted); font-size: .92rem; display: flex; flex-direction: column; gap: 2px; }
+.table-actions { display: grid; grid-template-columns: 1fr 1fr auto; gap: 8px; }
+.more-btn { width: 48px; border: 0; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 1.4rem; cursor: pointer; }
+.active-routine { display: flex; flex-direction: column; gap: 2px; }
+.active-routine .label { font-size: .8rem; text-transform: uppercase; letter-spacing: .1em; color: var(--accent); font-weight: 600; }
+.active-routine h2 { font-size: 1.8rem; line-height: 1.05; overflow-wrap: anywhere; }
+.bar .subtitle { color: var(--muted); font-size: .9rem; font-weight: 500; display: block; line-height: 1.1; }
+.bar .titles { display: flex; flex-direction: column; min-width: 0; }
+.bar .titles h1 { overflow-wrap: anywhere; }
+.h-name { font: 700 1.15rem var(--display); text-transform: uppercase; letter-spacing: .02em; color: var(--accent); }

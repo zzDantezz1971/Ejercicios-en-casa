@@ -4,20 +4,24 @@ import {
   emptyRoutine,
   type HistoryEntry,
   type Routine,
+  type SavedRoutine,
   type Settings,
 } from './types';
 
 /** Todo lo que la app guarda en el móvil. */
 export interface SavedData {
   version: number;
-  routine: Routine;
+  routines: SavedRoutine[];
+  activeId: string;
   settings: Settings;
   history: HistoryEntry[];
 }
 
 export const STORAGE_KEY = 'ejercicios-en-casa';
-export const DATA_VERSION = 1;
+export const DATA_VERSION = 2;
+export const DEFAULT_ROUTINE_NAME = 'Mi rutina';
 const HISTORY_LIMIT = 500;
+const NAME_MAX = 40;
 
 /** Almacenamiento mínimo (localStorage en la app, un mapa en las pruebas). */
 export interface KeyValue {
@@ -25,9 +29,37 @@ export interface KeyValue {
   setItem(key: string, value: string): void;
 }
 
+let idCounter = 0;
+function newId(): string {
+  return `t${Date.now().toString(36)}${(idCounter++).toString(36)}${Math.random().toString(36).slice(2, 6)}`;
+}
+
+function newRoutine(name: string, routine: Routine = emptyRoutine()): SavedRoutine {
+  return { id: newId(), name: cleanName(name), routine, createdAt: new Date().toISOString() };
+}
+
+export function cleanName(name: string): string {
+  const n = name.replace(/\s+/g, ' ').trim().slice(0, NAME_MAX);
+  return n || DEFAULT_ROUTINE_NAME;
+}
+
+function sanitizeRoutine(input: unknown): Routine {
+  const out = emptyRoutine();
+  const r = (input ?? {}) as Partial<Record<string, unknown>>;
+  for (const s of SECTION_IDS) {
+    const items = r[s];
+    if (Array.isArray(items)) {
+      out[s] = items.filter((i) => i && typeof i.exerciseId === 'string' && Number.isFinite(i.seconds));
+    }
+  }
+  return out;
+}
+
 /**
- * Guarda y carga los datos con número de versión. Si en el futuro cambia el formato,
- * se añade un paso en `migrate` y los datos antiguos se convierten sin perderse.
+ * Guarda y carga los datos con número de versión. Si cambia el formato, se añade un paso
+ * en `migrate` y los datos antiguos se convierten sin perderse.
+ *  - v1: una sola rutina (`routine`).
+ *  - v2: varias tablas con nombre (`routines`) y la activa (`activeId`).
  */
 export class Store {
   private data: SavedData;
@@ -36,19 +68,83 @@ export class Store {
     this.data = this.load();
   }
 
-  get routine(): Routine {
-    return this.data.routine;
+  /* ── Tablas ── */
+
+  get routines(): readonly SavedRoutine[] {
+    return this.data.routines;
   }
+
+  get active(): SavedRoutine {
+    return this.data.routines.find((r) => r.id === this.data.activeId) ?? this.data.routines[0];
+  }
+
+  /** Ejercicios de la tabla activa. */
+  get routine(): Routine {
+    return this.active.routine;
+  }
+
+  /** Guarda los ejercicios de la tabla activa. */
+  saveRoutine(routine: Routine): void {
+    this.active.routine = routine;
+    this.persist();
+  }
+
+  setActive(id: string): void {
+    if (this.data.routines.some((r) => r.id === id)) {
+      this.data.activeId = id;
+      this.persist();
+    }
+  }
+
+  /** Crea una tabla vacía y la deja activa. */
+  createRoutine(name: string): SavedRoutine {
+    const r = newRoutine(name);
+    this.data.routines.push(r);
+    this.data.activeId = r.id;
+    this.persist();
+    return r;
+  }
+
+  renameRoutine(id: string, name: string): void {
+    const r = this.data.routines.find((x) => x.id === id);
+    if (!r) return;
+    r.name = cleanName(name);
+    this.persist();
+  }
+
+  /** Copia una tabla con el nombre "… (copia)" justo debajo de la original. */
+  duplicateRoutine(id: string): SavedRoutine | undefined {
+    const i = this.data.routines.findIndex((x) => x.id === id);
+    if (i < 0) return undefined;
+    const src = this.data.routines[i];
+    const copy = newRoutine(`${src.name} (copia)`, structuredCloneRoutine(src.routine));
+    this.data.routines.splice(i + 1, 0, copy);
+    this.persist();
+    return copy;
+  }
+
+  /** Borra una tabla. Siempre queda al menos una (vacía si hace falta). */
+  deleteRoutine(id: string): void {
+    this.data.routines = this.data.routines.filter((r) => r.id !== id);
+    if (this.data.routines.length === 0) this.data.routines.push(newRoutine(DEFAULT_ROUTINE_NAME));
+    if (!this.data.routines.some((r) => r.id === this.data.activeId)) this.data.activeId = this.data.routines[0].id;
+    this.persist();
+  }
+
+  markUsed(id: string, when: Date = new Date()): void {
+    const r = this.data.routines.find((x) => x.id === id);
+    if (!r) return;
+    r.lastUsed = when.toISOString();
+    this.persist();
+  }
+
+  /* ── Ajustes e historial ── */
+
   get settings(): Settings {
     return this.data.settings;
   }
   get history(): readonly HistoryEntry[] {
     return this.data.history;
-  }
-
-  saveRoutine(routine: Routine): void {
-    this.data.routine = routine;
-    this.persist();
   }
 
   saveSettings(settings: Settings): void {
@@ -66,38 +162,50 @@ export class Store {
     this.persist();
   }
 
+  /* ── Carga y migración ── */
+
   private load(): SavedData {
-    const fresh: SavedData = { version: DATA_VERSION, routine: emptyRoutine(), settings: { ...DEFAULT_SETTINGS }, history: [] };
     let raw: string | null = null;
     try {
       raw = this.kv?.getItem(STORAGE_KEY) ?? null;
     } catch {
-      return fresh;
+      raw = null;
     }
-    if (!raw) return fresh;
-    try {
-      return Store.migrate(JSON.parse(raw), fresh);
-    } catch {
-      return fresh;
+    if (raw) {
+      try {
+        return Store.migrate(JSON.parse(raw));
+      } catch {
+        /* datos rotos: se empieza de cero */
+      }
     }
+    return Store.migrate({});
   }
 
   /** Convierte datos de versiones anteriores y rellena lo que falte. */
-  static migrate(input: Partial<SavedData> & { version?: number }, fresh: SavedData): SavedData {
-    const out: SavedData = {
-      version: DATA_VERSION,
-      routine: emptyRoutine(),
-      settings: { ...fresh.settings, ...(input.settings ?? {}) },
-      history: Array.isArray(input.history) ? input.history : [],
-    };
-    for (const s of SECTION_IDS) {
-      const items = input.routine?.[s];
-      if (Array.isArray(items)) {
-        out.routine[s] = items.filter((i) => i && typeof i.exerciseId === 'string' && Number.isFinite(i.seconds));
-      }
+  static migrate(input: Record<string, unknown>): SavedData {
+    const settings = { ...DEFAULT_SETTINGS, ...((input.settings as Partial<Settings>) ?? {}) };
+    const history = Array.isArray(input.history) ? (input.history as HistoryEntry[]) : [];
+
+    let routines: SavedRoutine[] = [];
+    if (Array.isArray(input.routines)) {
+      // v2
+      routines = (input.routines as Array<Partial<SavedRoutine>>)
+        .filter((r) => r && typeof r.id === 'string')
+        .map((r) => ({
+          id: r.id!,
+          name: cleanName(r.name ?? ''),
+          routine: sanitizeRoutine(r.routine),
+          createdAt: typeof r.createdAt === 'string' ? r.createdAt : new Date().toISOString(),
+          lastUsed: typeof r.lastUsed === 'string' ? r.lastUsed : undefined,
+        }));
+    } else if (input.routine) {
+      // v1 -> v2: la rutina única pasa a ser la tabla "Mi rutina"
+      routines = [newRoutine(DEFAULT_ROUTINE_NAME, sanitizeRoutine(input.routine))];
     }
-    // Aquí irán los pasos de migración cuando haya versión 2: if (input.version === 1) {...}
-    return out;
+    if (routines.length === 0) routines = [newRoutine(DEFAULT_ROUTINE_NAME)];
+    const activeId = routines.some((r) => r.id === input.activeId) ? (input.activeId as string) : routines[0].id;
+
+    return { version: DATA_VERSION, routines, activeId, settings, history };
   }
 
   private persist(): void {
@@ -107,4 +215,10 @@ export class Store {
       // Sin almacenamiento disponible: la app sigue funcionando sin guardar.
     }
   }
+}
+
+function structuredCloneRoutine(r: Routine): Routine {
+  const out = emptyRoutine();
+  for (const s of SECTION_IDS) out[s] = r[s].map((i) => ({ ...i }));
+  return out;
 }

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { STORAGE_KEY, Store, type KeyValue } from '../src/domain/Store';
+import { DEFAULT_ROUTINE_NAME, STORAGE_KEY, Store, type KeyValue } from '../src/domain/Store';
 import { RoutineEditor } from '../src/domain/RoutineEditor';
 import { DEFAULT_SETTINGS, emptyRoutine } from '../src/domain/types';
 
@@ -10,27 +10,95 @@ function memory(initial?: string): KeyValue & { data: Map<string, string> } {
 }
 
 describe('Store', () => {
-  it('empieza con valores por defecto y guarda los cambios', () => {
+  it('empieza con una tabla vacía "Mi rutina" y ajustes por defecto', () => {
+    const store = new Store(memory());
+    expect(store.settings).toEqual(DEFAULT_SETTINGS);
+    expect(store.routines).toHaveLength(1);
+    expect(store.active.name).toBe(DEFAULT_ROUTINE_NAME);
+    expect(store.routine).toEqual(emptyRoutine());
+  });
+
+  it('guarda los cambios y los recupera al volver a abrir', () => {
     const kv = memory();
     const store = new Store(kv);
-    expect(store.settings).toEqual(DEFAULT_SETTINGS);
     store.saveSettings({ ...DEFAULT_SETTINGS, restSeconds: 8 });
-    expect(new Store(kv).settings.restSeconds).toBe(8);
+    const r = emptyRoutine();
+    r.pesas = [{ exerciseId: 'x', seconds: 30 }];
+    store.saveRoutine(r);
+    const again = new Store(kv);
+    expect(again.settings.restSeconds).toBe(8);
+    expect(again.routine.pesas).toEqual([{ exerciseId: 'x', seconds: 30 }]);
   });
 
-  it('rellena ajustes nuevos y descarta datos rotos', () => {
-    const kv = memory(JSON.stringify({ version: 1, settings: { restSeconds: 12 }, routine: { pesas: [{ exerciseId: 'x', seconds: 30 }, { bad: 1 }] } }));
-    const store = new Store(kv);
+  it('convierte la rutina única de la versión 1 en la tabla "Mi rutina" sin perder nada', () => {
+    const v1 = {
+      version: 1,
+      settings: { restSeconds: 12 },
+      routine: { pesas: [{ exerciseId: 'x', seconds: 30 }, { bad: 1 }] },
+      history: [{ date: '2026-11-01T10:00:00Z', durationSec: 600, exercisesDone: 5, exercisesPlanned: 5, sections: ['pesas'], completed: true }],
+    };
+    const store = new Store(memory(JSON.stringify(v1)));
+    expect(store.routines).toHaveLength(1);
+    expect(store.active.name).toBe('Mi rutina');
+    expect(store.routine.pesas).toEqual([{ exerciseId: 'x', seconds: 30 }]);
     expect(store.settings.restSeconds).toBe(12);
     expect(store.settings.sectionCountdown).toBe(DEFAULT_SETTINGS.sectionCountdown);
-    expect(store.routine.pesas).toEqual([{ exerciseId: 'x', seconds: 30 }]);
-    expect(new Store(memory('{no es json')).routine).toEqual(emptyRoutine());
+    expect(store.history).toHaveLength(1);
   });
 
-  it('funciona sin almacenamiento', () => {
-    const store = new Store(null);
+  it('crea, renombra, duplica, cambia y borra tablas', () => {
+    const kv = memory();
+    const store = new Store(kv);
+    const first = store.active;
+    const r = emptyRoutine();
+    r.abdominales = [{ exerciseId: 'a', seconds: 40 }];
+    store.saveRoutine(r);
+
+    const arms = store.createRoutine('  Día   de brazos ');
+    expect(arms.name).toBe('Día de brazos');
+    expect(store.active.id).toBe(arms.id);
+    expect(store.routine).toEqual(emptyRoutine());
+
+    store.renameRoutine(arms.id, 'Brazos');
+    expect(store.active.name).toBe('Brazos');
+    store.renameRoutine(arms.id, '   ');
+    expect(store.active.name).toBe(DEFAULT_ROUTINE_NAME);
+
+    const copy = store.duplicateRoutine(first.id)!;
+    expect(copy.name).toBe(`${first.name} (copia)`);
+    expect(store.routines.map((x) => x.id)).toEqual([first.id, copy.id, arms.id]);
+    // la copia es independiente
+    store.setActive(copy.id);
     store.saveRoutine(emptyRoutine());
-    expect(store.history).toEqual([]);
+    store.setActive(first.id);
+    expect(store.routine.abdominales).toHaveLength(1);
+
+    store.deleteRoutine(first.id);
+    expect(store.routines.map((x) => x.id)).toEqual([copy.id, arms.id]);
+    expect(store.active.id).toBe(copy.id);
+
+    const again = new Store(kv);
+    expect(again.routines.map((x) => x.name)).toEqual([`${DEFAULT_ROUTINE_NAME} (copia)`, DEFAULT_ROUTINE_NAME]);
+  });
+
+  it('siempre queda al menos una tabla', () => {
+    const store = new Store(memory());
+    store.deleteRoutine(store.active.id);
+    expect(store.routines).toHaveLength(1);
+    expect(store.routine).toEqual(emptyRoutine());
+  });
+
+  it('recuerda la última vez que se usó una tabla', () => {
+    const store = new Store(memory());
+    store.markUsed(store.active.id, new Date('2026-11-03T09:00:00Z'));
+    expect(store.active.lastUsed).toBe('2026-11-03T09:00:00.000Z');
+  });
+
+  it('descarta datos rotos y funciona sin almacenamiento', () => {
+    expect(new Store(memory('{no es json')).routine).toEqual(emptyRoutine());
+    const store = new Store(null);
+    store.createRoutine('X');
+    expect(store.routines).toHaveLength(2);
   });
 });
 
