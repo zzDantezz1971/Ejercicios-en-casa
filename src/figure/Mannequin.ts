@@ -35,7 +35,7 @@ function ortho(v: THREE.Vector3, axis: THREE.Vector3): THREE.Vector3 {
 export const DEFAULT_PALETTE: Palette = {
   skin: '#E2A983', shirt: '#2F5BEA', shorts: '#1E2633', shoe: '#F2A516', sole: '#F4F1EA', brow: '#6B4A3A',
   stripe: '#F3F5F8', band: '#FF7A33',
-  iron: '#3B4452', bench: '#2B323D', benchLeg: '#8893A3', mat: '#26365C', wall: '#262E39',
+  iron: '#C9D0DA', bench: '#2B323D', benchLeg: '#8893A3', mat: '#26365C', wall: '#262E39',
 };
 
 const SIDE_W = { arm: 13, leg: 8.5 };
@@ -184,7 +184,7 @@ export class MannequinScene {
     const M = {
       skin: this.mat(p.skin, 0.55), shirt: this.mat(p.shirt, 0.7), shorts: this.mat(p.shorts, 0.75),
       shoe: this.mat(p.shoe, 0.5), sole: this.mat(p.sole, 0.8), brow: this.mat(p.brow, 0.8),
-      eye: this.mat('#FFFFFF', 0.3), pupil: this.mat('#1C1C1C', 0.3), iron: this.mat(p.iron, 0.35, 0.6),
+      eye: this.mat('#FFFFFF', 0.3), pupil: this.mat('#1C1C1C', 0.3), iron: this.mat(p.iron, 0.32, 0.3),
       stripe: this.mat(p.stripe, 0.6), band: this.mat(p.band, 0.6), watch: this.mat('#15181D', 0.3, 0.3),
       watchFace: this.mat('#9FB4FF', 0.2, 0.2), mouth: this.mat('#7A3B32', 0.6),
     };
@@ -223,7 +223,7 @@ export class MannequinScene {
     this.buildDumbbells(M.iron);
   }
 
-  private buildDumbbells(iron: THREE.Material = this.mat(this.pal.iron, 0.35, 0.6)): void {
+  private buildDumbbells(iron: THREE.Material = this.mat(this.pal.iron, 0.32, 0.3)): void {
     const G = this.geo;
     const db = this.motion.spec.db;
     const hands: Array<'L' | 'R'> = db === 'both' ? ['L', 'R'] : db ? [db] : [];
