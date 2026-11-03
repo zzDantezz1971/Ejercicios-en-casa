@@ -58,7 +58,11 @@ export class WorkoutScreen implements Screen {
     this.session.on('tick', (t) => this.onTick(t.remaining, t.elapsed, t.duration, t.step));
     this.session.on('status', (s) => this.onStatus(s));
     this.session.on('cue', (c) => {
-      if (c.type === 'switch') this.ui.side.textContent = 'Lado 2';
+      const step = this.session.current;
+      if (c.type === 'switch' && step?.kind === 'exercise') {
+        this.ui.side.textContent = 'Lado 2';
+        this.showFigure(step.exercise, 2);
+      }
     });
     this.session.on('finished', (s) => this.onFinished(s));
     this.onStatus('running');
@@ -102,10 +106,13 @@ export class WorkoutScreen implements Screen {
     else if (wasRunning) this.session.resume();
   }
 
-  private showFigure(ex: ExerciseDef): void {
-    if (this.shownExercise === ex.id) return;
-    this.shownExercise = ex.id;
-    this.view?.setExercise(ex);
+  /** Muestra el ejercicio; en los que van por lados, solo el lado que toca. */
+  private showFigure(ex: ExerciseDef, side: 1 | 2 = 1): void {
+    const s = ex.oneSided ? side : undefined;
+    const key = `${ex.id}:${s ?? ''}`;
+    if (this.shownExercise === key) return;
+    this.shownExercise = key;
+    this.view?.setExercise(ex, s);
   }
 
   private onStep(step: Step): void {
@@ -129,7 +136,7 @@ export class WorkoutScreen implements Screen {
         u.name.textContent = step.exercise.name;
         u.side.textContent = step.switchAt !== undefined ? 'Lado 1' : '';
         u.next.textContent = nextText(this.session.plan.steps, this.session.currentIndex);
-        this.showFigure(step.exercise);
+        this.showFigure(step.exercise, 1);
         this.view?.restart();
         break;
       case 'rest':

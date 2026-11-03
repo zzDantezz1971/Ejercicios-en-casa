@@ -80,26 +80,59 @@ export const PROPS: PropHelpers = {
   rect: (x, y, w, h, soft) => [{ t: 'rect', x, y, w, h, soft }],
 };
 
+const ANGLES = ['tl', 'tu', 'hd', 'uaL', 'uaR', 'faL', 'faR', 'thL', 'thR', 'snL', 'snR', 'ftL', 'ftR'];
+const swapSide = (k: string) => (k.endsWith('L') ? k.slice(0, -1) + 'R' : k.endsWith('R') ? k.slice(0, -1) + 'L' : k);
+
+/** Postura del otro lado: en vista lateral se intercambian brazo/pierna cercanos y lejanos; de frente, además se refleja. */
+function mirrorPose(view: string, p: Pose): Pose {
+  const o: Pose = {};
+  for (const k in p) o[swapSide(k)] = p[k];
+  if (view !== 'side') {
+    for (const k of ANGLES) if (k in o) o[k] = 180 - o[k];
+    o.x = -o.x;
+  }
+  return o;
+}
+
+/** Lado que se muestra en un ejercicio por lados: 1, 2 o ambos alternando (undefined). */
+export type Side = 1 | 2 | undefined;
+
 /** Un movimiento listo para consultar la postura en cualquier instante. */
 export class Motion {
   readonly view: 'side' | 'front' | 'top';
   readonly total: number;
   private frames: Array<{ p: Pose; h: number; d: number }> = [];
   private plantX = 0;
+  /** Lado 2 obtenido reflejando el lado 1. */
+  readonly mirrored: boolean;
+  private readonly plant?: string;
+  private readonly anchor?: { j: string; y: number };
 
-  constructor(readonly spec: MotionSpec) {
+  constructor(readonly spec: MotionSpec, readonly side: Side = undefined) {
     this.view = spec.v ?? 'side';
+    // Ejercicios con los dos lados en sus fotogramas (split): cada mitad es un lado. El resto se refleja para el lado 2.
+    this.mirrored = side === 2 && !spec.split;
+    this.plant = spec.plant && (this.mirrored ? swapSide(spec.plant) : spec.plant);
+    this.anchor = spec.anchor && (this.mirrored ? { ...spec.anchor, j: swapSide(spec.anchor.j) } : spec.anchor);
     if (spec.fn) this.total = spec.per ?? 2000;
     else {
-      this.frames = (spec.f ?? [[{}]]).map(([p, h, d]) => ({ p: resolve(this.view, p), h: h ?? 300, d: d ?? 800 }));
-      this.total = this.frames.reduce((s, f) => s + f.h + f.d, 0);
+      let f = spec.f ?? [[{}]];
+      if (side && spec.split) f = side === 1 ? f.slice(0, f.length / 2) : f.slice(f.length / 2);
+      this.frames = f.map(([p, h, d]) => {
+        const r = resolve(this.view, p);
+        return { p: this.mirrored ? mirrorPose(this.view, r) : r, h: h ?? 300, d: d ?? 800 };
+      });
+      this.total = this.frames.reduce((s, x) => s + x.h + x.d, 0);
     }
-    if (spec.plant) this.plantX = joints(this.view, this.poseAt(0))[spec.plant][0];
+    if (this.plant) this.plantX = joints(this.view, this.poseAt(0))[this.plant][0];
   }
 
   poseAt(ms: number): Pose {
     const T = this.total;
-    if (this.spec.fn) return resolve(this.view, this.spec.fn((((ms % T) + T) % T) / T));
+    if (this.spec.fn) {
+      const r = resolve(this.view, this.spec.fn((((ms % T) + T) % T) / T));
+      return this.mirrored ? mirrorPose(this.view, r) : r;
+    }
     let t = ((ms % T) + T) % T;
     const F = this.frames, n = F.length;
     for (let i = 0; i < n; i++) {
@@ -116,9 +149,8 @@ export class Motion {
   place(pose: Pose): Joints {
     const J = joints(this.view, pose);
     let dx = 0, dy = 0;
-    const s = this.spec;
-    if (s.plant) dx = this.plantX - J[s.plant][0];
-    if (s.anchor) dy = s.anchor.y - J[s.anchor.j][1];
+    if (this.plant) dx = this.plantX - J[this.plant][0];
+    if (this.anchor) dy = this.anchor.y - J[this.anchor.j][1];
     else if (this.view !== 'top') {
       let m = J.head[1] + 10.5;
       for (const k in J) if (k !== 'head') m = Math.max(m, J[k][1]);
@@ -133,7 +165,15 @@ export class Motion {
     return { pose, J: this.place(pose) };
   }
 
+  /** Accesorios (banco, pared...). Se calculan con el lado original y se reflejan si hace falta. */
   props(): PropOp[] {
-    return this.spec.props ? this.spec.props(this.place(this.poseAt(0)), PROPS) : [];
+    if (!this.spec.props) return [];
+    if (!this.mirrored) return this.spec.props(this.place(this.poseAt(0)), PROPS);
+    const base = new Motion(this.spec);
+    const ops = this.spec.props(base.place(base.poseAt(0)), PROPS);
+    if (this.view === 'side') return ops.map((o) => ({ ...o, z: -(o.z ?? 0) }));
+    return ops.map((o) =>
+      o.t === 'rect' ? { ...o, x: -(o.x + o.w) } : { ...o, a: [-o.a[0], o.a[1]] as Pt, b: [-o.b[0], o.b[1]] as Pt },
+    );
   }
 }

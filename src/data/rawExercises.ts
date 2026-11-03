@@ -69,10 +69,8 @@ export const RAW_SECTIONS: RawSection[] = [
  {n:'Press inclinado con mancuernas',z:'Pecho superior',db:'both',anchor:{j:'pel',y:-40},
    props:(J,P)=>[...P.benchFlat(J.pel[0]-16,J.pel[0]+18),...P.line([J.pel[0]-8,-36],[J.pel[0]-8-54*.82,-36-54*.57],7)],f:[
    [{tl:-145,th:5,sn:90,ua:-100,fa:-100},150,1000],[{tl:-145,th:5,sn:90,ua:60,fa:-95},150,1000]]},
- {n:'Aperturas con mancuernas',z:'Pecho',v:'top',db:'both',top:'Vista desde arriba',lift:40,legsDown:true,
-   props:(J,P)=>P.rect(J.pel[0]-15,J.head[1]-14,30,J.pel[1]-J.head[1]+30,true),f:[
-   [{thL:115,snL:95,thR:65,snR:85,uaL:180,faL:180,uaR:0,faR:0,saL:.22,saR:.22},150,1000],
-   [{thL:115,snL:95,thR:65,snR:85,uaL:182,faL:172,uaR:-2,faR:8},150,1000]]},
+ {n:'Aperturas con mancuernas',z:'Pecho',db:'both',armsOut:true,anchor:{j:'pel',y:-40},props:benchLie,f:[
+   [{...LYB,ua:-90,fa:-90},150,1000],[{...LYB,ua:-80,fa:-75,sa:.22},150,1000]]},
  {n:'Pullover con mancuerna',z:'Pecho y espalda',db:'R',anchor:{j:'pel',y:-40},props:benchLie,f:[
    [{...LYB,ua:270,fa:270},150,1100],[{...LYB,ua:195,fa:190},150,1100]]},
  {n:'Remo a una mano apoyado en banco',z:'Espalda',db:'R',anchor:{j:'knL',y:-38},props:benchRow,f:[
@@ -80,9 +78,9 @@ export const RAW_SECTIONS: RawSection[] = [
  {n:'Remo con pecho apoyado en banco inclinado',z:'Espalda',db:'both',
    props:inclineBack,f:[
    [{tl:-45,th:100,sn:100,ua:90,fa:90},150,800],[{tl:-45,th:100,sn:100,ua:205,fa:95},150,800]]},
- {n:'Pájaros (elevaciones posteriores)',z:'Hombro posterior y espalda alta',db:'both',
+ {n:'Pájaros (elevaciones posteriores)',z:'Hombro posterior y espalda alta',db:'both',armsOut:true,
    props:inclineBack,f:[
-   [{tl:-45,th:100,sn:100,ua:90,fa:95},150,800],[{tl:-45,th:100,sn:100,ua:150,fa:155,sa:.55},150,800]]},
+   [{tl:-45,th:100,sn:100,ua:90,fa:95},150,800],[{tl:-45,th:100,sn:100,ua:120,fa:125,sa:.2},150,800]]},
  {n:'Press de hombros sentado',z:'Hombros',v:'front',db:'both',anchor:{j:'pel',y:-40},
    props:(J,P)=>[...P.rect(J.pel[0]-15,J.neck[1]-4,30,-34-(J.neck[1]-4),true),...P.rect(J.pel[0]-26,-34,52,6),
      ...P.line([J.pel[0]-20,-29],[J.pel[0]-20,0],4),...P.line([J.pel[0]+20,-29],[J.pel[0]+20,0],4)],f:[
@@ -144,13 +142,13 @@ export const RAW_SECTIONS: RawSection[] = [
 
 {id:'estiramientos',title:'Estiramientos',note:'Te propongo 26: estiramientos de todo el cuerpo y, al final, 6 ejercicios suaves para fortalecer la zona lumbar.',groups:true,items:[
  {g:'Cuello'},
- {n:'Inclinación lateral de cuello',z:'Cuello',v:'front',f:[[{},300,900],[{hd:-138},1200,900],[{},300,900],[{hd:-42},1200,900]]},
+ {n:'Inclinación lateral de cuello',split:true,z:'Cuello',v:'front',f:[[{},300,900],[{hd:-138},1200,900],[{},300,900],[{hd:-42},1200,900]]},
  {n:'Barbilla al pecho',z:'Cuello',f:[[{},300,900],[{hd:-40},1400,900]]},
  {g:'Hombros, pecho y brazos'},
- {n:'Hombro cruzado',z:'Hombros',v:'front',f:[
+ {n:'Hombro cruzado',split:true,z:'Hombros',v:'front',f:[
    [{uaR:180,faR:180,saR:.9,uaL:100,faL:-70},1300,800],[{},200,800],
    [{uaL:0,faL:0,saL:.9,uaR:80,faR:-110},1300,800],[{},200,800]]},
- {n:'Tríceps detrás de la cabeza',z:'Tríceps y hombros',v:'front',f:[
+ {n:'Tríceps detrás de la cabeza',split:true,z:'Tríceps y hombros',v:'front',f:[
    [{uaR:-95,faR:120,uaL:305,faL:350},1300,900],[{},200,900],
    [{uaL:275,faL:60,uaR:-125,faR:190},1300,900],[{},200,900]]},
  {n:'Apertura de pecho con manos atrás',z:'Pecho y hombros',f:[[{ua:140,fa:140},300,900],[{ua:160,fa:162,tu:-96,hd:-104},1400,900]]},
@@ -164,14 +162,14 @@ export const RAW_SECTIONS: RawSection[] = [
    [{...PRONE,tl:-4,tu:-35,ua:80,fa:0,sa:.6},300,1200],[{...PRONE,tl:-5,tu:-55,hd:-50,ua:90,fa:0,sa:.75},1500,1200]]},
  {n:'Rodillas al pecho tumbado',z:'Lumbar',mat:1,f:[
    [{tl:180,th:-125,sn:15,ua:-40,fa:-20},800,1100],[{tl:180,th:-140,sn:5,ua:-48,fa:-12},1200,1100]]},
- {n:'Torsión lumbar tumbado',z:'Lumbar y glúteos',v:'top',mat:'top',top:'Vista desde arriba',f:[
+ {n:'Torsión lumbar tumbado',split:true,z:'Lumbar y glúteos',v:'top',mat:'top',top:'Vista desde arriba',f:[
    [{uaL:180,faL:180,uaR:0,faR:0,th:93,sn:90,sTh:.35,sSh:.4},200,1000],
    [{uaL:180,faL:180,uaR:0,faR:0,th:25,sn:100,hd:-110},1500,1000],
    [{uaL:180,faL:180,uaR:0,faR:0,th:93,sn:90,sTh:.35,sSh:.4},200,1000],
    [{uaL:180,faL:180,uaR:0,faR:0,th:155,sn:80,hd:-70},1500,1000]]},
  {n:'Hilo en la aguja',z:'Espalda alta',mat:1,f:[
    [{...QUAD,uaR:-90,faR:-90,hd:-40},600,1100],[{...QUAD,tu:-8,uaR:120,faR:150,hd:40},900,1100]]},
- {n:'Inclinación lateral de pie',z:'Costados y espalda',v:'front',f:[
+ {n:'Inclinación lateral de pie',split:true,z:'Costados y espalda',v:'front',f:[
    [{tl:-92,tu:-112,uaL:-100,faL:-122,uaR:-122,faR:-142},1300,1000],[{uaL:-95,faL:-86,uaR:-85,faR:-94},300,1000],
    [{tl:-88,tu:-68,uaL:-58,faL:-38,uaR:-80,faR:-58},1300,1000],[{uaL:-95,faL:-86,uaR:-85,faR:-94},300,1000]]},
  {g:'Cadera y piernas'},
@@ -181,10 +179,10 @@ export const RAW_SECTIONS: RawSection[] = [
  {n:'Isquiotibiales tumbado',z:'Parte trasera del muslo',mat:1,f:[
    [{tl:180,thL:0,snL:0,ftL:-90,thR:-40,snR:-40,ftR:-130,ua:-18,fa:-10},300,1200],
    [{tl:180,thL:0,snL:0,ftL:-90,thR:-80,snR:-80,ftR:-170,ua:-35,fa:-15},1500,1200]]},
- {n:'Cuádriceps de pie',z:'Parte delantera del muslo',f:[
+ {n:'Cuádriceps de pie',split:true,z:'Parte delantera del muslo',f:[
    [{},200,900],[{thR:95,snR:250,uaR:110,faR:100,uaL:-10,faL:-10},1500,900],
    [{},200,900],[{thL:95,snL:250,uaL:110,faL:100,uaR:-10,faR:-10},1500,900]]},
- {n:'Gemelos contra la pared',z:'Gemelos',props:(J,P)=>P.wall(J.haR[0]+4),f:[
+ {n:'Gemelos contra la pared',z:'Gemelos',az:-32,props:(J,P)=>P.wall(J.haR[0]+4),f:[
    [{tl:-70,ua:-15,fa:-15,thR:60,snR:100,thL:113,snL:113},1300,1000],[{tl:-66,ua:-12,fa:-12,thR:55,snR:105,thL:115,snL:115},1300,1000]]},
  {n:'Flexores de cadera (rodilla en el suelo)',z:'Cadera y lumbar',mat:1,f:[
    [{ua:110,fa:-20,thR:0,snR:90,thL:104,snL:180,ftL:180},500,1100],[{ua:110,fa:-20,thR:0,snR:105,thL:110,snL:180,ftL:180},1500,1100]]},

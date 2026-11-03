@@ -19,12 +19,19 @@ describe('Catálogo de ejercicios', () => {
     expect(Object.keys(DESCRIPTIONS).filter((id) => !CATALOG.has(id))).toEqual([]);
   });
 
-  it('cada movimiento se puede calcular sin valores inválidos', () => {
+  it('los ejercicios con los dos lados en sus fotogramas tienen un número par de fotogramas', () => {
+    for (const e of all.filter((x) => x.motion.split)) expect((e.motion.f?.length ?? 0) % 2, e.id).toBe(0);
+  });
+
+  it('cada movimiento (y cada lado) se puede calcular sin valores inválidos', () => {
     for (const e of all) {
-      const m = new Motion(e.motion);
-      for (let i = 0; i <= 8; i++) {
-        const { J } = m.jointsAt((m.total * i) / 8);
-        for (const p of Object.values(J)) expect(Number.isFinite(p[0]) && Number.isFinite(p[1]), e.id).toBe(true);
+      for (const side of [undefined, 1, 2] as const) {
+        const m = new Motion(e.motion, side);
+        for (let i = 0; i <= 8; i++) {
+          const { J } = m.jointsAt((m.total * i) / 8);
+          for (const p of Object.values(J)) expect(Number.isFinite(p[0]) && Number.isFinite(p[1]), e.id).toBe(true);
+        }
+        m.props();
       }
     }
   });

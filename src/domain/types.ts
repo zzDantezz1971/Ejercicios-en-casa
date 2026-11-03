@@ -39,6 +39,10 @@ export interface MotionSpec {
   lift?: number;
   /** En vista desde arriba, las rodillas bajan en vez de subir (pies en el suelo junto al banco). */
   legsDown?: boolean;
+  /** Los fotogramas contienen los dos lados: la primera mitad es el lado 1 y la segunda el lado 2. */
+  split?: boolean;
+  /** En vista lateral, los brazos acortados (sa < 1) se abren hacia los lados. */
+  armsOut?: boolean;
   /** En vista desde arriba, la figura está boca abajo. */
   prone?: boolean;
   mark?: string[];

@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import type { MotionSpec, PropOp } from '../domain/types';
-import { Motion, type Joints, type Pose } from './poses';
+import { Motion, type Joints, type Pose, type Side } from './poses';
 
 /* Maniquí 3D. Convierte las articulaciones del motor de posturas a 3D:
    X = adelante (vista lateral) o lateral (vista de frente), Y = arriba, Z = lado del cuerpo / profundidad. */
@@ -62,6 +62,26 @@ export function to3D(spec: MotionSpec, view: string, J: Joints, pose: Pose): Rec
     }
     o[k] = V(J[k][0], -J[k][1], z);
   }
+  // Un brazo o muslo "acortado" en 2D (escala < 1) apunta en realidad hacia la cámara o hacia el lado:
+  // se recupera esa profundidad para que en 3D se mueva de verdad en vez de encogerse.
+  const depth = (scale: number, len: number) => len * Math.sqrt(Math.max(0, 1 - scale * scale));
+  for (const s of ['L', 'R']) {
+    const sign = side ? (s === 'L' ? -1 : 1) : 1;
+    const sa = pose['sa' + s];
+    if (Math.abs(sa) < 1 && (!side || spec.armsOut)) {
+      o['el' + s].z += sign * depth(sa, 26);
+      o['ha' + s].z += sign * depth(sa, 50);
+    }
+    const sTh = pose['sTh' + s], sSh = pose['sSh' + s];
+    if (sTh < 1) {
+      const dk = sign * depth(sTh, 34);
+      o['kn' + s].z += dk;
+      // en vista lateral la espinilla vuelve hacia el centro (pierna cruzada); de frente sigue hacia delante
+      const ds = (side ? -sign : 1) * depth(sSh, 33);
+      o['an' + s].z += dk + ds;
+      o['ti' + s].z += dk + ds;
+    }
+  }
   return o;
 }
 
@@ -78,11 +98,13 @@ export class MannequinScene {
   private dumbbells: Array<{ hand: 'L' | 'R'; bar: THREE.Mesh; p1: THREE.Mesh; p2: THREE.Mesh }> = [];
   private disposables: Array<{ dispose(): void }> = [];
 
-  constructor(spec: MotionSpec, private readonly pal: Palette = DEFAULT_PALETTE) {
-    this.motion = new Motion(spec);
+  constructor(spec: MotionSpec, private readonly pal: Palette = DEFAULT_PALETTE, side: Side = undefined) {
+    this.motion = new Motion(spec, side);
     const view = this.motion.view;
     this.azimuth = spec.az ?? (view === 'side' ? 32 : view === 'top' ? 12 : 18);
-    this.elevation = spec.el ?? (view === 'top' ? 48 : 14);
+    // De lado, el lado 2 se ve mejor desde el otro costado (si no, el brazo o pierna que trabaja queda oculto).
+    if (view === 'side' && this.motion.mirrored) this.azimuth = 180 - this.azimuth;
+    this.elevation = spec.el ?? (view === 'top' ? 58 : 14);
     this.buildLights();
     this.buildBody();
     this.buildStage();
@@ -194,16 +216,17 @@ export class MannequinScene {
     }
     if (o.t === 'rect') {
       const m = this.add(G.box, benchM);
-      m.position.set(o.x + o.w / 2, -(o.y + o.h / 2), z0);
-      m.scale.set(o.w, o.h, dep);
+      const back = view === 'front' && o.soft;
+      m.position.set(o.x + o.w / 2, -(o.y + o.h / 2), back ? -16 : z0);
+      m.scale.set(o.w, o.h, back ? 6 : dep);
       bb.expandByObject(m);
       return;
     }
     const a = V(o.a[0], -o.a[1], 0), b = V(o.b[0], -o.b[1], 0);
     if (Math.abs(a.x - b.x) < 0.5 && Math.max(a.y, b.y) > 120) {
       const m = this.add(G.box, this.mat(this.pal.wall, 0.95));
-      m.position.set(a.x + 4, 75, 0);
-      m.scale.set(8, 150, 220);
+      m.position.set(a.x + 4, 75, -30);
+      m.scale.set(8, 150, 140);
       bb.expandByPoint(V(a.x + 8, 0, 0));
     } else if (o.w >= 6) {
       const m = this.add(G.box, benchM);
@@ -226,7 +249,9 @@ export class MannequinScene {
 
   placeCamera(): void {
     const s = this.size, c = this.center, cam = this.camera;
-    const span = Math.max(s.x * 1.08, s.y * cam.aspect * 1.08, s.z * 0.8, 150);
+    const span = this.motion.view === 'top'
+      ? Math.max(s.x * 1.12, s.z * cam.aspect * 0.95, 150)
+      : Math.max(s.x * 1.08, s.y * cam.aspect * 1.08, s.z * 0.8, 150);
     const dist = (span / cam.aspect / 2 / Math.tan((cam.fov * Math.PI) / 360)) * 1.04;
     const a = (this.azimuth * Math.PI) / 180, e = (this.elevation * Math.PI) / 180;
     cam.position.set(c.x + dist * Math.sin(a) * Math.cos(e), c.y + dist * Math.sin(e), c.z + dist * Math.cos(a) * Math.cos(e));

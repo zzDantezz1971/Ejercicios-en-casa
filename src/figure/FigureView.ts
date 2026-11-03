@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import type { ExerciseDef } from '../domain/types';
 import { MannequinScene, type Palette } from './Mannequin';
+import type { Side } from './poses';
 
 function makeRenderer(canvas: HTMLCanvasElement | OffscreenCanvas, preserve = false): THREE.WebGLRenderer {
   const r = new THREE.WebGLRenderer({ canvas: canvas as HTMLCanvasElement, antialias: true, alpha: true, preserveDrawingBuffer: preserve });
@@ -58,9 +59,12 @@ export class FigureView {
   }
 
   /** Cambia de ejercicio reutilizando el mismo lienzo 3D. */
-  setExercise(exercise: ExerciseDef, palette?: Palette): void {
+  setExercise(exercise: ExerciseDef, side: Side = undefined, palette?: Palette): void {
+    const az = this.scene.azimuth;
+    const keepAngle = this.scene.motion.spec === exercise.motion;
     this.scene.dispose();
-    this.scene = new MannequinScene(exercise.motion, palette);
+    this.scene = new MannequinScene(exercise.motion, palette, side);
+    if (keepAngle) this.scene.azimuth = az;
     const w = this.canvas.clientWidth, h = this.canvas.clientHeight;
     if (w && h) this.scene.setAspect(w / h);
     this.restart();
