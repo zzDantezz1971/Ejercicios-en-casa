@@ -21,13 +21,30 @@ export class RoutineEditor {
     return this.routine[section].find((i) => i.exerciseId === exerciseId)?.seconds;
   }
 
-  /** Marca al final de la lista o desmarca (los demás se renumeran solos). */
-  toggle(section: SectionId, exerciseId: string, defaultSeconds: number): void {
+  weight(section: SectionId, exerciseId: string): number | undefined {
+    return this.routine[section].find((i) => i.exerciseId === exerciseId)?.weight;
+  }
+
+  /** Marca al final de la lista (con su peso, si lo tiene) o desmarca (los demás se renumeran solos). */
+  toggle(section: SectionId, exerciseId: string, defaultSeconds: number, weight?: number): void {
     const list = this.routine[section];
     const pos = list.findIndex((i) => i.exerciseId === exerciseId);
+    const item = { exerciseId, seconds: clamp(defaultSeconds), ...(weight ? { weight: cleanWeight(weight) } : {}) };
     this.routine = {
       ...this.routine,
-      [section]: pos >= 0 ? list.filter((_, i) => i !== pos) : [...list, { exerciseId, seconds: clamp(defaultSeconds) }],
+      [section]: pos >= 0 ? list.filter((_, i) => i !== pos) : [...list, item],
+    };
+  }
+
+  /** Cambia el peso por mancuerna (0 o nada = sin peso). */
+  setWeight(section: SectionId, exerciseId: string, weight: number | undefined): void {
+    this.routine = {
+      ...this.routine,
+      [section]: this.routine[section].map((i) => {
+        if (i.exerciseId !== exerciseId) return i;
+        const { weight: _w, ...rest } = i;
+        return weight ? { ...rest, weight: cleanWeight(weight) } : rest;
+      }),
     };
   }
 
@@ -60,6 +77,14 @@ export class RoutineEditor {
   get totalExercises(): number {
     return SECTION_IDS.reduce((n, s) => n + this.routine[s].length, 0);
   }
+}
+
+export const MAX_WEIGHT = 50;
+export const WEIGHT_STEP = 0.5;
+
+/** Peso en pasos de 0,5 kg entre 0,5 y 50. */
+function cleanWeight(w: number): number {
+  return Math.min(MAX_WEIGHT, Math.max(WEIGHT_STEP, Math.round(w / WEIGHT_STEP) * WEIGHT_STEP));
 }
 
 function clamp(s: number): number {

@@ -2,9 +2,10 @@ import { bestStreak, routineNames, secondsBySection, topExercises } from '../../
 import { SECTION_IDS, SECTION_TITLES, type HistoryEntry } from '../../domain/types';
 import type { App, Screen } from '../App';
 import { addDays, dayKey, minutesPerWeek, startOfWeek, streak, trainedDays, WEEKDAY_LETTERS } from '../dates';
-import { append, clear, confirmDialog, h, humanDuration, plural } from '../dom';
+import { append, clear, confirmDialog, h, humanDuration, kg, plural } from '../dom';
 import { icon, SECTION_STYLE, type IconName } from '../icons';
 import { HistoryDetailScreen } from './HistoryDetailScreen';
+import { backupCard, backupDue } from '../components/backupPrompt';
 
 const NS = 'http://www.w3.org/2000/svg';
 
@@ -42,6 +43,7 @@ export class HistoryScreen implements Screen {
     const run = streak(list, now);
 
     append(this.body,
+      backupDue(this.app) ? backupCard(this.app, { question: false }) : null,
       names.length > 1 ? this.filters(names) : null,
       h('section', { class: 'stats-row four' },
         stat('flame', String(run), run === 1 ? 'día seguido' : 'días seguidos'),
@@ -129,7 +131,7 @@ export class HistoryScreen implements Screen {
         const li = h('li', { class: 'top-row' },
           h('span', { class: 'top-n' }, String(i + 1)),
           h('span', { class: 'top-name' }, ex.name),
-          h('span', { class: 'muted small' }, `${plural(t.times, 'vez', 'veces')} · ${humanDuration(t.seconds)}`));
+          h('span', { class: 'muted small' }, `${plural(t.times, 'vez', 'veces')} · ${humanDuration(t.seconds)}${t.maxWeight ? ` · máx. ${kg(t.maxWeight)}` : ''}`));
         li.style.setProperty('--sec', SECTION_STYLE[ex.section].color);
         return li;
       })));

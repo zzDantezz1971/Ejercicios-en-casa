@@ -20,6 +20,8 @@ export interface ExerciseLog {
   seconds: number;
   /** Se llegó al final de su tiempo. */
   completed: boolean;
+  /** Peso por mancuerna (kg). */
+  weight?: number;
 }
 
 export interface SessionSummary {
@@ -203,6 +205,7 @@ export class WorkoutSession extends Emitter<Events> {
         planned: st.seconds,
         seconds: Math.round(this.worked.get(i) ?? 0),
         completed: this.done.has(i),
+        ...(st.weight ? { weight: st.weight } : {}),
       });
     });
     const sections = new Set<SectionId>();

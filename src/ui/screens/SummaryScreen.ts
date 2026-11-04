@@ -3,6 +3,7 @@ import { SECTION_TITLES } from '../../domain/types';
 import type { App, Screen } from '../App';
 import { h, humanDuration } from '../dom';
 import { icon, SECTION_STYLE } from '../icons';
+import { backupCard, backupDue } from '../components/backupPrompt';
 
 /** Resumen al terminar, con una pequeña celebración si se completó. */
 export class SummaryScreen implements Screen {
@@ -23,8 +24,8 @@ export class SummaryScreen implements Screen {
       ...(confetti ? [confetti] : []),
       h('div', { class: 'summary-card' },
         h('div', { class: 'trophy' + (win ? ' win' : '') }, icon(win ? 'trophy' : 'check')),
-        h('p', { class: 'eyebrow' }, win ? 'Entrenamiento completado' : 'Entrenamiento terminado antes'),
-        h('h1', {}, win ? '¡Buen trabajo!' : s.exercisesDone ? 'Bien hecho' : 'Sin ejercicios completados'),
+        h('h1', {}, win ? '¡Buen trabajo!' : s.exercisesDone ? '¡Bien hecho!' : 'Sin ejercicios completados'),
+        h('p', { class: 'eyebrow' }, win ? 'Entrenamiento finalizado' : s.exercisesDone ? 'Entrenamiento finalizado antes de tiempo' : 'Entrenamiento terminado'),
         h('p', { class: 'muted' }, tableName),
         h('div', { class: 'stats' },
           stat('clock', humanDuration(s.durationSec), 'Tiempo'),
@@ -38,6 +39,7 @@ export class SummaryScreen implements Screen {
             }))
           : null,
         s.exercisesDone ? h('p', { class: 'muted small' }, 'Guardado en el historial.') : null,
+        s.exercisesDone && backupDue(app) ? backupCard(app, { question: true }) : null,
         h('button', { class: 'btn primary block big', onclick: () => this.app.openTab('inicio') }, 'Volver al inicio')),
     );
   }

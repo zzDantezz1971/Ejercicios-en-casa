@@ -50,9 +50,20 @@ describe('WorkoutPlan', () => {
   });
 
   it('sin pausa ni cuenta atrás si se ponen a 0', () => {
-    const settings: Settings = { ...DEFAULT_SETTINGS, restSeconds: 0, sectionCountdown: 0 };
+    const settings: Settings = { ...DEFAULT_SETTINGS, rest: { calentamiento: 0, pesas: 0, abdominales: 0, estiramientos: 0 }, sectionCountdown: 0 };
     const plan = WorkoutPlan.build(routine(), catalog, settings);
     expect(plan.steps.map((s) => s.kind)).toEqual(['exercise', 'exercise', 'sectionBreak', 'exercise', 'sectionBreak', 'exercise']);
+  });
+
+  it('usa la pausa de cada apartado y pasa el peso al ejercicio', () => {
+    const r = routine();
+    r.pesas = [{ exerciseId: 'c', seconds: 40, weight: 8 }, { exerciseId: 'c2', seconds: 20 }];
+    const cat: Catalog = new Map([...catalog, ['c2', ex('c2', 'pesas')]]);
+    const plan = WorkoutPlan.build(r, cat, { ...DEFAULT_SETTINGS, rest: { ...DEFAULT_SETTINGS.rest, calentamiento: 3, pesas: 30 } });
+    const rests = plan.steps.filter((s) => s.kind === 'rest').map((s) => [s.section, 'seconds' in s ? s.seconds : 0]);
+    expect(rests).toEqual([['calentamiento', 3], ['pesas', 30]]);
+    const first = plan.steps.find((s) => s.kind === 'exercise' && s.exercise.id === 'c');
+    expect(first && first.kind === 'exercise' && first.weight).toBe(8);
   });
 
   it('ignora ejercicios que ya no existen', () => {

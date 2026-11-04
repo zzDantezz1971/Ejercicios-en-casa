@@ -22,12 +22,13 @@ describe('Store', () => {
   it('guarda los cambios y los recupera al volver a abrir', () => {
     const kv = memory();
     const store = new Store(kv);
-    store.saveSettings({ ...DEFAULT_SETTINGS, restSeconds: 8 });
+    store.saveSettings({ ...DEFAULT_SETTINGS, rest: { ...DEFAULT_SETTINGS.rest, pesas: 8 } });
     const r = emptyRoutine();
     r.pesas = [{ exerciseId: 'x', seconds: 30 }];
     store.saveRoutine(r);
     const again = new Store(kv);
-    expect(again.settings.restSeconds).toBe(8);
+    expect(again.settings.rest.pesas).toBe(8);
+    expect(again.settings.rest.estiramientos).toBe(5);
     expect(again.routine.pesas).toEqual([{ exerciseId: 'x', seconds: 30 }]);
   });
 
@@ -42,7 +43,7 @@ describe('Store', () => {
     expect(store.routines).toHaveLength(1);
     expect(store.active.name).toBe('Mi rutina');
     expect(store.routine.pesas).toEqual([{ exerciseId: 'x', seconds: 30 }]);
-    expect(store.settings.restSeconds).toBe(12);
+    expect(store.settings.rest).toEqual({ calentamiento: 12, pesas: 12, abdominales: 12, estiramientos: 12 });
     expect(store.settings.sectionCountdown).toBe(DEFAULT_SETTINGS.sectionCountdown);
     expect(store.history).toHaveLength(1);
   });
@@ -202,6 +203,8 @@ describe('Copia de seguridad', () => {
     a.addHistory({ date: '2026-11-03T10:00:00Z', durationSec: 600, exercisesDone: 3, exercisesPlanned: 3, sections: ['pesas'], completed: true });
     a.hideExercise('pullover');
     const text = a.exportBackup(new Date('2026-11-04T09:00:00Z'));
+    expect(a.lastBackup).toBeUndefined();
+    a.markBackedUp(new Date('2026-11-04T09:00:00Z'));
     expect(a.lastBackup).toBe('2026-11-04T09:00:00.000Z');
     expect(Store.inspectBackup(text)).toEqual({ routines: 2, history: 1, exportedAt: '2026-11-04T09:00:00.000Z' });
 
@@ -219,5 +222,38 @@ describe('Copia de seguridad', () => {
     const s = new Store(memory());
     expect(() => s.importBackup('hola')).toThrow();
     expect(() => s.importBackup('{"x":1}')).toThrow();
+  });
+});
+
+describe('Peso, favoritos y aviso de copia', () => {
+  it('guarda el peso por mancuerna al elegir un ejercicio y se puede cambiar', () => {
+    const ed = new RoutineEditor(emptyRoutine());
+    ed.toggle('pesas', 'curl', 30, 8.3);
+    expect(ed.weight('pesas', 'curl')).toBe(8.5);
+    ed.setWeight('pesas', 'curl', 10);
+    expect(ed.value.pesas[0]).toEqual({ exerciseId: 'curl', seconds: 30, weight: 10 });
+    ed.setWeight('pesas', 'curl', undefined);
+    expect(ed.value.pesas[0]).toEqual({ exerciseId: 'curl', seconds: 30 });
+  });
+
+  it('recuerda el último peso usado', () => {
+    const s = new Store(memory());
+    s.saveRoutine({ ...emptyRoutine(), pesas: [{ exerciseId: 'curl', seconds: 30, weight: 6 }] });
+    expect(s.lastWeight('curl')).toBe(6);
+    s.addHistory({ date: '2026-11-03T10:00:00Z', durationSec: 60, exercisesDone: 1, exercisesPlanned: 1, sections: ['pesas'], completed: true,
+      items: [{ exerciseId: 'curl', section: 'pesas', planned: 30, seconds: 30, completed: true, weight: 9 }] });
+    expect(s.lastWeight('curl')).toBe(9);
+    expect(s.lastWeight('otro')).toBeUndefined();
+  });
+
+  it('marca favoritos y cuenta los días desde la última copia', () => {
+    const kv = memory();
+    const s = new Store(kv);
+    expect(s.toggleFavorite('a')).toBe(true);
+    expect(new Store(kv).favorites.has('a')).toBe(true);
+    expect(s.toggleFavorite('a')).toBe(false);
+    expect(s.daysSinceBackup()).toBe(Infinity);
+    s.markBackedUp(new Date('2026-11-01T10:00:00Z'));
+    expect(s.daysSinceBackup(new Date('2026-11-08T11:00:00Z'))).toBe(7);
   });
 });

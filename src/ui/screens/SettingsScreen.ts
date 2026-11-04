@@ -1,12 +1,13 @@
 import { Store } from '../../domain/Store';
-import type { Settings } from '../../domain/types';
-import { pickBackupFile, saveBackupFile } from '../../services/Backup';
+import { SECTION_IDS, SECTION_TITLES, type Settings } from '../../domain/types';
+import { pickBackupFile } from '../../services/Backup';
+import { saveBackupNow } from '../components/backupPrompt';
 import type { App, Screen } from '../App';
 import { append, clear, confirmDialog, h, plural } from '../dom';
-import { icon, type IconName } from '../icons';
+import { icon, SECTION_STYLE, type IconName } from '../icons';
 
 interface NumField {
-  key: 'restSeconds' | 'defaultSeconds' | 'sectionCountdown';
+  key: 'defaultSeconds' | 'sectionCountdown';
   label: string;
   help: string;
   icon: IconName;
@@ -16,7 +17,6 @@ interface NumField {
 }
 
 const FIELDS: NumField[] = [
-  { key: 'restSeconds', icon: 'rest', label: 'Pausa entre ejercicios', help: 'Tiempo para prepararte antes del siguiente ejercicio.', min: 0, max: 60, step: 1 },
   { key: 'sectionCountdown', icon: 'hourglass', label: 'Cuenta atrás de cada apartado', help: 'Antes del primer ejercicio de cada apartado.', min: 0, max: 30, step: 1 },
   { key: 'defaultSeconds', icon: 'clock', label: 'Duración inicial de cada ejercicio', help: 'La que se pone al marcar un ejercicio. Luego puedes cambiarla.', min: 5, max: 300, step: 5 },
 ];
@@ -68,17 +68,34 @@ export class SettingsScreen implements Screen {
       opt(2, 'Maniquí 2', 'Realista, con cuerpo y manos humanas'));
   }
 
+  /** Pausa entre ejercicios, una por apartado. */
+  private restCard(s: Settings): HTMLElement {
+    return h('section', { class: 'card setting rest-card' },
+      h('div', { class: 'rest-head' },
+        h('span', { class: 'set-icon' }, icon('rest')),
+        h('div', { class: 'set-text' }, h('strong', {}, 'Pausa entre ejercicios'), h('p', { class: 'muted small' }, 'Tiempo para prepararte antes del siguiente ejercicio, en cada apartado.'))),
+      ...SECTION_IDS.map((sec) => {
+        const v = s.rest[sec];
+        const set = (n: number) => this.update({ rest: { ...s.rest, [sec]: Math.max(0, Math.min(90, n)) } });
+        const row = h('div', { class: 'rest-row' },
+          h('span', { class: 'sec-dot' }, icon(SECTION_STYLE[sec].icon)),
+          h('span', { class: 'rest-name' }, SECTION_TITLES[sec]),
+          h('div', { class: 'stepper' },
+            h('button', { 'aria-label': `Menos pausa en ${SECTION_TITLES[sec]}`, disabled: v <= 0, onclick: () => set(v - 1) }, '−'),
+            h('span', { class: 'secs' }, `${v} s`),
+            h('button', { 'aria-label': `Más pausa en ${SECTION_TITLES[sec]}`, disabled: v >= 90, onclick: () => set(v + 1) }, '+')));
+        row.style.setProperty('--sec', SECTION_STYLE[sec].color);
+        return row;
+      }));
+  }
+
   /** Guardar una copia (para Drive) y restaurarla. */
   private backupSection(): HTMLElement {
     const last = this.app.store.lastBackup;
     const msg = h('p', { class: 'muted small', 'aria-live': 'polite' },
       last ? `Última copia: ${new Date(last).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}` : 'Aún no has guardado ninguna copia.');
     const save = async () => {
-      this.app.haptics.tap();
-      const r = await saveBackupFile(this.app.store.exportBackup());
-      if (r === 'cancelled') return;
-      this.render();
-      if (r === 'downloaded') await confirmDialog('Copia guardada en Descargas. Puedes subirla a tu Drive desde la app de Drive.', 'Vale', '');
+      if (await saveBackupNow(this.app)) this.render();
     };
     const restore = async () => {
       const text = await pickBackupFile();
@@ -113,7 +130,7 @@ export class SettingsScreen implements Screen {
   private render(): void {
     const s = this.app.store.settings;
     clear(this.body);
-    this.body.append(h('h3', { class: 'block-title' }, 'Tiempos'));
+    this.body.append(h('h3', { class: 'block-title' }, 'Tiempos'), this.restCard(s));
     for (const f of FIELDS) {
       const v = s[f.key];
       this.body.append(

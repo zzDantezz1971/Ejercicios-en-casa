@@ -1,7 +1,7 @@
 import { RoutineEditor, STEP_SECONDS } from '../../domain/RoutineEditor';
-import { SECTION_IDS, type ExerciseDef, type SectionId } from '../../domain/types';
+import { SECTION_IDS, usesWeight, type ExerciseDef, type SectionId } from '../../domain/types';
 import type { App, Screen } from '../App';
-import { append, clear, h, humanDuration, plural } from '../dom';
+import { append, clear, h, humanDuration, kg, plural, weightDialog } from '../dom';
 import { icon, SECTION_STYLE } from '../icons';
 import { badgeList, sidesMark } from '../components/badges';
 import { sortableList } from '../components/sortable';
@@ -14,7 +14,7 @@ export class RoutineScreen implements Screen {
   private editor: RoutineEditor;
   private section: SectionId = 'calentamiento';
   /** Todos los ejercicios, solo los elegidos (en su orden) o reordenando la lista. */
-  private mode: 'all' | 'chosen' | 'sorting' = 'all';
+  private mode: 'all' | 'fav' | 'chosen' | 'sorting' = 'all';
   private toolbar = h('div', { class: 'routine-toolbar' });
   private searchBox: HTMLElement;
   private hint = h('p', { class: 'hint' });
@@ -85,15 +85,19 @@ export class RoutineScreen implements Screen {
       this.hint.replaceChildren('Arrastra cada ejercicio por el asa ', icon('tables', 'ico inline'), ' o usa las flechas para colocarlo donde quieras. Este orden es el de la lista, igual para todas tus tablas.');
       return;
     }
-    const seg = (m: 'all' | 'chosen', label: string) =>
+    const seg = (m: 'all' | 'fav' | 'chosen', label: string | Node) =>
       h('button', { class: 'seg' + (this.mode === m ? ' on' : ''), 'aria-pressed': String(this.mode === m), onclick: () => { this.mode = m; this.clearSearch(); window.scrollTo(0, 0); this.render(); } }, label);
     append(this.toolbar,
-      h('div', { class: 'segmented' }, seg('all', 'Todos'), seg('chosen', `Elegidos (${n})`)),
+      h('div', { class: 'segmented' }, seg('all', 'Todos'), seg('fav', h('span', { class: 'seg-fav' }, icon('starFill'), 'Favoritos')), seg('chosen', `Elegidos (${n})`)),
       this.mode === 'all'
         ? h('button', { class: 'btn ghost small', onclick: () => { this.mode = 'sorting'; this.clearSearch(); window.scrollTo(0, 0); this.render(); } }, icon('tables'), 'Ordenar lista')
         : null,
     );
-    if (this.mode === 'chosen') {
+    if (this.mode === 'fav') {
+      this.hint.replaceChildren(this.favs().length
+        ? 'Tus ejercicios favoritos de este apartado. Toca uno para añadirlo a la tabla.'
+        : h('span', {}, 'Aún no tienes favoritos en este apartado. Abre un ejercicio con ', icon('info', 'ico inline'), ' y pulsa la estrella ', icon('star', 'ico inline'), '.'));
+    } else if (this.mode === 'chosen') {
       this.hint.replaceChildren(n
         ? h('span', {}, 'Este es el orden en que se harán. Arrastra por el asa ', icon('tables', 'ico inline'), ' o usa las flechas para cambiarlo.')
         : 'Aún no has elegido ejercicios en este apartado. Márcalos en "Todos".');
@@ -107,6 +111,12 @@ export class RoutineScreen implements Screen {
     const sec = this.app.sections.find((s) => s.id === sectionId)!;
     const hidden = this.app.store.hidden;
     return applyOrder(sec.exercises, this.app.store.customOrder(sectionId)).filter((e) => !hidden.has(e.id));
+  }
+
+  /** Favoritos del apartado, en el orden de la lista. */
+  private favs(): ExerciseDef[] {
+    const f = this.app.store.favorites;
+    return this.ordered(this.section).filter((e) => f.has(e.id));
   }
 
   /** Miniatura pequeña para las filas ordenables. */
@@ -132,7 +142,8 @@ export class RoutineScreen implements Screen {
             h('button', { 'aria-label': 'Menos tiempo', onclick: () => this.adjust(ex, -STEP_SECONDS) }, '−'),
             h('span', { class: 'secs' }, `${it.seconds} s`),
             h('button', { 'aria-label': 'Más tiempo', onclick: () => this.adjust(ex, STEP_SECONDS) }, '+'),
-            h('button', { class: 'remove-btn', 'aria-label': `Quitar ${ex.name} de la tabla`, onclick: () => this.toggle(ex) }, icon('close')))));
+            h('button', { class: 'remove-btn', 'aria-label': `Quitar ${ex.name} de la tabla`, onclick: () => void this.toggle(ex) }, icon('close'))),
+          usesWeight(ex) ? this.weightButton(ex, it.weight) : null));
       content.style.setProperty('--sec', SECTION_STYLE[ex.section].color);
       return { content, label: ex.name };
     });
@@ -183,7 +194,11 @@ export class RoutineScreen implements Screen {
   private renderList(): void {
     this.io.disconnect();
     clear(this.list);
-    this.list.className = this.mode === 'all' ? 'ex-grid' : 'ex-rows';
+    this.list.className = this.mode === 'all' || this.mode === 'fav' ? 'ex-grid' : 'ex-rows';
+    if (this.mode === 'fav') {
+      this.favs().forEach((ex) => this.list.append(this.card(ex)));
+      return;
+    }
     if (this.mode === 'chosen') return this.renderChosen();
     if (this.mode === 'sorting') return this.renderSorting();
     const q = normalize(this.query.trim());
@@ -219,9 +234,9 @@ export class RoutineScreen implements Screen {
     const fig = h('div', { class: 'thumb-box' }, img, ex.viewLabel ? h('span', { class: 'view-label' }, ex.viewLabel) : null, ex.oneSided ? sidesMark() : null);
     this.io.observe(fig);
     const card = h('article', { class: 'ex-card' + (pos ? ' selected' : ''), style: { '--sec': SECTION_STYLE[ex.section].color } },
-      h('button', { class: 'ex-main', 'aria-pressed': String(!!pos), onclick: () => this.toggle(ex) },
+      h('button', { class: 'ex-main', 'aria-pressed': String(!!pos), onclick: () => void this.toggle(ex) },
         fig,
-        h('span', { class: 'ex-name' }, pos ? h('span', { class: 'order' }, pos) : null, h('span', {}, ex.name)),
+        h('span', { class: 'ex-name' }, pos ? h('span', { class: 'order' }, pos) : null, h('span', {}, ex.name, this.app.store.favorites.has(ex.id) ? icon('starFill', 'ico fav-star') : null)),
         h('span', { class: 'ex-zone' }, ex.zone, ex.oneSided ? h('span', { class: 'by-sides' }, icon('sides'), 'por lados') : null),
         badgeList(ex.badges)),
       h('button', { class: 'info-btn', 'aria-label': `Cómo se hace: ${ex.name}`, onclick: () => this.app.push(new DetailScreen(this.app, ex)) }, icon('info')),
@@ -229,8 +244,24 @@ export class RoutineScreen implements Screen {
         h('button', { 'aria-label': 'Menos tiempo', onclick: () => this.adjust(ex, -STEP_SECONDS) }, '−'),
         h('span', { class: 'secs' }, icon('clock'), `${secs} s`),
         h('button', { 'aria-label': 'Más tiempo', onclick: () => this.adjust(ex, STEP_SECONDS) }, '+')) : null,
+      pos && usesWeight(ex) ? this.weightButton(ex, this.editor.weight(ex.section, ex.id)) : null,
     );
     return card;
+  }
+
+  /** Botón con el peso por mancuerna; al tocarlo se cambia. */
+  private weightButton(ex: ExerciseDef, weight: number | undefined): HTMLElement {
+    return h('button', {
+      class: 'weight-btn' + (weight ? '' : ' none'),
+      'aria-label': `Peso de ${ex.name}: ${weight ? kg(weight) + ' por mancuerna' : 'sin peso'}. Cambiar`,
+      onclick: async () => {
+        const w = await weightDialog(ex.name, weight ?? this.app.store.lastWeight(ex.id) ?? 5);
+        if (w === null) return;
+        this.editor.setWeight(ex.section, ex.id, w || undefined);
+        this.save();
+        this.refresh();
+      },
+    }, icon('dumbbell'), weight ? kg(weight) : 'Sin peso', h('span', { class: 'wb-edit' }, icon('edit')));
   }
 
   private loadThumb(fig: HTMLElement): void {
@@ -240,8 +271,15 @@ export class RoutineScreen implements Screen {
     if (ex) void this.app.thumbs.get(ex).then((url) => (img.src = url));
   }
 
-  private toggle(ex: ExerciseDef): void {
-    this.editor.toggle(ex.section, ex.id, this.app.store.settings.defaultSeconds);
+  private async toggle(ex: ExerciseDef): Promise<void> {
+    let weight: number | undefined;
+    if (!this.editor.position(ex.section, ex.id) && usesWeight(ex)) {
+      // al elegir un ejercicio con mancuerna se pide el peso (propone el último usado)
+      const w = await weightDialog(ex.name, this.app.store.lastWeight(ex.id) ?? 5);
+      if (w === null) return;
+      weight = w || undefined;
+    }
+    this.editor.toggle(ex.section, ex.id, this.app.store.settings.defaultSeconds, weight);
     this.app.haptics.tap();
     this.save();
     this.refresh();

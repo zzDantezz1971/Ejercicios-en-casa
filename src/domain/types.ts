@@ -83,14 +83,21 @@ export interface ExerciseDef {
 export interface RoutineItem {
   exerciseId: string;
   seconds: number;
+  /** Peso por mancuerna (kg), solo en ejercicios con mancuerna. */
+  weight?: number;
+}
+
+/** Ejercicios en los que se pide el peso (los que usan mancuerna). */
+export function usesWeight(ex: Pick<ExerciseDef, 'motion'>): boolean {
+  return !!ex.motion.db;
 }
 
 /** La rutina guarda los ejercicios elegidos de cada apartado en el orden en que se marcaron. */
 export type Routine = Record<SectionId, RoutineItem[]>;
 
 export interface Settings {
-  /** Pausa entre ejercicios (s). */
-  restSeconds: number;
+  /** Pausa entre ejercicios de cada apartado (s). */
+  rest: Record<SectionId, number>;
   /** Duración propuesta al marcar un ejercicio (s). */
   defaultSeconds: number;
   /** Cuenta atrás antes del primer ejercicio de cada apartado (s). */
@@ -102,7 +109,7 @@ export interface Settings {
 }
 
 export const DEFAULT_SETTINGS: Settings = {
-  restSeconds: 5,
+  rest: { calentamiento: 5, pesas: 5, abdominales: 5, estiramientos: 5 },
   defaultSeconds: 30,
   sectionCountdown: 10,
   sound: true,
@@ -124,7 +131,7 @@ export interface HistoryEntry {
   /** Tabla con la que se hizo. */
   routineId?: string;
   /** Detalle por ejercicio (solo en entrenamientos guardados desde esta versión). */
-  items?: Array<{ exerciseId: string; section: SectionId; planned: number; seconds: number; completed: boolean }>;
+  items?: Array<{ exerciseId: string; section: SectionId; planned: number; seconds: number; completed: boolean; weight?: number }>;
 }
 
 /** Una tabla de ejercicios guardada con nombre. */

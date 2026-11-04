@@ -22,6 +22,8 @@ export interface SavedData {
   order: Partial<Record<SectionId, string[]>>;
   /** Fecha de la última copia de seguridad guardada (ISO). */
   lastBackup?: string;
+  /** Ejercicios marcados como favoritos. */
+  favorites: string[];
 }
 
 export const STORAGE_KEY = 'ejercicios-en-casa';
@@ -57,7 +59,9 @@ function sanitizeRoutine(input: unknown): Routine {
   for (const s of SECTION_IDS) {
     const items = r[s];
     if (Array.isArray(items)) {
-      out[s] = items.filter((i) => i && typeof i.exerciseId === 'string' && Number.isFinite(i.seconds));
+      out[s] = items
+        .filter((i) => i && typeof i.exerciseId === 'string' && Number.isFinite(i.seconds))
+        .map((i) => (Number.isFinite(i.weight) && i.weight > 0 ? { exerciseId: i.exerciseId, seconds: i.seconds, weight: i.weight } : { exerciseId: i.exerciseId, seconds: i.seconds }));
     }
   }
   return out;
@@ -182,9 +186,13 @@ export class Store {
 
   /** Todo lo guardado, en texto, para la copia de seguridad. */
   exportBackup(now: Date = new Date()): string {
+    return JSON.stringify({ app: BACKUP_APP, exportedAt: now.toISOString(), ...this.data, lastBackup: now.toISOString() }, null, 1);
+  }
+
+  /** Anota que la copia se ha guardado. */
+  markBackedUp(now: Date = new Date()): void {
     this.data.lastBackup = now.toISOString();
     this.persist();
-    return JSON.stringify({ app: BACKUP_APP, exportedAt: now.toISOString(), ...this.data }, null, 1);
   }
 
   /** Resumen de una copia sin aplicarla (para confirmar antes de restaurar). */
@@ -233,6 +241,43 @@ export class Store {
     this.persist();
   }
 
+  /* ── Favoritos ── */
+
+  get favorites(): ReadonlySet<string> {
+    return new Set(this.data.favorites);
+  }
+
+  /** Marca o desmarca un favorito. Devuelve si queda como favorito. */
+  toggleFavorite(id: string): boolean {
+    const on = !this.data.favorites.includes(id);
+    this.data.favorites = on ? [...this.data.favorites, id] : this.data.favorites.filter((x) => x !== id);
+    this.persist();
+    return on;
+  }
+
+  /* ── Peso ── */
+
+  /** Último peso usado en un ejercicio: el del entrenamiento más reciente o, si no, el de alguna tabla. */
+  lastWeight(id: string): number | undefined {
+    for (const e of this.data.history) {
+      const w = e.items?.find((i) => i.exerciseId === id && i.weight)?.weight;
+      if (w) return w;
+    }
+    for (const r of [this.active, ...this.data.routines]) {
+      for (const s of SECTION_IDS) {
+        const w = r.routine[s].find((i) => i.exerciseId === id && i.weight)?.weight;
+        if (w) return w;
+      }
+    }
+    return undefined;
+  }
+
+  /** Días desde la última copia (Infinity si nunca se ha hecho). */
+  daysSinceBackup(now: Date = new Date()): number {
+    if (!this.data.lastBackup) return Infinity;
+    return Math.floor((now.getTime() - Date.parse(this.data.lastBackup)) / 864e5);
+  }
+
   /* ── Ejercicios eliminados ── */
 
   get hidden(): ReadonlySet<string> {
@@ -253,7 +298,7 @@ export class Store {
   }
 
   saveSettings(settings: Settings): void {
-    this.data.settings = { ...settings };
+    this.data.settings = { ...settings, rest: { ...settings.rest } };
     this.persist();
   }
 
@@ -295,7 +340,14 @@ export class Store {
 
   /** Convierte datos de versiones anteriores y rellena lo que falte. */
   static migrate(input: Record<string, unknown>): SavedData {
-    const settings = { ...DEFAULT_SETTINGS, ...((input.settings as Partial<Settings>) ?? {}) };
+    const rawSettings = (input.settings ?? {}) as Partial<Settings> & { restSeconds?: number };
+    const { restSeconds, ...known } = rawSettings;
+    const settings: Settings = { ...DEFAULT_SETTINGS, ...known };
+    // v anteriores: una sola pausa para todo -> la misma en cada apartado
+    const oldRest = Number.isFinite(restSeconds) ? (restSeconds as number) : undefined;
+    settings.rest = Object.fromEntries(
+      SECTION_IDS.map((s) => [s, Number.isFinite(known.rest?.[s]) ? known.rest![s] : (oldRest ?? DEFAULT_SETTINGS.rest[s])]),
+    ) as Settings['rest'];
     const history = Array.isArray(input.history) ? (input.history as HistoryEntry[]) : [];
 
     let routines: SavedRoutine[] = [];
@@ -325,7 +377,8 @@ export class Store {
       if (Array.isArray(o)) order[s] = o.filter((x): x is string => typeof x === 'string');
     }
     const lastBackup = typeof input.lastBackup === 'string' ? input.lastBackup : undefined;
-    return { version: DATA_VERSION, routines, activeId, settings, history, hidden, order, lastBackup };
+    const favorites = Array.isArray(input.favorites) ? (input.favorites as unknown[]).filter((x): x is string => typeof x === 'string') : [];
+    return { version: DATA_VERSION, routines, activeId, settings, history, hidden, order, lastBackup, favorites };
   }
 
   private persist(): void {

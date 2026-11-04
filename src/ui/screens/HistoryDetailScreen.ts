@@ -1,7 +1,7 @@
 import { WorkoutPlan } from '../../domain/WorkoutPlan';
 import { SECTION_IDS, SECTION_TITLES, emptyRoutine, type HistoryEntry, type SavedRoutine } from '../../domain/types';
 import type { App, Screen } from '../App';
-import { confirmDialog, h, humanDuration, mmss } from '../dom';
+import { confirmDialog, h, humanDuration, kg, mmss } from '../dom';
 import { icon, SECTION_STYLE } from '../icons';
 import { WorkoutScreen } from './WorkoutScreen';
 
@@ -32,7 +32,7 @@ export class HistoryDetailScreen implements Screen {
           h('span', { class: 'hd-mark' }, icon(it.completed ? 'check' : 'next')),
           h('div', { class: 'hd-text' },
             h('strong', {}, ex?.name ?? 'Ejercicio eliminado'),
-            h('span', { class: 'muted small' }, it.completed ? 'Hecho' : it.seconds > 0 ? 'Saltado a medias' : 'Saltado')),
+            h('span', { class: 'muted small' }, it.completed ? 'Hecho' : it.seconds > 0 ? 'Saltado a medias' : 'Saltado', it.weight ? ` · ${kg(it.weight)} por mancuerna` : '')),
           h('span', { class: 'hd-secs' }, `${mmss(it.seconds)}`, h('span', { class: 'muted small' }, ` / ${mmss(it.planned)}`)));
         r.style.setProperty('--sec', st.color);
         list.push(r);
@@ -70,7 +70,7 @@ export class HistoryDetailScreen implements Screen {
     for (const it of entry.items ?? []) {
       if (app.store.hidden.has(it.exerciseId)) continue;
       const sec = app.catalog.get(it.exerciseId)?.section;
-      if (sec) routine[sec].push({ exerciseId: it.exerciseId, seconds: it.planned });
+      if (sec) routine[sec].push({ exerciseId: it.exerciseId, seconds: it.planned, ...(it.weight ? { weight: it.weight } : {}) });
     }
     const plan = WorkoutPlan.build(routine, app.catalog, app.store.settings);
     if (plan.isEmpty) return;

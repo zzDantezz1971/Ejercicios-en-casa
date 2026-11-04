@@ -13,14 +13,32 @@ export class DetailScreen implements Screen {
   private view: FigureView | null = null;
   private action = h('div', { class: 'detail-action' });
 
+  private favBtn = h('button', { class: 'icon-btn fav-btn', onclick: () => this.toggleFav() });
+
+  private paintFav(): void {
+    const on = this.app.store.favorites.has(this.ex.id);
+    this.favBtn.classList.toggle('on', on);
+    this.favBtn.setAttribute('aria-pressed', String(on));
+    this.favBtn.setAttribute('aria-label', on ? 'Quitar de favoritos' : 'Añadir a favoritos');
+    this.favBtn.replaceChildren(icon(on ? 'starFill' : 'star'));
+  }
+
+  private toggleFav(): void {
+    this.app.haptics.tap();
+    this.app.store.toggleFavorite(this.ex.id);
+    this.paintFav();
+  }
+
   constructor(private readonly app: App, private readonly ex: ExerciseDef) {
+    this.paintFav();
     const d = ex.description;
     this.el.style.setProperty('--sec', SECTION_STYLE[ex.section].color);
     const sectionTitle = app.sections.find((s) => s.id === ex.section)?.title ?? '';
     this.el.append(
       h('header', { class: 'bar sticky' },
         h('button', { class: 'icon-btn', 'aria-label': 'Volver', onclick: () => app.back() }, icon('back')),
-        h('span', { class: 'w-sec-chip' }, icon(SECTION_STYLE[ex.section].icon), sectionTitle)),
+        h('span', { class: 'w-sec-chip' }, icon(SECTION_STYLE[ex.section].icon), sectionTitle),
+        this.favBtn),
       h('div', { class: 'stage' }, this.canvas, ex.oneSided ? sidesMark() : null, h('span', { class: 'stage-hint' }, icon('sides'), 'Arrastra para girar')),
       h('section', { class: 'detail-body' },
         h('h2', {}, ex.name),

@@ -42,14 +42,15 @@ export function secondsBySection(history: readonly HistoryEntry[]): { bySection:
 }
 
 /** Ejercicios más hechos (completados), de más a menos. */
-export function topExercises(history: readonly HistoryEntry[], n = 5): Array<{ exerciseId: string; times: number; seconds: number }> {
-  const map = new Map<string, { times: number; seconds: number }>();
+export function topExercises(history: readonly HistoryEntry[], n = 5): Array<{ exerciseId: string; times: number; seconds: number; maxWeight?: number }> {
+  const map = new Map<string, { times: number; seconds: number; maxWeight?: number }>();
   for (const e of history) {
     for (const i of e.items ?? []) {
       if (!i.completed) continue;
       const m = map.get(i.exerciseId) ?? { times: 0, seconds: 0 };
       m.times++;
       m.seconds += i.seconds;
+      if (i.weight && i.weight > (m.maxWeight ?? 0)) m.maxWeight = i.weight;
       map.set(i.exerciseId, m);
     }
   }

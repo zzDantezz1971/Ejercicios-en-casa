@@ -2,6 +2,7 @@ import type { SectionId } from '../domain/types';
 
 /* Iconos propios (24×24). Los de trazo usan currentColor; los marcados como "fill" van rellenos. */
 const STROKE: Record<string, string> = {
+  star: 'M12 3.2l2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 17l-5.4 2.9 1.1-6.1-4.5-4.2 6.1-.8z',
   home: 'M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z',
   tables: 'M8 6h12M8 12h12M8 18h12M3.5 6h.01M3.5 12h.01M3.5 18h.01',
   calendar: 'M4 6h16v14H4zM4 10h16M8 3v4M16 3v4',
@@ -34,6 +35,7 @@ const STROKE: Record<string, string> = {
 
 const FILL: Record<string, string> = {
   play: 'M7 4.5v15l12.5-7.5z',
+  starFill: 'M12 3.2l2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 17l-5.4 2.9 1.1-6.1-4.5-4.2 6.1-.8z',
   pause: 'M6.5 5h4v14h-4zm7 0h4v14h-4z',
   prev: 'M6 5h2.5v14H6zM20 5v14L9.5 12z',
   next: 'M15.5 5H18v14h-2.5zM4 5l10.5 7L4 19z',

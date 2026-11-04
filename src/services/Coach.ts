@@ -36,7 +36,7 @@ export class Coach {
             voice.say(`${SECTION_TITLES[step.section]}. Prepárate. Primer ejercicio: ${step.next.name}`);
             break;
           case 'exercise':
-            voice.say(`${step.exercise.name}. ${speakSeconds(step.seconds)}${step.switchAt !== undefined ? '. A mitad, cambio de lado' : ''}`);
+            voice.say(`${step.exercise.name}${step.weight ? `, ${speakKg(step.weight)}` : ''}. ${speakSeconds(step.seconds)}${step.switchAt !== undefined ? '. A mitad, cambio de lado' : ''}`);
             break;
           case 'rest':
             voice.say(`Descanso. Siguiente: ${step.next.name}`);
@@ -50,7 +50,9 @@ export class Coach {
         if (s.completed) {
           sounds.finish();
           haptics?.finish();
-          voice.say('Entrenamiento terminado. ¡Buen trabajo!');
+          voice.say('¡Buen trabajo! Entrenamiento finalizado.');
+        } else if (s.exercisesDone > 0) {
+          voice.say('¡Bien hecho! Entrenamiento finalizado.');
         }
       }),
     );
@@ -60,6 +62,15 @@ export class Coach {
     this.off.forEach((f) => f());
     this.off = [];
   }
+}
+
+/** 8 -> "8 kilos"; 7.5 -> "7 kilos y medio". */
+export function speakKg(w: number): string {
+  const whole = Math.floor(w);
+  const half = w - whole >= 0.5;
+  if (whole === 0) return 'medio kilo';
+  const base = whole === 1 ? 'un kilo' : `${whole} kilos`;
+  return half ? `${base} y medio` : base;
 }
 
 function speakSeconds(s: number): string {

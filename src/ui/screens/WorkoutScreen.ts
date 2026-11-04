@@ -4,7 +4,7 @@ import { SECTION_TITLES, type ExerciseDef, type SavedRoutine, type SectionId } f
 import { FigureView } from '../../figure/FigureView';
 import { Coach } from '../../services/Coach';
 import type { App, Screen } from '../App';
-import { confirmDialog, h, mmss, plural } from '../dom';
+import { confirmDialog, h, kg, mmss, plural } from '../dom';
 import { icon, SECTION_STYLE } from '../icons';
 import { SummaryScreen } from './SummaryScreen';
 
@@ -191,7 +191,7 @@ export class WorkoutScreen implements Screen {
         this.renderDots(step.section, index);
         u.position.textContent = `Ejercicio ${step.position} de ${step.totalInSection}`;
         u.phase.replaceChildren();
-        u.name.textContent = step.exercise.name;
+        u.name.replaceChildren(step.exercise.name, step.weight ? h('span', { class: 'w-weight' }, icon('dumbbell'), kg(step.weight)) : '');
         if (step.switchAt !== undefined) this.setSide(1);
         u.next.textContent = nextText(this.session.plan.steps, index);
         this.showFigure(step.exercise, 1);

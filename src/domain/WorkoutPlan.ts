@@ -13,6 +13,8 @@ export type Step =
       /** Posición dentro del apartado (1..total). */
       position: number;
       totalInSection: number;
+      /** Peso por mancuerna (kg). */
+      weight?: number;
     }
   | { kind: 'rest'; section: SectionId; seconds: number; next: ExerciseDef }
   | { kind: 'sectionBreak'; finished: SectionId; next: SectionId };
@@ -50,10 +52,12 @@ export class WorkoutPlan {
           switchAt: ex.oneSided ? Math.round(item.seconds / 2) : undefined,
           position: i + 1,
           totalInSection: items.length,
+          weight: item.weight,
         });
         const following = items[i + 1];
-        if (following && settings.restSeconds > 0) {
-          steps.push({ kind: 'rest', section, seconds: settings.restSeconds, next: following.ex });
+        const rest = settings.rest[section] ?? 0;
+        if (following && rest > 0) {
+          steps.push({ kind: 'rest', section, seconds: rest, next: following.ex });
         }
       });
       previous = section;
