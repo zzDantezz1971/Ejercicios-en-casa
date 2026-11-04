@@ -2,7 +2,7 @@ import { RoutineEditor } from '../../domain/RoutineEditor';
 import type { ExerciseDef } from '../../domain/types';
 import { FigureView } from '../../figure/FigureView';
 import type { App, Screen } from '../App';
-import { badgeList } from '../components/badges';
+import { badgeList, sidesMark } from '../components/badges';
 import { clear, confirmDialog, h } from '../dom';
 import { icon, SECTION_STYLE } from '../icons';
 
@@ -21,7 +21,7 @@ export class DetailScreen implements Screen {
       h('header', { class: 'bar sticky' },
         h('button', { class: 'icon-btn', 'aria-label': 'Volver', onclick: () => app.back() }, icon('back')),
         h('span', { class: 'w-sec-chip' }, icon(SECTION_STYLE[ex.section].icon), sectionTitle)),
-      h('div', { class: 'stage' }, this.canvas, h('span', { class: 'stage-hint' }, icon('sides'), 'Arrastra para girar')),
+      h('div', { class: 'stage' }, this.canvas, ex.oneSided ? sidesMark() : null, h('span', { class: 'stage-hint' }, icon('sides'), 'Arrastra para girar')),
       h('section', { class: 'detail-body' },
         h('h2', {}, ex.name),
         h('p', { class: 'muted' }, ex.zone, ex.viewLabel ? ` · ${ex.viewLabel.toLowerCase()}` : ''),

@@ -538,3 +538,15 @@ button:focus-visible, input:focus-visible, label:focus-within { outline: 2px sol
 .backup { display: flex; flex-direction: column; gap: 10px; padding: 14px; }
 .backup-head { display: flex; gap: 12px; align-items: flex-start; }
 .backup-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+/* Marca de ejercicio por lados sobre el maniquí */
+.sides-mark {
+  position: absolute; top: 8px; left: 8px; z-index: 2; display: inline-flex; align-items: center; gap: 5px;
+  background: #F5A524; color: #1A1200; font: 800 .78rem/1 var(--body); text-transform: uppercase; letter-spacing: .03em;
+  padding: 5px 9px 5px 7px; border-radius: 999px; box-shadow: 0 2px 8px rgb(0 0 0 / .35); pointer-events: none;
+}
+.sides-mark .ico { width: 15px; height: 15px; }
+.stage .sides-mark { top: 12px; left: 12px; font-size: .9rem; padding: 7px 12px 7px 9px; }
+.stage .sides-mark .ico { width: 18px; height: 18px; }
+.sides-mark.small { top: 4px; left: 4px; padding: 3px; }
+.sides-mark.small .ico { width: 13px; height: 13px; }

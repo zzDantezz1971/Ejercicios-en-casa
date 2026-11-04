@@ -3,7 +3,7 @@ import { SECTION_IDS, type ExerciseDef, type SectionId } from '../../domain/type
 import type { App, Screen } from '../App';
 import { append, clear, h, humanDuration, plural } from '../dom';
 import { icon, SECTION_STYLE } from '../icons';
-import { badgeList } from '../components/badges';
+import { badgeList, sidesMark } from '../components/badges';
 import { sortableList } from '../components/sortable';
 import { applyOrder, moveItem } from '../../domain/ordering';
 import { DetailScreen } from './DetailScreen';
@@ -112,7 +112,7 @@ export class RoutineScreen implements Screen {
   /** Miniatura pequeña para las filas ordenables. */
   private miniThumb(ex: ExerciseDef): HTMLElement {
     const img = h('img', { alt: '', class: 'thumb', 'data-id': ex.id });
-    const fig = h('div', { class: 'thumb-box mini' }, img);
+    const fig = h('div', { class: 'thumb-box mini' }, img, ex.oneSided ? sidesMark(true) : null);
     this.io.observe(fig);
     return fig;
   }
@@ -216,7 +216,7 @@ export class RoutineScreen implements Screen {
     const pos = this.editor.position(ex.section, ex.id);
     const secs = this.editor.seconds(ex.section, ex.id);
     const img = h('img', { alt: '', class: 'thumb', 'data-id': ex.id });
-    const fig = h('div', { class: 'thumb-box' }, img, ex.viewLabel ? h('span', { class: 'view-label' }, ex.viewLabel) : null);
+    const fig = h('div', { class: 'thumb-box' }, img, ex.viewLabel ? h('span', { class: 'view-label' }, ex.viewLabel) : null, ex.oneSided ? sidesMark() : null);
     this.io.observe(fig);
     const card = h('article', { class: 'ex-card' + (pos ? ' selected' : ''), style: { '--sec': SECTION_STYLE[ex.section].color } },
       h('button', { class: 'ex-main', 'aria-pressed': String(!!pos), onclick: () => this.toggle(ex) },
@@ -284,3 +284,4 @@ export class RoutineScreen implements Screen {
 function normalize(t: string): string {
   return t.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
 }
+
