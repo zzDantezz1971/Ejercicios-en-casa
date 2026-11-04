@@ -55,7 +55,7 @@ export function confirmDialog(text: string, ok: string, cancel = 'Cancelar'): Pr
         { class: 'dialog', role: 'dialog', 'aria-modal': 'true' },
         h('p', {}, text),
         h('div', { class: 'dialog-actions' },
-          h('button', { class: 'btn ghost', onclick: () => close(false) }, cancel),
+          cancel ? h('button', { class: 'btn ghost', onclick: () => close(false) }, cancel) : null,
           h('button', { class: 'btn primary', onclick: () => close(true) }, ok)),
       ),
     );

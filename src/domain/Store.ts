@@ -20,11 +20,14 @@ export interface SavedData {
   hidden: string[];
   /** Orden personalizado de la lista de ejercicios de cada apartado (si no hay, el original). */
   order: Partial<Record<SectionId, string[]>>;
+  /** Fecha de la última copia de seguridad guardada (ISO). */
+  lastBackup?: string;
 }
 
 export const STORAGE_KEY = 'ejercicios-en-casa';
 export const DATA_VERSION = 2;
 export const DEFAULT_ROUTINE_NAME = 'Mi rutina';
+export const BACKUP_APP = 'ejercicios-en-casa';
 const HISTORY_LIMIT = 500;
 const NAME_MAX = 40;
 
@@ -171,6 +174,48 @@ export class Store {
     return moved;
   }
 
+  /* ── Copia de seguridad ── */
+
+  get lastBackup(): string | undefined {
+    return this.data.lastBackup;
+  }
+
+  /** Todo lo guardado, en texto, para la copia de seguridad. */
+  exportBackup(now: Date = new Date()): string {
+    this.data.lastBackup = now.toISOString();
+    this.persist();
+    return JSON.stringify({ app: BACKUP_APP, exportedAt: now.toISOString(), ...this.data }, null, 1);
+  }
+
+  /** Resumen de una copia sin aplicarla (para confirmar antes de restaurar). */
+  static inspectBackup(text: string): { routines: number; history: number; exportedAt?: string } {
+    const d = Store.parseBackup(text);
+    return { routines: d.routines.length, history: d.history.length, exportedAt: d.exportedAt };
+  }
+
+  /** Sustituye todos los datos por los de la copia. */
+  importBackup(text: string): void {
+    const { exportedAt: _e, ...d } = Store.parseBackup(text);
+    this.data = d;
+    this.persist();
+  }
+
+  private static parseBackup(text: string): SavedData & { exportedAt?: string } {
+    let raw: unknown;
+    try {
+      raw = JSON.parse(text);
+    } catch {
+      throw new Error('El archivo no es una copia de Ejercicios en casa.');
+    }
+    const o = raw as Record<string, unknown>;
+    if (!o || typeof o !== 'object' || (o.app !== BACKUP_APP && !Array.isArray(o.routines))) {
+      throw new Error('El archivo no es una copia de Ejercicios en casa.');
+    }
+    const data = Store.migrate(o);
+    if (typeof o.lastBackup === 'string') data.lastBackup = o.lastBackup;
+    return { ...data, exportedAt: typeof o.exportedAt === 'string' ? o.exportedAt : undefined };
+  }
+
   /* ── Orden de la lista de ejercicios ── */
 
   /** Orden personalizado de un apartado, o undefined si se usa el original. */
@@ -285,7 +330,8 @@ export class Store {
       const o = rawOrder[s];
       if (Array.isArray(o)) order[s] = o.filter((x): x is string => typeof x === 'string');
     }
-    return { version: DATA_VERSION, routines, activeId, settings, history, hidden, order };
+    const lastBackup = typeof input.lastBackup === 'string' ? input.lastBackup : undefined;
+    return { version: DATA_VERSION, routines, activeId, settings, history, hidden, order, lastBackup };
   }
 
   private persist(): void {

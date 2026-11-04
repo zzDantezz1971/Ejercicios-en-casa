@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { WorkoutPlan, type Catalog } from '../src/domain/WorkoutPlan';
-import { WorkoutSession, type Cue } from '../src/domain/WorkoutSession';
+import { WorkoutSession, type Cue, type SessionSummary } from '../src/domain/WorkoutSession';
 import { DEFAULT_SETTINGS, emptyRoutine, type ExerciseDef, type Settings } from '../src/domain/types';
 
 const ex = (id: string, section: ExerciseDef['section'], oneSided = false): ExerciseDef => ({
@@ -121,6 +121,24 @@ describe('WorkoutSession', () => {
     expect(s.current?.kind).toBe('rest');
     s.previous(); // desde la pausa vuelve a a
     expect(s.current).toMatchObject({ kind: 'exercise', exercise: { id: 'a' } });
+  });
+
+  it('anota el tiempo hecho de cada ejercicio, completados y saltados', () => {
+    const c = clock();
+    const s = new WorkoutSession(WorkoutPlan.build(routine(), catalog, DEFAULT_SETTINGS), c.now);
+    let sum: SessionSummary | null = null;
+    s.on('finished', (r) => (sum = r));
+    s.start();
+    run(s, c, 10 + 20 + 5 + 4); // cuenta atrás, 'a' completo, pausa y 4 s de 'b'
+    s.next(); // salta el resto de 'b'
+    s.stop();
+    const items = (sum as unknown as SessionSummary).items;
+    expect(items.map((i) => i.exerciseId)).toEqual(['a', 'b', 'c', 'd']);
+    expect(items[0]).toMatchObject({ seconds: 20, completed: true, planned: 20 });
+    expect(items[1].completed).toBe(false);
+    expect(items[1].seconds).toBeGreaterThanOrEqual(3);
+    expect(items[1].seconds).toBeLessThanOrEqual(5);
+    expect(items[3]).toMatchObject({ seconds: 0, completed: false });
   });
 
   it('terminar antes guarda como no completado', () => {

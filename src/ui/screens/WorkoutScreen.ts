@@ -254,6 +254,8 @@ export class WorkoutScreen implements Screen {
         sections: s.sections,
         completed: s.completed,
         routineName: this.table.name,
+        routineId: this.table.id,
+        items: s.items,
       });
       this.app.store.markUsed(this.table.id, s.startedAt);
     }

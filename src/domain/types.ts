@@ -121,6 +121,10 @@ export interface HistoryEntry {
   completed: boolean;
   /** Nombre de la tabla con la que se hizo. */
   routineName?: string;
+  /** Tabla con la que se hizo. */
+  routineId?: string;
+  /** Detalle por ejercicio (solo en entrenamientos guardados desde esta versión). */
+  items?: Array<{ exerciseId: string; section: SectionId; planned: number; seconds: number; completed: boolean }>;
 }
 
 /** Una tabla de ejercicios guardada con nombre. */

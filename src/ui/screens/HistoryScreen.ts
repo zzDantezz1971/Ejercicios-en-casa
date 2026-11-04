@@ -1,8 +1,10 @@
-import { SECTION_TITLES, type HistoryEntry } from '../../domain/types';
+import { bestStreak, routineNames, secondsBySection, topExercises } from '../../domain/stats';
+import { SECTION_IDS, SECTION_TITLES, type HistoryEntry } from '../../domain/types';
 import type { App, Screen } from '../App';
 import { addDays, dayKey, minutesPerWeek, startOfWeek, streak, trainedDays, WEEKDAY_LETTERS } from '../dates';
-import { actionSheet, clear, confirmDialog, h, humanDuration, plural } from '../dom';
+import { append, clear, confirmDialog, h, humanDuration, plural } from '../dom';
 import { icon, SECTION_STYLE, type IconName } from '../icons';
+import { HistoryDetailScreen } from './HistoryDetailScreen';
 
 const NS = 'http://www.w3.org/2000/svg';
 
@@ -12,6 +14,8 @@ export class HistoryScreen implements Screen {
   readonly tab = 'historial' as const;
   private body = h('div', { class: 'history-body' });
   private month = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+  /** Tabla por la que se filtra (null = todas). */
+  private filter: string | null = null;
 
   constructor(private readonly app: App) {
     this.el.append(h('header', { class: 'page-head' }, h('h1', {}, 'Historial')), this.body);
@@ -22,38 +26,45 @@ export class HistoryScreen implements Screen {
   }
 
   private render(): void {
-    const list = this.app.store.history;
+    const all = this.app.store.history;
     clear(this.body);
-    if (!list.length) {
+    if (!all.length) {
       this.body.append(h('div', { class: 'empty-state' }, icon('calendar', 'ico big'), h('p', {}, 'Aún no hay entrenamientos. Cuando termines el primero aparecerá aquí.')));
       return;
     }
+    const names = routineNames(all);
+    if (this.filter && !names.includes(this.filter)) this.filter = null;
+    const list = this.filter ? all.filter((e) => e.routineName === this.filter) : all;
     const now = new Date();
     const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
     const daysThisMonth = new Set(list.filter((e) => Date.parse(e.date) >= monthStart).map((e) => dayKey(new Date(e.date)))).size;
     const total = list.reduce((n, e) => n + e.durationSec, 0);
     const run = streak(list, now);
 
-    this.body.append(
-      h('section', { class: 'stats-row' },
+    append(this.body,
+      names.length > 1 ? this.filters(names) : null,
+      h('section', { class: 'stats-row four' },
         stat('flame', String(run), run === 1 ? 'día seguido' : 'días seguidos'),
+        stat('trophy', String(bestStreak(list)), 'récord de racha'),
         stat('calendar', String(daysThisMonth), 'días este mes'),
         stat('clock', humanDuration(total), 'en total')),
       this.chart(list),
       this.calendar(list),
+      this.bySection(list),
+      this.topList(list),
       h('h3', { class: 'block-title' }, 'Entrenamientos'),
-      h('p', { class: 'muted small' }, 'Toca un entrenamiento para borrarlo.'),
+      h('p', { class: 'muted small' }, 'Toca un entrenamiento para ver el detalle, repetirlo o borrarlo.'),
     );
 
     let month = '';
-    for (const [index, e] of list.entries()) {
+    for (const e of list) {
       const d = new Date(e.date);
       const m = d.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' });
       if (m !== month) {
         month = m;
         this.body.append(h('h4', { class: 'group-title' }, m));
       }
-      this.body.append(row(e, () => void this.entryMenu(e, index)));
+      this.body.append(row(e, () => this.app.push(new HistoryDetailScreen(this.app, e))));
     }
     this.body.append(
       h('button', {
@@ -68,19 +79,60 @@ export class HistoryScreen implements Screen {
     );
   }
 
-  /** Menú de un entrenamiento: permite borrarlo solo a él. */
-  private async entryMenu(e: HistoryEntry, index: number): Promise<void> {
-    const d = new Date(e.date);
-    const when = `${d.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })}, ${d.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}`;
-    const title = e.routineName ? `${e.routineName} · ${when}` : when;
-    const choice = await actionSheet(title, [{ id: 'delete', label: 'Borrar este entrenamiento', danger: true }]);
-    if (choice !== 'delete') return;
-    if (await confirmDialog(`¿Borrar el entrenamiento del ${when}? No se puede deshacer.`, 'Borrar')) {
-      this.app.store.deleteHistoryAt(index);
-      const y = window.scrollY;
-      this.render();
-      window.scrollTo(0, y);
-    }
+  private rerender(): void {
+    const y = window.scrollY;
+    this.render();
+    window.scrollTo(0, y);
+  }
+
+  /** Chips para ver solo los entrenamientos de una tabla. */
+  private filters(names: string[]): HTMLElement {
+    const chip = (label: string, value: string | null) =>
+      h('button', {
+        class: 'filter-chip' + (this.filter === value ? ' on' : ''),
+        'aria-pressed': String(this.filter === value),
+        onclick: () => { this.filter = value; this.rerender(); },
+      }, label);
+    return h('div', { class: 'filter-chips', role: 'group', 'aria-label': 'Filtrar por tabla' },
+      chip('Todas', null), ...names.map((n) => chip(n, n)));
+  }
+
+  /** Barras con el tiempo dedicado a cada apartado. */
+  private bySection(list: readonly HistoryEntry[]): HTMLElement | null {
+    const { bySection, approximate } = secondsBySection(list);
+    const max = Math.max(...SECTION_IDS.map((s) => bySection[s]));
+    if (max <= 0) return null;
+    return h('section', { class: 'card' },
+      h('div', { class: 'card-head' }, h('h3', {}, 'Tiempo por apartado'), approximate ? h('span', { class: 'muted small' }, 'aprox.') : null),
+      ...SECTION_IDS.map((s) => {
+        const st = SECTION_STYLE[s];
+        const fill = h('span', { class: 'sb-fill' });
+        fill.style.width = `${(bySection[s] / max) * 100}%`;
+        const r = h('div', { class: 'sb-row' },
+          h('span', { class: 'sec-dot' }, icon(st.icon)),
+          h('span', { class: 'sb-name' }, SECTION_TITLES[s]),
+          h('span', { class: 'sb-bar' }, fill),
+          h('span', { class: 'sb-val' }, bySection[s] ? humanDuration(bySection[s]) : '—'));
+        r.style.setProperty('--sec', st.color);
+        return r;
+      }));
+  }
+
+  /** Los ejercicios que más veces se han completado. */
+  private topList(list: readonly HistoryEntry[]): HTMLElement | null {
+    const top = topExercises(list, 5).filter((t) => this.app.catalog.has(t.exerciseId));
+    if (!top.length) return null;
+    return h('section', { class: 'card' },
+      h('div', { class: 'card-head' }, h('h3', {}, 'Tus ejercicios más hechos')),
+      h('ol', { class: 'top-list' }, ...top.map((t, i) => {
+        const ex = this.app.catalog.get(t.exerciseId)!;
+        const li = h('li', { class: 'top-row' },
+          h('span', { class: 'top-n' }, String(i + 1)),
+          h('span', { class: 'top-name' }, ex.name),
+          h('span', { class: 'muted small' }, `${plural(t.times, 'vez', 'veces')} · ${humanDuration(t.seconds)}`));
+        li.style.setProperty('--sec', SECTION_STYLE[ex.section].color);
+        return li;
+      })));
   }
 
   /** Barras con los minutos de las últimas 8 semanas. */
@@ -138,9 +190,7 @@ export class HistoryScreen implements Screen {
     }
     const go = (delta: number) => {
       this.month = new Date(m.getFullYear(), m.getMonth() + delta, 1);
-      const y = window.scrollY;
-      this.render();
-      window.scrollTo(0, y);
+      this.rerender();
     };
     const isCurrent = m.getFullYear() === new Date().getFullYear() && m.getMonth() === new Date().getMonth();
     return h('section', { class: 'card cal-card' },
@@ -158,7 +208,7 @@ function stat(ic: IconName, value: string, label: string): HTMLElement {
 
 function row(e: HistoryEntry, onOpen: () => void): HTMLElement {
   const d = new Date(e.date);
-  return h('button', { class: 'card history-row', 'aria-label': `Opciones del entrenamiento del ${d.toLocaleDateString('es-ES')}`, onclick: onOpen },
+  return h('button', { class: 'card history-row', 'aria-label': `Ver el entrenamiento del ${d.toLocaleDateString('es-ES')}`, onclick: onOpen },
     h('div', { class: 'h-date' },
       h('span', { class: 'h-day' }, d.toLocaleDateString('es-ES', { day: 'numeric' })),
       h('span', { class: 'h-wd' }, d.toLocaleDateString('es-ES', { weekday: 'short' }))),

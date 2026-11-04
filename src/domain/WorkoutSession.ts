@@ -10,7 +10,21 @@ export type Cue =
   | { type: 'end' } // termina un ejercicio
   | { type: 'switch' }; // cambio de lado
 
+/** Lo que se hizo de cada ejercicio de la rutina. */
+export interface ExerciseLog {
+  exerciseId: string;
+  section: SectionId;
+  /** Duración prevista (s). */
+  planned: number;
+  /** Tiempo realmente hecho (s). */
+  seconds: number;
+  /** Se llegó al final de su tiempo. */
+  completed: boolean;
+}
+
 export interface SessionSummary {
+  /** Detalle por ejercicio, en el orden de la rutina. */
+  items: ExerciseLog[];
   startedAt: Date;
   durationSec: number;
   exercisesDone: number;
@@ -49,6 +63,8 @@ export class WorkoutSession extends Emitter<Events> {
   private startedAtMs = 0;
   private startedAt = new Date();
   private done = new Set<number>();
+  /** Segundos hechos en cada paso de ejercicio (índice → s). */
+  private worked = new Map<number, number>();
   private _status: SessionStatus = 'idle';
 
   constructor(
@@ -145,13 +161,24 @@ export class WorkoutSession extends Emitter<Events> {
     if (remaining <= 0) {
       if (step.kind === 'exercise') {
         this.done.add(this.index);
+        this.worked.set(this.index, step.seconds);
         this.emit('cue', { type: 'end' });
       }
       this.goTo(this.index + 1);
     }
   }
 
+  /** Guarda el tiempo hecho en el ejercicio actual antes de cambiar de paso. */
+  private recordCurrent(): void {
+    const step = this.current;
+    if (!step || step.kind !== 'exercise' || this._status === 'idle') return;
+    const pausedNow = this.pausedAt !== null ? this.now() - this.pausedAt : 0;
+    const elapsed = Math.min(step.seconds, Math.max(0, (this.now() - this.stepStart - this.pausedTotal - pausedNow) / 1000));
+    this.worked.set(this.index, Math.max(this.worked.get(this.index) ?? 0, elapsed));
+  }
+
   private goTo(i: number): void {
+    this.recordCurrent();
     if (i >= this.plan.steps.length) return this.finish(true);
     this.index = Math.max(0, i);
     this.stepStart = this.now();
@@ -166,6 +193,18 @@ export class WorkoutSession extends Emitter<Events> {
   }
 
   private finish(completed: boolean): void {
+    if (!completed) this.recordCurrent();
+    const items: ExerciseLog[] = [];
+    this.plan.steps.forEach((st, i) => {
+      if (st.kind !== 'exercise') return;
+      items.push({
+        exerciseId: st.exercise.id,
+        section: st.section,
+        planned: st.seconds,
+        seconds: Math.round(this.worked.get(i) ?? 0),
+        completed: this.done.has(i),
+      });
+    });
     const sections = new Set<SectionId>();
     this.done.forEach((i) => {
       const st = this.plan.steps[i];
@@ -173,6 +212,7 @@ export class WorkoutSession extends Emitter<Events> {
     });
     this.setStatus('finished');
     this.emit('finished', {
+      items,
       startedAt: this.startedAt,
       durationSec: Math.round((this.now() - this.startedAtMs) / 1000),
       exercisesDone: this.done.size,

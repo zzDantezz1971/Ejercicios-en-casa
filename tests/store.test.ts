@@ -195,3 +195,31 @@ describe('Orden de ejercicios', () => {
     expect(ed.position('pesas', 'x')).toBe(2);
   });
 });
+
+describe('Copia de seguridad', () => {
+  it('exporta y restaura todos los datos', () => {
+    const a = new Store(memory());
+    a.createRoutine('Brazos');
+    a.saveRoutine({ ...emptyRoutine(), pesas: [{ exerciseId: 'curl', seconds: 40 }] });
+    a.addHistory({ date: '2026-11-03T10:00:00Z', durationSec: 600, exercisesDone: 3, exercisesPlanned: 3, sections: ['pesas'], completed: true });
+    a.hideExercise('pullover');
+    const text = a.exportBackup(new Date('2026-11-04T09:00:00Z'));
+    expect(a.lastBackup).toBe('2026-11-04T09:00:00.000Z');
+    expect(Store.inspectBackup(text)).toEqual({ routines: 2, history: 1, exportedAt: '2026-11-04T09:00:00.000Z' });
+
+    const kv = memory();
+    const b = new Store(kv);
+    b.importBackup(text);
+    const c = new Store(kv);
+    expect(c.routines.map((r) => r.name)).toEqual(['Mi rutina', 'Brazos']);
+    expect(c.routine.pesas).toEqual([{ exerciseId: 'curl', seconds: 40 }]);
+    expect(c.history).toHaveLength(1);
+    expect(c.hidden.has('pullover')).toBe(true);
+  });
+
+  it('rechaza archivos que no son una copia', () => {
+    const s = new Store(memory());
+    expect(() => s.importBackup('hola')).toThrow();
+    expect(() => s.importBackup('{"x":1}')).toThrow();
+  });
+});

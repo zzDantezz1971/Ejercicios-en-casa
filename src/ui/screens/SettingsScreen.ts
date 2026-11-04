@@ -1,6 +1,8 @@
+import { Store } from '../../domain/Store';
 import type { Settings } from '../../domain/types';
+import { pickBackupFile, saveBackupFile } from '../../services/Backup';
 import type { App, Screen } from '../App';
-import { append, clear, h } from '../dom';
+import { append, clear, confirmDialog, h, plural } from '../dom';
 import { icon, type IconName } from '../icons';
 
 interface NumField {
@@ -82,6 +84,48 @@ export class SettingsScreen implements Screen {
       }));
   }
 
+  /** Guardar una copia (para Drive) y restaurarla. */
+  private backupSection(): HTMLElement {
+    const last = this.app.store.lastBackup;
+    const msg = h('p', { class: 'muted small', 'aria-live': 'polite' },
+      last ? `Última copia: ${new Date(last).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}` : 'Aún no has guardado ninguna copia.');
+    const save = async () => {
+      this.app.haptics.tap();
+      const r = await saveBackupFile(this.app.store.exportBackup());
+      if (r === 'cancelled') return;
+      this.render();
+      if (r === 'downloaded') await confirmDialog('Copia guardada en Descargas. Puedes subirla a tu Drive desde la app de Drive.', 'Vale', '');
+    };
+    const restore = async () => {
+      const text = await pickBackupFile();
+      if (text == null) return;
+      let info;
+      try {
+        info = Store.inspectBackup(text);
+      } catch (e) {
+        await confirmDialog((e as Error).message, 'Vale', '');
+        return;
+      }
+      const when = info.exportedAt ? ` del ${new Date(info.exportedAt).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}` : '';
+      const ok = await confirmDialog(
+        `¿Restaurar la copia${when}? Tiene ${plural(info.routines, 'tabla', 'tablas')} y ${plural(info.history, 'entrenamiento', 'entrenamientos')}. Se sustituirá todo lo que hay ahora en la app.`,
+        'Restaurar');
+      if (!ok) return;
+      this.app.store.importBackup(text);
+      location.reload();
+    };
+    return h('section', { class: 'card backup' },
+      h('div', { class: 'backup-head' },
+        h('span', { class: 'set-icon' }, icon('copy')),
+        h('div', { class: 'set-text' },
+          h('strong', {}, 'Tablas, historial y ajustes'),
+          h('p', { class: 'muted small' }, 'Al guardar se abre el menú de compartir: elige Drive para tener la copia a salvo. Para recuperarla, pulsa Restaurar y elige el archivo.'))),
+      msg,
+      h('div', { class: 'backup-actions' },
+        h('button', { class: 'btn primary', onclick: () => void save() }, icon('check'), 'Guardar copia'),
+        h('button', { class: 'btn ghost', onclick: () => void restore() }, icon('back'), 'Restaurar copia')));
+  }
+
   private render(): void {
     const s = this.app.store.settings;
     clear(this.body);
@@ -119,6 +163,8 @@ export class SettingsScreen implements Screen {
           this.app.voice.say('Así sonarán los avisos. Siguiente: curl de bíceps.');
         },
       }, icon('volume'), 'Probar sonido y voz'),
+      h('h3', { class: 'block-title' }, 'Copia de seguridad'),
+      this.backupSection(),
       this.removedSection(),
       h('p', { class: 'muted small center' }, 'Ejercicios en casa · funciona sin conexión'),
       !this.app.voice.available ? h('p', { class: 'muted' }, 'Este navegador no tiene voz disponible.') : null,
