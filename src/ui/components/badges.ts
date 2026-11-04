@@ -15,6 +15,5 @@ export function badgeList(badges?: Badge[]): HTMLElement | null {
 
 /** Marca sobre el maniquí: el ejercicio se hace en dos partes (un lado y luego el otro). */
 export function sidesMark(small = false): HTMLElement {
-  return h('span', { class: 'sides-mark' + (small ? ' small' : ''), title: 'Se hace por lados', 'aria-label': 'Se hace por lados' },
-    icon('sides'), small ? null : '2 lados');
+  return h('span', { class: 'sides-mark' + (small ? ' small' : ''), title: 'Se hace por lados', 'aria-label': 'Se hace por lados' }, icon('sides'));
 }
