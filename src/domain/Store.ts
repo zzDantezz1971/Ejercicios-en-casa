@@ -16,7 +16,7 @@ export interface SavedData {
   activeId: string;
   settings: Settings;
   history: HistoryEntry[];
-  /** Ejercicios que el usuario ha eliminado de la lista (se pueden recuperar). */
+  /** Ejercicios que el usuario ha eliminado para siempre. */
   hidden: string[];
   /** Orden personalizado de la lista de ejercicios de cada apartado (si no hay, el original). */
   order: Partial<Record<SectionId, string[]>>;
@@ -245,12 +245,6 @@ export class Store {
     for (const r of this.data.routines) {
       for (const s of SECTION_IDS) r.routine[s] = r.routine[s].filter((i) => i.exerciseId !== id);
     }
-    this.persist();
-  }
-
-  /** Vuelve a mostrar un ejercicio eliminado (no lo añade a ninguna tabla). */
-  restoreExercise(id: string): void {
-    this.data.hidden = this.data.hidden.filter((x) => x !== id);
     this.persist();
   }
 

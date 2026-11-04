@@ -68,22 +68,6 @@ export class SettingsScreen implements Screen {
       opt(2, 'Maniquí 2', 'Realista, con cuerpo y manos humanas'));
   }
 
-  /** Lista de ejercicios eliminados con botón para recuperarlos. */
-  private removedSection(): HTMLElement | null {
-    const ids = [...this.app.store.hidden].filter((id) => this.app.catalog.has(id));
-    if (!ids.length) return null;
-    return h('section', { class: 'removed' },
-      h('h3', { class: 'block-title' }, `Ejercicios eliminados (${ids.length})`),
-      h('p', { class: 'muted small' }, 'Al recuperarlos vuelven a la lista; añádelos a tus tablas si los quieres usar.'),
-      ...ids.map((id) => {
-        const ex = this.app.catalog.get(id)!;
-        const sec = this.app.sections.find((s) => s.id === ex.section)?.title ?? '';
-        return h('div', { class: 'card removed-row' },
-          h('div', { class: 'set-text' }, h('strong', {}, ex.name), h('span', { class: 'muted small' }, sec)),
-          h('button', { class: 'btn ghost small', onclick: () => { this.app.store.restoreExercise(id); this.render(); } }, 'Recuperar'));
-      }));
-  }
-
   /** Guardar una copia (para Drive) y restaurarla. */
   private backupSection(): HTMLElement {
     const last = this.app.store.lastBackup;
@@ -165,7 +149,6 @@ export class SettingsScreen implements Screen {
       }, icon('volume'), 'Probar sonido y voz'),
       h('h3', { class: 'block-title' }, 'Copia de seguridad'),
       this.backupSection(),
-      this.removedSection(),
       h('p', { class: 'muted small center' }, 'Ejercicios en casa · funciona sin conexión'),
       !this.app.voice.available ? h('p', { class: 'muted' }, 'Este navegador no tiene voz disponible.') : null,
     );

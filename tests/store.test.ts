@@ -102,7 +102,7 @@ describe('Store', () => {
     expect(store.history).toHaveLength(2);
   });
 
-  it('elimina un ejercicio de la lista y de todas las tablas, y se puede recuperar', () => {
+  it('elimina un ejercicio de la lista y de todas las tablas, para siempre', () => {
     const kv = memory();
     const store = new Store(kv);
     const r = emptyRoutine();
@@ -114,8 +114,6 @@ describe('Store', () => {
     const again = new Store(kv);
     expect(again.hidden.has('x')).toBe(true);
     expect(again.routines.flatMap((t) => t.routine.pesas.map((i) => i.exerciseId))).toEqual(['y']);
-    again.restoreExercise('x');
-    expect(new Store(kv).hidden.has('x')).toBe(false);
     expect(other.name).toBe('Otra');
   });
 

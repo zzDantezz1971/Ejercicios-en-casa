@@ -71,10 +71,10 @@ export class DetailScreen implements Screen {
     );
   }
 
-  /** Elimina el ejercicio de la lista y de todas las tablas (se puede recuperar en Ajustes). */
+  /** Elimina el ejercicio de la lista y de todas las tablas para siempre. */
   private async remove(): Promise<void> {
     const ok = await confirmDialog(
-      `¿Eliminar "${this.ex.name}"? Desaparecerá de la lista y de todas tus tablas. Podrás recuperarlo en Ajustes.`,
+      `¿Eliminar "${this.ex.name}"? Desaparecerá para siempre de la lista y de todas tus tablas, y no se podrá recuperar.`,
       'Eliminar',
     );
     if (!ok) return;
