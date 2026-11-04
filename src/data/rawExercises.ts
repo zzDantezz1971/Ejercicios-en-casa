@@ -160,6 +160,9 @@ export const RAW_SECTIONS: RawSection[] = [
    [{uaR:0,faR:0,uaL:30,faL:-20},1200,900],[{uaR:0,faR:0,uaL:28,faL:-14,tu:-88},1200,900]]},
  {n:'Círculos de brazos hacia delante',z:'Hombros',per:2600,fn:t=>{const a=90-360*t;return {thL:91,snL:89,thR:91,snR:89,ua:a,fa:a+8};}},
  {n:'Círculos de brazos hacia atrás',z:'Hombros y pecho',per:2600,fn:t=>{const a=90+360*t;return {thL:91,snL:89,thR:91,snR:89,ua:a,fa:a-8};}},
+ {n:'Mesa invertida',z:'Pecho, hombros y glúteos',mat:1,f:[
+   [{tl:-128,tu:-120,hd:-100,ua:118,fa:100,sa:.9,th:-25,sn:65},500,1200],
+   [{tl:-165,tu:-168,hd:150,ua:95,fa:88,sa:.9,th:0,sn:90},1500,1200]]},
  {g:'Espalda y zona lumbar'},
  {n:'Gato-camello',z:'Columna',mat:1,f:[[{...QUAD,tl:-38,tu:8,hd:70},400,1300],[{...QUAD,tl:2,tu:-34,hd:-45},400,1300]]},
  {n:'Postura del niño',z:'Espalda y lumbar',mat:1,f:[
@@ -183,6 +186,16 @@ export const RAW_SECTIONS: RawSection[] = [
  {n:'Inclinación lateral de pie',split:true,z:'Costados y espalda',v:'front',f:[
    [{tl:-92,tu:-112,uaL:-100,faL:-122,uaR:-122,faR:-142},1300,1000],[{uaL:-95,faL:-86,uaR:-85,faR:-94},300,1000],
    [{tl:-88,tu:-68,uaL:-58,faL:-38,uaR:-80,faR:-58},1300,1000],[{uaL:-95,faL:-86,uaR:-85,faR:-94},300,1000]]},
+ {n:'Medio triángulo',split:true,z:'Costados y cadera',v:'front',f:[
+   [{thL:108,snL:108,thR:72,snR:72},300,1000],
+   [{thL:108,snL:108,thR:72,snR:72,tl:-102,tu:-132,hd:-140,uaL:100,faL:98,uaR:-118,faR:-124},1500,1000],
+   [{thL:108,snL:108,thR:72,snR:72},300,1000],
+   [{thL:108,snL:108,thR:72,snR:72,tl:-78,tu:-48,hd:-40,uaR:80,faR:82,uaL:-62,faL:-56},1500,1000]]},
+ {n:'Molino de viento',z:'Espalda, costados e isquios',v:'front',b:['caution'],f:[
+   [{thL:115,snL:115,thR:65,snR:65,uaL:180,faL:180,uaR:0,faR:0},300,1100],
+   [{thL:115,snL:115,thR:65,snR:65,tl:-156,tu:-174,hd:172,uaR:116,faR:124,uaL:-58,faL:-56},700,1100],
+   [{thL:115,snL:115,thR:65,snR:65,uaL:180,faL:180,uaR:0,faR:0},300,1100],
+   [{thL:115,snL:115,thR:65,snR:65,tl:-24,tu:-6,hd:8,uaL:64,faL:56,uaR:-122,faR:-124},700,1100]]},
  {g:'Cadera y piernas'},
  {n:'Figura 4 (glúteo y piriforme)',z:'Glúteos y cadera',mat:1,f:[
    [{tl:180,thL:-110,snL:-20,thR:-60,sThR:.7,snR:206,sShR:.8,ua:-40,fa:0},900,1100],

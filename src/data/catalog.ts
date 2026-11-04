@@ -26,6 +26,7 @@ const ONE_SIDED = new Set([
   'flexores-de-cadera-rodilla-en-el-suelo',
   'puente-a-una-pierna',
   'zancada-lateral',
+  'medio-triangulo',
 ]);
 
 export function slug(name: string): string {

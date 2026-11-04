@@ -415,6 +415,27 @@ export const DESCRIPTIONS: Record<string, ExerciseDescription> = {
     mistakes: 'Sentarte hacia atrás.',
     easier: 'Recorrido más corto.',
   },
+  'mesa-invertida': {
+    start: 'Sentado en la esterilla, rodillas dobladas y pies apoyados. Manos en el suelo detrás de ti, dedos hacia los pies.',
+    move: 'Empuja con manos y pies y sube la cadera hasta que tronco y muslos queden en línea, como una mesa. Mantén unos segundos y baja despacio.',
+    tip: 'Hombros justo encima de las muñecas, abdominales y glúteos apretados. Respira hondo, sin contener el aire.',
+    mistakes: 'Dejar caer la cadera o arquear la zona lumbar.',
+    easier: 'Sube la cadera solo a medias y deja la cabeza mirando al frente.',
+  },
+  'medio-triangulo': {
+    start: 'De pie con las piernas bien separadas y los pies en paralelo.',
+    move: 'Desliza una mano por la pierna hacia abajo y sube el otro brazo por encima de la cabeza, inclinándote hacia el lado. Mantén y cambia de lado a mitad del tiempo.',
+    tip: 'Espalda erguida y pelvis adelantada: la inclinación es lateral, no hacia delante. Respira hondo.',
+    mistakes: 'Inclinarte hacia delante o girar la pelvis.',
+    easier: 'Baja la mano solo hasta el muslo.',
+  },
+  'molino-de-viento': {
+    start: 'De pie con las piernas muy separadas y los brazos abiertos en cruz.',
+    move: 'Inclínate y lleva una mano hacia el pie contrario mientras el otro brazo sube hacia el techo. Vuelve arriba y repite hacia el otro lado, alternando.',
+    tip: 'Toma aire al bajar y suéltalo al subir. Brazos rectos y hombros lejos de las orejas.',
+    mistakes: 'Encorvar la espalda o hacerlo con prisa.',
+    easier: 'Dobla un poco las rodillas y lleva la mano solo a la rodilla o la espinilla.',
+  },
   'inclinacion-lateral-de-pie': {
     start: 'De pie, brazos por encima de la cabeza.',
     move: 'Inclina el tronco hacia un lado estirando el costado contrario. Mantén y cambia de lado a mitad del tiempo.',
