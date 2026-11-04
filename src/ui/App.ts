@@ -58,6 +58,8 @@ export class App {
       kv = null;
     }
     this.store = new Store(kv);
+    // ejercicios que han cambiado de apartado en una versión nueva
+    this.store.fixSections((id) => this.catalog.get(id)?.section);
     this.applySettings();
     root.append(this.view, this.tabbar);
     // Botón atrás de Android: cada pantalla nueva añade una entrada al historial del navegador.

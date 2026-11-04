@@ -138,11 +138,6 @@ export const RAW_SECTIONS: RawSection[] = [
  {n:'Toques de talón',z:'Oblicuos',v:'top',mat:'top',top:'Vista desde arriba',f:[
    [{thL:102,snL:96,thR:78,snR:84,sTh:.55,sSh:.5,tu:-72,hd:-74,uaL:96,faL:94,uaR:76,faR:80,saR:1.12},180,520],[{thL:102,snL:96,thR:78,snR:84,sTh:.55,sSh:.5,uaL:96,faL:94,uaR:84,faR:86},60,520],
    [{thL:102,snL:96,thR:78,snR:84,sTh:.55,sSh:.5,tu:-108,hd:-106,uaL:104,faL:100,saL:1.12,uaR:84,faR:86},180,520],[{thL:102,snL:96,thR:78,snR:84,sTh:.55,sSh:.5,uaL:96,faL:94,uaR:84,faR:86},60,520]]},
- {n:'Torsión de columna con piernas cruzadas',z:'Oblicuos y lumbar',v:'top',mat:'top',top:'Vista desde arriba',b:['lumbar'],f:[
-   [{uaL:-112,faL:-104,uaR:-68,faR:-76,thL:96,snL:76,thR:86,snR:104,sThL:.4,sThR:.4,sShL:.55,sShR:.45},250,1100],
-   [{uaL:-112,faL:-104,uaR:-68,faR:-76,thL:14,snL:92,thR:4,snR:118,sThL:.97,sThR:.95,sShL:.85,sShR:.7,hd:-106},700,1100],
-   [{uaL:-112,faL:-104,uaR:-68,faR:-76,thL:96,snL:76,thR:86,snR:104,sThL:.4,sThR:.4,sShL:.55,sShR:.45},250,1100],
-   [{uaL:-112,faL:-104,uaR:-68,faR:-76,thL:176,snL:62,thR:166,snR:88,sThL:.95,sThR:.97,sShL:.7,sShR:.85,hd:-74},700,1100]]},
  {n:'Rodillas al pecho sentado',z:'Abdomen',mat:1,f:[
    [{tl:-125,ua:135,fa:115,th:-15,sn:-15,ft:-60},100,800],[{tl:-125,tu:-112,ua:135,fa:115,th:-60,sn:45},100,800]]},
  {n:'Inclinaciones laterales con mancuerna',z:'Oblicuos',v:'front',db:'R',b:['caution'],f:[
@@ -178,6 +173,11 @@ export const RAW_SECTIONS: RawSection[] = [
    [{uaL:180,faL:180,uaR:0,faR:0,th:25,sn:100,hd:-110},1500,1000],
    [{uaL:180,faL:180,uaR:0,faR:0,th:93,sn:90,sTh:.35,sSh:.4},200,1000],
    [{uaL:180,faL:180,uaR:0,faR:0,th:155,sn:80,hd:-70},1500,1000]]},
+ {n:'Torsión de columna con piernas cruzadas',z:'Columna y lumbar',v:'top',mat:'top',top:'Vista desde arriba',b:['lumbar'],f:[
+   [{uaL:-112,faL:-104,uaR:-68,faR:-76,thL:96,snL:76,thR:86,snR:104,sThL:.4,sThR:.4,sShL:.55,sShR:.45},250,1100],
+   [{uaL:-112,faL:-104,uaR:-68,faR:-76,thL:14,snL:92,thR:4,snR:118,sThL:.97,sThR:.95,sShL:.85,sShR:.7,hd:-106},700,1100],
+   [{uaL:-112,faL:-104,uaR:-68,faR:-76,thL:96,snL:76,thR:86,snR:104,sThL:.4,sThR:.4,sShL:.55,sShR:.45},250,1100],
+   [{uaL:-112,faL:-104,uaR:-68,faR:-76,thL:176,snL:62,thR:166,snR:88,sThL:.95,sThR:.97,sShL:.7,sShR:.85,hd:-74},700,1100]]},
  {n:'Hilo en la aguja',z:'Espalda alta',mat:1,f:[
    [{...QUAD,uaR:-90,faR:-90,hd:-40},600,1100],[{...QUAD,tu:-8,uaR:120,faR:150,hd:40},900,1100]]},
  {n:'Inclinación lateral de pie',split:true,z:'Costados y espalda',v:'front',f:[

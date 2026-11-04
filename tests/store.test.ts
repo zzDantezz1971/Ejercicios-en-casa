@@ -156,6 +156,19 @@ describe('RoutineEditor', () => {
   });
 });
 
+describe('Cambios de apartado', () => {
+  it('mueve a su apartado correcto un ejercicio que estaba en otro', () => {
+    const kv = memory();
+    const store = new Store(kv);
+    store.saveRoutine({ ...emptyRoutine(), abdominales: [{ exerciseId: 'giro', seconds: 45 }, { exerciseId: 'crunch', seconds: 30 }] });
+    const moved = store.fixSections((id) => (id === 'giro' ? 'estiramientos' : 'abdominales'));
+    expect(moved).toBe(1);
+    const again = new Store(kv);
+    expect(again.routine.abdominales.map((i) => i.exerciseId)).toEqual(['crunch']);
+    expect(again.routine.estiramientos).toEqual([{ exerciseId: 'giro', seconds: 45 }]);
+  });
+});
+
 describe('Orden de ejercicios', () => {
   it('guarda y restablece el orden personalizado de un apartado', () => {
     const kv = memory();

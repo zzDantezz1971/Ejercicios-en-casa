@@ -148,6 +148,29 @@ export class Store {
   get settings(): Settings {
     return this.data.settings;
   }
+  /**
+   * Si un ejercicio cambia de apartado en una versión nueva, lo mueve al apartado correcto en todas
+   * las tablas (al final de ese apartado). Devuelve cuántos ha movido.
+   */
+  fixSections(sectionOf: (id: string) => SectionId | undefined): number {
+    let moved = 0;
+    for (const r of this.data.routines) {
+      for (const s of SECTION_IDS) {
+        const keep = [];
+        for (const item of r.routine[s]) {
+          const real = sectionOf(item.exerciseId);
+          if (real && real !== s) {
+            if (!r.routine[real].some((i) => i.exerciseId === item.exerciseId)) r.routine[real].push(item);
+            moved++;
+          } else keep.push(item);
+        }
+        r.routine[s] = keep;
+      }
+    }
+    if (moved) this.persist();
+    return moved;
+  }
+
   /* ── Orden de la lista de ejercicios ── */
 
   /** Orden personalizado de un apartado, o undefined si se usa el original. */
