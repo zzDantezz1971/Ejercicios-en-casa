@@ -294,6 +294,13 @@ export const DESCRIPTIONS: Record<string, ExerciseDescription> = {
     mistakes: 'Tirar del cuello, encoger los hombros o apoyar los hombros en cada repetición.',
     easier: 'Separa más los pies del cuerpo o deja la cabeza apoyada en el suelo.',
   },
+  'torsion-de-columna-con-piernas-cruzadas': {
+    start: 'Tumbado boca arriba, brazos estirados por encima de la cabeza con las palmas en el suelo. Rodillas dobladas y una pierna cruzada sobre la otra, con las rodillas juntas.',
+    move: 'Deja caer despacio las piernas cruzadas hacia un lado, sin despegar los hombros del suelo, y vuelve al centro. Repite hacia el otro lado con un movimiento suave y controlado.',
+    tip: 'El giro sale de toda la columna y del abdomen. Aprovecha cada exhalación para girar un poco más. Hombros y palmas siempre apoyados.',
+    mistakes: 'Despegar los hombros, separar las rodillas o dejar caer las piernas de golpe.',
+    easier: 'Haz un recorrido más corto o sin cruzar las piernas. Si te molesta el cuello, pon un cojín bajo la nuca.',
+  },
   'rodillas-al-pecho-sentado': {
     start: 'Sentado, manos apoyadas detrás y piernas estiradas algo levantadas.',
     move: 'Lleva las rodillas hacia el pecho y vuelve a estirar las piernas.',
