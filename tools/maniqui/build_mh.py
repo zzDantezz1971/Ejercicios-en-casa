@@ -41,9 +41,8 @@ for f, w in [('t_torso_torso-scale-horiz-incr.target', 0.3), ('t_torso_torso-vsh
              ('t_armslegs_r-upperarm-scale-horiz-incr.target', 0.1), ('t_armslegs_l-upperarm-scale-horiz-incr.target', 0.1),
              ('t_armslegs_r-upperarm-muscle-incr.target', 0.6), ('t_armslegs_l-upperarm-muscle-incr.target', 0.6),
              ('t_neck_neck-scale-horiz-incr.target', 0.3)]:
-    k = float(os.environ.get('SHDIST', '0')) if 'shoulder-dist' in f else WIDE
-    apply(f, w * k / 0.35)
-CHEST = float(os.environ.get('CHEST', '0.4'))
+    apply(f, w * WIDE / 0.35)
+CHEST = float(os.environ.get('CHEST', '0'))
 if CHEST:
     apply('t_measure_measure-chest-circ-incr.target', CHEST)
     apply('t_armslegs_r-upperarm-muscle-incr.target', CHEST * 0.6)
@@ -89,13 +88,9 @@ V[:] = V_OPEN
 # Huesos propios: segmentos (a, b) en reposo
 pel = jp('spine05____head')
 neck = jp('neck01____head')
-s1 = jp('spine03____head')
-s2 = jp('spine01____head')
+mid = (pel + neck) / 2
 headC = (jp('head____head') + jp('head____tail')) / 2
-# columna en tres partes (lumbar, abdomen, pecho) y clavículas
-segs = {'hips': (pel, s1), 'abs': (s1, s2), 'chest': (s2, neck), 'head': (neck, headC)}
-for s in 'LR':
-    segs['cl' + s] = (jp(f'clavicle.{s}____head'), jp(f'upperarm01.{s}____head'))
+segs = {'hips': (pel, mid), 'chest': (mid, neck), 'head': (neck, headC)}
 for s in 'LR':
     segs['ua' + s] = (jp(f'upperarm01.{s}____head'), jp(f'lowerarm01.{s}____head'))
     segs['fa' + s] = (jp(f'lowerarm01.{s}____head'), jp(f'wrist.{s}____head'))
@@ -108,14 +103,10 @@ BONES = list(segs)
 def mybone(mh):
     side = mh[-1] if mh.endswith(('.L', '.R')) else ''
     base = mh[:-2] if side else mh
-    if base in ('root', 'spine05', 'spine04', 'pelvis'):
+    if base in ('root', 'spine05', 'spine04', 'spine03', 'pelvis'):
         return 'hips'
-    if base in ('spine03', 'spine02'):
-        return 'abs'
-    if base in ('spine01', 'breast'):
+    if base in ('spine02', 'spine01', 'clavicle', 'breast'):
         return 'chest'
-    if base == 'clavicle':
-        return 'cl' + side
     if base in ('shoulder01', 'upperarm01', 'upperarm02'):
         return 'ua' + side
     if base in ('lowerarm01', 'lowerarm02'):
@@ -175,7 +166,7 @@ for mh, lst in wfile.items():
 lipW = lipW[used]
 for i, p in enumerate(P):
     b = BONES[dom[i]]
-    if b in ('chest', 'abs') or b.startswith('cl'):
+    if b == 'chest':
         region[i] = 1
     elif b == 'hips':
         # cintura: por encima de la cadera camiseta, por debajo pantalón
@@ -195,7 +186,7 @@ for i, p in enumerate(P):
         region[i] = 5
 
 # parte del cuerpo de cada vértice: 0 tronco/cabeza, 1-2 brazo L/R, 3-4 pierna L/R, 5 pie, 6 mano, 7 labios
-PART = {'hips': 0, 'abs': 0, 'chest': 0, 'clL': 0, 'clR': 0, 'head': 0, 'uaL': 1, 'faL': 1, 'uaR': 2, 'faR': 2, 'thL': 3, 'shL': 3, 'thR': 4, 'shR': 4,
+PART = {'hips': 0, 'chest': 0, 'head': 0, 'uaL': 1, 'faL': 1, 'uaR': 2, 'faR': 2, 'thL': 3, 'shL': 3, 'thR': 4, 'shR': 4,
         'footL': 5, 'footR': 5, 'handL': 6, 'handR': 6}
 part = np.array([PART[BONES[d]] for d in dom], dtype=np.uint8)
 part[region == 5] = 7
