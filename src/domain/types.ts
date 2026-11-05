@@ -106,8 +106,6 @@ export interface Settings {
   sectionCountdown: number;
   sound: boolean;
   voice: boolean;
-  /** Maniquí: 1 = de piezas (con expresiones), 2 = realista. */
-  mannequin: 1 | 2;
   /** Decir "3, 2, 1" por voz al final de cada ejercicio, pausa y cuenta atrás. */
   voiceCount: boolean;
   /** Al empezar, preguntar por el reloj (pulsaciones) si no está conectado. */
@@ -132,7 +130,6 @@ export const DEFAULT_SETTINGS: Settings = {
   sectionCountdown: 10,
   sound: true,
   voice: true,
-  mannequin: 2,
   voiceCount: true,
   askWatch: true,
   profile: { age: null, height: null, sex: 'h' },

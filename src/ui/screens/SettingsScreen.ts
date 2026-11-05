@@ -45,31 +45,6 @@ export class SettingsScreen implements Screen {
     this.render();
   }
 
-  /** Dos tarjetas con la figura de cada maniquí para elegir. */
-  private mannequinPicker(current: 1 | 2): HTMLElement {
-    const opt = (n: 1 | 2, title: string, desc: string) => {
-      const img = h('img', { class: 'mq-thumb', alt: '' });
-      const card = h('button', {
-        class: 'mq-option' + (current === n ? ' on' : ''),
-        'aria-pressed': String(current === n),
-        onclick: () => {
-          if (current !== n) {
-            this.app.haptics.tap();
-            this.update({ mannequin: n });
-          }
-        },
-      }, h('span', { class: 'mq-img' }, img), h('strong', {}, title), h('span', { class: 'muted small' }, desc),
-        current === n ? h('span', { class: 'mq-check' }, icon('check')) : null);
-      // vista previa: el maniquí elegido se dibuja con el ajuste actual; el otro se pide aparte
-      const ex = this.app.catalog.get('curl-de-biceps');
-      if (ex) void this.app.thumbs.preview(ex, n).then((u) => (img.src = u));
-      return card;
-    };
-    return h('section', { class: 'mq-picker' },
-      opt(1, 'Maniquí 1 · Anatomía', 'En gris, con los músculos que trabajan (rojo) y que se estiran (turquesa)'),
-      opt(2, 'Maniquí 2 · Realista', 'Con ropa deportiva, cuerpo y manos humanas'));
-  }
-
   /** Pausa entre ejercicios, una por apartado. */
   private restCard(s: Settings): HTMLElement {
     return h('section', { class: 'card setting rest-card' },
@@ -228,8 +203,6 @@ export class SettingsScreen implements Screen {
           h('span', { class: 'set-text' }, h('strong', {}, label), h('span', { class: 'muted block small' }, help)),
           h('input', { type: 'checkbox', id: `set-${key}`, class: 'switch', checked: s[key], onchange: (e: Event) => this.update({ [key]: (e.target as HTMLInputElement).checked }) })));
     append(this.body,
-      h('h3', { class: 'block-title' }, 'Maniquí'),
-      this.mannequinPicker(s.mannequin),
       h('h3', { class: 'block-title' }, 'Avisos'),
       toggle('sound', 'volume', 'Pitidos y vibración', 'Al empezar y acabar cada ejercicio, y en los últimos 3 segundos.'),
       toggle('voice', 'voice', 'Avisos por voz', 'Dice el nombre del ejercicio, el siguiente y cuándo cambiar de lado.'),

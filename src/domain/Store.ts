@@ -426,7 +426,7 @@ export class Store {
   /** Convierte datos de versiones anteriores y rellena lo que falte. */
   static migrate(input: Record<string, unknown>): SavedData {
     const rawSettings = (input.settings ?? {}) as Partial<Settings> & { restSeconds?: number };
-    const { restSeconds, ...known } = rawSettings;
+    const { restSeconds, mannequin: _m, ...known } = rawSettings as typeof rawSettings & { mannequin?: unknown };
     const settings: Settings = { ...DEFAULT_SETTINGS, ...known };
     settings.profile = { ...DEFAULT_SETTINGS.profile, ...(known.profile ?? {}) };
     // v anteriores: una sola pausa para todo -> la misma en cada apartado

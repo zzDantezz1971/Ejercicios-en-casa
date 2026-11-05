@@ -451,19 +451,6 @@ button:focus-visible, input:focus-visible, label:focus-within { outline: 2px sol
 .sheet-btn.cancel { text-align: center; color: var(--muted); margin-top: 4px; border-top: 1px solid var(--line); border-radius: 0; }
 .cal-day.out.done { opacity: .4; }
 
-/* Selector de maniquí */
-.mq-picker { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.mq-option {
-  position: relative; display: flex; flex-direction: column; gap: 4px; text-align: left; cursor: pointer;
-  background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 8px 10px 12px;
-}
-.mq-option.on { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent), 0 8px 20px rgb(61 107 255 / .2); }
-.mq-option strong { font: 700 1.15rem var(--display); text-transform: uppercase; letter-spacing: .03em; }
-.mq-img { aspect-ratio: 3 / 2; border-radius: 12px; overflow: hidden; background: var(--stage); margin-bottom: 4px; }
-.mq-thumb { width: 100%; height: 100%; object-fit: cover; display: block; }
-.mq-thumb:not([src]) { visibility: hidden; }
-.mq-check { position: absolute; top: 14px; right: 16px; width: 26px; height: 26px; border-radius: 50%; background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center; }
-.mq-check .ico { width: 16px; height: 16px; }
 .history-row { width: 100%; text-align: left; cursor: pointer; color: inherit; font: inherit; }
 .history-row:active { transform: scale(.99); }
 .delete-ex { margin-top: 10px; }

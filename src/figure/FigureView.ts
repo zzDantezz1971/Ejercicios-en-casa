@@ -3,15 +3,15 @@ import type { ExerciseDef, MotionSpec } from '../domain/types';
 import { MannequinScene, type Mood, type Palette } from './Mannequin';
 import type { Side } from './poses';
 import type { SkinData } from './SkinnedFigure';
-import { anatomyOn, getLoadedSkin, getSkin } from './skinAsset';
+import { getSkin } from './skinAsset';
 import { muscleWeights } from './anatomy';
 
 /** Postura de pie, brazos algo separados, para el mapa de músculos. */
 const BODY_SPEC: MotionSpec = { v: 'front', f: [[{ uaL: 100, faL: 96, uaR: 80, faR: 84 }]] };
 
-/** Músculos a marcar si está elegido el maniquí anatomía. */
-function anatomyFor(ex: ExerciseDef, side: Side, on = anatomyOn()): { L: number[]; R: number[] } | undefined {
-  return on ? muscleWeights(ex.muscles, side) : undefined;
+/** Músculos a marcar en el maniquí anatomía. */
+function anatomyFor(ex: ExerciseDef, side: Side): { L: number[]; R: number[] } {
+  return muscleWeights(ex.muscles, side);
 }
 
 function makeRenderer(canvas: HTMLCanvasElement | OffscreenCanvas, preserve = false): THREE.WebGLRenderer {
@@ -148,29 +148,15 @@ export class Thumbnails {
 
   constructor(private readonly palette?: Palette, private readonly w = 330, private readonly h = 220) {}
 
-  /** Olvida las miniaturas (por ejemplo, al cambiar de maniquí). */
-  clear(): void {
-    for (const k of [...this.cache.keys()]) if (!k.startsWith('preview:')) this.cache.delete(k);
-  }
-
-  /** Miniatura con el maniquí elegido en Ajustes. */
+  /** Miniatura del ejercicio. */
   get(ex: ExerciseDef): Promise<string> {
-    return this.request(ex.id, ex, getSkin(), anatomyOn());
-  }
-
-  /** Miniatura con un maniquí concreto (para la vista previa de Ajustes): 1 = anatomía, 2 = realista. */
-  preview(ex: ExerciseDef, mannequin: 1 | 2): Promise<string> {
-    const skin = getLoadedSkin();
-    return this.request(`preview:${skin ? mannequin : 0}:${ex.id}`, ex, skin, mannequin === 1);
-  }
-
-  private request(key: string, ex: ExerciseDef, skin: SkinData | undefined, anatomy: boolean): Promise<string> {
-    return this.enqueue(key, () => this.draw(ex, skin, anatomy));
+    const skin = getSkin();
+    return this.enqueue(`${skin ? 'a' : 'p'}:${ex.id}`, () => this.draw(ex, skin));
   }
 
   /** Cuerpo de pie (de frente o de espaldas) con los músculos coloreados según `weights`. Vacío si no hay cuerpo realista. */
   bodyMap(weights: number[], back: boolean): Promise<string> {
-    const skin = getLoadedSkin();
+    const skin = getSkin();
     if (!skin) return Promise.resolve('');
     return this.enqueue(`map:${back ? 1 : 0}:${weights.map((w) => w.toFixed(2)).join(',')}`, () => {
       const r = this.ensureRenderer();
@@ -222,9 +208,9 @@ export class Thumbnails {
     return this.renderer;
   }
 
-  private draw(ex: ExerciseDef, skin: SkinData | undefined, anatomy: boolean): string {
+  private draw(ex: ExerciseDef, skin: SkinData | undefined): string {
     const r = this.ensureRenderer();
-    const sc = new MannequinScene(ex.motion, this.palette, undefined, skin, skin ? anatomyFor(ex, undefined, anatomy) : undefined);
+    const sc = new MannequinScene(ex.motion, this.palette, undefined, skin, skin ? anatomyFor(ex, undefined) : undefined);
     sc.mood = 'relaxed';
     sc.setAspect(this.w / this.h);
     sc.update(sc.motion.total * 0.45);
