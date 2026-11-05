@@ -26,6 +26,26 @@ const inclineBack = (J: Joints, P: PropHelpers): PropOp[] => {
   return [...P.line(a, b, 7), ...P.line(a, [a[0], 0], 4), ...P.line([a[0] - 12, 0], [a[0] + 12, 0], 4)];
 };
 
+
+/** Círculo grande de brazos rectos (de frente): suben por los lados un poco hacia atrás, pasan por encima
+    de la cabeza en V y bajan por delante. dir = 1 hacia delante, -1 hacia atrás (recorrido inverso). */
+function armCircle(t: number, dir: 1 | -1): Record<string, number> {
+  const th = 2 * Math.PI * (dir === 1 ? t : 1 - t);
+  const up = -Math.cos(th), h = Math.abs(Math.sin(th));
+  const rising = Math.sin(th) >= 0;
+  let x = h * (rising ? 0.95 : 0.12) + 0.2, z = h * (rising ? -0.28 : 0.99);
+  const y = up, n = Math.hypot(x, y, z);
+  x /= n; z /= n;
+  const yy = y / n;
+  const sa = Math.max(0.12, Math.hypot(x, yy));
+  const uaR = (Math.atan2(-yy, x) * 180) / Math.PI;
+  const back = z < 0 ? -z : 0;
+  const o: Record<string, number> = { uaR, faR: uaR, uaL: 180 - uaR, faL: 180 - uaR, sa,
+    // hacia atrás: se resta la profundidad que el motor pone hacia delante
+    zE: back ? -2 * 21 * back : 0, zH: back ? -2 * 41.5 * back : 0 };
+  return o;
+}
+
 export const RAW_SECTIONS: RawSection[] = [
 {id:'calentamiento',title:'Calentamiento',note:'Has pedido unos 10. Te propongo 12 para que puedas descartar.',items:[
  {n:'Marcha en el sitio',z:'Cuerpo entero',f:[
@@ -158,7 +178,7 @@ export const RAW_SECTIONS: RawSection[] = [
  {n:'Apertura de pecho con manos atrás',z:'Pecho y hombros',f:[[{ua:140,fa:140},300,900],[{ua:160,fa:162,tu:-96,hd:-104},1400,900]]},
  {n:'Estiramiento de antebrazos',z:'Antebrazos y muñecas',f:[
    [{uaR:0,faR:0,uaL:30,faL:-20},1200,900],[{uaR:0,faR:0,uaL:28,faL:-14,tu:-88},1200,900]]},
- {n:'Círculos de brazos hacia delante',z:'Hombros',per:2600,fn:t=>{const a=90-360*t;return {thL:91,snL:89,thR:91,snR:89,ua:a,fa:a+8};}},
+ {n:'Círculos de brazos hacia delante',z:'Hombros',v:'front',az:50,el:8,per:1150,fn:t=>armCircle(t,1)},
  {n:'Círculos de brazos hacia atrás',z:'Hombros y pecho',per:2600,fn:t=>{const a=90+360*t;return {thL:91,snL:89,thR:91,snR:89,ua:a,fa:a-8};}},
  {n:'Mesa invertida',z:'Pecho, hombros y glúteos',mat:1,f:[
    [{tl:-128,tu:-120,hd:-100,ua:118,fa:100,sa:.9,th:-25,sn:65},500,1200],
@@ -176,11 +196,11 @@ export const RAW_SECTIONS: RawSection[] = [
    [{uaL:180,faL:180,uaR:0,faR:0,th:25,sn:100,hd:-110},1500,1000],
    [{uaL:180,faL:180,uaR:0,faR:0,th:93,sn:90,sTh:.35,sSh:.4},200,1000],
    [{uaL:180,faL:180,uaR:0,faR:0,th:155,sn:80,hd:-70},1500,1000]]},
- {n:'Torsión de columna con piernas cruzadas',split:true,z:'Columna y lumbar',v:'top',mat:'top',top:'Vista desde arriba',b:['lumbar'],f:[
-   [{uaL:-112,faL:-104,uaR:-68,faR:-76,thL:96,snL:76,thR:86,snR:104,sThL:.4,sThR:.4,sShL:.55,sShR:.45},250,1100],
-   [{uaL:-112,faL:-104,uaR:-68,faR:-76,thL:14,snL:92,thR:4,snR:118,sThL:.97,sThR:.95,sShL:.85,sShR:.7,hd:-106},700,1100],
-   [{uaL:-112,faL:-104,uaR:-68,faR:-76,thL:96,snL:76,thR:86,snR:104,sThL:.4,sThR:.4,sShL:.55,sShR:.45},250,1100],
-   [{uaL:-112,faL:-104,uaR:-68,faR:-76,thL:176,snL:62,thR:166,snR:88,sThL:.95,sThR:.97,sShL:.7,sShR:.85,hd:-74},700,1100]]},
+ {n:'Torsión de columna con piernas cruzadas',split:true,z:'Columna y lumbar',v:'top',mat:'top',az:90,el:22,top:'De lado',b:['lumbar'],f:[
+   [{uaL:-122,faL:-118,uaR:-58,faR:-62,thL:100,snL:62,thR:84,snR:112,sThL:.45,sThR:.35,sShL:.45,sShR:.5},300,1300],
+   [{uaL:-122,faL:-118,uaR:-58,faR:-62,thL:-6,snL:88,thR:4,snR:104,sThL:.78,sThR:.97,sShL:.95,sShR:.9,hd:-106},1800,1300],
+   [{uaL:-122,faL:-118,uaR:-58,faR:-62,thL:100,snL:62,thR:84,snR:112,sThL:.45,sThR:.35,sShL:.45,sShR:.5},300,1300],
+   [{uaL:-122,faL:-118,uaR:-58,faR:-62,thL:186,snL:76,thR:176,snR:92,sThL:.97,sThR:.78,sShL:.9,sShR:.95,hd:-74},1800,1300]]},
  {n:'Hilo en la aguja',z:'Espalda alta',mat:1,f:[
    [{...QUAD,uaR:-90,faR:-90,hd:-40},600,1100],[{...QUAD,tu:-8,uaR:120,faR:150,hd:40},900,1100]]},
  {n:'Inclinación lateral de pie',split:true,z:'Costados y espalda',v:'front',f:[
