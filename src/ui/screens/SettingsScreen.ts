@@ -221,7 +221,7 @@ export class SettingsScreen implements Screen {
             h('button', { 'aria-label': 'Más', disabled: v >= f.max, onclick: () => this.update({ [f.key]: Math.min(f.max, v + f.step) }) }, '+'))),
       );
     }
-    const toggle = (key: 'sound' | 'voice', ic: IconName, label: string, help: string) =>
+    const toggle = (key: 'sound' | 'voice' | 'voiceCount', ic: IconName, label: string, help: string) =>
       h('section', { class: 'card setting' },
         h('label', { class: 'switch-row', for: `set-${key}` },
           h('span', { class: 'set-icon' }, icon(ic)),
@@ -233,6 +233,7 @@ export class SettingsScreen implements Screen {
       h('h3', { class: 'block-title' }, 'Avisos'),
       toggle('sound', 'volume', 'Pitidos y vibración', 'Al empezar y acabar cada ejercicio, y en los últimos 3 segundos.'),
       toggle('voice', 'voice', 'Avisos por voz', 'Dice el nombre del ejercicio, el siguiente y cuándo cambiar de lado.'),
+      s.voice ? toggle('voiceCount', 'hourglass', 'Cuenta atrás por voz', 'Dice "tres, dos, uno" al final de cada ejercicio, descanso y cuenta atrás.') : null,
       h('button', {
         class: 'btn ghost block',
         onclick: () => {

@@ -1,4 +1,5 @@
 import { RoutineEditor, STEP_SECONDS } from '../../domain/RoutineEditor';
+import { clampRounds, MAX_ROUNDS } from '../../domain/WorkoutPlan';
 import { SECTION_IDS, usesWeight, type ExerciseDef, type SectionId } from '../../domain/types';
 import type { App, Screen } from '../App';
 import { append, clear, h, humanDuration, kg, plural, weightDialog } from '../dom';
@@ -92,6 +93,7 @@ export class RoutineScreen implements Screen {
       this.mode === 'all'
         ? h('button', { class: 'btn ghost small', onclick: () => { this.mode = 'sorting'; this.clearSearch(); window.scrollTo(0, 0); this.render(); } }, icon('tables'), 'Ordenar lista')
         : null,
+      n ? this.roundsControl() : null,
     );
     if (this.mode === 'fav') {
       this.hint.replaceChildren(this.favs().length
@@ -104,6 +106,19 @@ export class RoutineScreen implements Screen {
     } else {
       this.hint.replaceChildren('Toca un ejercicio para añadirlo al final de la tabla. Pulsa ', icon('info', 'ico inline'), ' para ver cómo se hace.');
     }
+  }
+
+  /** Vueltas del apartado: repetir todos sus ejercicios 2, 3… veces seguidas. */
+  private roundsControl(): HTMLElement {
+    const r = clampRounds(this.app.store.active.rounds?.[this.section]);
+    const set = (v: number) => { this.app.store.setRounds(this.section, v); this.refresh(); };
+    return h('div', { class: 'rounds-ctl' },
+      icon('swap'),
+      h('span', { class: 'rounds-label' }, 'Vueltas'),
+      h('div', { class: 'stepper inline' },
+        h('button', { 'aria-label': 'Menos vueltas', disabled: r <= 1, onclick: () => set(r - 1) }, '−'),
+        h('span', { class: 'secs' }, `× ${r}`),
+        h('button', { 'aria-label': 'Más vueltas', disabled: r >= MAX_ROUNDS, onclick: () => set(r + 1) }, '+')));
   }
 
   /** Ejercicios visibles de un apartado, en el orden elegido por el usuario. */
@@ -302,7 +317,8 @@ export class RoutineScreen implements Screen {
     clear(this.footer);
     const r = this.editor.value;
     const count = SECTION_IDS.reduce((n, s) => n + r[s].length, 0);
-    const secs = SECTION_IDS.reduce((n, s) => n + r[s].reduce((m, i) => m + i.seconds, 0), 0);
+    const rounds = this.app.store.active.rounds ?? {};
+    const secs = SECTION_IDS.reduce((n, s) => n + r[s].reduce((m, i) => m + i.seconds, 0) * clampRounds(rounds[s]), 0);
     const inSection = r[this.section].length;
     if (this.mode === 'sorting') {
       this.footer.hidden = true;

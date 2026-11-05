@@ -1,4 +1,4 @@
-import { WorkoutPlan } from '../../domain/WorkoutPlan';
+import { WorkoutPlan, clampRounds } from '../../domain/WorkoutPlan';
 import { SECTION_IDS, SECTION_TITLES, type SectionId } from '../../domain/types';
 import type { App, Screen } from '../App';
 import { addDays, dayKey, greeting, startOfWeek, streak, trainedDays, WEEKDAY_LETTERS } from '../dates';
@@ -20,7 +20,7 @@ export class HomeScreen implements Screen {
   private render(): void {
     const { app } = this;
     const table = app.store.active;
-    const plan = WorkoutPlan.build(table.routine, app.catalog, app.store.settings);
+    const plan = WorkoutPlan.build(table.routine, app.catalog, app.store.settings, table.rounds);
     const now = new Date();
     clear(this.el);
 
@@ -83,13 +83,14 @@ export class HomeScreen implements Screen {
 
   private sectionRow(s: SectionId): HTMLElement {
     const items = this.app.store.routine[s].filter((i) => this.app.catalog.has(i.exerciseId));
-    const secs = items.reduce((n, i) => n + i.seconds, 0);
+    const R = clampRounds(this.app.store.active.rounds?.[s]);
+    const secs = items.reduce((n, i) => n + i.seconds, 0) * R;
     const st = SECTION_STYLE[s];
     const row = h('button', { class: 'sec-row' + (items.length ? '' : ' empty'), onclick: () => this.app.push(new RoutineScreen(this.app, s)) },
       h('span', { class: 'sec-icon' }, icon(st.icon)),
       h('span', { class: 'sec-text' },
         h('strong', {}, SECTION_TITLES[s]),
-        h('span', { class: 'muted small' }, items.length ? `${plural(items.length, 'ejercicio', 'ejercicios')} · ${humanDuration(secs)}` : 'Sin ejercicios · toca para añadir')),
+        h('span', { class: 'muted small' }, items.length ? `${plural(items.length, 'ejercicio', 'ejercicios')}${R > 1 ? ` × ${R} vueltas` : ''} · ${humanDuration(secs)}` : 'Sin ejercicios · toca para añadir')),
       icon('chevron', 'ico chev'));
     row.style.setProperty('--sec', st.color);
     return row;

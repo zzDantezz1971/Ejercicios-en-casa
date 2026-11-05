@@ -108,6 +108,8 @@ export interface Settings {
   voice: boolean;
   /** Maniquí: 1 = de piezas (con expresiones), 2 = realista. */
   mannequin: 1 | 2;
+  /** Decir "3, 2, 1" por voz al final de cada ejercicio, pausa y cuenta atrás. */
+  voiceCount: boolean;
   /** Al empezar, preguntar por el reloj (pulsaciones) si no está conectado. */
   askWatch: boolean;
   /** Datos personales para calcular las calorías. */
@@ -131,6 +133,7 @@ export const DEFAULT_SETTINGS: Settings = {
   sound: true,
   voice: true,
   mannequin: 2,
+  voiceCount: true,
   askWatch: true,
   profile: { age: null, height: null, sex: 'h' },
 };
@@ -194,6 +197,8 @@ export interface SavedRoutine {
   createdAt: string;
   /** Última vez que se entrenó con ella (ISO). */
   lastUsed?: string;
+  /** Vueltas de cada apartado (1 si no se indica). */
+  rounds?: Partial<Record<SectionId, number>>;
 }
 
 export function emptyRoutine(): Routine {

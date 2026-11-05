@@ -57,6 +57,16 @@ export function cleanName(name: string): string {
   return n || DEFAULT_ROUTINE_NAME;
 }
 
+function sanitizeRounds(input: unknown): Partial<Record<SectionId, number>> | undefined {
+  if (!input || typeof input !== 'object') return undefined;
+  const out: Partial<Record<SectionId, number>> = {};
+  for (const s of SECTION_IDS) {
+    const v = (input as Record<string, unknown>)[s];
+    if (typeof v === 'number' && v > 1) out[s] = Math.min(10, Math.round(v));
+  }
+  return Object.keys(out).length ? out : undefined;
+}
+
 function sanitizeRoutine(input: unknown): Routine {
   const out = emptyRoutine();
   const r = (input ?? {}) as Partial<Record<string, unknown>>;
@@ -97,6 +107,15 @@ export class Store {
   /** Ejercicios de la tabla activa. */
   get routine(): Routine {
     return this.active.routine;
+  }
+
+  /** Vueltas de un apartado de la tabla activa. */
+  setRounds(section: SectionId, n: number): void {
+    const r = Math.min(10, Math.max(1, Math.round(n)));
+    const a = this.active;
+    a.rounds = { ...(a.rounds ?? {}), [section]: r };
+    if (r === 1) delete a.rounds[section];
+    this.persist();
   }
 
   /** Guarda los ejercicios de la tabla activa. */
@@ -428,6 +447,7 @@ export class Store {
           routine: sanitizeRoutine(r.routine),
           createdAt: typeof r.createdAt === 'string' ? r.createdAt : new Date().toISOString(),
           lastUsed: typeof r.lastUsed === 'string' ? r.lastUsed : undefined,
+          rounds: sanitizeRounds(r.rounds),
         }));
     } else if (input.routine) {
       // v1 -> v2: la rutina única pasa a ser la tabla "Mi rutina"

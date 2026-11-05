@@ -15,11 +15,20 @@ export type Step =
       totalInSection: number;
       /** Peso por mancuerna (kg). */
       weight?: number;
+      /** Vuelta actual y total de vueltas del apartado. */
+      round: number;
+      rounds: number;
     }
   | { kind: 'rest'; section: SectionId; seconds: number; next: ExerciseDef }
   | { kind: 'sectionBreak'; finished: SectionId; next: SectionId };
 
 export type Catalog = ReadonlyMap<string, ExerciseDef>;
+
+export const MAX_ROUNDS = 10;
+
+export function clampRounds(n: number | undefined): number {
+  return Math.min(MAX_ROUNDS, Math.max(1, Math.round(n ?? 1)));
+}
 
 /** Convierte la rutina en la lista ordenada de pasos. */
 export class WorkoutPlan {
@@ -29,7 +38,7 @@ export class WorkoutPlan {
     this.steps = steps;
   }
 
-  static build(routine: Routine, catalog: Catalog, settings: Settings): WorkoutPlan {
+  static build(routine: Routine, catalog: Catalog, settings: Settings, rounds: Partial<Record<SectionId, number>> = {}): WorkoutPlan {
     const steps: Step[] = [];
     let previous: SectionId | null = null;
 
@@ -43,23 +52,28 @@ export class WorkoutPlan {
       if (settings.sectionCountdown > 0) {
         steps.push({ kind: 'countdown', section, seconds: settings.sectionCountdown, next: items[0].ex });
       }
-      items.forEach(({ item, ex }, i) => {
-        steps.push({
-          kind: 'exercise',
-          section,
-          exercise: ex,
-          seconds: item.seconds,
-          switchAt: ex.oneSided ? Math.round(item.seconds / 2) : undefined,
-          position: i + 1,
-          totalInSection: items.length,
-          weight: item.weight,
+      const R = clampRounds(rounds[section]);
+      const rest = settings.rest[section] ?? 0;
+      for (let r = 1; r <= R; r++) {
+        items.forEach(({ item, ex }, i) => {
+          steps.push({
+            kind: 'exercise',
+            section,
+            exercise: ex,
+            seconds: item.seconds,
+            switchAt: ex.oneSided ? Math.round(item.seconds / 2) : undefined,
+            position: i + 1,
+            totalInSection: items.length,
+            weight: item.weight,
+            round: r,
+            rounds: R,
+          });
+          const following = items[i + 1] ?? (r < R ? items[0] : undefined);
+          if (following && rest > 0) {
+            steps.push({ kind: 'rest', section, seconds: rest, next: following.ex });
+          }
         });
-        const following = items[i + 1];
-        const rest = settings.rest[section] ?? 0;
-        if (following && rest > 0) {
-          steps.push({ kind: 'rest', section, seconds: rest, next: following.ex });
-        }
-      });
+      }
       previous = section;
     }
     return new WorkoutPlan(steps);

@@ -18,14 +18,14 @@ export class Voice {
     return !!this.synth;
   }
 
-  /** Dice el texto; corta lo que estuviera diciendo antes. */
-  say(text: string): void {
+  /** Dice el texto; corta lo que estuviera diciendo antes (o lo pone a la cola con queue). */
+  say(text: string, queue = false): void {
     if (!this.enabled || !this.synth) return;
-    this.synth.cancel();
+    if (!queue) this.synth.cancel();
     const u = new SpeechSynthesisUtterance(text);
     u.lang = 'es-ES';
     if (this.voice) u.voice = this.voice;
-    u.rate = 1.02;
+    u.rate = queue ? 1.15 : 1.02;
     this.synth.speak(u);
   }
 

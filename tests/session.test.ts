@@ -163,3 +163,15 @@ describe('WorkoutSession', () => {
     expect(done).toMatchObject({ completed: false, exercisesDone: 1 });
   });
 });
+
+describe('Vueltas', () => {
+  it('repite los ejercicios del apartado con pausa entre vueltas', () => {
+    const r = emptyRoutine();
+    r.calentamiento = [{ exerciseId: 'a', seconds: 20 }, { exerciseId: 'b', seconds: 10 }];
+    const plan = WorkoutPlan.build(r, catalog, DEFAULT_SETTINGS, { calentamiento: 3 });
+    const exs = plan.steps.filter((s) => s.kind === 'exercise');
+    expect(exs.map((s) => (s.kind === 'exercise' ? `${s.exercise.id}${s.round}/${s.rounds}` : ''))).toEqual(['a1/3', 'b1/3', 'a2/3', 'b2/3', 'a3/3', 'b3/3']);
+    expect(plan.steps.filter((s) => s.kind === 'rest')).toHaveLength(5);
+    expect(plan.estimatedSeconds).toBe(10 + 3 * 30 + 5 * 5);
+  });
+});

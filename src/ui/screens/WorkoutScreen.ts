@@ -46,7 +46,7 @@ export class WorkoutScreen implements Screen {
 
   constructor(private readonly app: App, plan: WorkoutPlan, private readonly table: SavedRoutine) {
     this.session = new WorkoutSession(plan);
-    this.coach = new Coach(this.session, app.sounds, app.voice, app.haptics);
+    this.coach = new Coach(this.session, app.sounds, app.voice, app.haptics, { countdown: app.store.settings.voiceCount });
     const u = this.ui;
     u.pause.addEventListener('click', () => {
       app.haptics.tap();
@@ -202,7 +202,7 @@ export class WorkoutScreen implements Screen {
       case 'exercise':
         this.setSection(step.section);
         this.renderDots(step.section, index);
-        u.position.textContent = `Ejercicio ${step.position} de ${step.totalInSection}`;
+        u.position.textContent = `Ejercicio ${step.position} de ${step.totalInSection}` + (step.rounds > 1 ? ` · Vuelta ${step.round} de ${step.rounds}` : '');
         u.phase.replaceChildren();
         u.name.replaceChildren(step.exercise.name, step.weight ? h('span', { class: 'w-weight' }, icon('dumbbell'), kg(step.weight)) : '');
         if (step.switchAt !== undefined) this.setSide(1);

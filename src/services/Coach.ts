@@ -8,12 +8,13 @@ import type { Voice } from './Voice';
 export class Coach {
   private off: Array<() => void> = [];
 
-  constructor(session: WorkoutSession, sounds: Sounds, voice: Voice, haptics?: Haptics) {
+  constructor(session: WorkoutSession, sounds: Sounds, voice: Voice, haptics?: Haptics, opts: { countdown?: boolean } = {}) {
     this.off.push(
       session.on('cue', (cue) => {
         switch (cue.type) {
           case 'count':
             sounds.count();
+            if (opts.countdown && cue.n >= 1 && cue.n <= 3) voice.say(['', 'uno', 'dos', 'tres'][cue.n], true);
             break;
           case 'start':
             sounds.start();
@@ -36,7 +37,7 @@ export class Coach {
             voice.say(`${SECTION_TITLES[step.section]}. Prepárate. Primer ejercicio: ${step.next.name}`);
             break;
           case 'exercise':
-            voice.say(`${step.exercise.name}${step.weight ? `, ${speakKg(step.weight)}` : ''}. ${speakSeconds(step.seconds)}${step.switchAt !== undefined ? '. A mitad, cambio de lado' : ''}`);
+            voice.say(`${step.rounds > 1 && step.position === 1 ? `Vuelta ${step.round} de ${step.rounds}. ` : ''}${step.exercise.name}${step.weight ? `, ${speakKg(step.weight)}` : ''}. ${speakSeconds(step.seconds)}${step.switchAt !== undefined ? '. A mitad, cambio de lado' : ''}`);
             break;
           case 'rest':
             voice.say(`Descanso. Siguiente: ${step.next.name}`);
