@@ -1,6 +1,8 @@
 import { bestStreak, routineNames, secondsBySection } from '../../domain/stats';
-import { caloriesOf, totalCalories } from '../../domain/calories';
-import { SECTION_IDS, SECTION_TITLES, type HistoryEntry, type Profile } from '../../domain/types';
+import { weightCard } from '../components/weightCard';
+import { WeightScreen } from './WeightScreen';
+import type { Store } from '../../domain/Store';
+import { SECTION_IDS, SECTION_TITLES, type HistoryEntry } from '../../domain/types';
 import type { App, Screen } from '../App';
 import { addDays, dayKey, minutesPerWeek, startOfWeek, streak, trainedDays, WEEKDAY_LETTERS } from '../dates';
 import { append, clear, confirmDialog, h, humanDuration, plural } from '../dom';
@@ -32,6 +34,7 @@ export class HistoryScreen implements Screen {
     clear(this.body);
     if (!all.length) {
       this.body.append(h('div', { class: 'empty-state' }, icon('calendar', 'ico big'), h('p', {}, 'Aún no hay entrenamientos. Cuando termines el primero aparecerá aquí.')));
+      this.body.append(weightCard(this.app, () => this.rerender(), () => this.app.push(new WeightScreen(this.app))));
       return;
     }
     const names = routineNames(all);
@@ -52,6 +55,7 @@ export class HistoryScreen implements Screen {
         stat('calendar', String(daysThisMonth), 'días este mes'),
         stat('clock', humanDuration(total), 'en total'),
         ...this.kcalStats(list, now)),
+      weightCard(this.app, () => this.rerender(), () => this.app.push(new WeightScreen(this.app))),
       this.chart(list),
       this.calendar(list),
       this.bySection(list),
@@ -67,7 +71,7 @@ export class HistoryScreen implements Screen {
         month = m;
         this.body.append(h('h4', { class: 'group-title' }, m));
       }
-      this.body.append(row(e, this.app.store.settings.profile, () => this.app.push(new HistoryDetailScreen(this.app, e))));
+      this.body.append(row(e, this.app.store, () => this.app.push(new HistoryDetailScreen(this.app, e))));
     }
     this.body.append(
       h('button', {
@@ -84,11 +88,11 @@ export class HistoryScreen implements Screen {
 
   /** Calorías de esta semana y de este mes (si hay peso en Mis datos). */
   private kcalStats(list: readonly HistoryEntry[], now: Date): HTMLElement[] {
-    const p = this.app.store.settings.profile;
+    const st = this.app.store;
     const week = startOfWeek(now).getTime();
     const month = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
-    const w = totalCalories(list.filter((e) => Date.parse(e.date) >= week), p);
-    const m = totalCalories(list.filter((e) => Date.parse(e.date) >= month), p);
+    const w = st.totalCalories(list.filter((e) => Date.parse(e.date) >= week));
+    const m = st.totalCalories(list.filter((e) => Date.parse(e.date) >= month));
     if (w === null || m === null) return [];
     return [stat('flame', String(w), 'kcal esta semana'), stat('flame', String(m), 'kcal este mes')];
   }
@@ -203,12 +207,12 @@ function stat(ic: IconName, value: string, label: string): HTMLElement {
   return h('div', { class: 'stat' }, icon(ic), h('span', { class: 'stat-value' }, value), h('span', { class: 'muted small' }, label));
 }
 
-function kcalTag(e: HistoryEntry, profile: Profile): HTMLElement | null {
-  const c = caloriesOf(e, profile);
+function kcalTag(e: HistoryEntry, store: Store): HTMLElement | null {
+  const c = store.caloriesFor(e);
   return c ? h('span', { class: 'h-kcal' }, icon('flame'), `${c.kcal} kcal`) : null;
 }
 
-function row(e: HistoryEntry, profile: Profile, onOpen: () => void): HTMLElement {
+function row(e: HistoryEntry, store: Store, onOpen: () => void): HTMLElement {
   const d = new Date(e.date);
   return h('button', { class: 'card history-row', 'aria-label': `Ver el entrenamiento del ${d.toLocaleDateString('es-ES')}`, onclick: onOpen },
     h('div', { class: 'h-date' },
@@ -224,7 +228,7 @@ function row(e: HistoryEntry, profile: Profile, onOpen: () => void): HTMLElement
       })),
       h('span', { class: 'h-extra' },
         e.heart ? h('span', { class: 'h-hr' }, icon('heart'), `${e.heart.avg} ppm`) : null,
-        kcalTag(e, profile)),
+        kcalTag(e, store)),
       !e.completed ? h('span', { class: 'badge warn' }, 'Terminado antes') : null),
     h('span', { class: 'h-time muted small' }, d.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })),
   );

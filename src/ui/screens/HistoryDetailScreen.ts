@@ -4,7 +4,6 @@ import type { App, Screen } from '../App';
 import { confirmDialog, h, humanDuration, kg, mmss } from '../dom';
 import { icon, SECTION_STYLE } from '../icons';
 import { startWorkout } from '../components/startWorkout';
-import { caloriesOf } from '../../domain/calories';
 
 /** Detalle de un entrenamiento del historial: qué se hizo, cuánto tiempo y repetirlo. */
 export class HistoryDetailScreen implements Screen {
@@ -91,10 +90,10 @@ export class HistoryDetailScreen implements Screen {
 }
 
 function kcalNote(e: HistoryEntry, app: App): HTMLElement {
-  const c = caloriesOf(e, app.store.settings.profile);
-  if (!c) return h('p', { class: 'muted small' }, 'Pon tu peso en Ajustes › Mis datos para ver las calorías.');
+  const c = app.store.caloriesFor(e);
+  if (!c) return h('p', { class: 'muted small' }, 'Anota tu peso (Historial › Peso) para ver las calorías.');
   return h('p', { class: 'kcal-summary left' }, icon('flame'), `Unas ${c.kcal} kcal`,
-    h('span', { class: 'muted small' }, c.method === 'pulso' ? ' · calculadas con tu pulso' : ' · estimadas por tipo de ejercicio y tiempo'));
+    h('span', { class: 'muted small' }, (c.method === 'pulso' ? ' · calculadas con tu pulso' : ' · estimadas por tipo de ejercicio y tiempo') + (e.weightKg ? ` · con ${String(e.weightKg).replace('.', ',')} kg` : '')));
 }
 
 /** Pulso medio, máximo y mínimo, con la gráfica de la sesión. */

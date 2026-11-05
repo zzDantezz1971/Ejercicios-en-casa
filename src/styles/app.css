@@ -650,3 +650,29 @@ button:focus-visible, input:focus-visible, label:focus-within { outline: 2px sol
 .profile-row { grid-template-columns: 1fr auto; }
 .profile-row .stepper { min-width: 170px; }
 .secs.unset { color: var(--muted); }
+
+/* Peso corporal */
+.weight-card { display: flex; flex-direction: column; gap: 10px; }
+.link-btn { border: 0; background: transparent; color: var(--accent-2); font: 700 .9rem var(--body); display: inline-flex; align-items: center; gap: 2px; cursor: pointer; padding: 4px 0; }
+.link-btn .ico { width: 16px; height: 16px; }
+.wc-now { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.wc-now strong { font: 700 2rem/1 var(--display); }
+.wc-diff { font-weight: 700; font-size: .92rem; color: var(--muted); }
+.wc-diff.down { color: var(--sec-stretch); }
+.wc-diff.up { color: #F5A524; }
+.wc-actions { display: flex; justify-content: flex-end; }
+.weight-chart { width: 100%; height: auto; display: block; }
+.weight-chart .grid { stroke: var(--line); stroke-width: 1; }
+.weight-chart .axis { fill: var(--muted); font: 600 10px var(--body); }
+.weight-chart .w-line { fill: none; stroke: var(--accent); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; }
+.weight-chart .w-dot { fill: var(--surface); stroke: var(--accent); stroke-width: 2; }
+.weight-chart .w-dot.last { fill: var(--accent); }
+.weight-row { display: flex; align-items: center; gap: 12px; padding: 12px 14px; width: 100%; text-align: left; color: inherit; font: inherit; cursor: pointer; }
+.weight-row .h-main strong { font: 700 1.3rem var(--display); }
+.weight-row .h-main .muted { display: block; }
+.weight-row .h-main .muted::first-letter { text-transform: uppercase; }
+.wd-step.small { width: 44px; height: 48px; font-size: 1.1rem; font-weight: 700; }
+.weight-dialog .wd-row { gap: 6px; }
+.weight-dialog .wd-value { min-width: 112px; font-size: 2.1rem; }
+.dialog-actions.two { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.dialog-actions.two .btn { justify-content: center; }

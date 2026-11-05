@@ -114,8 +114,8 @@ export interface Settings {
 
 export interface Profile {
   age: number | null;
-  /** kg */
-  weight: number | null;
+  /** Solo en datos antiguos: ahora el peso se anota en el histórico de peso. */
+  weight?: number | null;
   /** h = hombre, m = mujer */
   sex: 'h' | 'm';
 }
@@ -128,7 +128,7 @@ export const DEFAULT_SETTINGS: Settings = {
   voice: true,
   mannequin: 2,
   askWatch: true,
-  profile: { age: null, weight: null, sex: 'h' },
+  profile: { age: null, sex: 'h' },
 };
 
 export interface HistoryEntry {
@@ -144,10 +144,22 @@ export interface HistoryEntry {
   routineName?: string;
   /** Tabla con la que se hizo. */
   routineId?: string;
+  /** Calorías calculadas al terminar, con el peso de ese día (no cambian si luego cambia el peso). */
+  kcal?: number;
+  kcalMethod?: 'pulso' | 'estimado';
+  /** Peso con el que se calcularon (kg). */
+  weightKg?: number;
   /** Pulsaciones del reloj (si estaba conectado): media, máxima y una muestra cada 5 s. */
   heart?: HeartSummary;
   /** Detalle por ejercicio (solo en entrenamientos guardados desde esta versión). */
   items?: Array<{ exerciseId: string; section: SectionId; planned: number; seconds: number; completed: boolean; weight?: number }>;
+}
+
+/** Una anotación del peso corporal. */
+export interface WeightEntry {
+  /** Fecha (ISO). */
+  date: string;
+  kg: number;
 }
 
 export interface HeartSummary {

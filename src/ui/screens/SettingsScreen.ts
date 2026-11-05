@@ -2,6 +2,8 @@ import { Store } from '../../domain/Store';
 import { SECTION_IDS, SECTION_TITLES, type Settings } from '../../domain/types';
 import { pickBackupFile } from '../../services/Backup';
 import { saveBackupNow } from '../components/backupPrompt';
+import { fmtKg } from '../components/weightCard';
+import { WeightScreen } from './WeightScreen';
 import type { App, Screen } from '../App';
 import { append, clear, confirmDialog, h, plural } from '../dom';
 import { icon, SECTION_STYLE, type IconName } from '../icons';
@@ -109,9 +111,11 @@ export class SettingsScreen implements Screen {
       h('div', { class: 'rest-head' },
         h('span', { class: 'set-icon' }, icon('flame')),
         h('div', { class: 'set-text' }, h('strong', {}, 'Para calcular las calorías'),
-          h('p', { class: 'muted small' }, 'Solo se guardan en tu móvil. Con el peso ya se estiman; con la edad y el reloj conectado, el cálculo usa tus pulsaciones.'))),
+          h('p', { class: 'muted small' }, 'Solo se guardan en tu móvil. Con el peso ya se estiman; con la edad y el reloj conectado, el cálculo usa tus pulsaciones. Cada entrenamiento guarda sus calorías con el peso de ese día.'))),
       stepper('Edad', p.age, 'años', 50, 1, 15, 99, (v) => set({ age: v })),
-      stepper('Peso', p.weight, 'kg', 75, 0.5, 30, 200, (v) => set({ weight: v })),
+      h('div', { class: 'rest-row profile-row' },
+        h('span', { class: 'rest-name' }, 'Peso', h('span', { class: 'muted small block' }, this.app.store.currentWeight ? `Último anotado: ${fmtKg(this.app.store.currentWeight)}` : 'Sin anotar')),
+        h('button', { class: 'btn ghost small', onclick: () => this.app.push(new WeightScreen(this.app)) }, 'Histórico de peso', icon('chevron'))),
       h('div', { class: 'rest-row profile-row' }, h('span', { class: 'rest-name' }, 'Sexo'), h('div', { class: 'segmented' }, sexBtn('h', 'Hombre'), sexBtn('m', 'Mujer'))));
   }
 

@@ -7,7 +7,9 @@ import {
   type SavedRoutine,
   type SectionId,
   type Settings,
+  type WeightEntry,
 } from './types';
+import { caloriesOf, type Calories } from './calories';
 
 /** Todo lo que la app guarda en el móvil. */
 export interface SavedData {
@@ -24,6 +26,8 @@ export interface SavedData {
   lastBackup?: string;
   /** Ejercicios marcados como favoritos. */
   favorites: string[];
+  /** Histórico del peso corporal, del más antiguo al más reciente. */
+  weights: WeightEntry[];
 }
 
 export const STORAGE_KEY = 'ejercicios-en-casa';
@@ -241,6 +245,68 @@ export class Store {
     this.persist();
   }
 
+  /* ── Peso corporal ── */
+
+  get weights(): readonly WeightEntry[] {
+    return this.data.weights;
+  }
+
+  /** Último peso anotado. */
+  get currentWeight(): number | null {
+    return this.data.weights.at(-1)?.kg ?? null;
+  }
+
+  /** Peso que se tenía en una fecha (el último anotado hasta entonces; si no hay, el primero). */
+  weightAt(date: string): number | null {
+    const t = Date.parse(date);
+    let w: number | null = this.data.weights[0]?.kg ?? null;
+    for (const x of this.data.weights) if (Date.parse(x.date) <= t) w = x.kg;
+    return w;
+  }
+
+  /** Anota el peso (si ya hay uno ese mismo día, lo sustituye). */
+  addWeight(kg: number, when: Date = new Date()): void {
+    const day = when.toDateString();
+    this.data.weights = this.data.weights.filter((x) => new Date(x.date).toDateString() !== day);
+    this.data.weights.push({ date: when.toISOString(), kg: roundKg(kg) });
+    this.data.weights.sort((a, b) => Date.parse(a.date) - Date.parse(b.date));
+    this.persist();
+  }
+
+  updateWeightAt(index: number, kg: number): void {
+    const x = this.data.weights[index];
+    if (!x) return;
+    x.kg = roundKg(kg);
+    this.persist();
+  }
+
+  deleteWeightAt(index: number): void {
+    this.data.weights = this.data.weights.filter((_, i) => i !== index);
+    this.persist();
+  }
+
+  /** Días desde la última vez que se anotó el peso (Infinity si nunca). */
+  daysSinceWeight(now: Date = new Date()): number {
+    const last = this.data.weights.at(-1);
+    return last ? Math.floor((now.getTime() - Date.parse(last.date)) / 864e5) : Infinity;
+  }
+
+  /** Calorías de un entrenamiento: las guardadas al terminarlo o, si no las tiene, con el peso de esa fecha. */
+  caloriesFor(e: HistoryEntry): Calories | null {
+    if (e.kcal != null) return { kcal: e.kcal, method: e.kcalMethod ?? 'estimado' };
+    return caloriesOf(e, { ...this.data.settings.profile, weight: this.weightAt(e.date) });
+  }
+
+  /** Suma de calorías (null si no se puede calcular ninguna). */
+  totalCalories(list: readonly HistoryEntry[]): number | null {
+    let any = false, n = 0;
+    for (const e of list) {
+      const c = this.caloriesFor(e);
+      if (c) { any = true; n += c.kcal; }
+    }
+    return any || (list.length === 0 && this.currentWeight !== null) ? n : null;
+  }
+
   /* ── Favoritos ── */
 
   get favorites(): ReadonlySet<string> {
@@ -379,7 +445,16 @@ export class Store {
     }
     const lastBackup = typeof input.lastBackup === 'string' ? input.lastBackup : undefined;
     const favorites = Array.isArray(input.favorites) ? (input.favorites as unknown[]).filter((x): x is string => typeof x === 'string') : [];
-    return { version: DATA_VERSION, routines, activeId, settings, history, hidden, order, lastBackup, favorites };
+    let weights: WeightEntry[] = Array.isArray(input.weights)
+      ? (input.weights as WeightEntry[]).filter((w) => w && typeof w.date === 'string' && Number.isFinite(w.kg) && w.kg > 0)
+      : [];
+    // versión anterior: un solo peso en Mis datos -> primera anotación del histórico
+    if (!weights.length && Number.isFinite(settings.profile.weight) && settings.profile.weight! > 0) {
+      weights = [{ date: new Date().toISOString(), kg: settings.profile.weight! }];
+    }
+    delete settings.profile.weight;
+    weights.sort((a, b) => Date.parse(a.date) - Date.parse(b.date));
+    return { version: DATA_VERSION, routines, activeId, settings, history, hidden, order, lastBackup, favorites, weights };
   }
 
   private persist(): void {
@@ -389,6 +464,10 @@ export class Store {
       // Sin almacenamiento disponible: la app sigue funcionando sin guardar.
     }
   }
+}
+
+function roundKg(kg: number): number {
+  return Math.round(Math.min(300, Math.max(20, kg)) * 10) / 10;
 }
 
 function structuredCloneRoutine(r: Routine): Routine {

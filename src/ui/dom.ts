@@ -171,3 +171,30 @@ export function weightDialog(name: string, initial: number): Promise<number | nu
     paint();
   });
 }
+
+/** Pide el peso corporal (pasos de 0,1 kg). Devuelve el peso o null si se cancela. */
+export function bodyWeightDialog(title: string, initial: number): Promise<number | null> {
+  return new Promise((resolve) => {
+    let value = Math.round(initial * 10) / 10;
+    const shown = h('span', { class: 'wd-value' });
+    const paint = () => (shown.textContent = `${value.toFixed(1).replace('.', ',')} kg`);
+    const set = (v: number) => {
+      value = Math.min(250, Math.max(30, Math.round(v * 10) / 10));
+      paint();
+    };
+    const step = (d: number, label: string, aria: string) => h('button', { class: 'wd-step small', 'aria-label': aria, onclick: () => set(value + d) }, label);
+    const close = (v: number | null) => {
+      wrap.remove();
+      resolve(v);
+    };
+    const wrap = h('div', { class: 'dialog-wrap', onclick: (e: Event) => e.target === wrap && close(null) },
+      h('div', { class: 'dialog weight-dialog', role: 'dialog', 'aria-modal': 'true', 'aria-label': title },
+        h('p', { class: 'dialog-title' }, title),
+        h('div', { class: 'wd-row' }, step(-1, '−1', 'Un kilo menos'), step(-0.1, '−', 'Cien gramos menos'), shown, step(0.1, '+', 'Cien gramos más'), step(1, '+1', 'Un kilo más')),
+        h('div', { class: 'dialog-actions two' },
+          h('button', { class: 'btn ghost', onclick: () => close(null) }, 'Cancelar'),
+          h('button', { class: 'btn primary', onclick: () => close(value) }, 'Guardar'))));
+    document.body.append(wrap);
+    paint();
+  });
+}

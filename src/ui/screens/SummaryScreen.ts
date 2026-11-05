@@ -1,6 +1,7 @@
 import type { SessionSummary } from '../../domain/WorkoutSession';
 import { SECTION_TITLES, type HeartSummary } from '../../domain/types';
 import { caloriesOf } from '../../domain/calories';
+import { askWeight, fmtKg } from '../components/weightCard';
 import type { App, Screen } from '../App';
 import { h, humanDuration } from '../dom';
 import { icon, SECTION_STYLE } from '../icons';
@@ -42,6 +43,7 @@ export class SummaryScreen implements Screen {
         heart ? h('p', { class: 'hr-summary' }, icon('heart'), `Pulso medio ${heart.avg} · máximo ${heart.max} ppm`) : null,
         this.kcal(s, heart),
         s.exercisesDone ? h('p', { class: 'muted small' }, 'Guardado en el historial.') : null,
+        s.exercisesDone && app.store.daysSinceWeight() >= 7 ? this.weightPrompt() : null,
         s.exercisesDone && backupDue(app) ? backupCard(app, { question: true }) : null,
         h('button', { class: 'btn primary block big', onclick: () => this.app.openTab('inicio') }, 'Volver al inicio')),
     );
@@ -51,9 +53,30 @@ export class SummaryScreen implements Screen {
   private kcal(s: SessionSummary, heart?: HeartSummary | null): HTMLElement | null {
     if (!s.exercisesDone) return null;
     const c = caloriesOf({ date: s.startedAt.toISOString(), durationSec: s.durationSec, exercisesDone: s.exercisesDone, exercisesPlanned: s.exercisesPlanned,
-      sections: s.sections, completed: s.completed, items: s.items, ...(heart ? { heart } : {}) }, this.app.store.settings.profile);
-    if (!c) return h('p', { class: 'muted small' }, 'Pon tu peso en Ajustes › Mis datos para ver las calorías.');
+      sections: s.sections, completed: s.completed, items: s.items, ...(heart ? { heart } : {}) }, { ...this.app.store.settings.profile, weight: this.app.store.currentWeight });
+    if (!c) return null;
     return h('p', { class: 'kcal-summary' }, icon('flame'), `Unas ${c.kcal} kcal`, h('span', { class: 'muted small' }, c.method === 'pulso' ? ' · con tu pulso' : ' · estimadas'));
+  }
+
+  /** Recordatorio semanal para anotar el peso. */
+  private weightPrompt(): HTMLElement {
+    const st = this.app.store;
+    const d = st.daysSinceWeight();
+    const card: HTMLElement = h('section', { class: 'card backup-prompt weight-prompt' },
+      h('div', { class: 'bp-head' },
+        h('span', { class: 'bp-icon' }, icon('trophy')),
+        h('div', {},
+          h('strong', {}, '¿Anotas tu peso de hoy?'),
+          h('p', { class: 'muted small' }, d === Infinity ? 'Así verás tu evolución en el Historial y se calcularán las calorías.' : `La última vez fue hace ${d} días (${fmtKg(st.currentWeight!)}).`))),
+      h('div', { class: 'bp-actions' },
+        h('button', { class: 'btn ghost small', onclick: () => card.remove() }, 'Ahora no'),
+        h('button', {
+          class: 'btn primary small',
+          onclick: async () => {
+            if (await askWeight(this.app)) card.replaceChildren(h('p', { class: 'bp-done' }, icon('check'), `Peso anotado: ${fmtKg(st.currentWeight!)}`));
+          },
+        }, icon('plus'), 'Anotar peso')));
+    return card;
   }
 
   onBack(): boolean {

@@ -1,6 +1,7 @@
 import type { Step, WorkoutPlan } from '../../domain/WorkoutPlan';
 import { WorkoutSession, type SessionSummary } from '../../domain/WorkoutSession';
-import { SECTION_TITLES, summarizeHeart, type ExerciseDef, type SavedRoutine, type SectionId } from '../../domain/types';
+import { SECTION_TITLES, summarizeHeart, type ExerciseDef, type HistoryEntry, type SavedRoutine, type SectionId } from '../../domain/types';
+import { caloriesOf } from '../../domain/calories';
 import { FigureView } from '../../figure/FigureView';
 import { Coach } from '../../services/Coach';
 import type { App, Screen } from '../App';
@@ -307,7 +308,7 @@ export class WorkoutScreen implements Screen {
     window.clearInterval(this.timer);
     const heart = summarizeHeart(this.hrSamples);
     if (s.exercisesDone > 0) {
-      this.app.store.addHistory({
+      const entry: HistoryEntry = {
         date: s.startedAt.toISOString(),
         durationSec: s.durationSec,
         exercisesDone: s.exercisesDone,
@@ -318,7 +319,12 @@ export class WorkoutScreen implements Screen {
         routineId: this.table.id,
         items: s.items,
         ...(heart ? { heart } : {}),
-      });
+      };
+      // las calorías se guardan con el peso de hoy: no cambian si luego cambia el peso
+      const weight = this.app.store.currentWeight;
+      const kcal = caloriesOf(entry, { ...this.app.store.settings.profile, weight });
+      if (kcal && weight) Object.assign(entry, { kcal: kcal.kcal, kcalMethod: kcal.method, weightKg: weight });
+      this.app.store.addHistory(entry);
       this.app.store.markUsed(this.table.id, s.startedAt);
     }
     this.app.replace(new SummaryScreen(this.app, s, this.table.name, heart));

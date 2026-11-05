@@ -28,7 +28,7 @@ export interface Calories {
 }
 
 /** Calorías aproximadas de un entrenamiento (null si falta el peso). */
-export function caloriesOf(e: HistoryEntry, p: Profile): Calories | null {
+export function caloriesOf(e: HistoryEntry, p: Pick<Profile, 'age' | 'sex'> & { weight?: number | null }): Calories | null {
   if (!p.weight) return null;
   const weight = p.weight;
   // Estimación por tipo de ejercicio: kcal = MET × kg × horas
@@ -46,8 +46,4 @@ export function caloriesOf(e: HistoryEntry, p: Profile): Calories | null {
   return { kcal: Math.round(avgPerMin * (e.durationSec / 60)), method: 'pulso' };
 }
 
-/** Suma de calorías de varios entrenamientos (null si falta el peso). */
-export function totalCalories(list: readonly HistoryEntry[], p: Profile): number | null {
-  if (!p.weight) return null;
-  return list.reduce((n, e) => n + (caloriesOf(e, p)?.kcal ?? 0), 0);
-}
+
