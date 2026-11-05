@@ -676,3 +676,14 @@ button:focus-visible, input:focus-visible, label:focus-within { outline: 2px sol
 .weight-dialog .wd-value { min-width: 112px; font-size: 2.1rem; }
 .dialog-actions.two { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .dialog-actions.two .btn { justify-content: center; }
+
+/* IMC */
+.bmi-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.bmi-label { font-weight: 700; color: var(--muted); font-size: .85rem; letter-spacing: .06em; }
+.bmi-row strong { font: 700 1.3rem var(--display); }
+.bmi-tag { font-size: .8rem; font-weight: 700; padding: 3px 9px; border-radius: 999px; }
+.bmi-tag.ok { color: var(--sec-stretch); background: color-mix(in srgb, var(--sec-stretch) 15%, transparent); }
+.bmi-tag.low, .bmi-tag.high { color: #F5A524; background: rgb(245 165 36 / .15); }
+.bmi-tag.veryHigh { color: var(--danger); background: color-mix(in srgb, var(--danger) 15%, transparent); }
+.rest-card .bmi-row { padding: 4px 0; }
+.profile-link { align-self: flex-start; }

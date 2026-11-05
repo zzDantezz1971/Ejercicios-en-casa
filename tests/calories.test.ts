@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { caloriesOf, keytelPerMin } from '../src/domain/calories';
+import { bmi, bmiCategory, caloriesOf, keytelPerMin } from '../src/domain/calories';
 import { STORAGE_KEY, Store } from '../src/domain/Store';
 import type { HistoryEntry, Profile } from '../src/domain/types';
 
@@ -68,6 +68,16 @@ describe('Histórico de peso', () => {
   it('el peso único de la versión anterior pasa a ser la primera anotación', () => {
     const s = new Store(memory(JSON.stringify({ version: 2, settings: { profile: { age: 54, weight: 79.5, sex: 'h' } } })));
     expect(s.currentWeight).toBe(79.5);
-    expect(s.settings.profile).toEqual({ age: 54, sex: 'h' });
+    expect(s.settings.profile).toEqual({ age: 54, height: null, sex: 'h' });
+  });
+});
+
+describe('IMC', () => {
+  it('calcula el IMC y su clasificación', () => {
+    expect(bmi(80, 178)).toBe(25.2);
+    expect(bmiCategory(25.2).label).toBe('Sobrepeso');
+    expect(bmiCategory(22).label).toBe('Peso normal');
+    expect(bmiCategory(17).label).toBe('Bajo peso');
+    expect(bmiCategory(31).label).toBe('Obesidad');
   });
 });

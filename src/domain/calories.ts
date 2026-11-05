@@ -13,6 +13,19 @@ const REST_MET = 1.5;
 /** Por debajo de este pulso la fórmula del pulso no es fiable: se usa la estimación por ejercicio. */
 const HR_MIN = 90;
 
+/** Índice de masa corporal: kg / m². */
+export function bmi(kg: number, cm: number): number {
+  return Math.round((kg / (cm / 100) ** 2) * 10) / 10;
+}
+
+/** Clasificación de la OMS para adultos. */
+export function bmiCategory(v: number): { label: string; tone: 'low' | 'ok' | 'high' | 'veryHigh' } {
+  if (v < 18.5) return { label: 'Bajo peso', tone: 'low' };
+  if (v < 25) return { label: 'Peso normal', tone: 'ok' };
+  if (v < 30) return { label: 'Sobrepeso', tone: 'high' };
+  return { label: 'Obesidad', tone: 'veryHigh' };
+}
+
 /** kcal por minuto según el pulso (fórmula de Keytel et al., 2005). */
 export function keytelPerMin(hr: number, p: { age: number; weight: number; sex: 'h' | 'm' }): number {
   const v = p.sex === 'm'

@@ -114,6 +114,8 @@ export interface Settings {
 
 export interface Profile {
   age: number | null;
+  /** cm */
+  height?: number | null;
   /** Solo en datos antiguos: ahora el peso se anota en el histórico de peso. */
   weight?: number | null;
   /** h = hombre, m = mujer */
@@ -128,7 +130,7 @@ export const DEFAULT_SETTINGS: Settings = {
   voice: true,
   mannequin: 2,
   askWatch: true,
-  profile: { age: null, sex: 'h' },
+  profile: { age: null, height: null, sex: 'h' },
 };
 
 export interface HistoryEntry {

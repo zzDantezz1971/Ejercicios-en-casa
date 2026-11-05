@@ -1,6 +1,7 @@
 import type { App } from '../App';
 import { bodyWeightDialog, h } from '../dom';
 import { icon } from '../icons';
+import { bmi, bmiCategory } from '../../domain/calories';
 
 const NS = 'http://www.w3.org/2000/svg';
 
@@ -12,6 +13,18 @@ export function fmtKg(kg: number): string {
 export function fmtDiff(d: number): string {
   const v = Math.abs(d).toFixed(1).replace('.', ',');
   return d < 0 ? `−${v} kg` : d > 0 ? `+${v} kg` : '0 kg';
+}
+
+/** Fila con el IMC y su clasificación. */
+export function bmiRow(kg: number, cm: number, firstKg?: number): HTMLElement {
+  const v = bmi(kg, cm);
+  const c = bmiCategory(v);
+  const change = firstKg !== undefined && firstKg !== kg ? v - bmi(firstKg, cm) : 0;
+  return h('div', { class: 'bmi-row' },
+    h('span', { class: 'bmi-label' }, 'IMC'),
+    h('strong', {}, String(v).replace('.', ',')),
+    h('span', { class: 'bmi-tag ' + c.tone }, c.label),
+    change ? h('span', { class: 'muted small' }, `${change < 0 ? '−' : '+'}${Math.abs(change).toFixed(1).replace('.', ',')} desde el inicio`) : null);
 }
 
 /** Anota el peso de hoy. Devuelve true si se guardó. */
@@ -71,6 +84,7 @@ export function weightCard(app: App, onChange: () => void, onOpen: () => void): 
       h('div', { class: 'wc-actions' }, add));
   }
   const first = ws[0], last = ws[ws.length - 1];
+  const height = app.store.settings.profile.height;
   const diff = last.kg - first.kg;
   const since = new Date(first.date).toLocaleDateString('es-ES', { day: 'numeric', month: 'long' });
   return h('section', { class: 'card weight-card' },
@@ -79,6 +93,7 @@ export function weightCard(app: App, onChange: () => void, onOpen: () => void): 
     h('div', { class: 'wc-now' },
       h('strong', {}, fmtKg(last.kg)),
       ws.length > 1 ? h('span', { class: 'wc-diff' + (diff < 0 ? ' down' : diff > 0 ? ' up' : '') }, `${fmtDiff(diff)} desde el ${since}`) : h('span', { class: 'muted small' }, 'Primera anotación')),
+    height ? bmiRow(last.kg, height, first.kg) : h('p', { class: 'muted small' }, 'Pon tu altura en Ajustes › Mis datos para ver tu IMC.'),
     weightChart(ws) as unknown as HTMLElement,
     h('div', { class: 'wc-actions' }, add));
 }

@@ -2,7 +2,7 @@ import { Store } from '../../domain/Store';
 import { SECTION_IDS, SECTION_TITLES, type Settings } from '../../domain/types';
 import { pickBackupFile } from '../../services/Backup';
 import { saveBackupNow } from '../components/backupPrompt';
-import { fmtKg } from '../components/weightCard';
+import { askWeight, bmiRow, fmtKg } from '../components/weightCard';
 import { WeightScreen } from './WeightScreen';
 import type { App, Screen } from '../App';
 import { append, clear, confirmDialog, h, plural } from '../dom';
@@ -91,9 +91,10 @@ export class SettingsScreen implements Screen {
       }));
   }
 
-  /** Edad, peso y sexo para calcular las calorías. */
+  /** Edad, altura, peso y sexo: calorías e IMC. */
   private profileCard(s: Settings): HTMLElement {
     const p = s.profile;
+    const cw = this.app.store.currentWeight;
     const set = (patch: Partial<Settings['profile']>) => this.update({ profile: { ...p, ...patch } });
     const stepper = (label: string, value: number | null, unit: string, start: number, step: number, min: number, max: number, onSet: (v: number) => void) => {
       const v = value ?? start;
@@ -110,12 +111,15 @@ export class SettingsScreen implements Screen {
     return h('section', { class: 'card setting rest-card' },
       h('div', { class: 'rest-head' },
         h('span', { class: 'set-icon' }, icon('flame')),
-        h('div', { class: 'set-text' }, h('strong', {}, 'Para calcular las calorías'),
-          h('p', { class: 'muted small' }, 'Solo se guardan en tu móvil. Con el peso ya se estiman; con la edad y el reloj conectado, el cálculo usa tus pulsaciones. Cada entrenamiento guarda sus calorías con el peso de ese día.'))),
+        h('div', { class: 'set-text' }, h('strong', {}, 'Calorías e IMC'),
+          h('p', { class: 'muted small' }, 'Solo se guardan en tu móvil. Con el peso ya se estiman las calorías; con la edad y el reloj conectado, se calculan con tus pulsaciones. Cada entrenamiento guarda sus calorías con el peso de ese día. La altura sirve para el IMC.'))),
       stepper('Edad', p.age, 'años', 50, 1, 15, 99, (v) => set({ age: v })),
+      stepper('Altura', p.height ?? null, 'cm', 175, 1, 100, 230, (v) => set({ height: v })),
       h('div', { class: 'rest-row profile-row' },
-        h('span', { class: 'rest-name' }, 'Peso', h('span', { class: 'muted small block' }, this.app.store.currentWeight ? `Último anotado: ${fmtKg(this.app.store.currentWeight)}` : 'Sin anotar')),
-        h('button', { class: 'btn ghost small', onclick: () => this.app.push(new WeightScreen(this.app)) }, 'Histórico de peso', icon('chevron'))),
+        h('span', { class: 'rest-name' }, 'Peso', h('span', { class: 'muted small block' }, cw ? `Último anotado: ${fmtKg(cw)}` : 'Sin anotar')),
+        h('button', { class: 'btn primary small', onclick: async () => { if (await askWeight(this.app)) this.render(); } }, icon('plus'), 'Anotar peso')),
+      cw && p.height ? bmiRow(cw, p.height) : null,
+      h('button', { class: 'link-btn profile-link', onclick: () => this.app.push(new WeightScreen(this.app)) }, 'Ver histórico de peso', icon('chevron')),
       h('div', { class: 'rest-row profile-row' }, h('span', { class: 'rest-name' }, 'Sexo'), h('div', { class: 'segmented' }, sexBtn('h', 'Hombre'), sexBtn('m', 'Mujer'))));
   }
 
