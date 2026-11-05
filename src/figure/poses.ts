@@ -13,13 +13,13 @@ const D = Math.PI / 180;
 const dir = (a: number): Pt => [Math.cos(a * D), Math.sin(a * D)];
 const add = (p: Pt, v: Pt, l: number): Pt => [p[0] + v[0] * l, p[1] + v[1] * l];
 const ease = (x: number) => 0.5 - 0.5 * Math.cos(Math.PI * x);
-const PAIRS = ['ua', 'fa', 'th', 'sn', 'ft', 'sa', 'sTh', 'sSh'];
+const PAIRS = ['ua', 'fa', 'th', 'sn', 'ft', 'sa', 'sTh', 'sSh', 'zE', 'zH', 'zK', 'zA'];
 
-export const LEN = { torso: 24, neck: 14, ua: 26, fa: 24, th: 34, sh: 33 };
+export const LEN = { torso: 24, neck: 14, ua: 22.5, fa: 21, th: 34, sh: 33 };
 
 function base(v: string): Pose {
   return {
-    x: 0, tw: 0, tl: -90, uaL: 90, faL: 90, uaR: 90, faR: 90, thL: 90, snL: 90, thR: 90, snR: 90,
+    x: 0, tw: 0, lean: 0, zEL: 0, zER: 0, zHL: 0, zHR: 0, zKL: 0, zKR: 0, zAL: 0, zAR: 0, tl: -90, uaL: 90, faL: 90, uaR: 90, faR: 90, thL: 90, snL: 90, thR: 90, snR: 90,
     ftL: v === 'side' ? 0 : 150, ftR: v === 'side' ? 0 : 30, saL: 1, saR: 1, sThL: 1, sThR: 1, sShL: 1, sShR: 1,
   };
 }

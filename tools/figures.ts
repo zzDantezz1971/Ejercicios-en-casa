@@ -30,6 +30,7 @@ for (const ex of list) {
     const sc = new MannequinScene(ex.motion, undefined, side, skin, skin && q.get('anat') ? muscleWeights(ex.muscles, side) : undefined);
     sc.setAspect(1.5);
     sc.mood = mood;
+    if (q.get('az')) { sc.azimuth = Number(q.get('az')); sc.placeCamera(); }
     sc.update(sc.motion.total * t);
     r.render(sc.scene, sc.camera);
     const img = document.createElement('img');

@@ -150,11 +150,11 @@ export const RAW_SECTIONS: RawSection[] = [
  {n:'Barbilla al pecho',z:'Cuello',f:[[{},300,900],[{hd:-40},1400,900]]},
  {g:'Hombros, pecho y brazos'},
  {n:'Hombro cruzado',split:true,z:'Hombros',v:'front',f:[
-   [{uaR:180,faR:180,saR:.9,uaL:100,faL:-70},1300,800],[{},200,800],
-   [{uaL:0,faL:0,saL:.9,uaR:80,faR:-110},1300,800],[{},200,800]]},
+   [{uaR:180,faR:180,saR:.93,uaL:100,faL:-70,zEL:4,zHL:12},1300,800],[{},200,800],
+   [{uaL:0,faL:0,saL:.93,uaR:80,faR:-110,zER:4,zHR:12},1300,800],[{},200,800]]},
  {n:'Tríceps detrás de la cabeza',split:true,z:'Tríceps y hombros',v:'front',f:[
-   [{uaR:-95,faR:120,uaL:305,faL:350},1300,900],[{},200,900],
-   [{uaL:275,faL:60,uaR:-125,faR:190},1300,900],[{},200,900]]},
+   [{uaR:-95,faR:120,uaL:305,faL:350,zER:-2,zHR:-13,zHL:-3},1300,900],[{},200,900],
+   [{uaL:275,faL:60,uaR:-125,faR:190,zEL:-2,zHL:-13,zHR:-3},1300,900],[{},200,900]]},
  {n:'Apertura de pecho con manos atrás',z:'Pecho y hombros',f:[[{ua:140,fa:140},300,900],[{ua:160,fa:162,tu:-96,hd:-104},1400,900]]},
  {n:'Estiramiento de antebrazos',z:'Antebrazos y muñecas',f:[
    [{uaR:0,faR:0,uaL:30,faL:-20},1200,900],[{uaR:0,faR:0,uaL:28,faL:-14,tu:-88},1200,900]]},
@@ -197,10 +197,10 @@ export const RAW_SECTIONS: RawSection[] = [
    [{thL:108,snL:108,thR:72,snR:72},300,1000],
    [{thL:108,snL:108,thR:72,snR:72,tl:-78,tu:-48,hd:-40,uaR:80,faR:82,uaL:-62,faL:-56},1500,1000]]},
  {n:'Molino de viento',z:'Espalda, costados e isquios',armsOut:true,az:38,el:12,b:['caution'],f:[
-   [{ua:92,fa:92,sa:.08},250,1000],
-   [{tl:-14,tu:-6,hd:20,uaR:96,faR:100,uaL:-88,faL:-88,saL:.95},650,1000],
-   [{ua:92,fa:92,sa:.08},250,1000],
-   [{tl:-14,tu:-6,hd:20,uaL:96,faL:100,uaR:-88,faR:-88,saR:.95},650,1000]]},
+   [{ua:92,fa:92,sa:.08,zKL:-7,zAL:-13,zKR:7,zAR:13},250,1000],
+   [{tl:-14,tu:-6,hd:20,uaR:96,faR:100,uaL:-88,faL:-88,saL:.95,zKL:-7,zAL:-13,zKR:7,zAR:13},650,1000],
+   [{ua:92,fa:92,sa:.08,zKL:-7,zAL:-13,zKR:7,zAR:13},250,1000],
+   [{tl:-14,tu:-6,hd:20,uaL:96,faL:100,uaR:-88,faR:-88,saR:.95,zKL:-7,zAL:-13,zKR:7,zAR:13},650,1000]]},
  {g:'Cadera y piernas'},
  {n:'Figura 4 (glúteo y piriforme)',z:'Glúteos y cadera',mat:1,f:[
    [{tl:180,thL:-110,snL:-20,thR:-60,sThR:.7,snR:206,sShR:.8,ua:-40,fa:0},900,1100],
@@ -224,11 +224,11 @@ export const RAW_SECTIONS: RawSection[] = [
    [{thL:172,snL:20,thR:8,snR:160,ftL:0,ftR:180,uaL:110,faL:75,uaR:70,faR:105},150,700],
    [{thL:160,snL:30,thR:20,snR:150,ftL:0,ftR:180,uaL:110,faL:75,uaR:70,faR:105},150,700]]},
  {n:'Zancada lateral',z:'Aductores',v:'front',plant:'anR',f:[
-   [{thL:128,snL:128,thR:62,snR:100,tl:-84,uaL:55,faL:75,uaR:80,faR:100},1400,1100],
-   [{thL:122,snL:122,thR:55,snR:104,tl:-80,uaL:55,faL:75,uaR:80,faR:100},1400,1100]]},
+   [{thL:128,snL:128,thR:62,snR:100,tl:-84,uaL:55,faL:75,uaR:80,faR:100,zKR:12,lean:16},1400,1100],
+   [{thL:122,snL:122,thR:55,snR:104,tl:-80,uaL:55,faL:75,uaR:80,faR:100,zKR:14,lean:18},1400,1100]]},
  {n:'Sentadilla sumo profunda',z:'Aductores y cadera',v:'front',f:[
-   [{thL:150,snL:95,thR:30,snR:85,ftL:170,ftR:10,uaL:60,faL:-40,uaR:120,faR:220},1400,1100],
-   [{thL:158,snL:97,thR:22,snR:83,ftL:170,ftR:10,uaL:50,faL:-45,uaR:130,faR:225},1400,1100]]},
+   [{thL:150,snL:95,thR:30,snR:85,ftL:170,ftR:10,uaL:100,faL:-62,uaR:80,faR:-118,zEL:6,zER:6,zHL:12,zHR:12,zKL:9,zKR:9,lean:14},1400,1100],
+   [{thL:158,snL:97,thR:22,snR:83,ftL:170,ftR:10,uaL:102,faL:-60,uaR:78,faR:-120,zEL:6,zER:6,zHL:12,zHR:12,zKL:10,zKR:10,lean:16},1400,1100]]},
  {n:'Apertura de piernas sentado',z:'Aductores e isquios',v:'front',noGround:1,mat:'top',b:['caution'],f:[
    [{thL:165,snL:165,thR:15,snR:15,ft:-90,uaL:110,faL:95,uaR:70,faR:85},1300,1200],
    [{thL:168,snL:168,thR:12,snR:12,ft:-90,tu:-92,uaL:100,faL:90,uaR:80,faR:90},1300,1200]]},

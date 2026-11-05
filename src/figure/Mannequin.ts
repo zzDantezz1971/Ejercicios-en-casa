@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import type { MotionSpec, PropOp } from '../domain/types';
-import { Motion, type Joints, type Pose, type Side } from './poses';
+import { LEN, Motion, type Joints, type Pose, type Side } from './poses';
 import { anatomyMaterial } from './anatomy';
 import { SkinnedFigure, type SkinData } from './SkinnedFigure';
 
@@ -49,8 +49,8 @@ export function to3D(spec: MotionSpec, view: string, J: Joints, pose: Pose): Rec
     const rise = (s: number, len: number) => len * Math.sqrt(Math.max(0, 1 - s * s));
     for (const k in J) o[k] = V(J[k][0], base, J[k][1]);
     for (const s of ['L', 'R']) {
-      o['el' + s].y = base + rise(pose['sa' + s], 26);
-      o['ha' + s].y = o['el' + s].y + rise(pose['sa' + s], 24);
+      o['el' + s].y = base + rise(pose['sa' + s], LEN.ua);
+      o['ha' + s].y = o['el' + s].y + rise(pose['sa' + s], LEN.fa);
       const kneeDy = rise(pose['sTh' + s], 34) * (spec.legsDown ? -1 : 1);
       o['kn' + s].y = Math.max(4, base + kneeDy);
       o['an' + s].y = Math.max(3.5, o['kn' + s].y - rise(pose['sSh' + s], 33));
@@ -89,8 +89,8 @@ export function to3D(spec: MotionSpec, view: string, J: Joints, pose: Pose): Rec
     const sign = side ? (s === 'L' ? -1 : 1) : 1;
     const sa = pose['sa' + s];
     if (Math.abs(sa) < 1 && (!side || spec.armsOut)) {
-      o['el' + s].z += sign * depth(sa, 26);
-      o['ha' + s].z += sign * depth(sa, 50);
+      o['el' + s].z += sign * depth(sa, LEN.ua);
+      o['ha' + s].z += sign * depth(sa, LEN.ua + LEN.fa);
     }
     const sTh = pose['sTh' + s], sSh = pose['sSh' + s];
     if (sTh < 1) {
@@ -101,6 +101,30 @@ export function to3D(spec: MotionSpec, view: string, J: Joints, pose: Pose): Rec
       o['an' + s].z += dk + ds;
       o['ti' + s].z += dk + ds;
     }
+  }
+  // Profundidad a mano (hacia la cámara de frente; hacia el lado cercano de lado): codo, mano, rodilla y pie.
+  for (const s of ['L', 'R']) {
+    o['el' + s].z += pose['zE' + s] ?? 0;
+    o['ha' + s].z += pose['zH' + s] ?? 0;
+    o['kn' + s].z += pose['zK' + s] ?? 0;
+    o['an' + s].z += pose['zA' + s] ?? 0;
+    o['ti' + s].z += pose['zA' + s] ?? 0;
+  }
+  // Inclinación del tronco hacia delante (lean, grados), útil en la vista de frente.
+  const lean = pose.lean ?? 0;
+  if (lean) {
+    const a = (lean * Math.PI) / 180, c = Math.cos(a), sn = Math.sin(a);
+    const py = o.pel.y, pz = o.pel.z;
+    const tilt = (k: string, f = 1) => {
+      const p = o[k];
+      if (!p) return;
+      const cc = f === 1 ? c : Math.cos(a * f), ss = f === 1 ? sn : Math.sin(a * f);
+      const dy = p.y - py, dz = p.z - pz;
+      p.y = py + dy * cc - dz * ss;
+      p.z = pz + dy * ss + dz * cc;
+    };
+    tilt('mid', 0.5);
+    for (const k of ['neck', 'head', 'shoL', 'shoR', 'elL', 'elR', 'haL', 'haR']) tilt(k);
   }
   // Giro del tronco sobre el eje vertical (tw, grados): hombros, brazos y cabeza giran; la cadera no.
   const tw = pose.tw ?? 0;
