@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { bestStreak, routineNames, secondsBySection, topExercises } from '../src/domain/stats';
-import type { HistoryEntry } from '../src/domain/types';
+import { summarizeHeart, type HistoryEntry } from '../src/domain/types';
 
 const entry = (date: string, extra: Partial<HistoryEntry> = {}): HistoryEntry => ({
   date, durationSec: 600, exercisesDone: 1, exercisesPlanned: 1, sections: ['pesas'], completed: true, ...extra,
@@ -35,5 +35,12 @@ describe('Estadísticas del historial', () => {
     ];
     expect(topExercises(h).map((x) => [x.exerciseId, x.times])).toEqual([['curl', 2], ['press', 1], ['remo', 1]]);
     expect(routineNames(h)).toEqual(['Brazos', 'Espalda']);
+  });
+});
+
+describe('Pulsaciones', () => {
+  it('calcula media, máxima y mínima descartando lecturas imposibles', () => {
+    expect(summarizeHeart([90, 110, 0, 130, 250])).toEqual({ avg: 110, max: 130, min: 90, samples: [90, 110, 130] });
+    expect(summarizeHeart([])).toBeNull();
   });
 });

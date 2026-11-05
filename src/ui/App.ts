@@ -1,3 +1,4 @@
+import { HeartRate } from '../services/HeartRate';
 import { CATALOG, SECTIONS } from '../data/catalog';
 import { Store } from '../domain/Store';
 import { Thumbnails } from '../figure/FigureView';
@@ -43,6 +44,7 @@ export class App {
   readonly haptics = new Haptics();
   readonly awake = new ScreenAwake();
   readonly thumbs = new Thumbnails();
+  readonly heart = new HeartRate();
   private stack: Screen[] = [];
   private realistic: boolean | null = null;
   private scroll = new WeakMap<Screen, number>();

@@ -1,6 +1,6 @@
 import type { Step, WorkoutPlan } from '../../domain/WorkoutPlan';
 import { WorkoutSession, type SessionSummary } from '../../domain/WorkoutSession';
-import { SECTION_TITLES, type ExerciseDef, type SavedRoutine, type SectionId } from '../../domain/types';
+import { SECTION_TITLES, summarizeHeart, type ExerciseDef, type SavedRoutine, type SectionId } from '../../domain/types';
 import { FigureView } from '../../figure/FigureView';
 import { Coach } from '../../services/Coach';
 import type { App, Screen } from '../App';
@@ -36,7 +36,12 @@ export class WorkoutScreen implements Screen {
     ringFg: document.createElementNS(NS, 'circle'),
     pause: h('button', { class: 'ctrl main', 'aria-label': 'Pausar' }),
     breakPanel: h('div', { class: 'w-break', hidden: true }),
+    hr: h('button', { class: 'hr-chip', type: 'button' }),
   };
+  /** Pulso cada 5 s mientras el entrenamiento está en marcha. */
+  private hrSamples: number[] = [];
+  private hrLast = 0;
+  private hrOff: (() => void) | null = null;
 
   constructor(private readonly app: App, plan: WorkoutPlan, private readonly table: SavedRoutine) {
     this.session = new WorkoutSession(plan);
@@ -52,7 +57,7 @@ export class WorkoutScreen implements Screen {
         h('div', { class: 'w-where' }, u.secChip, u.position),
         h('span', { class: 'w-table muted small' }, table.name)),
       u.dots,
-      h('div', { class: 'stage' }, u.canvas, u.phase),
+      h('div', { class: 'stage' }, u.canvas, u.phase, app.heart.available ? u.hr : null),
       h('section', { class: 'w-info' },
         this.ring(),
         h('div', { class: 'w-text' }, u.name, u.side, u.next)),
@@ -79,6 +84,9 @@ export class WorkoutScreen implements Screen {
     });
     this.session.on('finished', (s) => this.onFinished(s));
     this.onStatus('running');
+    u.hr.addEventListener('click', () => void this.connectHeart());
+    this.hrOff = app.heart.onChange(() => this.paintHeart());
+    this.paintHeart();
   }
 
   /** Anillo de progreso con el tiempo en el centro. */
@@ -104,7 +112,10 @@ export class WorkoutScreen implements Screen {
       this.started = true;
       this.session.start();
     }
-    this.timer = window.setInterval(() => this.session.tick(), 100);
+    this.timer = window.setInterval(() => {
+      this.session.tick();
+      this.sampleHeart();
+    }, 100);
   }
 
   leave(): void {
@@ -114,6 +125,7 @@ export class WorkoutScreen implements Screen {
   }
 
   dispose(): void {
+    this.hrOff?.();
     this.coach.dispose();
     this.app.voice.stop();
     this.view?.dispose();
@@ -243,8 +255,57 @@ export class WorkoutScreen implements Screen {
     this.view?.freeze(paused);
   }
 
+  /** Botón del pulso: conectar el reloj o mostrar las pulsaciones. */
+  private paintHeart(): void {
+    const hr = this.app.heart, b = this.ui.hr;
+    const bpm = hr.current;
+    b.className = 'hr-chip ' + hr.status + (bpm ? ' beat' : '');
+    if (hr.status === 'on' && bpm) {
+      b.replaceChildren(icon('heart'), h('strong', {}, String(bpm)), h('span', {}, 'ppm'));
+      b.setAttribute('aria-label', `${bpm} pulsaciones por minuto`);
+    } else if (hr.status === 'on') {
+      b.replaceChildren(icon('heart'), h('span', {}, 'Esperando pulso…'));
+      b.setAttribute('aria-label', 'Reloj conectado, esperando pulso');
+    } else if (hr.status === 'connecting' || hr.status === 'lost') {
+      b.replaceChildren(icon('heart'), h('span', {}, hr.status === 'lost' ? 'Reconectando…' : 'Conectando…'));
+      b.setAttribute('aria-label', 'Conectando con el reloj');
+    } else {
+      b.replaceChildren(icon('heart'), h('span', {}, 'Conectar reloj'));
+      b.setAttribute('aria-label', 'Conectar el reloj para ver las pulsaciones');
+    }
+  }
+
+  private async connectHeart(): Promise<void> {
+    const hr = this.app.heart;
+    if (hr.status === 'on' || hr.status === 'connecting') return;
+    try {
+      await hr.connect();
+    } catch (e) {
+      const name = (e as DOMException)?.name;
+      if (name === 'NotFoundError' || name === 'AbortError') return; // se cerró la lista sin elegir
+      const wasRunning = this.session.status === 'running';
+      this.session.pause();
+      await confirmDialog(`No se pudo conectar con el reloj. Comprueba que tiene activada la difusión de la frecuencia cardíaca y el Bluetooth del móvil encendido. (${(e as Error).message})`, 'Vale', '');
+      if (wasRunning) this.session.resume();
+    }
+  }
+
+  /** Guarda una muestra del pulso cada 5 s mientras se entrena. */
+  private sampleHeart(): void {
+    if (this.session.status !== 'running') return;
+    const now = Date.now();
+    if (now - this.hrLast < 5000) return;
+    const bpm = this.app.heart.current;
+    if (bpm) {
+      this.hrSamples.push(bpm);
+      this.hrLast = now;
+    }
+    this.paintHeart();
+  }
+
   private onFinished(s: SessionSummary): void {
     window.clearInterval(this.timer);
+    const heart = summarizeHeart(this.hrSamples);
     if (s.exercisesDone > 0) {
       this.app.store.addHistory({
         date: s.startedAt.toISOString(),
@@ -256,10 +317,11 @@ export class WorkoutScreen implements Screen {
         routineName: this.table.name,
         routineId: this.table.id,
         items: s.items,
+        ...(heart ? { heart } : {}),
       });
       this.app.store.markUsed(this.table.id, s.startedAt);
     }
-    this.app.replace(new SummaryScreen(this.app, s, this.table.name));
+    this.app.replace(new SummaryScreen(this.app, s, this.table.name, heart));
   }
 }
 

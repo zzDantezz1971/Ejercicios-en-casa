@@ -130,8 +130,30 @@ export interface HistoryEntry {
   routineName?: string;
   /** Tabla con la que se hizo. */
   routineId?: string;
+  /** Pulsaciones del reloj (si estaba conectado): media, máxima y una muestra cada 5 s. */
+  heart?: HeartSummary;
   /** Detalle por ejercicio (solo en entrenamientos guardados desde esta versión). */
   items?: Array<{ exerciseId: string; section: SectionId; planned: number; seconds: number; completed: boolean; weight?: number }>;
+}
+
+export interface HeartSummary {
+  avg: number;
+  max: number;
+  min: number;
+  /** Pulso cada 5 s durante el entrenamiento. */
+  samples: number[];
+}
+
+/** Resumen de pulsaciones a partir de las muestras (null si no hay). */
+export function summarizeHeart(samples: readonly number[]): HeartSummary | null {
+  const ok = samples.filter((b) => b > 30 && b < 230);
+  if (!ok.length) return null;
+  return {
+    avg: Math.round(ok.reduce((a, b) => a + b, 0) / ok.length),
+    max: Math.max(...ok),
+    min: Math.min(...ok),
+    samples: ok.slice(0, 1500),
+  };
 }
 
 /** Una tabla de ejercicios guardada con nombre. */

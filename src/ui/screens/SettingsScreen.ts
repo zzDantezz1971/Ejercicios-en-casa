@@ -89,6 +89,47 @@ export class SettingsScreen implements Screen {
       }));
   }
 
+  /** Conexión con el reloj para ver las pulsaciones. */
+  private watchSection(): HTMLElement {
+    const hr = this.app.heart;
+    const live = h('p', { class: 'hr-live', 'aria-live': 'polite' });
+    const btn = h('button', { class: 'btn primary' });
+    const paint = () => {
+      const bpm = hr.current;
+      live.replaceChildren(icon('heart'),
+        hr.status === 'on' ? (bpm ? `${hr.deviceName}: ${bpm} ppm` : `${hr.deviceName}: conectado, esperando pulso…`)
+          : hr.status === 'connecting' ? 'Conectando…' : hr.status === 'lost' ? 'Conexión perdida, reintentando…' : 'Sin conectar');
+      live.className = 'hr-live ' + hr.status;
+      btn.replaceChildren(hr.status === 'off' ? 'Probar conexión' : 'Desconectar');
+      btn.className = hr.status === 'off' ? 'btn primary' : 'btn ghost';
+    };
+    btn.addEventListener('click', async () => {
+      if (hr.status !== 'off') return hr.disconnect();
+      try {
+        await hr.connect();
+      } catch (e) {
+        const name = (e as DOMException)?.name;
+        if (name !== 'NotFoundError' && name !== 'AbortError') await confirmDialog(`No se pudo conectar: ${(e as Error).message}`, 'Vale', '');
+      }
+    });
+    const off = hr.onChange(paint);
+    // deja de escuchar cuando la sección desaparece
+    const obs = new MutationObserver(() => { if (!live.isConnected) { off(); obs.disconnect(); } });
+    queueMicrotask(() => obs.observe(this.body, { childList: true }));
+    paint();
+    if (!hr.available) {
+      return h('section', { class: 'card watch' }, h('p', { class: 'muted small' }, 'Este navegador no puede usar Bluetooth. Abre la app con Chrome en Android para conectar el reloj.'));
+    }
+    return h('section', { class: 'card watch' },
+      h('div', { class: 'backup-head' },
+        h('span', { class: 'set-icon hr-icon' }, icon('heart')),
+        h('div', { class: 'set-text' },
+          h('strong', {}, 'Pulsaciones del reloj'),
+          h('p', { class: 'muted small' }, 'En el reloj, activa "Difundir frecuencia cardíaca" (suele estar en Ajustes › Ajustes de entrenamiento). Después, al empezar un entrenamiento, toca "Conectar reloj" encima del maniquí y elige tu reloj. Si no aparece, inicia un entrenamiento en el reloj y vuelve a intentarlo.'))),
+      live,
+      btn);
+  }
+
   /** Guardar una copia (para Drive) y restaurarla. */
   private backupSection(): HTMLElement {
     const last = this.app.store.lastBackup;
@@ -164,6 +205,8 @@ export class SettingsScreen implements Screen {
           this.app.voice.say('Así sonarán los avisos. Siguiente: curl de bíceps.');
         },
       }, icon('volume'), 'Probar sonido y voz'),
+      h('h3', { class: 'block-title' }, 'Reloj'),
+      this.watchSection(),
       h('h3', { class: 'block-title' }, 'Copia de seguridad'),
       this.backupSection(),
       h('p', { class: 'muted small center' }, 'Ejercicios en casa · funciona sin conexión'),

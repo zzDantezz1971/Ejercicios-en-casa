@@ -1,5 +1,5 @@
 import { WorkoutPlan } from '../../domain/WorkoutPlan';
-import { SECTION_IDS, SECTION_TITLES, emptyRoutine, type HistoryEntry, type SavedRoutine } from '../../domain/types';
+import { SECTION_IDS, SECTION_TITLES, emptyRoutine, type HeartSummary, type HistoryEntry, type SavedRoutine } from '../../domain/types';
 import type { App, Screen } from '../App';
 import { confirmDialog, h, humanDuration, kg, mmss } from '../dom';
 import { icon, SECTION_STYLE } from '../icons';
@@ -53,6 +53,7 @@ export class HistoryDetailScreen implements Screen {
           stat('check', `${e.exercisesDone}/${e.exercisesPlanned}`, 'hechos'),
           stat('next', String(items.length ? skipped : e.exercisesPlanned - e.exercisesDone), 'saltados')),
         !e.completed ? h('p', { class: 'note' }, icon('info'), 'Se terminó antes de acabar la tabla.') : null,
+        e.heart ? heartCard(e.heart) : null,
         ...(items.length
           ? list
           : [h('p', { class: 'muted' }, 'Este entrenamiento es de una versión anterior de la app y no guarda el detalle de cada ejercicio.')]),
@@ -88,6 +89,38 @@ export class HistoryDetailScreen implements Screen {
     if (i >= 0) this.app.store.deleteHistoryAt(i);
     this.app.back();
   }
+}
+
+/** Pulso medio, máximo y mínimo, con la gráfica de la sesión. */
+function heartCard(hr: HeartSummary): HTMLElement {
+  const NS = 'http://www.w3.org/2000/svg';
+  const W = 320, H = 90, pad = 6;
+  const s = hr.samples;
+  const lo = Math.max(40, hr.min - 8), hi = hr.max + 8;
+  const x = (i: number) => pad + (s.length > 1 ? (i / (s.length - 1)) * (W - 2 * pad) : (W - 2 * pad) / 2);
+  const y = (b: number) => pad + (H - 2 * pad) * (1 - (b - lo) / (hi - lo));
+  const svg = document.createElementNS(NS, 'svg');
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  svg.setAttribute('class', 'hr-chart');
+  svg.setAttribute('role', 'img');
+  svg.setAttribute('aria-label', `Pulso durante el entrenamiento: de ${hr.min} a ${hr.max} pulsaciones por minuto`);
+  const pts = s.map((b, i) => `${x(i).toFixed(1)},${y(b).toFixed(1)}`).join(' ');
+  const area = document.createElementNS(NS, 'polygon');
+  area.setAttribute('points', `${x(0)},${H - pad} ${pts} ${x(s.length - 1)},${H - pad}`);
+  area.setAttribute('class', 'hr-area');
+  const line = document.createElementNS(NS, 'polyline');
+  line.setAttribute('points', pts);
+  line.setAttribute('class', 'hr-line');
+  const avg = document.createElementNS(NS, 'line');
+  for (const [k, v] of Object.entries({ x1: pad, x2: W - pad, y1: y(hr.avg), y2: y(hr.avg), class: 'hr-avg' })) avg.setAttribute(k, String(v));
+  svg.append(area, avg, line);
+  return h('section', { class: 'card hr-card' },
+    h('div', { class: 'card-head' }, h('h3', {}, 'Pulsaciones'), h('span', { class: 'muted small' }, 'ppm')),
+    h('div', { class: 'hr-nums' },
+      h('div', {}, h('strong', {}, String(hr.avg)), h('span', { class: 'muted small' }, 'media')),
+      h('div', {}, h('strong', {}, String(hr.max)), h('span', { class: 'muted small' }, 'máxima')),
+      h('div', {}, h('strong', {}, String(hr.min)), h('span', { class: 'muted small' }, 'mínima'))),
+    s.length > 1 ? (svg as unknown as HTMLElement) : null);
 }
 
 function stat(ic: Parameters<typeof icon>[0], value: string, label: string): HTMLElement {

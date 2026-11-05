@@ -222,6 +222,7 @@ function row(e: HistoryEntry, onOpen: () => void): HTMLElement {
         c.style.setProperty('--sec', SECTION_STYLE[s].color);
         return c;
       })),
+      e.heart ? h('span', { class: 'h-hr' }, icon('heart'), `${e.heart.avg} ppm de media`) : null,
       !e.completed ? h('span', { class: 'badge warn' }, 'Terminado antes') : null),
     h('span', { class: 'h-time muted small' }, d.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })),
   );

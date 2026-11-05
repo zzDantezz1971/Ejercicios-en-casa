@@ -1,5 +1,5 @@
 import type { SessionSummary } from '../../domain/WorkoutSession';
-import { SECTION_TITLES } from '../../domain/types';
+import { SECTION_TITLES, type HeartSummary } from '../../domain/types';
 import type { App, Screen } from '../App';
 import { h, humanDuration } from '../dom';
 import { icon, SECTION_STYLE } from '../icons';
@@ -9,7 +9,7 @@ import { backupCard, backupDue } from '../components/backupPrompt';
 export class SummaryScreen implements Screen {
   readonly el = h('main', { class: 'screen summary' });
 
-  constructor(private readonly app: App, s: SessionSummary, tableName: string) {
+  constructor(private readonly app: App, s: SessionSummary, tableName: string, heart?: HeartSummary | null) {
     const win = s.completed;
     const confetti = win ? h('div', { class: 'confetti', 'aria-hidden': 'true' }, ...Array.from({ length: 36 }, (_, i) => {
       const p = h('i', {});
@@ -38,6 +38,7 @@ export class SummaryScreen implements Screen {
               return c;
             }))
           : null,
+        heart ? h('p', { class: 'hr-summary' }, icon('heart'), `Pulso medio ${heart.avg} · máximo ${heart.max} ppm`) : null,
         s.exercisesDone ? h('p', { class: 'muted small' }, 'Guardado en el historial.') : null,
         s.exercisesDone && backupDue(app) ? backupCard(app, { question: true }) : null,
         h('button', { class: 'btn primary block big', onclick: () => this.app.openTab('inicio') }, 'Volver al inicio')),
