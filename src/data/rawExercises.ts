@@ -191,11 +191,11 @@ export const RAW_SECTIONS: RawSection[] = [
    [{thL:108,snL:108,thR:72,snR:72,tl:-102,tu:-132,hd:-140,uaL:100,faL:98,uaR:-118,faR:-124},1500,1000],
    [{thL:108,snL:108,thR:72,snR:72},300,1000],
    [{thL:108,snL:108,thR:72,snR:72,tl:-78,tu:-48,hd:-40,uaR:80,faR:82,uaL:-62,faL:-56},1500,1000]]},
- {n:'Molino de viento',z:'Espalda, costados e isquios',v:'front',b:['caution'],f:[
-   [{thL:115,snL:115,thR:65,snR:65,uaL:180,faL:180,uaR:0,faR:0},300,1100],
-   [{thL:115,snL:115,thR:65,snR:65,tl:-156,tu:-174,hd:172,uaR:116,faR:124,uaL:-58,faL:-56},700,1100],
-   [{thL:115,snL:115,thR:65,snR:65,uaL:180,faL:180,uaR:0,faR:0},300,1100],
-   [{thL:115,snL:115,thR:65,snR:65,tl:-24,tu:-6,hd:8,uaL:64,faL:56,uaR:-122,faR:-124},700,1100]]},
+ {n:'Molino de viento',z:'Espalda, costados e isquios',armsOut:true,az:38,el:12,b:['caution'],f:[
+   [{ua:92,fa:92,sa:.08},250,1000],
+   [{tl:-14,tu:-6,hd:20,uaR:96,faR:100,uaL:-88,faL:-88,saL:.95},650,1000],
+   [{ua:92,fa:92,sa:.08},250,1000],
+   [{tl:-14,tu:-6,hd:20,uaL:96,faL:100,uaR:-88,faR:-88,saR:.95},650,1000]]},
  {g:'Cadera y piernas'},
  {n:'Figura 4 (glúteo y piriforme)',z:'Glúteos y cadera',mat:1,f:[
    [{tl:180,thL:-110,snL:-20,thR:-60,sThR:.7,snR:206,sShR:.8,ua:-40,fa:0},900,1100],
