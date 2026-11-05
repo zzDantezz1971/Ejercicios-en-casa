@@ -19,7 +19,7 @@ export const LEN = { torso: 24, neck: 14, ua: 26, fa: 24, th: 34, sh: 33 };
 
 function base(v: string): Pose {
   return {
-    x: 0, tl: -90, uaL: 90, faL: 90, uaR: 90, faR: 90, thL: 90, snL: 90, thR: 90, snR: 90,
+    x: 0, tw: 0, tl: -90, uaL: 90, faL: 90, uaR: 90, faR: 90, thL: 90, snL: 90, thR: 90, snR: 90,
     ftL: v === 'side' ? 0 : 150, ftR: v === 'side' ? 0 : 30, saL: 1, saR: 1, sThL: 1, sThR: 1, sShL: 1, sShR: 1,
   };
 }
@@ -90,6 +90,7 @@ function mirrorPose(view: string, p: Pose): Pose {
   if (view !== 'side') {
     for (const k of ANGLES) if (k in o) o[k] = 180 - o[k];
     o.x = -o.x;
+    if ('tw' in o) o.tw = -o.tw;
   }
   return o;
 }

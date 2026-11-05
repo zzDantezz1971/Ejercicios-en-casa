@@ -186,6 +186,11 @@ export const RAW_SECTIONS: RawSection[] = [
  {n:'Inclinación lateral de pie',split:true,z:'Costados y espalda',v:'front',f:[
    [{tl:-92,tu:-112,uaL:-100,faL:-122,uaR:-122,faR:-142},1300,1000],[{uaL:-95,faL:-86,uaR:-85,faR:-94},300,1000],
    [{tl:-88,tu:-68,uaL:-58,faL:-38,uaR:-80,faR:-58},1300,1000],[{uaL:-95,faL:-86,uaR:-85,faR:-94},300,1000]]},
+ {n:'Rotación de tronco con brazos al frente',z:'Columna y costados',v:'front',az:42,el:16,f:[
+   [{thL:96,snL:96,thR:84,snR:84,uaL:4,faL:4,uaR:176,faR:176,sa:.22},200,1200],
+   [{thL:96,snL:96,thR:84,snR:84,uaL:4,faL:4,uaR:176,faR:176,sa:.22,tw:-65},500,1200],
+   [{thL:96,snL:96,thR:84,snR:84,uaL:4,faL:4,uaR:176,faR:176,sa:.22},200,1200],
+   [{thL:96,snL:96,thR:84,snR:84,uaL:4,faL:4,uaR:176,faR:176,sa:.22,tw:65},500,1200]]},
  {n:'Medio triángulo',split:true,z:'Costados y cadera',v:'front',f:[
    [{thL:108,snL:108,thR:72,snR:72},300,1000],
    [{thL:108,snL:108,thR:72,snR:72,tl:-102,tu:-132,hd:-140,uaL:100,faL:98,uaR:-118,faR:-124},1500,1000],

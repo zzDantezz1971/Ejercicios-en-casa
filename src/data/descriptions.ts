@@ -422,6 +422,13 @@ export const DESCRIPTIONS: Record<string, ExerciseDescription> = {
     mistakes: 'Dejar caer la cadera o arquear la zona lumbar.',
     easier: 'Sube la cadera solo a medias y deja la cabeza mirando al frente.',
   },
+  'rotacion-de-tronco-con-brazos-al-frente': {
+    start: 'De pie, pies a la anchura de la cadera, brazos estirados al frente a la altura del pecho con las manos juntas.',
+    move: 'Gira el tronco despacio hacia un lado llevando los brazos con él, vuelve al centro y gira hacia el otro lado, alternando.',
+    tip: 'La cadera no gira: mira siempre al frente con la pelvis. Espalda erguida, abdominales y glúteos apretados. Respira hondo, sin contener el aire.',
+    mistakes: 'Girar la pelvis o las rodillas, o hacerlo a tirones.',
+    easier: 'Gira solo un poco y con las manos en el pecho.',
+  },
   'medio-triangulo': {
     start: 'De pie con las piernas bien separadas y los pies en paralelo.',
     move: 'Desliza una mano por la pierna hacia abajo y sube el otro brazo por encima de la cabeza, inclinándote hacia el lado. Mantén y cambia de lado a mitad del tiempo.',

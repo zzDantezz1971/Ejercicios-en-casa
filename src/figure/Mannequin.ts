@@ -101,6 +101,22 @@ export function to3D(spec: MotionSpec, view: string, J: Joints, pose: Pose): Rec
       o['ti' + s].z += dk + ds;
     }
   }
+  // Giro del tronco sobre el eje vertical (tw, grados): hombros, brazos y cabeza giran; la cadera no.
+  const tw = pose.tw ?? 0;
+  if (tw) {
+    const a = (tw * Math.PI) / 180, c = Math.cos(a), sn = Math.sin(a);
+    const px = o.pel.x, pz = o.pel.z;
+    const turn = (k: string, f = 1) => {
+      const p = o[k];
+      if (!p) return;
+      const cc = f === 1 ? c : Math.cos(a * f), ss = f === 1 ? sn : Math.sin(a * f);
+      const dx = p.x - px, dz = p.z - pz;
+      p.x = px + dx * cc + dz * ss;
+      p.z = pz - dx * ss + dz * cc;
+    };
+    turn('mid', 0.5);
+    for (const k of ['neck', 'head', 'shoL', 'shoR', 'elL', 'elR', 'haL', 'haR']) turn(k);
+  }
   return o;
 }
 
