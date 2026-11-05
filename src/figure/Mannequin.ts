@@ -39,7 +39,7 @@ export const DEFAULT_PALETTE: Palette = {
   iron: '#C9D0DA', bench: '#2B323D', benchLeg: '#8893A3', mat: '#26365C', wall: '#262E39',
 };
 
-const SIDE_W = { arm: 13, leg: 8.5 };
+const SIDE_W = { arm: 15.5, leg: 8.5 };
 
 /** Lleva las articulaciones 2D a 3D según la vista del ejercicio. */
 export function to3D(spec: MotionSpec, view: string, J: Joints, pose: Pose): Record<string, V3> {
@@ -88,6 +88,13 @@ export function to3D(spec: MotionSpec, view: string, J: Joints, pose: Pose): Rec
   for (const s of ['L', 'R']) {
     const sign = side ? (s === 'L' ? -1 : 1) : 1;
     const sa = pose['sa' + s];
+    // brazos colgando: un poco separados del cuerpo (de lado, hacia fuera)
+    if (side) {
+      const down = Math.max(0, Math.sin((pose['ua' + s] * Math.PI) / 180));
+      const fdown = Math.max(0, Math.sin((pose['fa' + s] * Math.PI) / 180));
+      o['el' + s].z += sign * 2.2 * down;
+      o['ha' + s].z += sign * (2.2 * down + 2.6 * fdown * down);
+    }
     if (Math.abs(sa) < 1 && (!side || spec.armsOut)) {
       o['el' + s].z += sign * depth(sa, LEN.ua);
       o['ha' + s].z += sign * depth(sa, LEN.ua + LEN.fa);

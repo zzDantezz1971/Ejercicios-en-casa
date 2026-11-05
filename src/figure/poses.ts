@@ -15,11 +15,18 @@ const add = (p: Pt, v: Pt, l: number): Pt => [p[0] + v[0] * l, p[1] + v[1] * l];
 const ease = (x: number) => 0.5 - 0.5 * Math.cos(Math.PI * x);
 const PAIRS = ['ua', 'fa', 'th', 'sn', 'ft', 'sa', 'sTh', 'sSh', 'zE', 'zH', 'zK', 'zA'];
 
-export const LEN = { torso: 24, neck: 14, ua: 22.5, fa: 21, th: 34, sh: 33 };
+/** Media anchura de hombros (de frente), igual que el cuerpo del maniquí. */
+export const SHOULDER = 15;
+/** Distancia de la base del cuello a la altura de los hombros. */
+export const SHOULDER_DROP = 8;
+
+export const LEN = { torso: 24, neck: 14, ua: 21, fa: 20.5, th: 34, sh: 33 };
 
 function base(v: string): Pose {
   return {
-    x: 0, tw: 0, lean: 0, zEL: 0, zER: 0, zHL: 0, zHR: 0, zKL: 0, zKR: 0, zAL: 0, zAR: 0, tl: -90, uaL: 90, faL: 90, uaR: 90, faR: 90, thL: 90, snL: 90, thR: 90, snR: 90,
+    x: 0, tw: 0, lean: 0, zEL: 0, zER: 0, zHL: 0, zHR: 0, zKL: 0, zKR: 0, zAL: 0, zAR: 0, tl: -90,
+    // brazos colgando relajados: de frente, un poco separados del cuerpo
+    uaL: v === 'front' ? 97 : 90, faL: v === 'front' ? 94 : 90, uaR: v === 'front' ? 83 : 90, faR: v === 'front' ? 86 : 90, thL: 90, snL: 90, thR: 90, snR: 90,
     ftL: v === 'side' ? 0 : 150, ftR: v === 'side' ? 0 : 30, saL: 1, saR: 1, sThL: 1, sThR: 1, sShL: 1, sShR: 1,
   };
 }
@@ -45,12 +52,13 @@ export function joints(v: string, o: Pose): Joints {
   J.mid = add(J.pel, dir(o.tl), LEN.torso);
   J.neck = add(J.mid, dir(o.tu), LEN.torso);
   J.head = add(J.neck, dir(o.hd), LEN.neck);
-  const sc = add(J.neck, dir(o.tu), -3);
+  // articulación del hombro: bastante por debajo de la base del cuello, como en el cuerpo real
+  const sc = add(J.neck, dir(o.tu), -SHOULDER_DROP);
   if (v === 'side') {
     J.shoL = sc; J.shoR = sc; J.hipL = J.pel; J.hipR = J.pel;
   } else {
     const n = dir(o.tu + 90), m = dir(o.tl + 90);
-    J.shoL = add(sc, n, -12); J.shoR = add(sc, n, 12); J.hipL = add(J.pel, m, -8); J.hipR = add(J.pel, m, 8);
+    J.shoL = add(sc, n, -SHOULDER); J.shoR = add(sc, n, SHOULDER); J.hipL = add(J.pel, m, -8); J.hipR = add(J.pel, m, 8);
   }
   const fl = v === 'side' ? 9 : 6;
   for (const s of ['L', 'R']) {

@@ -7,7 +7,7 @@ Coordenadas de salida: x = lateral (lado R anatómico en -x), y = arriba, z = ad
 import base64, json, os, sys
 import numpy as np
 
-W_MUSCLE = float(sys.argv[1]) if len(sys.argv) > 1 else 0.6
+W_MUSCLE = float(sys.argv[1]) if len(sys.argv) > 1 else 1.3
 SCALE = 8.4
 
 V = []
@@ -27,18 +27,26 @@ def apply(fname, w):
     for line in open(fname):
         if line.startswith('#') or not line.strip():
             continue
-        i, dx, dy, dz = line.split()
+        parts = line.split()
+        if len(parts) != 4:
+            continue
+        i, dx, dy, dz = parts
         V[int(i)] += w * np.array([float(dx), float(dy), float(dz)])
 apply('caucasian-male-young.target', 1.0)
 # más ancho y fuerte de hombros, pecho y brazos
 import os
-WIDE = float(os.environ.get('WIDE', '0.15'))
+WIDE = float(os.environ.get('WIDE', '0.75'))
 for f, w in [('t_torso_torso-scale-horiz-incr.target', 0.3), ('t_torso_torso-vshape-incr.target', 0.9),
              ('t_measure_measure-shoulder-dist-incr.target', 0.5), ('t_torso_torso-scale-depth-incr.target', 0.0),
              ('t_armslegs_r-upperarm-scale-horiz-incr.target', 0.1), ('t_armslegs_l-upperarm-scale-horiz-incr.target', 0.1),
              ('t_armslegs_r-upperarm-muscle-incr.target', 0.6), ('t_armslegs_l-upperarm-muscle-incr.target', 0.6),
              ('t_neck_neck-scale-horiz-incr.target', 0.3)]:
     apply(f, w * WIDE / 0.35)
+CHEST = float(os.environ.get('CHEST', '0'))
+if CHEST:
+    apply('t_measure_measure-chest-circ-incr.target', CHEST)
+    apply('t_armslegs_r-upperarm-muscle-incr.target', CHEST * 0.6)
+    apply('t_armslegs_l-upperarm-muscle-incr.target', CHEST * 0.6)
 apply('universal-male-young-maxmuscle-averageweight.target', W_MUSCLE * 0.5)
 apply('universal-male-young-maxmuscle-minweight.target', W_MUSCLE * 0.5)
 

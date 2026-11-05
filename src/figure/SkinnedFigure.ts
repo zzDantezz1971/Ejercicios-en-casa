@@ -35,6 +35,9 @@ export const SKIN_PALETTE: SkinPalette = {
 };
 
 type V3 = THREE.Vector3;
+
+/** Grosor extra de brazos y piernas (cuerpo más fuerte). */
+export const BULK: Record<string, number> = (globalThis as { __BULK__?: Record<string, number> }).__BULK__ ?? { ua: 1.28, fa: 1.18, th: 1.2, sh: 1.15 };
 const V = (x = 0, y = 0, z = 0) => new THREE.Vector3(x, y, z);
 
 function b64(s: string): ArrayBuffer {
@@ -247,7 +250,7 @@ vec3 clothes() {
       const len = alongLen ?? dir.length();
       const F = frameMatrix(dir, lat);
       const k = len / rf.len;
-      const perp = this.perp * Math.max(1, Math.sqrt(k / this.perp));
+      const perp = this.perp * Math.max(1, Math.sqrt(k / this.perp)) * (BULK[name.slice(0, 2)] ?? 1);
       const Sc = new THREE.Matrix4().makeScale(perp, k, perp);
       const M = new THREE.Matrix4()
         .makeTranslation(a.x, a.y, a.z)
