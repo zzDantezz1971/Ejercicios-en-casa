@@ -1,8 +1,8 @@
-import { bestStreak, routineNames, secondsBySection, topExercises } from '../../domain/stats';
+import { bestStreak, routineNames, secondsBySection } from '../../domain/stats';
 import { SECTION_IDS, SECTION_TITLES, type HistoryEntry } from '../../domain/types';
 import type { App, Screen } from '../App';
 import { addDays, dayKey, minutesPerWeek, startOfWeek, streak, trainedDays, WEEKDAY_LETTERS } from '../dates';
-import { append, clear, confirmDialog, h, humanDuration, kg, plural } from '../dom';
+import { append, clear, confirmDialog, h, humanDuration, plural } from '../dom';
 import { icon, SECTION_STYLE, type IconName } from '../icons';
 import { HistoryDetailScreen } from './HistoryDetailScreen';
 import { backupCard, backupDue } from '../components/backupPrompt';
@@ -53,7 +53,6 @@ export class HistoryScreen implements Screen {
       this.chart(list),
       this.calendar(list),
       this.bySection(list),
-      this.topList(list),
       h('h3', { class: 'block-title' }, 'Entrenamientos'),
       h('p', { class: 'muted small' }, 'Toca un entrenamiento para ver el detalle, repetirlo o borrarlo.'),
     );
@@ -118,23 +117,6 @@ export class HistoryScreen implements Screen {
         r.style.setProperty('--sec', st.color);
         return r;
       }));
-  }
-
-  /** Los ejercicios que más veces se han completado. */
-  private topList(list: readonly HistoryEntry[]): HTMLElement | null {
-    const top = topExercises(list, 5).filter((t) => this.app.catalog.has(t.exerciseId));
-    if (!top.length) return null;
-    return h('section', { class: 'card' },
-      h('div', { class: 'card-head' }, h('h3', {}, 'Tus ejercicios más hechos')),
-      h('ol', { class: 'top-list' }, ...top.map((t, i) => {
-        const ex = this.app.catalog.get(t.exerciseId)!;
-        const li = h('li', { class: 'top-row' },
-          h('span', { class: 'top-n' }, String(i + 1)),
-          h('span', { class: 'top-name' }, ex.name),
-          h('span', { class: 'muted small' }, `${plural(t.times, 'vez', 'veces')} · ${humanDuration(t.seconds)}${t.maxWeight ? ` · máx. ${kg(t.maxWeight)}` : ''}`));
-        li.style.setProperty('--sec', SECTION_STYLE[ex.section].color);
-        return li;
-      })));
   }
 
   /** Barras con los minutos de las últimas 8 semanas. */

@@ -516,11 +516,6 @@ button:focus-visible, input:focus-visible, label:focus-within { outline: 2px sol
 .sb-bar { height: 10px; border-radius: 999px; background: var(--surface-2); overflow: hidden; }
 .sb-fill { display: block; height: 100%; border-radius: inherit; background: var(--sec); min-width: 2px; }
 .sb-val { font-variant-numeric: tabular-nums; font-size: .88rem; color: var(--muted); min-width: 52px; text-align: right; }
-.top-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
-.top-row { display: grid; grid-template-columns: 28px 1fr; column-gap: 10px; align-items: center; padding: 6px 0; }
-.top-row .muted { grid-column: 2; }
-.top-n { grid-row: span 2; width: 28px; height: 28px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font: 700 1rem var(--display); color: var(--sec); background: color-mix(in srgb, var(--sec) 16%, transparent); }
-.top-name { font-weight: 700; }
 .bar-title { font: 700 1.15rem var(--display); text-transform: uppercase; letter-spacing: .04em; }
 .hd-body { display: flex; flex-direction: column; gap: 10px; }
 .hd-date { text-transform: capitalize; margin: 0; }
