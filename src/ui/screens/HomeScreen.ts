@@ -5,7 +5,7 @@ import { addDays, dayKey, greeting, startOfWeek, streak, trainedDays, WEEKDAY_LE
 import { clear, h, humanDuration, plural } from '../dom';
 import { icon, SECTION_STYLE } from '../icons';
 import { RoutineScreen } from './RoutineScreen';
-import { WorkoutScreen } from './WorkoutScreen';
+import { startWorkout } from '../components/startWorkout';
 
 export class HomeScreen implements Screen {
   readonly el = h('main', { class: 'screen home' });
@@ -96,11 +96,7 @@ export class HomeScreen implements Screen {
   }
 
   private start(plan: WorkoutPlan): void {
-    // El sonido y la voz solo se activan desde un toque del usuario.
-    this.app.sounds.unlock();
-    this.app.voice.unlock();
-    this.app.haptics.tap();
-    this.app.push(new WorkoutScreen(this.app, plan, this.app.store.active));
+    void startWorkout(this.app, plan, this.app.store.active);
   }
 }
 

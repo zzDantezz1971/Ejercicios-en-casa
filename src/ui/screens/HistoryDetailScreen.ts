@@ -3,7 +3,7 @@ import { SECTION_IDS, SECTION_TITLES, emptyRoutine, type HeartSummary, type Hist
 import type { App, Screen } from '../App';
 import { confirmDialog, h, humanDuration, kg, mmss } from '../dom';
 import { icon, SECTION_STYLE } from '../icons';
-import { WorkoutScreen } from './WorkoutScreen';
+import { startWorkout } from '../components/startWorkout';
 
 /** Detalle de un entrenamiento del historial: qué se hizo, cuánto tiempo y repetirlo. */
 export class HistoryDetailScreen implements Screen {
@@ -77,10 +77,7 @@ export class HistoryDetailScreen implements Screen {
     if (plan.isEmpty) return;
     const table: SavedRoutine = app.store.routines.find((r) => r.id === entry.routineId)
       ?? { id: entry.routineId ?? 'historial', name: entry.routineName ?? 'Entrenamiento repetido', routine, createdAt: entry.date };
-    app.sounds.unlock();
-    app.voice.unlock();
-    app.haptics.tap();
-    app.push(new WorkoutScreen(app, plan, { ...table, routine }));
+    void startWorkout(app, plan, { ...table, routine });
   }
 
   private async remove(): Promise<void> {

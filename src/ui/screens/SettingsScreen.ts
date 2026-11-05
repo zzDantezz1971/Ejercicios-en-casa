@@ -127,7 +127,10 @@ export class SettingsScreen implements Screen {
           h('strong', {}, 'Pulsaciones del reloj'),
           h('p', { class: 'muted small' }, 'En el reloj, activa "Difundir frecuencia cardíaca" (suele estar en Ajustes › Ajustes de entrenamiento). Después, al empezar un entrenamiento, toca "Conectar reloj" encima del maniquí y elige tu reloj. Si no aparece, inicia un entrenamiento en el reloj y vuelve a intentarlo.'))),
       live,
-      btn);
+      btn,
+      h('label', { class: 'switch-row', for: 'set-askWatch' },
+        h('span', { class: 'set-text' }, h('strong', {}, 'Preguntar al empezar'), h('span', { class: 'muted block small' }, 'Antes de cada entrenamiento, pantalla para conectar el reloj.')),
+        h('input', { type: 'checkbox', id: 'set-askWatch', class: 'switch', checked: this.app.store.settings.askWatch, onchange: (e: Event) => this.update({ askWatch: (e.target as HTMLInputElement).checked }) })));
   }
 
   /** Guardar una copia (para Drive) y restaurarla. */

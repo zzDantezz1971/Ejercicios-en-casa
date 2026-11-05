@@ -624,3 +624,22 @@ button:focus-visible, input:focus-visible, label:focus-within { outline: 2px sol
 .hr-live { display: flex; align-items: center; gap: 8px; font-weight: 700; margin: 0; }
 .hr-live .ico { color: var(--muted); }
 .hr-live.on .ico { color: #FF4D6A; }
+
+/* Pantalla del reloj antes de empezar */
+.watch-dialog { gap: 14px; max-width: 420px; }
+.wd-head { display: flex; align-items: center; gap: 12px; }
+.wd-head h2 { margin: 0; font-size: 1.4rem; text-transform: uppercase; }
+.wd-heart { width: 44px; height: 44px; border-radius: 14px; display: flex; align-items: center; justify-content: center; background: rgb(255 77 106 / .14); color: #FF4D6A; flex: none; }
+.wd-heart .ico { width: 24px; height: 24px; animation: hr-beat 1.2s ease-in-out infinite; }
+.wd-steps { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; line-height: 1.4; }
+.wd-status { display: flex; align-items: center; gap: 8px; margin: 0; font-weight: 700; min-height: 1.4em; }
+.wd-status:empty { display: none; }
+.wd-status .ico { width: 18px; height: 18px; color: var(--muted); }
+.wd-status.on .ico { color: #FF4D6A; }
+.wd-status.on { color: var(--sec-stretch); }
+.wd-status.warn { color: #F5A524; font-weight: 600; font-size: .92rem; }
+.wd-actions { display: flex; flex-direction: column; gap: 8px; }
+.wd-actions .btn { justify-content: center; }
+.wd-never { display: flex; align-items: center; gap: 8px; font-size: .85rem; color: var(--muted); }
+.wd-never input { width: 18px; height: 18px; accent-color: var(--accent); }
+.watch .switch-row { display: flex; align-items: center; gap: 12px; border-top: 1px solid var(--line); padding-top: 10px; }

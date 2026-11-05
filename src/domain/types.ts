@@ -106,6 +106,8 @@ export interface Settings {
   voice: boolean;
   /** Maniquí: 1 = de piezas (con expresiones), 2 = realista. */
   mannequin: 1 | 2;
+  /** Al empezar, preguntar por el reloj (pulsaciones) si no está conectado. */
+  askWatch: boolean;
 }
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -115,6 +117,7 @@ export const DEFAULT_SETTINGS: Settings = {
   sound: true,
   voice: true,
   mannequin: 2,
+  askWatch: true,
 };
 
 export interface HistoryEntry {
