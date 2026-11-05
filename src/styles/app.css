@@ -719,3 +719,24 @@ button:focus-visible, input:focus-visible, label:focus-within { outline: 2px sol
   .workout .w-name { font-size: 1.45rem; }
   .workout .ctrl { padding-top: 8px; padding-bottom: 8px; }
 }
+
+/* Mapa de músculos */
+.muscle-map { display: flex; flex-direction: column; gap: 10px; }
+.segmented.small .seg { padding: 6px 11px; font-size: .85rem; }
+.mm-figs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.mm-fig { margin: 0; overflow: hidden; display: flex; flex-direction: column; align-items: center; gap: 2px; background: var(--stage); border-radius: 14px; padding: 4px 0 6px; }
+.mm-img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; display: block; transform: scale(1.5); transform-origin: 50% 46%; }
+.mm-img:not([src]) { visibility: hidden; }
+.mm-line { margin: 0; font-size: .92rem; display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; }
+.mm-line .mu-dot { align-self: center; }
+.mu-dot.work { background: #E5142A; }
+.mu-dot.stretch { background: #00B8A8; }
+.mu-dot.none { background: var(--muted); }
+
+/* Pesos de cada ejercicio */
+.ex-weights { margin: 6px 0 10px; }
+.note.tip { align-items: flex-start; border: 1px solid color-mix(in srgb, #F5A524 40%, transparent); background: rgb(245 165 36 / .08); }
+.note.tip > .ico { color: #F5A524; flex: none; margin-top: 2px; }
+.note.tip p { margin: 0 0 8px; }
+.note.tip p:last-child { margin-bottom: 0; }
+.weight-tips { text-align: left; width: 100%; }

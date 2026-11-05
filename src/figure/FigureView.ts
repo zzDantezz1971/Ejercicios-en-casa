@@ -1,10 +1,13 @@
 import * as THREE from 'three';
-import type { ExerciseDef } from '../domain/types';
+import type { ExerciseDef, MotionSpec } from '../domain/types';
 import { MannequinScene, type Mood, type Palette } from './Mannequin';
 import type { Side } from './poses';
 import type { SkinData } from './SkinnedFigure';
 import { anatomyOn, getLoadedSkin, getSkin } from './skinAsset';
 import { muscleWeights } from './anatomy';
+
+/** Postura de pie, brazos algo separados, para el mapa de músculos. */
+const BODY_SPEC: MotionSpec = { v: 'front', f: [[{ uaL: 100, faL: 96, uaR: 80, faR: 84 }]] };
 
 /** Músculos a marcar si está elegido el maniquí anatomía. */
 function anatomyFor(ex: ExerciseDef, side: Side, on = anatomyOn()): { L: number[]; R: number[] } | undefined {
@@ -140,7 +143,7 @@ export class FigureView {
 export class Thumbnails {
   private renderer: THREE.WebGLRenderer | null = null;
   private cache = new Map<string, string>();
-  private queue: Array<{ key: string; ex: ExerciseDef; skin: SkinData | undefined; anatomy: boolean; done: (url: string) => void }> = [];
+  private queue: Array<{ key: string; render: () => string; done: (url: string) => void }> = [];
   private busy = false;
 
   constructor(private readonly palette?: Palette, private readonly w = 330, private readonly h = 220) {}
@@ -162,10 +165,33 @@ export class Thumbnails {
   }
 
   private request(key: string, ex: ExerciseDef, skin: SkinData | undefined, anatomy: boolean): Promise<string> {
+    return this.enqueue(key, () => this.draw(ex, skin, anatomy));
+  }
+
+  /** Cuerpo de pie (de frente o de espaldas) con los músculos coloreados según `weights`. Vacío si no hay cuerpo realista. */
+  bodyMap(weights: number[], back: boolean): Promise<string> {
+    const skin = getLoadedSkin();
+    if (!skin) return Promise.resolve('');
+    return this.enqueue(`map:${back ? 1 : 0}:${weights.map((w) => w.toFixed(2)).join(',')}`, () => {
+      const r = this.ensureRenderer();
+      const sc = new MannequinScene(BODY_SPEC, this.palette, undefined, skin, { L: weights, R: weights });
+      sc.azimuth = back ? 180 : 0;
+      sc.elevation = 6;
+      sc.setAspect(this.w / this.h);
+      sc.placeCamera();
+      sc.update(0);
+      r.render(sc.scene, sc.camera);
+      const url = r.domElement.toDataURL('image/webp', 0.9);
+      sc.dispose();
+      return url;
+    });
+  }
+
+  private enqueue(key: string, render: () => string): Promise<string> {
     const hit = this.cache.get(key);
     if (hit) return Promise.resolve(hit);
     return new Promise((done) => {
-      this.queue.push({ key, ex, skin, anatomy, done });
+      this.queue.push({ key, render, done });
       this.pump();
     });
   }
@@ -177,7 +203,7 @@ export class Thumbnails {
       const job = this.queue.shift()!;
       let url = this.cache.get(job.key);
       if (!url) {
-        url = this.draw(job.ex, job.skin, job.anatomy);
+        url = job.render();
         this.cache.set(job.key, url);
       }
       job.done(url);
@@ -186,19 +212,24 @@ export class Thumbnails {
     });
   }
 
-  private draw(ex: ExerciseDef, skin: SkinData | undefined, anatomy: boolean): string {
+  private ensureRenderer(): THREE.WebGLRenderer {
     if (!this.renderer) {
       const c = document.createElement('canvas');
       this.renderer = makeRenderer(c, true);
       this.renderer.setPixelRatio(1);
       this.renderer.setSize(this.w * 2, this.h * 2, false);
     }
+    return this.renderer;
+  }
+
+  private draw(ex: ExerciseDef, skin: SkinData | undefined, anatomy: boolean): string {
+    const r = this.ensureRenderer();
     const sc = new MannequinScene(ex.motion, this.palette, undefined, skin, skin ? anatomyFor(ex, undefined, anatomy) : undefined);
     sc.mood = 'relaxed';
     sc.setAspect(this.w / this.h);
     sc.update(sc.motion.total * 0.45);
-    this.renderer.render(sc.scene, sc.camera);
-    const url = this.renderer.domElement.toDataURL('image/webp', 0.85);
+    r.render(sc.scene, sc.camera);
+    const url = r.domElement.toDataURL('image/webp', 0.85);
     sc.dispose();
     return url;
   }

@@ -1,10 +1,12 @@
 import { MUSCLE_NAMES, parseMuscles } from '../../figure/anatomy';
+import { exerciseWeights, weightSuggestion } from '../../domain/weights';
+import { weightChart } from '../components/weightCard';
 import { RoutineEditor } from '../../domain/RoutineEditor';
-import type { ExerciseDef } from '../../domain/types';
+import { usesWeight, type ExerciseDef } from '../../domain/types';
 import { FigureView } from '../../figure/FigureView';
 import type { App, Screen } from '../App';
 import { badgeList, sidesMark } from '../components/badges';
-import { clear, confirmDialog, h } from '../dom';
+import { clear, confirmDialog, h, kg } from '../dom';
 import { icon, SECTION_STYLE } from '../icons';
 
 /** Ficha de un ejercicio: animación grande que se puede girar y la explicación. */
@@ -14,6 +16,7 @@ export class DetailScreen implements Screen {
   private view: FigureView | null = null;
   private action = h('div', { class: 'detail-action' });
 
+  private weights = h('div', { class: 'ex-weights-wrap' });
   private favBtn = h('button', { class: 'icon-btn fav-btn', onclick: () => this.toggleFav() });
 
   private paintFav(): void {
@@ -47,6 +50,7 @@ export class DetailScreen implements Screen {
         badgeList(ex.badges),
         musclesInfo(ex.muscles),
         ex.oneSided ? h('p', { class: 'note' }, icon('sides'), 'Se hace por lados: a mitad del tiempo oirás el aviso para cambiar de lado.') : null,
+        this.weights,
         d
           ? h('div', { class: 'howto' },
               how('target', 'Posición inicial', d.start),
@@ -63,10 +67,39 @@ export class DetailScreen implements Screen {
     this.view ??= new FigureView(this.canvas, this.ex);
     this.view.start();
     this.renderAction();
+    this.renderWeights();
   }
 
   leave(): void {
     this.view?.stop();
+  }
+
+  /** Kilos usados en este ejercicio a lo largo del tiempo y propuesta de subir peso. */
+  private renderWeights(): void {
+    const { app, ex } = this;
+    this.weights.replaceChildren();
+    if (!usesWeight(ex)) return;
+    const ws = exerciseWeights(app.store.history, ex.id);
+    if (!ws.length) return;
+    const last = ws[ws.length - 1].kg, max = Math.max(...ws.map((w) => w.kg));
+    const sug = weightSuggestion(app.store.history, ex.id);
+    const pos = app.store.routine[ex.section].findIndex((i) => i.exerciseId === ex.id);
+    const inTable = pos >= 0 ? app.store.routine[ex.section][pos] : undefined;
+    this.weights.append(h('section', { class: 'card hr-card ex-weights' },
+      h('div', { class: 'card-head' }, h('h3', {}, 'Tus pesos'), h('span', { class: 'muted small' }, 'por mancuerna')),
+      h('p', { class: 'muted small' }, `Último: ${kg(last)} · Máximo: ${kg(max)} · ${ws.length} ${ws.length === 1 ? 'sesión' : 'sesiones'}`),
+      ws.length > 1 ? (weightChart(ws) as unknown as HTMLElement) : null,
+      sug ? h('div', { class: 'note tip' }, icon('bolt'),
+        h('div', {},
+          h('p', {}, `Llevas ${sug.sessions} sesiones completas con ${kg(sug.kg)}. ¿Probamos con ${kg(sug.next)}?`),
+          inTable && (inTable.weight ?? 0) < sug.next
+            ? h('button', { class: 'btn primary small', onclick: () => {
+                const ed = new RoutineEditor(app.store.routine);
+                ed.setWeight(ex.section, ex.id, sug.next);
+                app.store.saveRoutine(ed.value);
+                this.renderWeights();
+              } }, `Poner ${kg(sug.next)} en mi tabla`)
+            : null)) : null));
   }
 
   dispose(): void {

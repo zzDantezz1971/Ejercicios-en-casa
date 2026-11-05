@@ -1,3 +1,6 @@
+import { exerciseWeights, weightSuggestion } from '../src/domain/weights';
+import { MUSCLES } from '../src/figure/anatomy';
+import { muscleLoad, loadWeights } from '../src/domain/muscleLoad';
 import { describe, expect, it } from 'vitest';
 import { bestStreak, routineNames, secondsBySection, topExercises } from '../src/domain/stats';
 import { summarizeHeart, type HistoryEntry } from '../src/domain/types';
@@ -42,5 +45,36 @@ describe('Pulsaciones', () => {
   it('calcula media, máxima y mínima descartando lecturas imposibles', () => {
     expect(summarizeHeart([90, 110, 0, 130, 250])).toEqual({ avg: 110, max: 130, min: 90, samples: [90, 110, 130] });
     expect(summarizeHeart([])).toBeNull();
+  });
+});
+
+describe('Músculos trabajados', () => {
+  it('suma el tiempo de cada músculo (secundarios a la mitad) y separa los estiramientos', () => {
+    const e = (items: HistoryEntry['items']): HistoryEntry => ({ date: '2026-11-05T10:00:00Z', durationSec: 100, exercisesDone: 1, exercisesPlanned: 1, sections: [], completed: true, items });
+    const map: Record<string, string> = { curl: '+biceps ~antebrazo', cuad: '-cuadriceps@R' };
+    const load = muscleLoad([
+      e([{ exerciseId: 'curl', section: 'pesas', planned: 40, seconds: 40, completed: true }, { exerciseId: 'cuad', section: 'estiramientos', planned: 30, seconds: 30, completed: true }]),
+      { ...e(undefined) },
+    ], (id) => map[id]);
+    expect(load.work.biceps).toBe(40);
+    expect(load.work.antebrazo).toBe(20);
+    expect(load.stretch.cuadriceps).toBe(30);
+    expect(load.missing).toBe(1);
+    const w = loadWeights(load);
+    expect(w[MUSCLES.indexOf('biceps')]).toBe(1);
+    expect(w[MUSCLES.indexOf('cuadriceps')]).toBeLessThan(0);
+    expect(w[MUSCLES.indexOf('pecho')]).toBe(0);
+  });
+});
+
+describe('Evolución de pesos', () => {
+  const e = (d: string, kg: number, completed = true): HistoryEntry => ({ date: d, durationSec: 60, exercisesDone: 1, exercisesPlanned: 1, sections: ['pesas'], completed,
+    items: [{ exerciseId: 'curl', section: 'pesas', planned: 30, seconds: 30, completed, weight: kg }] });
+  it('ordena los kilos por fecha y propone subir tras 4 sesiones completas con el mismo peso', () => {
+    const h = [e('2026-11-06', 8), e('2026-11-04', 8), e('2026-11-02', 8), e('2026-10-30', 7), e('2026-11-01', 8)];
+    expect(exerciseWeights(h, 'curl').map((w) => w.kg)).toEqual([7, 8, 8, 8, 8]);
+    expect(weightSuggestion(h, 'curl')).toEqual({ kg: 8, next: 9, sessions: 4 });
+    expect(weightSuggestion(h.slice(1), 'curl')).toBeNull();
+    expect(weightSuggestion([e('2026-11-07', 8, false), ...h], 'curl')).toBeNull();
   });
 });

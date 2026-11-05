@@ -79,6 +79,15 @@ vec3 gHi;
 float band(float v, float a, float b, float s) { return smoothstep(a - s, a + s, v) * (1.0 - smoothstep(b - s, b + s, v)); }
 float along(vec3 p, vec3 a, vec3 dir) { return dot(p - a, dir) / dot(dir, dir); }
 vec3 radial(vec3 p, vec3 a, vec3 dir) { float t = along(p, a, dir); return normalize(p - (a + dir * t) + vec3(1e-4)); }
+// elipse suave en el plano x-y del tronco (1 dentro, 0 fuera)
+float ell(vec2 p, vec2 c, vec2 r) { return 1.0 - smoothstep(0.72, 1.0, length((p - c) / r)); }
+// huso a lo largo de un hueso: ancho en el centro, estrecho en los extremos; d = orientación (1 = centro del músculo)
+float spindle(float t, float a, float b, float d, float wide) {
+  float s = clamp((t - a) / (b - a), 0.0, 1.0);
+  float prof = sin(3.14159 * s);
+  float cov = mix(0.15, wide, prof);
+  return smoothstep(0.0, 0.25, prof) * smoothstep(1.0 - 2.0 * cov - 0.2, 1.0 - 2.0 * cov + 0.2, d);
+}
 vec3 anatomy() {
   int part = int(floor(vPart + 0.5));
   vec3 p = vRest;
@@ -88,20 +97,27 @@ vec3 anatomy() {
   float m[${N}];
   for (int i = 0; i < ${N}; i++) m[i] = 0.0;
   float ax = abs(p.x);
+  vec2 q = vec2(ax, p.y);
   float front = smoothstep(-0.5, 2.5, p.z - 1.0), back = smoothstep(0.5, -2.5, p.z - 1.0);
+  float lines = 0.0;
   bool shorts = false;
   // lado del cuerpo: 1 = izquierdo (x > 0), 0 = derecho
   float sideL = smoothstep(-1.5, 1.5, p.x);
+  // hombro (deltoides): casquete alrededor de la articulación, en tronco y brazo
+  float dl = 1.0 - smoothstep(5.5, 8.0, min(distance(p, uShoL), distance(p, uShoR)));
   if (part == 0) {
-    m[0] = band(p.y, 40.0, 51.0, 2.0) * band(ax, 1.0, 16.0, 2.0) * front;
-    m[1] = band(p.y, 15.0, 38.0, 2.0) * band(ax, -1.0, 7.5, 1.5) * front;
-    m[2] = band(p.y, 15.0, 36.0, 2.5) * band(ax, 8.0, 17.0, 2.0) * smoothstep(-4.0, 0.0, p.z);
-    m[3] = band(p.y, 12.0, 30.0, 2.5) * band(ax, -1.0, 9.0, 1.5) * back;
-    m[4] = band(p.y, 30.0, 50.0, 2.5) * band(ax, 2.0, 17.0, 2.0) * back;
-    m[5] = band(p.y, 48.0, 60.0, 2.0) * band(ax, -1.0, 13.0, 2.0) * smoothstep(1.5, -1.0, p.z - 1.0);
-    m[6] = band(p.y, -6.0, 14.0, 2.5) * band(ax, 1.0, 16.0, 2.0) * back;
-    m[7] = band(ax, 13.0, 22.0, 2.0) * band(p.y, 42.0, 54.0, 2.0);
-    m[15] = band(p.y, 55.0, 63.0, 1.5) * band(ax, -1.0, 6.5, 1.0);
+    m[0] = ell(q, vec2(8.0, 45.5), vec2(8.5, 5.8)) * front;
+    float abs6 = pow(pow(ax / 6.8, 4.0) + pow(abs(p.y - 27.0) / 12.0, 4.0), 0.25);
+    m[1] = (1.0 - smoothstep(0.8, 1.0, abs6)) * front;
+    // separaciones de la "tableta"
+    lines = m[1] * max(1.0 - smoothstep(0.0, 0.45, ax), max(1.0 - smoothstep(0.0, 0.5, abs(p.y - 23.0)), max(1.0 - smoothstep(0.0, 0.5, abs(p.y - 29.0)), 1.0 - smoothstep(0.0, 0.5, abs(p.y - 34.5)))));
+    m[2] = ell(q, vec2(11.8, 26.0), vec2(4.8, 10.5)) * smoothstep(-4.0, 0.0, p.z);
+    m[3] = ell(q, vec2(3.4, 21.0), vec2(3.3, 9.5)) * back;
+    m[4] = ell(q, vec2(9.0 + (p.y - 38.0) * 0.12, 38.0), vec2(6.8, 10.5)) * back;
+    m[5] = (1.0 - smoothstep(0.85, 1.0, ax / 12.5 + abs(p.y - 52.5) / 7.5)) * smoothstep(1.5, -1.0, p.z - 1.0);
+    m[6] = ell(q, vec2(6.2, 4.5), vec2(7.0, 7.8)) * back;
+    m[7] = dl;
+    m[15] = ell(vec2(ax, p.y), vec2(2.5, 59.0), vec2(3.6, 3.6)) * smoothstep(-2.0, 1.0, p.z);
     shorts = p.y < uWaistY && p.y > -8.0;
   } else if (part == 1 || part == 2) {
     sideL = part == 1 ? 1.0 : 0.0;
@@ -109,10 +125,10 @@ vec3 anatomy() {
     float t = along(p, sho, el - sho);
     vec3 r = radial(p, sho, el - sho);
     float tf = along(p, el, wr - el);
-    m[7] = 1.0 - smoothstep(0.2, 0.34, t);
-    m[8] = band(t, 0.24, 0.84, 0.1) * smoothstep(-0.45, 0.45, r.z);
-    m[9] = band(t, 0.2, 0.88, 0.1) * smoothstep(0.45, -0.45, r.z);
-    m[10] = band(tf, 0.1, 0.78, 0.1) * 0.85;
+    m[7] = max(dl, 1.0 - smoothstep(0.18, 0.32, t));
+    m[8] = spindle(t, 0.22, 0.92, r.z, 0.42);
+    m[9] = spindle(t, 0.14, 0.95, -r.z, 0.45);
+    m[10] = spindle(tf, 0.0, 0.85, 1.0, 1.0) * 0.9;
   } else if (part == 3 || part == 4) {
     sideL = part == 3 ? 1.0 : 0.0;
     vec3 hip = part == 3 ? uHipL : uHipR, kn = part == 3 ? uKnL : uKnR, an = part == 3 ? uAnL : uAnR;
@@ -121,10 +137,10 @@ vec3 anatomy() {
     float ts = along(p, kn, an - kn);
     vec3 rs = radial(p, kn, an - kn);
     float inner = part == 3 ? -r.x : r.x;
-    m[11] = band(t, 0.12, 0.92, 0.08) * smoothstep(-0.35, 0.4, r.z);
-    m[12] = band(t, 0.18, 0.92, 0.08) * smoothstep(0.25, -0.45, r.z);
-    m[13] = band(t, 0.1, 0.8, 0.08) * smoothstep(0.1, 0.6, inner);
-    m[14] = band(ts, 0.06, 0.6, 0.08) * smoothstep(0.25, -0.45, rs.z);
+    m[11] = spindle(t, 0.05, 1.0, r.z, 0.42);
+    m[12] = spindle(t, 0.12, 0.95, -r.z, 0.38);
+    m[13] = spindle(t, 0.0, 0.75, inner, 0.32);
+    m[14] = spindle(ts, -0.02, 0.62, -rs.z, 0.4);
     m[6] = (1.0 - smoothstep(0.1, 0.3, t)) * smoothstep(0.2, -0.6, r.z);
     shorts = t < 0.16;
   }
@@ -140,6 +156,7 @@ vec3 anatomy() {
   float wk = clamp(work * k, 0.0, 1.0), st = clamp(stretch * k, 0.0, 1.0);
   c = mix(c, red, wk);
   c = mix(c, teal, st);
+  c *= 1.0 - 0.28 * lines * max(wk, st);
   gHi = red * wk * 0.35 + teal * st * 0.3;
   return c;
 }`)
