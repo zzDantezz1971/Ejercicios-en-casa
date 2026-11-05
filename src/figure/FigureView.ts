@@ -14,9 +14,6 @@ function anatomyFor(ex: ExerciseDef, side: Side): { L: number[]; R: number[] } {
   return muscleWeights(ex.muscles, side);
 }
 
-/** Permitir girar el maniquí arrastrando el dedo. */
-const ROTATE = false;
-
 function makeRenderer(canvas: HTMLCanvasElement | OffscreenCanvas, preserve = false): THREE.WebGLRenderer {
   const r = new THREE.WebGLRenderer({ canvas: canvas as HTMLCanvasElement, antialias: true, alpha: true, preserveDrawingBuffer: preserve });
   r.shadowMap.enabled = true;
@@ -42,8 +39,7 @@ export class FigureView {
     this.scene.mood = this.mood;
     this.resizeObs = new ResizeObserver(() => this.resize());
     this.resizeObs.observe(canvas);
-    // cámara fija: no se gira con el dedo
-    if (ROTATE) canvas.addEventListener('pointerdown', this.onDown);
+    canvas.addEventListener('pointerdown', this.onDown);
     canvas.addEventListener('pointermove', this.onMove);
     canvas.addEventListener('pointerup', this.onUp);
     canvas.addEventListener('pointercancel', this.onUp);

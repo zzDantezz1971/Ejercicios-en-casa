@@ -173,11 +173,10 @@ export class MannequinScene {
     this.motion = new Motion(spec, side);
     this.skinData = skin;
     const view = this.motion.view;
-    // cámara fija, casi en el ángulo para el que está pensado cada movimiento
-    this.azimuth = spec.az ?? (view === 'side' ? 14 : view === 'top' ? 8 : 10);
+    this.azimuth = spec.az ?? (view === 'side' ? 32 : view === 'top' ? 12 : 18);
     // De lado, el lado 2 se ve mejor desde el otro costado (si no, el brazo o pierna que trabaja queda oculto).
     if (view === 'side' && this.motion.mirrored) this.azimuth = 180 - this.azimuth;
-    this.elevation = spec.el ?? (view === 'top' ? 58 : 9);
+    this.elevation = spec.el ?? (view === 'top' ? 58 : 14);
     this.buildLights();
     if (this.skinData) {
       this.skinned = new SkinnedFigure(this.skinData, undefined, this.scene);
