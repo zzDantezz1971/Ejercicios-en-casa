@@ -78,6 +78,7 @@ export class SkinnedFigure {
   private readonly perp: number;
   private headMatrix = new THREE.Matrix4();
   private shoes: Array<{ upper: THREE.Mesh; sole: THREE.Mesh }> = [];
+  private feet: Record<'L' | 'R', { an: V3; ti: V3 }> = { L: { an: V(), ti: V() }, R: { an: V(), ti: V() } };
 
   constructor(private readonly data: SkinData, palette: SkinPalette = SKIN_PALETTE, scene: THREE.Scene) {
     const n = data.count;
@@ -178,11 +179,14 @@ export class SkinnedFigure {
     let lat = shoLat.add(hipLat);
     if (lat.lengthSq() < 1e-6) lat = V(0, 0, 1);
     lat.normalize();
+    const has = (n: string) => !!this.restFrames[n];
+    const L = (n: string) => this.restFrames[n].len * this.perp;
 
-    const set = (name: string, a: V3, b: V3, alongLen?: number) => {
+    /** Coloca un hueso desde `a` en la dirección de `b`, con su largo real (sin estirarlo). Devuelve su matriz y el extremo. */
+    const set = (name: string, a: V3, b: V3, len = L(name)) => {
       const rf = this.restFrames[name];
-      const dir = b.clone().sub(a);
-      const len = alongLen ?? dir.length();
+      let dir = b.clone().sub(a);
+      if (dir.lengthSq() < 1e-8) dir = V(0, 1, 0);
       const F = frameMatrix(dir, lat);
       const k = len / rf.len;
       const perp = this.perp * Math.max(1, Math.sqrt(k / this.perp)) * (BULK[name.slice(0, 2)] ?? 1);
@@ -196,21 +200,75 @@ export class SkinnedFigure {
       const bone = this.bones[this.data.bones.indexOf(name)];
       bone.matrixWorld.copy(M);
       if (name === 'head') this.headMatrix.copy(M);
+      return { M, end: a.clone().addScaledVector(dir.normalize(), len) };
+    };
+    /** Punto de reposo llevado a la postura actual con la matriz de un hueso. */
+    const carry = (M: THREE.Matrix4, p: V3) => p.clone().applyMatrix4(M);
+
+    /** Dos huesos (brazo o pierna) que llegan a `target` doblando el codo/rodilla hacia `pole`. */
+    const ik = (a: V3, target: V3, pole: V3, l1: number, l2: number) => {
+      const d0 = target.clone().sub(a);
+      const dist = Math.min(Math.max(d0.length(), Math.abs(l1 - l2) + 0.01), l1 + l2 - 0.01);
+      const n = d0.lengthSq() > 1e-8 ? d0.normalize() : V(0, -1, 0);
+      let pv = pole.clone().sub(a);
+      pv.sub(n.clone().multiplyScalar(pv.dot(n)));
+      if (pv.lengthSq() < 1e-6) pv = ortho(lat, n);
+      pv.normalize();
+      const x = (l1 * l1 + dist * dist - l2 * l2) / (2 * dist);
+      const hgt = Math.sqrt(Math.max(0, l1 * l1 - x * x));
+      const mid = a.clone().addScaledVector(n, x).addScaledVector(pv, hgt);
+      return { mid, end: a.clone().addScaledVector(n, dist) };
     };
 
-    set('hips', J.pel, J.mid);
-    set('chest', J.mid, J.neck);
-    set('head', J.neck, J.head);
+    // ── Columna: curva suave por la cadera, el centro y el cuello, en tres partes de largo fijo ──
+    const pel = J.pel, midJ = J.mid, neckJ = J.neck;
+    const ctrl = midJ.clone().multiplyScalar(2).sub(pel.clone().add(neckJ).multiplyScalar(0.5));
+    const bez = (t: number) => pel.clone().multiplyScalar((1 - t) * (1 - t)).add(ctrl.clone().multiplyScalar(2 * t * (1 - t))).add(neckJ.clone().multiplyScalar(t * t));
+    let chestM: THREE.Matrix4, hipsM: THREE.Matrix4, neck: V3;
+    if (has('abs')) {
+      const tot = L('hips') + L('abs') + L('chest');
+      const h = set('hips', pel, bez(L('hips') / tot));
+      const ab = set('abs', h.end, bez((L('hips') + L('abs')) / tot));
+      const ch = set('chest', ab.end, neckJ);
+      hipsM = h.M; chestM = ch.M; neck = ch.end;
+    } else {
+      const h = set('hips', pel, midJ);
+      const ch = set('chest', h.end, neckJ);
+      hipsM = h.M; chestM = ch.M; neck = ch.end;
+    }
+    set('head', neck, neck.clone().add(J.head.clone().sub(neckJ)));
+    const up = neck.clone().sub(pel).normalize();
+
     for (const side of ['L', 'R'] as const) {
       const m = S(side);
-      set('ua' + side, J['sho' + m], J['el' + m]);
-      set('fa' + side, J['el' + m], J['ha' + m]);
-      const u = J['ha' + m].clone().sub(J['el' + m]).normalize();
-      const handLen = this.restFrames['hand' + side].len * this.perp;
-      set('hand' + side, J['ha' + m], J['ha' + m].clone().addScaledVector(u, handLen), handLen);
-      set('th' + side, J['hip' + m], J['kn' + m]);
-      set('sh' + side, J['kn' + m], J['an' + m]);
-      set('foot' + side, J['an' + m], J['ti' + m]);
+      // ── Hombro en su sitio real del cuerpo; sube un poco al levantar el brazo ──
+      let sho = carry(chestM, this.restFrames['ua' + side].a);
+      const armDir = J['el' + m].clone().sub(J['sho' + m]).normalize();
+      const elev = Math.max(0, armDir.dot(up) + 0.3) / 1.3;
+      sho = sho.addScaledVector(up, 3.2 * elev);
+      if (has('cl' + side)) set('cl' + side, carry(chestM, this.restFrames['cl' + side].a), sho, sho.distanceTo(carry(chestM, this.restFrames['cl' + side].a)));
+      // ── Brazo: la mano llega a su sitio y el codo se dobla hacia donde indica la animación ──
+      const arm = ik(sho, J['ha' + m], J['el' + m], L('ua' + side), L('fa' + side));
+      set('ua' + side, sho, arm.mid);
+      const fa = set('fa' + side, arm.mid, arm.end);
+      // mano: sigue al antebrazo; apoyada en el suelo, queda plana con los dedos hacia delante
+      const u = fa.end.clone().sub(arm.mid).normalize();
+      let hd = u.clone();
+      if (fa.end.y < 5 && u.y < -0.25) {
+        hd = V(u.x, 0, u.z);
+        if (hd.lengthSq() < 0.12) hd = V(up.x, 0, up.z);
+        if (hd.lengthSq() < 1e-4) hd = V(1, 0, 0);
+        hd.normalize().add(V(0, -0.08, 0)).normalize();
+      }
+      set('hand' + side, fa.end, fa.end.clone().add(hd));
+      // ── Pierna: el pie llega a su sitio y la rodilla se dobla hacia donde indica la animación ──
+      const hip = carry(hipsM, this.restFrames['th' + side].a);
+      const leg = ik(hip, J['an' + m], J['kn' + m], L('th' + side), L('sh' + side));
+      set('th' + side, hip, leg.mid);
+      set('sh' + side, leg.mid, leg.end);
+      const toe = leg.end.clone().add(J['ti' + m].clone().sub(J['an' + m]));
+      set('foot' + side, leg.end, toe);
+      this.feet[side] = { an: leg.end, ti: toe };
     }
     this.mesh.skeleton.update();
 
@@ -218,8 +276,7 @@ export class SkinnedFigure {
     (['L', 'R'] as const).forEach((side, i) => {
       const sh = this.shoes[i];
       if (!sh) return;
-      const m = S(side);
-      const an = J['an' + m], ti = J['ti' + m];
+      const an = this.feet[side].an, ti = this.feet[side].ti;
       const d = ti.clone().sub(an);
       if (d.lengthSq() < 1e-4) d.set(1, 0, 0);
       d.normalize();

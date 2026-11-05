@@ -39,7 +39,7 @@ export const DEFAULT_PALETTE: Palette = {
   iron: '#C9D0DA', bench: '#2B323D', benchLeg: '#8893A3', mat: '#26365C', wall: '#262E39',
 };
 
-const SIDE_W = { arm: 15.5, leg: 8.5 };
+const SIDE_W = { arm: 20, leg: 8.3 };
 
 /** Lleva las articulaciones 2D a 3D según la vista del ejercicio. */
 export function to3D(spec: MotionSpec, view: string, J: Joints, pose: Pose): Record<string, V3> {

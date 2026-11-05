@@ -16,11 +16,12 @@ const ease = (x: number) => 0.5 - 0.5 * Math.cos(Math.PI * x);
 const PAIRS = ['ua', 'fa', 'th', 'sn', 'ft', 'sa', 'sTh', 'sSh', 'zE', 'zH', 'zK', 'zA'];
 
 /** Media anchura de hombros (de frente), igual que el cuerpo del maniquí. */
-export const SHOULDER = 15;
+export const SHOULDER = 20;
 /** Distancia de la base del cuello a la altura de los hombros. */
-export const SHOULDER_DROP = 8;
+export const SHOULDER_DROP = 7.8;
 
-export const LEN = { torso: 24, neck: 14, ua: 21, fa: 20.5, th: 34, sh: 33 };
+// medidas del cuerpo del maniquí (los huesos ya no se estiran: las animaciones usan las mismas)
+export const LEN = { torso: 22.1, neck: 13.6, ua: 20.9, fa: 20.3, th: 33.4, sh: 33.6 };
 
 function base(v: string): Pose {
   return {
@@ -58,7 +59,7 @@ export function joints(v: string, o: Pose): Joints {
     J.shoL = sc; J.shoR = sc; J.hipL = J.pel; J.hipR = J.pel;
   } else {
     const n = dir(o.tu + 90), m = dir(o.tl + 90);
-    J.shoL = add(sc, n, -SHOULDER); J.shoR = add(sc, n, SHOULDER); J.hipL = add(J.pel, m, -8); J.hipR = add(J.pel, m, 8);
+    J.shoL = add(sc, n, -SHOULDER); J.shoR = add(sc, n, SHOULDER); J.hipL = add(J.pel, m, -8.3); J.hipR = add(J.pel, m, 8.3);
   }
   const fl = v === 'side' ? 9 : 6;
   for (const s of ['L', 'R']) {
@@ -71,9 +72,28 @@ export function joints(v: string, o: Pose): Joints {
   return J;
 }
 
-function lerp(a: Pose, b: Pose, k: number): Pose {
+/** Articulaciones de los extremos: empiezan a moverse un poco después (movimiento más natural). */
+const DISTAL = /^(fa|sn|ft|hd|zH|zA)/;
+const PROXIMAL = /^(tl|tu|tw|lean|ua|th)/;
+
+function lerp(a: Pose, b: Pose, x: number): Pose {
   const o: Pose = {};
-  for (const key in a) o[key] = a[key] + (b[key] - a[key]) * k;
+  const kd = ease(Math.min(1, Math.max(0, (x - 0.1) / 0.9)));
+  const kp = ease(Math.min(1, x / 0.92));
+  const k = ease(x);
+  for (const key in a) {
+    const kk = DISTAL.test(key) ? kd : PROXIMAL.test(key) ? kp : k;
+    o[key] = a[key] + (b[key] - a[key]) * kk;
+  }
+  return o;
+}
+
+/** Respiración: el tronco y la cabeza se mueven muy poco y despacio, para que no parezca una estatua. */
+function breathe(p: Pose, ms: number): Pose {
+  const b = Math.sin((ms / 4200) * Math.PI * 2);
+  const o = { ...p };
+  o.tu = (o.tu ?? o.tl) - 1.1 * b;
+  o.hd = (o.hd ?? o.tu) - 0.8 * b;
   return o;
 }
 
@@ -146,9 +166,9 @@ export class Motion {
     const F = this.frames, n = F.length;
     for (let i = 0; i < n; i++) {
       const f = F[i];
-      if (t < f.h) return f.p;
+      if (t < f.h) return breathe(f.p, ms);
       t -= f.h;
-      if (t < f.d) return lerp(f.p, F[(i + 1) % n].p, ease(t / f.d));
+      if (t < f.d) return breathe(lerp(f.p, F[(i + 1) % n].p, t / f.d), ms);
       t -= f.d;
     }
     return F[0].p;
