@@ -162,7 +162,7 @@ export const RAW_SECTIONS: RawSection[] = [
  {n:'Círculos de brazos hacia atrás',z:'Hombros y pecho',per:2600,fn:t=>{const a=90+360*t;return {thL:91,snL:89,thR:91,snR:89,ua:a,fa:a-8};}},
  {n:'Mesa invertida',z:'Pecho, hombros y glúteos',mat:1,f:[
    [{tl:-128,tu:-120,hd:-100,ua:118,fa:100,sa:.9,th:-25,sn:65},500,1200],
-   [{tl:-165,tu:-168,hd:150,ua:95,fa:88,sa:.9,th:0,sn:90},1500,1200]]},
+   [{tl:-165,tu:-168,hd:-210,ua:95,fa:88,sa:.9,th:0,sn:90},1500,1200]]},
  {g:'Espalda y zona lumbar'},
  {n:'Gato-camello',z:'Columna',mat:1,f:[[{...QUAD,tl:-38,tu:8,hd:70},400,1300],[{...QUAD,tl:2,tu:-34,hd:-45},400,1300]]},
  {n:'Postura del niño',z:'Espalda y lumbar',mat:1,f:[
