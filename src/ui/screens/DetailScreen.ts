@@ -43,7 +43,7 @@ export class DetailScreen implements Screen {
         h('button', { class: 'icon-btn', 'aria-label': 'Volver', onclick: () => app.back() }, icon('back')),
         h('span', { class: 'w-sec-chip' }, icon(SECTION_STYLE[ex.section].icon), sectionTitle),
         this.favBtn),
-      h('div', { class: 'stage' }, this.canvas, ex.oneSided ? sidesMark() : null, h('span', { class: 'stage-hint' }, icon('sides'), 'Arrastra para girar')),
+      h('div', { class: 'stage' }, this.canvas, ex.oneSided ? sidesMark() : null),
       h('section', { class: 'detail-body' },
         h('h2', {}, ex.name),
         h('p', { class: 'muted' }, ex.zone, ex.viewLabel ? ` · ${ex.viewLabel.toLowerCase()}` : ''),
