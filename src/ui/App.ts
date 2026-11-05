@@ -2,7 +2,7 @@ import { HeartRate } from '../services/HeartRate';
 import { CATALOG, SECTIONS } from '../data/catalog';
 import { Store } from '../domain/Store';
 import { Thumbnails } from '../figure/FigureView';
-import { useSkin } from '../figure/skinAsset';
+import { useAnatomy } from '../figure/skinAsset';
 import { Haptics } from '../services/Haptics';
 import { ScreenAwake } from '../services/ScreenAwake';
 import { Sounds } from '../services/Sounds';
@@ -46,7 +46,7 @@ export class App {
   readonly thumbs = new Thumbnails();
   readonly heart = new HeartRate();
   private stack: Screen[] = [];
-  private realistic: boolean | null = null;
+  private mannequin: 1 | 2 | null = null;
   private scroll = new WeakMap<Screen, number>();
   private view = h('div', { class: 'view' });
   private tabbar = h('nav', { class: 'tabbar', 'aria-label': 'Secciones' });
@@ -84,10 +84,12 @@ export class App {
   }
 
   applySettings(): void {
-    const realistic = this.store.settings.mannequin !== 1;
-    if (this.realistic !== realistic) {
-      this.realistic = realistic;
-      useSkin(realistic);
+    // 1 = anatomía (cuerpo realista en gris con los músculos), 2 = realista con ropa.
+    // El maniquí de piezas queda solo de reserva si no se puede cargar el cuerpo realista.
+    const m = this.store.settings.mannequin;
+    if (this.mannequin !== m) {
+      this.mannequin = m;
+      useAnatomy(m === 1);
       this.thumbs.clear();
     }
     this.sounds.enabled = this.store.settings.sound;

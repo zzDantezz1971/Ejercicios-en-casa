@@ -2,6 +2,7 @@ import type { Catalog } from '../domain/WorkoutPlan';
 import type { ExerciseDef, SectionId } from '../domain/types';
 import { DESCRIPTIONS } from './descriptions';
 import { RAW_SECTIONS } from './rawExercises';
+import { MUSCLES_BY_EXERCISE } from './muscles';
 
 /** Ejercicios que se hacen primero con un lado y luego con el otro. */
 const ONE_SIDED = new Set([
@@ -65,6 +66,7 @@ function buildSections(): SectionInfo[] {
         oneSided: ONE_SIDED.has(id),
         badges: b,
         description: DESCRIPTIONS[id],
+        muscles: MUSCLES_BY_EXERCISE[id],
         motion,
         viewLabel: raw.top ?? (motion.v === 'front' ? 'De frente' : undefined),
       } as ExerciseDef);

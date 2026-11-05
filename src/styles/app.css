@@ -687,3 +687,10 @@ button:focus-visible, input:focus-visible, label:focus-within { outline: 2px sol
 .bmi-tag.veryHigh { color: var(--danger); background: color-mix(in srgb, var(--danger) 15%, transparent); }
 .rest-card .bmi-row { padding: 4px 0; }
 .profile-link { align-self: flex-start; }
+
+/* Músculos de cada ejercicio */
+.muscles { display: flex; flex-direction: column; gap: 4px; margin: 4px 0 2px; }
+.mu-line { display: flex; align-items: baseline; gap: 6px; margin: 0; flex-wrap: wrap; font-size: .95rem; }
+.mu-dot { width: 10px; height: 10px; border-radius: 50%; flex: none; align-self: center; }
+.mu-line.work .mu-dot { background: #E5142A; }
+.mu-line.stretch .mu-dot { background: #00B8A8; }

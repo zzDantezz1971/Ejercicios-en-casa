@@ -1,3 +1,4 @@
+import { MUSCLE_NAMES, parseMuscles } from '../../figure/anatomy';
 import { RoutineEditor } from '../../domain/RoutineEditor';
 import type { ExerciseDef } from '../../domain/types';
 import { FigureView } from '../../figure/FigureView';
@@ -44,6 +45,7 @@ export class DetailScreen implements Screen {
         h('h2', {}, ex.name),
         h('p', { class: 'muted' }, ex.zone, ex.viewLabel ? ` · ${ex.viewLabel.toLowerCase()}` : ''),
         badgeList(ex.badges),
+        musclesInfo(ex.muscles),
         ex.oneSided ? h('p', { class: 'note' }, icon('sides'), 'Se hace por lados: a mitad del tiempo oirás el aviso para cambiar de lado.') : null,
         d
           ? h('div', { class: 'howto' },
@@ -100,6 +102,20 @@ export class DetailScreen implements Screen {
     this.app.back();
   }
 
+}
+
+/** Músculos que trabaja y que estira, con los mismos colores que el maniquí anatomía. */
+function musclesInfo(spec: string | undefined): HTMLElement | null {
+  const toks = parseMuscles(spec);
+  if (!toks.length) return null;
+  const names = (kinds: string[]) => [...new Set(toks.filter((t) => kinds.includes(t.kind)).map((t) => MUSCLE_NAMES[t.muscle]))];
+  const main = names(['work']), second = names(['work2']).filter((n) => !main.includes(n)), stretch = names(['stretch']);
+  const line = (cls: string, label: string, list: string[], extra?: string[]) => list.length || extra?.length
+    ? h('p', { class: 'mu-line ' + cls }, h('span', { class: 'mu-dot' }), h('strong', {}, label + ' '), [...list, ...(extra ?? []).map((x) => `${x} (suave)`)].join(', '))
+    : null;
+  return h('div', { class: 'muscles' },
+    line('work', 'Trabaja:', main, second),
+    line('stretch', 'Estira:', stretch));
 }
 
 function how(ic: Parameters<typeof icon>[0], title: string, text: string): HTMLElement {

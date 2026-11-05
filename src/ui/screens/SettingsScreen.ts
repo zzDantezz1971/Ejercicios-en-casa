@@ -62,12 +62,12 @@ export class SettingsScreen implements Screen {
         current === n ? h('span', { class: 'mq-check' }, icon('check')) : null);
       // vista previa: el maniquí elegido se dibuja con el ajuste actual; el otro se pide aparte
       const ex = this.app.catalog.get('curl-de-biceps');
-      if (ex) void this.app.thumbs.preview(ex, n === 2).then((u) => (img.src = u));
+      if (ex) void this.app.thumbs.preview(ex, n).then((u) => (img.src = u));
       return card;
     };
     return h('section', { class: 'mq-picker' },
-      opt(1, 'Maniquí 1', 'De piezas, con expresiones, reloj y muñequera'),
-      opt(2, 'Maniquí 2', 'Realista, con cuerpo y manos humanas'));
+      opt(1, 'Maniquí 1 · Anatomía', 'En gris, con los músculos que trabajan (rojo) y que se estiran (turquesa)'),
+      opt(2, 'Maniquí 2 · Realista', 'Con ropa deportiva, cuerpo y manos humanas'));
   }
 
   /** Pausa entre ejercicios, una por apartado. */

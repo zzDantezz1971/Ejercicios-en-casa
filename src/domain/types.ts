@@ -76,6 +76,8 @@ export interface ExerciseDef {
   badges?: Badge[];
   description?: ExerciseDescription;
   motion: MotionSpec;
+  /** Músculos que trabaja y estira (ver data/muscles.ts). */
+  muscles?: string;
   /** Texto que indica desde dónde se ve la figura, si no es de lado. */
   viewLabel?: string;
 }

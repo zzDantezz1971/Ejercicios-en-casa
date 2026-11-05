@@ -3,7 +3,13 @@ import type { ExerciseDef } from '../domain/types';
 import { MannequinScene, type Mood, type Palette } from './Mannequin';
 import type { Side } from './poses';
 import type { SkinData } from './SkinnedFigure';
-import { getLoadedSkin, getSkin } from './skinAsset';
+import { anatomyOn, getLoadedSkin, getSkin } from './skinAsset';
+import { muscleWeights } from './anatomy';
+
+/** Músculos a marcar si está elegido el maniquí anatomía. */
+function anatomyFor(ex: ExerciseDef, side: Side, on = anatomyOn()): { L: number[]; R: number[] } | undefined {
+  return on ? muscleWeights(ex.muscles, side) : undefined;
+}
 
 function makeRenderer(canvas: HTMLCanvasElement | OffscreenCanvas, preserve = false): THREE.WebGLRenderer {
   const r = new THREE.WebGLRenderer({ canvas: canvas as HTMLCanvasElement, antialias: true, alpha: true, preserveDrawingBuffer: preserve });
@@ -26,7 +32,7 @@ export class FigureView {
   constructor(private readonly canvas: HTMLCanvasElement, exercise: ExerciseDef, palette?: Palette, private readonly skin: SkinData | undefined = getSkin()) {
     this.renderer = makeRenderer(canvas);
     this.renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
-    this.scene = new MannequinScene(exercise.motion, palette, undefined, skin);
+    this.scene = new MannequinScene(exercise.motion, palette, undefined, skin, skin ? anatomyFor(exercise, undefined) : undefined);
     this.scene.mood = this.mood;
     this.resizeObs = new ResizeObserver(() => this.resize());
     this.resizeObs.observe(canvas);
@@ -73,7 +79,7 @@ export class FigureView {
     const az = this.scene.azimuth;
     const keepAngle = this.scene.motion.spec === exercise.motion;
     this.scene.dispose();
-    this.scene = new MannequinScene(exercise.motion, palette, side, this.skin);
+    this.scene = new MannequinScene(exercise.motion, palette, side, this.skin, this.skin ? anatomyFor(exercise, side) : undefined);
     this.scene.mood = this.mood;
     if (keepAngle) this.scene.azimuth = az;
     const w = this.canvas.clientWidth, h = this.canvas.clientHeight;
@@ -134,7 +140,7 @@ export class FigureView {
 export class Thumbnails {
   private renderer: THREE.WebGLRenderer | null = null;
   private cache = new Map<string, string>();
-  private queue: Array<{ key: string; ex: ExerciseDef; skin: SkinData | undefined; done: (url: string) => void }> = [];
+  private queue: Array<{ key: string; ex: ExerciseDef; skin: SkinData | undefined; anatomy: boolean; done: (url: string) => void }> = [];
   private busy = false;
 
   constructor(private readonly palette?: Palette, private readonly w = 330, private readonly h = 220) {}
@@ -146,20 +152,20 @@ export class Thumbnails {
 
   /** Miniatura con el maniquí elegido en Ajustes. */
   get(ex: ExerciseDef): Promise<string> {
-    return this.request(ex.id, ex, getSkin());
+    return this.request(ex.id, ex, getSkin(), anatomyOn());
   }
 
-  /** Miniatura con un maniquí concreto (para la vista previa de Ajustes). */
-  preview(ex: ExerciseDef, realistic: boolean): Promise<string> {
-    const skin = realistic ? getLoadedSkin() : undefined;
-    return this.request(`preview:${realistic && skin ? 2 : 1}:${ex.id}`, ex, skin);
+  /** Miniatura con un maniquí concreto (para la vista previa de Ajustes): 1 = anatomía, 2 = realista. */
+  preview(ex: ExerciseDef, mannequin: 1 | 2): Promise<string> {
+    const skin = getLoadedSkin();
+    return this.request(`preview:${skin ? mannequin : 0}:${ex.id}`, ex, skin, mannequin === 1);
   }
 
-  private request(key: string, ex: ExerciseDef, skin: SkinData | undefined): Promise<string> {
+  private request(key: string, ex: ExerciseDef, skin: SkinData | undefined, anatomy: boolean): Promise<string> {
     const hit = this.cache.get(key);
     if (hit) return Promise.resolve(hit);
     return new Promise((done) => {
-      this.queue.push({ key, ex, skin, done });
+      this.queue.push({ key, ex, skin, anatomy, done });
       this.pump();
     });
   }
@@ -171,7 +177,7 @@ export class Thumbnails {
       const job = this.queue.shift()!;
       let url = this.cache.get(job.key);
       if (!url) {
-        url = this.draw(job.ex, job.skin);
+        url = this.draw(job.ex, job.skin, job.anatomy);
         this.cache.set(job.key, url);
       }
       job.done(url);
@@ -180,14 +186,14 @@ export class Thumbnails {
     });
   }
 
-  private draw(ex: ExerciseDef, skin: SkinData | undefined): string {
+  private draw(ex: ExerciseDef, skin: SkinData | undefined, anatomy: boolean): string {
     if (!this.renderer) {
       const c = document.createElement('canvas');
       this.renderer = makeRenderer(c, true);
       this.renderer.setPixelRatio(1);
       this.renderer.setSize(this.w * 2, this.h * 2, false);
     }
-    const sc = new MannequinScene(ex.motion, this.palette, undefined, skin);
+    const sc = new MannequinScene(ex.motion, this.palette, undefined, skin, skin ? anatomyFor(ex, undefined, anatomy) : undefined);
     sc.mood = 'relaxed';
     sc.setAspect(this.w / this.h);
     sc.update(sc.motion.total * 0.45);

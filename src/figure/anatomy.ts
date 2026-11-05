@@ -1,0 +1,150 @@
+import * as THREE from 'three';
+import type { SkinData } from './SkinnedFigure';
+
+/* Maniquí "anatomía": el cuerpo realista en gris con los músculos del ejercicio coloreados
+   (rojo = trabaja, turquesa = se estira). Las zonas se calculan en la postura de reposo,
+   así se mueven con la piel. */
+
+export const MUSCLES = ['pecho', 'abdominales', 'oblicuos', 'lumbar', 'espalda', 'trapecio', 'gluteos', 'deltoides', 'biceps',
+  'triceps', 'antebrazo', 'cuadriceps', 'isquios', 'aductores', 'gemelos', 'cuello'] as const;
+export type Muscle = (typeof MUSCLES)[number];
+
+export const MUSCLE_NAMES: Record<Muscle, string> = {
+  pecho: 'Pecho', abdominales: 'Abdominales', oblicuos: 'Oblicuos', lumbar: 'Zona lumbar', espalda: 'Espalda (dorsales)',
+  trapecio: 'Trapecio', gluteos: 'Glúteos', deltoides: 'Hombros', biceps: 'Bíceps', triceps: 'Tríceps', antebrazo: 'Antebrazos',
+  cuadriceps: 'Cuádriceps', isquios: 'Isquiotibiales', aductores: 'Aductores', gemelos: 'Gemelos', cuello: 'Cuello',
+};
+
+export interface MuscleToken { muscle: Muscle; kind: 'work' | 'work2' | 'stretch'; side?: 'L' | 'R' }
+
+/** Lee "+biceps ~antebrazo -cuadriceps@R". */
+export function parseMuscles(spec: string | undefined): MuscleToken[] {
+  if (!spec) return [];
+  return spec.trim().split(/\s+/).map((tok) => {
+    const kind = tok[0] === '+' ? 'work' : tok[0] === '~' ? 'work2' : 'stretch';
+    const [m, side] = tok.slice(1).split('@');
+    return { muscle: m as Muscle, kind, side: side as 'L' | 'R' | undefined };
+  });
+}
+
+/** Peso de cada músculo en cada lado del cuerpo (+1 trabaja, +0.55 secundario, -1 se estira). */
+export function muscleWeights(spec: string | undefined, side: 1 | 2 | undefined): { L: number[]; R: number[] } {
+  const L = MUSCLES.map(() => 0), R = MUSCLES.map(() => 0);
+  for (const t of parseMuscles(spec)) {
+    const i = MUSCLES.indexOf(t.muscle);
+    if (i < 0) continue;
+    const v = t.kind === 'work' ? 1 : t.kind === 'work2' ? 0.55 : -1;
+    // lado 2: el lado del cuerpo se cambia; sin lado concreto (fichas): los dos
+    const s = t.side && side ? (side === 2 ? (t.side === 'L' ? 'R' : 'L') : t.side) : undefined;
+    if (!s || s === 'L') L[i] = v;
+    if (!s || s === 'R') R[i] = v;
+  }
+  return { L, R };
+}
+
+function b64(s: string): Uint8Array {
+  const b = atob(s);
+  const o = new Uint8Array(b.length);
+  for (let i = 0; i < b.length; i++) o[i] = b.charCodeAt(i);
+  return o;
+}
+
+const N = MUSCLES.length;
+
+/** Material del maniquí anatomía. */
+export function anatomyMaterial(g: THREE.BufferGeometry, d: SkinData, w: { L: number[]; R: number[] }): THREE.Material {
+  if (!g.getAttribute('aPart') && d.part) g.setAttribute('aPart', new THREE.BufferAttribute(Float32Array.from(b64(d.part)), 1));
+  const P = (k: string, i: 0 | 1) => new THREE.Vector3(...(d.rest[k][i] as [number, number, number]));
+  const uniforms = {
+    uWL: { value: w.L }, uWR: { value: w.R },
+    uShoL: { value: P('uaL', 0) }, uShoR: { value: P('uaR', 0) }, uElL: { value: P('uaL', 1) }, uElR: { value: P('uaR', 1) },
+    uWrL: { value: P('faL', 1) }, uWrR: { value: P('faR', 1) },
+    uHipL: { value: P('thL', 0) }, uHipR: { value: P('thR', 0) }, uKnL: { value: P('thL', 1) }, uKnR: { value: P('thR', 1) },
+    uAnL: { value: P('shL', 1) }, uAnR: { value: P('shR', 1) },
+    uWaistY: { value: d.clothes?.waistY ?? 15 },
+  };
+  const mat = new THREE.MeshStandardMaterial({ roughness: 0.55, metalness: 0 });
+  mat.onBeforeCompile = (sh) => {
+    Object.assign(sh.uniforms, uniforms);
+    sh.vertexShader = sh.vertexShader
+      .replace('#include <common>', '#include <common>\nattribute float aPart;\nvarying vec3 vRest;\nflat varying float vPart;')
+      .replace('#include <begin_vertex>', '#include <begin_vertex>\nvRest = position;\nvPart = aPart;');
+    sh.fragmentShader = sh.fragmentShader.replace('#include <common>', `#include <common>
+varying vec3 vRest;
+flat varying float vPart;
+uniform float uWL[${N}], uWR[${N}];
+uniform vec3 uShoL, uShoR, uElL, uElR, uWrL, uWrR, uHipL, uHipR, uKnL, uKnR, uAnL, uAnR;
+uniform float uWaistY;
+vec3 gHi;
+float band(float v, float a, float b, float s) { return smoothstep(a - s, a + s, v) * (1.0 - smoothstep(b - s, b + s, v)); }
+float along(vec3 p, vec3 a, vec3 dir) { return dot(p - a, dir) / dot(dir, dir); }
+vec3 radial(vec3 p, vec3 a, vec3 dir) { float t = along(p, a, dir); return normalize(p - (a + dir * t) + vec3(1e-4)); }
+vec3 anatomy() {
+  int part = int(floor(vPart + 0.5));
+  vec3 p = vRest;
+  gHi = vec3(0.0);
+  if (part == 7) return vec3(0.55, 0.47, 0.5);
+  if (part == 5) return vec3(0.95);
+  float m[${N}];
+  for (int i = 0; i < ${N}; i++) m[i] = 0.0;
+  float ax = abs(p.x);
+  float front = smoothstep(-0.5, 2.5, p.z - 1.0), back = smoothstep(0.5, -2.5, p.z - 1.0);
+  bool shorts = false;
+  // lado del cuerpo: 1 = izquierdo (x > 0), 0 = derecho
+  float sideL = smoothstep(-1.5, 1.5, p.x);
+  if (part == 0) {
+    m[0] = band(p.y, 40.0, 51.0, 2.0) * band(ax, 1.0, 16.0, 2.0) * front;
+    m[1] = band(p.y, 15.0, 38.0, 2.0) * band(ax, -1.0, 7.5, 1.5) * front;
+    m[2] = band(p.y, 15.0, 36.0, 2.5) * band(ax, 8.0, 17.0, 2.0) * smoothstep(-4.0, 0.0, p.z);
+    m[3] = band(p.y, 12.0, 30.0, 2.5) * band(ax, -1.0, 9.0, 1.5) * back;
+    m[4] = band(p.y, 30.0, 50.0, 2.5) * band(ax, 2.0, 17.0, 2.0) * back;
+    m[5] = band(p.y, 48.0, 60.0, 2.0) * band(ax, -1.0, 13.0, 2.0) * smoothstep(1.5, -1.0, p.z - 1.0);
+    m[6] = band(p.y, -6.0, 14.0, 2.5) * band(ax, 1.0, 16.0, 2.0) * back;
+    m[7] = band(ax, 13.0, 22.0, 2.0) * band(p.y, 42.0, 54.0, 2.0);
+    m[15] = band(p.y, 55.0, 63.0, 1.5) * band(ax, -1.0, 6.5, 1.0);
+    shorts = p.y < uWaistY && p.y > -8.0;
+  } else if (part == 1 || part == 2) {
+    sideL = part == 1 ? 1.0 : 0.0;
+    vec3 sho = part == 1 ? uShoL : uShoR, el = part == 1 ? uElL : uElR, wr = part == 1 ? uWrL : uWrR;
+    float t = along(p, sho, el - sho);
+    vec3 r = radial(p, sho, el - sho);
+    float tf = along(p, el, wr - el);
+    m[7] = 1.0 - smoothstep(0.2, 0.34, t);
+    m[8] = band(t, 0.24, 0.84, 0.1) * smoothstep(-0.45, 0.45, r.z);
+    m[9] = band(t, 0.2, 0.88, 0.1) * smoothstep(0.45, -0.45, r.z);
+    m[10] = band(tf, 0.1, 0.78, 0.1) * 0.85;
+  } else if (part == 3 || part == 4) {
+    sideL = part == 3 ? 1.0 : 0.0;
+    vec3 hip = part == 3 ? uHipL : uHipR, kn = part == 3 ? uKnL : uKnR, an = part == 3 ? uAnL : uAnR;
+    float t = along(p, hip, kn - hip);
+    vec3 r = radial(p, hip, kn - hip);
+    float ts = along(p, kn, an - kn);
+    vec3 rs = radial(p, kn, an - kn);
+    float inner = part == 3 ? -r.x : r.x;
+    m[11] = band(t, 0.12, 0.92, 0.08) * smoothstep(-0.35, 0.4, r.z);
+    m[12] = band(t, 0.18, 0.92, 0.08) * smoothstep(0.25, -0.45, r.z);
+    m[13] = band(t, 0.1, 0.8, 0.08) * smoothstep(0.1, 0.6, inner);
+    m[14] = band(ts, 0.06, 0.6, 0.08) * smoothstep(0.25, -0.45, rs.z);
+    m[6] = (1.0 - smoothstep(0.1, 0.3, t)) * smoothstep(0.2, -0.6, r.z);
+    shorts = t < 0.16;
+  }
+  float work = 0.0, stretch = 0.0;
+  for (int i = 0; i < ${N}; i++) {
+    float w = mix(uWR[i], uWL[i], sideL);
+    work = max(work, m[i] * max(w, 0.0));
+    stretch = max(stretch, m[i] * max(-w, 0.0));
+  }
+  vec3 c = shorts ? vec3(0.12, 0.15, 0.2) : vec3(0.6, 0.64, 0.7);
+  vec3 red = vec3(0.9, 0.08, 0.16), teal = vec3(0.0, 0.72, 0.66);
+  float k = shorts ? 0.5 : 1.0;
+  float wk = clamp(work * k, 0.0, 1.0), st = clamp(stretch * k, 0.0, 1.0);
+  c = mix(c, red, wk);
+  c = mix(c, teal, st);
+  gHi = red * wk * 0.35 + teal * st * 0.3;
+  return c;
+}`)
+      .replace('vec4 diffuseColor = vec4( diffuse, opacity );', 'vec4 diffuseColor = vec4( anatomy(), opacity );')
+      .replace('#include <emissivemap_fragment>', '#include <emissivemap_fragment>\ntotalEmissiveRadiance += gHi;');
+  };
+  return mat;
+}

@@ -4,6 +4,16 @@ import type { SkinData } from './SkinnedFigure';
    Si no se puede cargar, las figuras usan el maniquí de piezas como reserva. */
 let skin: SkinData | undefined;
 let enabled = true;
+let anatomy = false;
+
+/** Maniquí anatomía: el realista en gris con los músculos marcados. */
+export function useAnatomy(on: boolean): void {
+  anatomy = on;
+}
+
+export function anatomyOn(): boolean {
+  return anatomy;
+}
 
 /** Elegir entre el maniquí realista (true) y el de piezas (false). */
 export function useSkin(on: boolean): void {

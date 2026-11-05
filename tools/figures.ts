@@ -4,6 +4,7 @@ import * as THREE from 'three';
 import { SECTIONS } from '../src/data/catalog';
 import { MannequinScene } from '../src/figure/Mannequin';
 import type { SkinData } from '../src/figure/SkinnedFigure';
+import { muscleWeights } from '../src/figure/anatomy';
 
 const q = new URLSearchParams(location.search);
 const ids = q.get('ids')?.split(',');
@@ -26,7 +27,7 @@ for (const ex of list) {
   row.innerHTML = `<b>${ex.id}</b>`;
   out.append(row);
   for (const t of times) {
-    const sc = new MannequinScene(ex.motion, undefined, side, skin);
+    const sc = new MannequinScene(ex.motion, undefined, side, skin, skin && q.get('anat') ? muscleWeights(ex.muscles, side) : undefined);
     sc.setAspect(1.5);
     sc.mood = mood;
     sc.update(sc.motion.total * t);
