@@ -17,6 +17,7 @@ const ONE_SIDED = new Set([
   'triceps-detras-de-la-cabeza',
   'estiramiento-de-antebrazos',
   'torsion-lumbar-tumbado',
+  'torsion-de-columna-con-piernas-cruzadas',
   'hilo-en-la-aguja',
   'inclinacion-lateral-de-pie',
   'figura-4-gluteo-y-piriforme',

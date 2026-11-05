@@ -176,7 +176,7 @@ export const RAW_SECTIONS: RawSection[] = [
    [{uaL:180,faL:180,uaR:0,faR:0,th:25,sn:100,hd:-110},1500,1000],
    [{uaL:180,faL:180,uaR:0,faR:0,th:93,sn:90,sTh:.35,sSh:.4},200,1000],
    [{uaL:180,faL:180,uaR:0,faR:0,th:155,sn:80,hd:-70},1500,1000]]},
- {n:'Torsión de columna con piernas cruzadas',z:'Columna y lumbar',v:'top',mat:'top',top:'Vista desde arriba',b:['lumbar'],f:[
+ {n:'Torsión de columna con piernas cruzadas',split:true,z:'Columna y lumbar',v:'top',mat:'top',top:'Vista desde arriba',b:['lumbar'],f:[
    [{uaL:-112,faL:-104,uaR:-68,faR:-76,thL:96,snL:76,thR:86,snR:104,sThL:.4,sThR:.4,sShL:.55,sShR:.45},250,1100],
    [{uaL:-112,faL:-104,uaR:-68,faR:-76,thL:14,snL:92,thR:4,snR:118,sThL:.97,sThR:.95,sShL:.85,sShR:.7,hd:-106},700,1100],
    [{uaL:-112,faL:-104,uaR:-68,faR:-76,thL:96,snL:76,thR:86,snR:104,sThL:.4,sThR:.4,sShL:.55,sShR:.45},250,1100],
