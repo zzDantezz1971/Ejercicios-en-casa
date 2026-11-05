@@ -638,3 +638,15 @@ button:focus-visible, input:focus-visible, label:focus-within { outline: 2px sol
 .wd-never { display: flex; align-items: center; gap: 8px; font-size: .85rem; color: var(--muted); }
 .wd-never input { width: 18px; height: 18px; accent-color: var(--accent); }
 .watch .switch-row { display: flex; align-items: center; gap: 12px; border-top: 1px solid var(--line); padding-top: 10px; }
+
+/* Calorías */
+.kcal-summary { display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 700; margin: 0; flex-wrap: wrap; }
+.kcal-summary.left { justify-content: flex-start; }
+.kcal-summary .ico, .h-kcal .ico { color: var(--sec-warm); }
+.h-extra { display: flex; gap: 12px; flex-wrap: wrap; }
+.h-kcal { display: inline-flex; align-items: center; gap: 5px; font-size: .85rem; color: var(--muted); }
+.h-kcal .ico { width: 14px; height: 14px; }
+.stats-row.four .stat:nth-child(n+5) .ico { color: var(--sec-warm); }
+.profile-row { grid-template-columns: 1fr auto; }
+.profile-row .stepper { min-width: 170px; }
+.secs.unset { color: var(--muted); }

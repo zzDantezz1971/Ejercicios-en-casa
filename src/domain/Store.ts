@@ -298,7 +298,7 @@ export class Store {
   }
 
   saveSettings(settings: Settings): void {
-    this.data.settings = { ...settings, rest: { ...settings.rest } };
+    this.data.settings = { ...settings, rest: { ...settings.rest }, profile: { ...settings.profile } };
     this.persist();
   }
 
@@ -343,6 +343,7 @@ export class Store {
     const rawSettings = (input.settings ?? {}) as Partial<Settings> & { restSeconds?: number };
     const { restSeconds, ...known } = rawSettings;
     const settings: Settings = { ...DEFAULT_SETTINGS, ...known };
+    settings.profile = { ...DEFAULT_SETTINGS.profile, ...(known.profile ?? {}) };
     // v anteriores: una sola pausa para todo -> la misma en cada apartado
     const oldRest = Number.isFinite(restSeconds) ? (restSeconds as number) : undefined;
     settings.rest = Object.fromEntries(

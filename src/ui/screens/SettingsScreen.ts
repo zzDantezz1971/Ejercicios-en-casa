@@ -89,6 +89,32 @@ export class SettingsScreen implements Screen {
       }));
   }
 
+  /** Edad, peso y sexo para calcular las calorías. */
+  private profileCard(s: Settings): HTMLElement {
+    const p = s.profile;
+    const set = (patch: Partial<Settings['profile']>) => this.update({ profile: { ...p, ...patch } });
+    const stepper = (label: string, value: number | null, unit: string, start: number, step: number, min: number, max: number, onSet: (v: number) => void) => {
+      const v = value ?? start;
+      const fmt = (n: number) => `${String(n).replace('.', ',')} ${unit}`;
+      return h('div', { class: 'rest-row profile-row' },
+        h('span', { class: 'rest-name' }, label),
+        h('div', { class: 'stepper' },
+          h('button', { 'aria-label': `Menos ${label.toLowerCase()}`, disabled: value !== null && v <= min, onclick: () => onSet(value === null ? start : Math.max(min, v - step)) }, '−'),
+          h('span', { class: 'secs' + (value === null ? ' unset' : '') }, value === null ? '—' : fmt(v)),
+          h('button', { 'aria-label': `Más ${label.toLowerCase()}`, disabled: value !== null && v >= max, onclick: () => onSet(value === null ? start : Math.min(max, v + step)) }, '+')));
+    };
+    const sexBtn = (v: 'h' | 'm', label: string) =>
+      h('button', { class: 'seg' + (p.sex === v ? ' on' : ''), 'aria-pressed': String(p.sex === v), onclick: () => set({ sex: v }) }, label);
+    return h('section', { class: 'card setting rest-card' },
+      h('div', { class: 'rest-head' },
+        h('span', { class: 'set-icon' }, icon('flame')),
+        h('div', { class: 'set-text' }, h('strong', {}, 'Para calcular las calorías'),
+          h('p', { class: 'muted small' }, 'Solo se guardan en tu móvil. Con el peso ya se estiman; con la edad y el reloj conectado, el cálculo usa tus pulsaciones.'))),
+      stepper('Edad', p.age, 'años', 50, 1, 15, 99, (v) => set({ age: v })),
+      stepper('Peso', p.weight, 'kg', 75, 0.5, 30, 200, (v) => set({ weight: v })),
+      h('div', { class: 'rest-row profile-row' }, h('span', { class: 'rest-name' }, 'Sexo'), h('div', { class: 'segmented' }, sexBtn('h', 'Hombre'), sexBtn('m', 'Mujer'))));
+  }
+
   /** Conexión con el reloj para ver las pulsaciones. */
   private watchSection(): HTMLElement {
     const hr = this.app.heart;
@@ -208,6 +234,8 @@ export class SettingsScreen implements Screen {
           this.app.voice.say('Así sonarán los avisos. Siguiente: curl de bíceps.');
         },
       }, icon('volume'), 'Probar sonido y voz'),
+      h('h3', { class: 'block-title' }, 'Mis datos'),
+      this.profileCard(s),
       h('h3', { class: 'block-title' }, 'Reloj'),
       this.watchSection(),
       h('h3', { class: 'block-title' }, 'Copia de seguridad'),

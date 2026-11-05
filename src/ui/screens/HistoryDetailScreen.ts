@@ -4,6 +4,7 @@ import type { App, Screen } from '../App';
 import { confirmDialog, h, humanDuration, kg, mmss } from '../dom';
 import { icon, SECTION_STYLE } from '../icons';
 import { startWorkout } from '../components/startWorkout';
+import { caloriesOf } from '../../domain/calories';
 
 /** Detalle de un entrenamiento del historial: qué se hizo, cuánto tiempo y repetirlo. */
 export class HistoryDetailScreen implements Screen {
@@ -53,6 +54,7 @@ export class HistoryDetailScreen implements Screen {
           stat('check', `${e.exercisesDone}/${e.exercisesPlanned}`, 'hechos'),
           stat('next', String(items.length ? skipped : e.exercisesPlanned - e.exercisesDone), 'saltados')),
         !e.completed ? h('p', { class: 'note' }, icon('info'), 'Se terminó antes de acabar la tabla.') : null,
+        kcalNote(e, app),
         e.heart ? heartCard(e.heart) : null,
         ...(items.length
           ? list
@@ -86,6 +88,13 @@ export class HistoryDetailScreen implements Screen {
     if (i >= 0) this.app.store.deleteHistoryAt(i);
     this.app.back();
   }
+}
+
+function kcalNote(e: HistoryEntry, app: App): HTMLElement {
+  const c = caloriesOf(e, app.store.settings.profile);
+  if (!c) return h('p', { class: 'muted small' }, 'Pon tu peso en Ajustes › Mis datos para ver las calorías.');
+  return h('p', { class: 'kcal-summary left' }, icon('flame'), `Unas ${c.kcal} kcal`,
+    h('span', { class: 'muted small' }, c.method === 'pulso' ? ' · calculadas con tu pulso' : ' · estimadas por tipo de ejercicio y tiempo'));
 }
 
 /** Pulso medio, máximo y mínimo, con la gráfica de la sesión. */

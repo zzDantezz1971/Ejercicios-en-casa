@@ -108,6 +108,16 @@ export interface Settings {
   mannequin: 1 | 2;
   /** Al empezar, preguntar por el reloj (pulsaciones) si no está conectado. */
   askWatch: boolean;
+  /** Datos personales para calcular las calorías. */
+  profile: Profile;
+}
+
+export interface Profile {
+  age: number | null;
+  /** kg */
+  weight: number | null;
+  /** h = hombre, m = mujer */
+  sex: 'h' | 'm';
 }
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -118,6 +128,7 @@ export const DEFAULT_SETTINGS: Settings = {
   voice: true,
   mannequin: 2,
   askWatch: true,
+  profile: { age: null, weight: null, sex: 'h' },
 };
 
 export interface HistoryEntry {

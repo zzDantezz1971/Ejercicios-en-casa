@@ -1,5 +1,6 @@
 import type { SessionSummary } from '../../domain/WorkoutSession';
 import { SECTION_TITLES, type HeartSummary } from '../../domain/types';
+import { caloriesOf } from '../../domain/calories';
 import type { App, Screen } from '../App';
 import { h, humanDuration } from '../dom';
 import { icon, SECTION_STYLE } from '../icons';
@@ -39,10 +40,20 @@ export class SummaryScreen implements Screen {
             }))
           : null,
         heart ? h('p', { class: 'hr-summary' }, icon('heart'), `Pulso medio ${heart.avg} · máximo ${heart.max} ppm`) : null,
+        this.kcal(s, heart),
         s.exercisesDone ? h('p', { class: 'muted small' }, 'Guardado en el historial.') : null,
         s.exercisesDone && backupDue(app) ? backupCard(app, { question: true }) : null,
         h('button', { class: 'btn primary block big', onclick: () => this.app.openTab('inicio') }, 'Volver al inicio')),
     );
+  }
+
+  /** Calorías aproximadas, o cómo verlas si faltan los datos. */
+  private kcal(s: SessionSummary, heart?: HeartSummary | null): HTMLElement | null {
+    if (!s.exercisesDone) return null;
+    const c = caloriesOf({ date: s.startedAt.toISOString(), durationSec: s.durationSec, exercisesDone: s.exercisesDone, exercisesPlanned: s.exercisesPlanned,
+      sections: s.sections, completed: s.completed, items: s.items, ...(heart ? { heart } : {}) }, this.app.store.settings.profile);
+    if (!c) return h('p', { class: 'muted small' }, 'Pon tu peso en Ajustes › Mis datos para ver las calorías.');
+    return h('p', { class: 'kcal-summary' }, icon('flame'), `Unas ${c.kcal} kcal`, h('span', { class: 'muted small' }, c.method === 'pulso' ? ' · con tu pulso' : ' · estimadas'));
   }
 
   onBack(): boolean {
