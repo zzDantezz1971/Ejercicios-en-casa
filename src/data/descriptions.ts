@@ -210,6 +210,13 @@ export const DESCRIPTIONS: Record<string, ExerciseDescription> = {
     mistakes: 'Tirar del cuello o subir con impulso.',
     easier: 'Recorrido más corto.',
   },
+  'crunch-con-brazos-estirados': {
+    start: 'Tumbado boca arriba en la esterilla, rodillas dobladas y pies apoyados. Brazos estirados por detrás de la cabeza, apoyados en el suelo.',
+    move: 'Sube los hombros y la parte alta de la espalda llevando los brazos estirados hacia arriba, sin despegar la zona lumbar. Vuelve despacio a la posición de inicio y repite.',
+    tip: 'Los brazos acompañan al tronco, no tiran de él: el esfuerzo sale del abdomen. Mantén la barbilla separada del pecho. Suelta el aire al subir y tómalo al bajar.',
+    mistakes: 'Dar impulso con los brazos, tirar del cuello o despegar la zona lumbar del suelo.',
+    easier: 'Haz el crunch con los brazos cruzados sobre el pecho o sube menos.',
+  },
   'crunch-inverso': {
     start: 'Tumbado boca arriba, brazos junto al cuerpo y piernas dobladas en el aire.',
     move: 'Lleva las rodillas hacia el pecho despegando un poco la cadera del suelo. Baja despacio.',

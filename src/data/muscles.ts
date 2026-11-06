@@ -40,6 +40,7 @@ export const MUSCLES_BY_EXERCISE: Record<string, string> = {
   'fondos-de-triceps-en-banco': '+triceps ~pecho ~deltoides',
   // Abdominales
   'crunch-abdominal': '+abdominales',
+  'crunch-con-brazos-estirados': '+abdominales ~oblicuos',
   'crunch-inverso': '+abdominales ~oblicuos',
   'crunch-con-piernas-a-90': '+abdominales',
   'bicicleta': '+oblicuos +abdominales',
