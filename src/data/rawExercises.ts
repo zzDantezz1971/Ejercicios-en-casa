@@ -132,12 +132,12 @@ export const RAW_SECTIONS: RawSection[] = [
  {g:'Abdomen superior'},
  {n:'Crunch abdominal',z:'Abdomen',mat:1,az:20,el:18,f:[
    [{tl:180,tu:180,hd:184,...KNEES,ua:2,fa:2},350,850],
-   [{tl:181,tu:226,hd:240,...KNEES,ua:-14,fa:-14},450,850]]},
+   [{tl:180,tu:203,hd:214,...KNEES,ua:-10,fa:-10},450,850]]},
  {n:'Crunch con brazos estirados',z:'Abdomen',mat:1,az:20,el:18,f:[
    [{tl:180,tu:180,hd:184,...KNEES,ua:178,fa:178},300,850],
-   [{tl:181,tu:228,hd:236,...KNEES,ua:238,fa:236},400,850]]},
+   [{tl:180,tu:204,hd:212,...KNEES,ua:228,fa:226},400,850]]},
  {n:'Crunch con piernas a 90°',z:'Abdomen',mat:1,f:[
-   [{tl:180,th:-90,sn:0,ua:10,fa:10},150,900],[{tl:180,tu:210,th:-90,sn:0,ua:-25,fa:-25},150,900]]},
+   [{tl:180,th:-90,sn:0,ua:10,fa:10},150,900],[{tl:180,tu:202,hd:208,th:-90,sn:0,ua:-18,fa:-18},250,900]]},
  {g:'Oblicuos'},
  {n:'Bicicleta',z:'Oblicuos',mat:1,f:[
    [{tl:180,tu:205,ua:-80,fa:200,thR:-120,snR:-30,thL:-20,snL:-15},60,480],
