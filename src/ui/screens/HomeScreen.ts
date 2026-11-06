@@ -7,7 +7,7 @@ import { icon, SECTION_STYLE } from '../icons';
 import { RoutineScreen } from './RoutineScreen';
 import { startWorkout } from '../components/startWorkout';
 import { MonthScreen } from './MonthScreen';
-import { addMonths, monthKey, monthStart } from '../../domain/monthSummary';
+import { addMonths, addWeeks, monthKey, monthStart, weekKey, weekStart } from '../../domain/monthSummary';
 
 export class HomeScreen implements Screen {
   readonly el = h('main', { class: 'screen home' });
@@ -46,6 +46,19 @@ export class HomeScreen implements Screen {
         h('button', { class: 'btn primary small', onclick: () => app.push(new MonthScreen(app, prevMonth)) }, 'Ver'),
         h('button', { class: 'icon-btn small', 'aria-label': 'Cerrar aviso', onclick: () => { app.store.markSummarySeen(prevKey); card.remove(); } }, icon('close')));
       this.el.append(card);
+    } else {
+      // o el de la semana pasada (de lunes a domingo)
+      const prevWeek = addWeeks(weekStart(now), -1);
+      const wk = weekKey(prevWeek);
+      const hadWeek = app.store.history.some((e) => weekKey(new Date(e.date)) === wk);
+      if (hadWeek && app.store.weekSeen !== wk) {
+        const card: HTMLElement = h('section', { class: 'card month-banner' },
+          icon('calendar'),
+          h('div', { class: 'mb-text' }, h('strong', {}, 'Ya tienes el resumen de la semana pasada'), h('span', { class: 'muted small' }, 'Días, tiempo, calorías, peso y músculos.')),
+          h('button', { class: 'btn primary small', onclick: () => app.push(new MonthScreen(app, undefined, 'week', prevWeek)) }, 'Ver'),
+          h('button', { class: 'icon-btn small', 'aria-label': 'Cerrar aviso', onclick: () => { app.store.markWeekSeen(wk); card.remove(); } }, icon('close')));
+        this.el.append(card);
+      }
     }
 
     // Tarjeta principal con la tabla en uso

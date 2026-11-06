@@ -1,5 +1,5 @@
 import { loadWeights, muscleLoad } from '../../domain/muscleLoad';
-import { addMonths, monthKey, monthStart, monthStats, type MonthStats } from '../../domain/monthSummary';
+import { addMonths, addWeeks, monthKey, monthStart, monthStats, weekKey, weekStart, weekStats, type MonthStats } from '../../domain/monthSummary';
 import { MUSCLE_NAMES, MUSCLES } from '../../figure/anatomy';
 import type { App, Screen } from '../App';
 import { bodyMaps } from '../components/bodyMaps';
@@ -7,52 +7,77 @@ import { fmtDiff, fmtKg } from '../components/weightCard';
 import { append, clear, h, humanDuration, kg } from '../dom';
 import { icon, type IconName } from '../icons';
 
-/** Resumen de un mes comparado con el anterior. */
+/** Resumen de una semana (de lunes a domingo) o de un mes, comparado con el periodo anterior. */
 export class MonthScreen implements Screen {
   readonly el = h('main', { class: 'screen month-screen' });
   private body = h('div', { class: 'history-body' });
   private month: Date;
+  private week: Date;
 
-  constructor(private readonly app: App, month: Date = monthStart(new Date())) {
+  constructor(private readonly app: App, month: Date = monthStart(new Date()), private mode: 'week' | 'month' = 'month', week: Date = weekStart(new Date())) {
     this.month = monthStart(month);
+    this.week = weekStart(week);
     this.el.append(
       h('header', { class: 'bar sticky' },
         h('button', { class: 'icon-btn', 'aria-label': 'Volver', onclick: () => app.back() }, icon('back')),
-        h('span', { class: 'bar-title' }, 'Resumen del mes')),
+        h('span', { class: 'bar-title' }, 'Resumen')),
       this.body);
   }
 
   enter(): void {
-    this.app.store.markSummarySeen(monthKey(addMonths(monthStart(new Date()), -1)));
+    if (this.mode === 'month') this.app.store.markSummarySeen(monthKey(addMonths(monthStart(new Date()), -1)));
+    else this.app.store.markWeekSeen(weekKey(addWeeks(weekStart(new Date()), -1)));
     this.render();
   }
 
   private stats(m: Date): MonthStats {
     const st = this.app.store;
-    return monthStats(st.history, st.weights, m, (e) => st.caloriesFor(e)?.kcal ?? null);
+    const k = (e: Parameters<typeof st.caloriesFor>[0]) => st.caloriesFor(e)?.kcal ?? null;
+    return this.mode === 'week' ? weekStats(st.history, st.weights, m, k) : monthStats(st.history, st.weights, m, k);
   }
 
   private render(): void {
     clear(this.body);
-    const cur = this.stats(this.month), prev = this.stats(addMonths(this.month, -1));
-    const isNow = monthKey(this.month) === monthKey(new Date());
-    const t0 = this.month.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' });
-    const title = t0.charAt(0).toUpperCase() + t0.slice(1);
-    const go = (d: number) => { this.month = addMonths(this.month, d); this.render(); window.scrollTo(0, 0); };
+    const W = this.mode === 'week';
+    const start = W ? this.week : this.month;
+    const prevStart = W ? addWeeks(this.week, -1) : addMonths(this.month, -1);
+    const cur = this.stats(start), prev = this.stats(prevStart);
+    const isNow = W ? weekKey(this.week) === weekKey(new Date()) : monthKey(this.month) === monthKey(new Date());
+    let title: string;
+    if (W) {
+      const end = addWeeks(this.week, 1);
+      end.setDate(end.getDate() - 1);
+      const f = (d: Date, o: Intl.DateTimeFormatOptions) => d.toLocaleDateString('es-ES', o);
+      title = this.week.getMonth() === end.getMonth()
+        ? `Del ${this.week.getDate()} al ${f(end, { day: 'numeric', month: 'long' })}`
+        : `Del ${f(this.week, { day: 'numeric', month: 'short' })} al ${f(end, { day: 'numeric', month: 'short' })}`;
+    } else {
+      const t0 = this.month.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' });
+      title = t0.charAt(0).toUpperCase() + t0.slice(1);
+    }
+    const go = (d: number) => {
+      if (W) this.week = addWeeks(this.week, d);
+      else this.month = addMonths(this.month, d);
+      this.render();
+      window.scrollTo(0, 0);
+    };
+    const seg = (m: 'week' | 'month', label: string) =>
+      h('button', { class: 'seg' + (this.mode === m ? ' on' : ''), 'aria-pressed': String(this.mode === m), onclick: () => { this.mode = m; this.render(); } }, label);
+    this.body.append(h('div', { class: 'segmented period-seg' }, seg('week', 'Semana'), seg('month', 'Mes')));
     append(this.body,
       h('div', { class: 'card-head month-nav' },
-        h('button', { class: 'icon-btn small', 'aria-label': 'Mes anterior', onclick: () => go(-1) }, icon('back')),
+        h('button', { class: 'icon-btn small', 'aria-label': W ? 'Semana anterior' : 'Mes anterior', onclick: () => go(-1) }, icon('back')),
         h('h2', { class: 'cal-title' }, title),
-        h('button', { class: 'icon-btn small', 'aria-label': 'Mes siguiente', disabled: isNow, onclick: () => go(1) }, icon('chevron'))),
-      isNow ? h('p', { class: 'muted small center' }, 'Mes en curso: se completa a medida que entrenas.') : null,
+        h('button', { class: 'icon-btn small', 'aria-label': W ? 'Semana siguiente' : 'Mes siguiente', disabled: isNow, onclick: () => go(1) }, icon('chevron'))),
+      isNow ? h('p', { class: 'muted small center' }, `${W ? 'Semana' : 'Mes'} en curso: se completa a medida que entrenas.`) : null,
     );
     if (!cur.sessions) {
-      this.body.append(h('div', { class: 'empty-state' }, icon('calendar', 'ico big'), h('p', {}, 'No hay entrenamientos en este mes.')));
+      this.body.append(h('div', { class: 'empty-state' }, icon('calendar', 'ico big'), h('p', {}, W ? 'No hay entrenamientos en esta semana.' : 'No hay entrenamientos en este mes.')));
       return;
     }
-    const prevName = addMonths(this.month, -1).toLocaleDateString('es-ES', { month: 'long' });
+    const prevName = W ? 'la semana anterior' : addMonths(this.month, -1).toLocaleDateString('es-ES', { month: 'long' });
     const cmp = (a: number, b: number, unit: (n: number) => string) => {
-      if (!prev.sessions) return h('span', { class: 'muted small' }, 'sin datos del mes anterior');
+      if (!prev.sessions) return h('span', { class: 'muted small' }, W ? 'sin datos de la semana anterior' : 'sin datos del mes anterior');
       const d = a - b;
       if (Math.abs(d) < 1e-9) return h('span', { class: 'delta same' }, `igual que ${prevName}`);
       return h('span', { class: 'delta ' + (d > 0 ? 'up' : 'down') }, `${d > 0 ? '↑' : '↓'} ${unit(Math.abs(d))} ${d > 0 ? 'más' : 'menos'} que ${prevName}`);
@@ -73,8 +98,8 @@ export class MonthScreen implements Screen {
       this.body.append(h('section', { class: 'card month-weight' },
         h('div', { class: 'card-head' }, h('h3', {}, 'Peso')),
         h('div', { class: 'wc-now' }, h('strong', {}, fmtKg(cur.weight.to)),
-          h('span', { class: 'wc-diff' + (d < 0 ? ' down' : d > 0 ? ' up' : '') }, `${fmtDiff(d)} este mes`)),
-        h('p', { class: 'muted small' }, `Empezaste el mes con ${fmtKg(cur.weight.from)}.`)));
+          h('span', { class: 'wc-diff' + (d < 0 ? ' down' : d > 0 ? ' up' : '') }, `${fmtDiff(d)} ${W ? 'esta semana' : 'este mes'}`)),
+        h('p', { class: 'muted small' }, `Empezaste ${W ? 'la semana' : 'el mes'} con ${fmtKg(cur.weight.from)}.`)));
     }
 
     // Músculos
@@ -89,7 +114,7 @@ export class MonthScreen implements Screen {
       };
       const minutes = (s: number) => (s >= 60 ? `${Math.round(s / 60)} min` : `${Math.round(s)} s`);
       this.body.append(h('section', { class: 'card muscle-map' },
-        h('div', { class: 'card-head' }, h('h3', {}, 'Músculos del mes')),
+        h('div', { class: 'card-head' }, h('h3', {}, W ? 'Músculos de la semana' : 'Músculos del mes')),
         h('div', { class: 'mm-figs' }, img(false), img(true)),
         worked.length ? h('p', { class: 'mm-line' }, h('span', { class: 'mu-dot work' }), h('strong', {}, 'Más trabajados: '),
           worked.slice(0, 5).map((m) => `${MUSCLE_NAMES[m]} (${minutes(load.work[m])})`).join(', ')) : null));

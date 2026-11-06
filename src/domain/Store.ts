@@ -30,6 +30,8 @@ export interface SavedData {
   weights: WeightEntry[];
   /** Último mes ("2026-10") cuyo resumen ya se ha visto o descartado. */
   summarySeen?: string;
+  /** Última semana (lunes "2026-11-02") cuyo resumen ya se ha visto o descartado. */
+  weekSeen?: string;
 }
 
 export const STORAGE_KEY = 'ejercicios-en-casa';
@@ -334,6 +336,16 @@ export class Store {
     return this.data.summarySeen;
   }
 
+  get weekSeen(): string | undefined {
+    return this.data.weekSeen;
+  }
+
+  markWeekSeen(key: string): void {
+    if (this.data.weekSeen === key) return;
+    this.data.weekSeen = key;
+    this.persist();
+  }
+
   markSummarySeen(key: string): void {
     if (this.data.summarySeen === key) return;
     this.data.summarySeen = key;
@@ -489,7 +501,8 @@ export class Store {
     delete settings.profile.weight;
     weights.sort((a, b) => Date.parse(a.date) - Date.parse(b.date));
     const summarySeen = typeof input.summarySeen === 'string' ? input.summarySeen : undefined;
-    return { version: DATA_VERSION, routines, activeId, settings, history, hidden, order, lastBackup, favorites, weights, summarySeen };
+    const weekSeen = typeof input.weekSeen === 'string' ? input.weekSeen : undefined;
+    return { version: DATA_VERSION, routines, activeId, settings, history, hidden, order, lastBackup, favorites, weights, summarySeen, weekSeen };
   }
 
   private persist(): void {

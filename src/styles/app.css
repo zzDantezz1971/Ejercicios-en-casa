@@ -760,3 +760,6 @@ button:focus-visible, input:focus-visible, label:focus-within { outline: 2px sol
 .month-banner { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-color: color-mix(in srgb, var(--accent) 50%, var(--line)); }
 .month-banner > .ico { width: 26px; height: 26px; color: var(--accent-2); flex: none; }
 .mb-text { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.summary-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.summary-btns .btn { justify-content: center; }
+.period-seg { align-self: center; }

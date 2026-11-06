@@ -31,13 +31,50 @@ export function monthKey(d: Date): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
 }
 
+/** Lunes de la semana (hora local). */
+export function weekStart(d: Date): Date {
+  const x = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  x.setDate(x.getDate() - ((x.getDay() + 6) % 7));
+  return x;
+}
+
+export function addWeeks(d: Date, n: number): Date {
+  return new Date(d.getFullYear(), d.getMonth(), d.getDate() + 7 * n);
+}
+
+/** Clave de la semana: fecha de su lunes, p. ej. "2026-11-02". */
+export function weekKey(d: Date): string {
+  const m = weekStart(d);
+  return `${m.getFullYear()}-${String(m.getMonth() + 1).padStart(2, '0')}-${String(m.getDate()).padStart(2, '0')}`;
+}
+
 export function monthStats(
   history: readonly HistoryEntry[],
   weights: readonly WeightEntry[],
   start: Date,
   kcalOf: (e: HistoryEntry) => number | null,
 ): MonthStats {
-  const a = start.getTime(), b = addMonths(start, 1).getTime();
+  return periodStats(history, weights, start, addMonths(start, 1), kcalOf);
+}
+
+export function weekStats(
+  history: readonly HistoryEntry[],
+  weights: readonly WeightEntry[],
+  start: Date,
+  kcalOf: (e: HistoryEntry) => number | null,
+): MonthStats {
+  return periodStats(history, weights, start, addWeeks(start, 1), kcalOf);
+}
+
+/** Resumen de un periodo [start, end). */
+export function periodStats(
+  history: readonly HistoryEntry[],
+  weights: readonly WeightEntry[],
+  start: Date,
+  end: Date,
+  kcalOf: (e: HistoryEntry) => number | null,
+): MonthStats {
+  const a = start.getTime(), b = end.getTime();
   const entries = history.filter((e) => { const t = Date.parse(e.date); return t >= a && t < b; });
   const dayKeys = new Set(entries.map((e) => new Date(e.date).toDateString()));
   let kcal: number | null = null;

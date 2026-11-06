@@ -1,4 +1,4 @@
-import { addMonths, monthKey, monthStats } from '../src/domain/monthSummary';
+import { addMonths, monthKey, monthStats, weekKey, weekStart, weekStats } from '../src/domain/monthSummary';
 import { goalProgress } from '../src/domain/goal';
 import { exerciseWeights, weightSuggestion } from '../src/domain/weights';
 import { MUSCLES } from '../src/figure/anatomy';
@@ -99,5 +99,15 @@ describe('Resumen del mes', () => {
     expect(goalProgress(82, 80, 75).done).toBeCloseTo(2 / 7);
     expect(goalProgress(82, 74.8, 75)).toMatchObject({ left: 0, reached: true, done: 1 });
     expect(goalProgress(70, 72, 75)).toMatchObject({ left: 3, losing: false });
+  });
+});
+
+describe('Resumen de la semana', () => {
+  it('semana natural de lunes a domingo', () => {
+    expect(weekKey(new Date(2026, 10, 8))).toBe('2026-11-02'); // domingo 8 -> lunes 2
+    expect(weekKey(new Date(2026, 10, 9))).toBe('2026-11-09');
+    const e = (d: string): HistoryEntry => ({ date: d, durationSec: 600, exercisesDone: 1, exercisesPlanned: 1, sections: [], completed: true });
+    const w = weekStats([e('2026-11-01T20:00:00'), e('2026-11-02T08:00:00'), e('2026-11-08T22:00:00'), e('2026-11-09T07:00:00')], [], weekStart(new Date(2026, 10, 4)), () => null);
+    expect([w.sessions, w.days]).toEqual([2, 2]);
   });
 });
