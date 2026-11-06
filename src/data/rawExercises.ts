@@ -158,8 +158,8 @@ export const RAW_SECTIONS: RawSection[] = [
  {n:'Apertura de pecho con manos atrás',z:'Pecho y hombros',f:[[{ua:140,fa:140},300,900],[{ua:160,fa:162,tu:-96,hd:-104},1400,900]]},
  {n:'Estiramiento de antebrazos',z:'Antebrazos y muñecas',f:[
    [{uaR:0,faR:0,uaL:30,faL:-20},1200,900],[{uaR:0,faR:0,uaL:28,faL:-14,tu:-88},1200,900]]},
- {n:'Círculos de brazos hacia delante',z:'Hombros',per:2600,fn:t=>{const a=90-360*t;return {thL:91,snL:89,thR:91,snR:89,ua:a,fa:a+8};}},
- {n:'Círculos de brazos hacia atrás',z:'Hombros y pecho',per:2600,fn:t=>{const a=90+360*t;return {thL:91,snL:89,thR:91,snR:89,ua:a,fa:a-8};}},
+ {n:'Círculos de brazos hacia delante',z:'Hombros',per:2600,fn:t=>{const a=90+360*t;return {thL:91,snL:89,thR:91,snR:89,ua:a,fa:a-8};}},
+ {n:'Círculos de brazos hacia atrás',z:'Hombros y pecho',per:2600,fn:t=>{const a=90-360*t;return {thL:91,snL:89,thR:91,snR:89,ua:a,fa:a+8};}},
  {n:'Mesa invertida',z:'Pecho, hombros y glúteos',mat:1,f:[
    [{tl:-128,tu:-120,hd:-100,ua:118,fa:100,sa:.9,th:-25,sn:65},500,1200],
    [{tl:-165,tu:-168,hd:-210,ua:95,fa:88,sa:.9,th:0,sn:90},1500,1200]]},
