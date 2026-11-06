@@ -106,6 +106,8 @@ export interface Settings {
   sectionCountdown: number;
   sound: boolean;
   voice: boolean;
+  /** Frases motivadoras propias y si se muestran solo esas. */
+  phrases: { mine: string[]; onlyMine: boolean };
   /** Decir "3, 2, 1" por voz al final de cada ejercicio, pausa y cuenta atrás. */
   voiceCount: boolean;
   /** Al empezar, preguntar por el reloj (pulsaciones) si no está conectado. */
@@ -115,6 +117,8 @@ export interface Settings {
 }
 
 export interface Profile {
+  /** Nombre o alias con el que la app se dirige al usuario. */
+  name?: string;
   age: number | null;
   /** cm */
   height?: number | null;
@@ -132,6 +136,7 @@ export const DEFAULT_SETTINGS: Settings = {
   sectionCountdown: 10,
   sound: true,
   voice: true,
+  phrases: { mine: [], onlyMine: false },
   voiceCount: true,
   askWatch: true,
   profile: { age: null, height: null, sex: 'h' },

@@ -3,6 +3,7 @@ import { bodyWeightDialog, h } from '../dom';
 import { icon } from '../icons';
 import { bmi, bmiCategory } from '../../domain/calories';
 import { goalProgress } from '../../domain/goal';
+import { checkAndCelebrate } from './medals';
 
 const NS = 'http://www.w3.org/2000/svg';
 
@@ -33,6 +34,7 @@ export async function askWeight(app: App): Promise<boolean> {
   const kg = await bodyWeightDialog('Tu peso de hoy', app.store.currentWeight ?? 75);
   if (kg === null) return false;
   app.store.addWeight(kg);
+  checkAndCelebrate(app);
   return true;
 }
 
@@ -66,7 +68,7 @@ export function weightChart(points: ReadonlyArray<{ date: string; kg: number }>,
   const short = (d: string) => new Date(d).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
   el('text', { x: x(points[0].date), y: H - 4, class: 'axis', 'text-anchor': points.length > 1 ? 'start' : 'middle' }, short(points[0].date));
   if (points.length > 1) el('text', { x: W - pad.r, y: H - 4, class: 'axis', 'text-anchor': 'end' }, short(points[points.length - 1].date));
-  if (points.length > 1) el('polyline', { points: points.map((p) => `${x(p.date).toFixed(1)},${y(p.kg).toFixed(1)}`).join(' '), class: 'w-line' });
+  if (points.length > 1) el('polyline', { points: points.map((p) => `${x(p.date).toFixed(1)},${y(p.kg).toFixed(1)}`).join(' '), class: 'w-line', pathLength: 1 });
   points.forEach((p, i) => el('circle', { cx: x(p.date), cy: y(p.kg), r: i === points.length - 1 ? 4.5 : 3, class: i === points.length - 1 ? 'w-dot last' : 'w-dot' }));
   svg.setAttribute('aria-label', `Peso de ${fmtKg(points[0].kg)} a ${fmtKg(points[points.length - 1].kg)}`);
   return svg;

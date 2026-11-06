@@ -1,5 +1,6 @@
 import { bestStreak, routineNames, secondsBySection } from '../../domain/stats';
 import { weightCard } from '../components/weightCard';
+import { medalsCard } from '../components/medals';
 import { loadWeights, muscleLoad } from '../../domain/muscleLoad';
 import { MUSCLE_NAMES, MUSCLES } from '../../figure/anatomy';
 import { bodyMaps } from '../components/bodyMaps';
@@ -62,6 +63,7 @@ export class HistoryScreen implements Screen {
         stat('clock', humanDuration(total), 'en total'),
         ...this.kcalStats(list, now)),
       weightCard(this.app, () => this.rerender(), () => this.app.push(new WeightScreen(this.app))),
+      medalsCard(this.app),
       this.chart(list),
       this.calendar(list),
       h('div', { class: 'summary-btns' },
@@ -202,7 +204,7 @@ export class HistoryScreen implements Screen {
       const last = i === weeks.length - 1;
       if (w.minutes > 0) {
         const top = y(w.minutes);
-        el('rect', { x, y: top, width: bwi, height: Math.max(2, H - pad.b - top), rx: 4, class: last ? 'bar now' : 'bar' });
+        el('rect', { x, y: top, width: bwi, height: Math.max(2, H - pad.b - top), rx: 4, class: last ? 'bar now' : 'bar', style: `animation-delay:${i * 60}ms` });
         if (last || w.minutes === Math.max(...weeks.map((q) => q.minutes))) el('text', { x: x + bwi / 2, y: top - 4, class: 'val', 'text-anchor': 'middle' }, String(Math.round(w.minutes)));
       }
       el('text', { x: x + bwi / 2, y: H - 6, class: 'axis', 'text-anchor': 'middle' }, last ? 'Esta' : `${w.start.getDate()}/${w.start.getMonth() + 1}`);

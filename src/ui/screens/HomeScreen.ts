@@ -7,7 +7,8 @@ import { icon, SECTION_STYLE } from '../icons';
 import { RoutineScreen } from './RoutineScreen';
 import { startWorkout } from '../components/startWorkout';
 import { MonthScreen } from './MonthScreen';
-import { addMonths, addWeeks, monthKey, monthStart, weekKey, weekStart } from '../../domain/monthSummary';
+import { addMonths, addWeeks, monthKey, monthStart, weekKey, weekStart, weekStats } from '../../domain/monthSummary';
+import { phraseOfDay } from '../../domain/phrases';
 
 export class HomeScreen implements Screen {
   readonly el = h('main', { class: 'screen home' });
@@ -31,7 +32,8 @@ export class HomeScreen implements Screen {
     this.el.append(
       h('header', { class: 'home-head' },
         h('p', { class: 'eyebrow' }, date),
-        h('h1', {}, greeting(now))),
+        h('h1', {}, greeting(now, app.store.settings.profile.name)),
+        h('p', { class: 'daily-phrase' }, phraseOfDay(now, app.store.settings.phrases.mine, app.store.settings.phrases.onlyMine, app.store.settings.profile.name))),
     );
 
     // Aviso: ya está el resumen del mes pasado
@@ -102,12 +104,57 @@ export class HomeScreen implements Screen {
           }))),
     );
 
+    this.el.append(this.rings(now));
+
     // Apartados de la tabla
     this.el.append(
       h('section', { class: 'sections' },
         h('h3', { class: 'block-title' }, 'Contenido de la tabla'),
         ...SECTION_IDS.map((s) => this.sectionRow(s))),
     );
+  }
+
+  /** Anillos de la semana (de lunes a domingo): días, minutos y calorías. */
+  private rings(now: Date): HTMLElement {
+    const st = this.app.store;
+    const k = (e: Parameters<typeof st.caloriesFor>[0]) => st.caloriesFor(e)?.kcal ?? null;
+    const cur = weekStats(st.history, st.weights, weekStart(now), k);
+    const prev = weekStats(st.history, st.weights, addWeeks(weekStart(now), -1), k);
+    const mins = Math.round(cur.seconds / 60);
+    const kcalGoal = Math.max(300, prev.kcal ?? 0);
+    const items = [
+      { v: cur.days / 7, color: 'var(--sec-warm)', label: 'Días', value: `${cur.days} de 7` },
+      { v: mins / 150, color: 'var(--accent)', label: 'Minutos', value: `${mins} de 150`, hint: '150 min a la semana es lo recomendado' },
+      { v: cur.kcal != null ? cur.kcal / kcalGoal : 0, color: 'var(--sec-stretch)', label: 'Calorías', value: cur.kcal != null ? `${cur.kcal} de ${kcalGoal}` : '—', hint: prev.kcal ? 'Meta: lo de la semana pasada' : undefined },
+    ];
+    const NS = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(NS, 'svg');
+    svg.setAttribute('viewBox', '0 0 120 120');
+    svg.setAttribute('class', 'rings');
+    svg.setAttribute('role', 'img');
+    svg.setAttribute('aria-label', items.map((i) => `${i.label}: ${i.value}`).join(', '));
+    items.forEach((it, i) => {
+      const r = 52 - i * 15, len = 2 * Math.PI * r;
+      const bg = document.createElementNS(NS, 'circle');
+      for (const [a, b] of Object.entries({ cx: 60, cy: 60, r, class: 'ring-track' })) bg.setAttribute(a, String(b));
+      bg.style.setProperty('--c', it.color);
+      const fg = document.createElementNS(NS, 'circle');
+      for (const [a, b] of Object.entries({ cx: 60, cy: 60, r, class: 'ring-val', 'stroke-dasharray': len, 'stroke-dashoffset': len, transform: 'rotate(-90 60 60)' })) fg.setAttribute(a, String(b));
+      fg.style.setProperty('--c', it.color);
+      fg.style.setProperty('--to', String(len * (1 - Math.min(1, it.v))));
+      svg.append(bg, fg);
+    });
+    // se dibujan con una pequeña animación al entrar
+    requestAnimationFrame(() => requestAnimationFrame(() => svg.querySelectorAll<SVGCircleElement>('.ring-val').forEach((c) => c.setAttribute('stroke-dashoffset', c.style.getPropertyValue('--to')))));
+    return h('section', { class: 'card rings-card' },
+      svg as unknown as HTMLElement,
+      h('div', { class: 'rings-legend' },
+        h('h3', {}, 'Tu semana'),
+        ...items.map((it) => {
+          const row = h('div', { class: 'rl-row' }, h('span', { class: 'rl-dot' }), h('div', {}, h('strong', {}, it.label), h('span', { class: 'muted small' }, ` ${it.value}`), it.hint ? h('span', { class: 'muted small block' }, it.hint) : null));
+          row.style.setProperty('--c', it.color);
+          return row;
+        })));
   }
 
   private sectionRow(s: SectionId): HTMLElement {

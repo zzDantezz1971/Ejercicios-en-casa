@@ -23,6 +23,8 @@ export class WorkoutScreen implements Screen {
   private timer = 0;
   private started = false;
   private dotsFor: SectionId | null = null;
+  private fadeTimer = 0;
+  private pulsedAt = 0;
 
   private ui = {
     secChip: h('span', { class: 'w-sec-chip' }),
@@ -46,7 +48,7 @@ export class WorkoutScreen implements Screen {
 
   constructor(private readonly app: App, plan: WorkoutPlan, private readonly table: SavedRoutine) {
     this.session = new WorkoutSession(plan);
-    this.coach = new Coach(this.session, app.sounds, app.voice, app.haptics, { countdown: app.store.settings.voiceCount });
+    this.coach = new Coach(this.session, app.sounds, app.voice, app.haptics, { countdown: app.store.settings.voiceCount, name: app.store.settings.profile.name });
     const u = this.ui;
     u.pause.addEventListener('click', () => {
       app.haptics.tap();
@@ -152,8 +154,20 @@ export class WorkoutScreen implements Screen {
     const s = ex.oneSided ? side : undefined;
     const key = `${ex.id}:${s ?? ''}`;
     if (this.shownExercise === key) return;
+    const first = this.shownExercise === null;
     this.shownExercise = key;
-    this.view?.setExercise(ex, s);
+    if (first || !this.view) {
+      this.view?.setExercise(ex, s);
+      return;
+    }
+    // fundido: el maniquí se desvanece, cambia de ejercicio y vuelve a aparecer
+    const c = this.ui.canvas;
+    c.classList.add('fading');
+    window.clearTimeout(this.fadeTimer);
+    this.fadeTimer = window.setTimeout(() => {
+      this.view?.setExercise(ex, s);
+      c.classList.remove('fading');
+    }, 180);
   }
 
   private setSide(side: 0 | 1 | 2): void {
@@ -245,7 +259,17 @@ export class WorkoutScreen implements Screen {
     this.ui.time.textContent = step.kind === 'exercise' ? mmss(Math.ceil(remaining)) : String(Math.ceil(remaining));
     const k = Math.min(1, elapsed / duration);
     this.ui.ringFg.setAttribute('stroke-dashoffset', String(RING_LEN * (1 - k)));
-    this.el.classList.toggle('last3', remaining <= 3 && remaining > 0);
+    const last3 = remaining <= 3 && remaining > 0;
+    this.el.classList.toggle('last3', last3);
+    // un pulso del anillo con cada segundo de la cuenta atrás final
+    const sec = Math.ceil(remaining);
+    if (last3 && sec !== this.pulsedAt) {
+      this.pulsedAt = sec;
+      const ring = this.ui.ringFg.ownerSVGElement;
+      ring?.classList.remove('pulse');
+      void ring?.getBoundingClientRect();
+      ring?.classList.add('pulse');
+    } else if (!last3) this.pulsedAt = 0;
   }
 
   private onStatus(s: string): void {

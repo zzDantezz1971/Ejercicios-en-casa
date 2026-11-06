@@ -1,3 +1,4 @@
+import { phraseOfDay } from '../../domain/phrases';
 import { applyUpdate, BUILD_TIME, checkForUpdate, updateReady } from '../../services/Updates';
 import { Store } from '../../domain/Store';
 import { SECTION_IDS, SECTION_TITLES, type Settings } from '../../domain/types';
@@ -116,6 +117,10 @@ export class SettingsScreen implements Screen {
         h('span', { class: 'set-icon' }, icon('flame')),
         h('div', { class: 'set-text' }, h('strong', {}, 'Calorías e IMC'),
           h('p', { class: 'muted small' }, 'Solo se guardan en tu móvil. Con el peso ya se estiman las calorías; con la edad y el reloj conectado, se calculan con tus pulsaciones. Cada entrenamiento guarda sus calorías con el peso de ese día. La altura sirve para el IMC.'))),
+      h('div', { class: 'rest-row profile-row name-row' },
+        h('label', { class: 'rest-name', for: 'set-name' }, 'Nombre o alias'),
+        h('input', { id: 'set-name', class: 'text-input small', type: 'text', maxlength: 24, placeholder: 'Cómo quieres que te llame', value: p.name ?? '', autocomplete: 'off',
+          onchange: (e: Event) => set({ name: (e.target as HTMLInputElement).value.replace(/\s+/g, ' ').trim() || undefined }) })),
       stepper('Edad', p.age, 'años', 50, 1, 15, 99, (v) => set({ age: v })),
       stepper('Altura', p.height ?? null, 'cm', 175, 1, 100, 230, (v) => set({ height: v })),
       h('div', { class: 'rest-row profile-row' },
@@ -132,6 +137,32 @@ export class SettingsScreen implements Screen {
           } }, p.goalKg ? 'Cambiar' : 'Fijar objetivo'))),
       h('button', { class: 'link-btn profile-link', onclick: () => this.app.push(new WeightScreen(this.app)) }, 'Ver histórico de peso', icon('chevron')),
       h('div', { class: 'rest-row profile-row' }, h('span', { class: 'rest-name' }, 'Sexo'), h('div', { class: 'segmented' }, sexBtn('h', 'Hombre'), sexBtn('m', 'Mujer'))));
+  }
+
+  /** Frases motivadoras propias: añadir, borrar y elegir si salen solo las tuyas. */
+  private phrasesSection(s: Settings): HTMLElement {
+    const ph = s.phrases;
+    const save = (mine: string[], onlyMine = ph.onlyMine) => this.update({ phrases: { mine, onlyMine } });
+    const input = h('input', { class: 'text-input small', type: 'text', maxlength: 120, placeholder: 'Escribe tu frase', 'aria-label': 'Nueva frase' });
+    const add = () => {
+      const t = input.value.replace(/\s+/g, ' ').trim();
+      if (t) save([...ph.mine, t]);
+    };
+    input.addEventListener('keydown', (e) => { if (e.key === 'Enter') add(); });
+    const today = phraseOfDay(new Date(), ph.mine, ph.onlyMine, s.profile.name);
+    return h('section', { class: 'card setting rest-card phrases-card' },
+      h('div', { class: 'rest-head' },
+        h('span', { class: 'set-icon' }, icon('bolt')),
+        h('div', { class: 'set-text' }, h('strong', {}, 'Frases motivadoras'),
+          h('p', { class: 'muted small' }, 'Cada día, Inicio muestra una frase. Puedes añadir las tuyas; se mezclan con las de la app. Escribe {n} donde quieras que aparezca tu nombre.'))),
+      h('p', { class: 'phrase-today' }, '“', today, '”'),
+      ...ph.mine.map((t, i) => h('div', { class: 'phrase-row' },
+        h('span', {}, t),
+        h('button', { class: 'icon-btn small', 'aria-label': `Borrar la frase ${t}`, onclick: () => save(ph.mine.filter((_, j) => j !== i)) }, icon('trash')))),
+      h('div', { class: 'phrase-add' }, input, h('button', { class: 'btn primary small', onclick: add }, icon('plus'), 'Añadir')),
+      ph.mine.length ? h('label', { class: 'switch-row', for: 'set-only-mine' },
+        h('span', { class: 'set-text' }, h('strong', {}, 'Solo mis frases')),
+        h('input', { type: 'checkbox', id: 'set-only-mine', class: 'switch', checked: ph.onlyMine, onchange: (e: Event) => save(ph.mine, (e.target as HTMLInputElement).checked) })) : null);
   }
 
   /** Conexión con el reloj para ver las pulsaciones. */
@@ -254,6 +285,7 @@ export class SettingsScreen implements Screen {
       }, icon('volume'), 'Probar sonido y voz'),
       h('h3', { class: 'block-title' }, 'Mis datos'),
       this.profileCard(s),
+      this.phrasesSection(s),
       h('h3', { class: 'block-title' }, 'Reloj'),
       this.watchSection(),
       h('h3', { class: 'block-title' }, 'Copia de seguridad'),

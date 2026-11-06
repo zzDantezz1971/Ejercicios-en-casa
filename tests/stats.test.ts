@@ -1,3 +1,5 @@
+import { Store } from '../src/domain/Store';
+import { personalize, phraseOfDay } from '../src/domain/phrases';
 import { addMonths, monthKey, monthStats, weekKey, weekStart, weekStats } from '../src/domain/monthSummary';
 import { goalProgress } from '../src/domain/goal';
 import { exerciseWeights, weightSuggestion } from '../src/domain/weights';
@@ -109,5 +111,32 @@ describe('Resumen de la semana', () => {
     const e = (d: string): HistoryEntry => ({ date: d, durationSec: 600, exercisesDone: 1, exercisesPlanned: 1, sections: [], completed: true });
     const w = weekStats([e('2026-11-01T20:00:00'), e('2026-11-02T08:00:00'), e('2026-11-08T22:00:00'), e('2026-11-09T07:00:00')], [], weekStart(new Date(2026, 10, 4)), () => null);
     expect([w.sessions, w.days]).toEqual([2, 2]);
+  });
+});
+
+describe('Frases motivadoras', () => {
+  it('pone el nombre o lo quita, y cambia cada día', () => {
+    expect(personalize('Cada repetición cuenta{, n}.', 'David')).toBe('Cada repetición cuenta, David.');
+    expect(personalize('Cada repetición cuenta{, n}.')).toBe('Cada repetición cuenta.');
+    expect(phraseOfDay(new Date(2026, 10, 6), ['Mía'], true)).toBe('Mía');
+    const a = phraseOfDay(new Date(2026, 10, 6, 8), [], false), b = phraseOfDay(new Date(2026, 10, 6, 22), [], false);
+    expect(a).toBe(b);
+    expect(phraseOfDay(new Date(2026, 10, 7), [], false)).not.toBe(a);
+  });
+});
+
+describe('Medallas', () => {
+  it('se consiguen con los datos y la primera vez no se celebran', () => {
+    const data = new Map<string, string>();
+    const kv = { getItem: (k: string) => data.get(k) ?? null, setItem: (k: string, v: string) => void data.set(k, v) };
+    const s = new Store(kv);
+    const e = (d: string): HistoryEntry => ({ date: d, durationSec: 1200, exercisesDone: 4, exercisesPlanned: 4, sections: ['calentamiento', 'pesas', 'abdominales', 'estiramientos'], completed: true });
+    s.addHistory(e('2026-11-02T07:30:00'));
+    expect(s.checkMedals()).toEqual([]); // primera vez: se apuntan sin celebrar
+    expect(Object.keys(s.medals)).toEqual(expect.arrayContaining(['entrenos-1', 'completo', 'madrugador']));
+    s.addHistory(e('2026-11-03T10:00:00'));
+    s.addHistory(e('2026-11-04T10:00:00'));
+    expect(s.checkMedals()).toEqual(expect.arrayContaining(['racha-3', 'semana-3']));
+    expect(s.checkMedals()).toEqual([]);
   });
 });

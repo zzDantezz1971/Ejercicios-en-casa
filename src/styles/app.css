@@ -775,3 +775,96 @@ button:focus-visible, input:focus-visible, label:focus-within { outline: 2px sol
 }
 .update-banner span { flex: 1; }
 body:has(.screen.workout) .update-banner { display: none; }
+
+/* Entrenamiento: fundido entre ejercicios y pulso del anillo en los últimos segundos */
+.stage-canvas { transition: opacity .18s ease; }
+.stage-canvas.fading { opacity: 0; }
+.w-ring.pulse { animation: ring-pulse .55s cubic-bezier(.2, .8, .2, 1); }
+@keyframes ring-pulse {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.09); filter: drop-shadow(0 0 14px color-mix(in srgb, var(--phase) 80%, transparent)); }
+  100% { transform: scale(1); }
+}
+@media (prefers-reduced-motion: reduce) { .w-ring.pulse { animation: none; } .stage-canvas { transition: none; } }
+
+/* Nombre y frases */
+.name-row .text-input { max-width: 210px; }
+.text-input.small { font-size: 1rem; padding: 10px 12px; }
+.phrase-today { margin: 2px 0 4px; font-style: italic; color: var(--accent-2); }
+.phrase-row { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-top: 1px solid var(--line); }
+.phrase-row span { flex: 1; }
+.phrase-add { display: flex; gap: 8px; align-items: center; }
+.phrase-add .text-input { flex: 1; min-width: 0; }
+.phrases-card .switch-row { display: flex; align-items: center; gap: 12px; }
+
+/* Inicio: frase del día y anillos de la semana */
+.daily-phrase { margin: 6px 0 0; color: var(--muted); font-style: italic; font-size: 1rem; animation: in-fade .5s ease-out; }
+.rings-card { display: grid; grid-template-columns: 128px 1fr; align-items: center; gap: 16px; padding: 14px 16px; }
+.rings { width: 128px; height: 128px; }
+.ring-track { fill: none; stroke: color-mix(in srgb, var(--c) 18%, transparent); stroke-width: 11; }
+.ring-val { fill: none; stroke: var(--c); stroke-width: 11; stroke-linecap: round; transition: stroke-dashoffset 1.1s cubic-bezier(.2, .8, .2, 1); filter: drop-shadow(0 0 5px color-mix(in srgb, var(--c) 50%, transparent)); }
+.rings-legend { display: flex; flex-direction: column; gap: 6px; }
+.rings-legend h3 { margin: 0 0 2px; font-size: 1.2rem; text-transform: uppercase; }
+.rl-row { display: flex; gap: 8px; align-items: flex-start; }
+.rl-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--c); margin-top: 6px; flex: none; }
+@media (prefers-reduced-motion: reduce) { .ring-val { transition: none; } .daily-phrase { animation: none; } }
+
+/* Medallas */
+.medal-badge { --m1: #CD8A4F; --m2: #8A5126; width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex: none;
+  background: radial-gradient(circle at 32% 28%, var(--m1), var(--m2)); color: #fff; box-shadow: inset 0 0 0 3px rgb(255 255 255 / .25), 0 3px 10px rgb(0 0 0 / .35); }
+.medal-badge.plata { --m1: #E8EDF3; --m2: #8D99A8; color: #26303C; }
+.medal-badge.oro { --m1: #FFE08A; --m2: #D9921A; color: #3A2500; }
+.medal-badge .ico { width: 22px; height: 22px; }
+.medal-badge.locked { background: var(--surface-2); color: var(--muted); box-shadow: inset 0 0 0 2px var(--line); }
+.medal-badge.locked .ico { opacity: .35; }
+.medal-badge.big { width: 116px; height: 116px; box-shadow: inset 0 0 0 6px rgb(255 255 255 / .3), 0 0 0 10px rgb(245 165 36 / .15), 0 16px 40px rgb(0 0 0 / .5); }
+.medal-badge.big .ico { width: 56px; height: 56px; }
+.medal-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(72px, 1fr)); gap: 10px 6px; }
+.medal-cell { border: 0; background: transparent; color: var(--fg); display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; padding: 4px 2px; border-radius: 12px; font: inherit; }
+.medal-cell:active { background: var(--surface-2); }
+.medal-name { font-size: .72rem; text-align: center; line-height: 1.15; }
+.medal-cell.locked .medal-name { color: var(--muted); }
+.medal-info { margin: 6px 0 0; min-height: 1.4em; }
+.celebrate { position: fixed; inset: 0; z-index: 90; background: rgb(5 8 12 / .82); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; padding: 24px; animation: in-fade .25s ease-out; overflow: hidden; }
+.celebrate-box { position: relative; z-index: 1; width: 100%; max-width: 360px; background: var(--surface); border: 1px solid var(--line); border-radius: 26px; padding: 24px 20px 20px; display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; }
+.celebrate-box h2 { margin: 6px 0 0; font-size: 1.9rem; text-transform: uppercase; }
+.celebrate-box p { margin: 0; }
+.celebrate-box.pop .medal-badge { animation: medal-pop .9s cubic-bezier(.2, 1.4, .3, 1); }
+.celebrate-box.pop { animation: box-pop .35s cubic-bezier(.2, .9, .3, 1.2); }
+@keyframes medal-pop { 0% { transform: scale(.2) rotate(-200deg); opacity: 0; } 60% { transform: scale(1.12) rotate(10deg); opacity: 1; } 100% { transform: scale(1) rotate(0); } }
+@keyframes box-pop { from { transform: scale(.9); opacity: .4; } }
+.tier-tag { font-size: .78rem; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; padding: 3px 10px; border-radius: 999px; }
+.tier-tag.bronce { background: rgb(205 138 79 / .2); color: #E0A06A; }
+.tier-tag.plata { background: rgb(200 210 222 / .18); color: #D5DDE7; }
+.tier-tag.oro { background: rgb(255 214 107 / .18); color: #FFD66B; }
+.celebrate-box .btn { margin-top: 8px; }
+@media (prefers-reduced-motion: reduce) { .celebrate-box.pop, .celebrate-box.pop .medal-badge { animation: none; } }
+
+/* Detalles: botones y pestañas con respuesta al toque */
+.icon-btn, .ex-main, .sec-row, .history-row, .medal-cell, .seg, .filter-chip, .weight-btn, .link-btn { transition: transform .12s ease, background-color .2s, color .2s; }
+.icon-btn:active, .sec-row:active, .seg:active, .filter-chip:active, .weight-btn:active { transform: scale(.94); }
+.ex-main:active { transform: scale(.98); }
+.btn { transition: transform .12s ease, box-shadow .2s, background .2s; }
+.tab-item { transition: color .2s; }
+.tab-item.active .ico { animation: tab-bounce .4s cubic-bezier(.2, 1.6, .4, 1); }
+@keyframes tab-bounce { 0% { transform: scale(.7) translateY(3px); } 100% { transform: none; } }
+
+/* Gráficas que se dibujan al aparecer */
+.chart .bar { transform-box: fill-box; transform-origin: bottom; animation: bar-grow .7s cubic-bezier(.2, .8, .2, 1) both; }
+@keyframes bar-grow { from { transform: scaleY(0); } }
+.weight-chart .w-line, .hr-line { stroke-dasharray: 1; stroke-dashoffset: 0; animation: line-draw 1.2s ease-out both; }
+@keyframes line-draw { from { stroke-dashoffset: 1; } }
+.weight-chart .w-dot { animation: in-fade .4s ease-out .8s both; }
+.sb-fill, .goal-fill { animation: fill-grow .9s cubic-bezier(.2, .8, .2, 1) both; transform-origin: left; }
+@keyframes fill-grow { from { transform: scaleX(0); } }
+.stat-value { animation: in-fade .45s ease-out both; }
+
+/* Títulos de zona con silueta */
+.zone-title { display: flex; align-items: center; gap: 10px; }
+.zone-ico { width: 22px; height: 23px; flex: none; }
+.zone-body { fill: color-mix(in srgb, var(--muted) 45%, transparent); }
+.zone-hot { fill: var(--sec, var(--accent)); filter: drop-shadow(0 0 3px color-mix(in srgb, var(--sec, var(--accent)) 60%, transparent)); }
+
+@media (prefers-reduced-motion: reduce) {
+  .chart .bar, .weight-chart .w-line, .hr-line, .weight-chart .w-dot, .sb-fill, .goal-fill, .stat-value, .tab-item.active .ico { animation: none; }
+}

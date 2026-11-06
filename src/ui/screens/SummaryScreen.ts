@@ -3,6 +3,7 @@ import { SECTION_TITLES, type HeartSummary } from '../../domain/types';
 import { caloriesOf } from '../../domain/calories';
 import { askWeight, fmtKg } from '../components/weightCard';
 import { weightSuggestion } from '../../domain/weights';
+import { checkAndCelebrate } from '../components/medals';
 import type { App, Screen } from '../App';
 import { h, humanDuration, kg } from '../dom';
 import { icon, SECTION_STYLE } from '../icons';
@@ -14,6 +15,8 @@ export class SummaryScreen implements Screen {
 
   constructor(private readonly app: App, s: SessionSummary, tableName: string, heart?: HeartSummary | null) {
     const win = s.completed;
+    const name = app.store.settings.profile.name;
+    const nm = name ? `, ${name}` : '';
     const confetti = win ? h('div', { class: 'confetti', 'aria-hidden': 'true' }, ...Array.from({ length: 36 }, (_, i) => {
       const p = h('i', {});
       p.style.setProperty('--x', `${Math.round(Math.random() * 100)}%`);
@@ -27,7 +30,7 @@ export class SummaryScreen implements Screen {
       ...(confetti ? [confetti] : []),
       h('div', { class: 'summary-card' },
         h('div', { class: 'trophy' + (win ? ' win' : '') }, icon(win ? 'trophy' : 'check')),
-        h('h1', {}, win ? '¡Buen trabajo!' : s.exercisesDone ? '¡Bien hecho!' : 'Sin ejercicios completados'),
+        h('h1', {}, win ? `¡Buen trabajo${nm}!` : s.exercisesDone ? `¡Bien hecho${nm}!` : 'Sin ejercicios completados'),
         h('p', { class: 'eyebrow' }, win ? 'Entrenamiento finalizado' : s.exercisesDone ? 'Entrenamiento finalizado antes de tiempo' : 'Entrenamiento terminado'),
         h('p', { class: 'muted' }, tableName),
         h('div', { class: 'stats' },
@@ -91,6 +94,16 @@ export class SummaryScreen implements Screen {
         }, icon('plus'), 'Anotar peso')));
     return card;
   }
+
+  enter(): void {
+    // medallas nuevas tras este entrenamiento
+    if (!this.checked) {
+      this.checked = true;
+      window.setTimeout(() => checkAndCelebrate(this.app), 900);
+    }
+  }
+
+  private checked = false;
 
   onBack(): boolean {
     this.app.openTab('inicio');

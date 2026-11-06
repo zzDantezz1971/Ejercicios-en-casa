@@ -3,7 +3,7 @@ import { clampRounds, MAX_ROUNDS } from '../../domain/WorkoutPlan';
 import { SECTION_IDS, usesWeight, type ExerciseDef, type SectionId } from '../../domain/types';
 import type { App, Screen } from '../App';
 import { append, clear, h, humanDuration, kg, plural, weightDialog } from '../dom';
-import { icon, SECTION_STYLE } from '../icons';
+import { icon, SECTION_STYLE, zoneIcon } from '../icons';
 import { badgeList, sidesMark } from '../components/badges';
 import { sortableList } from '../components/sortable';
 import { applyOrder, moveItem } from '../../domain/ordering';
@@ -236,7 +236,7 @@ export class RoutineScreen implements Screen {
     for (const ex of this.ordered(this.section)) {
       if (!custom && ex.group && ex.group !== group) {
         group = ex.group;
-        this.list.append(h('h2', { class: 'group-title' }, group));
+        this.list.append(h('h2', { class: 'group-title zone-title' }, zoneIcon(group), group));
       }
       this.list.append(this.card(ex));
     }

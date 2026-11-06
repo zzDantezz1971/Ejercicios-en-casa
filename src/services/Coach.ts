@@ -8,7 +8,7 @@ import type { Voice } from './Voice';
 export class Coach {
   private off: Array<() => void> = [];
 
-  constructor(session: WorkoutSession, sounds: Sounds, voice: Voice, haptics?: Haptics, opts: { countdown?: boolean } = {}) {
+  constructor(session: WorkoutSession, sounds: Sounds, voice: Voice, haptics?: Haptics, opts: { countdown?: boolean; name?: string } = {}) {
     this.off.push(
       session.on('cue', (cue) => {
         switch (cue.type) {
@@ -51,9 +51,9 @@ export class Coach {
         if (s.completed) {
           sounds.finish();
           haptics?.finish();
-          voice.say('¡Buen trabajo! Entrenamiento finalizado.');
+          voice.say(`¡Buen trabajo${opts.name ? `, ${opts.name}` : ''}! Entrenamiento finalizado.`);
         } else if (s.exercisesDone > 0) {
-          voice.say('¡Bien hecho! Entrenamiento finalizado.');
+          voice.say(`¡Bien hecho${opts.name ? `, ${opts.name}` : ''}! Entrenamiento finalizado.`);
         }
       }),
     );

@@ -42,7 +42,28 @@ const FILL: Record<string, string> = {
   next: 'M15.5 5H18v14h-2.5zM4 5l10.5 7L4 19z',
 };
 
-export type IconName = keyof typeof STROKE | keyof typeof FILL;
+/** Iconos ilustrados de los apartados: capas rellenas con distinta opacidad del color del apartado. */
+const ILLUSTRATED: Record<string, Array<[string, number]>> = {
+  secWarm: [
+    ['M12 2.5c1.2 3.6 6 5.6 6 11a6 6 0 0 1-12 0c0-2.9 1.4-4.8 3-6.1.1 2.3 1.2 3.7 2.9 4C11 8.8 10.9 5.6 12 2.5z', 0.95],
+    ['M12 11.5c.6 1.7 3 2.7 3 5.2a3 3 0 0 1-6 0c0-1.4.7-2.3 1.5-3 .1 1 .6 1.7 1.4 1.9-.4-1.3-.4-2.8.1-4.1z', 0.45],
+  ],
+  secWeights: [
+    ['M2.5 9.2a1 1 0 0 1 1-1h1.4v7.6H3.5a1 1 0 0 1-1-1z M19.1 8.2h1.4a1 1 0 0 1 1 1v5.6a1 1 0 0 1-1 1h-1.4z', 0.55],
+    ['M5.6 5.5h2.2a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H5.6a1 1 0 0 1-1-1v-11a1 1 0 0 1 1-1z M16.2 5.5h2.2a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1h-2.2a1 1 0 0 1-1-1v-11a1 1 0 0 1 1-1z', 0.95],
+    ['M8.8 11h6.4v2H8.8z', 0.8],
+  ],
+  secAbs: [
+    ['M7 4.5c2.8-1.3 7.2-1.3 10 0l.8 9.5c-.3 3.4-2.4 5.9-5.8 6.6-3.4-.7-5.5-3.2-5.8-6.6z', 0.35],
+    ['M9.2 6.6h2.3v2.6H9.2zM12.5 6.6h2.3v2.6h-2.3zM9.2 10.2h2.3v2.6H9.2zM12.5 10.2h2.3v2.6h-2.3zM9.6 13.8h1.9v2.8c-.8-.4-1.5-1.3-1.9-2.8zM12.5 13.8h1.9c-.4 1.5-1.1 2.4-1.9 2.8z', 0.95],
+  ],
+  secStretch: [
+    ['M12 2.6a2 2 0 1 1 0 4 2 2 0 0 1 0-4z', 0.95],
+    ['M3.6 8.6c.2-.7.9-1 1.6-.8l6.8 1.7 6.8-1.7c.7-.2 1.4.1 1.6.8.2.7-.2 1.4-.9 1.6l-5.3 1.6v3.4l3.4 5.4c.4.6.2 1.4-.4 1.8-.6.4-1.4.2-1.8-.4L12 16.9l-3.4 5.1c-.4.6-1.2.8-1.8.4-.6-.4-.8-1.2-.4-1.8l3.4-5.4v-3.4L4.5 10.2c-.7-.2-1.1-.9-.9-1.6z', 0.9],
+  ],
+};
+
+export type IconName = keyof typeof STROKE | keyof typeof FILL | keyof typeof ILLUSTRATED;
 
 export function icon(name: IconName, cls = 'ico'): SVGSVGElement {
   const NS = 'http://www.w3.org/2000/svg';
@@ -50,6 +71,16 @@ export function icon(name: IconName, cls = 'ico'): SVGSVGElement {
   svg.setAttribute('viewBox', '0 0 24 24');
   svg.setAttribute('aria-hidden', 'true');
   svg.setAttribute('class', cls);
+  if (name in ILLUSTRATED) {
+    for (const [d, op] of ILLUSTRATED[name]) {
+      const p = document.createElementNS(NS, 'path');
+      p.setAttribute('d', d);
+      p.setAttribute('fill', 'currentColor');
+      p.setAttribute('fill-opacity', String(op));
+      svg.append(p);
+    }
+    return svg;
+  }
   const path = document.createElementNS(NS, 'path');
   if (name in FILL) {
     path.setAttribute('d', FILL[name]);
@@ -68,8 +99,58 @@ export function icon(name: IconName, cls = 'ico'): SVGSVGElement {
 
 /** Color e icono de cada apartado. */
 export const SECTION_STYLE: Record<SectionId, { color: string; icon: IconName }> = {
-  calentamiento: { color: 'var(--sec-warm)', icon: 'flame' },
-  pesas: { color: 'var(--sec-weights)', icon: 'dumbbell' },
-  abdominales: { color: 'var(--sec-abs)', icon: 'target' },
-  estiramientos: { color: 'var(--sec-stretch)', icon: 'stretch' },
+  calentamiento: { color: 'var(--sec-warm)', icon: 'secWarm' },
+  pesas: { color: 'var(--sec-weights)', icon: 'secWeights' },
+  abdominales: { color: 'var(--sec-abs)', icon: 'secAbs' },
+  estiramientos: { color: 'var(--sec-stretch)', icon: 'secStretch' },
 };
+
+/* Silueta del cuerpo con la zona trabajada resaltada (títulos de zona en las listas). */
+type Zone = 'cuello' | 'hombros' | 'pecho' | 'espalda' | 'brazos' | 'abdomen' | 'lumbar' | 'cadera' | 'piernas' | 'todo';
+
+export function zoneOf(title: string): Zone {
+  const t = title.toLowerCase();
+  if (/cuello|trapecio/.test(t)) return 'cuello';
+  if (/hombro/.test(t)) return 'hombros';
+  if (/pecho/.test(t)) return 'pecho';
+  if (/lumbar/.test(t)) return 'lumbar';
+  if (/espalda|costado/.test(t)) return 'espalda';
+  if (/brazo/.test(t)) return 'brazos';
+  if (/abdomen|oblicuo|core/.test(t)) return 'abdomen';
+  if (/cadera|glúte|aductor|ingle/.test(t)) return 'cadera';
+  if (/pierna/.test(t)) return 'piernas';
+  return 'todo';
+}
+
+const BODY = {
+  head: 'M12 1.2a2.3 2.3 0 1 1 0 4.6 2.3 2.3 0 0 1 0-4.6z',
+  neck: 'M11 5.6h2v1.4h-2z',
+  shoulders: 'M7.4 7.3c1.3-.5 2.8-.7 4.6-.7s3.3.2 4.6.7l.4 1.8H7z',
+  chest: 'M7.2 8.9h9.6l-.3 3.3H7.5z',
+  abdomen: 'M7.6 12.1h8.8l-.3 3.4H7.9z',
+  hips: 'M7.8 15.4h8.4l.4 2.4H7.4z',
+  armL: 'M6.2 7.6l1.4.4-1 6.2-1 2.9-1.3-.4.8-2.8z',
+  armR: 'M17.8 7.6l-1.4.4 1 6.2 1 2.9 1.3-.4-.8-2.8z',
+  legL: 'M7.5 17.7h4l-.5 6.1H8.4z',
+  legR: 'M12.5 17.7h4l-.9 6.1h-2.6z',
+};
+
+export function zoneIcon(title: string): SVGSVGElement {
+  const NS = 'http://www.w3.org/2000/svg';
+  const zone = zoneOf(title);
+  const hot: Record<Zone, string[]> = {
+    cuello: ['neck'], hombros: ['shoulders'], pecho: ['chest'], espalda: ['shoulders', 'chest'], brazos: ['armL', 'armR'],
+    abdomen: ['abdomen'], lumbar: ['abdomen'], cadera: ['hips'], piernas: ['legL', 'legR'], todo: [],
+  };
+  const svg = document.createElementNS(NS, 'svg');
+  svg.setAttribute('viewBox', '0 0 24 25');
+  svg.setAttribute('aria-hidden', 'true');
+  svg.setAttribute('class', 'zone-ico');
+  for (const [k, d] of Object.entries(BODY)) {
+    const p = document.createElementNS(NS, 'path');
+    p.setAttribute('d', d);
+    p.setAttribute('class', hot[zone].includes(k) ? 'zone-hot' : 'zone-body');
+    svg.append(p);
+  }
+  return svg;
+}

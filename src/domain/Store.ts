@@ -10,6 +10,7 @@ import {
   type WeightEntry,
 } from './types';
 import { caloriesOf, type Calories } from './calories';
+import { earnedMedals } from './medals';
 
 /** Todo lo que la app guarda en el móvil. */
 export interface SavedData {
@@ -33,6 +34,8 @@ export interface SavedData {
   summarySeen?: string;
   /** Última semana (lunes "2026-11-02") cuyo resumen ya se ha visto o descartado. */
   weekSeen?: string;
+  /** Medallas conseguidas: id → fecha (ISO). */
+  medals?: Record<string, string>;
 }
 
 export const STORAGE_KEY = 'ejercicios-en-casa';
@@ -355,6 +358,29 @@ export class Store {
     this.persist();
   }
 
+  /* ── Medallas ── */
+
+  get medals(): Readonly<Record<string, string>> {
+    return this.data.medals ?? {};
+  }
+
+  /**
+   * Comprueba las medallas y guarda las nuevas. Devuelve las conseguidas ahora.
+   * La primera vez se apuntan las que ya se tenían sin celebrarlas.
+   */
+  checkMedals(now: Date = new Date()): string[] {
+    const first = !this.data.medals;
+    const have = { ...(this.data.medals ?? {}) };
+    const kcal = this.data.history.reduce((n, e) => n + (this.caloriesFor(e)?.kcal ?? 0), 0);
+    const got = earnedMedals({ history: this.data.history, weights: this.data.weights, goalKg: this.data.settings.profile.goalKg, kcal });
+    const fresh = got.filter((id) => !have[id]);
+    if (!fresh.length && !first) return [];
+    for (const id of fresh) have[id] = now.toISOString();
+    this.data.medals = have;
+    this.persist();
+    return first ? [] : fresh;
+  }
+
   /* ── Favoritos ── */
 
   get favorites(): ReadonlySet<string> {
@@ -412,7 +438,7 @@ export class Store {
   }
 
   saveSettings(settings: Settings): void {
-    this.data.settings = { ...settings, rest: { ...settings.rest }, profile: { ...settings.profile } };
+    this.data.settings = { ...settings, rest: { ...settings.rest }, profile: { ...settings.profile }, phrases: { mine: [...settings.phrases.mine], onlyMine: settings.phrases.onlyMine } };
     this.persist();
   }
 
@@ -458,6 +484,8 @@ export class Store {
     const { restSeconds, mannequin: _m, ...known } = rawSettings as typeof rawSettings & { mannequin?: unknown };
     const settings: Settings = { ...DEFAULT_SETTINGS, ...known };
     settings.profile = { ...DEFAULT_SETTINGS.profile, ...(known.profile ?? {}) };
+    const ph = (known.phrases ?? {}) as Partial<Settings['phrases']>;
+    settings.phrases = { mine: Array.isArray(ph.mine) ? ph.mine.filter((x): x is string => typeof x === 'string').slice(0, 100) : [], onlyMine: !!ph.onlyMine };
     // v anteriores: una sola pausa para todo -> la misma en cada apartado
     const oldRest = Number.isFinite(restSeconds) ? (restSeconds as number) : undefined;
     settings.rest = Object.fromEntries(
@@ -507,7 +535,8 @@ export class Store {
     if (input.orderVer !== ORDER_VER) for (const k of Object.keys(order)) delete order[k as SectionId];
     const summarySeen = typeof input.summarySeen === 'string' ? input.summarySeen : undefined;
     const weekSeen = typeof input.weekSeen === 'string' ? input.weekSeen : undefined;
-    return { version: DATA_VERSION, routines, activeId, settings, history, hidden, order, orderVer: ORDER_VER, lastBackup, favorites, weights, summarySeen, weekSeen };
+    const medals = input.medals && typeof input.medals === 'object' ? (input.medals as Record<string, string>) : undefined;
+    return { version: DATA_VERSION, routines, activeId, settings, history, hidden, order, orderVer: ORDER_VER, lastBackup, favorites, weights, summarySeen, weekSeen, medals };
   }
 
   private persist(): void {

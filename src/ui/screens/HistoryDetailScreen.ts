@@ -116,6 +116,7 @@ function heartCard(hr: HeartSummary): HTMLElement {
   const line = document.createElementNS(NS, 'polyline');
   line.setAttribute('points', pts);
   line.setAttribute('class', 'hr-line');
+  line.setAttribute('pathLength', '1');
   const avg = document.createElementNS(NS, 'line');
   for (const [k, v] of Object.entries({ x1: pad, x2: W - pad, y1: y(hr.avg), y2: y(hr.avg), class: 'hr-avg' })) avg.setAttribute(k, String(v));
   svg.append(area, avg, line);

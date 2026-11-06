@@ -52,12 +52,10 @@ export function minutesPerWeek(history: readonly HistoryEntry[], weeks: number, 
   return out;
 }
 
-export function greeting(now = new Date()): string {
+export function greeting(now = new Date(), name?: string): string {
   const h = now.getHours();
-  if (h < 6) return 'Buenas noches';
-  if (h < 14) return 'Buenos días';
-  if (h < 21) return 'Buenas tardes';
-  return 'Buenas noches';
+  const g = h < 6 ? 'Buenas noches' : h < 14 ? 'Buenos días' : h < 21 ? 'Buenas tardes' : 'Buenas noches';
+  return name ? `${g}, ${name}` : g;
 }
 
 export const WEEKDAY_LETTERS = ['L', 'M', 'X', 'J', 'V', 'S', 'D'];

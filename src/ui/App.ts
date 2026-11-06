@@ -60,6 +60,8 @@ export class App {
     this.store = new Store(kv);
     // ejercicios que han cambiado de apartado en una versión nueva
     this.store.fixSections((id) => this.catalog.get(id)?.section);
+    // la primera vez se apuntan las medallas que ya se tenían, sin celebrarlas
+    if (!Object.keys(this.store.medals).length) this.store.checkMedals();
     this.applySettings();
     root.append(this.view, this.tabbar);
     // Botón atrás de Android: cada pantalla nueva añade una entrada al historial del navegador.
