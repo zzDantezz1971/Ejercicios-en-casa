@@ -22,6 +22,7 @@ export interface SavedData {
   hidden: string[];
   /** Orden personalizado de la lista de ejercicios de cada apartado (si no hay, el original). */
   order: Partial<Record<SectionId, string[]>>;
+  orderVer?: number;
   /** Fecha de la última copia de seguridad guardada (ISO). */
   lastBackup?: string;
   /** Ejercicios marcados como favoritos. */
@@ -39,6 +40,8 @@ export const DATA_VERSION = 2;
 export const DEFAULT_ROUTINE_NAME = 'Mi rutina';
 export const BACKUP_APP = 'ejercicios-en-casa';
 const HISTORY_LIMIT = 500;
+/** Versión del orden por defecto; al cambiar, se descartan los órdenes personalizados guardados. */
+const ORDER_VER = 2;
 const NAME_MAX = 40;
 
 /** Almacenamiento mínimo (localStorage en la app, un mapa en las pruebas). */
@@ -500,9 +503,11 @@ export class Store {
     }
     delete settings.profile.weight;
     weights.sort((a, b) => Date.parse(a.date) - Date.parse(b.date));
+    // nueva ordenación por zonas: se descarta una sola vez el orden personalizado anterior
+    if (input.orderVer !== ORDER_VER) for (const k of Object.keys(order)) delete order[k as SectionId];
     const summarySeen = typeof input.summarySeen === 'string' ? input.summarySeen : undefined;
     const weekSeen = typeof input.weekSeen === 'string' ? input.weekSeen : undefined;
-    return { version: DATA_VERSION, routines, activeId, settings, history, hidden, order, lastBackup, favorites, weights, summarySeen, weekSeen };
+    return { version: DATA_VERSION, routines, activeId, settings, history, hidden, order, orderVer: ORDER_VER, lastBackup, favorites, weights, summarySeen, weekSeen };
   }
 
   private persist(): void {

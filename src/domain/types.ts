@@ -69,7 +69,7 @@ export interface ExerciseDef {
   section: SectionId;
   /** Zona del cuerpo que trabaja. */
   zone: string;
-  /** Subgrupo dentro del apartado (solo estiramientos). */
+  /** Zona o subgrupo dentro del apartado. */
   group?: string;
   /** Se hace primero con un lado y luego con el otro: aviso de cambio a mitad del tiempo. */
   oneSided?: boolean;
