@@ -6,6 +6,8 @@ import { clear, h, humanDuration, plural } from '../dom';
 import { icon, SECTION_STYLE } from '../icons';
 import { RoutineScreen } from './RoutineScreen';
 import { startWorkout } from '../components/startWorkout';
+import { MonthScreen } from './MonthScreen';
+import { addMonths, monthKey, monthStart } from '../../domain/monthSummary';
 
 export class HomeScreen implements Screen {
   readonly el = h('main', { class: 'screen home' });
@@ -31,6 +33,20 @@ export class HomeScreen implements Screen {
         h('p', { class: 'eyebrow' }, date),
         h('h1', {}, greeting(now))),
     );
+
+    // Aviso: ya está el resumen del mes pasado
+    const prevMonth = addMonths(monthStart(now), -1);
+    const prevKey = monthKey(prevMonth);
+    const hadPrev = app.store.history.some((e) => monthKey(new Date(e.date)) === prevKey);
+    if (hadPrev && app.store.summarySeen !== prevKey) {
+      const name = prevMonth.toLocaleDateString('es-ES', { month: 'long' });
+      const card: HTMLElement = h('section', { class: 'card month-banner' },
+        icon('calendar'),
+        h('div', { class: 'mb-text' }, h('strong', {}, `Ya tienes el resumen de ${name}`), h('span', { class: 'muted small' }, 'Días, tiempo, calorías, peso y récords del mes.')),
+        h('button', { class: 'btn primary small', onclick: () => app.push(new MonthScreen(app, prevMonth)) }, 'Ver'),
+        h('button', { class: 'icon-btn small', 'aria-label': 'Cerrar aviso', onclick: () => { app.store.markSummarySeen(prevKey); card.remove(); } }, icon('close')));
+      this.el.append(card);
+    }
 
     // Tarjeta principal con la tabla en uso
     const art = h('img', { class: 'hero-art', alt: '' });

@@ -2,13 +2,8 @@ import { bestStreak, routineNames, secondsBySection } from '../../domain/stats';
 import { weightCard } from '../components/weightCard';
 import { loadWeights, muscleLoad } from '../../domain/muscleLoad';
 import { MUSCLE_NAMES, MUSCLES } from '../../figure/anatomy';
-import { Thumbnails } from '../../figure/FigureView';
-
-let maps: Thumbnails | null = null;
-/** Dibujante propio (vertical) para el mapa de músculos. */
-function bodyMaps(): Thumbnails {
-  return (maps ??= new Thumbnails(undefined, 220, 330));
-}
+import { bodyMaps } from '../components/bodyMaps';
+import { MonthScreen } from './MonthScreen';
 import { WeightScreen } from './WeightScreen';
 import type { Store } from '../../domain/Store';
 import { SECTION_IDS, SECTION_TITLES, type HistoryEntry } from '../../domain/types';
@@ -69,6 +64,7 @@ export class HistoryScreen implements Screen {
       weightCard(this.app, () => this.rerender(), () => this.app.push(new WeightScreen(this.app))),
       this.chart(list),
       this.calendar(list),
+      h('button', { class: 'btn ghost block month-btn', onclick: () => this.app.push(new MonthScreen(this.app)) }, icon('calendar'), 'Resumen del mes'),
       this.bySection(list),
       this.muscleMap(list, now),
       h('h3', { class: 'block-title' }, 'Entrenamientos'),

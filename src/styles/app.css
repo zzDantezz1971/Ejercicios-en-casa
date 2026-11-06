@@ -727,3 +727,36 @@ button:focus-visible, input:focus-visible, label:focus-within { outline: 2px sol
 .note.tip p { margin: 0 0 8px; }
 .note.tip p:last-child { margin-bottom: 0; }
 .weight-tips { text-align: left; width: 100%; }
+
+/* Objetivo de peso */
+.weight-chart .w-goal { stroke: var(--sec-stretch); stroke-width: 1.5; stroke-dasharray: 5 4; }
+.weight-chart .w-goal-label { fill: var(--sec-stretch); font: 700 10px var(--body); }
+.goal-block { display: flex; flex-direction: column; gap: 6px; }
+.goal-top { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+.goal-bar { height: 9px; border-radius: 999px; background: var(--surface-2); overflow: hidden; }
+.goal-fill { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--accent), var(--sec-stretch)); }
+.goal-block.reached { flex-direction: row; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 14px; background: rgb(245 165 36 / .12); border: 1px solid rgb(245 165 36 / .4); }
+.goal-block.reached > .ico { width: 28px; height: 28px; color: #F5A524; flex: none; }
+.goal-block.reached div { display: flex; flex-direction: column; }
+.goal-btns { display: flex; gap: 6px; }
+
+/* Resumen del mes */
+.month-btn { margin: 2px 0; }
+.month-nav { justify-content: space-between; }
+.month-nav h2 { margin: 0; text-transform: none; }
+.month-stat .delta { font-size: .78rem; font-weight: 700; text-align: center; }
+.delta.up { color: var(--sec-stretch); }
+.delta.down { color: #F5A524; }
+.delta.same { color: var(--muted); }
+.month-stat .muted.small:last-child { text-align: center; }
+.records { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.records li { display: grid; grid-template-columns: 20px 1fr auto; align-items: center; gap: 10px; }
+.records .ico { color: #F5A524; width: 18px; height: 18px; }
+.rec-name { font-weight: 600; }
+.rec-kg { font-weight: 700; font-variant-numeric: tabular-nums; color: var(--sec-stretch); }
+.month-extra { display: flex; flex-direction: column; gap: 8px; }
+.month-extra p { margin: 0; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.month-extra .ico { width: 18px; height: 18px; color: var(--accent-2); }
+.month-banner { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-color: color-mix(in srgb, var(--accent) 50%, var(--line)); }
+.month-banner > .ico { width: 26px; height: 26px; color: var(--accent-2); flex: none; }
+.mb-text { flex: 1; display: flex; flex-direction: column; min-width: 0; }

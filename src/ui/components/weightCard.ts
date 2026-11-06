@@ -2,6 +2,7 @@ import type { App } from '../App';
 import { bodyWeightDialog, h } from '../dom';
 import { icon } from '../icons';
 import { bmi, bmiCategory } from '../../domain/calories';
+import { goalProgress } from '../../domain/goal';
 
 const NS = 'http://www.w3.org/2000/svg';
 
@@ -36,13 +37,13 @@ export async function askWeight(app: App): Promise<boolean> {
 }
 
 /** Gráfica con la línea del peso a lo largo del tiempo. */
-export function weightChart(points: ReadonlyArray<{ date: string; kg: number }>): SVGSVGElement {
+export function weightChart(points: ReadonlyArray<{ date: string; kg: number }>, goal?: number | null): SVGSVGElement {
   const W = 320, H = 130, pad = { l: 34, r: 8, t: 10, b: 20 };
   const svg = document.createElementNS(NS, 'svg');
   svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
   svg.setAttribute('class', 'weight-chart');
   svg.setAttribute('role', 'img');
-  const kgs = points.map((p) => p.kg);
+  const kgs = points.map((p) => p.kg).concat(goal ? [goal] : []);
   const lo = Math.floor(Math.min(...kgs) - 1), hi = Math.ceil(Math.max(...kgs) + 1);
   const t0 = Date.parse(points[0].date), t1 = Date.parse(points[points.length - 1].date);
   const x = (d: string) => pad.l + (t1 > t0 ? ((Date.parse(d) - t0) / (t1 - t0)) * (W - pad.l - pad.r) : (W - pad.l - pad.r) / 2);
@@ -57,6 +58,10 @@ export function weightChart(points: ReadonlyArray<{ date: string; kg: number }>)
   for (const g of [lo, (lo + hi) / 2, hi]) {
     el('line', { x1: pad.l, x2: W - pad.r, y1: y(g), y2: y(g), class: 'grid' });
     el('text', { x: pad.l - 6, y: y(g), class: 'axis', 'text-anchor': 'end', 'dominant-baseline': 'central' }, String(Math.round(g * 10) / 10).replace('.', ','));
+  }
+  if (goal) {
+    el('line', { x1: pad.l, x2: W - pad.r, y1: y(goal), y2: y(goal), class: 'w-goal' });
+    el('text', { x: W - pad.r - 2, y: y(goal) - 4, class: 'w-goal-label', 'text-anchor': 'end' }, `Objetivo ${String(goal).replace('.', ',')}`);
   }
   const short = (d: string) => new Date(d).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
   el('text', { x: x(points[0].date), y: H - 4, class: 'axis', 'text-anchor': points.length > 1 ? 'start' : 'middle' }, short(points[0].date));
@@ -85,6 +90,7 @@ export function weightCard(app: App, onChange: () => void, onOpen: () => void): 
   }
   const first = ws[0], last = ws[ws.length - 1];
   const height = app.store.settings.profile.height;
+  const goal = app.store.settings.profile.goalKg;
   const diff = last.kg - first.kg;
   const since = new Date(first.date).toLocaleDateString('es-ES', { day: 'numeric', month: 'long' });
   return h('section', { class: 'card weight-card' },
@@ -94,6 +100,21 @@ export function weightCard(app: App, onChange: () => void, onOpen: () => void): 
       h('strong', {}, fmtKg(last.kg)),
       ws.length > 1 ? h('span', { class: 'wc-diff' + (diff < 0 ? ' down' : diff > 0 ? ' up' : '') }, `${fmtDiff(diff)} desde el ${since}`) : h('span', { class: 'muted small' }, 'Primera anotación')),
     height ? bmiRow(last.kg, height, first.kg) : h('p', { class: 'muted small' }, 'Pon tu altura en Ajustes › Mis datos para ver tu IMC.'),
-    weightChart(ws) as unknown as HTMLElement,
+    goal ? goalBlock(first.kg, last.kg, goal) : null,
+    weightChart(ws, goal) as unknown as HTMLElement,
     h('div', { class: 'wc-actions' }, add));
+}
+
+/** "Te faltan X kg" con barra de progreso, o la felicitación si ya se ha llegado. */
+export function goalBlock(firstKg: number, currentKg: number, goal: number): HTMLElement {
+  const g = goalProgress(firstKg, currentKg, goal);
+  if (g.reached) {
+    return h('div', { class: 'goal-block reached' }, icon('trophy'),
+      h('div', {}, h('strong', {}, '¡Objetivo conseguido!'), h('span', { class: 'muted small' }, `Has llegado a ${fmtKg(goal)}. Puedes fijar uno nuevo en Ajustes › Mis datos.`)));
+  }
+  const bar = h('span', { class: 'goal-fill' });
+  bar.style.width = `${Math.round(g.done * 100)}%`;
+  return h('div', { class: 'goal-block' },
+    h('div', { class: 'goal-top' }, h('strong', {}, `Te faltan ${fmtKg(g.left)}`), h('span', { class: 'muted small' }, `Objetivo ${fmtKg(goal)} · ${Math.round(g.done * 100)} %`)),
+    h('span', { class: 'goal-bar' }, bar));
 }

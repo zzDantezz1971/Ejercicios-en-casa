@@ -122,6 +122,8 @@ export interface Profile {
   weight?: number | null;
   /** h = hombre, m = mujer */
   sex: 'h' | 'm';
+  /** Peso al que se quiere llegar (kg). */
+  goalKg?: number | null;
 }
 
 export const DEFAULT_SETTINGS: Settings = {

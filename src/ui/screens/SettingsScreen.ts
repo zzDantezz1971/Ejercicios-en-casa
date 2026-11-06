@@ -5,7 +5,7 @@ import { saveBackupNow } from '../components/backupPrompt';
 import { askWeight, bmiRow, fmtKg } from '../components/weightCard';
 import { WeightScreen } from './WeightScreen';
 import type { App, Screen } from '../App';
-import { append, clear, confirmDialog, h, plural } from '../dom';
+import { append, bodyWeightDialog, clear, confirmDialog, h, plural } from '../dom';
 import { icon, SECTION_STYLE, type IconName } from '../icons';
 
 interface NumField {
@@ -94,6 +94,14 @@ export class SettingsScreen implements Screen {
         h('span', { class: 'rest-name' }, 'Peso', h('span', { class: 'muted small block' }, cw ? `Último anotado: ${fmtKg(cw)}` : 'Sin anotar')),
         h('button', { class: 'btn primary small', onclick: async () => { if (await askWeight(this.app)) this.render(); } }, icon('plus'), 'Anotar peso')),
       cw && p.height ? bmiRow(cw, p.height) : null,
+      h('div', { class: 'rest-row profile-row' },
+        h('span', { class: 'rest-name' }, 'Objetivo de peso', h('span', { class: 'muted small block' }, p.goalKg ? fmtKg(p.goalKg) : 'Sin objetivo')),
+        h('div', { class: 'goal-btns' },
+          p.goalKg ? h('button', { class: 'btn ghost small', onclick: () => set({ goalKg: null }) }, 'Quitar') : null,
+          h('button', { class: 'btn ghost small', onclick: async () => {
+            const kg = await bodyWeightDialog('Peso al que quieres llegar', p.goalKg ?? Math.round(((cw ?? 80) - 3) * 10) / 10);
+            if (kg !== null) set({ goalKg: kg });
+          } }, p.goalKg ? 'Cambiar' : 'Fijar objetivo'))),
       h('button', { class: 'link-btn profile-link', onclick: () => this.app.push(new WeightScreen(this.app)) }, 'Ver histórico de peso', icon('chevron')),
       h('div', { class: 'rest-row profile-row' }, h('span', { class: 'rest-name' }, 'Sexo'), h('div', { class: 'segmented' }, sexBtn('h', 'Hombre'), sexBtn('m', 'Mujer'))));
   }

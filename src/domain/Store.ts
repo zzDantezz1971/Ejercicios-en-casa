@@ -28,6 +28,8 @@ export interface SavedData {
   favorites: string[];
   /** Histórico del peso corporal, del más antiguo al más reciente. */
   weights: WeightEntry[];
+  /** Último mes ("2026-10") cuyo resumen ya se ha visto o descartado. */
+  summarySeen?: string;
 }
 
 export const STORAGE_KEY = 'ejercicios-en-casa';
@@ -326,6 +328,18 @@ export class Store {
     return any || (list.length === 0 && this.currentWeight !== null) ? n : null;
   }
 
+  /* ── Resumen del mes ── */
+
+  get summarySeen(): string | undefined {
+    return this.data.summarySeen;
+  }
+
+  markSummarySeen(key: string): void {
+    if (this.data.summarySeen === key) return;
+    this.data.summarySeen = key;
+    this.persist();
+  }
+
   /* ── Favoritos ── */
 
   get favorites(): ReadonlySet<string> {
@@ -474,7 +488,8 @@ export class Store {
     }
     delete settings.profile.weight;
     weights.sort((a, b) => Date.parse(a.date) - Date.parse(b.date));
-    return { version: DATA_VERSION, routines, activeId, settings, history, hidden, order, lastBackup, favorites, weights };
+    const summarySeen = typeof input.summarySeen === 'string' ? input.summarySeen : undefined;
+    return { version: DATA_VERSION, routines, activeId, settings, history, hidden, order, lastBackup, favorites, weights, summarySeen };
   }
 
   private persist(): void {

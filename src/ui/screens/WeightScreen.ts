@@ -28,7 +28,7 @@ export class WeightScreen implements Screen {
       this.body.append(h('p', { class: 'muted' }, 'Aún no has anotado tu peso.'), add);
       return;
     }
-    this.body.append(h('section', { class: 'card' }, weightChart(ws) as unknown as HTMLElement), add);
+    this.body.append(h('section', { class: 'card' }, weightChart(ws, this.app.store.settings.profile.goalKg) as unknown as HTMLElement), add);
     for (let i = ws.length - 1; i >= 0; i--) {
       const w = ws[i];
       const prev = ws[i - 1];

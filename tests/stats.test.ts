@@ -1,3 +1,5 @@
+import { addMonths, monthKey, monthStats } from '../src/domain/monthSummary';
+import { goalProgress } from '../src/domain/goal';
 import { exerciseWeights, weightSuggestion } from '../src/domain/weights';
 import { MUSCLES } from '../src/figure/anatomy';
 import { muscleLoad, loadWeights } from '../src/domain/muscleLoad';
@@ -76,5 +78,26 @@ describe('Evolución de pesos', () => {
     expect(weightSuggestion(h, 'curl')).toEqual({ kg: 8, next: 9, sessions: 4 });
     expect(weightSuggestion(h.slice(1), 'curl')).toBeNull();
     expect(weightSuggestion([e('2026-11-07', 8, false), ...h], 'curl')).toBeNull();
+  });
+});
+
+describe('Resumen del mes', () => {
+  it('cuenta días, tiempo, peso y récords del mes', () => {
+    const it = (kg: number) => [{ exerciseId: 'curl', section: 'pesas' as const, planned: 30, seconds: 30, completed: true, weight: kg }];
+    const e = (d: string, kg: number, name = 'Brazos'): HistoryEntry => ({ date: d, durationSec: 600, exercisesDone: 1, exercisesPlanned: 1, sections: ['pesas'], completed: true, routineName: name, items: it(kg) });
+    const h = [e('2026-10-28T10:00:00', 7), e('2026-11-02T10:00:00', 8), e('2026-11-03T10:00:00', 8), e('2026-11-03T18:00:00', 8, 'Otra'), e('2026-11-10T10:00:00', 9)];
+    const w = [{ date: '2026-10-20T08:00:00', kg: 82 }, { date: '2026-11-15T08:00:00', kg: 80.5 }];
+    const m = monthStats(h, w, new Date(2026, 10, 1), () => 100);
+    expect([m.days, m.sessions, m.seconds, m.kcal, m.bestStreak]).toEqual([3, 4, 2400, 400, 2]);
+    expect(m.topTable).toEqual({ name: 'Brazos', times: 3 });
+    expect(m.weight).toEqual({ from: 82, to: 80.5 });
+    expect(m.records).toEqual([{ exerciseId: 'curl', from: 7, to: 9 }]);
+    expect(monthKey(addMonths(new Date(2026, 11, 5), 1))).toBe('2027-01');
+  });
+  it('objetivo de peso: lo que falta y el progreso', () => {
+    expect(goalProgress(82, 80, 75)).toMatchObject({ left: 5, reached: false, losing: true });
+    expect(goalProgress(82, 80, 75).done).toBeCloseTo(2 / 7);
+    expect(goalProgress(82, 74.8, 75)).toMatchObject({ left: 0, reached: true, done: 1 });
+    expect(goalProgress(70, 72, 75)).toMatchObject({ left: 3, losing: false });
   });
 });
