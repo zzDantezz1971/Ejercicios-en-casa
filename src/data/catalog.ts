@@ -3,6 +3,7 @@ import type { ExerciseDef, SectionId } from '../domain/types';
 import { DESCRIPTIONS } from './descriptions';
 import { RAW_SECTIONS } from './rawExercises';
 import { MUSCLES_BY_EXERCISE } from './muscles';
+import { exerciseText } from '../i18n';
 
 /** Ejercicios que se hacen primero con un lado y luego con el otro. */
 const ONE_SIDED = new Set([
@@ -57,15 +58,18 @@ function buildSections(): SectionInfo[] {
       }
       const { n, z, g: _g, b, top: _top, ...motion } = raw;
       const id = slug(n!);
+      // textos en el idioma elegido (el identificador sigue saliendo del nombre en castellano)
+      const t = exerciseText(id);
+      const desc = DESCRIPTIONS[id];
       exercises.push({
         id,
-        name: n!,
+        name: t?.[0] ?? n!,
         section: sec.id,
-        zone: z ?? '',
+        zone: t?.[1] ?? z ?? '',
         group,
         oneSided: ONE_SIDED.has(id),
         badges: b,
-        description: DESCRIPTIONS[id],
+        description: t && desc ? { start: t[2], move: t[3], tip: t[4], mistakes: t[5] || undefined, easier: t[6] || undefined } : desc,
         muscles: MUSCLES_BY_EXERCISE[id],
         motion,
         viewLabel: raw.top ?? (motion.v === 'front' ? 'De frente' : undefined),

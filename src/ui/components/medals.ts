@@ -1,3 +1,4 @@
+import { LANG, LOCALE } from '../../i18n';
 import { MEDALS, type Medal } from '../../domain/medals';
 import type { App } from '../App';
 import { h } from '../dom';
@@ -61,7 +62,7 @@ export function medalsCard(app: App): HTMLElement {
   const got = MEDALS.filter((m) => have[m.id]).length;
   const info = h('p', { class: 'medal-info muted small', 'aria-live': 'polite' }, 'Toca una medalla para ver cómo se consigue.');
   return h('section', { class: 'card medals-card' },
-    h('div', { class: 'card-head' }, h('h3', {}, 'Medallas'), h('span', { class: 'muted small' }, `${got} de ${MEDALS.length}`)),
+    h('div', { class: 'card-head' }, h('h3', {}, 'Medallas'), h('span', { class: 'muted small' }, LANG === 'en' ? `${got} of ${MEDALS.length}` : `${got} de ${MEDALS.length}`)),
     h('div', { class: 'medal-grid' }, ...MEDALS.map((m) => {
       const when = have[m.id];
       return h('button', {
@@ -69,7 +70,7 @@ export function medalsCard(app: App): HTMLElement {
         'aria-label': `${m.title}${when ? ', conseguida' : ', por conseguir'}`,
         onclick: () => {
           info.replaceChildren(h('strong', {}, m.title), ` · ${m.desc} `,
-            when ? h('span', {}, `Conseguida el ${new Date(when).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}.`) : h('span', {}, 'Aún por conseguir.'));
+            when ? h('span', {}, `Conseguida el ${new Date(when).toLocaleDateString(LOCALE, { day: 'numeric', month: 'long', year: 'numeric' })}.`) : h('span', {}, 'Aún por conseguir.'));
         },
       }, medalBadge(m, !!when), h('span', { class: 'medal-name' }, m.title));
     })),

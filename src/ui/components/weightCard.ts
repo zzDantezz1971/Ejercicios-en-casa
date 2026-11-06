@@ -1,3 +1,4 @@
+import { LOCALE, DEC } from '../../i18n';
 import type { App } from '../App';
 import { bodyWeightDialog, h } from '../dom';
 import { icon } from '../icons';
@@ -8,12 +9,12 @@ import { checkAndCelebrate } from './medals';
 const NS = 'http://www.w3.org/2000/svg';
 
 export function fmtKg(kg: number): string {
-  return `${kg.toFixed(1).replace('.', ',')} kg`;
+  return `${kg.toFixed(1).replace('.', DEC)} kg`;
 }
 
 /** Diferencia con signo: −3,5 kg / +0,4 kg. */
 export function fmtDiff(d: number): string {
-  const v = Math.abs(d).toFixed(1).replace('.', ',');
+  const v = Math.abs(d).toFixed(1).replace('.', DEC);
   return d < 0 ? `−${v} kg` : d > 0 ? `+${v} kg` : '0 kg';
 }
 
@@ -24,9 +25,9 @@ export function bmiRow(kg: number, cm: number, firstKg?: number): HTMLElement {
   const change = firstKg !== undefined && firstKg !== kg ? v - bmi(firstKg, cm) : 0;
   return h('div', { class: 'bmi-row' },
     h('span', { class: 'bmi-label' }, 'IMC'),
-    h('strong', {}, String(v).replace('.', ',')),
+    h('strong', {}, String(v).replace('.', DEC)),
     h('span', { class: 'bmi-tag ' + c.tone }, c.label),
-    change ? h('span', { class: 'muted small' }, `${change < 0 ? '−' : '+'}${Math.abs(change).toFixed(1).replace('.', ',')} desde el inicio`) : null);
+    change ? h('span', { class: 'muted small' }, `${change < 0 ? '−' : '+'}${Math.abs(change).toFixed(1).replace('.', DEC)} desde el inicio`) : null);
 }
 
 /** Anota el peso de hoy. Devuelve true si se guardó. */
@@ -59,13 +60,13 @@ export function weightChart(points: ReadonlyArray<{ date: string; kg: number }>,
   };
   for (const g of [lo, (lo + hi) / 2, hi]) {
     el('line', { x1: pad.l, x2: W - pad.r, y1: y(g), y2: y(g), class: 'grid' });
-    el('text', { x: pad.l - 6, y: y(g), class: 'axis', 'text-anchor': 'end', 'dominant-baseline': 'central' }, String(Math.round(g * 10) / 10).replace('.', ','));
+    el('text', { x: pad.l - 6, y: y(g), class: 'axis', 'text-anchor': 'end', 'dominant-baseline': 'central' }, String(Math.round(g * 10) / 10).replace('.', DEC));
   }
   if (goal) {
     el('line', { x1: pad.l, x2: W - pad.r, y1: y(goal), y2: y(goal), class: 'w-goal' });
-    el('text', { x: W - pad.r - 2, y: y(goal) - 4, class: 'w-goal-label', 'text-anchor': 'end' }, `Objetivo ${String(goal).replace('.', ',')}`);
+    el('text', { x: W - pad.r - 2, y: y(goal) - 4, class: 'w-goal-label', 'text-anchor': 'end' }, `Objetivo ${String(goal).replace('.', DEC)}`);
   }
-  const short = (d: string) => new Date(d).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
+  const short = (d: string) => new Date(d).toLocaleDateString(LOCALE, { day: 'numeric', month: 'short' });
   el('text', { x: x(points[0].date), y: H - 4, class: 'axis', 'text-anchor': points.length > 1 ? 'start' : 'middle' }, short(points[0].date));
   if (points.length > 1) el('text', { x: W - pad.r, y: H - 4, class: 'axis', 'text-anchor': 'end' }, short(points[points.length - 1].date));
   if (points.length > 1) el('polyline', { points: points.map((p) => `${x(p.date).toFixed(1)},${y(p.kg).toFixed(1)}`).join(' '), class: 'w-line', pathLength: 1 });
@@ -94,7 +95,7 @@ export function weightCard(app: App, onChange: () => void, onOpen: () => void): 
   const height = app.store.settings.profile.height;
   const goal = app.store.settings.profile.goalKg;
   const diff = last.kg - first.kg;
-  const since = new Date(first.date).toLocaleDateString('es-ES', { day: 'numeric', month: 'long' });
+  const since = new Date(first.date).toLocaleDateString(LOCALE, { day: 'numeric', month: 'long' });
   return h('section', { class: 'card weight-card' },
     h('div', { class: 'card-head' }, h('h3', {}, 'Peso'),
       h('button', { class: 'link-btn', onclick: onOpen }, 'Ver todo', icon('chevron'))),

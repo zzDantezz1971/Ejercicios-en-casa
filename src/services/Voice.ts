@@ -1,14 +1,24 @@
-/** Avisos por voz en castellano con la síntesis de voz del móvil. */
+import { LANG, type Lang } from '../i18n';
+
+const CODE: Record<Lang, string> = { ca: 'ca', es: 'es', en: 'en' };
+
+/** Avisos por voz con la síntesis de voz del móvil, en el idioma de la app si el móvil tiene esa voz (si no, en castellano). */
 export class Voice {
   enabled = true;
   private voice: SpeechSynthesisVoice | null = null;
+  /** Idioma en que habla de verdad (el de la app o, si no hay voz para él, castellano). */
+  lang: Lang = LANG;
   private readonly synth: SpeechSynthesis | null = typeof speechSynthesis !== 'undefined' ? speechSynthesis : null;
 
   constructor() {
     if (!this.synth) return;
     const pick = () => {
       const voices = this.synth!.getVoices();
-      this.voice = voices.find((v) => v.lang === 'es-ES') ?? voices.find((v) => v.lang.startsWith('es')) ?? null;
+      const find = (l: Lang) => voices.find((v) => v.lang.replace('_', '-').toLowerCase().startsWith(CODE[l] + '-') || v.lang.toLowerCase() === CODE[l]);
+      const own = find(LANG);
+      const es = voices.find((v) => v.lang === 'es-ES') ?? find('es');
+      this.voice = own ?? es ?? null;
+      this.lang = own || !voices.length ? LANG : 'es';
     };
     pick();
     this.synth.addEventListener?.('voiceschanged', pick);
@@ -23,7 +33,7 @@ export class Voice {
     if (!this.enabled || !this.synth) return;
     if (!queue) this.synth.cancel();
     const u = new SpeechSynthesisUtterance(text);
-    u.lang = 'es-ES';
+    u.lang = this.voice?.lang ?? ({ ca: 'ca-ES', es: 'es-ES', en: 'en-GB' } as const)[this.lang];
     if (this.voice) u.voice = this.voice;
     u.rate = queue ? 1.15 : 1.02;
     this.synth.speak(u);

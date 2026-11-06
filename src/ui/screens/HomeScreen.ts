@@ -1,3 +1,4 @@
+import { LOCALE } from '../../i18n';
 import { WorkoutPlan, clampRounds } from '../../domain/WorkoutPlan';
 import { SECTION_IDS, SECTION_TITLES, type SectionId } from '../../domain/types';
 import type { App, Screen } from '../App';
@@ -28,7 +29,7 @@ export class HomeScreen implements Screen {
     clear(this.el);
 
     // Cabecera
-    const date = now.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' });
+    const date = now.toLocaleDateString(LOCALE, { weekday: 'long', day: 'numeric', month: 'long' });
     this.el.append(
       h('header', { class: 'home-head' },
         h('p', { class: 'eyebrow' }, date),
@@ -41,7 +42,7 @@ export class HomeScreen implements Screen {
     const prevKey = monthKey(prevMonth);
     const hadPrev = app.store.history.some((e) => monthKey(new Date(e.date)) === prevKey);
     if (hadPrev && app.store.summarySeen !== prevKey) {
-      const name = prevMonth.toLocaleDateString('es-ES', { month: 'long' });
+      const name = prevMonth.toLocaleDateString(LOCALE, { month: 'long' });
       const card: HTMLElement = h('section', { class: 'card month-banner' },
         icon('calendar'),
         h('div', { class: 'mb-text' }, h('strong', {}, `Ya tienes el resumen de ${name}`), h('span', { class: 'muted small' }, 'Días, tiempo, calorías, peso y récords del mes.')),
@@ -125,7 +126,7 @@ export class HomeScreen implements Screen {
     const items = [
       { v: cur.days / 7, color: 'var(--sec-warm)', label: 'Días', value: `${cur.days} de 7` },
       { v: mins / 150, color: 'var(--accent)', label: 'Minutos', value: `${mins} de 150`, hint: '150 min a la semana es lo recomendado' },
-      { v: cur.kcal != null ? cur.kcal / kcalGoal : 0, color: 'var(--sec-stretch)', label: 'Calorías', value: cur.kcal != null ? `${cur.kcal} de ${kcalGoal}` : '—', hint: prev.kcal ? 'Meta: lo de la semana pasada' : undefined },
+      { v: cur.kcal != null ? cur.kcal / kcalGoal : 0, color: 'var(--sec-stretch)', label: 'Calorías', value: cur.kcal != null ? `${cur.kcal} de ${kcalGoal} kcal` : '—', hint: prev.kcal ? 'Meta: lo de la semana pasada' : undefined },
     ];
     const NS = 'http://www.w3.org/2000/svg';
     const svg = document.createElementNS(NS, 'svg');
@@ -182,8 +183,8 @@ export function formatDate(iso: string): string {
   const today = new Date();
   const yesterday = new Date(Date.now() - 864e5);
   const same = (a: Date, b: Date) => a.toDateString() === b.toDateString();
-  const time = d.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+  const time = d.toLocaleTimeString(LOCALE, { hour: '2-digit', minute: '2-digit' });
   if (same(d, today)) return `hoy a las ${time}`;
   if (same(d, yesterday)) return `ayer a las ${time}`;
-  return d.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' });
+  return d.toLocaleDateString(LOCALE, { weekday: 'long', day: 'numeric', month: 'long' });
 }

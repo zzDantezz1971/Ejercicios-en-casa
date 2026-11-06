@@ -1,3 +1,4 @@
+import { DEC } from '../i18n';
 /** Crea elementos con atributos e hijos en una línea: h('button', { class: 'btn', onclick }, 'Texto'). */
 type Attrs = Record<string, unknown>;
 type Child = Node | string | number | null | undefined | false;
@@ -130,7 +131,7 @@ export function actionSheet<T extends string>(title: string, options: Array<{ id
 
 /** Peso con coma decimal: 7,5 kg. */
 export function kg(w: number): string {
-  return `${String(w).replace('.', ',')} kg`;
+  return `${String(w).replace('.', DEC)} kg`;
 }
 
 /**
@@ -177,7 +178,7 @@ export function bodyWeightDialog(title: string, initial: number): Promise<number
   return new Promise((resolve) => {
     let value = Math.round(initial * 10) / 10;
     const shown = h('span', { class: 'wd-value' });
-    const paint = () => (shown.textContent = `${value.toFixed(1).replace('.', ',')} kg`);
+    const paint = () => (shown.textContent = `${value.toFixed(1).replace('.', DEC)} kg`);
     const set = (v: number) => {
       value = Math.min(250, Math.max(30, Math.round(v * 10) / 10));
       paint();

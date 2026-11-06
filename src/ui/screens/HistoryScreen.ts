@@ -1,3 +1,4 @@
+import { LOCALE } from '../../i18n';
 import { bestStreak, routineNames, secondsBySection } from '../../domain/stats';
 import { weightCard } from '../components/weightCard';
 import { medalsCard } from '../components/medals';
@@ -78,7 +79,7 @@ export class HistoryScreen implements Screen {
     let month = '';
     for (const e of list) {
       const d = new Date(e.date);
-      const m = d.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' });
+      const m = d.toLocaleDateString(LOCALE, { month: 'long', year: 'numeric' });
       if (m !== month) {
         month = m;
         this.body.append(h('h4', { class: 'group-title' }, m));
@@ -220,7 +221,7 @@ export class HistoryScreen implements Screen {
     const m = this.month;
     const first = startOfWeek(m);
     const today = dayKey(new Date());
-    const title = m.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' });
+    const title = m.toLocaleDateString(LOCALE, { month: 'long', year: 'numeric' });
     const cells: HTMLElement[] = WEEKDAY_LETTERS.map((l) => h('span', { class: 'cal-wd' }, l));
     for (let i = 0; i < 42; i++) {
       const d = addDays(first, i);
@@ -253,10 +254,10 @@ function kcalTag(e: HistoryEntry, store: Store): HTMLElement | null {
 
 function row(e: HistoryEntry, store: Store, onOpen: () => void): HTMLElement {
   const d = new Date(e.date);
-  return h('button', { class: 'card history-row', 'aria-label': `Ver el entrenamiento del ${d.toLocaleDateString('es-ES')}`, onclick: onOpen },
+  return h('button', { class: 'card history-row', 'aria-label': `Ver el entrenamiento del ${d.toLocaleDateString(LOCALE)}`, onclick: onOpen },
     h('div', { class: 'h-date' },
-      h('span', { class: 'h-day' }, d.toLocaleDateString('es-ES', { day: 'numeric' })),
-      h('span', { class: 'h-wd' }, d.toLocaleDateString('es-ES', { weekday: 'short' }))),
+      h('span', { class: 'h-day' }, d.toLocaleDateString(LOCALE, { day: 'numeric' })),
+      h('span', { class: 'h-wd' }, d.toLocaleDateString(LOCALE, { weekday: 'short' }))),
     h('div', { class: 'h-main' },
       e.routineName ? h('span', { class: 'h-name' }, e.routineName) : null,
       h('strong', {}, `${humanDuration(e.durationSec)} · ${plural(e.exercisesDone, 'ejercicio', 'ejercicios')}`),
@@ -269,6 +270,6 @@ function row(e: HistoryEntry, store: Store, onOpen: () => void): HTMLElement {
         e.heart ? h('span', { class: 'h-hr' }, icon('heart'), `${e.heart.avg} ppm`) : null,
         kcalTag(e, store)),
       !e.completed ? h('span', { class: 'badge warn' }, 'Terminado antes') : null),
-    h('span', { class: 'h-time muted small' }, d.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })),
+    h('span', { class: 'h-time muted small' }, d.toLocaleTimeString(LOCALE, { hour: '2-digit', minute: '2-digit' })),
   );
 }

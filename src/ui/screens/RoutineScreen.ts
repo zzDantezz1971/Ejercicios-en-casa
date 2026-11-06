@@ -1,3 +1,4 @@
+import { tr } from '../../i18n';
 import { RoutineEditor, STEP_SECONDS } from '../../domain/RoutineEditor';
 import { clampRounds, MAX_ROUNDS } from '../../domain/WorkoutPlan';
 import { SECTION_IDS, usesWeight, type ExerciseDef, type SectionId } from '../../domain/types';
@@ -221,7 +222,7 @@ export class RoutineScreen implements Screen {
       // Búsqueda en todos los apartados
       let found = 0;
       for (const sec of this.app.sections) {
-        const hits = this.ordered(sec.id).filter((e) => normalize(`${e.name} ${e.zone} ${e.group ?? ''}`).includes(q));
+        const hits = this.ordered(sec.id).filter((e) => normalize(`${e.name} ${e.zone} ${e.group ? tr(e.group) : ''}`).includes(q));
         if (!hits.length) continue;
         found += hits.length;
         this.list.append(h('h2', { class: 'group-title' }, sec.title));

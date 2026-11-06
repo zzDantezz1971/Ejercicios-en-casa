@@ -485,6 +485,7 @@ export class Store {
     const settings: Settings = { ...DEFAULT_SETTINGS, ...known };
     settings.profile = { ...DEFAULT_SETTINGS.profile, ...(known.profile ?? {}) };
     const ph = (known.phrases ?? {}) as Partial<Settings['phrases']>;
+    if (!['ca', 'es', 'en'].includes(settings.lang)) settings.lang = 'ca';
     settings.phrases = { mine: Array.isArray(ph.mine) ? ph.mine.filter((x): x is string => typeof x === 'string').slice(0, 100) : [], onlyMine: !!ph.onlyMine };
     // v anteriores: una sola pausa para todo -> la misma en cada apartado
     const oldRest = Number.isFinite(restSeconds) ? (restSeconds as number) : undefined;

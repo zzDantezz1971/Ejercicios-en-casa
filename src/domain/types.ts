@@ -114,6 +114,8 @@ export interface Settings {
   askWatch: boolean;
   /** Datos personales para calcular las calorías. */
   profile: Profile;
+  /** Idioma de la app. */
+  lang: 'ca' | 'es' | 'en';
 }
 
 export interface Profile {
@@ -140,6 +142,7 @@ export const DEFAULT_SETTINGS: Settings = {
   voiceCount: true,
   askWatch: true,
   profile: { age: null, height: null, sex: 'h' },
+  lang: 'ca',
 };
 
 export interface HistoryEntry {

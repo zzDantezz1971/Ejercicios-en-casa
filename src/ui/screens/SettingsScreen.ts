@@ -1,3 +1,4 @@
+import { LANG, LANGS, LOCALE, DEC } from '../../i18n';
 import { phraseOfDay } from '../../domain/phrases';
 import { applyUpdate, BUILD_TIME, checkForUpdate, updateReady } from '../../services/Updates';
 import { Store } from '../../domain/Store';
@@ -50,7 +51,7 @@ export class SettingsScreen implements Screen {
   /** Fecha y hora de la versión instalada y botón para buscar una nueva. */
   private versionSection(): HTMLElement {
     const d = new Date(BUILD_TIME);
-    const when = `${d.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}, ${d.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}`;
+    const when = `${d.toLocaleDateString(LOCALE, { day: 'numeric', month: 'long', year: 'numeric' })}, ${d.toLocaleTimeString(LOCALE, { hour: '2-digit', minute: '2-digit' })}`;
     const status = h('p', { class: 'muted small', 'aria-live': 'polite' }, updateReady() ? 'Hay una versión nueva lista.' : '');
     const btn = h('button', { class: 'btn ghost small' }, updateReady() ? 'Actualizar ahora' : 'Buscar actualización');
     btn.addEventListener('click', async () => {
@@ -72,6 +73,21 @@ export class SettingsScreen implements Screen {
         h('p', { class: 'muted small' }, `Del ${when}`)),
       btn,
       status);
+  }
+
+  /** Idioma de la app: al cambiarlo se recarga para pintarlo todo de nuevo. */
+  private langCard(): HTMLElement {
+    const pick = (id: Settings['lang']) => {
+      if (id === LANG) return;
+      this.app.store.saveSettings({ ...this.app.store.settings, lang: id });
+      location.reload();
+    };
+    return h('section', { class: 'card setting rest-card lang-card' },
+      h('div', { class: 'rest-head' },
+        h('span', { class: 'set-icon' }, icon('globe')),
+        h('div', { class: 'set-text' }, h('strong', {}, 'Idioma'))),
+      h('div', { class: 'segmented lang-segs', 'data-no-tr': '' },
+        ...LANGS.map((l) => h('button', { class: 'seg' + (l.id === LANG ? ' on' : ''), 'aria-pressed': String(l.id === LANG), lang: l.id, onclick: () => pick(l.id) }, l.name))));
   }
 
   /** Pausa entre ejercicios, una por apartado. */
@@ -102,7 +118,7 @@ export class SettingsScreen implements Screen {
     const set = (patch: Partial<Settings['profile']>) => this.update({ profile: { ...p, ...patch } });
     const stepper = (label: string, value: number | null, unit: string, start: number, step: number, min: number, max: number, onSet: (v: number) => void) => {
       const v = value ?? start;
-      const fmt = (n: number) => `${String(n).replace('.', ',')} ${unit}`;
+      const fmt = (n: number) => `${String(n).replace('.', DEC)} ${unit}`;
       return h('div', { class: 'rest-row profile-row' },
         h('span', { class: 'rest-name' }, label),
         h('div', { class: 'stepper' },
@@ -213,7 +229,7 @@ export class SettingsScreen implements Screen {
   private backupSection(): HTMLElement {
     const last = this.app.store.lastBackup;
     const msg = h('p', { class: 'muted small', 'aria-live': 'polite' },
-      last ? `Última copia: ${new Date(last).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}` : 'Aún no has guardado ninguna copia.');
+      last ? `Última copia: ${new Date(last).toLocaleDateString(LOCALE, { day: 'numeric', month: 'long', year: 'numeric' })}` : 'Aún no has guardado ninguna copia.');
     const save = async () => {
       if (await saveBackupNow(this.app)) this.render();
     };
@@ -227,7 +243,7 @@ export class SettingsScreen implements Screen {
         await confirmDialog((e as Error).message, 'Vale', '');
         return;
       }
-      const when = info.exportedAt ? ` del ${new Date(info.exportedAt).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}` : '';
+      const when = info.exportedAt ? ` del ${new Date(info.exportedAt).toLocaleDateString(LOCALE, { day: 'numeric', month: 'long', year: 'numeric' })}` : '';
       const ok = await confirmDialog(
         `¿Restaurar la copia${when}? Tiene ${plural(info.routines, 'tabla', 'tablas')} y ${plural(info.history, 'entrenamiento', 'entrenamientos')}. Se sustituirá todo lo que hay ahora en la app.`,
         'Restaurar');
@@ -250,7 +266,7 @@ export class SettingsScreen implements Screen {
   private render(): void {
     const s = this.app.store.settings;
     clear(this.body);
-    this.body.append(h('h3', { class: 'block-title' }, 'Tiempos'), this.restCard(s));
+    this.body.append(this.langCard(), h('h3', { class: 'block-title' }, 'Tiempos'), this.restCard(s));
     for (const f of FIELDS) {
       const v = s[f.key];
       this.body.append(
@@ -280,7 +296,11 @@ export class SettingsScreen implements Screen {
           this.app.sounds.unlock();
           this.app.sounds.start();
           this.app.voice.unlock();
-          this.app.voice.say('Así sonarán los avisos. Siguiente: curl de bíceps.');
+          this.app.voice.say({
+            es: 'Así sonarán los avisos. Siguiente: curl de bíceps.',
+            ca: 'Així sonaran els avisos. Següent: curl de bíceps.',
+            en: 'This is how the alerts will sound. Next up: bicep curl.',
+          }[this.app.voice.lang]);
         },
       }, icon('volume'), 'Probar sonido y voz'),
       h('h3', { class: 'block-title' }, 'Mis datos'),

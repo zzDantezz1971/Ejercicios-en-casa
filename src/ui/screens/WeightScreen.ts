@@ -1,3 +1,4 @@
+import { LOCALE } from '../../i18n';
 import type { App, Screen } from '../App';
 import { actionSheet, bodyWeightDialog, clear, confirmDialog, h } from '../dom';
 import { icon } from '../icons';
@@ -37,14 +38,14 @@ export class WeightScreen implements Screen {
       this.body.append(h('button', { class: 'card weight-row', onclick: () => void this.menu(i) },
         h('div', { class: 'h-main' },
           h('strong', {}, fmtKg(w.kg)),
-          h('span', { class: 'muted small' }, d.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }))),
+          h('span', { class: 'muted small' }, d.toLocaleDateString(LOCALE, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }))),
         diff !== null ? h('span', { class: 'wc-diff' + (diff < 0 ? ' down' : diff > 0 ? ' up' : '') }, fmtDiff(diff)) : h('span', { class: 'muted small' }, 'inicio')));
     }
   }
 
   private async menu(i: number): Promise<void> {
     const w = this.app.store.weights[i];
-    const when = new Date(w.date).toLocaleDateString('es-ES', { day: 'numeric', month: 'long' });
+    const when = new Date(w.date).toLocaleDateString(LOCALE, { day: 'numeric', month: 'long' });
     const c = await actionSheet(`${fmtKg(w.kg)} · ${when}`, [
       { id: 'edit', label: 'Cambiar el peso' },
       { id: 'delete', label: 'Borrar esta anotación', danger: true },

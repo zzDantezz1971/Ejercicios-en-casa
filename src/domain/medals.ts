@@ -1,3 +1,4 @@
+import { LOCALE } from '../i18n';
 import { SECTION_IDS, type HistoryEntry, type WeightEntry } from './types';
 import { bestStreak } from './stats';
 import { weekKey } from './monthSummary';
@@ -58,7 +59,7 @@ const time = (n: number, tier: Tier, title: string): Medal => ({
   id: `horas-${n}`, title, desc: `${n} horas de entrenamiento en total.`, icon: 'clock', tier, earned: (c) => hours(c) >= n,
 });
 const kcal = (n: number, tier: Tier, title: string): Medal => ({
-  id: `kcal-${n}`, title, desc: `${n.toLocaleString('es-ES')} kcal quemadas en total.`, icon: 'heart', tier, earned: (c) => c.kcal >= n,
+  id: `kcal-${n}`, title, desc: `${n.toLocaleString(LOCALE)} kcal quemadas en total.`, icon: 'heart', tier, earned: (c) => c.kcal >= n,
 });
 const kg = (n: number, tier: Tier, title: string): Medal => ({
   id: `kg-${n}`, title, desc: `${n} kg menos desde tu primer peso anotado.`, icon: 'target', tier, earned: (c) => lost(c) >= n - 1e-9,

@@ -7,6 +7,7 @@ import { SettingsScreen } from './ui/screens/SettingsScreen';
 import { TablesScreen } from './ui/screens/TablesScreen';
 import { applyUpdate, initUpdates, onUpdateReady } from './services/Updates';
 import { h } from './ui/dom';
+import { startTranslating } from './i18n';
 
 async function start(): Promise<void> {
   // El cuerpo del maniquí se carga antes de dibujar la primera figura.
@@ -21,6 +22,7 @@ async function start(): Promise<void> {
   app.openTab('inicio');
 }
 
+startTranslating();
 void start();
 
 // Funciona sin conexión. Cuando hay una versión nueva, un aviso permite aplicarla con un toque

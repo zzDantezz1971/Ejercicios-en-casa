@@ -1,3 +1,4 @@
+import { LOCALE } from '../../i18n';
 import { loadWeights, muscleLoad } from '../../domain/muscleLoad';
 import { addMonths, addWeeks, monthKey, monthStart, monthStats, weekKey, weekStart, weekStats, type MonthStats } from '../../domain/monthSummary';
 import { MUSCLE_NAMES, MUSCLES } from '../../figure/anatomy';
@@ -47,12 +48,12 @@ export class MonthScreen implements Screen {
     if (W) {
       const end = addWeeks(this.week, 1);
       end.setDate(end.getDate() - 1);
-      const f = (d: Date, o: Intl.DateTimeFormatOptions) => d.toLocaleDateString('es-ES', o);
+      const f = (d: Date, o: Intl.DateTimeFormatOptions) => d.toLocaleDateString(LOCALE, o);
       title = this.week.getMonth() === end.getMonth()
         ? `Del ${this.week.getDate()} al ${f(end, { day: 'numeric', month: 'long' })}`
         : `Del ${f(this.week, { day: 'numeric', month: 'short' })} al ${f(end, { day: 'numeric', month: 'short' })}`;
     } else {
-      const t0 = this.month.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' });
+      const t0 = this.month.toLocaleDateString(LOCALE, { month: 'long', year: 'numeric' });
       title = t0.charAt(0).toUpperCase() + t0.slice(1);
     }
     const go = (d: number) => {
@@ -75,7 +76,7 @@ export class MonthScreen implements Screen {
       this.body.append(h('div', { class: 'empty-state' }, icon('calendar', 'ico big'), h('p', {}, W ? 'No hay entrenamientos en esta semana.' : 'No hay entrenamientos en este mes.')));
       return;
     }
-    const prevName = W ? 'la semana anterior' : addMonths(this.month, -1).toLocaleDateString('es-ES', { month: 'long' });
+    const prevName = W ? 'la semana anterior' : addMonths(this.month, -1).toLocaleDateString(LOCALE, { month: 'long' });
     const cmp = (a: number, b: number, unit: (n: number) => string) => {
       if (!prev.sessions) return h('span', { class: 'muted small' }, W ? 'sin datos de la semana anterior' : 'sin datos del mes anterior');
       const d = a - b;

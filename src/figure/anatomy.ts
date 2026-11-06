@@ -1,3 +1,4 @@
+import { tr } from '../i18n';
 import * as THREE from 'three';
 import type { SkinData } from './SkinnedFigure';
 
@@ -9,11 +10,13 @@ export const MUSCLES = ['pecho', 'abdominales', 'oblicuos', 'lumbar', 'espalda',
   'triceps', 'antebrazo', 'cuadriceps', 'isquios', 'aductores', 'gemelos', 'cuello'] as const;
 export type Muscle = (typeof MUSCLES)[number];
 
-export const MUSCLE_NAMES: Record<Muscle, string> = {
+const MUSCLE_NAMES_ES: Record<Muscle, string> = {
   pecho: 'Pecho', abdominales: 'Abdominales', oblicuos: 'Oblicuos', lumbar: 'Zona lumbar', espalda: 'Espalda (dorsales)',
   trapecio: 'Trapecio', gluteos: 'Glúteos', deltoides: 'Hombros', biceps: 'Bíceps', triceps: 'Tríceps', antebrazo: 'Antebrazos',
   cuadriceps: 'Cuádriceps', isquios: 'Isquiotibiales', aductores: 'Aductores', gemelos: 'Gemelos', cuello: 'Cuello',
 };
+/** Nombre de cada músculo en el idioma en uso. */
+export const MUSCLE_NAMES = Object.fromEntries(Object.entries(MUSCLE_NAMES_ES).map(([k, v]) => [k, tr(v)])) as Record<Muscle, string>;
 
 export interface MuscleToken { muscle: Muscle; kind: 'work' | 'work2' | 'stretch'; side?: 'L' | 'R' }
 

@@ -1,4 +1,5 @@
 import type { HistoryEntry } from '../domain/types';
+import { LANG } from '../i18n';
 
 const DAY = 864e5;
 
@@ -58,4 +59,8 @@ export function greeting(now = new Date(), name?: string): string {
   return name ? `${g}, ${name}` : g;
 }
 
-export const WEEKDAY_LETTERS = ['L', 'M', 'X', 'J', 'V', 'S', 'D'];
+export const WEEKDAY_LETTERS = {
+  es: ['L', 'M', 'X', 'J', 'V', 'S', 'D'],
+  ca: ['Dl', 'Dt', 'Dc', 'Dj', 'Dv', 'Ds', 'Dg'],
+  en: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
+}[LANG];
