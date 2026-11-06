@@ -4,9 +4,12 @@ import { VitePWA } from 'vite-plugin-pwa';
 // La app se publica en https://<usuario>.github.io/ejercicios-en-casa/
 export default defineConfig({
   base: './',
+  // fecha y hora de esta versión (se muestra en Ajustes)
+  define: { __BUILD_TIME__: JSON.stringify(new Date().toISOString()) },
   plugins: [
     VitePWA({
-      registerType: 'autoUpdate',
+      // la versión nueva se aplica cuando el usuario pulsa "Actualizar" (nunca en mitad de un entrenamiento)
+      registerType: 'prompt',
       includeAssets: ['icon.svg'],
       manifest: {
         name: 'Ejercicios en casa',

@@ -1,3 +1,4 @@
+import { applyUpdate, BUILD_TIME, checkForUpdate, updateReady } from '../../services/Updates';
 import { Store } from '../../domain/Store';
 import { SECTION_IDS, SECTION_TITLES, type Settings } from '../../domain/types';
 import { pickBackupFile } from '../../services/Backup';
@@ -43,6 +44,33 @@ export class SettingsScreen implements Screen {
     this.app.store.saveSettings({ ...this.app.store.settings, ...patch });
     this.app.applySettings();
     this.render();
+  }
+
+  /** Fecha y hora de la versión instalada y botón para buscar una nueva. */
+  private versionSection(): HTMLElement {
+    const d = new Date(BUILD_TIME);
+    const when = `${d.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}, ${d.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}`;
+    const status = h('p', { class: 'muted small', 'aria-live': 'polite' }, updateReady() ? 'Hay una versión nueva lista.' : '');
+    const btn = h('button', { class: 'btn ghost small' }, updateReady() ? 'Actualizar ahora' : 'Buscar actualización');
+    btn.addEventListener('click', async () => {
+      if (updateReady()) return void applyUpdate();
+      btn.disabled = true;
+      status.textContent = 'Buscando…';
+      const found = await checkForUpdate();
+      btn.disabled = false;
+      if (found) {
+        status.textContent = 'Hay una versión nueva lista.';
+        btn.textContent = 'Actualizar ahora';
+      } else {
+        status.textContent = navigator.onLine ? 'Ya tienes la última versión.' : 'Sin conexión: no se puede comprobar ahora.';
+      }
+    });
+    return h('section', { class: 'card version-card' },
+      h('div', { class: 'set-text' },
+        h('strong', {}, 'Versión de la app'),
+        h('p', { class: 'muted small' }, `Del ${when}`)),
+      btn,
+      status);
   }
 
   /** Pausa entre ejercicios, una por apartado. */
@@ -230,7 +258,7 @@ export class SettingsScreen implements Screen {
       this.watchSection(),
       h('h3', { class: 'block-title' }, 'Copia de seguridad'),
       this.backupSection(),
-      h('p', { class: 'muted small center' }, 'Ejercicios en casa · funciona sin conexión'),
+      this.versionSection(),
       !this.app.voice.available ? h('p', { class: 'muted' }, 'Este navegador no tiene voz disponible.') : null,
     );
   }
