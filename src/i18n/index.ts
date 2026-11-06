@@ -148,6 +148,9 @@ function walk(root: Node): void {
 /** Traduce todo lo que se pinte en la página a partir de ahora. */
 export function startTranslating(): void {
   document.documentElement.lang = LANG;
+  // la app ya está traducida: que el navegador no la traduzca otra vez por su cuenta
+  document.documentElement.setAttribute('translate', 'no');
+  document.documentElement.classList.add('notranslate');
   if (LANG === 'es') return;
   walk(document.body);
   new MutationObserver((records) => {
