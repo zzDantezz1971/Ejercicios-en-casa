@@ -34,7 +34,7 @@ export class HomeScreen implements Screen {
       h('header', { class: 'home-head' },
         h('p', { class: 'eyebrow' }, date),
         h('h1', {}, greeting(now, app.store.settings.profile.name)),
-        h('p', { class: 'daily-phrase' }, phraseOfDay(now, app.store.settings.phrases.mine, app.store.settings.phrases.onlyMine, app.store.settings.profile.name))),
+        app.store.settings.phrases ? h('p', { class: 'daily-phrase' }, phraseOfDay(now, app.store.settings.profile.name)) : null),
     );
 
     // Aviso: ya está el resumen del mes pasado

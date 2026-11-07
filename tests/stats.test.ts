@@ -118,10 +118,9 @@ describe('Frases motivadoras', () => {
   it('pone el nombre o lo quita, y cambia cada día', () => {
     expect(personalize('Cada repetición cuenta{, n}.', 'David')).toBe('Cada repetición cuenta, David.');
     expect(personalize('Cada repetición cuenta{, n}.')).toBe('Cada repetición cuenta.');
-    expect(phraseOfDay(new Date(2026, 10, 6), ['Mía'], true)).toBe('Mía');
-    const a = phraseOfDay(new Date(2026, 10, 6, 8), [], false), b = phraseOfDay(new Date(2026, 10, 6, 22), [], false);
+    const a = phraseOfDay(new Date(2026, 10, 6, 8)), b = phraseOfDay(new Date(2026, 10, 6, 22));
     expect(a).toBe(b);
-    expect(phraseOfDay(new Date(2026, 10, 7), [], false)).not.toBe(a);
+    expect(phraseOfDay(new Date(2026, 10, 7))).not.toBe(a);
   });
 });
 

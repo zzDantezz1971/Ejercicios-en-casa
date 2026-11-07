@@ -1,12 +1,9 @@
 import { LOCALE } from '../../i18n';
 import { bestStreak, routineNames, secondsBySection } from '../../domain/stats';
-import { weightCard } from '../components/weightCard';
-import { medalsCard } from '../components/medals';
 import { loadWeights, muscleLoad } from '../../domain/muscleLoad';
 import { MUSCLE_NAMES, MUSCLES } from '../../figure/anatomy';
 import { bodyMaps } from '../components/bodyMaps';
 import { MonthScreen } from './MonthScreen';
-import { WeightScreen } from './WeightScreen';
 import type { Store } from '../../domain/Store';
 import { SECTION_IDS, SECTION_TITLES, type HistoryEntry } from '../../domain/types';
 import type { App, Screen } from '../App';
@@ -42,7 +39,6 @@ export class HistoryScreen implements Screen {
     clear(this.body);
     if (!all.length) {
       this.body.append(h('div', { class: 'empty-state' }, icon('calendar', 'ico big'), h('p', {}, 'Aún no hay entrenamientos. Cuando termines el primero aparecerá aquí.')));
-      this.body.append(weightCard(this.app, () => this.rerender(), () => this.app.push(new WeightScreen(this.app))));
       return;
     }
     const names = routineNames(all);
@@ -63,8 +59,6 @@ export class HistoryScreen implements Screen {
         stat('calendar', String(daysThisMonth), 'días este mes'),
         stat('clock', humanDuration(total), 'en total'),
         ...this.kcalStats(list, now)),
-      weightCard(this.app, () => this.rerender(), () => this.app.push(new WeightScreen(this.app))),
-      medalsCard(this.app),
       this.chart(list),
       this.calendar(list),
       h('div', { class: 'summary-btns' },

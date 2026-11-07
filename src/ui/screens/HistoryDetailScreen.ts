@@ -92,7 +92,7 @@ export class HistoryDetailScreen implements Screen {
 
 function kcalNote(e: HistoryEntry, app: App): HTMLElement {
   const c = app.store.caloriesFor(e);
-  if (!c) return h('p', { class: 'muted small' }, 'Anota tu peso (Historial › Peso) para ver las calorías.');
+  if (!c) return h('p', { class: 'muted small' }, 'Anota tu peso en Mis datos para ver las calorías.');
   return h('p', { class: 'kcal-summary left' }, icon('flame'), `Unas ${c.kcal} kcal`,
     h('span', { class: 'muted small' }, (c.method === 'pulso' ? ' · calculadas con tu pulso' : ' · estimadas por tipo de ejercicio y tiempo') + (e.weightKg ? ` · con ${String(e.weightKg).replace('.', DEC)} kg` : '')));
 }

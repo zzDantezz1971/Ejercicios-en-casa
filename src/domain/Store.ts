@@ -438,7 +438,7 @@ export class Store {
   }
 
   saveSettings(settings: Settings): void {
-    this.data.settings = { ...settings, rest: { ...settings.rest }, profile: { ...settings.profile }, phrases: { mine: [...settings.phrases.mine], onlyMine: settings.phrases.onlyMine } };
+    this.data.settings = { ...settings, rest: { ...settings.rest }, profile: { ...settings.profile } };
     this.persist();
   }
 
@@ -484,9 +484,8 @@ export class Store {
     const { restSeconds, mannequin: _m, ...known } = rawSettings as typeof rawSettings & { mannequin?: unknown };
     const settings: Settings = { ...DEFAULT_SETTINGS, ...known };
     settings.profile = { ...DEFAULT_SETTINGS.profile, ...(known.profile ?? {}) };
-    const ph = (known.phrases ?? {}) as Partial<Settings['phrases']>;
-    if (!['ca', 'es', 'en'].includes(settings.lang)) settings.lang = 'ca';
-    settings.phrases = { mine: Array.isArray(ph.mine) ? ph.mine.filter((x): x is string => typeof x === 'string').slice(0, 100) : [], onlyMine: !!ph.onlyMine };
+    // antes eran frases propias; ahora solo se elige si se muestran
+    settings.phrases = typeof known.phrases === 'boolean' ? known.phrases : true;
     // v anteriores: una sola pausa para todo -> la misma en cada apartado
     const oldRest = Number.isFinite(restSeconds) ? (restSeconds as number) : undefined;
     settings.rest = Object.fromEntries(

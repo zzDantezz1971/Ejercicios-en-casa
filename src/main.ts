@@ -4,6 +4,8 @@ import { App } from './ui/App';
 import { HistoryScreen } from './ui/screens/HistoryScreen';
 import { HomeScreen } from './ui/screens/HomeScreen';
 import { SettingsScreen } from './ui/screens/SettingsScreen';
+import { MedalsScreen } from './ui/screens/MedalsScreen';
+import { ProfileScreen } from './ui/screens/ProfileScreen';
 import { TablesScreen } from './ui/screens/TablesScreen';
 import { applyUpdate, initUpdates, onUpdateReady } from './services/Updates';
 import { h } from './ui/dom';
@@ -16,7 +18,9 @@ async function start(): Promise<void> {
   app.setTabs({
     inicio: () => new HomeScreen(app),
     tablas: () => new TablesScreen(app),
+    medallas: () => new MedalsScreen(app),
     historial: () => new HistoryScreen(app),
+    datos: () => new ProfileScreen(app),
     ajustes: () => new SettingsScreen(app),
   });
   app.openTab('inicio');

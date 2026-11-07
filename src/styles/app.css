@@ -74,14 +74,15 @@ button:focus-visible, input:focus-visible, label:focus-within { outline: 2px sol
 /* Barra inferior */
 .tabbar {
   position: fixed; left: 0; right: 0; bottom: 0; z-index: 30;
-  display: grid; grid-template-columns: repeat(4, 1fr);
+  display: grid; grid-template-columns: repeat(6, 1fr);
   padding: 6px max(8px, env(safe-area-inset-right, 0px)) calc(6px + env(safe-area-inset-bottom, 0px)) max(8px, env(safe-area-inset-left, 0px));
   background: rgb(15 20 27 / .92); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
   border-top: 1px solid var(--line);
 }
 .tab-item {
   border: 0; background: transparent; cursor: pointer; color: var(--muted);
-  display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 6px 0; font-size: .74rem; font-weight: 600;
+  display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 6px 0; font-size: .66rem; font-weight: 600;
+  min-width: 0; text-align: center; line-height: 1.15;
   border-radius: 14px; position: relative;
 }
 .tab-item .ico { width: 24px; height: 24px; }

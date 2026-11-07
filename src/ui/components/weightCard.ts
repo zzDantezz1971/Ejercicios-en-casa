@@ -102,7 +102,7 @@ export function weightCard(app: App, onChange: () => void, onOpen: () => void): 
     h('div', { class: 'wc-now' },
       h('strong', {}, fmtKg(last.kg)),
       ws.length > 1 ? h('span', { class: 'wc-diff' + (diff < 0 ? ' down' : diff > 0 ? ' up' : '') }, `${fmtDiff(diff)} desde el ${since}`) : h('span', { class: 'muted small' }, 'Primera anotación')),
-    height ? bmiRow(last.kg, height, first.kg) : h('p', { class: 'muted small' }, 'Pon tu altura en Ajustes › Mis datos para ver tu IMC.'),
+    height ? bmiRow(last.kg, height, first.kg) : h('p', { class: 'muted small' }, 'Pon tu altura en Mis datos para ver tu IMC.'),
     goal ? goalBlock(first.kg, last.kg, goal) : null,
     weightChart(ws, goal) as unknown as HTMLElement,
     h('div', { class: 'wc-actions' }, add));
@@ -113,7 +113,7 @@ export function goalBlock(firstKg: number, currentKg: number, goal: number): HTM
   const g = goalProgress(firstKg, currentKg, goal);
   if (g.reached) {
     return h('div', { class: 'goal-block reached' }, icon('trophy'),
-      h('div', {}, h('strong', {}, '¡Objetivo conseguido!'), h('span', { class: 'muted small' }, `Has llegado a ${fmtKg(goal)}. Puedes fijar uno nuevo en Ajustes › Mis datos.`)));
+      h('div', {}, h('strong', {}, '¡Objetivo conseguido!'), h('span', { class: 'muted small' }, `Has llegado a ${fmtKg(goal)}. Puedes fijar uno nuevo en Mis datos.`)));
   }
   const bar = h('span', { class: 'goal-fill' });
   bar.style.width = `${Math.round(g.done * 100)}%`;

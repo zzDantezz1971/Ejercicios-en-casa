@@ -1,14 +1,11 @@
-import { LANG, LANGS, LOCALE, DEC } from '../../i18n';
-import { phraseOfDay } from '../../domain/phrases';
+import { LOCALE } from '../../i18n';
 import { applyUpdate, BUILD_TIME, checkForUpdate, updateReady } from '../../services/Updates';
 import { Store } from '../../domain/Store';
 import { SECTION_IDS, SECTION_TITLES, type Settings } from '../../domain/types';
 import { pickBackupFile } from '../../services/Backup';
 import { saveBackupNow } from '../components/backupPrompt';
-import { askWeight, bmiRow, fmtKg } from '../components/weightCard';
-import { WeightScreen } from './WeightScreen';
 import type { App, Screen } from '../App';
-import { append, bodyWeightDialog, clear, confirmDialog, h, plural } from '../dom';
+import { append, clear, confirmDialog, h, plural } from '../dom';
 import { icon, SECTION_STYLE, type IconName } from '../icons';
 
 interface NumField {
@@ -75,21 +72,6 @@ export class SettingsScreen implements Screen {
       status);
   }
 
-  /** Idioma de la app: al cambiarlo se recarga para pintarlo todo de nuevo. */
-  private langCard(): HTMLElement {
-    const pick = (id: Settings['lang']) => {
-      if (id === LANG) return;
-      this.app.store.saveSettings({ ...this.app.store.settings, lang: id });
-      location.reload();
-    };
-    return h('section', { class: 'card setting rest-card lang-card' },
-      h('div', { class: 'rest-head' },
-        h('span', { class: 'set-icon' }, icon('globe')),
-        h('div', { class: 'set-text' }, h('strong', {}, 'Idioma'))),
-      h('div', { class: 'segmented lang-segs', 'data-no-tr': '' },
-        ...LANGS.map((l) => h('button', { class: 'seg' + (l.id === LANG ? ' on' : ''), 'aria-pressed': String(l.id === LANG), lang: l.id, onclick: () => pick(l.id) }, l.name))));
-  }
-
   /** Pausa entre ejercicios, una por apartado. */
   private restCard(s: Settings): HTMLElement {
     return h('section', { class: 'card setting rest-card' },
@@ -109,76 +91,6 @@ export class SettingsScreen implements Screen {
         row.style.setProperty('--sec', SECTION_STYLE[sec].color);
         return row;
       }));
-  }
-
-  /** Edad, altura, peso y sexo: calorías e IMC. */
-  private profileCard(s: Settings): HTMLElement {
-    const p = s.profile;
-    const cw = this.app.store.currentWeight;
-    const set = (patch: Partial<Settings['profile']>) => this.update({ profile: { ...p, ...patch } });
-    const stepper = (label: string, value: number | null, unit: string, start: number, step: number, min: number, max: number, onSet: (v: number) => void) => {
-      const v = value ?? start;
-      const fmt = (n: number) => `${String(n).replace('.', DEC)} ${unit}`;
-      return h('div', { class: 'rest-row profile-row' },
-        h('span', { class: 'rest-name' }, label),
-        h('div', { class: 'stepper' },
-          h('button', { 'aria-label': `Menos ${label.toLowerCase()}`, disabled: value !== null && v <= min, onclick: () => onSet(value === null ? start : Math.max(min, v - step)) }, '−'),
-          h('span', { class: 'secs' + (value === null ? ' unset' : '') }, value === null ? '—' : fmt(v)),
-          h('button', { 'aria-label': `Más ${label.toLowerCase()}`, disabled: value !== null && v >= max, onclick: () => onSet(value === null ? start : Math.min(max, v + step)) }, '+')));
-    };
-    const sexBtn = (v: 'h' | 'm', label: string) =>
-      h('button', { class: 'seg' + (p.sex === v ? ' on' : ''), 'aria-pressed': String(p.sex === v), onclick: () => set({ sex: v }) }, label);
-    return h('section', { class: 'card setting rest-card' },
-      h('div', { class: 'rest-head' },
-        h('span', { class: 'set-icon' }, icon('flame')),
-        h('div', { class: 'set-text' }, h('strong', {}, 'Calorías e IMC'),
-          h('p', { class: 'muted small' }, 'Solo se guardan en tu móvil. Con el peso ya se estiman las calorías; con la edad y el reloj conectado, se calculan con tus pulsaciones. Cada entrenamiento guarda sus calorías con el peso de ese día. La altura sirve para el IMC.'))),
-      h('div', { class: 'rest-row profile-row name-row' },
-        h('label', { class: 'rest-name', for: 'set-name' }, 'Nombre o alias'),
-        h('input', { id: 'set-name', class: 'text-input small', type: 'text', maxlength: 24, placeholder: 'Cómo quieres que te llame', value: p.name ?? '', autocomplete: 'off',
-          onchange: (e: Event) => set({ name: (e.target as HTMLInputElement).value.replace(/\s+/g, ' ').trim() || undefined }) })),
-      stepper('Edad', p.age, 'años', 50, 1, 15, 99, (v) => set({ age: v })),
-      stepper('Altura', p.height ?? null, 'cm', 175, 1, 100, 230, (v) => set({ height: v })),
-      h('div', { class: 'rest-row profile-row' },
-        h('span', { class: 'rest-name' }, 'Peso', h('span', { class: 'muted small block' }, cw ? `Último anotado: ${fmtKg(cw)}` : 'Sin anotar')),
-        h('button', { class: 'btn primary small', onclick: async () => { if (await askWeight(this.app)) this.render(); } }, icon('plus'), 'Anotar peso')),
-      cw && p.height ? bmiRow(cw, p.height) : null,
-      h('div', { class: 'rest-row profile-row' },
-        h('span', { class: 'rest-name' }, 'Objetivo de peso', h('span', { class: 'muted small block' }, p.goalKg ? fmtKg(p.goalKg) : 'Sin objetivo')),
-        h('div', { class: 'goal-btns' },
-          p.goalKg ? h('button', { class: 'btn ghost small', onclick: () => set({ goalKg: null }) }, 'Quitar') : null,
-          h('button', { class: 'btn ghost small', onclick: async () => {
-            const kg = await bodyWeightDialog('Peso al que quieres llegar', p.goalKg ?? Math.round(((cw ?? 80) - 3) * 10) / 10);
-            if (kg !== null) set({ goalKg: kg });
-          } }, p.goalKg ? 'Cambiar' : 'Fijar objetivo'))),
-      h('button', { class: 'link-btn profile-link', onclick: () => this.app.push(new WeightScreen(this.app)) }, 'Ver histórico de peso', icon('chevron')),
-      h('div', { class: 'rest-row profile-row' }, h('span', { class: 'rest-name' }, 'Sexo'), h('div', { class: 'segmented' }, sexBtn('h', 'Hombre'), sexBtn('m', 'Mujer'))));
-  }
-
-  /** Frases motivadoras propias: añadir, borrar y elegir si salen solo las tuyas. */
-  private phrasesSection(s: Settings): HTMLElement {
-    const ph = s.phrases;
-    const save = (mine: string[], onlyMine = ph.onlyMine) => this.update({ phrases: { mine, onlyMine } });
-    const input = h('input', { class: 'text-input small', type: 'text', maxlength: 120, placeholder: 'Escribe tu frase', 'aria-label': 'Nueva frase' });
-    const add = () => {
-      const t = input.value.replace(/\s+/g, ' ').trim();
-      if (t) save([...ph.mine, t]);
-    };
-    input.addEventListener('keydown', (e) => { if (e.key === 'Enter') add(); });
-    const today = phraseOfDay(new Date(), ph.mine, ph.onlyMine, s.profile.name);
-    return h('section', { class: 'card setting rest-card phrases-card' },
-      h('div', { class: 'rest-head' },
-        h('span', { class: 'set-icon' }, icon('bolt')),
-        h('div', { class: 'set-text' }, h('strong', {}, 'Frases motivadoras'),
-          h('p', { class: 'muted small' }, 'Cada día, Inicio muestra una frase. Puedes añadir las tuyas; se mezclan con las de la app. Escribe {n} donde quieras que aparezca tu nombre.'))),
-      h('p', { class: 'phrase-today' }, '“', today, '”'),
-      ...ph.mine.map((t, i) => h('div', { class: 'phrase-row' },
-        h('span', {}, t),
-        h('button', { class: 'icon-btn small', 'aria-label': `Borrar la frase ${t}`, onclick: () => save(ph.mine.filter((_, j) => j !== i)) }, icon('trash')))),
-      h('div', { class: 'phrase-add' }, input, h('button', { class: 'btn primary small', onclick: add }, icon('plus'), 'Añadir')),
-      ph.mine.length ? h('label', { class: 'switch-row', for: 'set-only-mine' },
-        h('span', { class: 'set-text' }, h('strong', {}, 'Solo mis frases')),
-        h('input', { type: 'checkbox', id: 'set-only-mine', class: 'switch', checked: ph.onlyMine, onchange: (e: Event) => save(ph.mine, (e.target as HTMLInputElement).checked) })) : null);
   }
 
   /** Conexión con el reloj para ver las pulsaciones. */
@@ -266,7 +178,7 @@ export class SettingsScreen implements Screen {
   private render(): void {
     const s = this.app.store.settings;
     clear(this.body);
-    this.body.append(this.langCard(), h('h3', { class: 'block-title' }, 'Tiempos'), this.restCard(s));
+    this.body.append(h('h3', { class: 'block-title' }, 'Tiempos'), this.restCard(s));
     for (const f of FIELDS) {
       const v = s[f.key];
       this.body.append(
@@ -279,7 +191,7 @@ export class SettingsScreen implements Screen {
             h('button', { 'aria-label': 'Más', disabled: v >= f.max, onclick: () => this.update({ [f.key]: Math.min(f.max, v + f.step) }) }, '+'))),
       );
     }
-    const toggle = (key: 'sound' | 'voice' | 'voiceCount', ic: IconName, label: string, help: string) =>
+    const toggle = (key: 'sound' | 'voice' | 'voiceCount' | 'phrases', ic: IconName, label: string, help: string) =>
       h('section', { class: 'card setting' },
         h('label', { class: 'switch-row', for: `set-${key}` },
           h('span', { class: 'set-icon' }, icon(ic)),
@@ -303,9 +215,8 @@ export class SettingsScreen implements Screen {
           }[this.app.voice.lang]);
         },
       }, icon('volume'), 'Probar sonido y voz'),
-      h('h3', { class: 'block-title' }, 'Mis datos'),
-      this.profileCard(s),
-      this.phrasesSection(s),
+      h('h3', { class: 'block-title' }, 'Inicio'),
+      toggle('phrases', 'bolt', 'Frases motivadoras', 'Una frase distinta cada día en Inicio.'),
       h('h3', { class: 'block-title' }, 'Reloj'),
       this.watchSection(),
       h('h3', { class: 'block-title' }, 'Copia de seguridad'),

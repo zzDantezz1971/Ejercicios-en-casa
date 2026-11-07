@@ -113,8 +113,8 @@ export function personalize(phrase: string, name?: string): string {
 }
 
 /** Frase del día: la misma durante todo el día, distinta al día siguiente. */
-export function phraseOfDay(date: Date, mine: readonly string[], onlyMine: boolean, name?: string): string {
-  const pool = onlyMine && mine.length ? [...mine] : [...PHRASES, ...mine];
+export function phraseOfDay(date: Date, name?: string): string {
+  const pool = PHRASES;
   const day = Math.floor(new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime() / 864e5);
   const idx = ((day * 7919) % pool.length + pool.length) % pool.length;
   return personalize(pool[idx], name);
