@@ -10,6 +10,7 @@ import { startWorkout } from '../components/startWorkout';
 import { MonthScreen } from './MonthScreen';
 import { addMonths, addWeeks, monthKey, monthStart, weekKey, weekStart, weekStats } from '../../domain/monthSummary';
 import { randomPhrase } from '../../domain/phrases';
+import { weekGoalsDialog } from '../components/weekGoals';
 
 export class HomeScreen implements Screen {
   readonly el = h('main', { class: 'screen home' });
@@ -122,11 +123,12 @@ export class HomeScreen implements Screen {
     const cur = weekStats(st.history, st.weights, weekStart(now), k);
     const prev = weekStats(st.history, st.weights, addWeeks(weekStart(now), -1), k);
     const mins = Math.round(cur.seconds / 60);
-    const kcalGoal = Math.max(300, prev.kcal ?? 0);
+    const goals = st.settings.weekGoals;
+    const kcalGoal = goals.kcal ?? Math.max(300, prev.kcal ?? 0);
     const items = [
       { v: cur.days / 7, color: 'var(--sec-warm)', label: 'Días', value: `${cur.days} de 7` },
-      { v: mins / 150, color: 'var(--accent)', label: 'Minutos', value: `${mins} de 150`, hint: '150 min a la semana es lo recomendado' },
-      { v: cur.kcal != null ? cur.kcal / kcalGoal : 0, color: 'var(--sec-stretch)', label: 'Calorías', value: cur.kcal != null ? `${cur.kcal} de ${kcalGoal} kcal` : '—', hint: prev.kcal ? 'Meta: lo de la semana pasada' : undefined },
+      { v: mins / goals.minutes, color: 'var(--accent)', label: 'Minutos', value: `${mins} de ${goals.minutes} min`, hint: goals.minutes === 150 ? '150 min a la semana es lo recomendado' : undefined },
+      { v: cur.kcal != null ? cur.kcal / kcalGoal : 0, color: 'var(--sec-stretch)', label: 'Calorías', value: cur.kcal != null ? `${cur.kcal} de ${kcalGoal} kcal` : '—', hint: goals.kcal === null && prev.kcal ? 'Meta: lo de la semana pasada' : undefined },
     ];
     const NS = 'http://www.w3.org/2000/svg';
     const svg = document.createElementNS(NS, 'svg');
@@ -147,10 +149,13 @@ export class HomeScreen implements Screen {
     });
     // se dibujan con una pequeña animación al entrar
     requestAnimationFrame(() => requestAnimationFrame(() => svg.querySelectorAll<SVGCircleElement>('.ring-val').forEach((c) => c.setAttribute('stroke-dashoffset', c.style.getPropertyValue('--to')))));
-    return h('section', { class: 'card rings-card' },
+    return h('section', {
+      class: 'card rings-card', role: 'button', tabindex: 0, 'aria-label': 'Tu semana: ver y cambiar metas',
+      onclick: () => weekGoalsDialog(this.app, { days: cur.days, mins, kcal: cur.kcal, prevKcal: prev.kcal }, () => this.render()),
+    },
       svg as unknown as HTMLElement,
       h('div', { class: 'rings-legend' },
-        h('h3', {}, 'Tu semana'),
+        h('h3', { class: 'rings-title' }, 'Tu semana', icon('chevron')),
         ...items.map((it) => {
           const row = h('div', { class: 'rl-row' }, h('span', { class: 'rl-dot' }), h('div', {}, h('strong', {}, it.label), h('span', { class: 'muted small' }, ` ${it.value}`), it.hint ? h('span', { class: 'muted small block' }, it.hint) : null));
           row.style.setProperty('--c', it.color);

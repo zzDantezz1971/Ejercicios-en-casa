@@ -438,7 +438,7 @@ export class Store {
   }
 
   saveSettings(settings: Settings): void {
-    this.data.settings = { ...settings, rest: { ...settings.rest }, profile: { ...settings.profile } };
+    this.data.settings = { ...settings, rest: { ...settings.rest }, profile: { ...settings.profile }, weekGoals: { ...settings.weekGoals } };
     this.persist();
   }
 
@@ -486,6 +486,12 @@ export class Store {
     settings.profile = { ...DEFAULT_SETTINGS.profile, ...(known.profile ?? {}) };
     // antes eran frases propias; ahora solo se elige si se muestran
     settings.phrases = typeof known.phrases === 'boolean' ? known.phrases : true;
+    if (!['ca', 'es', 'en'].includes(settings.lang)) settings.lang = 'ca';
+    const wg = (known.weekGoals ?? {}) as Partial<Settings['weekGoals']>;
+    settings.weekGoals = {
+      minutes: Number.isFinite(wg.minutes) && wg.minutes! >= 10 ? Math.round(wg.minutes!) : 150,
+      kcal: Number.isFinite(wg.kcal) && wg.kcal! >= 50 ? Math.round(wg.kcal!) : null,
+    };
     // v anteriores: una sola pausa para todo -> la misma en cada apartado
     const oldRest = Number.isFinite(restSeconds) ? (restSeconds as number) : undefined;
     settings.rest = Object.fromEntries(

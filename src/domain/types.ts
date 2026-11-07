@@ -116,6 +116,8 @@ export interface Settings {
   profile: Profile;
   /** Idioma de la app. */
   lang: 'ca' | 'es' | 'en';
+  /** Metas de la semana en Inicio: minutos y calorías (null = lo de la semana pasada). */
+  weekGoals: { minutes: number; kcal: number | null };
 }
 
 export interface Profile {
@@ -143,6 +145,7 @@ export const DEFAULT_SETTINGS: Settings = {
   askWatch: true,
   profile: { age: null, height: null, sex: 'h' },
   lang: 'ca',
+  weekGoals: { minutes: 150, kcal: null },
 };
 
 export interface HistoryEntry {

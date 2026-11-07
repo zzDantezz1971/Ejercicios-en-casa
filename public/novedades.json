@@ -1,5 +1,23 @@
 [
   {
+    "fecha": "2026-11-07T09:00:00Z",
+    "es": [
+      "Icono con fondo negro.",
+      "Inicio: toca «Tu semana» para ver qué mide cada anillo y cambiar tus metas de minutos y calorías.",
+      "Medallas: toca una medalla para abrir su ficha, con la fecha en que la conseguiste."
+    ],
+    "ca": [
+      "Icona amb fons negre.",
+      "Inici: toca «La teva setmana» per veure què mesura cada anell i canviar els objectius de minuts i calories.",
+      "Medalles: toca una medalla per obrir-ne la fitxa, amb la data en què la vas aconseguir."
+    ],
+    "en": [
+      "Icon with a black background.",
+      "Home: tap “Your week” to see what each ring measures and change your minutes and calories goals.",
+      "Medals: tap a medal to open its details, including the date you earned it."
+    ]
+  },
+  {
     "fecha": "2026-11-07T01:10:00Z",
     "es": [
       "Icono con fondo azul marino y el dibujo más grande, para que se vea bien sobre fondos de pantalla oscuros. Para verlo, quita el icono y vuelve a instalar la app desde Chrome."

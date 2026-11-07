@@ -893,3 +893,57 @@ body:has(.screen.workout) .update-banner { display: none; }
 /* Idioma */
 .lang-segs { display: flex; width: 100%; margin-top: 10px; }
 .lang-segs .seg { flex: 1; padding: 9px 6px; }
+
+/* Tu semana: metas */
+.rings-card { cursor: pointer; }
+.rings-title { display: flex; align-items: center; gap: 4px; }
+.rings-title .ico { width: 18px; height: 18px; color: var(--muted); }
+.week-goals { gap: 14px; max-height: calc(100vh - 48px); overflow-y: auto; }
+.week-goals h3 { margin: 0; font: 700 1.3rem var(--display); text-transform: uppercase; }
+.week-goals > p { margin: -8px 0 0; }
+.wg-row { display: flex; gap: 12px; align-items: flex-start; }
+.wg-ico { width: 38px; height: 38px; border-radius: 12px; flex: none; display: flex; align-items: center; justify-content: center;
+  color: var(--c); background: color-mix(in srgb, var(--c) 16%, transparent); }
+.wg-ico .ico { width: 20px; height: 20px; }
+.wg-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.wg-body p { margin: 0; }
+.wg-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.wg-now { font: 700 1.05rem var(--display); color: var(--c); }
+.wg-goal { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+.wg-kcal { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+.wg-kcal p { margin: 0; text-align: right; }
+
+/* Ficha de una medalla */
+.medal-detail { --glow: 205 127 63; position: relative; width: 100%; max-width: 360px; border-radius: 28px; padding: 28px 22px 20px;
+  display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; border: 1px solid var(--line);
+  background: radial-gradient(120% 70% at 50% 0%, rgb(var(--glow) / .35), transparent 60%), var(--surface);
+  animation: box-pop .35s cubic-bezier(.2, .9, .3, 1.2); }
+.medal-detail.plata { --glow: 190 205 220; }
+.medal-detail.oro { --glow: 255 196 64; }
+.medal-detail.locked { --glow: 120 130 150; }
+.medal-detail h2 { margin: 2px 0 0; font-size: 2rem; text-transform: uppercase; line-height: 1; }
+.medal-detail .eyebrow { margin: 6px 0 0; color: rgb(var(--glow)); }
+.md-desc { margin: 0; font-size: 1.05rem; }
+.md-close { position: absolute; top: 10px; right: 10px; }
+.md-stage { position: relative; width: 170px; height: 170px; display: flex; align-items: center; justify-content: center; }
+.md-stage::before { content: ""; position: absolute; inset: 0; border-radius: 50%;
+  background: conic-gradient(from 0deg, transparent, rgb(var(--glow) / .45), transparent 30%, rgb(var(--glow) / .35), transparent 60%, rgb(var(--glow) / .45), transparent 90%);
+  filter: blur(6px); animation: md-spin 8s linear infinite; }
+.medal-detail.locked .md-stage::before { display: none; }
+.md-stage .medal-badge { position: relative; overflow: hidden; animation: medal-pop .9s cubic-bezier(.2, 1.4, .3, 1); }
+.md-stage .medal-badge::after { content: ""; position: absolute; inset: -20%; background: linear-gradient(115deg, transparent 40%, rgb(255 255 255 / .55) 50%, transparent 60%);
+  transform: translateX(-120%); animation: md-shine 3s ease-in-out 1s infinite; }
+.medal-detail.locked .medal-badge::after { display: none; }
+.md-sparkles i { position: absolute; left: 50%; top: 50%; width: 6px; height: 6px; border-radius: 50%; background: rgb(var(--glow));
+  transform: rotate(var(--a)) translateY(-78px); opacity: 0; animation: md-twinkle 2.5s ease-in-out var(--d) infinite; }
+.md-facts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; margin-top: 8px; }
+.md-fact { display: flex; gap: 8px; align-items: center; text-align: left; padding: 10px; border-radius: 14px; background: var(--surface-2); }
+.md-fact > .ico { width: 20px; height: 20px; color: rgb(var(--glow)); flex: none; }
+.md-fact div { display: flex; flex-direction: column; min-width: 0; }
+.md-fact strong { font-size: .9rem; }
+.medal-detail .btn { margin-top: 10px; }
+@keyframes md-spin { to { transform: rotate(360deg); } }
+@keyframes md-shine { 0%, 60% { transform: translateX(-120%); } 100% { transform: translateX(120%); } }
+@keyframes md-twinkle { 0%, 100% { opacity: 0; } 50% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .md-stage::before, .md-stage .medal-badge, .md-stage .medal-badge::after, .md-sparkles i { animation: none; } }
+.medal-badge.big.locked { box-shadow: inset 0 0 0 6px var(--line), 0 16px 40px rgb(0 0 0 / .5); }
