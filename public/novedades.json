@@ -1,5 +1,17 @@
 [
   {
+    "fecha": "2026-11-07T17:30:00Z",
+    "es": [
+      "El idioma se cambia ahora en Ajustes."
+    ],
+    "ca": [
+      "L’idioma ara es canvia a Configuració."
+    ],
+    "en": [
+      "The language is now changed in Settings."
+    ]
+  },
+  {
     "fecha": "2026-11-07T12:30:00Z",
     "es": [
       "Historial: el resumen de arriba (racha, días, tiempo y calorías) ocupa mucho menos, en una sola tarjeta."

@@ -1,4 +1,4 @@
-import { LOCALE } from '../../i18n';
+import { LANG, LANGS, LOCALE } from '../../i18n';
 import { showUpdateDialog } from '../components/updateDialog';
 import { BUILD_TIME, checkForUpdate, updateReady } from '../../services/Updates';
 import { Store } from '../../domain/Store';
@@ -71,6 +71,21 @@ export class SettingsScreen implements Screen {
         h('p', { class: 'muted small' }, `Del ${when}`)),
       btn,
       status);
+  }
+
+  /** Idioma de la app: al cambiarlo se recarga para pintarlo todo de nuevo. */
+  private langCard(): HTMLElement {
+    const pick = (id: Settings['lang']) => {
+      if (id === LANG) return;
+      this.app.store.saveSettings({ ...this.app.store.settings, lang: id });
+      location.reload();
+    };
+    return h('section', { class: 'card setting rest-card lang-card' },
+      h('div', { class: 'rest-head' },
+        h('span', { class: 'set-icon' }, icon('globe')),
+        h('div', { class: 'set-text' }, h('strong', {}, 'Idioma'))),
+      h('div', { class: 'segmented lang-segs', 'data-no-tr': '' },
+        ...LANGS.map((l) => h('button', { class: 'seg' + (l.id === LANG ? ' on' : ''), 'aria-pressed': String(l.id === LANG), lang: l.id, onclick: () => pick(l.id) }, l.name))));
   }
 
   /** Pausa entre ejercicios, una por apartado. */
@@ -179,7 +194,7 @@ export class SettingsScreen implements Screen {
   private render(): void {
     const s = this.app.store.settings;
     clear(this.body);
-    this.body.append(h('h3', { class: 'block-title' }, 'Tiempos'), this.restCard(s));
+    this.body.append(h('h3', { class: 'block-title' }, 'Idioma'), this.langCard(), h('h3', { class: 'block-title' }, 'Tiempos'), this.restCard(s));
     for (const f of FIELDS) {
       const v = s[f.key];
       this.body.append(

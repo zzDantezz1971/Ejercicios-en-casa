@@ -1,10 +1,9 @@
-import { DEC, LANG, LANGS } from '../../i18n';
+import { DEC } from '../../i18n';
 import type { Settings } from '../../domain/types';
 import { weightCard } from '../components/weightCard';
 import { WeightScreen } from './WeightScreen';
 import type { App, Screen } from '../App';
 import { append, clear, h } from '../dom';
-import { icon } from '../icons';
 
 /** Mis datos: nombre, edad, altura, sexo, idioma y todo lo del peso (IMC, objetivo, histórico). */
 export class ProfileScreen implements Screen {
@@ -24,21 +23,6 @@ export class ProfileScreen implements Screen {
     this.app.store.saveSettings({ ...this.app.store.settings, ...patch });
     this.app.applySettings();
     this.render();
-  }
-
-  /** Idioma de la app: al cambiarlo se recarga para pintarlo todo de nuevo. */
-  private langCard(): HTMLElement {
-    const pick = (id: Settings['lang']) => {
-      if (id === LANG) return;
-      this.app.store.saveSettings({ ...this.app.store.settings, lang: id });
-      location.reload();
-    };
-    return h('section', { class: 'card setting rest-card lang-card' },
-      h('div', { class: 'rest-head' },
-        h('span', { class: 'set-icon' }, icon('globe')),
-        h('div', { class: 'set-text' }, h('strong', {}, 'Idioma'))),
-      h('div', { class: 'segmented lang-segs', 'data-no-tr': '' },
-        ...LANGS.map((l) => h('button', { class: 'seg' + (l.id === LANG ? ' on' : ''), 'aria-pressed': String(l.id === LANG), lang: l.id, onclick: () => pick(l.id) }, l.name))));
   }
 
   /** Nombre, edad, altura y sexo. */
@@ -72,7 +56,6 @@ export class ProfileScreen implements Screen {
     clear(this.body);
     append(this.body,
       this.profileCard(s),
-      weightCard(this.app, () => this.render(), () => this.app.push(new WeightScreen(this.app))),
-      this.langCard());
+      weightCard(this.app, () => this.render(), () => this.app.push(new WeightScreen(this.app))));
   }
 }
