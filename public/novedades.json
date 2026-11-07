@@ -1,5 +1,17 @@
 [
   {
+    "fecha": "2026-11-07T01:05:00Z",
+    "es": [
+      "El icono tiene ahora el fondo azul marino, para que se vea bien sobre fondos de pantalla oscuros. Para verlo, quita el icono y vuelve a instalar la app desde Chrome."
+    ],
+    "ca": [
+      "La icona té ara el fons blau marí, perquè es vegi bé sobre fons de pantalla foscos. Per veure-la, treu la icona i torna a instal·lar l’aplicació des de Chrome."
+    ],
+    "en": [
+      "The icon now has a navy blue background so it stands out on dark wallpapers. To see it, remove the icon and install the app again from Chrome."
+    ]
+  },
+  {
     "fecha": "2026-11-07T01:00:00Z",
     "es": [
       "El icono de la app es más grande. Para verlo, quita el icono y vuelve a instalar la app desde Chrome (⋮ → Instalar aplicación)."
