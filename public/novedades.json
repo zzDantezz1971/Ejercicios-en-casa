@@ -1,5 +1,17 @@
 [
   {
+    "fecha": "2026-11-07T12:10:00Z",
+    "es": [
+      "Inicio: la tarjeta de la tabla en uso muestra una imagen según los apartados que tiene (calentamiento, pesas, abdominales, estiramientos o una combinación). El nombre de la tabla sale tal como lo escribes."
+    ],
+    "ca": [
+      "Inici: la targeta de la taula en ús mostra una imatge segons els apartats que té (escalfament, peses, abdominals, estiraments o una combinació). El nom de la taula surt tal com l’escrius."
+    ],
+    "en": [
+      "Home: the current routine card shows an image based on its sections (warm-up, weights, abs, stretches or a combination). The routine name appears exactly as you type it."
+    ]
+  },
+  {
     "fecha": "2026-11-07T11:40:00Z",
     "es": [
       "Inicio: en «Esta semana», toca un día marcado para ver su entrenamiento."

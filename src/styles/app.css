@@ -146,13 +146,13 @@ button:focus-visible, input:focus-visible, label:focus-within { outline: 2px sol
   background: radial-gradient(80% 60% at 100% 0%, rgb(255 255 255 / .18), transparent 60%);
 }
 .hero-art {
-  position: absolute; right: -24px; top: -6px; width: 62%; max-width: 300px; aspect-ratio: 3 / 2; object-fit: contain;
+  position: absolute; right: 14px; top: 14px; width: 30%; max-width: 130px; aspect-ratio: 1; object-fit: contain;
   opacity: .9; filter: drop-shadow(0 10px 20px rgb(0 0 0 / .35));
 }
 .hero-art:not([src]) { visibility: hidden; }
 .hero-body { position: relative; z-index: 1; padding: 20px; display: flex; flex-direction: column; gap: 10px; }
 .hero-label { font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .16em; opacity: .85; }
-.hero-title { font-size: 2.3rem; line-height: 1; text-transform: uppercase; max-width: 70%; overflow-wrap: anywhere; }
+.hero-title { font-size: 2.3rem; line-height: 1; text-transform: none; max-width: 70%; overflow-wrap: anywhere; }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 6px; }
 .chip { display: inline-flex; align-items: center; gap: 6px; background: rgb(255 255 255 / .16); border-radius: 999px; padding: 5px 11px; font-weight: 600; font-size: .9rem; }
 .chip .ico { width: 16px; height: 16px; }

@@ -67,9 +67,11 @@ export class HomeScreen implements Screen {
     }
 
     // Tarjeta principal con la tabla en uso
+    // Imagen de la tabla según los apartados que tienen ejercicios (15 combinaciones posibles)
     const art = h('img', { class: 'hero-art', alt: '' });
-    const first = plan.steps.find((s) => s.kind === 'exercise');
-    if (first && first.kind === 'exercise') void app.thumbs.get(first.exercise).then((u) => (art.src = u));
+    const LETTER = { calentamiento: 'c', pesas: 'p', abdominales: 'a', estiramientos: 'e' } as const;
+    const combo = SECTION_IDS.filter((sec) => table.routine[sec].some((i) => app.catalog.has(i.exerciseId))).map((sec) => LETTER[sec]).join('');
+    if (combo) art.src = `${import.meta.env.BASE_URL}tablas/combo_${combo}.svg`;
     this.el.append(
       h('section', { class: 'hero' },
         art,
