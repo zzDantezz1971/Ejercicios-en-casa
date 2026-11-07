@@ -1,5 +1,17 @@
 [
   {
+    "fecha": "2026-11-07T12:30:00Z",
+    "es": [
+      "Historial: el resumen de arriba (racha, días, tiempo y calorías) ocupa mucho menos, en una sola tarjeta."
+    ],
+    "ca": [
+      "Historial: el resum de dalt (ratxa, dies, temps i calories) ocupa molt menys, en una sola targeta."
+    ],
+    "en": [
+      "History: the summary at the top (streak, days, time and calories) takes up much less space, in a single card."
+    ]
+  },
+  {
     "fecha": "2026-11-07T12:10:00Z",
     "es": [
       "Inicio: la tarjeta de la tabla en uso muestra una imagen según los apartados que tiene (calentamiento, pesas, abdominales, estiramientos o una combinación)."

@@ -960,3 +960,11 @@ button.cal-day:active { transform: scale(.92); }
 .day-pick .dialog-title::first-letter { text-transform: uppercase; }
 button.wd { border: 0; background: transparent; padding: 0; font: inherit; color: inherit; cursor: pointer; }
 button.wd:active .wd-dot { transform: scale(.92); }
+
+/* Historial: resumen compacto en una sola tarjeta de 3 columnas */
+.stats-row.four { grid-template-columns: repeat(3, 1fr); gap: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 6px 4px; }
+.stats-row.four .stat { background: none; border: 0; border-radius: 0; padding: 8px 4px; display: flex; flex-flow: row wrap; justify-content: center; align-items: center; gap: 2px 5px; text-align: center; }
+.stats-row.four .stat .ico { width: 16px; height: 16px; }
+.stats-row.four .stat-value { font-size: 1.2rem; }
+.stats-row.four .stat > .muted { flex-basis: 100%; font-size: .72rem; line-height: 1.15; }
+.stats-row.four .stat:nth-child(n+4) { border-top: 1px solid var(--line); }
