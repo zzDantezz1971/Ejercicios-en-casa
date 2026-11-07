@@ -951,3 +951,10 @@ body:has(.screen.workout) .update-banner { display: none; }
 /* Copiar un entrenamiento a otro día */
 .copy-day .cd-field { display: flex; flex-direction: column; gap: 6px; }
 .copy-day input { color-scheme: dark; }
+
+/* Calendario: días con entrenamiento que se pueden tocar */
+button.cal-day { border: 0; font: inherit; cursor: pointer; }
+button.cal-day:active { transform: scale(.92); }
+.cal-hint { margin: 10px 0 0; text-align: center; }
+.day-pick { gap: 10px; }
+.day-pick .dialog-title::first-letter { text-transform: uppercase; }

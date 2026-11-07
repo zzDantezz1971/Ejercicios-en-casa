@@ -1,5 +1,17 @@
 [
   {
+    "fecha": "2026-11-07T10:55:00Z",
+    "es": [
+      "Historial: toca un día marcado en el calendario para ver su entrenamiento. La lista larga de entrenamientos desaparece."
+    ],
+    "ca": [
+      "Historial: toca un dia marcat al calendari per veure’n l’entrenament. La llista llarga d’entrenaments desapareix."
+    ],
+    "en": [
+      "History: tap a highlighted day on the calendar to see its workout. The long list of workouts is gone."
+    ]
+  },
+  {
     "fecha": "2026-11-07T10:40:00Z",
     "es": [
       "Inicio: «Contenido de la tabla» sale justo debajo de la tabla en uso y solo muestra los apartados con ejercicios."

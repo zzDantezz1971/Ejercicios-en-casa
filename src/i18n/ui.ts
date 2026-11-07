@@ -115,6 +115,8 @@ const ROWS: Row[] = [
   ['Hora de inicio', 'Hora d’inici', 'Start time'],
   ['Copiar', 'Copia', 'Copy'],
 
+  ['Toca un día marcado para ver su entrenamiento.', 'Toca un dia marcat per veure’n l’entrenament.', 'Tap a highlighted day to see its workout.'],
+
   // ── Etiquetas de ejercicios ──
   ['Bueno para la lumbar', 'Bo per a la zona lumbar', 'Good for the lower back'],
   ['Ojo con la lumbar', 'Compte amb la zona lumbar', 'Careful with the lower back'],

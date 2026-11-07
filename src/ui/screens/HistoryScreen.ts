@@ -66,20 +66,8 @@ export class HistoryScreen implements Screen {
         h('button', { class: 'btn ghost', onclick: () => this.app.push(new MonthScreen(this.app, undefined, 'month')) }, icon('calendar'), 'Resumen del mes')),
       this.bySection(list),
       this.muscleMap(list, now),
-      h('h3', { class: 'block-title' }, 'Entrenamientos'),
-      h('p', { class: 'muted small' }, 'Toca un entrenamiento para ver el detalle, repetirlo o borrarlo.'),
     );
 
-    let month = '';
-    for (const e of list) {
-      const d = new Date(e.date);
-      const m = d.toLocaleDateString(LOCALE, { month: 'long', year: 'numeric' });
-      if (m !== month) {
-        month = m;
-        this.body.append(h('h4', { class: 'group-title' }, m));
-      }
-      this.body.append(row(e, this.app.store, () => this.app.push(new HistoryDetailScreen(this.app, e))));
-    }
     this.body.append(
       h('button', {
         class: 'btn danger block',
@@ -221,7 +209,10 @@ export class HistoryScreen implements Screen {
       const d = addDays(first, i);
       if (i >= 35 && d.getMonth() !== m.getMonth()) break;
       const k = dayKey(d);
-      cells.push(h('span', { class: 'cal-day' + (d.getMonth() !== m.getMonth() ? ' out' : '') + (days.has(k) ? ' done' : '') + (k === today ? ' today' : '') }, String(d.getDate())));
+      const cls = 'cal-day' + (d.getMonth() !== m.getMonth() ? ' out' : '') + (days.has(k) ? ' done' : '') + (k === today ? ' today' : '');
+      cells.push(days.has(k)
+        ? h('button', { class: cls, 'aria-label': `Ver el entrenamiento del ${d.toLocaleDateString(LOCALE)}`, onclick: () => this.openDay(list, k) }, String(d.getDate()))
+        : h('span', { class: cls }, String(d.getDate())));
     }
     const go = (delta: number) => {
       this.month = new Date(m.getFullYear(), m.getMonth() + delta, 1);
@@ -233,7 +224,22 @@ export class HistoryScreen implements Screen {
         h('button', { class: 'icon-btn small', 'aria-label': 'Mes anterior', onclick: () => go(-1) }, icon('back')),
         h('h3', { class: 'cal-title' }, title),
         h('button', { class: 'icon-btn small', 'aria-label': 'Mes siguiente', disabled: isCurrent, onclick: () => go(1) }, icon('chevron'))),
-      h('div', { class: 'cal-grid' }, ...cells));
+      h('div', { class: 'cal-grid' }, ...cells),
+      h('p', { class: 'muted small cal-hint' }, 'Toca un día marcado para ver su entrenamiento.'));
+  }
+
+  /** Abre el entrenamiento de un día; si hubo varios, deja elegir. */
+  private openDay(list: readonly HistoryEntry[], k: string): void {
+    const es = list.filter((e) => dayKey(new Date(e.date)) === k);
+    if (es.length === 1) return this.app.push(new HistoryDetailScreen(this.app, es[0]));
+    const close = () => wrap.remove();
+    const d = new Date(es[0].date);
+    const wrap = h('div', { class: 'dialog-wrap', onclick: (ev: Event) => ev.target === wrap && close() },
+      h('div', { class: 'dialog day-pick', role: 'dialog', 'aria-modal': 'true' },
+        h('p', { class: 'dialog-title' }, d.toLocaleDateString(LOCALE, { weekday: 'long', day: 'numeric', month: 'long' })),
+        ...es.map((e) => row(e, this.app.store, () => { close(); this.app.push(new HistoryDetailScreen(this.app, e)); })),
+        h('div', { class: 'dialog-actions' }, h('button', { class: 'btn ghost', onclick: close }, 'Cerrar'))));
+    document.body.append(wrap);
   }
 }
 
