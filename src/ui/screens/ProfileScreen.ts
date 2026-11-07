@@ -3,9 +3,8 @@ import type { Settings } from '../../domain/types';
 import { weightCard } from '../components/weightCard';
 import { WeightScreen } from './WeightScreen';
 import type { App, Screen } from '../App';
-import { append, bodyWeightDialog, clear, h } from '../dom';
+import { append, clear, h } from '../dom';
 import { icon } from '../icons';
-import { fmtKg } from '../components/weightCard';
 
 /** Mis datos: nombre, edad, altura, sexo, idioma y todo lo del peso (IMC, objetivo, histórico). */
 export class ProfileScreen implements Screen {
@@ -42,10 +41,9 @@ export class ProfileScreen implements Screen {
         ...LANGS.map((l) => h('button', { class: 'seg' + (l.id === LANG ? ' on' : ''), 'aria-pressed': String(l.id === LANG), lang: l.id, onclick: () => pick(l.id) }, l.name))));
   }
 
-  /** Nombre, edad, altura, sexo y objetivo de peso. */
+  /** Nombre, edad, altura y sexo. */
   private profileCard(s: Settings): HTMLElement {
     const p = s.profile;
-    const cw = this.app.store.currentWeight;
     const set = (patch: Partial<Settings['profile']>) => this.update({ profile: { ...p, ...patch } });
     const stepper = (label: string, value: number | null, unit: string, start: number, step: number, min: number, max: number, onSet: (v: number) => void) => {
       const v = value ?? start;
@@ -66,14 +64,6 @@ export class ProfileScreen implements Screen {
           onchange: (e: Event) => set({ name: (e.target as HTMLInputElement).value.replace(/\s+/g, ' ').trim() || undefined }) })),
       stepper('Edad', p.age, 'años', 50, 1, 15, 99, (v) => set({ age: v })),
       stepper('Altura', p.height ?? null, 'cm', 175, 1, 100, 230, (v) => set({ height: v })),
-      h('div', { class: 'rest-row profile-row' },
-        h('span', { class: 'rest-name' }, 'Objetivo de peso', h('span', { class: 'muted small block' }, p.goalKg ? fmtKg(p.goalKg) : 'Sin objetivo')),
-        h('div', { class: 'goal-btns' },
-          p.goalKg ? h('button', { class: 'btn ghost small', onclick: () => set({ goalKg: null }) }, 'Quitar') : null,
-          h('button', { class: 'btn ghost small', onclick: async () => {
-            const kg = await bodyWeightDialog('Peso al que quieres llegar', p.goalKg ?? Math.round(((cw ?? 80) - 3) * 10) / 10);
-            if (kg !== null) set({ goalKg: kg });
-          } }, p.goalKg ? 'Cambiar' : 'Fijar objetivo'))),
       h('div', { class: 'rest-row profile-row' }, h('span', { class: 'rest-name' }, 'Sexo'), h('div', { class: 'segmented' }, sexBtn('h', 'Hombre'), sexBtn('m', 'Mujer'))));
   }
 

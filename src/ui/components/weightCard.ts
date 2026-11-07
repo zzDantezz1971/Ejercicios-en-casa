@@ -75,37 +75,67 @@ export function weightChart(points: ReadonlyArray<{ date: string; kg: number }>,
   return svg;
 }
 
-/** Tarjeta del Historial: peso actual, cambio desde el principio, gráfica y botón para anotar. */
+/** Tarjeta de Peso (Mis datos), de arriba abajo: peso de hoy y botón para anotar, resumen (inicio, cambio, IMC),
+    objetivo con sus botones y gráfica. */
 export function weightCard(app: App, onChange: () => void, onOpen: () => void): HTMLElement {
   const ws = app.store.weights;
+  const profile = app.store.settings.profile;
+  const goal = profile.goalKg ?? null;
   const add = h('button', {
     class: 'btn primary small',
-    onclick: async (ev: Event) => {
-      ev.stopPropagation();
-      if (await askWeight(app)) onChange();
-    },
+    onclick: async () => { if (await askWeight(app)) onChange(); },
   }, icon('plus'), 'Anotar peso');
-  if (!ws.length) {
-    return h('section', { class: 'card weight-card' },
-      h('div', { class: 'card-head' }, h('h3', {}, 'Peso')),
-      h('p', { class: 'muted small' }, 'Anota tu peso para ver cómo evoluciona y calcular las calorías de cada entrenamiento.'),
-      h('div', { class: 'wc-actions' }, add));
-  }
+  const setGoal = (goalKg: number | null) => {
+    app.store.saveSettings({ ...app.store.settings, profile: { ...app.store.settings.profile, goalKg } });
+    onChange();
+  };
+  const askGoal = async () => {
+    const kg = await bodyWeightDialog('Peso al que quieres llegar', goal ?? Math.round(((app.store.currentWeight ?? 80) - 3) * 10) / 10);
+    if (kg !== null) setGoal(kg);
+  };
+  const head = h('div', { class: 'card-head' }, h('h3', {}, 'Peso'),
+    ws.length ? h('button', { class: 'link-btn', onclick: onOpen }, 'Ver todo', icon('chevron')) : null);
+
+  // Objetivo: progreso y botones para fijarlo, cambiarlo o quitarlo
   const first = ws[0], last = ws[ws.length - 1];
-  const height = app.store.settings.profile.height;
-  const goal = app.store.settings.profile.goalKg;
+  const goalSection = h('div', { class: 'wc-goal' },
+    h('div', { class: 'wc-goal-head' },
+      h('span', { class: 'wc-label' }, icon('target'), 'Objetivo'),
+      h('div', { class: 'goal-btns' },
+        goal ? h('button', { class: 'btn ghost small', onclick: () => setGoal(null) }, 'Quitar') : null,
+        h('button', { class: goal ? 'btn ghost small' : 'btn primary small', onclick: () => void askGoal() }, goal ? 'Cambiar' : 'Fijar objetivo'))),
+    goal && last ? goalBlock(first.kg, last.kg, goal)
+      : goal ? h('p', { class: 'muted small' }, `Objetivo ${fmtKg(goal)}`)
+        : h('p', { class: 'muted small' }, 'Fija un peso al que quieras llegar y verás cuánto te falta.'));
+
+  if (!ws.length) {
+    return h('section', { class: 'card weight-card' }, head,
+      h('div', { class: 'wc-now' },
+        h('p', { class: 'muted small' }, 'Anota tu peso para ver cómo evoluciona y calcular las calorías de cada entrenamiento.'), add),
+      goalSection);
+  }
+  const height = profile.height;
   const diff = last.kg - first.kg;
-  const since = new Date(first.date).toLocaleDateString(LOCALE, { day: 'numeric', month: 'long' });
-  return h('section', { class: 'card weight-card' },
-    h('div', { class: 'card-head' }, h('h3', {}, 'Peso'),
-      h('button', { class: 'link-btn', onclick: onOpen }, 'Ver todo', icon('chevron'))),
+  const when = new Date(last.date).toLocaleDateString(LOCALE, { day: 'numeric', month: 'long' });
+  const v = height ? bmi(last.kg, height) : null;
+  const c = v !== null ? bmiCategory(v) : null;
+  const tile = (label: string, value: string, extra?: HTMLElement | null, cls = '') =>
+    h('div', { class: 'wc-tile' + cls }, h('span', { class: 'wc-label' }, label), h('strong', {}, value), extra ?? null);
+  return h('section', { class: 'card weight-card' }, head,
+    // 1. Peso de hoy
     h('div', { class: 'wc-now' },
-      h('strong', {}, fmtKg(last.kg)),
-      ws.length > 1 ? h('span', { class: 'wc-diff' + (diff < 0 ? ' down' : diff > 0 ? ' up' : '') }, `${fmtDiff(diff)} desde el ${since}`) : h('span', { class: 'muted small' }, 'Primera anotación')),
-    height ? bmiRow(last.kg, height, first.kg) : h('p', { class: 'muted small' }, 'Pon tu altura en Mis datos para ver tu IMC.'),
-    goal ? goalBlock(first.kg, last.kg, goal) : null,
-    weightChart(ws, goal) as unknown as HTMLElement,
-    h('div', { class: 'wc-actions' }, add));
+      h('div', {}, h('strong', {}, fmtKg(last.kg)), h('span', { class: 'muted small block' }, `Anotado el ${when}`)),
+      add),
+    // 2. Resumen
+    h('div', { class: 'wc-tiles' },
+      tile('Al empezar', fmtKg(first.kg)),
+      tile('Cambio', ws.length > 1 ? fmtDiff(diff) : '—', null, diff < 0 ? ' down' : diff > 0 ? ' up' : ''),
+      v !== null && c ? tile('IMC', String(v).replace('.', DEC), h('span', { class: 'bmi-tag ' + c.tone }, c.label))
+        : tile('IMC', '—', h('span', { class: 'muted small' }, 'Pon tu altura arriba'))),
+    // 3. Objetivo
+    goalSection,
+    // 4. Evolución
+    h('div', { class: 'wc-goal' }, h('span', { class: 'wc-label' }, icon('calendar'), 'Evolución'), weightChart(ws, goal) as unknown as HTMLElement));
 }
 
 /** "Te faltan X kg" con barra de progreso, o la felicitación si ya se ha llegado. */
@@ -113,7 +143,7 @@ export function goalBlock(firstKg: number, currentKg: number, goal: number): HTM
   const g = goalProgress(firstKg, currentKg, goal);
   if (g.reached) {
     return h('div', { class: 'goal-block reached' }, icon('trophy'),
-      h('div', {}, h('strong', {}, '¡Objetivo conseguido!'), h('span', { class: 'muted small' }, `Has llegado a ${fmtKg(goal)}. Puedes fijar uno nuevo en Mis datos.`)));
+      h('div', {}, h('strong', {}, '¡Objetivo conseguido!'), h('span', { class: 'muted small' }, `Has llegado a ${fmtKg(goal)}. Puedes fijar uno nuevo.`)));
   }
   const bar = h('span', { class: 'goal-fill' });
   bar.style.width = `${Math.round(g.done * 100)}%`;

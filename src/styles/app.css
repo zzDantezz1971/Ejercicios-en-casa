@@ -740,6 +740,18 @@ button:focus-visible, input:focus-visible, label:focus-within { outline: 2px sol
 .goal-block.reached > .ico { width: 28px; height: 28px; color: #F5A524; flex: none; }
 .goal-block.reached div { display: flex; flex-direction: column; }
 .goal-btns { display: flex; gap: 6px; }
+.weight-card { gap: 14px; }
+.weight-card .wc-now { align-items: center; justify-content: space-between; flex-wrap: nowrap; }
+.wc-label { display: inline-flex; align-items: center; gap: 6px; font-size: .78rem; font-weight: 700; letter-spacing: .04em; color: var(--muted); }
+.wc-label .ico { width: 16px; height: 16px; }
+.wc-tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.wc-tile { display: flex; flex-direction: column; gap: 4px; padding: 10px; border-radius: 14px; background: var(--surface-2); min-width: 0; }
+.wc-tile strong { font: 700 1.15rem/1.1 var(--display); }
+.wc-tile.down strong { color: var(--sec-stretch); }
+.wc-tile.up strong { color: #F5A524; }
+.wc-tile .bmi-tag { align-self: flex-start; font-size: .72rem; padding: 2px 7px; }
+.wc-goal { display: flex; flex-direction: column; gap: 8px; padding-top: 12px; border-top: 1px solid var(--line); }
+.wc-goal-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 
 /* Resumen del mes */
 .month-btn { margin: 2px 0; }
