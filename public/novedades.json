@@ -1,5 +1,17 @@
 [
   {
+    "fecha": "2026-11-07T10:40:00Z",
+    "es": [
+      "Inicio: «Contenido de la tabla» sale justo debajo de la tabla en uso y solo muestra los apartados con ejercicios."
+    ],
+    "ca": [
+      "Inici: «Contingut de la taula» surt just a sota de la taula en ús i només mostra els apartats amb exercicis."
+    ],
+    "en": [
+      "Home: “Routine contents” now appears right below the current routine and only shows sections with exercises."
+    ]
+  },
+  {
     "fecha": "2026-11-07T09:40:00Z",
     "es": [
       "Historial: en el detalle de un entrenamiento, «Copiar a otro día» crea uno igual en la fecha que elijas (para recuperar uno que no se guardó)."

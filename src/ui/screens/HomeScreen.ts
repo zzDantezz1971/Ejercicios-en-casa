@@ -86,6 +86,16 @@ export class HomeScreen implements Screen {
             h('button', { class: 'btn glass small', onclick: () => app.openTab('tablas') }, icon('swap'), 'Cambiar tabla')))),
     );
 
+    // Apartados de la tabla (solo los que tienen ejercicios), justo debajo de la tabla en uso
+    const withEx = SECTION_IDS.filter((sec) => this.app.store.routine[sec].some((i) => this.app.catalog.has(i.exerciseId)));
+    if (withEx.length) {
+      this.el.append(
+        h('section', { class: 'sections' },
+          h('h3', { class: 'block-title' }, 'Contenido de la tabla'),
+          ...withEx.map((sec) => this.sectionRow(sec))),
+      );
+    }
+
     // Semana y racha
     const days = trainedDays(app.store.history);
     const monday = startOfWeek(now);
@@ -108,12 +118,6 @@ export class HomeScreen implements Screen {
 
     this.el.append(this.rings(now));
 
-    // Apartados de la tabla
-    this.el.append(
-      h('section', { class: 'sections' },
-        h('h3', { class: 'block-title' }, 'Contenido de la tabla'),
-        ...SECTION_IDS.map((s) => this.sectionRow(s))),
-    );
   }
 
   /** Anillos de la semana (de lunes a domingo): días, minutos y calorías. */
