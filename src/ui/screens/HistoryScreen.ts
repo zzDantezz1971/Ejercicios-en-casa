@@ -211,7 +211,7 @@ export class HistoryScreen implements Screen {
       const k = dayKey(d);
       const cls = 'cal-day' + (d.getMonth() !== m.getMonth() ? ' out' : '') + (days.has(k) ? ' done' : '') + (k === today ? ' today' : '');
       cells.push(days.has(k)
-        ? h('button', { class: cls, 'aria-label': `Ver el entrenamiento del ${d.toLocaleDateString(LOCALE)}`, onclick: () => this.openDay(list, k) }, String(d.getDate()))
+        ? h('button', { class: cls, 'aria-label': `Ver el entrenamiento del ${d.toLocaleDateString(LOCALE)}`, onclick: () => openDay(this.app, list, k) }, String(d.getDate()))
         : h('span', { class: cls }, String(d.getDate())));
     }
     const go = (delta: number) => {
@@ -226,20 +226,6 @@ export class HistoryScreen implements Screen {
         h('button', { class: 'icon-btn small', 'aria-label': 'Mes siguiente', disabled: isCurrent, onclick: () => go(1) }, icon('chevron'))),
       h('div', { class: 'cal-grid' }, ...cells),
       h('p', { class: 'muted small cal-hint' }, 'Toca un día marcado para ver su entrenamiento.'));
-  }
-
-  /** Abre el entrenamiento de un día; si hubo varios, deja elegir. */
-  private openDay(list: readonly HistoryEntry[], k: string): void {
-    const es = list.filter((e) => dayKey(new Date(e.date)) === k);
-    if (es.length === 1) return this.app.push(new HistoryDetailScreen(this.app, es[0]));
-    const close = () => wrap.remove();
-    const d = new Date(es[0].date);
-    const wrap = h('div', { class: 'dialog-wrap', onclick: (ev: Event) => ev.target === wrap && close() },
-      h('div', { class: 'dialog day-pick', role: 'dialog', 'aria-modal': 'true' },
-        h('p', { class: 'dialog-title' }, d.toLocaleDateString(LOCALE, { weekday: 'long', day: 'numeric', month: 'long' })),
-        ...es.map((e) => row(e, this.app.store, () => { close(); this.app.push(new HistoryDetailScreen(this.app, e)); })),
-        h('div', { class: 'dialog-actions' }, h('button', { class: 'btn ghost', onclick: close }, 'Cerrar'))));
-    document.body.append(wrap);
   }
 }
 
@@ -272,4 +258,18 @@ function row(e: HistoryEntry, store: Store, onOpen: () => void): HTMLElement {
       !e.completed ? h('span', { class: 'badge warn' }, 'Terminado antes') : null),
     h('span', { class: 'h-time muted small' }, d.toLocaleTimeString(LOCALE, { hour: '2-digit', minute: '2-digit' })),
   );
+}
+
+/** Abre el entrenamiento de un día; si hubo varios, deja elegir. */
+export function openDay(app: App, list: readonly HistoryEntry[], k: string): void {
+  const es = list.filter((e) => dayKey(new Date(e.date)) === k);
+  if (es.length === 1) return app.push(new HistoryDetailScreen(app, es[0]));
+  const close = () => wrap.remove();
+  const d = new Date(es[0].date);
+  const wrap = h('div', { class: 'dialog-wrap', onclick: (ev: Event) => ev.target === wrap && close() },
+    h('div', { class: 'dialog day-pick', role: 'dialog', 'aria-modal': 'true' },
+      h('p', { class: 'dialog-title' }, d.toLocaleDateString(LOCALE, { weekday: 'long', day: 'numeric', month: 'long' })),
+      ...es.map((e) => row(e, app.store, () => { close(); app.push(new HistoryDetailScreen(app, e)); })),
+      h('div', { class: 'dialog-actions' }, h('button', { class: 'btn ghost', onclick: close }, 'Cerrar'))));
+  document.body.append(wrap);
 }

@@ -958,3 +958,5 @@ button.cal-day:active { transform: scale(.92); }
 .cal-hint { margin: 10px 0 0; text-align: center; }
 .day-pick { gap: 10px; }
 .day-pick .dialog-title::first-letter { text-transform: uppercase; }
+button.wd { border: 0; background: transparent; padding: 0; font: inherit; color: inherit; cursor: pointer; }
+button.wd:active .wd-dot { transform: scale(.92); }

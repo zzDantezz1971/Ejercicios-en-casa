@@ -11,6 +11,7 @@ import { MonthScreen } from './MonthScreen';
 import { addMonths, addWeeks, monthKey, monthStart, weekKey, weekStart, weekStats } from '../../domain/monthSummary';
 import { randomPhrase } from '../../domain/phrases';
 import { weekGoalsDialog } from '../components/weekGoals';
+import { openDay } from './HistoryScreen';
 
 export class HomeScreen implements Screen {
   readonly el = h('main', { class: 'screen home' });
@@ -110,7 +111,10 @@ export class HomeScreen implements Screen {
         h('div', { class: 'week-days' },
           ...WEEKDAY_LETTERS.map((l, i) => {
             const d = addDays(monday, i), k = dayKey(d);
-            return h('div', { class: 'wd' + (days.has(k) ? ' done' : '') + (k === todayKey ? ' today' : '') + (d > now ? ' future' : '') },
+            const cls = 'wd' + (days.has(k) ? ' done' : '') + (k === todayKey ? ' today' : '') + (d > now ? ' future' : '');
+            return h(days.has(k) ? 'button' : 'div', days.has(k)
+              ? { class: cls, 'aria-label': `Ver el entrenamiento del ${d.toLocaleDateString(LOCALE)}`, onclick: () => openDay(app, app.store.history, k) }
+              : { class: cls },
               h('span', { class: 'wd-letter' }, l),
               h('span', { class: 'wd-dot' }, days.has(k) ? icon('check') : String(d.getDate())));
           }))),

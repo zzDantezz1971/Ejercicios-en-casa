@@ -1,5 +1,17 @@
 [
   {
+    "fecha": "2026-11-07T11:40:00Z",
+    "es": [
+      "Inicio: en «Esta semana», toca un día marcado para ver su entrenamiento."
+    ],
+    "ca": [
+      "Inici: a «Aquesta setmana», toca un dia marcat per veure’n l’entrenament."
+    ],
+    "en": [
+      "Home: in “This week”, tap a highlighted day to see its workout."
+    ]
+  },
+  {
     "fecha": "2026-11-07T10:55:00Z",
     "es": [
       "Historial: toca un día marcado en el calendario para ver su entrenamiento. La lista larga de entrenamientos desaparece."
