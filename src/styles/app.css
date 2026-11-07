@@ -947,3 +947,7 @@ body:has(.screen.workout) .update-banner { display: none; }
 @keyframes md-twinkle { 0%, 100% { opacity: 0; } 50% { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .md-stage::before, .md-stage .medal-badge, .md-stage .medal-badge::after, .md-sparkles i { animation: none; } }
 .medal-badge.big.locked { box-shadow: inset 0 0 0 6px var(--line), 0 16px 40px rgb(0 0 0 / .5); }
+
+/* Copiar un entrenamiento a otro día */
+.copy-day .cd-field { display: flex; flex-direction: column; gap: 6px; }
+.copy-day input { color-scheme: dark; }

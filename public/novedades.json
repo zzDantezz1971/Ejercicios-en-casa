@@ -1,5 +1,17 @@
 [
   {
+    "fecha": "2026-11-07T09:40:00Z",
+    "es": [
+      "Historial: en el detalle de un entrenamiento, «Copiar a otro día» crea uno igual en la fecha que elijas (para recuperar uno que no se guardó)."
+    ],
+    "ca": [
+      "Historial: al detall d’un entrenament, «Copia a un altre dia» en crea un d’igual en la data que triïs (per recuperar-ne un que no es va desar)."
+    ],
+    "en": [
+      "History: in a workout’s details, “Copy to another day” creates an identical one on the date you choose (to recover one that wasn’t saved)."
+    ]
+  },
+  {
     "fecha": "2026-11-07T09:20:00Z",
     "es": [
       "Arreglo: ya se puede volver a instalar la app desde Chrome (⋮ → Instalar aplicación)."

@@ -5,6 +5,7 @@ import type { App, Screen } from '../App';
 import { confirmDialog, h, humanDuration, kg, mmss } from '../dom';
 import { icon, SECTION_STYLE } from '../icons';
 import { startWorkout } from '../components/startWorkout';
+import { checkAndCelebrate } from '../components/medals';
 
 /** Detalle de un entrenamiento del historial: qué se hizo, cuánto tiempo y repetirlo. */
 export class HistoryDetailScreen implements Screen {
@@ -62,8 +63,41 @@ export class HistoryDetailScreen implements Screen {
         canRepeat
           ? h('button', { class: 'btn primary block', onclick: () => this.repeat() }, icon('play'), 'Repetir este entrenamiento')
           : null,
+        h('button', { class: 'btn ghost block', onclick: () => this.copyToDay() }, icon('copy'), 'Copiar a otro día'),
         h('button', { class: 'btn danger block', onclick: () => void this.remove() }, icon('trash'), 'Borrar este entrenamiento')),
     );
+  }
+
+  /** Crea un entrenamiento igual en otro día (para recuperar uno que no se guardó). */
+  private copyToDay(): void {
+    const { app, entry } = this;
+    const src = new Date(entry.date);
+    const next = new Date(src.getTime() + 864e5);
+    const pad = (n: number) => String(n).padStart(2, '0');
+    const dayIn = h('input', { type: 'date', class: 'text-input', value: `${next.getFullYear()}-${pad(next.getMonth() + 1)}-${pad(next.getDate())}` });
+    const timeIn = h('input', { type: 'time', class: 'text-input', value: `${pad(src.getHours())}:${pad(src.getMinutes())}` });
+    const close = () => wrap.remove();
+    const ok = () => {
+      const [y, m, d] = dayIn.value.split('-').map(Number);
+      const [hh, mm] = (timeIn.value || '12:00').split(':').map(Number);
+      if (!y || !m || !d) return;
+      const when = new Date(y, m - 1, d, hh, mm);
+      if (when.getTime() > Date.now()) { dayIn.setCustomValidity('—'); dayIn.reportValidity(); return; }
+      app.store.copyHistoryTo(entry, when);
+      close();
+      app.back();
+      checkAndCelebrate(app);
+    };
+    const wrap = h('div', { class: 'dialog-wrap', onclick: (e: Event) => e.target === wrap && close() },
+      h('div', { class: 'dialog copy-day', role: 'dialog', 'aria-modal': 'true' },
+        h('p', { class: 'dialog-title' }, 'Copiar a otro día'),
+        h('p', { class: 'muted small' }, 'Se crea un entrenamiento igual a este (ejercicios, tiempo, calorías y pulso) en el día y la hora que elijas.'),
+        h('label', { class: 'cd-field' }, h('span', { class: 'muted small' }, 'Día'), dayIn),
+        h('label', { class: 'cd-field' }, h('span', { class: 'muted small' }, 'Hora de inicio'), timeIn),
+        h('div', { class: 'dialog-actions' },
+          h('button', { class: 'btn ghost', onclick: close }, 'Cancelar'),
+          h('button', { class: 'btn primary', onclick: ok }, 'Copiar'))));
+    document.body.append(wrap);
   }
 
   /** Vuelve a hacer los mismos ejercicios, en el mismo orden y con los tiempos previstos. */

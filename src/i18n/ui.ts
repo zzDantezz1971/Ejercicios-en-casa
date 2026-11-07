@@ -109,6 +109,12 @@ const ROWS: Row[] = [
   ['Sigue entrenando: cuando lo consigas, la medalla se desbloqueará sola.', 'Continua entrenant: quan ho aconsegueixis, la medalla es desbloquejarà sola.', 'Keep training: once you achieve it, the medal will unlock by itself.'],
   ['Toca una medalla para ver su ficha.', 'Toca una medalla per veure’n la fitxa.', 'Tap a medal to see its details.'],
 
+  ['Copiar a otro día', 'Copia a un altre dia', 'Copy to another day'],
+  ['Se crea un entrenamiento igual a este (ejercicios, tiempo, calorías y pulso) en el día y la hora que elijas.', 'Es crea un entrenament igual que aquest (exercicis, temps, calories i pols) el dia i l’hora que triïs.', 'A workout identical to this one (exercises, time, calories and heart rate) is created on the day and time you choose.'],
+  ['Día', 'Dia', 'Day'],
+  ['Hora de inicio', 'Hora d’inici', 'Start time'],
+  ['Copiar', 'Copia', 'Copy'],
+
   // ── Etiquetas de ejercicios ──
   ['Bueno para la lumbar', 'Bo per a la zona lumbar', 'Good for the lower back'],
   ['Ojo con la lumbar', 'Compte amb la zona lumbar', 'Careful with the lower back'],

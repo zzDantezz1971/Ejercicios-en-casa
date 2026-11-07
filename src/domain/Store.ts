@@ -447,6 +447,16 @@ export class Store {
     this.persist();
   }
 
+  /** Copia un entrenamiento del historial a otra fecha y hora (p. ej. uno que se perdió). */
+  copyHistoryTo(entry: HistoryEntry, date: Date): HistoryEntry {
+    const copy: HistoryEntry = { ...structuredClone(entry), date: date.toISOString() };
+    this.data.history = [copy, ...this.data.history]
+      .sort((a, b) => Date.parse(b.date) - Date.parse(a.date))
+      .slice(0, HISTORY_LIMIT);
+    this.persist();
+    return copy;
+  }
+
   /** Borra un entrenamiento concreto (posición en la lista, del más reciente al más antiguo). */
   deleteHistoryAt(index: number): void {
     if (index < 0 || index >= this.data.history.length) return;
