@@ -32,6 +32,16 @@ const PHRASES_ES: string[] = [
   'Hoy toca ser constante{, n}.',
   'Tu salud es tu mejor inversión.',
   'Suda hoy, sonríe mañana.',
+  'Tu cuerpo puede más de lo que crees{, n}.',
+  'Hoy suma, mañana se nota.',
+  'Mejor hecho que perfecto.',
+  'Cada entrenamiento es una inversión en ti{, n}.',
+  'Una espalda fuerte empieza por un buen core.',
+  'No te compares: mejora.',
+  'Constancia hoy, orgullo mañana{, n}.',
+  'Respira hondo y a por ello.',
+  'Un poco cada día vale más que mucho de vez en cuando.',
+  'Hoy también cuenta{, n}.',
 ];
 const PHRASES_CA: string[] = [
   'Avui és un bon dia per moure’s{, n}.',
@@ -64,6 +74,16 @@ const PHRASES_CA: string[] = [
   'Avui toca ser constant{, n}.',
   'La teva salut és la teva millor inversió.',
   'Sua avui, somriu demà.',
+  'El teu cos pot més del que et penses{, n}.',
+  'Avui suma, demà es nota.',
+  'Millor fet que perfecte.',
+  'Cada entrenament és una inversió en tu{, n}.',
+  'Una esquena forta comença amb un bon core.',
+  'No et comparis: millora.',
+  'Constància avui, orgull demà{, n}.',
+  'Respira fondo i som-hi.',
+  'Una mica cada dia val més que molt de tant en tant.',
+  'Avui també compta{, n}.',
 ];
 
 const PHRASES_EN: string[] = [
@@ -97,6 +117,16 @@ const PHRASES_EN: string[] = [
   'Today is a day to be consistent{, n}.',
   'Your health is your best investment.',
   'Sweat today, smile tomorrow.',
+  'Your body can do more than you think{, n}.',
+  'It adds up today, it shows tomorrow.',
+  'Done is better than perfect.',
+  'Every workout is an investment in yourself{, n}.',
+  'A strong back starts with a good core.',
+  'Don’t compare yourself: improve.',
+  'Consistency today, pride tomorrow{, n}.',
+  'Take a deep breath and go for it.',
+  'A little every day beats a lot now and then.',
+  'Today counts too{, n}.',
 ];
 
 /** Frases de la app en el idioma en uso. */
@@ -110,6 +140,16 @@ export function personalize(phrase: string, name?: string): string {
     .replace(/\{n\}/g, name ?? '')
     .replace(/\s+([.!?,])/g, '$1')
     .trim();
+}
+
+let lastIdx = -1;
+
+/** Una frase al azar, distinta de la última que salió. */
+export function randomPhrase(name?: string, rnd: () => number = Math.random): string {
+  let idx = Math.floor(rnd() * PHRASES.length);
+  if (idx === lastIdx) idx = (idx + 1) % PHRASES.length;
+  lastIdx = idx;
+  return personalize(PHRASES[idx], name);
 }
 
 /** Frase del día: la misma durante todo el día, distinta al día siguiente. */

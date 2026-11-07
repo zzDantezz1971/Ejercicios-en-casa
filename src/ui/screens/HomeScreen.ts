@@ -9,7 +9,7 @@ import { RoutineScreen } from './RoutineScreen';
 import { startWorkout } from '../components/startWorkout';
 import { MonthScreen } from './MonthScreen';
 import { addMonths, addWeeks, monthKey, monthStart, weekKey, weekStart, weekStats } from '../../domain/monthSummary';
-import { phraseOfDay } from '../../domain/phrases';
+import { randomPhrase } from '../../domain/phrases';
 
 export class HomeScreen implements Screen {
   readonly el = h('main', { class: 'screen home' });
@@ -34,7 +34,7 @@ export class HomeScreen implements Screen {
       h('header', { class: 'home-head' },
         h('p', { class: 'eyebrow' }, date),
         h('h1', {}, greeting(now, app.store.settings.profile.name)),
-        app.store.settings.phrases ? h('p', { class: 'daily-phrase' }, phraseOfDay(now, app.store.settings.profile.name)) : null),
+        app.store.settings.phrases ? h('p', { class: 'daily-phrase' }, randomPhrase(app.store.settings.profile.name)) : null),
     );
 
     // Aviso: ya está el resumen del mes pasado

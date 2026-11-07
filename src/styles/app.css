@@ -740,6 +740,9 @@ button:focus-visible, input:focus-visible, label:focus-within { outline: 2px sol
 .goal-block.reached > .ico { width: 28px; height: 28px; color: #F5A524; flex: none; }
 .goal-block.reached div { display: flex; flex-direction: column; }
 .goal-btns { display: flex; gap: 6px; }
+.update-dialog h3 { margin: 0 0 8px; font: 700 1.3rem var(--display); text-transform: uppercase; letter-spacing: .02em; }
+.news-list { margin: 0 0 14px; padding-left: 20px; display: flex; flex-direction: column; gap: 8px; max-height: 50vh; overflow-y: auto; }
+.news-list li { line-height: 1.4; }
 .weight-card { gap: 14px; }
 .weight-card .wc-now { align-items: center; justify-content: space-between; flex-wrap: nowrap; }
 .wc-label { display: inline-flex; align-items: center; gap: 6px; font-size: .78rem; font-weight: 700; letter-spacing: .04em; color: var(--muted); }

@@ -1,0 +1,26 @@
+[
+  {
+    "fecha": "2026-11-07T00:40:00Z",
+    "es": ["Frases motivadoras: ahora sale una distinta cada vez que abres Inicio, y hay 10 frases nuevas (40 en total).", "Al actualizar la app verás este resumen de lo que ha cambiado."],
+    "ca": ["Frases motivadores: ara en surt una de diferent cada vegada que obres Inici, i hi ha 10 frases noves (40 en total).", "En actualitzar l’aplicació veuràs aquest resum del que ha canviat."],
+    "en": ["Motivational phrases: a different one now appears every time you open Home, and there are 10 new phrases (40 in total).", "When you update the app you’ll see this summary of what has changed."]
+  },
+  {
+    "fecha": "2026-11-07T00:28:00Z",
+    "es": ["La frase motivadora de Inicio sale centrada y en dorado."],
+    "ca": ["La frase motivadora d’Inici surt centrada i en daurat."],
+    "en": ["The motivational phrase on Home is now centred and in gold."]
+  },
+  {
+    "fecha": "2026-11-07T00:24:00Z",
+    "es": ["Mis datos: el apartado Peso, más ordenado, con el objetivo de peso dentro."],
+    "ca": ["Les meves dades: l’apartat Pes, més ordenat, amb l’objectiu de pes a dins."],
+    "en": ["My details: the Weight section is tidier and now includes the weight goal."]
+  },
+  {
+    "fecha": "2026-11-07T00:18:00Z",
+    "es": ["Nuevas pestañas: Medallas y Mis datos.", "Frases motivadoras: se activan o desactivan en Ajustes."],
+    "ca": ["Pestanyes noves: Medalles i Les meves dades.", "Frases motivadores: s’activen o es desactiven a Configuració."],
+    "en": ["New tabs: Medals and My details.", "Motivational phrases: turn them on or off in Settings."]
+  }
+]

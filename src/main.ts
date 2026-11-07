@@ -7,7 +7,8 @@ import { SettingsScreen } from './ui/screens/SettingsScreen';
 import { MedalsScreen } from './ui/screens/MedalsScreen';
 import { ProfileScreen } from './ui/screens/ProfileScreen';
 import { TablesScreen } from './ui/screens/TablesScreen';
-import { applyUpdate, initUpdates, onUpdateReady } from './services/Updates';
+import { initUpdates, onUpdateReady } from './services/Updates';
+import { showUpdateDialog } from './ui/components/updateDialog';
 import { h } from './ui/dom';
 import { startTranslating } from './i18n';
 
@@ -36,7 +37,7 @@ onUpdateReady(() => {
   if (document.querySelector('.update-banner')) return;
   const banner = h('div', { class: 'update-banner', role: 'status' },
     h('span', {}, 'Nueva versión disponible'),
-    h('button', { class: 'btn primary small', onclick: () => void applyUpdate() }, 'Actualizar'),
+    h('button', { class: 'btn primary small', onclick: () => void showUpdateDialog() }, 'Ver novedades'),
     h('button', { class: 'icon-btn small', 'aria-label': 'Más tarde', onclick: () => banner.remove() }, '✕'));
   document.body.append(banner);
 });

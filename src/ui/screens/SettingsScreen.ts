@@ -1,5 +1,6 @@
 import { LOCALE } from '../../i18n';
-import { applyUpdate, BUILD_TIME, checkForUpdate, updateReady } from '../../services/Updates';
+import { showUpdateDialog } from '../components/updateDialog';
+import { BUILD_TIME, checkForUpdate, updateReady } from '../../services/Updates';
 import { Store } from '../../domain/Store';
 import { SECTION_IDS, SECTION_TITLES, type Settings } from '../../domain/types';
 import { pickBackupFile } from '../../services/Backup';
@@ -52,7 +53,7 @@ export class SettingsScreen implements Screen {
     const status = h('p', { class: 'muted small', 'aria-live': 'polite' }, updateReady() ? 'Hay una versión nueva lista.' : '');
     const btn = h('button', { class: 'btn ghost small' }, updateReady() ? 'Actualizar ahora' : 'Buscar actualización');
     btn.addEventListener('click', async () => {
-      if (updateReady()) return void applyUpdate();
+      if (updateReady()) return void showUpdateDialog();
       btn.disabled = true;
       status.textContent = 'Buscando…';
       const found = await checkForUpdate();
