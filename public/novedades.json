@@ -1,5 +1,17 @@
 [
   {
+    "fecha": "2026-11-07T09:20:00Z",
+    "es": [
+      "Arreglo: ya se puede volver a instalar la app desde Chrome (⋮ → Instalar aplicación)."
+    ],
+    "ca": [
+      "Correcció: ja es pot tornar a instal·lar l’aplicació des de Chrome (⋮ → Instal·la l’aplicació)."
+    ],
+    "en": [
+      "Fix: the app can be installed again from Chrome (⋮ → Install app)."
+    ]
+  },
+  {
     "fecha": "2026-11-07T09:00:00Z",
     "es": [
       "Icono con fondo negro.",

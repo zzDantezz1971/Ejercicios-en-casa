@@ -17,6 +17,8 @@ export default defineConfig({
         description: 'Rutinas de calentamiento, pesas, abdominales y estiramientos en casa.',
         lang: 'es',
         start_url: './',
+        // identidad propia de la app instalada (nueva, para que Chrome no se líe con una instalación anterior)
+        id: './?app=ejercicios-v2',
         scope: './',
         display: 'standalone',
         orientation: 'any',
