@@ -1,5 +1,17 @@
 [
   {
+    "fecha": "2026-11-07T01:00:00Z",
+    "es": [
+      "El icono de la app es más grande. Para verlo, quita el icono y vuelve a instalar la app desde Chrome (⋮ → Instalar aplicación)."
+    ],
+    "ca": [
+      "La icona de l’aplicació és més gran. Per veure-la, treu la icona i torna a instal·lar l’aplicació des de Chrome (⋮ → Instal·la l’aplicació)."
+    ],
+    "en": [
+      "The app icon is bigger. To see it, remove the icon and install the app again from Chrome (⋮ → Install app)."
+    ]
+  },
+  {
     "fecha": "2026-11-07T00:55:00Z",
     "es": [
       "Icono nuevo: una casa naranja con una mancuerna dorada. Para verlo, borra el icono actual e instala la app otra vez desde Chrome (⋮ → Instalar aplicación)."
