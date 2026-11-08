@@ -1,5 +1,17 @@
 [
   {
+    "fecha": "2026-11-08T21:50:00Z",
+    "es": [
+      "Nueva página de política de privacidad (en catalán, castellano e inglés): tus datos se guardan solo en tu móvil y la app no los envía a ningún sitio."
+    ],
+    "ca": [
+      "Nova pàgina de política de privacitat (en català, castellà i anglès): les teves dades es guarden només al teu mòbil i l’app no les envia enlloc."
+    ],
+    "en": [
+      "New privacy policy page (in Catalan, Spanish and English): your data stays on your phone and the app never sends it anywhere."
+    ]
+  },
+  {
     "fecha": "2026-11-08T20:30:00Z",
     "es": [
       "Las letras de la app van incluidas en ella: se ven bien sin conexión desde el primer día y ya no se descarga nada de Google."

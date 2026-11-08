@@ -37,7 +37,7 @@ export default defineConfig(({ mode }) => ({
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,woff2,json}'],
         // las novedades se leen siempre del servidor
-        globIgnores: ['**/novedades.json'],
+        globIgnores: ['**/novedades.json', '**/privacidad.html'],
         maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,
         // Las fuentes de Google se guardan la primera vez para poder usarlas sin conexión.
         runtimeCaching: [
