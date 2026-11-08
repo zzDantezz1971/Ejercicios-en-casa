@@ -1,6 +1,6 @@
 import { DEC } from '../../i18n';
 import { SEXES, SEX_LABELS, type Settings, type Sex } from '../../domain/types';
-import { weightCard } from '../components/weightCard';
+import { weightCards } from '../components/weightCard';
 import { WeightScreen } from './WeightScreen';
 import type { App, Screen } from '../App';
 import { append, clear, h } from '../dom';
@@ -56,6 +56,6 @@ export class ProfileScreen implements Screen {
     clear(this.body);
     append(this.body,
       this.profileCard(s),
-      weightCard(this.app, () => this.render(), () => this.app.push(new WeightScreen(this.app))));
+      ...weightCards(this.app, () => this.render(), () => this.app.push(new WeightScreen(this.app))));
   }
 }

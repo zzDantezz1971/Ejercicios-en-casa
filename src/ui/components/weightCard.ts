@@ -1,6 +1,6 @@
 import { LOCALE, DEC } from '../../i18n';
 import type { App } from '../App';
-import { bodyWeightDialog, h } from '../dom';
+import { actionSheet, bodyWeightDialog, h } from '../dom';
 import { icon } from '../icons';
 import { bmi, bmiCategory } from '../../domain/calories';
 import { goalProgress } from '../../domain/goal';
@@ -75,16 +75,13 @@ export function weightChart(points: ReadonlyArray<{ date: string; kg: number }>,
   return svg;
 }
 
-/** Tarjeta de Peso (Mis datos), de arriba abajo: peso de hoy y botón para anotar, resumen (inicio, cambio, IMC),
-    objetivo con sus botones y gráfica. */
-export function weightCard(app: App, onChange: () => void, onOpen: () => void): HTMLElement {
+/** Mis datos: tres tarjetas. Peso (el actual en grande, el cambio, botón para anotar y la gráfica),
+    Objetivo (cuánto falta, con un solo botón para cambiarlo o quitarlo) e IMC (con su escala de colores). */
+export function weightCards(app: App, onChange: () => void, onOpen: () => void): HTMLElement[] {
   const ws = app.store.weights;
   const profile = app.store.settings.profile;
   const goal = profile.goalKg ?? null;
-  const add = h('button', {
-    class: 'btn primary small',
-    onclick: async () => { if (await askWeight(app)) onChange(); },
-  }, icon('plus'), 'Anotar peso');
+  const add = h('button', { class: 'btn primary small', onclick: async () => { if (await askWeight(app)) onChange(); } }, icon('plus'), 'Anotar peso');
   const setGoal = (goalKg: number | null) => {
     app.store.saveSettings({ ...app.store.settings, profile: { ...app.store.settings.profile, goalKg } });
     onChange();
@@ -93,49 +90,66 @@ export function weightCard(app: App, onChange: () => void, onOpen: () => void): 
     const kg = await bodyWeightDialog('Peso al que quieres llegar', goal ?? Math.round(((app.store.currentWeight ?? 80) - 3) * 10) / 10);
     if (kg !== null) setGoal(kg);
   };
-  const head = h('div', { class: 'card-head' }, h('h3', {}, 'Peso'),
-    ws.length ? h('button', { class: 'link-btn', onclick: onOpen }, 'Ver todo', icon('chevron')) : null);
-
-  // Objetivo: progreso y botones para fijarlo, cambiarlo o quitarlo
+  const goalMenu = async () => {
+    const c = await actionSheet('Objetivo de peso', [{ id: 'change', label: 'Cambiar objetivo' }, { id: 'remove', label: 'Quitar objetivo', danger: true }]);
+    if (c === 'change') void askGoal();
+    if (c === 'remove') setGoal(null);
+  };
   const first = ws[0], last = ws[ws.length - 1];
-  const goalSection = h('div', { class: 'wc-goal' },
-    h('div', { class: 'wc-goal-head' },
-      h('span', { class: 'wc-label' }, icon('target'), 'Objetivo'),
-      h('div', { class: 'goal-btns' },
-        goal ? h('button', { class: 'btn ghost small', onclick: () => setGoal(null) }, 'Quitar') : null,
-        h('button', { class: goal ? 'btn ghost small' : 'btn primary small', onclick: () => void askGoal() }, goal ? 'Cambiar' : 'Fijar objetivo'))),
+
+  // 1. Peso
+  const peso = !last
+    ? h('section', { class: 'card weight-card' }, h('div', { class: 'card-head' }, h('h3', {}, 'Peso')),
+      h('div', { class: 'wa-hero' }, h('p', { class: 'muted small' }, 'Anota tu peso para ver cómo evoluciona y calcular las calorías de cada entrenamiento.'), add))
+    : (() => {
+      const diff = last.kg - first.kg;
+      const when = new Date(last.date).toLocaleDateString(LOCALE, { day: 'numeric', month: 'short' });
+      const chip = ws.length > 1 ? h('span', { class: 'wv-diff' + (diff < 0 ? ' down' : diff > 0 ? ' up' : '') }, `${diff < 0 ? '↓ ' : diff > 0 ? '↑ ' : ''}${fmtDiff(diff).replace(/^[−+]/, '')} desde el inicio`) : null;
+      return h('section', { class: 'card weight-card' },
+        h('div', { class: 'card-head' }, h('h3', {}, 'Peso'), h('button', { class: 'link-btn', onclick: onOpen }, 'Ver todo', icon('chevron'))),
+        h('div', { class: 'wa-hero' },
+          h('div', {}, h('strong', { class: 'wa-kg' }, fmtKg(last.kg)), h('div', { class: 'wa-sub' }, chip, h('span', { class: 'muted small' }, when))),
+          add),
+        weightChart(ws, goal) as unknown as HTMLElement);
+    })();
+
+  // 2. Objetivo
+  const objetivo = h('section', { class: 'card weight-card' },
+    h('div', { class: 'card-head' }, h('h3', {}, 'Objetivo'), goal ? h('button', { class: 'link-btn', onclick: () => void goalMenu() }, 'Cambiar') : null),
     goal && last ? goalBlock(first.kg, last.kg, goal)
       : goal ? h('p', { class: 'muted small' }, `Objetivo ${fmtKg(goal)}`)
-        : h('p', { class: 'muted small' }, 'Fija un peso al que quieras llegar y verás cuánto te falta.'));
+        : h('div', { class: 'wb-row' }, h('p', { class: 'muted small' }, 'Fija un peso al que quieras llegar y verás cuánto te falta.'),
+          h('button', { class: 'btn primary small', onclick: () => void askGoal() }, 'Fijar')));
 
-  if (!ws.length) {
-    return h('section', { class: 'card weight-card' }, head,
-      h('div', { class: 'wc-now' },
-        h('p', { class: 'muted small' }, 'Anota tu peso para ver cómo evoluciona y calcular las calorías de cada entrenamiento.'), add),
-      goalSection);
-  }
+  // 3. IMC (solo con peso anotado)
+  if (!last) return [peso, objetivo];
   const height = profile.height;
-  const diff = last.kg - first.kg;
-  const when = new Date(last.date).toLocaleDateString(LOCALE, { day: 'numeric', month: 'long' });
   const v = height ? bmi(last.kg, height) : null;
-  const c = v !== null ? bmiCategory(v) : null;
-  const tile = (label: string, value: string, extra?: HTMLElement | null, cls = '') =>
-    h('div', { class: 'wc-tile' + cls }, h('span', { class: 'wc-label' }, label), h('strong', {}, value), extra ?? null);
-  return h('section', { class: 'card weight-card' }, head,
-    // 1. Peso de hoy
-    h('div', { class: 'wc-now' },
-      h('div', {}, h('strong', {}, fmtKg(last.kg)), h('span', { class: 'muted small block' }, `Anotado el ${when}`)),
-      add),
-    // 2. Resumen
-    h('div', { class: 'wc-tiles' },
-      tile('Al empezar', fmtKg(first.kg)),
-      tile('Cambio', ws.length > 1 ? fmtDiff(diff) : '—', null, diff < 0 ? ' down' : diff > 0 ? ' up' : ''),
-      v !== null && c ? tile('IMC', String(v).replace('.', DEC), h('span', { class: 'bmi-tag ' + c.tone }, c.label))
-        : tile('IMC', '—', h('span', { class: 'muted small' }, 'Pon tu altura arriba'))),
-    // 3. Objetivo
-    goalSection,
-    // 4. Evolución
-    h('div', { class: 'wc-goal' }, h('span', { class: 'wc-label' }, icon('calendar'), 'Evolución'), weightChart(ws, goal) as unknown as HTMLElement));
+  const imc = h('section', { class: 'card weight-card' }, h('div', { class: 'card-head' }, h('h3', {}, 'IMC')),
+    v !== null ? bmiScale(v) : h('p', { class: 'muted small' }, 'Pon tu altura arriba para calcular tu IMC.'));
+  return [peso, objetivo, imc];
+}
+
+/** Valor del IMC con una escala de colores (bajo peso, normal, sobrepeso, obesidad) y una marca donde estás. */
+function bmiScale(v: number): HTMLElement {
+  const cat = bmiCategory(v);
+  const lo = 15, hi = 35;
+  const at = (x: number) => `${(((Math.max(lo, Math.min(hi, x)) - lo) / (hi - lo)) * 100).toFixed(1)}%`;
+  const mark = h('span', { class: 'wb-mark' });
+  mark.style.left = at(v);
+  const seg = (from: number, to: number, cls: string) => {
+    const s = h('span', { class: 'wb-seg ' + cls });
+    s.style.flex = String(to - from);
+    return s;
+  };
+  return h('div', { class: 'wb-bmi' },
+    h('div', { class: 'wb-bmi-top' }, h('strong', { class: 'wa-kg' }, String(v).replace('.', DEC)), h('span', { class: 'bmi-tag ' + cat.tone }, cat.label)),
+    h('div', { class: 'wb-scale' }, seg(15, 18.5, 'low'), seg(18.5, 25, 'ok'), seg(25, 30, 'high'), seg(30, 35, 'veryHigh'), mark),
+    h('div', { class: 'wb-ticks' }, ...[18.5, 25, 30].map((t) => {
+      const s = h('span', {}, String(t).replace('.', DEC));
+      s.style.left = at(t);
+      return s;
+    })));
 }
 
 /** "Te faltan X kg" con barra de progreso, o la felicitación si ya se ha llegado. */

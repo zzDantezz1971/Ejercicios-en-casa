@@ -1,5 +1,17 @@
 [
   {
+    "fecha": "2026-11-09T10:30:00Z",
+    "es": [
+      "Mis datos: el peso, ahora en tres tarjetas más claras. Peso (el actual en grande, cuánto has cambiado y la gráfica), Objetivo (cuánto te falta) e IMC (con una escala de colores que muestra dónde estás)."
+    ],
+    "ca": [
+      "Les meves dades: el pes, ara en tres targetes més clares. Pes (l’actual en gran, quant has canviat i la gràfica), Objectiu (quant et falta) i IMC (amb una escala de colors que mostra on ets)."
+    ],
+    "en": [
+      "My details: weight now comes in three clearer cards. Weight (your current weight in large type, how much it has changed and the chart), Goal (how far you have to go) and BMI (with a colour scale showing where you are)."
+    ]
+  },
+  {
     "fecha": "2026-11-09T09:30:00Z",
     "es": [
       "Sexo: ahora hay cuatro opciones (Hombre, Mujer, LGTBIQ+ y Nada), centradas, en la bienvenida y en Mis datos."

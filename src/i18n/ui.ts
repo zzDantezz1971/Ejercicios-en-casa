@@ -626,6 +626,11 @@ const ROWS: Row[] = [
   ['Probar sonido y voz', 'Prova el so i la veu', 'Test sound and voice'],
   ['Mis datos', 'Les meves dades', 'My details'],
   ['Este navegador no tiene voz disponible.', 'Aquest navegador no té veu disponible.', 'This browser has no voice available.'],
+  // Mis datos: tarjetas de peso
+  ['Cambiar objetivo', 'Canvia l’objectiu', 'Change goal'],
+  ['Quitar objetivo', 'Treu l’objectiu', 'Remove goal'],
+  ['Fijar', 'Fixa', 'Set'],
+  ['Pon tu altura arriba para calcular tu IMC.', 'Posa la teva alçada a dalt per calcular el teu IMC.', 'Add your height above to work out your BMI.'],
   // Bienvenida de la primera vez
   ['LGTBIQ+', 'LGTBIQ+', 'LGBTIQ+'],
   ['Nada', 'Cap', 'None'],

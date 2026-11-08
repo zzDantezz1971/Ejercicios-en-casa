@@ -1026,3 +1026,22 @@ button.wd:active .wd-dot { transform: scale(.92); }
 /* sexo: cuatro botones a lo ancho, centrados */
 .segmented.sex-segs { display: flex; width: 100%; }
 .sex-segs .seg { flex: 1; padding: 10px 4px; text-align: center; }
+
+/* ── Mis datos: tarjetas de Peso, Objetivo e IMC ── */
+.wa-hero { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.wa-kg { font: 700 2.6rem/1 var(--display); display: block; }
+.wa-sub { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
+.wv-diff { font-weight: 700; font-size: .88rem; color: var(--muted); }
+.wv-diff.down { color: var(--sec-stretch); }
+.wv-diff.up { color: #F5A524; }
+.wb-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.wb-bmi { display: flex; flex-direction: column; gap: 10px; }
+.wb-bmi-top { display: flex; align-items: center; gap: 10px; }
+.wb-scale { position: relative; display: flex; height: 10px; border-radius: 999px; overflow: visible; gap: 2px; }
+.wb-seg { height: 100%; }
+.wb-seg:first-child { border-radius: 999px 0 0 999px; } .wb-seg:nth-last-child(2) { border-radius: 0 999px 999px 0; }
+.wb-seg.low { background: #F5A524; } .wb-seg.ok { background: var(--sec-stretch); } .wb-seg.high { background: #F5A524; } .wb-seg.veryHigh { background: var(--danger); }
+.wb-mark { position: absolute; top: -5px; width: 4px; height: 20px; margin-left: -2px; border-radius: 3px; background: #fff; box-shadow: 0 0 0 2px var(--surface); }
+.wb-ticks { position: relative; height: 14px; }
+.wb-ticks span { position: absolute; transform: translateX(-50%); font-size: .72rem; color: var(--muted); }
+.wa-hero .btn { white-space: nowrap; flex: none; }
