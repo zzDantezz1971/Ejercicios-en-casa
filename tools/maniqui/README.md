@@ -14,7 +14,7 @@ para generar la página de comparación.
 
 ## Maniquí actual (Meshy) y cómo volver al anterior
 
-- Desde noviembre de 2026 `public/maniqui.json` es el cuerpo anatómico creado con Meshy AI, con el esqueleto
-  puesto por `build_meshy.py`.
+- Se probó como `public/maniqui.json` (8-11-2026) el cuerpo anatómico creado con Meshy AI, con el esqueleto
+  puesto por `build_meshy.py`; se retiró el mismo día (deformaciones y pies). La app vuelve a usar el anterior.
 - `maniqui_anterior.json` es el maniquí que había antes (MakeHuman, opción B). Para volver a él:
   `cp tools/maniqui/maniqui_anterior.json public/maniqui.json` (commit anterior al cambio: 0bd453d).
