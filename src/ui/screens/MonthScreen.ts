@@ -4,7 +4,7 @@ import { addMonths, addWeeks, monthKey, monthStart, monthStats, weekKey, weekSta
 import { MUSCLE_NAMES, MUSCLES } from '../../figure/anatomy';
 import type { App, Screen } from '../App';
 import { bodyMaps } from '../components/bodyMaps';
-import { fmtDiff, fmtKg } from '../components/weightCard';
+import { askWeight, fmtDiff, fmtKg } from '../components/weightCard';
 import { append, clear, h, humanDuration, kg } from '../dom';
 import { icon, type IconName } from '../icons';
 
@@ -98,14 +98,33 @@ export class MonthScreen implements Screen {
         prev.sessions ? null : h('p', { class: 'ms-note' }, W ? 'No hay datos de la semana anterior para comparar.' : 'No hay datos del mes anterior para comparar.')),
     );
 
-    // Peso
-    if (cur.weight) {
-      const d = cur.weight.to - cur.weight.from;
-      this.body.append(h('section', { class: 'card month-weight' },
-        h('div', { class: 'card-head' }, h('h3', {}, 'Peso')),
-        h('div', { class: 'wc-now' }, h('strong', {}, fmtKg(cur.weight.to)),
-          h('span', { class: 'wc-diff' + (d < 0 ? ' down' : d > 0 ? ' up' : '') }, `${fmtDiff(d)} ${W ? 'esta semana' : 'este mes'}`)),
-        h('p', { class: 'muted small' }, `Empezaste ${W ? 'la semana' : 'el mes'} con ${fmtKg(cur.weight.from)}.`)));
+    // Peso: siempre hay tarjeta (con el cambio, con la única anotación, con la última conocida o para anotarlo)
+    {
+      const end = W ? addWeeks(start, 1) : addMonths(start, 1);
+      const ws = this.app.store.weights;
+      const inside = ws.filter((w) => { const t = Date.parse(w.date); return t >= start.getTime() && t < end.getTime(); });
+      const before = ws.filter((w) => Date.parse(w.date) < start.getTime());
+      const addBtn = isNow ? h('button', { class: 'btn primary small', onclick: async () => { if (await askWeight(this.app)) this.render(); } }, icon('plus'), 'Anotar peso') : null;
+      const card = (...kids: Array<HTMLElement | null>) =>
+        this.body.append(h('section', { class: 'card month-weight' }, h('div', { class: 'card-head' }, h('h3', {}, 'Peso')), ...kids));
+      if (cur.weight) {
+        const d = cur.weight.to - cur.weight.from;
+        card(
+          h('div', { class: 'wc-now' }, h('strong', {}, fmtKg(cur.weight.to)),
+            h('span', { class: 'wc-diff' + (d < 0 ? ' down' : d > 0 ? ' up' : '') }, `${fmtDiff(d)} ${W ? 'esta semana' : 'este mes'}`)),
+          h('p', { class: 'muted small' }, `Empezaste ${W ? 'la semana' : 'el mes'} con ${fmtKg(cur.weight.from)}.`));
+      } else if (inside.length === 1) {
+        card(h('div', { class: 'wc-now' }, h('strong', {}, fmtKg(inside[0].kg))),
+          h('p', { class: 'muted small' }, 'Es tu primer peso anotado: a partir de ahora verás cómo cambia.'));
+      } else if (before.length) {
+        const lastW = before[before.length - 1];
+        const when = new Date(lastW.date).toLocaleDateString(LOCALE, { day: 'numeric', month: 'long' });
+        card(h('div', { class: 'mw-row' },
+          h('p', { class: 'muted small' }, `${W ? 'No anotaste el peso esta semana.' : 'No anotaste el peso este mes.'} El último: ${fmtKg(lastW.kg)} (${when}).`),
+          addBtn));
+      } else {
+        card(h('div', { class: 'mw-row' }, h('p', { class: 'muted small' }, 'Anota tu peso para ver aquí cómo cambia cada semana y cada mes.'), addBtn));
+      }
     }
 
     // Músculos

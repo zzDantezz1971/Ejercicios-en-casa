@@ -1072,3 +1072,5 @@ button.wd:active .wd-dot { transform: scale(.92); }
 .ms-label::first-letter { text-transform: uppercase; }
 .ms-hint { color: var(--accent); font-size: .78rem; font-weight: 700; }
 .ms-note { grid-column: 1 / -1; margin: 0; padding: 10px 8px 8px; border-top: 1px solid var(--line); text-align: center; color: var(--muted); font-size: .82rem; }
+.mw-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.mw-row p { margin: 0; }

@@ -1,5 +1,17 @@
 [
   {
+    "fecha": "2026-11-09T12:30:00Z",
+    "es": [
+      "Resumen: la tarjeta del peso sale siempre. Con un solo peso anotado lo muestra; si esa semana o mes no lo anotaste, te recuerda el último; y si aún no tienes ninguno, te invita a anotarlo."
+    ],
+    "ca": [
+      "Resum: la targeta del pes surt sempre. Amb un sol pes anotat el mostra; si aquella setmana o mes no el vas anotar, et recorda l’últim; i si encara no en tens cap, et convida a anotar-lo."
+    ],
+    "en": [
+      "Summary: the weight card is always shown. With a single entry it shows it; if you didn’t log your weight that week or month, it reminds you of the last one; and if you have none yet, it invites you to log it."
+    ]
+  },
+  {
     "fecha": "2026-11-09T12:00:00Z",
     "es": [
       "Resumen de la semana y del mes: las cuatro cifras quedan alineadas en dos columnas, y si no hay datos del periodo anterior se avisa una sola vez (antes salía repetido y sin traducir)."
