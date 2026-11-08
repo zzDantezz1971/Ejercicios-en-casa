@@ -1,0 +1,104 @@
+# Ficha de Google Play
+
+Textos para copiar en Play Console → Presencia en Google Play → Ficha principal.
+Idioma principal: **catalán (ca)**; traducciones: **castellano (es-ES)** e **inglés (en-GB / en-US)**.
+
+- Política de privacidad: https://zzdantezz1971.github.io/Ejercicios-en-casa/privacidad.html
+- Correo de contacto: exercicisacasa.app@gmail.com
+- Categoría: Salud y forma física · Sin anuncios · Gratis
+
+---
+
+## Català
+
+**Nom de l’app** (màx. 30)
+Exercicis a casa
+
+**Descripció breu** (màx. 80)
+Rutines a casa amb un ninot 3D que et mostra cada exercici. Sense anuncis.
+
+**Descripció completa**
+Entrena a casa amb rutines fetes a la teva mida: escalfament, peses, abdominals i estiraments.
+
+Un ninot en 3D et mostra com es fa cada exercici i t’assenyala en vermell els músculs que treballes i en turquesa els que estires. El pots girar amb el dit per veure’l des de qualsevol angle.
+
+QUÈ POTS FER
+• Crear les teves taules amb 89 exercicis i triar quant dura cadascun i el pes de les manuelles.
+• Entrenar amb compte enrere, avisos per veu i vibració, i la pantalla sempre encesa.
+• Connectar un rellotge o un pulsòmetre per Bluetooth i veure el pols mentre entrenes.
+• Consultar l’historial al calendari, els minuts de cada setmana i el resum de cada mes.
+• Apuntar el pes, fixar-te un objectiu i veure’n l’evolució i l’IMC.
+• Guanyar medalles per la constància, el temps, les calories i molt més.
+• Posar-te objectius setmanals de minuts i calories.
+
+LES TEVES DADES SÓN TEVES
+• No cal crear cap compte.
+• Tot es guarda només al teu mòbil, i entra a la còpia automàtica d’Android.
+• Sense anuncis i sense seguiment.
+• Pots fer i recuperar còpies de seguretat quan vulguis.
+
+En català, castellà i anglès.
+
+---
+
+## Castellano
+
+**Nombre de la app** (máx. 30)
+Ejercicios en casa
+
+**Descripción breve** (máx. 80)
+Rutinas en casa con un muñeco 3D que te enseña cada ejercicio. Sin anuncios.
+
+**Descripción completa**
+Entrena en casa con rutinas hechas a tu medida: calentamiento, pesas, abdominales y estiramientos.
+
+Un muñeco en 3D te enseña cómo se hace cada ejercicio y te marca en rojo los músculos que trabajas y en turquesa los que estiras. Lo puedes girar con el dedo para verlo desde cualquier ángulo.
+
+QUÉ PUEDES HACER
+• Crear tus tablas con 89 ejercicios y elegir cuánto dura cada uno y el peso de las mancuernas.
+• Entrenar con cuenta atrás, avisos por voz y vibración, y la pantalla siempre encendida.
+• Conectar un reloj o un pulsómetro por Bluetooth y ver tu pulso mientras entrenas.
+• Consultar tu historial en el calendario, los minutos de cada semana y el resumen de cada mes.
+• Anotar tu peso, fijarte un objetivo y ver su evolución y tu IMC.
+• Ganar medallas por la constancia, el tiempo, las calorías y mucho más.
+• Ponerte objetivos semanales de minutos y calorías.
+
+TUS DATOS SON TUYOS
+• No hace falta crear ninguna cuenta.
+• Todo se guarda solo en tu móvil, y entra en la copia automática de Android.
+• Sin anuncios y sin seguimiento.
+• Puedes hacer y recuperar copias de seguridad cuando quieras.
+
+En catalán, castellano e inglés.
+
+---
+
+## English
+
+**App name** (max. 30)
+Home Workouts
+
+**Short description** (max. 80)
+Home routines with a 3D figure that shows you every exercise. No ads.
+
+**Full description**
+Train at home with routines made to fit you: warm-up, weights, abs and stretching.
+
+A 3D figure shows you how to do each exercise and highlights in red the muscles you work and in teal the ones you stretch. Turn it with your finger to see it from any angle.
+
+WHAT YOU CAN DO
+• Build your own tables from 89 exercises and choose how long each one lasts and your dumbbell weight.
+• Train with a countdown, voice and vibration cues, and the screen always on.
+• Connect a watch or heart rate monitor over Bluetooth and see your heart rate as you train.
+• Check your history on the calendar, your minutes each week and your monthly summary.
+• Log your weight, set a goal and follow your progress and BMI.
+• Earn medals for consistency, time, calories and much more.
+• Set weekly goals for minutes and calories.
+
+YOUR DATA IS YOURS
+• No account needed.
+• Everything is stored only on your phone, and included in Android’s automatic backup.
+• No ads and no tracking.
+• Make and restore backups whenever you like.
+
+In Catalan, Spanish and English.

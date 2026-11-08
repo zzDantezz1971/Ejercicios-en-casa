@@ -1,5 +1,17 @@
 [
   {
+    "fecha": "2026-11-08T22:30:00Z",
+    "es": [
+      "En inglés, el botón de pausa del entrenamiento ahora dice «Pause»."
+    ],
+    "ca": [
+      "En anglès, el botó de pausa de l’entrenament ara diu «Pause»."
+    ],
+    "en": [
+      "The workout pause button now correctly reads “Pause”."
+    ]
+  },
+  {
     "fecha": "2026-11-08T21:50:00Z",
     "es": [
       "Nueva página de política de privacidad (en catalán, castellano e inglés): tus datos se guardan solo en tu móvil y la app no los envía a ningún sitio."

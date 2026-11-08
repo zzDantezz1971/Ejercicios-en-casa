@@ -305,7 +305,7 @@ const ROWS: Row[] = [
   ['Siguiente apartado', 'Apartat següent', 'Next section'],
   ['{s} completado', '{s}: fet', '{s} complete'],
   ['Toca la pantalla para continuar', 'Toca la pantalla per continuar', 'Tap the screen to continue'],
-  ['Pausa', 'Pausa', 'Paused'],
+  ['Pausa', 'Pausa', 'Pause'],
   ['Reanudar', 'Reprèn', 'Resume'],
   ['{n} pulsaciones por minuto', '{n} pulsacions per minut', '{n} beats per minute'],
   ['Esperando pulso…', 'Esperant el pols…', 'Waiting for pulse…'],
