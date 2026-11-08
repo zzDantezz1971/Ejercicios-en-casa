@@ -130,7 +130,8 @@ export class MonthScreen implements Screen {
     // Músculos
     const load = muscleLoad(cur.entries, (id) => this.app.catalog.get(id)?.muscles);
     const worked = MUSCLES.filter((m) => load.work[m] > 0).sort((a, b) => load.work[b] - load.work[a]);
-    if (worked.length || MUSCLES.some((m) => load.stretch[m] > 0)) {
+    const stretched = MUSCLES.filter((m) => load.stretch[m] > 0).sort((a, b) => load.stretch[b] - load.stretch[a]);
+    if (worked.length || stretched.length) {
       const w = loadWeights(load);
       const img = (back: boolean) => {
         const el = h('img', { class: 'mm-img', alt: back ? 'Músculos de espaldas' : 'Músculos de frente' });
@@ -142,7 +143,9 @@ export class MonthScreen implements Screen {
         h('div', { class: 'card-head' }, h('h3', {}, W ? 'Músculos de la semana' : 'Músculos del mes')),
         h('div', { class: 'mm-figs' }, img(false), img(true)),
         worked.length ? h('p', { class: 'mm-line' }, h('span', { class: 'mu-dot work' }), h('strong', {}, 'Más trabajados: '),
-          worked.slice(0, 5).map((m) => `${MUSCLE_NAMES[m]} (${minutes(load.work[m])})`).join(', ')) : null));
+          worked.slice(0, 5).map((m) => `${MUSCLE_NAMES[m]} (${minutes(load.work[m])})`).join(', ')) : null,
+        stretched.length ? h('p', { class: 'mm-line' }, h('span', { class: 'mu-dot stretch' }), h('strong', {}, 'Más estirados: '),
+          stretched.slice(0, 5).map((m) => `${MUSCLE_NAMES[m]} (${minutes(load.stretch[m])})`).join(', ')) : null));
     }
 
     // Récords de peso

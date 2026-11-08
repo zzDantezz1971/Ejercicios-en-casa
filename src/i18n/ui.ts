@@ -399,6 +399,7 @@ const ROWS: Row[] = [
   ['Los entrenamientos de este periodo son de una versión anterior y no guardan el detalle de cada ejercicio.', 'Els entrenaments d’aquest període són d’una versió anterior i no desen el detall de cada exercici.', 'The workouts in this period are from an earlier version and don’t store the details of each exercise.'],
   ['Aún no has entrenado en este periodo.', 'Encara no has entrenat en aquest període.', 'You haven’t trained in this period yet.'],
   ['Más trabajados:', 'Més treballats:', 'Most worked:'],
+  ['Más estirados:', 'Més estirats:', 'Most stretched:'],
   ['Solo estirados:', 'Només estirats:', 'Only stretched:'],
   ['Sin trabajar:', 'Sense treballar:', 'Not worked:'],
   ['Tiempo por apartado', 'Temps per apartat', 'Time per section'],
