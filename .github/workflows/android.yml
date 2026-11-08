@@ -5,9 +5,9 @@ name: App Android
 # - si está el secreto ANDROID_KEYSTORE_PASSWORD: el .aab firmado para subir a Google Play.
 #   La primera vez se crea la clave de subida y se guarda CIFRADA con esa contraseña en
 #   android/upload-key.jks.enc (sin la contraseña no sirve de nada); las siguientes veces se usa esa misma.
+# Solo se lanza a mano (Actions → App Android → Run workflow) cuando se va a preparar una versión
+# para Google Play; los cambios del día a día se prueban en la web.
 on:
-  push:
-    branches: [main, ccr-585051fd-lwbi4u]
   workflow_dispatch:
 
 permissions:
