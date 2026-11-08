@@ -1,6 +1,6 @@
 import { LANG, LANGS } from '../../i18n';
 import { flushDurable } from '../../platform/durable';
-import type { Profile } from '../../domain/types';
+import { SEXES, SEX_LABELS, type Profile, type Sex } from '../../domain/types';
 import type { App, Screen } from '../App';
 import { clear, h } from '../dom';
 import { icon } from '../icons';
@@ -95,8 +95,8 @@ export class WelcomeScreen implements Screen {
     const errors = {} as Record<Field['key'], HTMLElement>;
     const nameInput = h('input', { id: 'wl-name', class: 'text-input', type: 'text', maxlength: 24, autocomplete: 'off', placeholder: 'Cómo quieres que te llame', value: this.name,
       oninput: (e: Event) => (this.name = (e.target as HTMLInputElement).value) }) as HTMLInputElement;
-    const sexBtn = (v: Profile['sex'], label: string) =>
-      h('button', { class: 'seg' + (this.sex === v ? ' on' : ''), 'aria-pressed': String(this.sex === v), onclick: () => { this.sex = v; this.render(); } }, label);
+    const sexBtn = (v: Sex) =>
+      h('button', { class: 'seg' + (this.sex === v ? ' on' : ''), 'aria-pressed': String(this.sex === v), onclick: () => { this.sex = v; this.render(); } }, SEX_LABELS[v]);
 
     const fieldRow = (f: Field) => {
       const input = h('input', { id: `wl-${f.key}`, class: 'text-input num', type: 'text', inputmode: f.decimals ? 'decimal' : 'numeric', autocomplete: 'off',
@@ -159,7 +159,7 @@ export class WelcomeScreen implements Screen {
       h('p', { class: 'muted welcome-intro' }, 'Con estos datos calculamos las calorías que quemas, tu IMC y la evolución de tu peso. Todo se guarda solo en tu móvil y lo puedes cambiar cuando quieras en Mis datos.'),
       h('section', { class: 'card welcome-card' },
         h('div', { class: 'welcome-field' }, h('label', { for: 'wl-name' }, 'Nombre o alias'), nameInput),
-        h('div', { class: 'welcome-field' }, h('span', { class: 'label' }, 'Sexo'), h('div', { class: 'segmented' }, sexBtn('h', 'Hombre'), sexBtn('m', 'Mujer'))),
+        h('div', { class: 'segmented sex-segs', role: 'group', 'aria-label': 'Sexo' }, ...SEXES.map(sexBtn)),
         h('div', { class: 'welcome-grid' }, ...FIELDS.map(fieldRow))),
       h('div', { class: 'welcome-actions' },
         h('button', { class: 'btn primary block big', onclick: () => void finish() }, 'Empezar')),

@@ -1,4 +1,4 @@
-import { SECTION_IDS, type HistoryEntry, type Profile, type SectionId } from './types';
+import { SECTION_IDS, type HistoryEntry, type Profile, type SectionId, type Sex } from './types';
 import { secondsBySection } from './stats';
 
 /** Gasto aproximado de cada apartado en MET (1 MET = reposo). */
@@ -27,10 +27,11 @@ export function bmiCategory(v: number): { label: string; tone: 'low' | 'ok' | 'h
 }
 
 /** kcal por minuto según el pulso (fórmula de Keytel et al., 2005). */
-export function keytelPerMin(hr: number, p: { age: number; weight: number; sex: 'h' | 'm' }): number {
-  const v = p.sex === 'm'
-    ? -20.4022 + 0.4472 * hr - 0.1263 * p.weight + 0.074 * p.age
-    : -55.0969 + 0.6309 * hr + 0.1988 * p.weight + 0.2017 * p.age;
+export function keytelPerMin(hr: number, p: { age: number; weight: number; sex: Sex }): number {
+  const woman = -20.4022 + 0.4472 * hr - 0.1263 * p.weight + 0.074 * p.age;
+  const man = -55.0969 + 0.6309 * hr + 0.1988 * p.weight + 0.2017 * p.age;
+  // sin hombre/mujer (LGTBIQ+ o nada): la media de las dos fórmulas
+  const v = p.sex === 'm' ? woman : p.sex === 'h' ? man : (woman + man) / 2;
   return Math.max(0, v / 4.184);
 }
 

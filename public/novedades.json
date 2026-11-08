@@ -1,5 +1,17 @@
 [
   {
+    "fecha": "2026-11-09T09:30:00Z",
+    "es": [
+      "Sexo: ahora hay cuatro opciones (Hombre, Mujer, LGTBIQ+ y Nada), centradas, en la bienvenida y en Mis datos."
+    ],
+    "ca": [
+      "Sexe: ara hi ha quatre opcions (Home, Dona, LGTBIQ+ i Cap), centrades, a la benvinguda i a Les meves dades."
+    ],
+    "en": [
+      "Sex: there are now four options (Male, Female, LGBTIQ+ and None), centred, on the welcome screen and in My details."
+    ]
+  },
+  {
     "fecha": "2026-11-09T09:00:00Z",
     "es": [
       "Bienvenida: la primera vez que se abre la app, se elige el idioma y se rellenan los datos personales (nombre, sexo, edad, altura, peso y objetivo). Si falta la altura o el peso, la app avisa de lo que no podrá calcular."

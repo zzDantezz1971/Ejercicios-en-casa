@@ -1,6 +1,7 @@
 import {
   DEFAULT_SETTINGS,
   SECTION_IDS,
+  SEXES,
   emptyRoutine,
   type HistoryEntry,
   type Routine,
@@ -507,6 +508,7 @@ export class Store {
     const { restSeconds, mannequin: _m, ...known } = rawSettings as typeof rawSettings & { mannequin?: unknown };
     const settings: Settings = { ...DEFAULT_SETTINGS, ...known };
     settings.profile = { ...DEFAULT_SETTINGS.profile, ...(known.profile ?? {}) };
+    if (!SEXES.includes(settings.profile.sex)) settings.profile.sex = DEFAULT_SETTINGS.profile.sex;
     // antes eran frases propias; ahora solo se elige si se muestran
     settings.phrases = typeof known.phrases === 'boolean' ? known.phrases : true;
     if (!['ca', 'es', 'en'].includes(settings.lang)) settings.lang = 'ca';

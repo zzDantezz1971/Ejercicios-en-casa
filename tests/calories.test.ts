@@ -81,3 +81,13 @@ describe('IMC', () => {
     expect(bmiCategory(31).label).toBe('Obesidad');
   });
 });
+
+describe('sexo sin indicar', () => {
+  it('LGTBIQ+ o nada: la media de las fórmulas de hombre y mujer', async () => {
+    const { keytelPerMin } = await import('../src/domain/calories');
+    const base = { age: 50, weight: 80 };
+    const h = keytelPerMin(130, { ...base, sex: 'h' }), m = keytelPerMin(130, { ...base, sex: 'm' });
+    expect(keytelPerMin(130, { ...base, sex: 'x' })).toBeCloseTo((h + m) / 2, 6);
+    expect(keytelPerMin(130, { ...base, sex: 'n' })).toBeCloseTo((h + m) / 2, 6);
+  });
+});

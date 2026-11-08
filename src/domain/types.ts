@@ -120,6 +120,11 @@ export interface Settings {
   weekGoals: { minutes: number; kcal: number | null };
 }
 
+export const SEXES = ['h', 'm', 'x', 'n'] as const;
+export type Sex = (typeof SEXES)[number];
+/** Botones del sexo (en Mis datos y en la bienvenida). */
+export const SEX_LABELS: Record<Sex, string> = { h: 'Hombre', m: 'Mujer', x: 'LGTBIQ+', n: 'Nada' };
+
 export interface Profile {
   /** Nombre o alias con el que la app se dirige al usuario. */
   name?: string;
@@ -128,8 +133,8 @@ export interface Profile {
   height?: number | null;
   /** Solo en datos antiguos: ahora el peso se anota en el histórico de peso. */
   weight?: number | null;
-  /** h = hombre, m = mujer */
-  sex: 'h' | 'm';
+  /** h = hombre, m = mujer, x = LGTBIQ+, n = nada (sin indicar) */
+  sex: Sex;
   /** Peso al que se quiere llegar (kg). */
   goalKg?: number | null;
 }

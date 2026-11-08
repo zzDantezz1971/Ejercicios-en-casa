@@ -1,5 +1,5 @@
 import { DEC } from '../../i18n';
-import type { Settings } from '../../domain/types';
+import { SEXES, SEX_LABELS, type Settings, type Sex } from '../../domain/types';
 import { weightCard } from '../components/weightCard';
 import { WeightScreen } from './WeightScreen';
 import type { App, Screen } from '../App';
@@ -39,8 +39,8 @@ export class ProfileScreen implements Screen {
           h('span', { class: 'secs' + (value === null ? ' unset' : '') }, value === null ? '—' : fmt(v)),
           h('button', { 'aria-label': `Más ${label.toLowerCase()}`, disabled: value !== null && v >= max, onclick: () => onSet(value === null ? start : Math.min(max, v + step)) }, '+')));
     };
-    const sexBtn = (v: 'h' | 'm', label: string) =>
-      h('button', { class: 'seg' + (p.sex === v ? ' on' : ''), 'aria-pressed': String(p.sex === v), onclick: () => set({ sex: v }) }, label);
+    const sexBtn = (v: Sex) =>
+      h('button', { class: 'seg' + (p.sex === v ? ' on' : ''), 'aria-pressed': String(p.sex === v), onclick: () => set({ sex: v }) }, SEX_LABELS[v]);
     return h('section', { class: 'card setting rest-card' },
       h('div', { class: 'rest-row profile-row name-row' },
         h('label', { class: 'rest-name', for: 'set-name' }, 'Nombre o alias'),
@@ -48,7 +48,7 @@ export class ProfileScreen implements Screen {
           onchange: (e: Event) => set({ name: (e.target as HTMLInputElement).value.replace(/\s+/g, ' ').trim() || undefined }) })),
       stepper('Edad', p.age, 'años', 50, 1, 15, 99, (v) => set({ age: v })),
       stepper('Altura', p.height ?? null, 'cm', 175, 1, 100, 230, (v) => set({ height: v })),
-      h('div', { class: 'rest-row profile-row' }, h('span', { class: 'rest-name' }, 'Sexo'), h('div', { class: 'segmented' }, sexBtn('h', 'Hombre'), sexBtn('m', 'Mujer'))));
+      h('div', { class: 'segmented sex-segs', role: 'group', 'aria-label': 'Sexo' }, ...SEXES.map(sexBtn)));
   }
 
   private render(): void {

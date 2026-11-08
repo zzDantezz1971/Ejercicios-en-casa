@@ -627,6 +627,8 @@ const ROWS: Row[] = [
   ['Mis datos', 'Les meves dades', 'My details'],
   ['Este navegador no tiene voz disponible.', 'Aquest navegador no té veu disponible.', 'This browser has no voice available.'],
   // Bienvenida de la primera vez
+  ['LGTBIQ+', 'LGTBIQ+', 'LGBTIQ+'],
+  ['Nada', 'Cap', 'None'],
   ['Te damos la bienvenida', 'Et donem la benvinguda', 'Welcome'],
   ['Elige el idioma de la app.', 'Tria l’idioma de l’app.', 'Choose the app language.'],
   ['Continuar', 'Continua', 'Continue'],

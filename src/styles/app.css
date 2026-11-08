@@ -1022,3 +1022,7 @@ button.wd:active .wd-dot { transform: scale(.92); }
 .text-input.bad { border-color: #FF4D6D; }
 .field-error { color: #FF6B86; font-size: .8rem; margin: 0; min-height: 0; }
 .field-error:empty { display: none; }
+
+/* sexo: cuatro botones a lo ancho, centrados */
+.segmented.sex-segs { display: flex; width: 100%; }
+.sex-segs .seg { flex: 1; padding: 10px 4px; text-align: center; }
