@@ -113,13 +113,20 @@ export function weightCards(app: App, onChange: () => void, onOpen: () => void):
         weightChart(ws, goal) as unknown as HTMLElement);
     })();
 
-  // 2. Objetivo
+  // 2. Objetivo: "Peso objetivo 78,0 kg · 61 %", "Te faltan 2,6 kg", la barra y el botón Cambiar objetivo
+  const g = goal && last ? goalProgress(first.kg, last.kg, goal) : null;
+  const fill = h('span', { class: 'goal-fill' });
+  if (g) fill.style.width = `${Math.round(g.done * 100)}%`;
   const objetivo = h('section', { class: 'card weight-card' },
-    h('div', { class: 'card-head' }, h('h3', {}, 'Objetivo'), goal ? h('button', { class: 'link-btn', onclick: () => void goalMenu() }, 'Cambiar') : null),
-    goal && last ? goalBlock(first.kg, last.kg, goal)
-      : goal ? h('p', { class: 'muted small' }, `Objetivo ${fmtKg(goal)}`)
-        : h('div', { class: 'wb-row' }, h('p', { class: 'muted small' }, 'Fija un peso al que quieras llegar y verás cuánto te falta.'),
-          h('button', { class: 'btn primary small', onclick: () => void askGoal() }, 'Fijar')));
+    h('div', { class: 'card-head' }, h('h3', {}, 'Objetivo')),
+    goal
+      ? h('div', { class: 'wb-goal' },
+        h('div', { class: 'wb-goal-line' }, h('span', {}, 'Peso objetivo'), h('strong', {}, fmtKg(goal)), g ? h('strong', { class: 'wb-pct' }, `${Math.round(g.done * 100)} %`) : null),
+        g ? h('p', { class: 'wb-left' + (g.reached ? ' reached' : '') }, g.reached ? '¡Objetivo conseguido!' : `Te faltan ${fmtKg(g.left)}`) : null,
+        g ? h('span', { class: 'goal-bar' }, fill) : null,
+        h('button', { class: 'btn ghost small block', onclick: () => void goalMenu() }, icon('target'), 'Cambiar objetivo'))
+      : h('div', { class: 'wb-row' }, h('p', { class: 'muted small' }, 'Fija un peso al que quieras llegar y verás cuánto te falta.'),
+        h('button', { class: 'btn primary small', onclick: () => void askGoal() }, 'Fijar')));
 
   // 3. IMC (solo con peso anotado)
   if (!last) return [peso, objetivo];
@@ -152,16 +159,3 @@ function bmiScale(v: number): HTMLElement {
     })));
 }
 
-/** "Te faltan X kg" con barra de progreso, o la felicitación si ya se ha llegado. */
-export function goalBlock(firstKg: number, currentKg: number, goal: number): HTMLElement {
-  const g = goalProgress(firstKg, currentKg, goal);
-  if (g.reached) {
-    return h('div', { class: 'goal-block reached' }, icon('trophy'),
-      h('div', {}, h('strong', {}, '¡Objetivo conseguido!'), h('span', { class: 'muted small' }, `Has llegado a ${fmtKg(goal)}. Puedes fijar uno nuevo.`)));
-  }
-  const bar = h('span', { class: 'goal-fill' });
-  bar.style.width = `${Math.round(g.done * 100)}%`;
-  return h('div', { class: 'goal-block' },
-    h('div', { class: 'goal-top' }, h('strong', {}, `Te faltan ${fmtKg(g.left)}`), h('span', { class: 'muted small' }, `Objetivo ${fmtKg(goal)} · ${Math.round(g.done * 100)} %`)),
-    h('span', { class: 'goal-bar' }, bar));
-}

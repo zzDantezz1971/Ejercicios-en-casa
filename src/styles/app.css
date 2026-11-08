@@ -1045,3 +1045,10 @@ button.wd:active .wd-dot { transform: scale(.92); }
 .wb-ticks { position: relative; height: 14px; }
 .wb-ticks span { position: absolute; transform: translateX(-50%); font-size: .72rem; color: var(--muted); }
 .wa-hero .btn { white-space: nowrap; flex: none; }
+
+.wb-goal { display: flex; flex-direction: column; gap: 10px; }
+.wb-goal-line { display: flex; align-items: baseline; gap: 8px; font-size: 1.02rem; }
+.wb-goal-line strong { font: 700 1.25rem/1 var(--display); }
+.wb-goal-line .wb-pct { margin-left: auto; color: var(--sec-stretch); }
+.wb-left { margin: 0; font-weight: 700; }
+.wb-left.reached { color: var(--sec-stretch); }

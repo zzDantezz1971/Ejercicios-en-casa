@@ -1,5 +1,17 @@
 [
   {
+    "fecha": "2026-11-09T11:00:00Z",
+    "es": [
+      "Mis datos: la tarjeta Objetivo muestra el peso objetivo y el porcentaje conseguido, cuánto te falta y un botón «Cambiar objetivo»."
+    ],
+    "ca": [
+      "Les meves dades: la targeta Objectiu mostra el pes objectiu i el percentatge aconseguit, quant et falta i un botó «Canvia l’objectiu»."
+    ],
+    "en": [
+      "My details: the Goal card shows your target weight and the percentage reached, how far you have to go and a “Change goal” button."
+    ]
+  },
+  {
     "fecha": "2026-11-09T10:30:00Z",
     "es": [
       "Mis datos: el peso, ahora en tres tarjetas más claras. Peso (el actual en grande, cuánto has cambiado y la gráfica), Objetivo (cuánto te falta) e IMC (con una escala de colores que muestra dónde estás)."

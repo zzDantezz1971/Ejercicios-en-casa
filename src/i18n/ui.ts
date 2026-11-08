@@ -630,6 +630,7 @@ const ROWS: Row[] = [
   ['Cambiar objetivo', 'Canvia l’objectiu', 'Change goal'],
   ['Quitar objetivo', 'Treu l’objectiu', 'Remove goal'],
   ['Fijar', 'Fixa', 'Set'],
+  ['Peso objetivo', 'Pes objectiu', 'Target weight'],
   ['Pon tu altura arriba para calcular tu IMC.', 'Posa la teva alçada a dalt per calcular el teu IMC.', 'Add your height above to work out your BMI.'],
   // Bienvenida de la primera vez
   ['LGTBIQ+', 'LGTBIQ+', 'LGBTIQ+'],
