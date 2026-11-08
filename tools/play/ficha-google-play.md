@@ -50,7 +50,7 @@ En català, castellà i anglès.
 Ejercicios en casa
 
 **Descripción breve** (máx. 80)
-Entrena en casa en segundos, sin registros. Un muñeco 3D te enseña cada ejercicio.
+Entrena en segundos y sin registros. Un muñeco 3D te enseña cada ejercicio.
 
 **Descripción completa**
 Entrena en casa con rutinas hechas a tu medida: calentamiento, pesas, abdominales y estiramientos.
