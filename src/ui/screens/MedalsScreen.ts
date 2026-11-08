@@ -1,4 +1,4 @@
-import { medalsCard } from '../components/medals';
+import { medalsBoard } from '../components/medals';
 import type { App, Screen } from '../App';
 import { clear, h } from '../dom';
 
@@ -14,8 +14,6 @@ export class MedalsScreen implements Screen {
 
   enter(): void {
     clear(this.body);
-    const card = medalsCard(this.app);
-    card.querySelector('.card-head h3')?.remove(); // el título ya está arriba
-    this.body.append(card);
+    this.body.append(...medalsBoard(this.app));
   }
 }

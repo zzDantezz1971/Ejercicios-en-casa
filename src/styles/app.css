@@ -973,3 +973,29 @@ button.wd:active .wd-dot { transform: scale(.92); }
 .stats-row.four .stat-value { white-space: nowrap; }
 .stats-row.four .stat:nth-child(4) .stat-value { font-size: 1.3rem; }
 .stats-row.four .stat:nth-child(4) .ico { width: 22px; height: 22px; }
+
+/* Pestaña Medallas */
+.medals-screen .history-body { display: flex; flex-direction: column; gap: 12px; }
+.medals-summary { display: flex; flex-direction: column; gap: 10px; }
+.mb-top { display: flex; align-items: baseline; justify-content: space-between; }
+.mb-big { font: 700 2.4rem/1 var(--display); }
+.mb-pct { font: 700 1.2rem var(--display); color: #F5A524; }
+.mb-bar { height: 10px; border-radius: 999px; background: var(--surface-2); overflow: hidden; }
+.mb-fill { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #CD8A4F, #E8EDF3, #FFD66B); }
+.mb-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.mb-tier { display: flex; align-items: center; gap: 6px; justify-content: center; padding: 8px 4px; border-radius: 12px; background: var(--surface-2); }
+.mb-tier strong { font: 700 1.05rem var(--display); }
+.mb-dot { width: 12px; height: 12px; border-radius: 50%; background: #CD8A4F; flex: none; }
+.mb-tier.plata .mb-dot { background: #C9D2DC; }
+.mb-tier.oro .mb-dot { background: #FFD66B; }
+.mb-hint { margin: 0; text-align: center; }
+.medal-group { display: flex; flex-direction: column; gap: 12px; }
+.mg-head { display: flex; align-items: center; gap: 10px; }
+.mg-head h3 { margin: 0; flex: 1; font: 700 1.1rem var(--display); text-transform: uppercase; letter-spacing: .03em; }
+.mg-icon { width: 34px; height: 34px; border-radius: 10px; display: flex; align-items: center; justify-content: center; background: var(--surface-2); color: var(--accent-2); }
+.mg-icon .ico { width: 18px; height: 18px; }
+.mg-count { display: inline-flex; align-items: center; gap: 4px; font-weight: 700; color: var(--muted); font-size: .9rem; }
+.mg-count .ico { width: 16px; height: 16px; color: var(--sec-stretch); }
+.medal-group.full { border-color: rgb(245 165 36 / .45); }
+.medal-group.full .mg-count { color: #F5A524; }
+.medal-group .medal-grid { grid-template-columns: repeat(4, 1fr); }

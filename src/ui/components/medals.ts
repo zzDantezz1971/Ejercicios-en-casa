@@ -1,5 +1,5 @@
 import { LANG, LOCALE } from '../../i18n';
-import { MEDALS, type Medal } from '../../domain/medals';
+import { MEDALS, MEDAL_GROUPS, type Medal } from '../../domain/medals';
 import type { App } from '../App';
 import { h } from '../dom';
 import { icon } from '../icons';
@@ -106,4 +106,42 @@ export function medalsCard(app: App): HTMLElement {
       }, medalBadge(m, !!when), h('span', { class: 'medal-name' }, m.title));
     })),
     info);
+}
+
+/** Pestaña Medallas: resumen arriba y las medallas por grupos. */
+export function medalsBoard(app: App): HTMLElement[] {
+  const have = app.store.medals;
+  const got = MEDALS.filter((m) => have[m.id]);
+  const pct = Math.round((got.length / MEDALS.length) * 100);
+  const bar = h('span', { class: 'mb-fill' });
+  bar.style.width = `${pct}%`;
+  const tierCount = (t: Medal['tier']) => {
+    const n = got.filter((m) => m.tier === t).length, total = MEDALS.filter((m) => m.tier === t).length;
+    return h('div', { class: `mb-tier ${t}` }, h('span', { class: 'mb-dot' }), h('strong', {}, `${n}/${total}`), h('span', { class: 'muted small' }, TIER_NAME[t]));
+  };
+  const summary = h('section', { class: 'card medals-summary' },
+    h('div', { class: 'mb-top' },
+      h('div', {}, h('strong', { class: 'mb-big' }, String(got.length)), h('span', { class: 'muted' }, LANG === 'en' ? ` of ${MEDALS.length}` : ` de ${MEDALS.length}`)),
+      h('span', { class: 'mb-pct' }, `${pct} %`)),
+    h('span', { class: 'mb-bar' }, bar),
+    h('div', { class: 'mb-tiers' }, tierCount('oro'), tierCount('plata'), tierCount('bronce')),
+    h('p', { class: 'muted small mb-hint' }, 'Toca una medalla para ver su ficha.'));
+  const groups = MEDAL_GROUPS.map((g) => {
+    const ms = MEDALS.filter((m) => m.group === g.id);
+    const n = ms.filter((m) => have[m.id]).length;
+    return h('section', { class: 'card medal-group' + (n === ms.length ? ' full' : '') },
+      h('div', { class: 'mg-head' },
+        h('span', { class: 'mg-icon' }, icon(g.icon)),
+        h('h3', {}, g.title),
+        h('span', { class: 'mg-count' }, n === ms.length ? icon('check') : null, `${n}/${ms.length}`)),
+      h('div', { class: 'medal-grid' }, ...ms.map((m) => {
+        const when = have[m.id];
+        return h('button', {
+          class: 'medal-cell' + (when ? '' : ' locked'),
+          'aria-label': `${m.title}${when ? ', conseguida' : ', por conseguir'}`,
+          onclick: () => medalDialog(app, m),
+        }, medalBadge(m, !!when), h('span', { class: 'medal-name' }, m.title));
+      })));
+  });
+  return [summary, ...groups];
 }

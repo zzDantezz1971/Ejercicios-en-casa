@@ -1,5 +1,17 @@
 [
   {
+    "fecha": "2026-11-08T09:00:00Z",
+    "es": [
+      "Medallas: ordenadas por grupos (entrenamientos, constancia, tiempo, calorías, peso, fuerza, apartados y especiales), con un resumen arriba y 13 medallas nuevas."
+    ],
+    "ca": [
+      "Medalles: ordenades per grups (entrenaments, constància, temps, calories, pes, força, apartats i especials), amb un resum a dalt i 13 medalles noves."
+    ],
+    "en": [
+      "Medals: sorted into groups (workouts, consistency, time, calories, weight, strength, sections and special), with a summary at the top and 13 new medals."
+    ]
+  },
+  {
     "fecha": "2026-11-07T17:30:00Z",
     "es": [
       "El idioma se cambia ahora en Ajustes."
