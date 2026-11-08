@@ -159,7 +159,7 @@ export class WelcomeScreen implements Screen {
       h('p', { class: 'muted welcome-intro' }, 'Con estos datos calculamos las calorías que quemas, tu IMC y la evolución de tu peso. Todo se guarda solo en tu móvil y lo puedes cambiar cuando quieras en Mis datos.'),
       h('section', { class: 'card welcome-card' },
         h('div', { class: 'welcome-field' }, h('label', { for: 'wl-name' }, 'Nombre o alias'), nameInput),
-        h('div', { class: 'segmented sex-segs', role: 'group', 'aria-label': 'Sexo' }, ...SEXES.map(sexBtn)),
+        h('div', { class: 'sex-wrap' }, h('div', { class: 'segmented sex-segs', role: 'group', 'aria-label': 'Sexo' }, ...SEXES.map(sexBtn)), h('p', { class: 'sex-note' }, 'Solo se usa para calcular mejor las calorías cuando entrenas con el reloj conectado.')),
         h('div', { class: 'welcome-grid' }, ...FIELDS.map(fieldRow))),
       h('div', { class: 'welcome-actions' },
         h('button', { class: 'btn primary block big', onclick: () => void finish() }, 'Empezar')),

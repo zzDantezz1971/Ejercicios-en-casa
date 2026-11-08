@@ -631,6 +631,7 @@ const ROWS: Row[] = [
   ['Quitar objetivo', 'Treu l’objectiu', 'Remove goal'],
   ['Fijar', 'Fixa', 'Set'],
   ['Peso objetivo', 'Pes objectiu', 'Target weight'],
+  ['Solo se usa para calcular mejor las calorías cuando entrenas con el reloj conectado.', 'Només s’usa per calcular millor les calories quan entrenes amb el rellotge connectat.', 'Only used to work out calories more accurately when you train with your watch connected.'],
   ['Pon tu altura arriba para calcular tu IMC.', 'Posa la teva alçada a dalt per calcular el teu IMC.', 'Add your height above to work out your BMI.'],
   // Bienvenida de la primera vez
   ['LGTBIQ+', 'LGTBIQ+', 'LGBTIQ+'],

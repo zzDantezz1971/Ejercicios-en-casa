@@ -1052,3 +1052,6 @@ button.wd:active .wd-dot { transform: scale(.92); }
 .wb-goal-line .wb-pct { margin-left: auto; color: var(--sec-stretch); }
 .wb-left { margin: 0; font-weight: 700; }
 .wb-left.reached { color: var(--sec-stretch); }
+
+.sex-wrap { display: flex; flex-direction: column; gap: 6px; }
+.sex-note { margin: 0; font-size: .78rem; color: var(--muted); text-align: center; }
