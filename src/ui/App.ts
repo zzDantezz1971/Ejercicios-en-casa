@@ -1,4 +1,5 @@
 import { HeartRate } from '../services/HeartRate';
+import { durableStorage } from '../platform/durable';
 import { CATALOG, SECTIONS } from '../data/catalog';
 import { Store } from '../domain/Store';
 import { Thumbnails } from '../figure/FigureView';
@@ -53,13 +54,7 @@ export class App {
   private tabFactory: Record<TabId, () => Screen> | null = null;
 
   constructor(root: HTMLElement) {
-    let kv: Storage | null = null;
-    try {
-      kv = window.localStorage;
-    } catch {
-      kv = null;
-    }
-    this.store = new Store(kv);
+    this.store = new Store(durableStorage());
     // ejercicios que han cambiado de apartado en una versión nueva
     this.store.fixSections((id) => this.catalog.get(id)?.section);
     // la primera vez se apuntan las medallas que ya se tenían, sin celebrarlas

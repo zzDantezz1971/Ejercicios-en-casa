@@ -1,12 +1,16 @@
+import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vitest/config';
 import { VitePWA } from 'vite-plugin-pwa';
 
 // La app se publica en https://<usuario>.github.io/ejercicios-en-casa/
-export default defineConfig({
+// Con --mode android se genera la versión para la app Android (Capacitor): sin service worker
+// (las versiones nuevas llegan por Google Play) y en la carpeta dist-android.
+export default defineConfig(({ mode }) => ({
   base: './',
+  resolve: mode === 'android' ? { alias: { 'virtual:pwa-register': fileURLToPath(new URL('./src/platform/pwa-stub.ts', import.meta.url)) } } : undefined,
   // fecha y hora de esta versión (se muestra en Ajustes)
   define: { __BUILD_TIME__: JSON.stringify(new Date().toISOString()) },
-  plugins: [
+  plugins: mode === 'android' ? [] : [
     VitePWA({
       // la versión nueva se aplica cuando el usuario pulsa "Actualizar" (nunca en mitad de un entrenamiento)
       registerType: 'prompt',
@@ -46,6 +50,6 @@ export default defineConfig({
       },
     }),
   ],
-  build: { chunkSizeWarningLimit: 800 },
+  build: { chunkSizeWarningLimit: 800, outDir: mode === 'android' ? 'dist-android' : 'dist' },
   test: { environment: 'jsdom', include: ['tests/**/*.test.ts'] },
-});
+}));

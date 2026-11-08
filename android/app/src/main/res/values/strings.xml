@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Exercicis a casa</string>
+    <string name="title_activity_main">Exercicis a casa</string>
+    <string name="package_name">cat.ejercicisacasa.app</string>
+    <string name="custom_url_scheme">cat.ejercicisacasa.app</string>
+</resources>

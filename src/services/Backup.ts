@@ -1,3 +1,7 @@
+import { Directory, Encoding, Filesystem } from '@capacitor/filesystem';
+import { Share } from '@capacitor/share';
+import { IS_NATIVE } from '../platform/native';
+
 /* Copia de seguridad: guardar en un archivo (con el menú de compartir del móvil, que incluye Drive)
    y elegir un archivo para restaurarla. */
 
@@ -13,6 +17,16 @@ function fileName(now = new Date()): string {
  */
 export async function saveBackupFile(text: string): Promise<'shared' | 'downloaded' | 'cancelled'> {
   const name = fileName();
+  if (IS_NATIVE) {
+    // App Android: se escribe el archivo y se abre el menú de compartir del sistema (Drive, correo, Archivos…)
+    try {
+      const { uri } = await Filesystem.writeFile({ path: name, data: text, directory: Directory.Cache, encoding: Encoding.UTF8 });
+      await Share.share({ title: 'Copia de Ejercicios en casa', files: [uri] });
+      return 'shared';
+    } catch {
+      return 'cancelled';
+    }
+  }
   const file = new File([text], name, { type: 'text/plain' });
   const nav = navigator as Navigator & { canShare?: (d: ShareData) => boolean };
   if (nav.canShare?.({ files: [file] })) {

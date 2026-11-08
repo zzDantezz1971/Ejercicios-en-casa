@@ -1,3 +1,8 @@
+import '@fontsource/barlow/latin-400.css';
+import '@fontsource/barlow/latin-500.css';
+import '@fontsource/barlow/latin-600.css';
+import '@fontsource/barlow-condensed/latin-600.css';
+import '@fontsource/barlow-condensed/latin-700.css';
 import './styles/app.css';
 import { loadSkin } from './figure/skinAsset';
 import { App } from './ui/App';
@@ -7,7 +12,7 @@ import { SettingsScreen } from './ui/screens/SettingsScreen';
 import { MedalsScreen } from './ui/screens/MedalsScreen';
 import { ProfileScreen } from './ui/screens/ProfileScreen';
 import { TablesScreen } from './ui/screens/TablesScreen';
-import { initUpdates, onUpdateReady } from './services/Updates';
+import { firstRunOfNewVersion, initUpdates, onUpdateReady } from './services/Updates';
 import { showUpdateDialog } from './ui/components/updateDialog';
 import { h } from './ui/dom';
 import { startTranslating } from './i18n';
@@ -25,6 +30,8 @@ async function start(): Promise<void> {
     ajustes: () => new SettingsScreen(app),
   });
   app.openTab('inicio');
+  // App Android actualizada desde Google Play: se enseña qué ha cambiado
+  if (firstRunOfNewVersion()) void showUpdateDialog();
 }
 
 startTranslating();

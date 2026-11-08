@@ -1,3 +1,6 @@
+import { BleClient, numberToUUID } from '@capacitor-community/bluetooth-le';
+import { IS_NATIVE } from '../platform/native';
+
 /* Pulsómetro por Bluetooth (Web Bluetooth, perfil estándar de frecuencia cardíaca).
    Sirve para relojes que difunden el pulso, como los Huawei con "Difundir frecuencia cardíaca". */
 
@@ -26,6 +29,9 @@ export function parseHeartRate(v: DataView): number {
   return flags & 1 ? v.getUint16(1, true) : v.getUint8(1);
 }
 
+const HR_SERVICE = numberToUUID(0x180d);
+const HR_MEASUREMENT = numberToUUID(0x2a37);
+
 export class HeartRate {
   status: Status = 'off';
   bpm: number | null = null;
@@ -33,12 +39,14 @@ export class HeartRate {
   /** Último momento en que llegó un dato (ms). */
   lastAt = 0;
   private device: BtDevice | null = null;
+  /** App Android: id del reloj en el Bluetooth del sistema. */
+  private nativeId: string | null = null;
   private listeners = new Set<Listener>();
   private retries = 0;
   private manualOff = false;
 
   get available(): boolean {
-    return typeof navigator !== 'undefined' && !!(navigator as unknown as BtNavigator).bluetooth;
+    return IS_NATIVE || (typeof navigator !== 'undefined' && !!(navigator as unknown as BtNavigator).bluetooth);
   }
 
   get connected(): boolean {
@@ -61,6 +69,7 @@ export class HeartRate {
 
   /** Busca el reloj y se conecta. Debe llamarse desde un toque del usuario. */
   async connect(): Promise<void> {
+    if (IS_NATIVE) return this.connectNative();
     const bt = (navigator as unknown as BtNavigator).bluetooth;
     if (!bt) throw new Error('Este navegador no puede usar Bluetooth. Usa Chrome en Android.');
     this.manualOff = false;
@@ -71,7 +80,43 @@ export class HeartRate {
     await this.open();
   }
 
+  /** App Android: Bluetooth del sistema (el WebView no tiene Web Bluetooth). */
+  private async connectNative(): Promise<void> {
+    this.manualOff = false;
+    await BleClient.initialize({ androidNeverForLocation: true });
+    const dev = await BleClient.requestDevice({ services: [HR_SERVICE] });
+    this.nativeId = dev.deviceId;
+    this.deviceName = dev.name ?? 'Reloj';
+    await this.openNative();
+  }
+
+  private async openNative(): Promise<void> {
+    const id = this.nativeId;
+    if (!id) return;
+    this.status = 'connecting';
+    this.emit();
+    try {
+      await BleClient.connect(id, () => void this.onLost());
+      await BleClient.startNotifications(id, HR_SERVICE, HR_MEASUREMENT, (v) => {
+        const bpm = parseHeartRate(v);
+        if (bpm > 0) {
+          this.bpm = bpm;
+          this.lastAt = Date.now();
+          this.emit();
+        }
+      });
+      this.status = 'on';
+      this.retries = 0;
+      this.emit();
+    } catch (e) {
+      this.status = 'lost';
+      this.emit();
+      throw e;
+    }
+  }
+
   private async open(): Promise<void> {
+    if (IS_NATIVE) return this.openNative();
     if (!this.device?.gatt) return;
     this.status = 'connecting';
     this.emit();
@@ -118,6 +163,8 @@ export class HeartRate {
 
   disconnect(): void {
     this.manualOff = true;
+    if (this.nativeId) void BleClient.disconnect(this.nativeId).catch(() => undefined);
+    this.nativeId = null;
     this.device?.gatt?.disconnect();
     this.device = null;
     this.status = 'off';

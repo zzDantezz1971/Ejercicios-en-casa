@@ -1,5 +1,17 @@
 [
   {
+    "fecha": "2026-11-08T20:30:00Z",
+    "es": [
+      "Las letras de la app van incluidas en ella: se ven bien sin conexión desde el primer día y ya no se descarga nada de Google."
+    ],
+    "ca": [
+      "Les lletres de l’app hi van incloses: es veuen bé sense connexió des del primer dia i ja no es descarrega res de Google."
+    ],
+    "en": [
+      "The app’s fonts are now built in: they look right offline from day one and nothing is downloaded from Google any more."
+    ]
+  },
+  {
     "fecha": "2026-11-08T18:40:00Z",
     "es": [
       "Editar tabla: nuevo botón con un lápiz arriba a la derecha para cambiar el nombre de la tabla."

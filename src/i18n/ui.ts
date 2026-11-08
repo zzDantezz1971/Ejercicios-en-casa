@@ -559,6 +559,7 @@ const ROWS: Row[] = [
   ['Hay una versión nueva lista.', 'Hi ha una versió nova a punt.', 'A new version is ready.'],
   ['Actualizar ahora', 'Actualitza ara', 'Update now'],
   ['Buscar actualización', 'Cerca actualitzacions', 'Check for updates'],
+  ['Las actualizaciones llegan desde Google Play.', 'Les actualitzacions arriben des de Google Play.', 'Updates arrive through Google Play.'],
   ['Buscando…', 'Cercant…', 'Checking…'],
   ['Ya tienes la última versión.', 'Ja tens la versió més recent.', 'You already have the latest version.'],
   ['Sin conexión: no se puede comprobar ahora.', 'Sense connexió: ara no es pot comprovar.', 'Offline: can’t check right now.'],

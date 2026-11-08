@@ -1,4 +1,5 @@
 import { registerSW } from 'virtual:pwa-register';
+import { IS_NATIVE } from '../platform/native';
 
 /* Actualizaciones de la app: busca versiones nuevas al abrirla, al volver a ella y cada 30 min,
    y avisa para aplicarlas con un toque. */
@@ -10,7 +11,8 @@ const listeners = new Set<() => void>();
 export const BUILD_TIME: string = typeof __BUILD_TIME__ !== 'undefined' ? __BUILD_TIME__ : new Date().toISOString();
 
 export function initUpdates(): void {
-  if (!('serviceWorker' in navigator)) return;
+  // en la app Android las versiones nuevas llegan por Google Play
+  if (IS_NATIVE || !('serviceWorker' in navigator)) return;
   updateSW = registerSW({
     immediate: true,
     onNeedRefresh() {
@@ -55,3 +57,22 @@ export async function checkForUpdate(): Promise<boolean> {
   for (let i = 0; i < 16 && !ready; i++) await new Promise((r) => setTimeout(r, 500));
   return ready;
 }
+
+/** App Android: la última versión de la que ya se enseñaron las novedades. */
+const SEEN_KEY = 'ejercicios-en-casa-version-vista';
+
+/** App Android: true la primera vez que se abre una versión nueva instalada desde Google Play (no en la primera instalación). */
+export function firstRunOfNewVersion(): boolean {
+  if (!IS_NATIVE) return false;
+  try {
+    const seen = localStorage.getItem(SEEN_KEY);
+    localStorage.setItem(SEEN_KEY, BUILD_TIME);
+    previousBuild = seen;
+    return !!seen && seen !== BUILD_TIME;
+  } catch {
+    return false;
+  }
+}
+
+/** Fecha de la versión anterior (para enseñar solo las novedades posteriores). */
+export let previousBuild: string | null = null;

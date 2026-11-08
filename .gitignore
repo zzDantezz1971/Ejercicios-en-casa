@@ -4,3 +4,4 @@ dist
 .DS_Store
 tools/skin_*.json
 tools/comparativa-maniquis.html
+dist-android

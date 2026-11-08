@@ -1,6 +1,7 @@
 import { LANG, LANGS, LOCALE } from '../../i18n';
 import { showUpdateDialog } from '../components/updateDialog';
 import { BUILD_TIME, checkForUpdate, updateReady } from '../../services/Updates';
+import { IS_NATIVE } from '../../platform/native';
 import { Store } from '../../domain/Store';
 import { SECTION_IDS, SECTION_TITLES, type Settings } from '../../domain/types';
 import { pickBackupFile } from '../../services/Backup';
@@ -50,6 +51,14 @@ export class SettingsScreen implements Screen {
   private versionSection(): HTMLElement {
     const d = new Date(BUILD_TIME);
     const when = `${d.toLocaleDateString(LOCALE, { day: 'numeric', month: 'long', year: 'numeric' })}, ${d.toLocaleTimeString(LOCALE, { hour: '2-digit', minute: '2-digit' })}`;
+    if (IS_NATIVE) {
+      // en la app Android las versiones nuevas llegan por Google Play
+      return h('section', { class: 'card version-card' },
+        h('div', { class: 'set-text' },
+          h('strong', {}, 'Versión de la app'),
+          h('p', { class: 'muted small' }, `Del ${when}`),
+          h('p', { class: 'muted small' }, 'Las actualizaciones llegan desde Google Play.')));
+    }
     const status = h('p', { class: 'muted small', 'aria-live': 'polite' }, updateReady() ? 'Hay una versión nueva lista.' : '');
     const btn = h('button', { class: 'btn ghost small' }, updateReady() ? 'Actualizar ahora' : 'Buscar actualización');
     btn.addEventListener('click', async () => {
