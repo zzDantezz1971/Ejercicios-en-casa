@@ -64,7 +64,7 @@ export function anatomyMaterial(g: THREE.BufferGeometry, d: SkinData, w: { L: nu
     uWrL: { value: P('faL', 1) }, uWrR: { value: P('faR', 1) },
     uHipL: { value: P('thL', 0) }, uHipR: { value: P('thR', 0) }, uKnL: { value: P('thL', 1) }, uKnR: { value: P('thR', 1) },
     uAnL: { value: P('shL', 1) }, uAnR: { value: P('shR', 1) },
-    uWaistY: { value: d.clothes?.waistY ?? 15 },
+    uWaistY: { value: d.clothes?.waistY ?? 15 }, uShortT: { value: d.clothes?.shortsT ?? 0.16 },
   };
   const mat = new THREE.MeshStandardMaterial({ roughness: 0.55, metalness: 0 });
   mat.onBeforeCompile = (sh) => {
@@ -77,7 +77,7 @@ varying vec3 vRest;
 flat varying float vPart;
 uniform float uWL[${N}], uWR[${N}];
 uniform vec3 uShoL, uShoR, uElL, uElR, uWrL, uWrR, uHipL, uHipR, uKnL, uKnR, uAnL, uAnR;
-uniform float uWaistY;
+uniform float uWaistY, uShortT;
 vec3 gHi;
 float band(float v, float a, float b, float s) { return smoothstep(a - s, a + s, v) * (1.0 - smoothstep(b - s, b + s, v)); }
 float along(vec3 p, vec3 a, vec3 dir) { return dot(p - a, dir) / dot(dir, dir); }
@@ -145,7 +145,7 @@ vec3 anatomy() {
     m[13] = spindle(t, 0.0, 0.75, inner, 0.32);
     m[14] = spindle(ts, -0.02, 0.62, -rs.z, 0.4);
     m[6] = (1.0 - smoothstep(0.1, 0.3, t)) * smoothstep(0.2, -0.6, r.z);
-    shorts = t < 0.16;
+    shorts = t < uShortT && p.y < uWaistY;
   }
   float work = 0.0, stretch = 0.0;
   for (int i = 0; i < ${N}; i++) {

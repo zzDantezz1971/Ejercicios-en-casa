@@ -16,6 +16,8 @@ export interface SkinData {
   si: string;
   sw: string;
   reg: string;
+  /** El modelo ya tiene el volumen bueno: no ensanchar brazos y piernas. */
+  noBulk?: boolean;
   /** Añadir zapatillas encima del pie (si la malla tiene el pie descalzo). */
   shoes?: boolean;
   /** Parte del cuerpo de cada vértice: 0 tronco/cabeza, 1-2 brazo L/R, 3-4 pierna L/R, 5 pie, 6 mano, 7 labios. */
@@ -23,7 +25,7 @@ export interface SkinData {
   /** Mano cerrada (puño) como forma alternativa: vértices que cambian y su desplazamiento. */
   fist?: { idx: string; d: string };
   /** Cortes de la ropa en la postura de reposo. */
-  clothes?: { collarY: number; waistY: number; sleeve: number; shorts: number; sock: number; shoeTop: number; sleeveStripe?: number };
+  clothes?: { collarY: number; waistY: number; sleeve: number; shorts: number; sock: number; shoeTop: number; sleeveStripe?: number; shortsT?: number };
 }
 
 export interface SkinPalette {
@@ -185,7 +187,7 @@ export class SkinnedFigure {
       const len = alongLen ?? dir.length();
       const F = frameMatrix(dir, lat);
       const k = len / rf.len;
-      const perp = this.perp * Math.max(1, Math.sqrt(k / this.perp)) * (BULK[name.slice(0, 2)] ?? 1);
+      const perp = this.perp * Math.max(1, Math.sqrt(k / this.perp)) * (this.data.noBulk ? 1 : (BULK[name.slice(0, 2)] ?? 1));
       const Sc = new THREE.Matrix4().makeScale(perp, k, perp);
       const M = new THREE.Matrix4()
         .makeTranslation(a.x, a.y, a.z)

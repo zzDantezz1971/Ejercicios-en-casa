@@ -11,3 +11,10 @@ Scripts que generan los datos del maniquí de una sola pieza (`SkinnedFigure`). 
 
 Los scripts escriben `skin_a.json` / `skin_b.json`; copiarlos a `tools/` y ejecutar `tools/build-compare.sh`
 para generar la página de comparación.
+
+## Maniquí actual (Meshy) y cómo volver al anterior
+
+- Desde noviembre de 2026 `public/maniqui.json` es el cuerpo anatómico creado con Meshy AI, con el esqueleto
+  puesto por `build_meshy.py`.
+- `maniqui_anterior.json` es el maniquí que había antes (MakeHuman, opción B). Para volver a él:
+  `cp tools/maniqui/maniqui_anterior.json public/maniqui.json` (también está la etiqueta git `maniqui-anterior`).

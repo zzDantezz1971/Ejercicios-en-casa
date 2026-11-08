@@ -27,11 +27,11 @@ for (const ex of list) {
   row.innerHTML = `<b>${ex.id}</b>`;
   out.append(row);
   for (const t of times) {
-    const sc = new MannequinScene(ex.motion, undefined, side, skin, skin && q.get('anat') ? muscleWeights(ex.muscles, side) : undefined);
+    const sc = new MannequinScene(ex.motion, undefined, side, skin, skin && q.get('anat') ? muscleWeights(q.get('mus') ?? ex.muscles, side) : undefined);
     sc.setAspect(1.5);
     sc.mood = mood;
-    if (q.get('az')) { sc.azimuth = Number(q.get('az')); sc.placeCamera(); }
     sc.update(sc.motion.total * t);
+    if (q.get('az')) { sc.azimuth = Number(q.get('az')); sc.placeCamera(); }
     r.render(sc.scene, sc.camera);
     const img = document.createElement('img');
     img.src = canvas.toDataURL();
