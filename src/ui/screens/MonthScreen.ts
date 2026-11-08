@@ -77,20 +77,25 @@ export class MonthScreen implements Screen {
       return;
     }
     const prevName = W ? 'la semana anterior' : addMonths(this.month, -1).toLocaleDateString(LOCALE, { month: 'long' });
-    const cmp = (a: number, b: number, unit: (n: number) => string) => {
-      if (!prev.sessions) return h('span', { class: 'muted small' }, W ? 'sin datos de la semana anterior' : 'sin datos del mes anterior');
+    const cmp = (a: number, b: number, unit: (n: number) => string): HTMLElement | null => {
+      if (!prev.sessions) return null;
       const d = a - b;
       if (Math.abs(d) < 1e-9) return h('span', { class: 'delta same' }, `igual que ${prevName}`);
       return h('span', { class: 'delta ' + (d > 0 ? 'up' : 'down') }, `${d > 0 ? '↑' : '↓'} ${unit(Math.abs(d))} ${d > 0 ? 'más' : 'menos'} que ${prevName}`);
     };
-    const tile = (ic: IconName, value: string, label: string, delta: HTMLElement) =>
-      h('div', { class: 'stat month-stat' }, icon(ic), h('span', { class: 'stat-value' }, value), h('span', { class: 'muted small' }, label), delta);
+    const tile = (ic: IconName, value: string, label: string, delta: HTMLElement | null) =>
+      h('div', { class: 'month-stat' },
+        h('div', { class: 'ms-top' }, icon(ic), h('span', { class: 'stat-value' }, value)),
+        h('span', { class: 'ms-label' }, label),
+        delta);
     this.body.append(
-      h('section', { class: 'stats-row four' },
+      h('section', { class: 'month-grid' + (prev.sessions ? '' : ' no-prev') },
         tile('calendar', String(cur.days), cur.days === 1 ? 'día entrenado' : 'días entrenados', cmp(cur.days, prev.days, (n) => `${n} ${n === 1 ? 'día' : 'días'}`)),
         tile('clock', humanDuration(cur.seconds), 'en total', cmp(cur.seconds, prev.seconds, (n) => humanDuration(n))),
-        tile('flame', cur.kcal != null ? String(cur.kcal) : '—', 'kcal', cur.kcal != null && prev.kcal != null ? cmp(cur.kcal, prev.kcal, (n) => `${n} kcal`) : h('span', { class: 'muted small' }, cur.kcal == null ? 'anota tu peso' : '')),
-        tile('bolt', String(cur.sessions), cur.sessions === 1 ? 'entrenamiento' : 'entrenamientos', cmp(cur.sessions, prev.sessions, (n) => String(n)))),
+        tile('flame', cur.kcal != null ? String(cur.kcal) : '—', 'kcal', cur.kcal != null && prev.kcal != null ? cmp(cur.kcal, prev.kcal, (n) => `${n} kcal`) : cur.kcal == null ? h('span', { class: 'ms-hint' }, 'Anota tu peso') : null),
+        tile('bolt', String(cur.sessions), cur.sessions === 1 ? 'entrenamiento' : 'entrenamientos', cmp(cur.sessions, prev.sessions, (n) => String(n))),
+        // sin el periodo anterior, un solo aviso en vez de repetirlo en cada casilla
+        prev.sessions ? null : h('p', { class: 'ms-note' }, W ? 'No hay datos de la semana anterior para comparar.' : 'No hay datos del mes anterior para comparar.')),
     );
 
     // Peso

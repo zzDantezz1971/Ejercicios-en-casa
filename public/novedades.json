@@ -1,5 +1,17 @@
 [
   {
+    "fecha": "2026-11-09T12:00:00Z",
+    "es": [
+      "Resumen de la semana y del mes: las cuatro cifras quedan alineadas en dos columnas, y si no hay datos del periodo anterior se avisa una sola vez (antes salía repetido y sin traducir)."
+    ],
+    "ca": [
+      "Resum de la setmana i del mes: les quatre xifres queden alineades en dues columnes, i si no hi ha dades del període anterior s’avisa una sola vegada (abans sortia repetit i sense traduir)."
+    ],
+    "en": [
+      "Weekly and monthly summary: the four figures are now lined up in two columns, and if there’s no data from the previous period you’re told just once (it used to be repeated and untranslated)."
+    ]
+  },
+  {
     "fecha": "2026-11-09T11:30:00Z",
     "es": [
       "Bajo las opciones de sexo, una nota explica para qué se usa: solo para calcular mejor las calorías cuando entrenas con el reloj conectado."
