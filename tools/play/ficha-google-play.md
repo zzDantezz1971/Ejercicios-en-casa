@@ -15,7 +15,7 @@ Idioma principal: **catalán (ca)**; traducciones: **castellano (es-ES)** e **in
 Exercicis a casa
 
 **Descripció breu** (màx. 80)
-Entrena a casa en segons, sense registres. Un ninot 3D et mostra cada exercici.
+Entrena a casa en segons i sense registres. Ràpid, senzill i sense anuncis.
 
 **Descripció completa**
 Entrena a casa amb rutines fetes a la teva mida: escalfament, peses, abdominals i estiraments.
@@ -23,7 +23,7 @@ Entrena a casa amb rutines fetes a la teva mida: escalfament, peses, abdominals 
 COMENÇA EN SEGONS
 Res de registres ni de formularis interminables. Obre l’app, tria l’idioma i a entrenar: en pocs segons ja hi ets. Només et demanem unes poques dades per calcular les calories, i fins i tot aquestes són opcionals.
 
-Un ninot en 3D et mostra com es fa cada exercici i t’assenyala en vermell els músculs que treballes i en turquesa els que estires. El pots girar amb el dit per veure’l des de qualsevol angle.
+Cada exercici t’explica com es fa i t’assenyala en vermell els músculs que treballes i en turquesa els que estires.
 
 QUÈ POTS FER
 • Crear les teves taules amb 89 exercicis i triar quant dura cadascun i el pes de les manuelles.
@@ -50,7 +50,7 @@ En català, castellà i anglès.
 Ejercicios en casa
 
 **Descripción breve** (máx. 80)
-Entrena en segundos y sin registros. Un muñeco 3D te enseña cada ejercicio.
+Entrena en casa en segundos y sin registros. Rápido, sencillo y sin anuncios.
 
 **Descripción completa**
 Entrena en casa con rutinas hechas a tu medida: calentamiento, pesas, abdominales y estiramientos.
@@ -58,7 +58,7 @@ Entrena en casa con rutinas hechas a tu medida: calentamiento, pesas, abdominale
 EMPIEZA EN SEGUNDOS
 Nada de registros ni de formularios interminables. Abres la app, eliges el idioma y a entrenar: en pocos segundos ya estás dentro. Solo te pedimos unos pocos datos para calcular las calorías, y hasta esos son opcionales.
 
-Un muñeco en 3D te enseña cómo se hace cada ejercicio y te marca en rojo los músculos que trabajas y en turquesa los que estiras. Lo puedes girar con el dedo para verlo desde cualquier ángulo.
+Cada ejercicio te explica cómo se hace y te marca en rojo los músculos que trabajas y en turquesa los que estiras.
 
 QUÉ PUEDES HACER
 • Crear tus tablas con 89 ejercicios y elegir cuánto dura cada uno y el peso de las mancuernas.
@@ -85,7 +85,7 @@ En catalán, castellano e inglés.
 Home Workouts
 
 **Short description** (max. 80)
-Train at home in seconds, no sign-up. A 3D figure shows you every exercise.
+Train at home in seconds with no sign-up. Quick, simple and ad-free.
 
 **Full description**
 Train at home with routines made to fit you: warm-up, weights, abs and stretching.
@@ -93,7 +93,7 @@ Train at home with routines made to fit you: warm-up, weights, abs and stretchin
 START IN SECONDS
 No sign-up and no endless forms. Open the app, pick your language and start training: you’re in within seconds. We only ask for a few details to work out calories, and even those are optional.
 
-A 3D figure shows you how to do each exercise and highlights in red the muscles you work and in teal the ones you stretch. Turn it with your finger to see it from any angle.
+Each exercise explains how to do it and highlights in red the muscles you work and in teal the ones you stretch.
 
 WHAT YOU CAN DO
 • Build your own tables from 89 exercises and choose how long each one lasts and your dumbbell weight.
