@@ -3,7 +3,7 @@ import { RoutineEditor, STEP_SECONDS } from '../../domain/RoutineEditor';
 import { clampRounds, MAX_ROUNDS } from '../../domain/WorkoutPlan';
 import { SECTION_IDS, usesWeight, type ExerciseDef, type SectionId } from '../../domain/types';
 import type { App, Screen } from '../App';
-import { append, clear, h, humanDuration, kg, plural, weightDialog } from '../dom';
+import { append, clear, h, humanDuration, kg, plural, promptDialog, weightDialog } from '../dom';
 import { icon, SECTION_STYLE, zoneIcon } from '../icons';
 import { badgeList, sidesMark } from '../components/badges';
 import { sortableList } from '../components/sortable';
@@ -38,7 +38,8 @@ export class RoutineScreen implements Screen {
     this.el.append(
       h('header', { class: 'bar sticky' },
         h('button', { class: 'icon-btn', 'aria-label': 'Volver', onclick: () => app.back() }, icon('back')),
-        this.title),
+        this.title,
+        h('button', { class: 'icon-btn rename-btn', 'aria-label': 'Cambiar nombre', title: 'Cambiar nombre', onclick: () => void this.rename() }, icon('edit'))),
       this.tabs,
       this.toolbar,
       (this.searchBox = h('label', { class: 'search', for: 'ex-search' }, icon('search'), this.search)),
@@ -52,6 +53,15 @@ export class RoutineScreen implements Screen {
     this.editor = new RoutineEditor(this.app.store.routine);
     this.title.replaceChildren(h('span', { class: 'subtitle' }, 'Editar tabla'), h('h1', {}, this.app.store.active.name));
     this.render();
+  }
+
+  /** Cambiar el nombre de la tabla que se está editando. */
+  private async rename(): Promise<void> {
+    const t = this.app.store.active;
+    const name = await promptDialog('Nuevo nombre', t.name, 'Guardar');
+    if (!name) return;
+    this.app.store.renameRoutine(t.id, name);
+    this.title.querySelector('h1')!.textContent = this.app.store.active.name;
   }
 
   dispose(): void {

@@ -1,5 +1,17 @@
 [
   {
+    "fecha": "2026-11-08T18:40:00Z",
+    "es": [
+      "Editar tabla: nuevo botón con un lápiz arriba a la derecha para cambiar el nombre de la tabla."
+    ],
+    "ca": [
+      "Edita la taula: botó nou amb un llapis a dalt a la dreta per canviar el nom de la taula."
+    ],
+    "en": [
+      "Edit table: new pencil button at the top right to rename the table."
+    ]
+  },
+  {
     "fecha": "2026-11-08T11:50:00Z",
     "es": [
       "Vuelve el muñeco de antes en los ejercicios: se mueve de forma más limpia y natural que el cuerpo anatómico de prueba."
