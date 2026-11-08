@@ -1000,3 +1000,25 @@ button.wd:active .wd-dot { transform: scale(.92); }
 .medal-group.full { border-color: rgb(245 165 36 / .45); }
 .medal-group.full .mg-count { color: #F5A524; }
 .medal-group .medal-grid { grid-template-columns: repeat(4, 1fr); }
+
+/* ── Bienvenida (primera vez) ── */
+.welcome { min-height: 100dvh; display: flex; flex-direction: column; gap: 16px; padding-bottom: calc(24px + var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px))); }
+.welcome-top { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px; padding-top: 48px; }
+.welcome-logo { width: 96px; height: 96px; border-radius: 22px; box-shadow: 0 10px 30px rgba(0, 0, 0, .45); }
+.welcome-top h1 { font-size: 2rem; text-transform: uppercase; line-height: 1.05; margin-top: 8px; }
+.welcome-langs { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; }
+.welcome-lang { display: flex; align-items: center; justify-content: space-between; padding: 18px 20px; border-radius: 16px; border: 1.5px solid var(--line); background: var(--surface); color: var(--fg); font: 600 1.15rem/1 var(--body); text-align: left; }
+.welcome-lang.on { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 14%, var(--surface)); }
+.welcome-lang .check { color: var(--accent); font-size: 1.2rem; }
+.welcome-actions { margin-top: auto; padding-top: 8px; }
+.welcome-intro { margin: 0; }
+.welcome-card { display: flex; flex-direction: column; gap: 16px; }
+.welcome-field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.welcome-field > label, .welcome-field > .label { font-weight: 600; font-size: .95rem; }
+.welcome-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 12px; }
+.with-unit { position: relative; display: flex; align-items: center; }
+.with-unit .text-input { width: 100%; padding-right: 48px; }
+.with-unit .unit { position: absolute; right: 14px; color: var(--muted); font-size: .9rem; pointer-events: none; }
+.text-input.bad { border-color: #FF4D6D; }
+.field-error { color: #FF6B86; font-size: .8rem; margin: 0; min-height: 0; }
+.field-error:empty { display: none; }

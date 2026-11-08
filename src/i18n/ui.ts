@@ -626,6 +626,23 @@ const ROWS: Row[] = [
   ['Probar sonido y voz', 'Prova el so i la veu', 'Test sound and voice'],
   ['Mis datos', 'Les meves dades', 'My details'],
   ['Este navegador no tiene voz disponible.', 'Aquest navegador no té veu disponible.', 'This browser has no voice available.'],
+  // Bienvenida de la primera vez
+  ['Te damos la bienvenida', 'Et donem la benvinguda', 'Welcome'],
+  ['Elige el idioma de la app.', 'Tria l’idioma de l’app.', 'Choose the app language.'],
+  ['Continuar', 'Continua', 'Continue'],
+  ['Paso 2 de 2', 'Pas 2 de 2', 'Step 2 of 2'],
+  ['Tus datos', 'Les teves dades', 'Your details'],
+  ['Con estos datos calculamos las calorías que quemas, tu IMC y la evolución de tu peso. Todo se guarda solo en tu móvil y lo puedes cambiar cuando quieras en Mis datos.', 'Amb aquestes dades calculem les calories que cremes, el teu IMC i l’evolució del teu pes. Tot es guarda només al teu mòbil i ho pots canviar quan vulguis a Les meves dades.', 'We use these details to work out the calories you burn, your BMI and how your weight changes. Everything stays on your phone, and you can change it any time in My details.'],
+  ['Peso actual', 'Pes actual', 'Current weight'],
+  ['años', 'anys', 'years'],
+  ['Escribe un valor entre {a} y {b} {c}.', 'Escriu un valor entre {a} i {b} {c}.', 'Enter a value between {a} and {b} {c}.'],
+  ['Faltan datos', 'Falten dades', 'Missing details'],
+  ['Sin la altura y el peso no podremos calcular las calorías quemadas, el IMC ni hacer el control de tu peso.', 'Sense l’alçada i el pes no podrem calcular les calories cremades, l’IMC ni fer el control del teu pes.', 'Without your height and weight we can’t work out calories burned or your BMI, or track your weight.'],
+  ['Sin la altura no podremos calcular tu IMC.', 'Sense l’alçada no podrem calcular el teu IMC.', 'Without your height we can’t work out your BMI.'],
+  ['Sin el peso no podremos calcular las calorías quemadas, el IMC ni hacer el control de tu peso.', 'Sense el pes no podrem calcular les calories cremades, l’IMC ni fer el control del teu pes.', 'Without your weight we can’t work out calories burned or your BMI, or track your weight.'],
+  ['Puedes añadirlos ahora o más tarde en Mis datos.', 'Els pots afegir ara o més tard a Les meves dades.', 'You can add them now or later in My details.'],
+  ['Continuar sin ellos', 'Continua sense', 'Continue without them'],
+  ['Añadirlos ahora', 'Afegeix-los ara', 'Add them now'],
 ];
 
 export const UI_CA: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[1]]));

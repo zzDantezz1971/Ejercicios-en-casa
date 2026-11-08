@@ -1,4 +1,5 @@
 import { LANG, LANGS, LOCALE } from '../../i18n';
+import { flushDurable } from '../../platform/durable';
 import { showUpdateDialog } from '../components/updateDialog';
 import { BUILD_TIME, checkForUpdate, updateReady } from '../../services/Updates';
 import { IS_NATIVE } from '../../platform/native';
@@ -84,9 +85,11 @@ export class SettingsScreen implements Screen {
 
   /** Idioma de la app: al cambiarlo se recarga para pintarlo todo de nuevo. */
   private langCard(): HTMLElement {
-    const pick = (id: Settings['lang']) => {
+    const pick = async (id: Settings['lang']) => {
       if (id === LANG) return;
       this.app.store.saveSettings({ ...this.app.store.settings, lang: id });
+      // en la app Android, que el idioma quede guardado antes de recargar
+      await flushDurable();
       location.reload();
     };
     return h('section', { class: 'card setting rest-card lang-card' },
@@ -94,7 +97,7 @@ export class SettingsScreen implements Screen {
         h('span', { class: 'set-icon' }, icon('globe')),
         h('div', { class: 'set-text' }, h('strong', {}, 'Idioma'))),
       h('div', { class: 'segmented lang-segs', 'data-no-tr': '' },
-        ...LANGS.map((l) => h('button', { class: 'seg' + (l.id === LANG ? ' on' : ''), 'aria-pressed': String(l.id === LANG), lang: l.id, onclick: () => pick(l.id) }, l.name))));
+        ...LANGS.map((l) => h('button', { class: 'seg' + (l.id === LANG ? ' on' : ''), 'aria-pressed': String(l.id === LANG), lang: l.id, onclick: () => void pick(l.id) }, l.name))));
   }
 
   /** Pausa entre ejercicios, una por apartado. */
@@ -186,6 +189,7 @@ export class SettingsScreen implements Screen {
         'Restaurar');
       if (!ok) return;
       this.app.store.importBackup(text);
+      await flushDurable();
       location.reload();
     };
     return h('section', { class: 'card backup' },

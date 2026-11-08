@@ -257,3 +257,19 @@ describe('Peso, favoritos y aviso de copia', () => {
     expect(s.daysSinceBackup(new Date('2026-11-08T11:00:00Z'))).toBe(7);
   });
 });
+
+describe('bienvenida de la primera vez', () => {
+  const mem = (raw?: string) => { const m = new Map<string, string>(); if (raw) m.set('ejercicios-en-casa', raw); return { getItem: (k: string) => m.get(k) ?? null, setItem: (k: string, v: string) => void m.set(k, v), m }; };
+  it('sin datos se muestra; al terminar ya no', () => {
+    const kv = mem();
+    const s = new Store(kv);
+    expect(s.welcomed).toBe(false);
+    s.saveSettings({ ...s.settings, lang: 'es' }); // cambiar el idioma no la da por vista
+    expect(new Store(kv).welcomed).toBe(false);
+    s.markWelcomed();
+    expect(new Store(kv).welcomed).toBe(true);
+  });
+  it('quien ya usaba la app no la ve', () => {
+    expect(new Store(mem(JSON.stringify({ version: 2, history: [] }))).welcomed).toBe(true);
+  });
+});

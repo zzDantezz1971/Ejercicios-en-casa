@@ -12,6 +12,7 @@ import { SettingsScreen } from './ui/screens/SettingsScreen';
 import { MedalsScreen } from './ui/screens/MedalsScreen';
 import { ProfileScreen } from './ui/screens/ProfileScreen';
 import { TablesScreen } from './ui/screens/TablesScreen';
+import { WelcomeScreen } from './ui/screens/WelcomeScreen';
 import { firstRunOfNewVersion, initUpdates, onUpdateReady } from './services/Updates';
 import { showUpdateDialog } from './ui/components/updateDialog';
 import { h } from './ui/dom';
@@ -29,7 +30,9 @@ async function start(): Promise<void> {
     datos: () => new ProfileScreen(app),
     ajustes: () => new SettingsScreen(app),
   });
-  app.openTab('inicio');
+  // primera vez: idioma y datos personales
+  if (!app.store.welcomed) app.home(new WelcomeScreen(app));
+  else app.openTab('inicio');
   // App Android actualizada desde Google Play: se enseña qué ha cambiado
   if (firstRunOfNewVersion()) void showUpdateDialog();
 }

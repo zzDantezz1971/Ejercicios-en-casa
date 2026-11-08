@@ -26,6 +26,13 @@ export async function restoreDurable(): Promise<void> {
   }
 }
 
+let pending: Promise<unknown> = Promise.resolve();
+
+/** Espera a que la copia duradera esté escrita (antes de recargar la app). */
+export async function flushDurable(): Promise<void> {
+  await pending.catch(() => undefined);
+}
+
 /** Almacenamiento para el Store: localStorage y, en la app, también la copia duradera. */
 export function durableStorage(): { getItem(k: string): string | null; setItem(k: string, v: string): void } | null {
   let ls: Storage | null = null;
@@ -43,7 +50,7 @@ export function durableStorage(): { getItem(k: string): string | null; setItem(k
       } catch {
         /* lleno o bloqueado: queda la copia duradera */
       }
-      void Preferences.set({ key: k, value: v });
+      pending = Preferences.set({ key: k, value: v });
     },
   };
 }

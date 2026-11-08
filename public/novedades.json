@@ -1,5 +1,17 @@
 [
   {
+    "fecha": "2026-11-09T09:00:00Z",
+    "es": [
+      "Bienvenida: la primera vez que se abre la app, se elige el idioma y se rellenan los datos personales (nombre, sexo, edad, altura, peso y objetivo). Si falta la altura o el peso, la app avisa de lo que no podrá calcular."
+    ],
+    "ca": [
+      "Benvinguda: la primera vegada que s’obre l’app, es tria l’idioma i s’omplen les dades personals (nom, sexe, edat, alçada, pes i objectiu). Si falta l’alçada o el pes, l’app avisa del que no podrà calcular."
+    ],
+    "en": [
+      "Welcome: the first time the app is opened, you choose the language and fill in your details (name, sex, age, height, weight and goal). If height or weight is missing, the app tells you what it won’t be able to work out."
+    ]
+  },
+  {
     "fecha": "2026-11-08T22:30:00Z",
     "es": [
       "En inglés, el botón de pausa del entrenamiento ahora dice «Pause»."

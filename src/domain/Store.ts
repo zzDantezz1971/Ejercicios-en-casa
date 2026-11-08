@@ -34,6 +34,8 @@ export interface SavedData {
   summarySeen?: string;
   /** Última semana (lunes "2026-11-02") cuyo resumen ya se ha visto o descartado. */
   weekSeen?: string;
+  /** Ya se ha pasado por la bienvenida (idioma y datos personales) de la primera vez. */
+  welcomed: boolean;
   /** Medallas conseguidas: id → fecha (ISO). */
   medals?: Record<string, string>;
 }
@@ -469,6 +471,17 @@ export class Store {
     this.persist();
   }
 
+  /* ── Bienvenida de la primera vez ── */
+
+  get welcomed(): boolean {
+    return this.data.welcomed;
+  }
+
+  markWelcomed(): void {
+    this.data.welcomed = true;
+    this.persist();
+  }
+
   /* ── Carga y migración ── */
 
   private load(): SavedData {
@@ -552,7 +565,9 @@ export class Store {
     const summarySeen = typeof input.summarySeen === 'string' ? input.summarySeen : undefined;
     const weekSeen = typeof input.weekSeen === 'string' ? input.weekSeen : undefined;
     const medals = input.medals && typeof input.medals === 'object' ? (input.medals as Record<string, string>) : undefined;
-    return { version: DATA_VERSION, routines, activeId, settings, history, hidden, order, orderVer: ORDER_VER, lastBackup, favorites, weights, summarySeen, weekSeen, medals };
+    // bienvenida: si no consta, solo la ve quien empieza de cero (con datos de antes, ya se da por vista)
+    const welcomed = typeof input.welcomed === 'boolean' ? input.welcomed : Object.keys(input).length > 0;
+    return { version: DATA_VERSION, routines, activeId, settings, history, hidden, order, orderVer: ORDER_VER, lastBackup, favorites, weights, summarySeen, weekSeen, medals, welcomed };
   }
 
   private persist(): void {
