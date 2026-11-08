@@ -19,6 +19,13 @@ android {
     }
     // Firma para Google Play: el almacén de claves llega como secreto de GitHub (nunca está en el repositorio).
     signingConfigs {
+        // clave de pruebas fija (no es secreta): así cada APK de prueba se instala encima del anterior sin perder datos
+        debug {
+            storeFile file('debug.keystore')
+            storePassword 'android'
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+        }
         release {
             def ks = System.getenv("ANDROID_KEYSTORE_FILE")
             if (ks) {
@@ -30,6 +37,9 @@ android {
         }
     }
     buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+        }
         release {
             if (System.getenv("ANDROID_KEYSTORE_FILE")) signingConfig signingConfigs.release
             minifyEnabled false

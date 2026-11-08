@@ -8,6 +8,11 @@ const config: CapacitorConfig = {
   webDir: 'dist-android',
   backgroundColor: '#0A0D12',
   android: { allowMixedContent: false },
+  plugins: {
+    // los márgenes de la barra de estado y de los botones de Android los pone MainActivity.java
+    // (funciona igual en todas las versiones del WebView)
+    SystemBars: { insetsHandling: 'disable', style: 'DARK' },
+  },
 };
 
 export default config;
