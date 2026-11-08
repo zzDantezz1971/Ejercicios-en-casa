@@ -2,14 +2,17 @@ name: App Android
 
 # Genera la app Android (Capacitor):
 # - siempre: un APK de prueba (se puede instalar a mano en el móvil);
-# - si están los secretos de firma: el .aab firmado para subir a Google Play.
+# - si está el secreto ANDROID_KEYSTORE_PASSWORD: el .aab firmado para subir a Google Play.
+#   La primera vez se crea la clave de subida y se guarda CIFRADA con esa contraseña en
+#   android/upload-key.jks.enc (sin la contraseña no sirve de nada); las siguientes veces se usa esa misma.
 on:
   push:
     branches: [main, ccr-585051fd-lwbi4u]
   workflow_dispatch:
 
 permissions:
-  contents: read
+  # para guardar en el repositorio la clave de subida cifrada (solo la primera vez)
+  contents: write
 
 concurrency:
   group: android
@@ -42,20 +45,35 @@ jobs:
       - name: Clave de firma
         id: key
         env:
-          KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          PASS: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
         run: |
-          if [ -n "$KEYSTORE_B64" ]; then
-            echo "$KEYSTORE_B64" | base64 -d > "$RUNNER_TEMP/upload.jks"
-            echo "ANDROID_KEYSTORE_FILE=$RUNNER_TEMP/upload.jks" >> "$GITHUB_ENV"
-            echo "ok=true" >> "$GITHUB_OUTPUT"
+          if [ -z "$PASS" ]; then echo "Sin contraseña de firma: solo APK de prueba."; exit 0; fi
+          if [ ${#PASS} -lt 16 ]; then echo "::error::La contraseña de firma debe tener al menos 16 caracteres."; exit 1; fi
+          KS="$RUNNER_TEMP/upload.jks"
+          ENC=android/upload-key.jks.enc
+          if [ -f "$ENC" ]; then
+            openssl enc -d -aes-256-cbc -pbkdf2 -iter 600000 -in "$ENC" -out "$KS" -pass env:PASS
+          else
+            keytool -genkeypair -keystore "$KS" -storetype PKCS12 -alias upload -keyalg RSA -keysize 4096 \
+              -validity 10000 -storepass "$PASS" -keypass "$PASS" -dname "CN=Exercicis a casa"
+            openssl enc -aes-256-cbc -pbkdf2 -iter 600000 -salt -in "$KS" -out "$ENC" -pass env:PASS
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add "$ENC"
+            git commit -m "App Android: clave de subida a Google Play (cifrada)"
+            git pull --rebase origin "$GITHUB_REF_NAME"
+            git push origin "HEAD:$GITHUB_REF_NAME"
           fi
+          keytool -list -keystore "$KS" -storepass "$PASS" -alias upload > /dev/null
+          echo "ANDROID_KEYSTORE_FILE=$KS" >> "$GITHUB_ENV"
+          echo "ok=true" >> "$GITHUB_OUTPUT"
       - name: App firmada para Google Play (.aab)
         if: steps.key.outputs.ok == 'true'
         working-directory: android
         env:
           ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
-          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          ANDROID_KEY_ALIAS: upload
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
         run: ./gradlew --no-daemon bundleRelease
       - uses: actions/upload-artifact@v4
         with:
