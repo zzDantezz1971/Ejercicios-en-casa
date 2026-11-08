@@ -400,6 +400,8 @@ const ROWS: Row[] = [
   ['Aún no has entrenado en este periodo.', 'Encara no has entrenat en aquest període.', 'You haven’t trained in this period yet.'],
   ['Más trabajados:', 'Més treballats:', 'Most worked:'],
   ['Más estirados:', 'Més estirats:', 'Most stretched:'],
+  ['Menos trabajados:', 'Menys treballats:', 'Least worked:'],
+  ['Menos estirados:', 'Menys estirats:', 'Least stretched:'],
   ['Solo estirados:', 'Només estirats:', 'Only stretched:'],
   ['Sin trabajar:', 'Sense treballar:', 'Not worked:'],
   ['Tiempo por apartado', 'Temps per apartat', 'Time per section'],

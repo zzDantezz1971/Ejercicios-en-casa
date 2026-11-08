@@ -139,13 +139,22 @@ export class MonthScreen implements Screen {
         return h('figure', { class: 'mm-fig' }, el, h('figcaption', { class: 'muted small' }, back ? 'Detrás' : 'Delante'));
       };
       const minutes = (s: number) => (s >= 60 ? `${Math.round(s / 60)} min` : `${Math.round(s)} s`);
+      // los 3 con menos tiempo (incluidos los que no se han trabajado o estirado nada), sin repetir los "más"
+      const least = (t: Record<string, number>, top: readonly string[]) => {
+        if (!top.length) return '';
+        const shown = new Set(top.slice(0, 5));
+        return MUSCLES.filter((m) => !shown.has(m)).sort((a, b) => t[a] - t[b]).slice(0, 3)
+          .map((m) => `${MUSCLE_NAMES[m]} (${t[m] > 0 ? minutes(t[m]) : '0 min'})`).join(', ');
+      };
       this.body.append(h('section', { class: 'card muscle-map' },
         h('div', { class: 'card-head' }, h('h3', {}, W ? 'Músculos de la semana' : 'Músculos del mes')),
         h('div', { class: 'mm-figs' }, img(false), img(true)),
         worked.length ? h('p', { class: 'mm-line' }, h('span', { class: 'mu-dot work' }), h('strong', {}, 'Más trabajados: '),
           worked.slice(0, 5).map((m) => `${MUSCLE_NAMES[m]} (${minutes(load.work[m])})`).join(', ')) : null,
+        least(load.work, worked) ? h('p', { class: 'mm-line less' }, h('span', { class: 'mu-dot work' }), h('strong', {}, 'Menos trabajados: '), least(load.work, worked)) : null,
         stretched.length ? h('p', { class: 'mm-line' }, h('span', { class: 'mu-dot stretch' }), h('strong', {}, 'Más estirados: '),
-          stretched.slice(0, 5).map((m) => `${MUSCLE_NAMES[m]} (${minutes(load.stretch[m])})`).join(', ')) : null));
+          stretched.slice(0, 5).map((m) => `${MUSCLE_NAMES[m]} (${minutes(load.stretch[m])})`).join(', ')) : null,
+        least(load.stretch, stretched) ? h('p', { class: 'mm-line less' }, h('span', { class: 'mu-dot stretch' }), h('strong', {}, 'Menos estirados: '), least(load.stretch, stretched)) : null));
     }
 
     // Récords de peso
