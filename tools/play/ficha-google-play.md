@@ -15,7 +15,7 @@ Idioma principal: **catalán (ca)**; traducciones: **castellano (es-ES)** e **in
 Exercicis a casa
 
 **Descripció breu** (màx. 80)
-Entrena a casa en segons i sense registres. Ràpid, senzill i sense anuncis.
+Entrena a casa, accés en segons i sense registres. Senzill i sense anuncis.
 
 **Descripció completa**
 Entrena a casa amb rutines fetes a la teva mida: escalfament, peses, abdominals i estiraments.
@@ -50,7 +50,7 @@ En català, castellà i anglès.
 Ejercicios en casa
 
 **Descripción breve** (máx. 80)
-Entrena en casa en segundos y sin registros. Rápido, sencillo y sin anuncios.
+Entrena en casa, acceso en segundos y sin registros. Sencillo y sin anuncios.
 
 **Descripción completa**
 Entrena en casa con rutinas hechas a tu medida: calentamiento, pesas, abdominales y estiramientos.
@@ -85,7 +85,7 @@ En catalán, castellano e inglés.
 Home Workouts
 
 **Short description** (max. 80)
-Train at home in seconds with no sign-up. Quick, simple and ad-free.
+Train at home, access in seconds and no sign-up. Simple and ad-free.
 
 **Full description**
 Train at home with routines made to fit you: warm-up, weights, abs and stretching.
