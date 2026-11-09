@@ -1,7 +1,7 @@
 import { tr } from '../../i18n';
 import { RoutineEditor, STEP_SECONDS } from '../../domain/RoutineEditor';
 import { clampRounds, MAX_ROUNDS } from '../../domain/WorkoutPlan';
-import { SECTION_IDS, usesWeight, type ExerciseDef, type SectionId } from '../../domain/types';
+import { SECTION_IDS, SECTION_TITLES, usesWeight, type ExerciseDef, type SectionId } from '../../domain/types';
 import type { App, Screen } from '../App';
 import { append, clear, h, humanDuration, kg, plural, promptDialog, weightDialog } from '../dom';
 import { icon, SECTION_STYLE, zoneIcon } from '../icons';
@@ -286,7 +286,8 @@ export class RoutineScreen implements Screen {
     const secs = this.editor.seconds(ex.section, ex.id);
     const img = h('img', { alt: '', class: 'thumb', 'data-id': ex.id });
     const fig = h('div', { class: 'thumb-box' + (ex.pending ? ' pending' : '') }, img, ex.pending ? h('span', { class: 'pending-label' }, 'Animación en preparación') : null,
-      ex.viewLabel && !ex.pending ? h('span', { class: 'view-label' }, ex.viewLabel) : null, ex.oneSided ? sidesMark() : null);
+      ex.viewLabel && !ex.pending ? h('span', { class: 'view-label' }, ex.viewLabel) : null, ex.oneSided ? sidesMark() : null,
+      h('span', { class: 'sec-mark', title: SECTION_TITLES[ex.section], 'aria-label': SECTION_TITLES[ex.section] }, icon(SECTION_STYLE[ex.section].icon)));
     this.io.observe(fig);
     const card = h('article', { class: 'ex-card' + (pos ? ' selected' : ''), style: { '--sec': SECTION_STYLE[ex.section].color } },
       h('button', { class: 'ex-main', 'aria-pressed': String(!!pos), onclick: () => void this.toggle(ex) },

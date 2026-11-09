@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-10T10:00:00Z",
+    "es": ["Al elegir ejercicios, cada ficha muestra el icono de su apartado (calentamiento, fuerza, abdominales o estiramientos), y los segundos caben en una sola línea."],
+    "ca": ["En triar exercicis, cada fitxa mostra la icona del seu apartat (escalfament, força, abdominals o estiraments), i els segons caben en una sola línia."],
+    "en": ["When choosing exercises, each card shows its section icon (warm-up, strength, abs or stretching), and the seconds fit on one line."]
+  },
+  {
     "fecha": "2026-11-10T09:30:00Z",
     "es": ["Al editar una tabla, cada apartado muestra arriba a la izquierda cuántos ejercicios puedes hacer con tu material."],
     "ca": ["En editar una taula, cada apartat mostra a dalt a l’esquerra quants exercicis pots fer amb el teu material."],
