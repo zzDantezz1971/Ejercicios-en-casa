@@ -220,14 +220,18 @@ export class RoutineScreen implements Screen {
 
   private renderTabs(): void {
     clear(this.tabs);
+    const owned = new Set<string>(this.app.store.settings.equipment);
     for (const s of this.app.sections) {
       const n = this.editor.value[s.id].length;
+      // ejercicios de este apartado que se pueden hacer con el material marcado
+      const avail = this.ordered(s.id).filter((e) => canDo(e.equip, owned)).length;
       this.tabs.append(
         h('button', {
           class: 'tab' + (s.id === this.section ? ' active' : ''), role: 'tab', 'aria-selected': String(s.id === this.section),
           style: { '--sec': SECTION_STYLE[s.id].color },
           onclick: () => { this.section = s.id; this.clearSearch(); window.scrollTo(0, 0); this.render(); },
-        }, icon(SECTION_STYLE[s.id].icon), s.title, n ? h('span', { class: 'tab-count' }, n) : null),
+          'aria-label': `${s.title}: ${avail} ejercicios disponibles`,
+        }, h('span', { class: 'tab-avail', 'aria-hidden': 'true' }, avail), icon(SECTION_STYLE[s.id].icon), s.title, n ? h('span', { class: 'tab-count' }, n) : null),
       );
     }
     this.el.style.setProperty('--sec', SECTION_STYLE[this.section].color);

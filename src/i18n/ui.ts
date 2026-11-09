@@ -666,6 +666,7 @@ const ROWS: Row[] = [
   ['{n} ejercicio necesita material que no tienes.', '{n} exercici necessita material que no tens.', '{n} exercise needs equipment you don’t have.'],
   ['{n} ejercicios necesitan material que no tienes.', '{n} exercicis necessiten material que no tens.', '{n} exercises need equipment you don’t have.'],
   ['Mostrarlos', 'Mostra’ls', 'Show them'],
+  ['{s}: {n} ejercicios disponibles', '{s}: {n} exercicis disponibles', '{s}: {n} exercises available'],
   ['Ocultarlos', 'Amaga’ls', 'Hide them'],
   ['Material', 'Material', 'Equipment'],
   ['Mi material', 'El meu material', 'My equipment'],

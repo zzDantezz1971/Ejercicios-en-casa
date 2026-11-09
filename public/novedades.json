@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-10T09:30:00Z",
+    "es": ["Al editar una tabla, cada apartado muestra arriba a la izquierda cuántos ejercicios puedes hacer con tu material."],
+    "ca": ["En editar una taula, cada apartat mostra a dalt a l’esquerra quants exercicis pots fer amb el teu material."],
+    "en": ["When editing a table, each section shows in its top-left corner how many exercises you can do with your equipment."]
+  },
+  {
     "fecha": "2026-11-10T09:00:00Z",
     "es": ["Bienvenida: pantalla del material más limpia."],
     "ca": ["Benvinguda: pantalla del material més neta."],

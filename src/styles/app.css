@@ -1135,3 +1135,9 @@ button.wd:active .wd-dot { transform: scale(.92); }
 .fig-pending strong { font-size: 1rem; }
 .detail-equip { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 8px 0; font-size: .9rem; }
 .detail-equip .equip-chip { font-size: .8rem; padding: 3px 9px; }
+
+/* Editar tabla: cuántos ejercicios de cada apartado se pueden hacer con el material marcado */
+.routine .tabs { padding-top: 12px; padding-left: 8px; margin-left: -8px; }
+.tab { position: relative; }
+.tab-avail { position: absolute; top: -9px; left: -7px; min-width: 22px; height: 20px; padding: 0 6px; border-radius: 999px; display: flex; align-items: center; justify-content: center;
+  background: var(--surface-2); border: 1px solid var(--sec); color: var(--fg); font: 700 .72rem/1 var(--body); box-shadow: 0 2px 6px rgb(0 0 0 / .3); }
