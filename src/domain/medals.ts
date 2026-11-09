@@ -146,7 +146,7 @@ export const MEDALS: Medal[] = [
     earned: (c) => !!c.goalKg && c.weights.length > 1 && (c.goalKg <= c.weights[0].kg ? c.weights.at(-1)!.kg <= c.goalKg : c.weights.at(-1)!.kg >= c.goalKg) },
   // Fuerza
   { group: 'fuerza', id: 'record-peso', title: 'Más fuerte', desc: 'Has subido el peso en un ejercicio.', icon: 'dumbbell', tier: 'plata', earned: weightRecord },
-  { group: 'fuerza', id: 'pesas-10', title: 'Constructor', desc: '10 entrenamientos con pesas.', icon: 'dumbbell', tier: 'bronce', earned: (c) => withSection(c, 'pesas') >= 10 },
+  { group: 'fuerza', id: 'pesas-10', title: 'Constructor', desc: '10 entrenamientos de fuerza.', icon: 'dumbbell', tier: 'bronce', earned: (c) => withSection(c, 'pesas') >= 10 },
   { group: 'fuerza', id: 'peso-10kg', title: 'Peso pesado', desc: 'Un ejercicio con 10 kg o más por mancuerna.', icon: 'dumbbell', tier: 'oro', earned: (c) => maxWeight(c) >= 10 },
   // Apartados
   { group: 'apartados', id: 'completo', title: 'Tabla completa', desc: 'Un entrenamiento completo con los cuatro apartados.', icon: 'check', tier: 'bronce',

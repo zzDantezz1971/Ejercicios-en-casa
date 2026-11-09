@@ -1109,3 +1109,29 @@ button.wd:active .wd-dot { transform: scale(.92); }
 :root[data-theme="light"] .tier-tag.oro { color: #A06A00; }
 :root[data-theme="light"] .tier-tag.bronce { color: #9A5A26; }
 :root[data-theme="light"] .streak.on { color: #C2541B; }
+
+/* ── Material ── */
+.equip-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.equip-card { position: relative; display: flex; align-items: center; gap: 10px; padding: 12px; border-radius: 14px; border: 1.5px solid var(--line); background: var(--surface); color: var(--fg); font: 600 .95rem/1.2 var(--body); text-align: left; cursor: pointer; }
+.equip-card .ico { width: 24px; height: 24px; flex: none; color: var(--muted); }
+.equip-card.on { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 14%, var(--surface)); }
+.equip-card.on .ico { color: var(--accent-2); }
+.equip-card .check { position: absolute; top: 6px; right: 8px; color: var(--accent); font-size: .85rem; }
+.equip-card-box { display: flex; flex-direction: column; gap: 10px; }
+.equip-card-box .equip-card { background: var(--surface-2); }
+.equip-chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 2px; }
+.equip-chip { display: inline-flex; align-items: center; gap: 4px; font-size: .72rem; font-weight: 700; padding: 2px 7px; border-radius: 999px; background: var(--surface-2); color: var(--muted); }
+.equip-chip .ico { width: 13px; height: 13px; }
+.equip-chip .or { font-weight: 400; }
+.equip-chip.missing { color: #F5A524; background: rgb(245 165 36 / .14); }
+.equip-note { grid-column: 1 / -1; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 12px 14px; border-radius: 14px; border: 1px dashed var(--line); color: var(--muted); font-size: .88rem; }
+.equip-note .ico { width: 18px; height: 18px; flex: none; }
+.equip-note .link-btn { margin-left: auto; }
+.thumb-box.pending { background: var(--stage); }
+.thumb-box.pending .thumb { opacity: .9; }
+.pending-label { position: absolute; left: 8px; right: 8px; bottom: 6px; text-align: center; font-size: .68rem; font-weight: 700; color: #C9D1DC; letter-spacing: .02em; }
+.fig-pending { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; background: var(--stage); color: #C9D1DC; border-radius: inherit; text-align: center; padding: 16px; z-index: 2; }
+.fig-pending .ico { width: 56px; height: 56px; color: #8D99AA; }
+.fig-pending strong { font-size: 1rem; }
+.detail-equip { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 8px 0; font-size: .9rem; }
+.detail-equip .equip-chip { font-size: .8rem; padding: 3px 9px; }

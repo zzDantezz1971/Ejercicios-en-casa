@@ -5,7 +5,7 @@ import { RoutineEditor } from '../../domain/RoutineEditor';
 import { usesWeight, type ExerciseDef } from '../../domain/types';
 import { FigureView } from '../../figure/FigureView';
 import type { App, Screen } from '../App';
-import { badgeList, sidesMark } from '../components/badges';
+import { badgeList, sidesMark, equipChips } from '../components/badges';
 import { clear, confirmDialog, h, kg } from '../dom';
 import { icon, SECTION_STYLE } from '../icons';
 
@@ -43,11 +43,13 @@ export class DetailScreen implements Screen {
         h('button', { class: 'icon-btn', 'aria-label': 'Volver', onclick: () => app.back() }, icon('back')),
         h('span', { class: 'w-sec-chip' }, icon(SECTION_STYLE[ex.section].icon), sectionTitle),
         this.favBtn),
-      h('div', { class: 'stage' }, this.canvas, ex.oneSided ? sidesMark() : null, h('span', { class: 'stage-hint' }, icon('sides'), 'Arrastra para girar')),
+      h('div', { class: 'stage' }, this.canvas, ex.oneSided ? sidesMark() : null, ex.pending ? null : h('span', { class: 'stage-hint' }, icon('sides'), 'Arrastra para girar')),
       h('section', { class: 'detail-body' },
         h('h2', {}, ex.name),
         h('p', { class: 'muted' }, ex.zone, ex.viewLabel ? ` · ${ex.viewLabel.toLowerCase()}` : ''),
         badgeList(ex.badges),
+        ex.equip?.length ? h('div', { class: 'detail-equip' }, h('strong', {}, 'Necesita'), equipChips(ex.equip, new Set<string>(app.store.settings.equipment)))
+          : h('div', { class: 'detail-equip' }, h('span', { class: 'equip-chip' }, 'Sin material')),
         musclesInfo(ex.muscles),
         ex.oneSided ? h('p', { class: 'note' }, icon('sides'), 'Se hace por lados: a mitad del tiempo oirás el aviso para cambiar de lado.') : null,
         this.weights,

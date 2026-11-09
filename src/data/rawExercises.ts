@@ -63,7 +63,7 @@ export const RAW_SECTIONS: RawSection[] = [
    [{thL:82,snL:96,thR:100,snR:86,ua:110,fa:-100},40,260]]},
 ]},
 
-{id:'pesas',title:'Pesas',note:'Ordenados por zona, de arriba abajo. Los de espalda van apoyados en el banco para no cargar la zona lumbar.',groups:true,items:[
+{id:'pesas',title:'Fuerza',note:'Ordenados por zona, de arriba abajo. Los de espalda van apoyados en el banco para no cargar la zona lumbar.',groups:true,items:[
  {g:'Cuello y trapecio'},
  {n:'Encogimientos de hombros',z:'Trapecio',db:'both',f:[
    [{},300,700],[{sa:.82,hd:-96},500,700]]},

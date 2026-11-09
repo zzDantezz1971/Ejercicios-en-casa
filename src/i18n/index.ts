@@ -5,6 +5,7 @@ import { EX2 } from './ex2';
 import { EX3 } from './ex3';
 import { EX4, GROUPS } from './ex4';
 import { UI_CA, UI_EN } from './ui';
+import { EXTRA_GROUPS, EXTRA_T } from '../data/extra';
 
 export type Lang = 'ca' | 'es' | 'en';
 
@@ -34,7 +35,7 @@ export const DEC = LANG === 'en' ? '.' : ',';
 /** Código de idioma para la voz. */
 export const VOICE_LANG = LOCALE;
 
-const EX: Record<string, { ca: ExT; en: ExT }> = { ...EX1, ...EX2, ...EX3, ...EX4 };
+const EX: Record<string, { ca: ExT; en: ExT }> = { ...EX1, ...EX2, ...EX3, ...EX4, ...EXTRA_T };
 
 /** Textos de un ejercicio en el idioma en uso (o undefined en castellano). */
 export function exerciseText(id: string): ExT | undefined {
@@ -55,7 +56,7 @@ const patterns: Array<{ re: RegExp; keys: string[]; out: string }> = [];
 function load(lang: Lang): void {
   if (lang === 'es') return;
   const ui = lang === 'ca' ? UI_CA : UI_EN;
-  for (const [es, tr] of Object.entries(GROUPS)) exact[es] = tr[lang];
+  for (const [es, tr] of Object.entries({ ...GROUPS, ...EXTRA_GROUPS })) exact[es] = tr[lang];
   for (const [es, t] of Object.entries(ui)) {
     if (/\{\w+\}/.test(es)) {
       const keys: string[] = [];

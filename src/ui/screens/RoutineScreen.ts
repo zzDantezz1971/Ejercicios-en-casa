@@ -5,7 +5,8 @@ import { SECTION_IDS, usesWeight, type ExerciseDef, type SectionId } from '../..
 import type { App, Screen } from '../App';
 import { append, clear, h, humanDuration, kg, plural, promptDialog, weightDialog } from '../dom';
 import { icon, SECTION_STYLE, zoneIcon } from '../icons';
-import { badgeList, sidesMark } from '../components/badges';
+import { badgeList, equipChips, sidesMark } from '../components/badges';
+import { canDo } from '../../domain/equipment';
 import { sortableList } from '../components/sortable';
 import { applyOrder, moveItem } from '../../domain/ordering';
 import { DetailScreen } from './DetailScreen';
@@ -25,6 +26,8 @@ export class RoutineScreen implements Screen {
   private footer = h('div', { class: 'routine-footer' });
   private title = h('div', { class: 'titles' });
   private query = '';
+  /** Ver también los ejercicios que necesitan material que no se tiene. */
+  private showAllEquip = false;
   private search = h('input', { type: 'search', id: 'ex-search', class: 'search-input', placeholder: 'Buscar ejercicio o zona', autocomplete: 'off', enterkeyhint: 'search' });
   private io = new IntersectionObserver((entries) => entries.forEach((e) => e.isIntersecting && this.loadThumb(e.target as HTMLElement)), { rootMargin: '300px' });
 
@@ -139,6 +142,25 @@ export class RoutineScreen implements Screen {
     return applyOrder(sec.exercises, this.app.store.customOrder(sectionId)).filter((e) => !hidden.has(e.id));
   }
 
+  /** Ejercicios que se pueden hacer con el material que tiene el usuario (o todos, si los pide ver). */
+  private visible(sectionId: SectionId): ExerciseDef[] {
+    const all = this.ordered(sectionId);
+    if (this.showAllEquip) return all;
+    const owned = new Set<string>(this.app.store.settings.equipment);
+    return all.filter((e) => canDo(e.equip, owned));
+  }
+
+  /** Aviso al final de la lista: cuántos ejercicios necesitan material que no tiene, y botón para verlos. */
+  private equipNote(sectionId: SectionId): HTMLElement | null {
+    const owned = new Set<string>(this.app.store.settings.equipment);
+    const n = this.ordered(sectionId).filter((e) => !canDo(e.equip, owned)).length;
+    if (!n) return null;
+    return h('div', { class: 'equip-note' },
+      icon('dumbbell'),
+      h('span', {}, this.showAllEquip ? 'Se muestran también los que necesitan material que no tienes.' : plural(n, 'ejercicio necesita material que no tienes.', 'ejercicios necesitan material que no tienes.')),
+      h('button', { class: 'link-btn', onclick: () => { this.showAllEquip = !this.showAllEquip; this.renderList(); } }, this.showAllEquip ? 'Ocultarlos' : 'Mostrarlos'));
+  }
+
   /** Favoritos del apartado, en el orden de la lista. */
   private favs(): ExerciseDef[] {
     const f = this.app.store.favorites;
@@ -232,7 +254,7 @@ export class RoutineScreen implements Screen {
       // Búsqueda en todos los apartados
       let found = 0;
       for (const sec of this.app.sections) {
-        const hits = this.ordered(sec.id).filter((e) => normalize(`${e.name} ${e.zone} ${e.group ? tr(e.group) : ''}`).includes(q));
+        const hits = this.visible(sec.id).filter((e) => normalize(`${e.name} ${e.zone} ${e.group ? tr(e.group) : ''}`).includes(q));
         if (!hits.length) continue;
         found += hits.length;
         this.list.append(h('h2', { class: 'group-title' }, sec.title));
@@ -244,26 +266,30 @@ export class RoutineScreen implements Screen {
     // con orden personalizado no hay subgrupos: la lista es libre
     const custom = !!this.app.store.customOrder(this.section);
     let group: string | undefined;
-    for (const ex of this.ordered(this.section)) {
+    for (const ex of this.visible(this.section)) {
       if (!custom && ex.group && ex.group !== group) {
         group = ex.group;
         this.list.append(h('h2', { class: 'group-title zone-title' }, zoneIcon(group), group));
       }
       this.list.append(this.card(ex));
     }
+    const note = this.equipNote(this.section);
+    if (note) this.list.append(note);
   }
 
   private card(ex: ExerciseDef): HTMLElement {
     const pos = this.editor.position(ex.section, ex.id);
     const secs = this.editor.seconds(ex.section, ex.id);
     const img = h('img', { alt: '', class: 'thumb', 'data-id': ex.id });
-    const fig = h('div', { class: 'thumb-box' }, img, ex.viewLabel ? h('span', { class: 'view-label' }, ex.viewLabel) : null, ex.oneSided ? sidesMark() : null);
+    const fig = h('div', { class: 'thumb-box' + (ex.pending ? ' pending' : '') }, img, ex.pending ? h('span', { class: 'pending-label' }, 'Animación en preparación') : null,
+      ex.viewLabel && !ex.pending ? h('span', { class: 'view-label' }, ex.viewLabel) : null, ex.oneSided ? sidesMark() : null);
     this.io.observe(fig);
     const card = h('article', { class: 'ex-card' + (pos ? ' selected' : ''), style: { '--sec': SECTION_STYLE[ex.section].color } },
       h('button', { class: 'ex-main', 'aria-pressed': String(!!pos), onclick: () => void this.toggle(ex) },
         fig,
         h('span', { class: 'ex-name' }, pos ? h('span', { class: 'order' }, pos) : null, h('span', {}, ex.name, this.app.store.favorites.has(ex.id) ? icon('starFill', 'ico fav-star') : null)),
         h('span', { class: 'ex-zone' }, ex.zone, ex.oneSided ? h('span', { class: 'by-sides' }, icon('sides'), 'por lados') : null),
+        equipChips(ex.equip, new Set<string>(this.app.store.settings.equipment)),
         badgeList(ex.badges)),
       h('button', { class: 'info-btn', 'aria-label': `Cómo se hace: ${ex.name}`, onclick: () => this.app.push(new DetailScreen(this.app, ex)) }, icon('info')),
       pos ? h('div', { class: 'stepper' },

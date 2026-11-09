@@ -1,5 +1,23 @@
 [
   {
+    "fecha": "2026-11-09T23:30:00Z",
+    "es": [
+      "Material: al empezar (y en Mis datos → Mi material) marcas el material que tienes: mancuernas, pesa rusa, barra con discos, banco, bandas elásticas, step, fitball, barra de dominadas, comba o rueda abdominal. Al elegir ejercicios solo ves los que puedes hacer; los demás se pueden mostrar con un toque.",
+      "El apartado «Pesas» pasa a llamarse «Fuerza».",
+      "En cada ejercicio se indica el material que necesita."
+    ],
+    "ca": [
+      "Material: en començar (i a Les meves dades → El meu material) marques el material que tens: manuelles, pesa russa, barra amb discos, banc, bandes elàstiques, step, fitball, barra de dominades, corda de saltar o roda abdominal. En triar exercicis només veus els que pots fer; els altres es poden mostrar amb un toc.",
+      "L’apartat «Peses» passa a dir-se «Força».",
+      "A cada exercici s’indica el material que necessita."
+    ],
+    "en": [
+      "Equipment: when you start (and in My details → My equipment) you tick the equipment you have: dumbbells, kettlebell, barbell, bench, resistance bands, step, exercise ball, pull-up bar, skipping rope or ab wheel. When choosing exercises you only see the ones you can do; the rest can be shown with one tap.",
+      "The “Weights” section is now called “Strength”.",
+      "Each exercise shows the equipment it needs."
+    ]
+  },
+  {
     "fecha": "2026-11-09T15:00:00Z",
     "es": [
       "Modo claro: en Ajustes → Apariencia puedes elegir Oscuro, Claro o Automático (el mismo modo que tu móvil).",

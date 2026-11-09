@@ -1,10 +1,11 @@
+import type { Equip } from './equipment';
 /** Apartados de la rutina, en el orden en que se hacen. */
 export const SECTION_IDS = ['calentamiento', 'pesas', 'abdominales', 'estiramientos'] as const;
 export type SectionId = (typeof SECTION_IDS)[number];
 
 export const SECTION_TITLES: Record<SectionId, string> = {
   calentamiento: 'Calentamiento',
-  pesas: 'Pesas',
+  pesas: 'Fuerza',
   abdominales: 'Abdominales',
   estiramientos: 'Estiramientos',
 };
@@ -80,6 +81,10 @@ export interface ExerciseDef {
   muscles?: string;
   /** Texto que indica desde dónde se ve la figura, si no es de lado. */
   viewLabel?: string;
+  /** Material que necesita (vacío o sin definir = sin material). */
+  equip?: Equip[][];
+  /** Aún sin animación del muñeco: se muestra "Animación en preparación". */
+  pending?: boolean;
 }
 
 export interface RoutineItem {
@@ -90,8 +95,8 @@ export interface RoutineItem {
 }
 
 /** Ejercicios en los que se pide el peso (los que usan mancuerna). */
-export function usesWeight(ex: Pick<ExerciseDef, 'motion'>): boolean {
-  return !!ex.motion.db;
+export function usesWeight(ex: Pick<ExerciseDef, 'motion' | 'equip'>): boolean {
+  return !!ex.motion.db || !!ex.equip?.some((alts) => alts.length === 1 && alts[0] === 'mancuernas');
 }
 
 /** La rutina guarda los ejercicios elegidos de cada apartado en el orden en que se marcaron. */
@@ -118,6 +123,8 @@ export interface Settings {
   lang: 'ca' | 'es' | 'en';
   /** Tema de la interfaz. */
   theme: 'dark' | 'light' | 'auto';
+  /** Material que tiene el usuario (los ejercicios sin material se ven siempre). */
+  equipment: Equip[];
   /** Metas de la semana en Inicio: minutos y calorías (null = lo de la semana pasada). */
   weekGoals: { minutes: number; kcal: number | null };
 }
@@ -153,6 +160,7 @@ export const DEFAULT_SETTINGS: Settings = {
   profile: { age: null, height: null, sex: 'h' },
   lang: 'ca',
   theme: 'dark',
+  equipment: [],
   weekGoals: { minutes: 150, kcal: null },
 };
 

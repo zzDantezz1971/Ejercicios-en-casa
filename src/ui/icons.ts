@@ -12,6 +12,15 @@ const STROKE: Record<string, string> = {
   search: 'M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20 20l-4-4',
   flame: 'M12 3c.8 3 4.5 5 4.5 9.5a4.5 4.5 0 0 1-9 0c0-2.2 1-3.6 2.2-4.6.1 1.8 1 2.9 2.3 3.1-.6-2.7-.8-5.2 0-8z',
   clock: 'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 7v5l3.5 2',
+  kettlebell: 'M9.5 9.5V7.5a2.5 2.5 0 0 1 5 0v2M12 9a6 6 0 1 0 0 12 6 6 0 0 0 0-12z',
+  barbell: 'M2.5 12h19M5.5 8.5v7M8.5 6.5v11M15.5 6.5v11M18.5 8.5v7',
+  bench: 'M3 10.5h18M6 10.5V18M18 10.5V18M4 18h4M16 18h4',
+  band: 'M4 12c0-2.8 3.6-5 8-5s8 2.2 8 5-3.6 5-8 5-8-2.2-8-5zM8 12c0-1.2 1.8-2 4-2s4 .8 4 2-1.8 2-4 2-4-.8-4-2z',
+  step: 'M2.5 18h19M5 18l2.5-6h9l2.5 6M7.5 12V10h9v2',
+  ball: 'M12 4a8 8 0 1 0 0 16 8 8 0 0 0 0-16zM4.3 10.5c5 2 10.4 2 15.4 0M5.5 16.5c4-2 9-2 13 0',
+  pullup: 'M3 5.5h18M5.5 5.5V20M18.5 5.5V20M9 5.5v3M15 5.5v3',
+  rope: 'M5 4v5M19 4v5M5 9c0 10 14 10 14 0',
+  wheel: 'M12 6a6 6 0 1 0 0 12 6 6 0 0 0 0-12zM12 10.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM2.5 12h3.5M18 12h3.5',
   dumbbell: 'M6.5 7v10M3.5 9.5v5M17.5 7v10M20.5 9.5v5M6.5 12h11',
   target: 'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 7.5a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9zM12 11.2a.8.8 0 1 0 0 1.6.8.8 0 0 0 0-1.6z',
   stretch: 'M12 3.5a1.6 1.6 0 1 0 0 3.2 1.6 1.6 0 0 0 0-3.2zM4 9.5l8 1.5 8-1.5M12 11v4.5L8.5 21M12 15.5l3.5 5.5',
@@ -156,4 +165,9 @@ export function zoneIcon(title: string): SVGSVGElement {
     svg.append(p);
   }
   return svg;
+}
+
+/** Trazo de un icono de línea (para dibujarlo dentro de otra imagen). */
+export function strokePath(name: string): string | undefined {
+  return STROKE[name];
 }

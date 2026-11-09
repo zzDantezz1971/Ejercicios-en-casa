@@ -1,3 +1,4 @@
+import { EQUIPMENT, type Equip } from './equipment';
 import {
   DEFAULT_SETTINGS,
   SECTION_IDS,
@@ -513,6 +514,10 @@ export class Store {
     settings.phrases = typeof known.phrases === 'boolean' ? known.phrases : true;
     if (!['ca', 'es', 'en'].includes(settings.lang)) settings.lang = 'ca';
     if (!['dark', 'light', 'auto'].includes(settings.theme)) settings.theme = 'dark';
+    // material: quien ya usaba la app (antes de existir esta opción) tenía mancuernas y banco
+    settings.equipment = Array.isArray(known.equipment)
+      ? known.equipment.filter((e): e is Equip => (EQUIPMENT as readonly string[]).includes(e))
+      : Object.keys(input).length > 0 ? ['mancuernas', 'banco'] : [];
     const wg = (known.weekGoals ?? {}) as Partial<Settings['weekGoals']>;
     settings.weekGoals = {
       minutes: Number.isFinite(wg.minutes) && wg.minutes! >= 10 ? Math.round(wg.minutes!) : 150,

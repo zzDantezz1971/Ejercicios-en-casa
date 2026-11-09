@@ -1,6 +1,8 @@
 import { DEC } from '../../i18n';
 import { SEXES, SEX_LABELS, type Settings, type Sex } from '../../domain/types';
 import { weightCards } from '../components/weightCard';
+import { equipGrid } from '../components/equipGrid';
+import { EQUIPMENT, type Equip } from '../../domain/equipment';
 import { WeightScreen } from './WeightScreen';
 import type { App, Screen } from '../App';
 import { append, clear, h } from '../dom';
@@ -51,11 +53,21 @@ export class ProfileScreen implements Screen {
       h('div', { class: 'sex-wrap' }, h('div', { class: 'segmented sex-segs', role: 'group', 'aria-label': 'Sexo' }, ...SEXES.map(sexBtn)), h('p', { class: 'sex-note' }, 'Solo se usa para calcular mejor las calorías cuando entrenas con el reloj conectado.')));
   }
 
+  /** Mi material: el que se marque decide qué ejercicios con material se ven. */
+  private equipCard(s: Settings): HTMLElement {
+    const sel = new Set<Equip>(s.equipment);
+    return h('section', { class: 'card equip-card-box' },
+      h('div', { class: 'card-head' }, h('h3', {}, 'Mi material')),
+      h('p', { class: 'muted small' }, 'Marca lo que tengas. Los ejercicios sin material los verás siempre; con más material, verás más ejercicios.'),
+      equipGrid(sel, () => this.update({ equipment: EQUIPMENT.filter((e) => sel.has(e)) })));
+  }
+
   private render(): void {
     const s = this.app.store.settings;
     clear(this.body);
     append(this.body,
       this.profileCard(s),
+      this.equipCard(s),
       ...weightCards(this.app, () => this.render(), () => this.app.push(new WeightScreen(this.app))));
   }
 }

@@ -5,6 +5,8 @@ import type { Side } from './poses';
 import type { SkinData } from './SkinnedFigure';
 import { getSkin } from './skinAsset';
 import { muscleWeights } from './anatomy';
+import { EQUIP_INFO } from '../domain/equipment';
+import { strokePath } from '../ui/icons';
 
 /** Postura de pie, brazos algo separados, para el mapa de músculos. */
 const BODY_SPEC: MotionSpec = { v: 'front', f: [[{ uaL: 100, faL: 96, uaR: 80, faR: 84 }]] };
@@ -45,6 +47,7 @@ export class FigureView {
     canvas.addEventListener('pointercancel', this.onUp);
     this.resize();
     this.renderAt(this.scene.motion.total * 0.4);
+    pendingOverlay(canvas, exercise);
   }
 
   start(): void {
@@ -89,6 +92,7 @@ export class FigureView {
     if (w && h) this.scene.setAspect(w / h);
     this.restart();
     this.renderAt(this.frozenAt ?? 0);
+    pendingOverlay(this.canvas, exercise);
   }
 
   restart(): void {
@@ -150,6 +154,7 @@ export class Thumbnails {
 
   /** Miniatura del ejercicio. */
   get(ex: ExerciseDef): Promise<string> {
+    if (ex.pending) return Promise.resolve(pendingThumb(ex));
     const skin = getSkin();
     return this.enqueue(`${skin ? 'a' : 'p'}:${ex.id}`, () => this.draw(ex, skin));
   }
@@ -219,4 +224,29 @@ export class Thumbnails {
     sc.dispose();
     return url;
   }
+}
+
+/** Miniatura de un ejercicio todavía sin animación: el icono de su material (o de fuerza) en gris. */
+function pendingThumb(ex: ExerciseDef): string {
+  const name = ex.equip?.[0]?.[0] ? EQUIP_INFO[ex.equip[0][0]].icon : ex.section === 'estiramientos' ? 'stretch' : ex.section === 'calentamiento' ? 'flame' : 'bolt';
+  const d = strokePath(name) ?? '';
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 330 220"><g transform="translate(129 72) scale(3)" fill="none" stroke="#8D99AA" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="${d}"/></g></svg>`;
+  return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+}
+
+/** Recuadro que tapa el lienzo 3D de un ejercicio sin animación. */
+function pendingOverlay(canvas: HTMLCanvasElement, ex: ExerciseDef): void {
+  const parent = canvas.parentElement;
+  if (!parent) return;
+  parent.querySelector(':scope > .fig-pending')?.remove();
+  if (!ex.pending) return;
+  if (getComputedStyle(parent).position === 'static') parent.style.position = 'relative';
+  const name = ex.equip?.[0]?.[0] ? EQUIP_INFO[ex.equip[0][0]].icon : 'bolt';
+  const box = document.createElement('div');
+  box.className = 'fig-pending';
+  box.innerHTML = `<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="${strokePath(name) ?? ''}"/></svg>`;
+  const t = document.createElement('strong');
+  t.textContent = 'Animación en preparación';
+  box.append(t);
+  parent.append(box);
 }

@@ -4,6 +4,8 @@ import { SEXES, SEX_LABELS, type Profile, type Sex } from '../../domain/types';
 import type { App, Screen } from '../App';
 import { clear, h } from '../dom';
 import { icon } from '../icons';
+import { EQUIPMENT, type Equip } from '../../domain/equipment';
+import { equipGrid } from '../components/equipGrid';
 
 /* Bienvenida de la primera vez: 1) idioma, 2) datos personales (todos opcionales).
    Si falta la altura o el peso, se avisa de lo que no se podrá calcular. */
@@ -33,7 +35,11 @@ function parseNum(text: string): number | null {
 
 export class WelcomeScreen implements Screen {
   readonly el = h('main', { class: 'screen welcome' });
-  private step: 1 | 2 = 1;
+  private step: 1 | 2 | 3 = 1;
+  /** Datos del paso 2, que se guardan al terminar (paso 3). */
+  private data: { profile: Partial<Profile>; weight: number | null } | null = null;
+  /** Material marcado en el paso 3 (empieza sin marcar). */
+  private equip = new Set<Equip>();
   private name = '';
   private sex: Profile['sex'] = 'h';
   private values: Record<Field['key'], string> = { age: '', height: '', weight: '', goal: '' };
@@ -48,10 +54,10 @@ export class WelcomeScreen implements Screen {
     this.render();
   }
 
-  /** Atrás en el paso 2 vuelve al idioma. */
+  /** Atrás vuelve al paso anterior. */
   async onBack(): Promise<boolean> {
-    if (this.step === 2) {
-      this.step = 1;
+    if (this.step > 1) {
+      this.step = (this.step - 1) as 1 | 2;
       this.render();
       return true;
     }
@@ -61,7 +67,8 @@ export class WelcomeScreen implements Screen {
   private render(): void {
     clear(this.el);
     if (this.step === 1) this.renderLang();
-    else this.renderData();
+    else if (this.step === 2) this.renderData();
+    else this.renderEquip();
     window.scrollTo(0, 0);
   }
 
@@ -133,36 +140,49 @@ export class WelcomeScreen implements Screen {
         if (choice === 'add') return void (missH ? inputs.height : inputs.weight).focus();
       }
 
-      const { store } = this.app;
-      const s = store.settings;
-      const name = this.name.replace(/\s+/g, ' ').trim() || undefined;
-      store.saveSettings({
-        ...s,
-        profile: {
-          ...s.profile,
-          name,
-          sex: this.sex,
-          age: nums.age === null ? s.profile.age : Math.round(nums.age),
-          height: nums.height === null ? s.profile.height : Math.round(nums.height),
-          goalKg: nums.goal === null ? s.profile.goalKg : Math.round(nums.goal * 10) / 10,
-        },
-      });
-      if (nums.weight !== null) store.addWeight(Math.round(nums.weight * 10) / 10);
-      store.markWelcomed();
-      this.app.openTab('inicio');
+      const p: Partial<Profile> = { name: this.name.replace(/\s+/g, ' ').trim() || undefined, sex: this.sex };
+      if (nums.age !== null) p.age = Math.round(nums.age);
+      if (nums.height !== null) p.height = Math.round(nums.height);
+      if (nums.goal !== null) p.goalKg = Math.round(nums.goal * 10) / 10;
+      this.data = { profile: p, weight: nums.weight === null ? null : Math.round(nums.weight * 10) / 10 };
+      this.step = 3;
+      this.render();
     };
 
     this.el.append(
       h('header', { class: 'bar' },
         h('button', { class: 'icon-btn', 'aria-label': 'Volver', onclick: () => void this.onBack() }, icon('back')),
-        h('div', { class: 'titles' }, h('span', { class: 'subtitle' }, 'Paso 2 de 2'), h('h1', {}, 'Tus datos'))),
+        h('div', { class: 'titles' }, h('span', { class: 'subtitle' }, 'Paso 2 de 3'), h('h1', {}, 'Tus datos'))),
       h('p', { class: 'muted welcome-intro' }, 'Con estos datos calculamos las calorías que quemas, tu IMC y la evolución de tu peso. Todo se guarda solo en tu móvil y lo puedes cambiar cuando quieras en Mis datos.'),
       h('section', { class: 'card welcome-card' },
         h('div', { class: 'welcome-field' }, h('label', { for: 'wl-name' }, 'Nombre o alias'), nameInput),
         h('div', { class: 'sex-wrap' }, h('div', { class: 'segmented sex-segs', role: 'group', 'aria-label': 'Sexo' }, ...SEXES.map(sexBtn)), h('p', { class: 'sex-note' }, 'Solo se usa para calcular mejor las calorías cuando entrenas con el reloj conectado.')),
         h('div', { class: 'welcome-grid' }, ...FIELDS.map(fieldRow))),
       h('div', { class: 'welcome-actions' },
-        h('button', { class: 'btn primary block big', onclick: () => void finish() }, 'Empezar')),
+        h('button', { class: 'btn primary block big', onclick: () => void finish() }, 'Continuar')),
+    );
+  }
+
+  /* ── Paso 3: material ── */
+
+  private renderEquip(): void {
+    const finish = () => {
+      const { store } = this.app;
+      const s = store.settings;
+      store.saveSettings({ ...s, profile: { ...s.profile, ...(this.data?.profile ?? {}) }, equipment: EQUIPMENT.filter((e) => this.equip.has(e)) });
+      if (this.data?.weight != null) store.addWeight(this.data.weight);
+      store.markWelcomed();
+      this.app.openTab('inicio');
+    };
+    this.el.append(
+      h('header', { class: 'bar' },
+        h('button', { class: 'icon-btn', 'aria-label': 'Volver', onclick: () => void this.onBack() }, icon('back')),
+        h('div', { class: 'titles' }, h('span', { class: 'subtitle' }, 'Paso 3 de 3'), h('h1', {}, '¿Qué material tienes?'))),
+      h('p', { class: 'muted welcome-intro' }, 'Marca lo que tengas. Los ejercicios sin material los verás siempre; con más material, verás más ejercicios.'),
+      equipGrid(this.equip, () => this.render()),
+      h('p', { class: 'muted small center' }, 'Silla, pared y suelo se dan por hechos.'),
+      h('div', { class: 'welcome-actions' },
+        h('button', { class: 'btn primary block big', onclick: finish }, 'Empezar')),
     );
   }
 

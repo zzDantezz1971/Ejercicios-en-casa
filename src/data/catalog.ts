@@ -4,6 +4,24 @@ import { DESCRIPTIONS } from './descriptions';
 import { RAW_SECTIONS } from './rawExercises';
 import { MUSCLES_BY_EXERCISE } from './muscles';
 import { exerciseText } from '../i18n';
+import { parseNeed } from '../domain/equipment';
+import { EXTRAS, extraId } from './extra';
+
+/** Material de los ejercicios de antes (los que usan mancuernas lo sacan del movimiento). */
+const NEEDS_BENCH = new Set([
+  'pajaros-elevaciones-posteriores',
+  'press-de-banca-con-mancuernas',
+  'press-inclinado-con-mancuernas',
+  'aperturas-con-mancuernas',
+  'pullover-con-mancuerna',
+  'remo-a-una-mano-apoyado-en-banco',
+  'remo-con-pecho-apoyado-en-banco-inclinado',
+  'patada-de-triceps-apoyado-en-banco',
+  'press-frances-tumbado',
+]);
+
+/** Movimiento provisional de los ejercicios nuevos (de pie, quieto); no se ve: sale "Animación en preparación". */
+const STILL = { f: [[{}, 0, 1000]] } as ExerciseDef['motion'];
 
 /** Ejercicios que se hacen primero con un lado y luego con el otro. */
 const ONE_SIDED = new Set([
@@ -73,7 +91,32 @@ function buildSections(): SectionInfo[] {
         muscles: MUSCLES_BY_EXERCISE[id],
         motion,
         viewLabel: raw.top ?? (motion.v === 'front' ? 'De frente' : undefined),
+        equip: [...(motion.db ? [['mancuernas' as const]] : []), ...(NEEDS_BENCH.has(id) ? [['banco' as const]] : [])],
       } as ExerciseDef);
+    }
+    // ejercicios nuevos: detrás del último de su mismo subgrupo (o al final, si el subgrupo es nuevo)
+    for (const x of EXTRAS.filter((e) => e.s === sec.id)) {
+      const id = extraId(x.n);
+      const t = exerciseText(id);
+      const ex: ExerciseDef = {
+        id,
+        name: t?.[0] ?? x.n,
+        section: sec.id,
+        zone: t?.[1] ?? x.z,
+        group: x.g,
+        oneSided: !!x.one,
+        badges: x.b,
+        description: t ? { start: t[2], move: t[3], tip: t[4], mistakes: t[5] || undefined, easier: t[6] || undefined }
+          : { start: x.es[0], move: x.es[1], tip: x.es[2], mistakes: x.es[3] || undefined, easier: x.es[4] || undefined },
+        muscles: x.m,
+        motion: STILL,
+        equip: parseNeed(x.eq),
+        pending: true,
+      };
+      let at = -1;
+      if (x.g) for (let i = exercises.length - 1; i >= 0; i--) if (exercises[i].group === x.g) { at = i; break; }
+      if (at >= 0) exercises.splice(at + 1, 0, ex);
+      else exercises.push(ex);
     }
     return { id: sec.id, title: sec.title, exercises };
   });
