@@ -13,7 +13,6 @@ import { MedalsScreen } from './ui/screens/MedalsScreen';
 import { ProfileScreen } from './ui/screens/ProfileScreen';
 import { TablesScreen } from './ui/screens/TablesScreen';
 import { WelcomeScreen } from './ui/screens/WelcomeScreen';
-import { showReminders } from './ui/components/weightReminder';
 import { firstRunOfNewVersion, initUpdates, onUpdateReady } from './services/Updates';
 import { showUpdateDialog } from './ui/components/updateDialog';
 import { h } from './ui/dom';
@@ -34,14 +33,6 @@ async function start(): Promise<void> {
   // primera vez: idioma y datos personales
   if (!app.store.welcomed) app.home(new WelcomeScreen(app));
   else app.openTab('inicio');
-  // enlace de prueba: …/?probar=avisos enseña los recordatorios (sin guardar nada)
-  const params = new URLSearchParams(location.search);
-  if (app.store.welcomed && params.get('probar') === 'avisos') {
-    params.delete('probar');
-    history.replaceState(null, '', location.pathname + (params.size ? `?${params}` : '') + location.hash);
-    const ago = (days: number) => new Date(Date.now() - days * 864e5).toISOString();
-    showReminders(app, { weight: { days: 20, kg: app.store.currentWeight ?? 75, date: ago(20) }, backup: { days: 10, last: ago(10) } });
-  }
   // App Android actualizada desde Google Play: se enseña qué ha cambiado
   if (firstRunOfNewVersion()) void showUpdateDialog();
 }

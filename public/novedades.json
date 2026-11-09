@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-09T22:48:34Z",
+    "es": ["Quitado el enlace de prueba de los recordatorios."],
+    "ca": ["Tret l'enllaç de prova dels recordatoris."],
+    "en": ["Removed the reminders test link."]
+  },
+  {
     "fecha": "2026-11-09T22:45:12Z",
     "es": ["Los recordatorios del peso y de la copia ya no salen en la pantalla final: aparecen en una ventana pequeña al pulsar «Volver al inicio»."],
     "ca": ["Els recordatoris del pes i de la còpia ja no surten a la pantalla final: apareixen en una finestra petita en prémer «Torna a l'inici»."],

@@ -8,12 +8,6 @@ import { fmtKg } from './weightCard';
 /** Cada cuántos días se recuerda anotar el peso al acabar un entrenamiento. */
 export const WEIGHT_EVERY_DAYS = 15;
 
-/** Datos inventados para el enlace de prueba (?probar=avisos). */
-export interface FakeReminders {
-  weight: { days: number; kg: number; date: string };
-  backup: { days: number; last: string };
-}
-
 const fmtDay = (iso: string) => new Date(iso).toLocaleDateString(LOCALE, { day: 'numeric', month: 'long' });
 
 /** ¿Hay algún recordatorio pendiente (peso cada 15 días, copia cada 7)? */
@@ -23,16 +17,16 @@ export function remindersDue(app: App): boolean {
 
 /**
  * Ventana compacta con los recordatorios pendientes (al pulsar «Volver al inicio» tras un entrenamiento):
- * el del peso lleva a Mis datos; el de la copia la hace en ese momento. `fake` es para el enlace de prueba.
+ * el del peso lleva a Mis datos; el de la copia la hace en ese momento.
  */
-export function showReminders(app: App, fake?: FakeReminders): void {
+export function showReminders(app: App): void {
   const st = app.store;
   const rows: HTMLElement[] = [];
   const close = () => wrap.remove();
 
-  const wDays = fake?.weight.days ?? st.daysSinceWeight();
-  if (fake || wDays >= WEIGHT_EVERY_DAYS) {
-    const last = fake ? fake.weight : st.weights.at(-1);
+  const wDays = st.daysSinceWeight();
+  if (wDays >= WEIGHT_EVERY_DAYS) {
+    const last = st.weights.at(-1);
     rows.push(h('div', { class: 'rm-row' },
       h('span', { class: 'bp-icon' }, icon('trophy')),
       h('div', { class: 'rm-text' },
@@ -42,9 +36,9 @@ export function showReminders(app: App, fake?: FakeReminders): void {
       h('button', { class: 'btn primary small', onclick: () => { close(); goToWeight(app); } }, 'Ir a Mis datos')));
   }
 
-  if (fake || backupDue(app)) {
-    const bDays = fake?.backup.days ?? st.daysSinceBackup();
-    const last = fake?.backup.last ?? st.lastBackup;
+  if (backupDue(app)) {
+    const bDays = st.daysSinceBackup();
+    const last = st.lastBackup;
     const btn = h('button', {
       class: 'btn primary small',
       onclick: async () => {
@@ -63,7 +57,6 @@ export function showReminders(app: App, fake?: FakeReminders): void {
 
   const wrap = h('div', { class: 'dialog-wrap', onclick: (e: Event) => e.target === wrap && close() },
     h('div', { class: 'dialog reminders', role: 'dialog', 'aria-modal': 'true' },
-      fake ? h('p', { class: 'muted small rm-test' }, 'Prueba: no se ha guardado nada.') : null,
       ...rows,
       h('div', { class: 'dialog-actions' }, h('button', { class: 'btn ghost small', onclick: close }, 'Cancelar'))));
   document.body.append(wrap);
