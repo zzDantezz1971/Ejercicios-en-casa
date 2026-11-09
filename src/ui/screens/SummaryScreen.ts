@@ -1,17 +1,13 @@
 import type { SessionSummary } from '../../domain/WorkoutSession';
 import { SECTION_TITLES, type HeartSummary } from '../../domain/types';
 import { caloriesOf } from '../../domain/calories';
-import { fmtKg } from '../components/weightCard';
 import { weightSuggestion } from '../../domain/weights';
 import { checkAndCelebrate } from '../components/medals';
 import type { App, Screen } from '../App';
 import { h, humanDuration, kg } from '../dom';
 import { icon, SECTION_STYLE } from '../icons';
 import { backupCard, backupDue } from '../components/backupPrompt';
-import { LOCALE } from '../../i18n';
-
-/** Cada cuántos días se recuerda anotar el peso al acabar un entrenamiento. */
-export const WEIGHT_EVERY_DAYS = 15;
+import { WEIGHT_EVERY_DAYS, weightReminder } from '../components/weightReminder';
 
 /** Resumen al terminar, con una pequeña celebración si se completó. */
 export class SummaryScreen implements Screen {
@@ -52,7 +48,7 @@ export class SummaryScreen implements Screen {
         this.kcal(s, heart),
         this.weightTips(s),
         s.exercisesDone ? h('p', { class: 'muted small' }, 'Guardado en el historial.') : null,
-        s.exercisesDone && app.store.daysSinceWeight() >= WEIGHT_EVERY_DAYS ? this.weightPrompt() : null,
+        s.exercisesDone && app.store.daysSinceWeight() >= WEIGHT_EVERY_DAYS ? weightReminder(app) : null,
         s.exercisesDone && backupDue(app) ? backupCard(app) : null,
         h('button', { class: 'btn primary block big', onclick: () => this.app.openTab('inicio') }, 'Volver al inicio')),
     );
@@ -76,35 +72,6 @@ export class SummaryScreen implements Screen {
     return h('div', { class: 'note tip weight-tips' }, icon('bolt'),
       h('div', {}, ...tips.map(({ id, sug }) =>
         h('p', {}, h('strong', {}, this.app.catalog.get(id)?.name ?? ''), `: ${sug!.sessions} sesiones completas con ${kg(sug!.kg)}. Prueba con ${kg(sug!.next)} la próxima vez.`))));
-  }
-
-  /** Recordatorio para pesarse (cada 15 días): cuánto hace, el último peso, y botones Cancelar / Ir a Mis datos. */
-  private weightPrompt(): HTMLElement {
-    const st = this.app.store;
-    const d = st.daysSinceWeight();
-    const last = st.weights.at(-1);
-    const when = last ? new Date(last.date).toLocaleDateString(LOCALE, { day: 'numeric', month: 'long' }) : '';
-    const card: HTMLElement = h('section', { class: 'card backup-prompt weight-prompt' },
-      h('div', { class: 'bp-head' },
-        h('span', { class: 'bp-icon' }, icon('trophy')),
-        h('div', {},
-          h('strong', {}, d === Infinity ? 'Aún no has anotado tu peso' : `Hace ${d} días que no te pesas`),
-          h('p', { class: 'muted small' }, 'Para llevar un mejor control de tu evolución y de las calorías, deberías pesarte.'),
-          last ? h('p', { class: 'muted small' }, `Último peso: ${fmtKg(last.kg)} (${when}).`) : null)),
-      h('div', { class: 'bp-actions' },
-        h('button', { class: 'btn ghost small', onclick: () => card.remove() }, 'Cancelar'),
-        h('button', { class: 'btn primary small', onclick: () => this.goToWeight() }, icon('chevron'), 'Ir a Mis datos')));
-    return card;
-  }
-
-  /** Abre Mis datos y baja hasta el apartado del peso. */
-  private goToWeight(): void {
-    this.app.openTab('datos');
-    // cuando la pantalla ya está pintada; con un pequeño margen arriba
-    setTimeout(() => {
-      const el = document.querySelector<HTMLElement>('.weight-card');
-      if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 16, behavior: 'smooth' });
-    }, 150);
   }
 
   enter(): void {

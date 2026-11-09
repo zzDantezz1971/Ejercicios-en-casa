@@ -375,6 +375,8 @@ const ROWS: Row[] = [
   ['Para no perder tus tablas y tu historial si cambias de móvil o se borran los datos, deberías hacerla.', 'Per no perdre les teves taules i el teu historial si canvies de mòbil o s’esborren les dades, l’hauries de fer.', 'So you don’t lose your routines and history if you change phones or the data gets deleted, you should make one.'],
   ['Última copia: {d}.', 'Última còpia: {d}.', 'Last backup: {d}.'],
   ['Hacer copia ahora', 'Fes la còpia ara', 'Back up now'],
+  ['Prueba de avisos', 'Prova d’avisos', 'Reminder test'],
+  ['Esto es una prueba: así salen los recordatorios al acabar un entrenamiento. No se ha guardado nada.', 'Això és una prova: així surten els recordatoris en acabar un entrenament. No s’ha desat res.', 'This is a test: this is how the reminders appear after a workout. Nothing has been saved.'],
   ['Así verás tu evolución en el Historial y se calcularán las calorías.', 'Així veuràs la teva evolució a l’Historial i es calcularan les calories.', 'That way you’ll see your progress in History and calories will be calculated.'],
   ['La última vez fue hace {d} días ({w}).', 'L’última vegada va ser fa {d} dies ({w}).', 'The last time was {d} days ago ({w}).'],
   ['Peso anotado: {w}', 'Pes anotat: {w}', 'Weight logged: {w}'],

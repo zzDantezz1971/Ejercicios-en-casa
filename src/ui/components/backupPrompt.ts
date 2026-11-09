@@ -22,9 +22,9 @@ export function backupDue(app: App): boolean {
 }
 
 /** Recordatorio de la copia: cuánto hace de la última, por qué conviene y botones Cancelar / Hacer copia ahora. */
-export function backupCard(app: App): HTMLElement {
-  const d = app.store.daysSinceBackup();
-  const last = app.store.lastBackup;
+export function backupCard(app: App, fake?: { days: number; last: string }): HTMLElement {
+  const d = fake?.days ?? app.store.daysSinceBackup();
+  const last = fake?.last ?? app.store.lastBackup;
   const when = last ? new Date(last).toLocaleDateString(LOCALE, { day: 'numeric', month: 'long' }) : null;
   const card: HTMLElement = h('section', { class: 'card backup-prompt', role: 'region', 'aria-label': 'Copia de seguridad' },
     h('div', { class: 'bp-head' },
