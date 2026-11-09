@@ -167,8 +167,10 @@ export const DEFAULT_SETTINGS: Settings = {
 export interface HistoryEntry {
   /** Fecha y hora de inicio (ISO). */
   date: string;
-  /** Tiempo real empleado (s). */
+  /** Tiempo real empleado (s), sin las pausas (desde esta versión). */
   durationSec: number;
+  /** Tiempo en pausa (s): solo para saber la hora de fin. */
+  pausedSec?: number;
   exercisesDone: number;
   exercisesPlanned: number;
   sections: SectionId[];

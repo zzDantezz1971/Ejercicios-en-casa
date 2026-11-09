@@ -352,6 +352,7 @@ export class WorkoutScreen implements Screen {
       const entry: HistoryEntry = {
         date: s.startedAt.toISOString(),
         durationSec: s.durationSec,
+        ...(s.pausedSec > 0 ? { pausedSec: s.pausedSec } : {}),
         exercisesDone: s.exercisesDone,
         exercisesPlanned: s.exercisesPlanned,
         sections: s.sections,

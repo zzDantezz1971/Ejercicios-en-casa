@@ -29,7 +29,10 @@ export interface SessionSummary {
   /** Detalle por ejercicio, en el orden de la rutina. */
   items: ExerciseLog[];
   startedAt: Date;
+  /** Duración del entrenamiento sin las pausas (s). */
   durationSec: number;
+  /** Tiempo que estuvo en pausa (s). */
+  pausedSec: number;
   exercisesDone: number;
   exercisesPlanned: number;
   sections: SectionId[];
@@ -65,6 +68,8 @@ export class WorkoutSession extends Emitter<Events> {
   private stepStart = 0;
   private pausedAt: number | null = null;
   private pausedTotal = 0;
+  /** Tiempo en pausa de todo el entrenamiento (ms): no cuenta en la duración. */
+  private pausedAll = 0;
   private lastCount = Infinity;
   private switched = false;
   private sideCount = Infinity;
@@ -109,6 +114,7 @@ export class WorkoutSession extends Emitter<Events> {
   resume(): void {
     if (this._status !== 'paused' || this.pausedAt === null) return;
     this.pausedTotal += this.now() - this.pausedAt;
+    this.pausedAll += this.now() - this.pausedAt;
     this.pausedAt = null;
     this.setStatus('running');
   }
@@ -219,6 +225,7 @@ export class WorkoutSession extends Emitter<Events> {
     if (i >= this.plan.steps.length) return this.finish(true);
     this.index = Math.max(0, i);
     this.stepStart = this.now();
+    if (this.pausedAt !== null) this.pausedAll += this.now() - this.pausedAt;
     this.pausedAt = null;
     this.pausedTotal = 0;
     this.lastCount = Infinity;
@@ -233,6 +240,10 @@ export class WorkoutSession extends Emitter<Events> {
 
   private finish(completed: boolean): void {
     if (!completed) this.recordCurrent();
+    if (this.pausedAt !== null) {
+      this.pausedAll += this.now() - this.pausedAt;
+      this.pausedAt = null;
+    }
     const items: ExerciseLog[] = [];
     this.plan.steps.forEach((st, i) => {
       if (st.kind !== 'exercise') return;
@@ -254,7 +265,9 @@ export class WorkoutSession extends Emitter<Events> {
     this.emit('finished', {
       items,
       startedAt: this.startedAt,
-      durationSec: Math.round((this.now() - this.startedAtMs) / 1000),
+      // sin el tiempo en pausa
+      durationSec: Math.round((this.now() - this.startedAtMs - this.pausedAll) / 1000),
+      pausedSec: Math.round(this.pausedAll / 1000),
       exercisesDone: this.done.size,
       exercisesPlanned: this.plan.exerciseCount,
       sections: [...sections],

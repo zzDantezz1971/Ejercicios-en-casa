@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-09T21:05:43Z",
+    "es": ["Tiempo del entrenamiento: el rato que lo tienes en pausa ya no cuenta (ni en el historial, ni en los minutos de la semana, ni en las calorías)."],
+    "ca": ["Temps de l'entrenament: l'estona que el tens en pausa ja no compta (ni a l'historial, ni als minuts de la setmana, ni a les calories)."],
+    "en": ["Workout time: the time it spends paused no longer counts (not in the history, the week's minutes or the calories)."]
+  },
+  {
     "fecha": "2026-11-09T12:04:40Z",
     "es": ["Novedades: ahora solo se enseñan los cambios desde tu última actualización (antes salían también los de días anteriores)."],
     "ca": ["Novetats: ara només s'ensenyen els canvis des de la teva última actualització (abans també sortien els de dies anteriors)."],

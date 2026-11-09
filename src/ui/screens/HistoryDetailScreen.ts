@@ -14,7 +14,7 @@ export class HistoryDetailScreen implements Screen {
   constructor(private readonly app: App, private readonly entry: HistoryEntry) {
     const e = entry;
     const d = new Date(e.date);
-    const end = new Date(d.getTime() + e.durationSec * 1000);
+    const end = new Date(d.getTime() + (e.durationSec + (e.pausedSec ?? 0)) * 1000);
     const hm = (x: Date) => x.toLocaleTimeString(LOCALE, { hour: '2-digit', minute: '2-digit' });
     const items = e.items ?? [];
     const skipped = items.filter((i) => !i.completed).length;

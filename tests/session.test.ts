@@ -217,3 +217,39 @@ describe('Cambio de lado', () => {
     expect(plan.estimatedSeconds).toBe(countdown + 40 + 5);
   });
 });
+
+describe('Duración sin pausas', () => {
+  it('el tiempo en pausa no cuenta en la duración del entrenamiento', () => {
+    const c = clock();
+    const s = new WorkoutSession(WorkoutPlan.build(routine(), catalog, DEFAULT_SETTINGS), c.now);
+    let sum: SessionSummary | null = null;
+    s.on('finished', (r) => (sum = r));
+    s.start();
+    run(s, c, 15); // cuenta atrás y 5 s del primer ejercicio
+    s.pause();
+    c.advance(300); // 5 minutos en pausa
+    s.resume();
+    run(s, c, 5);
+    s.pause();
+    c.advance(60); // otra pausa, y se termina sin reanudar
+    s.stop();
+    expect(sum!.pausedSec).toBe(360);
+    expect(sum!.durationSec).toBe(20);
+  });
+
+  it('también descuenta la pausa si se salta de ejercicio estando en pausa', () => {
+    const c = clock();
+    const s = new WorkoutSession(WorkoutPlan.build(routine(), catalog, DEFAULT_SETTINGS), c.now);
+    let sum: SessionSummary | null = null;
+    s.on('finished', (r) => (sum = r));
+    s.start();
+    run(s, c, 12);
+    s.pause();
+    c.advance(100);
+    s.next();
+    run(s, c, 2);
+    s.stop();
+    expect(sum!.pausedSec).toBe(100);
+    expect(sum!.durationSec).toBe(14);
+  });
+});
