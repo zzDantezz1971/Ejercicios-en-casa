@@ -676,7 +676,6 @@ const ROWS: Row[] = [
   ['Paso 3 de 3', 'Pas 3 de 3', 'Step 3 of 3'],
   ['Sin material', 'Sense material', 'No equipment'],
   ['Necesita', 'Necessita', 'Needs'],
-  ['Silla, pared y suelo se dan por hechos.', 'Cadira, paret i terra es donen per fets.', 'A chair, a wall and the floor are taken for granted.'],
   ['10 entrenamientos de fuerza.', '10 entrenaments de força.', '10 strength workouts.'],
   // Bienvenida de la primera vez
   ['LGTBIQ+', 'LGTBIQ+', 'LGBTIQ+'],

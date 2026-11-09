@@ -180,7 +180,6 @@ export class WelcomeScreen implements Screen {
         h('div', { class: 'titles' }, h('span', { class: 'subtitle' }, 'Paso 3 de 3'), h('h1', {}, '¿Qué material tienes?'))),
       h('p', { class: 'muted welcome-intro' }, 'Marca lo que tengas. Los ejercicios sin material los verás siempre; con más material, verás más ejercicios.'),
       equipGrid(this.equip, () => this.render()),
-      h('p', { class: 'muted small center' }, 'Silla, pared y suelo se dan por hechos.'),
       h('div', { class: 'welcome-actions' },
         h('button', { class: 'btn primary block big', onclick: finish }, 'Empezar')),
     );
