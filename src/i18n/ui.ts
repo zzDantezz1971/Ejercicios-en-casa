@@ -641,6 +641,12 @@ const ROWS: Row[] = [
   ['Quitar objetivo', 'Treu l’objectiu', 'Remove goal'],
   ['Fijar', 'Fixa', 'Set'],
   ['Peso objetivo', 'Pes objectiu', 'Target weight'],
+  ['Apariencia', 'Aparença', 'Appearance'],
+  ['Modo de la pantalla', 'Mode de la pantalla', 'Screen mode'],
+  ['Automático usa el mismo modo que tu móvil.', 'Automàtic fa servir el mateix mode que el teu mòbil.', 'Automatic uses the same mode as your phone.'],
+  ['Oscuro', 'Fosc', 'Dark'],
+  ['Claro', 'Clar', 'Light'],
+  ['Automático', 'Automàtic', 'Automatic'],
   ['Solo se usa para calcular mejor las calorías cuando entrenas con el reloj conectado.', 'Només s’usa per calcular millor les calories quan entrenes amb el rellotge connectat.', 'Only used to work out calories more accurately when you train with your watch connected.'],
   ['Pon tu altura arriba para calcular tu IMC.', 'Posa la teva alçada a dalt per calcular el teu IMC.', 'Add your height above to work out your BMI.'],
   // Bienvenida de la primera vez

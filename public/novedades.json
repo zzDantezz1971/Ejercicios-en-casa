@@ -1,5 +1,20 @@
 [
   {
+    "fecha": "2026-11-09T15:00:00Z",
+    "es": [
+      "Modo claro: en Ajustes → Apariencia puedes elegir Oscuro, Claro o Automático (el mismo modo que tu móvil).",
+      "Ajustes más compactos: la cuenta atrás y la duración inicial van juntas en una sola tarjeta."
+    ],
+    "ca": [
+      "Mode clar: a Configuració → Aparença pots triar Fosc, Clar o Automàtic (el mateix mode que el teu mòbil).",
+      "Configuració més compacta: el compte enrere i la durada inicial van junts en una sola targeta."
+    ],
+    "en": [
+      "Light mode: in Settings → Appearance you can choose Dark, Light or Automatic (the same mode as your phone).",
+      "More compact settings: the countdown and the default duration now share a single card."
+    ]
+  },
+  {
     "fecha": "2026-11-09T14:00:00Z",
     "es": [
       "Historial: la tarjeta Músculos muestra lo mismo que los resúmenes (más y menos trabajados, más y menos estirados)."

@@ -1,4 +1,5 @@
 import { LANG, LANGS, LOCALE } from '../../i18n';
+import { applyTheme } from '../../platform/theme';
 import { flushDurable } from '../../platform/durable';
 import { showUpdateDialog } from '../components/updateDialog';
 import { BUILD_TIME, checkForUpdate, updateReady } from '../../services/Updates';
@@ -84,6 +85,21 @@ export class SettingsScreen implements Screen {
   }
 
   /** Idioma de la app: al cambiarlo se recarga para pintarlo todo de nuevo. */
+  /** Modo oscuro, claro o el del sistema. */
+  private themeCard(s: Settings): HTMLElement {
+    const pick = (t: Settings['theme']) => {
+      this.update({ theme: t });
+      applyTheme(t);
+    };
+    const opt = (t: Settings['theme'], label: string) =>
+      h('button', { class: 'seg' + (s.theme === t ? ' on' : ''), 'aria-pressed': String(s.theme === t), onclick: () => pick(t) }, label);
+    return h('section', { class: 'card setting rest-card lang-card' },
+      h('div', { class: 'rest-head' },
+        h('span', { class: 'set-icon' }, icon('sun')),
+        h('div', { class: 'set-text' }, h('strong', {}, 'Modo de la pantalla'), h('p', { class: 'muted small' }, 'Automático usa el mismo modo que tu móvil.'))),
+      h('div', { class: 'segmented lang-segs' }, opt('dark', 'Oscuro'), opt('light', 'Claro'), opt('auto', 'Automático')));
+  }
+
   private langCard(): HTMLElement {
     const pick = async (id: Settings['lang']) => {
       if (id === LANG) return;
@@ -207,19 +223,23 @@ export class SettingsScreen implements Screen {
   private render(): void {
     const s = this.app.store.settings;
     clear(this.body);
-    this.body.append(h('h3', { class: 'block-title' }, 'Idioma'), this.langCard(), h('h3', { class: 'block-title' }, 'Tiempos'), this.restCard(s));
-    for (const f of FIELDS) {
-      const v = s[f.key];
-      this.body.append(
-        h('section', { class: 'card setting' },
+    this.body.append(
+      h('h3', { class: 'block-title' }, 'Apariencia'), this.themeCard(s),
+      h('h3', { class: 'block-title' }, 'Idioma'), this.langCard(),
+      h('h3', { class: 'block-title' }, 'Tiempos'), this.restCard(s));
+    // cuenta atrás y duración inicial: en una sola tarjeta, con el título y el contador en la misma fila
+    this.body.append(h('section', { class: 'card setting-list' },
+      ...FIELDS.map((f) => {
+        const v = s[f.key];
+        return h('div', { class: 'set-compact' },
           h('span', { class: 'set-icon' }, icon(f.icon)),
-          h('div', { class: 'set-text' }, h('strong', {}, f.label), h('p', { class: 'muted small' }, f.help)),
-          h('div', { class: 'stepper big' },
+          h('strong', { class: 'sc-title' }, f.label),
+          h('div', { class: 'stepper inline sc-step' },
             h('button', { 'aria-label': 'Menos', disabled: v <= f.min, onclick: () => this.update({ [f.key]: Math.max(f.min, v - f.step) }) }, '−'),
             h('span', { class: 'secs' }, `${v} s`),
-            h('button', { 'aria-label': 'Más', disabled: v >= f.max, onclick: () => this.update({ [f.key]: Math.min(f.max, v + f.step) }) }, '+'))),
-      );
-    }
+            h('button', { 'aria-label': 'Más', disabled: v >= f.max, onclick: () => this.update({ [f.key]: Math.min(f.max, v + f.step) }) }, '+')),
+          h('p', { class: 'muted small sc-help' }, f.help));
+      })));
     const toggle = (key: 'sound' | 'voice' | 'voiceCount' | 'phrases', ic: IconName, label: string, help: string) =>
       h('section', { class: 'card setting' },
         h('label', { class: 'switch-row', for: `set-${key}` },

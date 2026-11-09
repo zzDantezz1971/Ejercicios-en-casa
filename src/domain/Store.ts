@@ -512,6 +512,7 @@ export class Store {
     // antes eran frases propias; ahora solo se elige si se muestran
     settings.phrases = typeof known.phrases === 'boolean' ? known.phrases : true;
     if (!['ca', 'es', 'en'].includes(settings.lang)) settings.lang = 'ca';
+    if (!['dark', 'light', 'auto'].includes(settings.theme)) settings.theme = 'dark';
     const wg = (known.weekGoals ?? {}) as Partial<Settings['weekGoals']>;
     settings.weekGoals = {
       minutes: Number.isFinite(wg.minutes) && wg.minutes! >= 10 ? Math.round(wg.minutes!) : 150,
