@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-09T22:52:02Z",
+    "es": ["Editar o crear una tabla: los apartados en dos filas (Calentamiento y Fuerza arriba, Abdominales y Estiramientos abajo)."],
+    "ca": ["Editar o crear una taula: els apartats en dues files (Escalfament i Força a dalt, Abdominals i Estiraments a baix)."],
+    "en": ["Editing or creating a routine: the sections are in two rows (Warm-up and Strength on top, Abs and Stretches below)."]
+  },
+  {
     "fecha": "2026-11-09T22:48:34Z",
     "es": ["Quitado el enlace de prueba de los recordatorios."],
     "ca": ["Tret l'enllaç de prova dels recordatoris."],
