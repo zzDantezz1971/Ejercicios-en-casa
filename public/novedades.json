@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-10T14:30:00Z",
+    "es": ["Fichas de ejercicios: si el maniquí quedaba debajo de algún icono, ahora se aparta un poco o se hace algo más pequeño."],
+    "ca": ["Fitxes d'exercicis: si el maniquí quedava sota alguna icona, ara s'aparta una mica o es fa una mica més petit."],
+    "en": ["Exercise cards: if the figure sat under an icon, it now moves aside a little or gets slightly smaller."]
+  },
+  {
     "fecha": "2026-11-10T14:00:00Z",
     "es": ["Fichas de ejercicios: si hace falta más de un aparato, cada icono va en su propia línea."],
     "ca": ["Fitxes d'exercicis: si cal més d'un aparell, cada icona va en la seva pròpia línia."],

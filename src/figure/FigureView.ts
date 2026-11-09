@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { findFit, markZones } from './thumbFit';
 import type { ExerciseDef, MotionSpec } from '../domain/types';
 import { MannequinScene, type Mood, type Palette } from './Mannequin';
 import type { Side } from './poses';
@@ -220,10 +221,33 @@ export class Thumbnails {
     sc.setAspect(this.w / this.h);
     sc.update(sc.motion.total * 0.45);
     r.render(sc.scene, sc.camera);
-    const url = r.domElement.toDataURL('image/webp', 0.85);
+    const url = fitAroundMarks(r.domElement, ex.equip?.length ?? 0) ?? r.domElement.toDataURL('image/webp', 0.85);
     sc.dispose();
     return url;
   }
+}
+
+/** Si la figura queda debajo de los iconos de la ficha, la recoloca (ver thumbFit). Null si no hace falta. */
+function fitAroundMarks(src: HTMLCanvasElement, equipLines: number): string | null {
+  const w = 132, h = 88;
+  const small = document.createElement('canvas');
+  small.width = w; small.height = h;
+  const g = small.getContext('2d', { willReadFrequently: true });
+  if (!g) return null;
+  g.drawImage(src, 0, 0, w, h);
+  const px = g.getImageData(0, 0, w, h).data;
+  const mask = new Uint8Array(w * h);
+  for (let i = 0; i < mask.length; i++) mask[i] = px[i * 4 + 3] > 110 ? 1 : 0; // la sombra del suelo es más transparente
+  const fit = findFit(mask, w, h, markZones(equipLines));
+  if (!fit) return null;
+  const out = document.createElement('canvas');
+  out.width = src.width; out.height = src.height;
+  const o = out.getContext('2d');
+  if (!o) return null;
+  const W = src.width, H = src.height;
+  o.setTransform(fit.s, 0, 0, fit.s, W / 2 - fit.s * W / 2 + fit.dx * W, H - fit.s * H);
+  o.drawImage(src, 0, 0);
+  return out.toDataURL('image/webp', 0.85);
 }
 
 /** Miniatura de un ejercicio todavía sin animación: el icono de su material (o de fuerza) en gris. */
