@@ -5,7 +5,7 @@ import { SECTION_IDS, SECTION_TITLES, usesWeight, type ExerciseDef, type Section
 import type { App, Screen } from '../App';
 import { append, clear, h, humanDuration, kg, plural, promptDialog, weightDialog } from '../dom';
 import { icon, SECTION_STYLE, zoneIcon } from '../icons';
-import { badgeList, equipChips, sidesMark } from '../components/badges';
+import { badgeList, equipChips } from '../components/badges';
 import { canDo } from '../../domain/equipment';
 import { sortableList } from '../components/sortable';
 import { applyOrder, moveItem } from '../../domain/ordering';
@@ -170,7 +170,7 @@ export class RoutineScreen implements Screen {
   /** Miniatura pequeña para las filas ordenables. */
   private miniThumb(ex: ExerciseDef): HTMLElement {
     const img = h('img', { alt: '', class: 'thumb', 'data-id': ex.id });
-    const fig = h('div', { class: 'thumb-box mini' }, img, ex.oneSided ? sidesMark(true) : null);
+    const fig = h('div', { class: 'thumb-box mini' }, img);
     this.io.observe(fig);
     return fig;
   }
@@ -186,6 +186,7 @@ export class RoutineScreen implements Screen {
         this.miniThumb(ex),
         h('div', { class: 'row-text' },
           h('strong', {}, ex.name),
+          ex.oneSided ? h('span', { class: 'by-sides' }, icon('sides'), 'por lados') : null,
           h('div', { class: 'stepper inline' },
             h('button', { 'aria-label': 'Menos tiempo', onclick: () => this.adjust(ex, -STEP_SECONDS) }, '−'),
             h('span', { class: 'secs' }, `${it.seconds} s`),
@@ -206,7 +207,7 @@ export class RoutineScreen implements Screen {
   private renderSorting(): void {
     const exs = this.ordered(this.section);
     const rows = exs.map((ex) => ({
-      content: h('div', { class: 'row-ex' }, this.miniThumb(ex), h('div', { class: 'row-text' }, h('strong', {}, ex.name), h('span', { class: 'muted small' }, ex.zone))),
+      content: h('div', { class: 'row-ex' }, this.miniThumb(ex), h('div', { class: 'row-text' }, h('strong', {}, ex.name), h('span', { class: 'muted small' }, ex.zone), ex.oneSided ? h('span', { class: 'by-sides' }, icon('sides'), 'por lados') : null)),
       label: ex.name,
     }));
     this.list.append(sortableList(rows, (from, to) => {

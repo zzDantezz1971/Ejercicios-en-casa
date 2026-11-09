@@ -243,6 +243,8 @@ button:focus-visible, input:focus-visible, label:focus-within { outline: 2px sol
 .ex-zone { font-size: .8rem; color: var(--muted); padding: 0 10px; display: flex; flex-direction: column; gap: 2px; align-items: flex-start; }
 .by-sides { display: inline-flex; align-items: center; gap: 3px; color: var(--accent-2); }
 .by-sides .ico { width: 14px; height: 14px; }
+.row-text .by-sides { font-size: .8rem; }
+.detail-body .by-sides { display: flex; font-size: .9rem; margin: -4px 0 8px; }
 .badges { display: flex; flex-wrap: wrap; gap: 4px; padding: 2px 10px 0; }
 .badge { font-size: .68rem; font-weight: 700; border-radius: 6px; padding: 2px 7px; }
 .badge.good { color: var(--good); background: var(--good-soft); }
