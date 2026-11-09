@@ -14,7 +14,7 @@ export function muscleLines(load: Load): HTMLElement[] {
     // los 3 con menos tiempo (también los que no se han hecho nada), sin repetir los de arriba
     const low = MUSCLES.filter((m) => !shown.has(m)).sort((a, b) => t[a] - t[b]).slice(0, 3);
     const line = (cls: string, label: string, list: readonly string[]) =>
-      h('p', { class: 'mm-line' + cls }, h('span', { class: 'mu-dot ' + kind }), h('strong', {}, label), list.map((m) => MUSCLE_NAMES[m as keyof typeof MUSCLE_NAMES]).join(', '));
+      h('p', { class: 'mm-line' + cls }, h('span', { class: 'mu-dot ' + kind }), h('strong', {}, label), h('span', { class: 'mm-list' }, list.map((m) => MUSCLE_NAMES[m as keyof typeof MUSCLE_NAMES]).join(', ')));
     lines.push(line('', more, top));
     if (low.length) lines.push(line(' less', less, low));
   };

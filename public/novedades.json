@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-09T22:15:03Z",
+    "es": ["El aviso de versión nueva es un poco más grande.", "Músculos: en las cuatro líneas, la lista de músculos va siempre debajo del título."],
+    "ca": ["L'avís de versió nova és una mica més gran.", "Músculs: a les quatre línies, la llista de músculs va sempre sota el títol."],
+    "en": ["The new version notice is a little bigger.", "Muscles: in all four lines, the list of muscles always goes below the heading."]
+  },
+  {
     "fecha": "2026-11-09T22:08:15Z",
     "es": ["Músculos más y menos trabajados: ya no salen los minutos de cada músculo.", "Borrar todo el historial: ahora pide confirmarlo dos veces y recuerda que solo se puede recuperar con una copia de seguridad."],
     "ca": ["Músculs més i menys treballats: ja no surten els minuts de cada múscul.", "Esborrar tot l'historial: ara demana confirmar-ho dues vegades i recorda que només es pot recuperar amb una còpia de seguretat."],

@@ -737,6 +737,7 @@ button.hd-row { width: 100%; color: inherit; font: inherit; cursor: pointer; }
 .mm-img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; display: block; transform: scale(1.5); transform-origin: 50% 46%; }
 .mm-img:not([src]) { visibility: hidden; }
 .mm-line { margin: 0; font-size: .92rem; display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; }
+.mm-line .mm-list { flex-basis: 100%; }
 .mm-line .mu-dot { align-self: center; }
 .mu-dot.work { background: #E5142A; }
 .mu-dot.stretch { background: #00B8A8; }
@@ -811,6 +812,10 @@ button.hd-row { width: 100%; color: inherit; font: inherit; cursor: pointer; }
   background: var(--surface); border: 1px solid var(--accent); box-shadow: 0 10px 30px rgb(0 0 0 / .45); font-weight: 700;
 }
 .update-banner span { flex: 1; }
+/* un poco más grande para que se vea bien */
+.update-banner { padding: 16px 14px 16px 20px; gap: 12px; font-size: 1.12rem; border-radius: 20px; border-width: 2px; }
+.update-banner .btn { font-size: 1.05rem; padding: 12px 18px; }
+.update-banner .icon-btn { width: 44px; height: 44px; font-size: 1.1rem; }
 body:has(.screen.workout) .update-banner { display: none; }
 
 /* Entrenamiento: fundido entre ejercicios y pulso del anillo en los últimos segundos */
