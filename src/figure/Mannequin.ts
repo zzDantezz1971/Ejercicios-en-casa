@@ -169,7 +169,7 @@ export class MannequinScene {
   /** Maniquí de una sola pieza con piel (si se le pasan datos de malla). */
   private skinned: SkinnedFigure | null = null;
 
-  constructor(spec: MotionSpec, private readonly pal: Palette = DEFAULT_PALETTE, side: Side = undefined, skin?: SkinData, anatomy?: { L: number[]; R: number[]; heat?: boolean }) {
+  constructor(spec: MotionSpec, private readonly pal: Palette = DEFAULT_PALETTE, side: Side = undefined, skin?: SkinData, anatomy?: { L: number[]; R: number[] }) {
     this.motion = new Motion(spec, side);
     this.skinData = skin;
     const view = this.motion.view;
@@ -185,7 +185,7 @@ export class MannequinScene {
         // de frente y desde arriba el cuerpo 3D tiene izquierda y derecha cambiadas respecto a la animación
         const swap = view !== 'side' && !(view === 'top' && spec.prone);
         const w = swap ? { L: anatomy.R, R: anatomy.L } : anatomy;
-        this.skinned.mesh.material = anatomyMaterial(this.skinned.mesh.geometry, this.skinData, w, anatomy.heat);
+        this.skinned.mesh.material = anatomyMaterial(this.skinned.mesh.geometry, this.skinData, w);
         old.dispose();
       }
       // puño para agarrar mancuernas; mano casi abierta para apoyarse

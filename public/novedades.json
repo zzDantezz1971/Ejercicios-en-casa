@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-09T23:05:51Z",
+    "es": ["Músculos de los resúmenes: vuelven los colores rojos (claro = poco, fuerte = mucho), ahora bien repartidos para ver la diferencia entre músculos, sin leyenda."],
+    "ca": ["Músculs dels resums: tornen els colors vermells (clar = poc, fort = molt), ara ben repartits per veure la diferència entre músculs, sense llegenda."],
+    "en": ["Muscles in the summaries: the red colours are back (light = less, strong = more), now well spread out so you can see the difference between muscles, with no legend."]
+  },
+  {
     "fecha": "2026-11-09T23:01:06Z",
     "es": ["Músculos de los resúmenes: el muñeco es ahora un mapa de calor (amarillo = poco, naranja, rojo = mucho) con su leyenda, para distinguir bien lo más y lo menos trabajado. Sin sombra en el suelo."],
     "ca": ["Músculs dels resums: el ninot ara és un mapa de calor (groc = poc, taronja, vermell = molt) amb la seva llegenda, per distingir bé el més i el menys treballat. Sense ombra a terra."],
