@@ -42,7 +42,7 @@ export function humanDuration(total: number): string {
 }
 
 /** Diálogo de confirmación dentro de la página. */
-export function confirmDialog(text: string, ok: string, cancel = 'Cancelar'): Promise<boolean> {
+export function confirmDialog(text: string, ok: string, cancel = 'Cancelar', danger = false): Promise<boolean> {
   return new Promise((resolve) => {
     const close = (v: boolean) => {
       wrap.remove();
@@ -57,11 +57,12 @@ export function confirmDialog(text: string, ok: string, cancel = 'Cancelar'): Pr
         h('p', {}, text),
         h('div', { class: 'dialog-actions' },
           cancel ? h('button', { class: 'btn ghost', onclick: () => close(false) }, cancel) : null,
-          h('button', { class: 'btn primary', onclick: () => close(true) }, ok)),
+          h('button', { class: danger ? 'btn primary danger-solid' : 'btn primary', onclick: () => close(true) }, ok)),
       ),
     );
     document.body.append(wrap);
-    (wrap.querySelector('.btn.primary') as HTMLButtonElement).focus();
+    // si es peligroso, el foco va a Cancelar
+    (wrap.querySelector(danger && cancel ? '.btn.ghost' : '.btn.primary') as HTMLButtonElement).focus();
   });
 }
 

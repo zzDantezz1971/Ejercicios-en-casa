@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-09T22:08:15Z",
+    "es": ["Músculos más y menos trabajados: ya no salen los minutos de cada músculo.", "Borrar todo el historial: ahora pide confirmarlo dos veces y recuerda que solo se puede recuperar con una copia de seguridad."],
+    "ca": ["Músculs més i menys treballats: ja no surten els minuts de cada múscul.", "Esborrar tot l'historial: ara demana confirmar-ho dues vegades i recorda que només es pot recuperar amb una còpia de seguretat."],
+    "en": ["Most and least worked muscles: the minutes for each muscle are no longer shown.", "Delete whole history: it now asks you to confirm twice and reminds you it can only be recovered from a backup."]
+  },
+  {
     "fecha": "2026-11-09T21:56:19Z",
     "es": ["Historial: «Mejor semana» pasa a ser «Mejor mes».", "Resúmenes: ya no hay selector de semana o mes dentro (cada botón abre el suyo), y el tiempo por apartado es el total, con descansos incluidos."],
     "ca": ["Historial: «Millor setmana» passa a ser «Millor mes».", "Resums: ja no hi ha selector de setmana o mes a dins (cada botó obre el seu), i el temps per apartat és el total, amb els descansos inclosos."],

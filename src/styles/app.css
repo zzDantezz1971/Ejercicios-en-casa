@@ -1210,3 +1210,6 @@ button.wd:active .wd-dot { transform: scale(.92); }
 .rec-row.two .rec-top .stat-value { font-size: 1.7rem; }
 .rec-label { font-size: .8rem; font-weight: 600; line-height: 1.2; }
 .rec-sub { font-size: .72rem; color: var(--muted); line-height: 1.2; }
+
+/* Confirmación peligrosa (última antes de borrar): botón rojo */
+.btn.primary.danger-solid { background: var(--danger); border-color: var(--danger); color: #FFFFFF; box-shadow: none; }

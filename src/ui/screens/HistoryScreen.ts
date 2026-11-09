@@ -51,7 +51,10 @@ export class HistoryScreen implements Screen {
       h('button', {
         class: 'btn danger block',
         onclick: async () => {
-          if (await confirmDialog('¿Borrar todo el historial? No se puede deshacer.', 'Borrar')) {
+          // doble confirmación: es irreversible (salvo con una copia de seguridad)
+          const n = this.app.store.history.length;
+          if (!(await confirmDialog('¿Borrar todo el historial? No se puede deshacer. Solo podrás recuperarlo si tienes una copia de seguridad (Configuración → Copia de seguridad).', 'Continuar'))) return;
+          if (await confirmDialog(`¿Seguro? Se borrarán ${plural(n, 'entrenamiento', 'entrenamientos')}, con tus récords, rachas y resúmenes. Esta es la última confirmación.`, 'Sí, borrar todo', 'Cancelar', true)) {
             this.app.store.clearHistory();
             this.render();
           }
