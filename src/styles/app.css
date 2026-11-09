@@ -596,6 +596,9 @@ button:focus-visible, input:focus-visible, label:focus-within { outline: 2px sol
 .hr-chip strong { font: 700 1.5rem/1 var(--display); font-variant-numeric: tabular-nums; }
 .hr-chip span { color: var(--muted); }
 .hr-chip.on strong + span { font-size: .78rem; }
+/* sin reloj conectado (o conectando): pastilla pequeña para no tapar al maniquí */
+.hr-chip.off, .hr-chip.connecting, .hr-chip.lost { top: 8px; right: 8px; gap: 4px; padding: 4px 9px; font-size: .68rem; font-weight: 600; opacity: .85; }
+.hr-chip.off .ico, .hr-chip.connecting .ico, .hr-chip.lost .ico { width: 13px; height: 13px; }
 .hr-chip.off .ico, .hr-chip.lost .ico, .hr-chip.connecting .ico { color: var(--muted); }
 .hr-chip.beat .ico { animation: hr-beat 1s ease-in-out infinite; }
 @keyframes hr-beat { 0%, 100% { transform: scale(1); } 15% { transform: scale(1.25); } 30% { transform: scale(1); } }

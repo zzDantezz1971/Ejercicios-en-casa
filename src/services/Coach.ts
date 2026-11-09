@@ -12,9 +12,9 @@ const VT: Record<VoiceLang, {
   prepare: string; round: string; half: string; rest: string; secDone: string; sw: string; done: string; doneEarly: string; count: string[];
 }> = {
   es: { prepare: '{s}. Prepárate. Primer ejercicio: {x}', round: 'Vuelta {a} de {b}. ', half: '. A mitad, cambio de lado', rest: 'Descanso. Siguiente: {x}',
-    secDone: '{a} terminado. Toca la pantalla para seguir con {b}', sw: 'Cambia de lado', done: '¡Buen trabajo{n}! Entrenamiento finalizado.', doneEarly: '¡Bien hecho{n}! Entrenamiento finalizado.', count: ['', 'uno', 'dos', 'tres'] },
+    secDone: '{a} terminado. Toca la pantalla para seguir con {b}', sw: 'Cambio de lado', done: '¡Buen trabajo{n}! Entrenamiento finalizado.', doneEarly: '¡Bien hecho{n}! Entrenamiento finalizado.', count: ['', 'uno', 'dos', 'tres'] },
   ca: { prepare: '{s}. Prepara’t. Primer exercici: {x}', round: 'Volta {a} de {b}. ', half: '. A la meitat, canvi de costat', rest: 'Descans. Següent: {x}',
-    secDone: '{a}: fet. Toca la pantalla per continuar amb {b}', sw: 'Canvia de costat', done: 'Bona feina{n}! Entrenament acabat.', doneEarly: 'Ben fet{n}! Entrenament acabat.', count: ['', 'un', 'dos', 'tres'] },
+    secDone: '{a}: fet. Toca la pantalla per continuar amb {b}', sw: 'Canvi de costat', done: 'Bona feina{n}! Entrenament acabat.', doneEarly: 'Ben fet{n}! Entrenament acabat.', count: ['', 'un', 'dos', 'tres'] },
   en: { prepare: '{s}. Get ready. First exercise: {x}', round: 'Round {a} of {b}. ', half: '. Switch sides halfway', rest: 'Rest. Next up: {x}',
     secDone: '{a} done. Tap the screen to continue with {b}', sw: 'Switch sides', done: 'Great job{n}! Workout complete.', doneEarly: 'Well done{n}! Workout complete.', count: ['', 'one', 'two', 'three'] },
 };
@@ -38,8 +38,7 @@ export class Coach {
         switch (cue.type) {
           case 'count':
             sounds.count();
-            // en el cambio de lado, el «tres» lo tapa el «Cambia de lado»: la voz dice solo «dos, uno»
-            if (opts.countdown && cue.n >= 1 && cue.n <= 3 && !(cue.side && cue.n === 3)) voice.say(T().count[cue.n], true);
+            if (opts.countdown && cue.n >= 1 && cue.n <= 3) voice.say(T().count[cue.n], true);
             break;
           case 'go':
             sounds.start();

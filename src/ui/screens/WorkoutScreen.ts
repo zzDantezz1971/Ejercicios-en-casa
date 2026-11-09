@@ -78,7 +78,7 @@ export class WorkoutScreen implements Screen {
     });
 
     this.session.on('step', ({ step }) => this.onStep(step));
-    this.session.on('tick', (t) => this.onTick(t.remaining, t.elapsed, t.duration, t.step, t.switching));
+    this.session.on('tick', (t) => this.onTick(t.remaining, t.elapsed, t.duration, t.step, t.switching, t.announcing));
     this.session.on('status', (s) => this.onStatus(s));
     this.session.on('cue', (c) => {
       const step = this.session.current;
@@ -205,7 +205,7 @@ export class WorkoutScreen implements Screen {
     this.setSide(0);
     if (this.switchingShown) {
       this.switchingShown = false;
-      this.el.classList.remove('switching');
+      this.el.classList.remove('switching', 'announcing');
       this.view?.freeze(false);
     }
     const index = this.session.currentIndex;
@@ -262,19 +262,20 @@ export class WorkoutScreen implements Screen {
     }
   }
 
-  private onTick(remaining: number, elapsed: number, duration: number, step: Step, switching?: number): void {
-    // cambio de lado: el tiempo está parado y el anillo muestra la cuenta atrás de 3 s
+  private onTick(remaining: number, elapsed: number, duration: number, step: Step, switching?: number, announcing = false): void {
+    // cambio de lado: el tiempo está parado; primero se anuncia y luego el anillo muestra la cuenta atrás de 3 s
     const sw = switching !== undefined;
     if (sw !== this.switchingShown) {
       this.switchingShown = sw;
       this.el.classList.toggle('switching', sw);
-      this.ui.phase.replaceChildren(...(sw ? [icon('sides'), 'Cambia de lado'] : []));
+      this.ui.phase.replaceChildren(...(sw ? [icon('sides'), 'Cambio de lado'] : []));
       this.view?.freeze(sw);
     }
-    this.ui.time.textContent = sw ? String(Math.ceil(switching)) : step.kind === 'exercise' ? mmss(Math.ceil(remaining)) : String(Math.ceil(remaining));
+    this.el.classList.toggle('announcing', announcing);
+    this.ui.time.textContent = sw && !announcing ? String(Math.ceil(switching)) : step.kind === 'exercise' ? mmss(Math.ceil(remaining)) : String(Math.ceil(remaining));
     const k = Math.min(1, elapsed / duration);
     this.ui.ringFg.setAttribute('stroke-dashoffset', String(RING_LEN * (1 - k)));
-    const left = sw ? switching : remaining;
+    const left = sw ? (announcing ? Infinity : switching) : remaining;
     const last3 = left <= 3 && left > 0;
     this.el.classList.toggle('last3', last3);
     // un pulso del anillo con cada segundo de la cuenta atrás (final o del cambio de lado)

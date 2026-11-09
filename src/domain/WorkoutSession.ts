@@ -1,6 +1,5 @@
 import { Emitter } from './Emitter';
-import { SWITCH_PAUSE, type Step, type WorkoutPlan } from './WorkoutPlan';
-export { SWITCH_PAUSE };
+import { SWITCH_PAUSE, SWITCH_TOTAL, type Step, type WorkoutPlan } from './WorkoutPlan';
 import type { SectionId } from './types';
 
 export type SessionStatus = 'idle' | 'running' | 'paused' | 'waiting' | 'finished';
@@ -42,8 +41,10 @@ export interface TickInfo {
   elapsed: number;
   remaining: number;
   duration: number;
-  /** Durante el cambio de lado: segundos que quedan de su cuenta atrás. */
+  /** Durante el cambio de lado: segundos que quedan de su cuenta atrás (3 mientras se anuncia). */
   switching?: number;
+  /** Durante el cambio de lado: aún se está anunciando, la cuenta atrás no ha empezado. */
+  announcing?: boolean;
 }
 
 type Events = {
@@ -161,14 +162,15 @@ export class WorkoutSession extends Emitter<Events> {
         this.switched = true;
         this.emit('cue', { type: 'switch' });
       }
-      const left = switchAt + SWITCH_PAUSE - raw;
+      const left = switchAt + SWITCH_TOTAL - raw;
       if (left > 0) {
-        const n = Math.ceil(left);
-        if (n < this.sideCount) {
+        const announcing = left > SWITCH_PAUSE;
+        const n = Math.ceil(Math.min(left, SWITCH_PAUSE));
+        if (!announcing && n < this.sideCount) {
           this.emit('cue', { type: 'count', n, side: true });
           this.sideCount = n;
         }
-        this.emit('tick', { step, elapsed: switchAt, remaining: step.seconds - switchAt, duration: step.seconds, switching: left });
+        this.emit('tick', { step, elapsed: switchAt, remaining: step.seconds - switchAt, duration: step.seconds, switching: Math.min(left, SWITCH_PAUSE), announcing });
         return;
       }
       if (!this.resumed) {
@@ -196,11 +198,11 @@ export class WorkoutSession extends Emitter<Events> {
     }
   }
 
-  /** Tiempo del paso sin contar la cuenta atrás del cambio de lado. */
+  /** Tiempo del paso sin contar el cambio de lado (anuncio + cuenta atrás). */
   private effective(step: Step, raw: number): number {
     const at = step.kind === 'exercise' ? step.switchAt : undefined;
     if (at === undefined || raw <= at) return raw;
-    return Math.max(at, raw - SWITCH_PAUSE);
+    return Math.max(at, raw - SWITCH_TOTAL);
   }
 
   /** Guarda el tiempo hecho en el ejercicio actual antes de cambiar de paso. */

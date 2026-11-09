@@ -52,7 +52,7 @@ export class DetailScreen implements Screen {
         ex.equip?.length ? h('div', { class: 'detail-equip' }, h('strong', {}, 'Necesita'), equipChips(ex.equip, new Set<string>(app.store.settings.equipment)))
           : h('div', { class: 'detail-equip' }, h('span', { class: 'equip-chip' }, 'Sin material')),
         musclesInfo(ex.muscles),
-        ex.oneSided ? h('p', { class: 'note' }, icon('sides'), 'Se hace por lados: a mitad del tiempo el reloj se para 3 segundos para que cambies de lado.') : null,
+        ex.oneSided ? h('p', { class: 'note' }, icon('sides'), 'Se hace por lados: a mitad del tiempo el reloj se para, se avisa del cambio de lado y hay una cuenta atrás de 3 segundos.') : null,
         this.weights,
         d
           ? h('div', { class: 'howto' },

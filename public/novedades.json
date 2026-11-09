@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-10T15:20:00Z",
+    "es": ["Cambio de lado: primero se dice «Cambio de lado» y, al acabar la frase, empieza la cuenta atrás de 3 segundos.", "Entrenamiento: el botón «Conectar reloj» es más pequeño y ya no tapa al maniquí."],
+    "ca": ["Canvi de costat: primer es diu «Canvi de costat» i, quan acaba la frase, comença el compte enrere de 3 segons.", "Entrenament: el botó «Connecta el rellotge» és més petit i ja no tapa el maniquí."],
+    "en": ["Switching sides: it now says \"Switch sides\" first, and the 3-second countdown starts once it has finished.", "Workout: the \"Connect watch\" button is smaller and no longer covers the figure."]
+  },
+  {
     "fecha": "2026-11-10T15:00:00Z",
     "es": ["Ejercicios por lados: a mitad de tiempo el reloj se para, hay una cuenta atrás de 3 segundos para cambiar de lado y después sigue la otra mitad."],
     "ca": ["Exercicis per costats: a la meitat del temps el rellotge s'atura, hi ha un compte enrere de 3 segons per canviar de costat i després continua l'altra meitat."],
