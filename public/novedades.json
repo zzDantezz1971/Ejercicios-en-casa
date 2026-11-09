@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-09T21:16:24Z",
+    "es": ["Historial, detalle de un entrenamiento: arriba, duración, calorías y tiempo haciendo ejercicio (fuera «Hechos» y «Saltados»).", "Historial: toca cualquier ejercicio de la lista para ver su ficha, con el muñeco y cómo se hace."],
+    "ca": ["Historial, detall d'un entrenament: a dalt, durada, calories i temps fent exercici (fora «Fets» i «Saltats»).", "Historial: toca qualsevol exercici de la llista per veure'n la fitxa, amb el ninot i com es fa."],
+    "en": ["History, workout detail: duration, calories and time spent exercising at the top (\"Done\" and \"Skipped\" are gone).", "History: tap any exercise in the list to see its card, with the figure and how to do it."]
+  },
+  {
     "fecha": "2026-11-09T21:05:43Z",
     "es": ["Tiempo del entrenamiento: el rato que lo tienes en pausa ya no cuenta (ni en el historial, ni en los minutos de la semana, ni en las calorías)."],
     "ca": ["Temps de l'entrenament: l'estona que el tens en pausa ja no compta (ni a l'historial, ni als minuts de la setmana, ni a les calories)."],

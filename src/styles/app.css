@@ -526,6 +526,11 @@ button:focus-visible, input:focus-visible, label:focus-within { outline: 2px sol
 .hd-row.skipped .hd-mark { background: var(--surface-2); color: var(--muted); }
 .hd-text { flex: 1; min-width: 0; display: flex; flex-direction: column; }
 .hd-secs { font-variant-numeric: tabular-nums; font-weight: 700; white-space: nowrap; }
+button.hd-row { width: 100%; text-align: left; color: inherit; font: inherit; cursor: pointer; }
+.hd-chev { width: 16px; height: 16px; color: var(--muted); flex: none; margin-right: -4px; }
+.hd-stats .stat:nth-child(2) .ico { color: #FF7A45; }
+.hd-stats.two { grid-template-columns: repeat(2, 1fr); }
+.hd-kcal-how { margin-top: -4px; }
 .hd-body .btn.block { margin-top: 6px; }
 .backup { display: flex; flex-direction: column; gap: 10px; padding: 14px; }
 .backup-head { display: flex; gap: 12px; align-items: flex-start; }

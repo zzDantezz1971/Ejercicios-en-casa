@@ -75,6 +75,8 @@ const ROWS: Row[] = [
   ['150 min a la semana es lo recomendado', 'El que es recomana són 150 min a la setmana', '150 min a week is the recommendation'],
   ['por lados', 'per costats', 'each side'],
   ['duración', 'durada', 'duration'],
+  ['calorías', 'calories', 'calories'],
+  ['en ejercicio', 'fent exercici', 'exercising'],
   ['hechos', 'fets', 'done'],
   ['saltados', 'saltats', 'skipped'],
   ['inicio', 'inici', 'start'],

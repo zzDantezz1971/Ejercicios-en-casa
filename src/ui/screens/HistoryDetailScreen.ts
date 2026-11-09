@@ -6,6 +6,7 @@ import { confirmDialog, h, humanDuration, kg, mmss } from '../dom';
 import { icon, SECTION_STYLE } from '../icons';
 import { startWorkout } from '../components/startWorkout';
 import { checkAndCelebrate } from '../components/medals';
+import { DetailScreen } from './DetailScreen';
 
 /** Detalle de un entrenamiento del historial: qué se hizo, cuánto tiempo y repetirlo. */
 export class HistoryDetailScreen implements Screen {
@@ -17,7 +18,8 @@ export class HistoryDetailScreen implements Screen {
     const end = new Date(d.getTime() + (e.durationSec + (e.pausedSec ?? 0)) * 1000);
     const hm = (x: Date) => x.toLocaleTimeString(LOCALE, { hour: '2-digit', minute: '2-digit' });
     const items = e.items ?? [];
-    const skipped = items.filter((i) => !i.completed).length;
+    const activeSec = items.reduce((n, i) => n + i.seconds, 0);
+    const cal = app.store.caloriesFor(e);
 
     const list: HTMLElement[] = [];
     for (const s of SECTION_IDS) {
@@ -30,12 +32,15 @@ export class HistoryDetailScreen implements Screen {
       list.push(head);
       for (const it of its) {
         const ex = app.catalog.get(it.exerciseId);
-        const r = h('div', { class: 'card hd-row' + (it.completed ? '' : ' skipped') },
+        // tocar un ejercicio abre su ficha (muñeco, cómo se hace, músculos…)
+        const r = h(ex ? 'button' : 'div', { class: 'card hd-row' + (it.completed ? '' : ' skipped') + (ex ? ' tappable' : ''),
+          ...(ex ? { 'aria-label': `Cómo se hace: ${ex.name}`, onclick: () => app.push(new DetailScreen(app, ex)) } : {}) },
           h('span', { class: 'hd-mark' }, icon(it.completed ? 'check' : 'next')),
           h('div', { class: 'hd-text' },
             h('strong', {}, ex?.name ?? 'Ejercicio eliminado'),
             h('span', { class: 'muted small' }, it.completed ? 'Hecho' : it.seconds > 0 ? 'Saltado a medias' : 'Saltado', it.weight ? ` · ${kg(it.weight)} por mancuerna` : '')),
-          h('span', { class: 'hd-secs' }, `${mmss(it.seconds)}`, h('span', { class: 'muted small' }, ` / ${mmss(it.planned)}`)));
+          h('span', { class: 'hd-secs' }, `${mmss(it.seconds)}`, h('span', { class: 'muted small' }, ` / ${mmss(it.planned)}`)),
+          ex ? icon('chevron', 'ico hd-chev') : null);
         r.style.setProperty('--sec', st.color);
         list.push(r);
       }
@@ -50,12 +55,13 @@ export class HistoryDetailScreen implements Screen {
         e.routineName ? h('span', { class: 'h-name' }, e.routineName) : null,
         h('h2', { class: 'hd-date' }, d.toLocaleDateString(LOCALE, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })),
         h('p', { class: 'muted' }, `De ${hm(d)} a ${hm(end)}`),
-        h('section', { class: 'stats-row' },
+        h('section', { class: 'stats-row hd-stats' + (items.length ? '' : ' two') },
           stat('clock', humanDuration(e.durationSec), 'duración'),
-          stat('check', `${e.exercisesDone}/${e.exercisesPlanned}`, 'hechos'),
-          stat('next', String(items.length ? skipped : e.exercisesPlanned - e.exercisesDone), 'saltados')),
+          stat('flame', cal ? `${cal.kcal} kcal` : '—', 'calorías'),
+          // tiempo haciendo ejercicios (sin descansos ni cuentas atrás)
+          items.length ? stat('bolt', humanDuration(activeSec), 'en ejercicio') : null),
+        kcalNote(e, cal),
         !e.completed ? h('p', { class: 'note' }, icon('info'), 'Se terminó antes de acabar la tabla.') : null,
-        kcalNote(e, app),
         e.heart ? heartCard(e.heart) : null,
         ...(items.length
           ? list
@@ -124,11 +130,11 @@ export class HistoryDetailScreen implements Screen {
   }
 }
 
-function kcalNote(e: HistoryEntry, app: App): HTMLElement {
-  const c = app.store.caloriesFor(e);
+function kcalNote(e: HistoryEntry, c: ReturnType<App['store']['caloriesFor']>): HTMLElement {
   if (!c) return h('p', { class: 'muted small' }, 'Anota tu peso en Mis datos para ver las calorías.');
-  return h('p', { class: 'kcal-summary left' }, icon('flame'), `Unas ${c.kcal} kcal`,
-    h('span', { class: 'muted small' }, (c.method === 'pulso' ? ' · calculadas con tu pulso' : ' · estimadas por tipo de ejercicio y tiempo') + (e.weightKg ? ` · con ${String(e.weightKg).replace('.', DEC)} kg` : '')));
+  return h('p', { class: 'muted small hd-kcal-how' },
+    h('span', {}, c.method === 'pulso' ? 'calculadas con tu pulso' : 'estimadas por tipo de ejercicio y tiempo'),
+    e.weightKg ? ' · ' : null, e.weightKg ? h('span', {}, `con ${String(e.weightKg).replace('.', DEC)} kg`) : null);
 }
 
 /** Pulso medio, máximo y mínimo, con la gráfica de la sesión. */
