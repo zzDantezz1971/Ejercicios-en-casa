@@ -76,6 +76,8 @@ const ROWS: Row[] = [
   ['por lados', 'per costats', 'each side'],
   ['duración', 'durada', 'duration'],
   ['calorías', 'calories', 'calories'],
+  ['Calorías calculadas con tu pulso', 'Calories calculades amb el teu pols', 'Calories calculated from your heart rate'],
+  ['Calorías estimadas por tipo de ejercicio y tiempo', 'Calories estimades segons el tipus d’exercici i el temps', 'Calories estimated from exercise type and time'],
   ['en ejercicio', 'fent exercici', 'exercising'],
   ['hechos', 'fets', 'done'],
   ['saltados', 'saltats', 'skipped'],

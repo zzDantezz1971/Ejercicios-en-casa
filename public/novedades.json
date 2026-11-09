@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-09T21:20:55Z",
+    "es": ["Historial: la nota de debajo de los recuadros ahora dice «Calorías calculadas con tu pulso» (o «estimadas…»)."],
+    "ca": ["Historial: la nota de sota els requadres ara diu «Calories calculades amb el teu pols» (o «estimades…»)."],
+    "en": ["History: the note under the boxes now reads \"Calories calculated from your heart rate\" (or \"estimated…\")."]
+  },
+  {
     "fecha": "2026-11-09T21:18:23Z",
     "es": ["Historial: los ejercicios de un entrenamiento salen en cuadrícula, 2 o 3 por fila según el ancho del móvil."],
     "ca": ["Historial: els exercicis d'un entrenament surten en quadrícula, 2 o 3 per fila segons l'amplada del mòbil."],
