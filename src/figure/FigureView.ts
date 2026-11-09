@@ -164,9 +164,11 @@ export class Thumbnails {
   bodyMap(weights: number[], back: boolean): Promise<string> {
     const skin = getSkin();
     if (!skin) return Promise.resolve('');
-    return this.enqueue(`map:${back ? 1 : 0}:${weights.map((w) => w.toFixed(2)).join(',')}`, () => {
+    return this.enqueue(`heat:${back ? 1 : 0}:${weights.map((w) => w.toFixed(2)).join(',')}`, () => {
       const r = this.ensureRenderer();
-      const sc = new MannequinScene(BODY_SPEC, this.palette, undefined, skin, { L: weights, R: weights });
+      const sc = new MannequinScene(BODY_SPEC, this.palette, undefined, skin, { L: weights, R: weights, heat: true });
+      // sin sombra en el suelo (ensuciaba el texto de debajo)
+      sc.scene.traverse((o) => { if ((o as THREE.Mesh).material instanceof THREE.ShadowMaterial) o.visible = false; });
       sc.azimuth = back ? 180 : 0;
       sc.elevation = 6;
       sc.setAspect(this.w / this.h);

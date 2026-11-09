@@ -55,11 +55,12 @@ function b64(s: string): Uint8Array {
 const N = MUSCLES.length;
 
 /** Material del maniquí anatomía. */
-export function anatomyMaterial(g: THREE.BufferGeometry, d: SkinData, w: { L: number[]; R: number[] }): THREE.Material {
+/** `heat`: mapa de calor del resumen (amarillo = poco, naranja, rojo = mucho) en vez del rojo único del ejercicio. */
+export function anatomyMaterial(g: THREE.BufferGeometry, d: SkinData, w: { L: number[]; R: number[] }, heat = false): THREE.Material {
   if (!g.getAttribute('aPart') && d.part) g.setAttribute('aPart', new THREE.BufferAttribute(Float32Array.from(b64(d.part)), 1));
   const P = (k: string, i: 0 | 1) => new THREE.Vector3(...(d.rest[k][i] as [number, number, number]));
   const uniforms = {
-    uWL: { value: w.L }, uWR: { value: w.R },
+    uWL: { value: w.L }, uWR: { value: w.R }, uHeat: { value: heat ? 1 : 0 },
     uShoL: { value: P('uaL', 0) }, uShoR: { value: P('uaR', 0) }, uElL: { value: P('uaL', 1) }, uElR: { value: P('uaR', 1) },
     uWrL: { value: P('faL', 1) }, uWrR: { value: P('faR', 1) },
     uHipL: { value: P('thL', 0) }, uHipR: { value: P('thR', 0) }, uKnL: { value: P('thL', 1) }, uKnR: { value: P('thR', 1) },
@@ -77,7 +78,7 @@ varying vec3 vRest;
 flat varying float vPart;
 uniform float uWL[${N}], uWR[${N}];
 uniform vec3 uShoL, uShoR, uElL, uElR, uWrL, uWrR, uHipL, uHipR, uKnL, uKnR, uAnL, uAnR;
-uniform float uWaistY, uShortT;
+uniform float uWaistY, uShortT, uHeat;
 vec3 gHi;
 float band(float v, float a, float b, float s) { return smoothstep(a - s, a + s, v) * (1.0 - smoothstep(b - s, b + s, v)); }
 float along(vec3 p, vec3 a, vec3 dir) { return dot(p - a, dir) / dot(dir, dir); }
@@ -157,6 +158,15 @@ vec3 anatomy() {
   vec3 red = vec3(0.9, 0.08, 0.16), teal = vec3(0.0, 0.72, 0.66);
   float k = shorts ? 0.5 : 1.0;
   float wk = clamp(work * k, 0.0, 1.0), st = clamp(stretch * k, 0.0, 1.0);
+  if (uHeat > 0.5) {
+    // mapa de calor: amarillo (poco) → naranja → rojo (mucho), siempre bien visible
+    float hw = clamp(work, 0.0, 1.0);
+    vec3 heatC = hw < 0.5 ? mix(vec3(1.0, 0.85, 0.2), vec3(1.0, 0.5, 0.1), hw / 0.5) : mix(vec3(1.0, 0.5, 0.1), vec3(0.9, 0.06, 0.12), (hw - 0.5) / 0.5);
+    float on = smoothstep(0.0, 0.05, work);
+    c = mix(c, heatC, on * k * 0.92);
+    gHi = heatC * on * k * 0.3;
+    return c;
+  }
   c = mix(c, red, wk);
   c = mix(c, teal, st);
   c *= 1.0 - 0.28 * lines * max(wk, st);

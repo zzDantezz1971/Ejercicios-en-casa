@@ -1230,3 +1230,9 @@ button.wd:active .wd-dot { transform: scale(.92); }
 .rm-row > .btn, .rm-row > .bp-done { grid-column: 2; justify-self: end; }
 .rm-row + .rm-row { border-top: 1px solid var(--line); padding-top: 12px; }
 .reminders .dialog-actions { margin-top: 0; }
+
+/* Mapa de calor de músculos: leyenda y puntos a juego (rojo = más, amarillo = menos) */
+.mm-legend { display: flex; align-items: center; gap: 8px; font-size: .75rem; color: var(--muted); margin: 2px 4px 4px; }
+.mm-grad { flex: 1; height: 8px; border-radius: 999px; background: linear-gradient(90deg, #FFD933, #FF801A 50%, #E60F1F); }
+.muscle-map .mm-line .mu-dot.work { background: #E60F1F; opacity: 1; }
+.muscle-map .mm-line.less .mu-dot.work { background: #FFD933; opacity: 1; }

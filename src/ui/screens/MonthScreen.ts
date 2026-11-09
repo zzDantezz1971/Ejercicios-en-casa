@@ -131,6 +131,8 @@ export class MonthScreen implements Screen {
       this.body.append(h('section', { class: 'card muscle-map' },
         h('div', { class: 'card-head' }, h('h3', {}, W ? 'Músculos de la semana' : 'Músculos del mes')),
         h('div', { class: 'mm-figs' }, img(false), img(true)),
+        // leyenda del mapa de calor
+        h('div', { class: 'mm-legend' }, h('span', {}, 'Poco'), h('span', { class: 'mm-grad' }), h('span', {}, 'Mucho')),
         ...muscleLines(load)));
     }
 

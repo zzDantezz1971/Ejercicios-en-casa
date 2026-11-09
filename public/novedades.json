@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-09T23:01:06Z",
+    "es": ["Músculos de los resúmenes: el muñeco es ahora un mapa de calor (amarillo = poco, naranja, rojo = mucho) con su leyenda, para distinguir bien lo más y lo menos trabajado. Sin sombra en el suelo."],
+    "ca": ["Músculs dels resums: el ninot ara és un mapa de calor (groc = poc, taronja, vermell = molt) amb la seva llegenda, per distingir bé el més i el menys treballat. Sense ombra a terra."],
+    "en": ["Muscles in the summaries: the figure is now a heat map (yellow = less, orange, red = more) with a legend, so you can clearly tell the most and least worked. No shadow on the floor."]
+  },
+  {
     "fecha": "2026-11-09T22:52:02Z",
     "es": ["Editar o crear una tabla: los apartados en dos filas (Calentamiento y Fuerza arriba, Abdominales y Estiramientos abajo)."],
     "ca": ["Editar o crear una taula: els apartats en dues files (Escalfament i Força a dalt, Abdominals i Estiraments a baix)."],

@@ -40,9 +40,15 @@ export function totalLoad(load: MuscleLoad): Record<Muscle, number> {
   return Object.fromEntries(MUSCLES.map((m) => [m, load.work[m] + load.stretch[m]])) as Record<Muscle, number>;
 }
 
-/** Pesos para colorear el maniquí: rojo más intenso cuanto más se ha trabajado (o estirado) cada músculo. */
+/**
+ * Pesos para el mapa de calor del maniquí (0 = nada; de poco a mucho hasta 1). Mezcla el puesto de cada
+ * músculo y su tiempo, para que los colores (amarillo → naranja → rojo) se repartan bien aunque un músculo
+ * tenga mucho más tiempo que los demás.
+ */
 export function loadWeights(load: MuscleLoad): number[] {
   const t = totalLoad(load);
-  const max = Math.max(1, ...MUSCLES.map((m) => t[m]));
-  return MUSCLES.map((m) => (t[m] > 0 ? 0.3 + 0.7 * (t[m] / max) : 0));
+  const done = MUSCLES.filter((m) => t[m] > 0).sort((a, b) => t[a] - t[b]);
+  const max = Math.max(1, ...done.map((m) => t[m]));
+  const rank = new Map(done.map((m, i) => [m, done.length > 1 ? i / (done.length - 1) : 1]));
+  return MUSCLES.map((m) => (t[m] > 0 ? Math.max(0.06, 0.6 * rank.get(m)! + 0.4 * (t[m] / max)) : 0));
 }

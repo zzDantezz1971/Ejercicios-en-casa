@@ -78,7 +78,8 @@ describe('Músculos trabajados', () => {
     expect(load.missing).toBe(1);
     const w = loadWeights(load);
     expect(w[MUSCLES.indexOf('biceps')]).toBe(1);
-    expect(w[MUSCLES.indexOf('cuadriceps')]).toBeCloseTo(0.3 + 0.7 * 0.75); // estirar cuenta como trabajar
+    expect(w[MUSCLES.indexOf('cuadriceps')]).toBeGreaterThan(w[MUSCLES.indexOf('antebrazo')]); // estirar cuenta como trabajar (30 s > 20 s)
+    expect(w[MUSCLES.indexOf('cuadriceps')]).toBeLessThan(1);
     expect(w[MUSCLES.indexOf('pecho')]).toBe(0);
   });
 });
