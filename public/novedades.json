@@ -1,5 +1,17 @@
 [
   {
+    "fecha": "2026-11-09T14:00:00Z",
+    "es": [
+      "Historial: la tarjeta Músculos muestra lo mismo que los resúmenes (más y menos trabajados, más y menos estirados)."
+    ],
+    "ca": [
+      "Historial: la targeta Músculs mostra el mateix que els resums (més i menys treballats, més i menys estirats)."
+    ],
+    "en": [
+      "History: the Muscles card now shows the same as the summaries (most and least worked, most and least stretched)."
+    ]
+  },
+  {
     "fecha": "2026-11-09T13:30:00Z",
     "es": [
       "Resumen de la semana y del mes: también se indican los músculos menos trabajados y los menos estirados, para saber qué te conviene trabajar más."

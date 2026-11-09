@@ -1,9 +1,10 @@
 import { LOCALE } from '../../i18n';
 import { loadWeights, muscleLoad } from '../../domain/muscleLoad';
 import { addMonths, addWeeks, monthKey, monthStart, monthStats, weekKey, weekStart, weekStats, type MonthStats } from '../../domain/monthSummary';
-import { MUSCLE_NAMES, MUSCLES } from '../../figure/anatomy';
+import { MUSCLES } from '../../figure/anatomy';
 import type { App, Screen } from '../App';
 import { bodyMaps } from '../components/bodyMaps';
+import { muscleLines } from '../components/muscleLines';
 import { askWeight, fmtDiff, fmtKg } from '../components/weightCard';
 import { append, clear, h, humanDuration, kg } from '../dom';
 import { icon, type IconName } from '../icons';
@@ -138,23 +139,10 @@ export class MonthScreen implements Screen {
         void bodyMaps().bodyMap(w, back).then((u) => { if (u) el.src = u; else el.remove(); });
         return h('figure', { class: 'mm-fig' }, el, h('figcaption', { class: 'muted small' }, back ? 'Detrás' : 'Delante'));
       };
-      const minutes = (s: number) => (s >= 60 ? `${Math.round(s / 60)} min` : `${Math.round(s)} s`);
-      // los 3 con menos tiempo (incluidos los que no se han trabajado o estirado nada), sin repetir los "más"
-      const least = (t: Record<string, number>, top: readonly string[]) => {
-        if (!top.length) return '';
-        const shown = new Set(top.slice(0, 5));
-        return MUSCLES.filter((m) => !shown.has(m)).sort((a, b) => t[a] - t[b]).slice(0, 3)
-          .map((m) => `${MUSCLE_NAMES[m]} (${t[m] > 0 ? minutes(t[m]) : '0 min'})`).join(', ');
-      };
       this.body.append(h('section', { class: 'card muscle-map' },
         h('div', { class: 'card-head' }, h('h3', {}, W ? 'Músculos de la semana' : 'Músculos del mes')),
         h('div', { class: 'mm-figs' }, img(false), img(true)),
-        worked.length ? h('p', { class: 'mm-line' }, h('span', { class: 'mu-dot work' }), h('strong', {}, 'Más trabajados: '),
-          worked.slice(0, 5).map((m) => `${MUSCLE_NAMES[m]} (${minutes(load.work[m])})`).join(', ')) : null,
-        least(load.work, worked) ? h('p', { class: 'mm-line less' }, h('span', { class: 'mu-dot work' }), h('strong', {}, 'Menos trabajados: '), least(load.work, worked)) : null,
-        stretched.length ? h('p', { class: 'mm-line' }, h('span', { class: 'mu-dot stretch' }), h('strong', {}, 'Más estirados: '),
-          stretched.slice(0, 5).map((m) => `${MUSCLE_NAMES[m]} (${minutes(load.stretch[m])})`).join(', ')) : null,
-        least(load.stretch, stretched) ? h('p', { class: 'mm-line less' }, h('span', { class: 'mu-dot stretch' }), h('strong', {}, 'Menos estirados: '), least(load.stretch, stretched)) : null));
+        ...muscleLines(load)));
     }
 
     // Récords de peso

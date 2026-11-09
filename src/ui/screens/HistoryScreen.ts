@@ -1,8 +1,8 @@
 import { LOCALE } from '../../i18n';
 import { bestStreak, routineNames, secondsBySection } from '../../domain/stats';
 import { loadWeights, muscleLoad } from '../../domain/muscleLoad';
-import { MUSCLE_NAMES, MUSCLES } from '../../figure/anatomy';
 import { bodyMaps } from '../components/bodyMaps';
+import { muscleLines } from '../components/muscleLines';
 import { MonthScreen } from './MonthScreen';
 import type { Store } from '../../domain/Store';
 import { SECTION_IDS, SECTION_TITLES, type HistoryEntry } from '../../domain/types';
@@ -123,18 +123,12 @@ export class HistoryScreen implements Screen {
       void bodyMaps().bodyMap(weights, back).then((u) => { if (u) el.src = u; else el.remove(); });
       return h('figure', { class: 'mm-fig' }, el, h('figcaption', { class: 'muted small' }, back ? 'Detrás' : 'Delante'));
     };
-    const worked = MUSCLES.filter((m) => load.work[m] > 0).sort((a, b) => load.work[b] - load.work[a]);
-    const none = MUSCLES.filter((m) => load.work[m] === 0 && load.stretch[m] === 0);
-    const onlyStretch = MUSCLES.filter((m) => load.work[m] === 0 && load.stretch[m] > 0);
-    const minutes = (s: number) => (s >= 60 ? `${Math.round(s / 60)} min` : `${Math.round(s)} s`);
     return h('section', { class: 'card muscle-map' },
       h('div', { class: 'card-head' }, h('h3', {}, 'Músculos'), h('div', { class: 'segmented small' }, seg('week', 'Semana'), seg('month', 'Mes'))),
       entries.length && load.missing < entries.length
         ? h('div', { class: 'mm-figs' }, img(false), img(true))
         : h('p', { class: 'muted small' }, entries.length ? 'Los entrenamientos de este periodo son de una versión anterior y no guardan el detalle de cada ejercicio.' : 'Aún no has entrenado en este periodo.'),
-      worked.length ? h('p', { class: 'mm-line' }, h('span', { class: 'mu-dot work' }), h('strong', {}, 'Más trabajados: '), worked.slice(0, 5).map((m) => `${MUSCLE_NAMES[m]} (${minutes(load.work[m])})`).join(', ')) : null,
-      onlyStretch.length ? h('p', { class: 'mm-line' }, h('span', { class: 'mu-dot stretch' }), h('strong', {}, 'Solo estirados: '), onlyStretch.map((m) => MUSCLE_NAMES[m]).join(', ')) : null,
-      worked.length && none.length ? h('p', { class: 'mm-line' }, h('span', { class: 'mu-dot none' }), h('strong', {}, 'Sin trabajar: '), none.map((m) => MUSCLE_NAMES[m]).join(', ')) : null);
+      ...muscleLines(load));
   }
 
   /** Barras con el tiempo dedicado a cada apartado. */
