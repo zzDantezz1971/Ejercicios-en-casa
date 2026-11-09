@@ -81,7 +81,7 @@ const PHRASES_CA: string[] = [
   'Una esquena forta comença amb un bon core.',
   'No et comparis: millora.',
   'Constància avui, orgull demà{, n}.',
-  'Respira fondo i som-hi.',
+  'Respira fons i som-hi.',
   'Una mica cada dia val més que molt de tant en tant.',
   'Avui també compta{, n}.',
 ];
