@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-10T12:00:00Z",
+    "es": ["Ajustes: el círculo de los interruptores queda bien centrado también en modo oscuro."],
+    "ca": ["Configuració: el cercle dels interruptors queda ben centrat també en mode fosc."],
+    "en": ["Settings: the knob of the switches is properly centred in dark mode too."]
+  },
+  {
     "fecha": "2026-11-10T11:45:00Z",
     "es": ["Ajustes: la pausa entre ejercicios ocupa menos espacio."],
     "ca": ["Configuració: la pausa entre exercicis ocupa menys espai."],
