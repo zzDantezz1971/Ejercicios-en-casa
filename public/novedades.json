@@ -1,120 +1,126 @@
 [
   {
-    "fecha": "2026-11-10T15:40:00Z",
+    "fecha": "2026-11-09T12:04:40Z",
+    "es": ["Novedades: ahora solo se enseñan los cambios desde tu última actualización (antes salían también los de días anteriores)."],
+    "ca": ["Novetats: ara només s'ensenyen els canvis des de la teva última actualització (abans també sortien els de dies anteriors)."],
+    "en": ["What's new: it now only shows the changes since your last update (before, it also listed those from earlier days)."]
+  },
+  {
+    "fecha": "2026-11-09T12:03:07Z",
     "es": ["Entrenamiento: los avisos de arriba («Prepárate», «Descanso», «Cambio de lado») son más pequeños."],
     "ca": ["Entrenament: els avisos de dalt («Prepara't», «Descans», «Canvi de costat») són més petits."],
     "en": ["Workout: the labels at the top (\"Get ready\", \"Rest\", \"Switch sides\") are smaller."]
   },
   {
-    "fecha": "2026-11-10T15:20:00Z",
+    "fecha": "2026-11-09T11:59:45Z",
     "es": ["Cambio de lado: primero se dice «Cambio de lado» y, al acabar la frase, empieza la cuenta atrás de 3 segundos.", "Entrenamiento: el botón «Conectar reloj» es más pequeño y ya no tapa al maniquí."],
     "ca": ["Canvi de costat: primer es diu «Canvi de costat» i, quan acaba la frase, comença el compte enrere de 3 segons.", "Entrenament: el botó «Connecta el rellotge» és més petit i ja no tapa el maniquí."],
     "en": ["Switching sides: it now says \"Switch sides\" first, and the 3-second countdown starts once it has finished.", "Workout: the \"Connect watch\" button is smaller and no longer covers the figure."]
   },
   {
-    "fecha": "2026-11-10T15:00:00Z",
+    "fecha": "2026-11-09T11:51:29Z",
     "es": ["Ejercicios por lados: a mitad de tiempo el reloj se para, hay una cuenta atrás de 3 segundos para cambiar de lado y después sigue la otra mitad."],
     "ca": ["Exercicis per costats: a la meitat del temps el rellotge s'atura, hi ha un compte enrere de 3 segons per canviar de costat i després continua l'altra meitat."],
     "en": ["Exercises done on each side: halfway through, the clock stops for a 3-second countdown to switch sides, then the second half carries on."]
   },
   {
-    "fecha": "2026-11-10T14:30:00Z",
+    "fecha": "2026-11-09T10:31:57Z",
     "es": ["Fichas de ejercicios: si el maniquí quedaba debajo de algún icono, ahora se aparta un poco o se hace algo más pequeño."],
     "ca": ["Fitxes d'exercicis: si el maniquí quedava sota alguna icona, ara s'aparta una mica o es fa una mica més petit."],
     "en": ["Exercise cards: if the figure sat under an icon, it now moves aside a little or gets slightly smaller."]
   },
   {
-    "fecha": "2026-11-10T14:00:00Z",
+    "fecha": "2026-11-09T10:16:40Z",
     "es": ["Fichas de ejercicios: si hace falta más de un aparato, cada icono va en su propia línea."],
     "ca": ["Fitxes d'exercicis: si cal més d'un aparell, cada icona va en la seva pròpia línia."],
     "en": ["Exercise cards: if more than one piece of equipment is needed, each icon sits on its own line."]
   },
   {
-    "fecha": "2026-11-10T13:40:00Z",
+    "fecha": "2026-11-09T10:11:14Z",
     "es": ["Fichas de ejercicios: el material se indica solo con su icono, arriba a la izquierda."],
     "ca": ["Fitxes d'exercicis: el material s'indica només amb la seva icona, a dalt a l'esquerra."],
     "en": ["Exercise cards: equipment is shown with just its icon, at the top left."]
   },
   {
-    "fecha": "2026-11-10T13:20:00Z",
+    "fecha": "2026-11-09T10:07:45Z",
     "es": ["Fichas de ejercicios: el material que hace falta sale arriba a la izquierda, con su icono (en naranja si no lo tienes)."],
     "ca": ["Fitxes d'exercicis: el material que cal surt a dalt a l'esquerra, amb la seva icona (en taronja si no el tens)."],
     "en": ["Exercise cards: the equipment needed now shows at the top left, with its icon (orange if you don't have it)."]
   },
   {
-    "fecha": "2026-11-10T13:00:00Z",
+    "fecha": "2026-11-09T09:59:29Z",
     "es": ["Detalle del ejercicio y lista para ordenar: fuera el icono naranja y «de cara»; ahora pone «por lados» en azul."],
     "ca": ["Detall de l'exercici i llista per ordenar: fora la icona taronja i «de cara»; ara posa «per costats» en blau."],
     "en": ["Exercise detail and reorder list: the orange icon and \"front view\" are gone; it now says \"each side\" in blue."]
   },
   {
-    "fecha": "2026-11-10T12:40:00Z",
+    "fecha": "2026-11-09T09:54:40Z",
     "es": ["Fichas de ejercicios: fuera el icono naranja y el texto «De cara»; «por lados» va siempre debajo de la zona trabajada."],
     "ca": ["Fitxes d'exercicis: fora la icona taronja i el text «De cara»; «per costats» va sempre sota la zona treballada."],
     "en": ["Exercise cards: the orange icon and the \"Front view\" text are gone; \"each side\" now always sits below the worked area."]
   },
   {
-    "fecha": "2026-11-10T12:20:00Z",
+    "fecha": "2026-11-09T09:45:26Z",
     "es": ["Interruptores: círculo un poco más pequeño y colores más suaves en modo oscuro, para que se vea centrado."],
     "ca": ["Interruptors: cercle una mica més petit i colors més suaus en mode fosc, perquè es vegi centrat."],
     "en": ["Switches: slightly smaller knob and softer colours in dark mode, so it looks centred."]
   },
   {
-    "fecha": "2026-11-10T12:00:00Z",
+    "fecha": "2026-11-09T09:40:31Z",
     "es": ["Ajustes: el círculo de los interruptores queda bien centrado también en modo oscuro."],
     "ca": ["Configuració: el cercle dels interruptors queda ben centrat també en mode fosc."],
     "en": ["Settings: the knob of the switches is properly centred in dark mode too."]
   },
   {
-    "fecha": "2026-11-10T11:45:00Z",
+    "fecha": "2026-11-09T09:36:08Z",
     "es": ["Ajustes: la pausa entre ejercicios ocupa menos espacio."],
     "ca": ["Configuració: la pausa entre exercicis ocupa menys espai."],
     "en": ["Settings: the rest between exercises takes up less space."]
   },
   {
-    "fecha": "2026-11-10T11:30:00Z",
+    "fecha": "2026-11-09T09:32:27Z",
     "es": ["Fichas de ejercicios: el icono del apartado es más pequeño y queda por encima del muñeco."],
     "ca": ["Fitxes d’exercicis: la icona de l’apartat és més petita i queda per sobre del ninot."],
     "en": ["Exercise cards: the section icon is smaller and sits above the figure."]
   },
   {
-    "fecha": "2026-11-10T11:15:00Z",
+    "fecha": "2026-11-09T09:29:59Z",
     "es": ["Fichas de ejercicios: el icono del apartado pasa a la esquina de arriba a la derecha."],
     "ca": ["Fitxes d’exercicis: la icona de l’apartat passa a la cantonada de dalt a la dreta."],
     "en": ["Exercise cards: the section icon moves to the top-right corner."]
   },
   {
-    "fecha": "2026-11-10T11:00:00Z",
+    "fecha": "2026-11-09T09:28:11Z",
     "es": ["Catalán: «respira fons» en lugar de «respira fondo» en la frase motivadora y en las explicaciones de los ejercicios."],
     "ca": ["Català: «respira fons» en lloc de «respira fondo» a la frase motivadora i a les explicacions dels exercicis."],
     "en": ["Catalan: “respira fons” instead of “respira fondo” in the motivational phrase and exercise instructions."]
   },
   {
-    "fecha": "2026-11-10T10:30:00Z",
+    "fecha": "2026-11-09T09:26:19Z",
     "es": ["Fichas de ejercicios más claras: al tocar la ficha ves el muñeco y cómo se hace, y abajo de todo está el botón «Seleccionar» (o «Seleccionado» para quitarlo). El botón de información desaparece."],
     "ca": ["Fitxes d’exercicis més clares: en tocar la fitxa veus el ninot i com es fa, i a baix de tot hi ha el botó «Selecciona» (o «Seleccionat» per treure’l). El botó d’informació desapareix."],
     "en": ["Clearer exercise cards: tap a card to see the figure and how it’s done, and at the bottom there’s a “Select” button (or “Selected” to remove it). The info button is gone."]
   },
   {
-    "fecha": "2026-11-10T10:00:00Z",
+    "fecha": "2026-11-09T09:19:48Z",
     "es": ["Al elegir ejercicios, cada ficha muestra el icono de su apartado (calentamiento, fuerza, abdominales o estiramientos), y los segundos caben en una sola línea."],
     "ca": ["En triar exercicis, cada fitxa mostra la icona del seu apartat (escalfament, força, abdominals o estiraments), i els segons caben en una sola línia."],
     "en": ["When choosing exercises, each card shows its section icon (warm-up, strength, abs or stretching), and the seconds fit on one line."]
   },
   {
-    "fecha": "2026-11-10T09:30:00Z",
+    "fecha": "2026-11-09T09:12:17Z",
     "es": ["Al editar una tabla, cada apartado muestra arriba a la izquierda cuántos ejercicios puedes hacer con tu material."],
     "ca": ["En editar una taula, cada apartat mostra a dalt a l’esquerra quants exercicis pots fer amb el teu material."],
     "en": ["When editing a table, each section shows in its top-left corner how many exercises you can do with your equipment."]
   },
   {
-    "fecha": "2026-11-10T09:00:00Z",
+    "fecha": "2026-11-09T09:05:53Z",
     "es": ["Bienvenida: pantalla del material más limpia."],
     "ca": ["Benvinguda: pantalla del material més neta."],
     "en": ["Welcome: cleaner equipment screen."]
   },
   {
-    "fecha": "2026-11-10T02:30:00Z",
+    "fecha": "2026-11-09T00:53:16Z",
     "es": [
       "52 ejercicios nuevos más: 16 con bandas elásticas, 10 con step, 9 con fitball, 8 con barra de dominadas, 5 con comba y 4 con rueda abdominal. En total hay 151 ejercicios nuevos (49 sin material) y 240 en la app. Todavía sin animación."
     ],
@@ -126,7 +132,7 @@
     ]
   },
   {
-    "fecha": "2026-11-10T01:30:00Z",
+    "fecha": "2026-11-09T00:49:27Z",
     "es": [
       "50 ejercicios nuevos con material: 24 con mancuernas (press Arnold, remo renegado, curl martillo, sentadilla goblet, thruster…), 14 con pesa rusa (swing, cargada, molino, halo…) y 12 con barra con discos (sentadilla, peso muerto, press militar, hip thrust…). Todavía sin animación."
     ],
@@ -138,7 +144,7 @@
     ]
   },
   {
-    "fecha": "2026-11-10T00:30:00Z",
+    "fecha": "2026-11-09T00:45:33Z",
     "es": [
       "49 ejercicios nuevos sin material: flexiones de varios tipos, sentadilla búlgara, zancada atrás, burpees, barquita, abdominal en V, postura de la paloma, perro boca abajo y muchos más. Todavía no tienen animación del muñeco, pero sí la explicación completa."
     ],
@@ -150,7 +156,7 @@
     ]
   },
   {
-    "fecha": "2026-11-09T23:30:00Z",
+    "fecha": "2026-11-09T00:40:35Z",
     "es": [
       "Material: al empezar (y en Mis datos → Mi material) marcas el material que tienes: mancuernas, pesa rusa, barra con discos, banco, bandas elásticas, step, fitball, barra de dominadas, comba o rueda abdominal. Al elegir ejercicios solo ves los que puedes hacer; los demás se pueden mostrar con un toque.",
       "El apartado «Pesas» pasa a llamarse «Fuerza».",
@@ -168,7 +174,7 @@
     ]
   },
   {
-    "fecha": "2026-11-09T15:00:00Z",
+    "fecha": "2026-11-09T00:09:49Z",
     "es": [
       "Modo claro: en Ajustes → Apariencia puedes elegir Oscuro, Claro o Automático (el mismo modo que tu móvil).",
       "Ajustes más compactos: la cuenta atrás y la duración inicial van juntas en una sola tarjeta."
@@ -183,7 +189,7 @@
     ]
   },
   {
-    "fecha": "2026-11-09T14:00:00Z",
+    "fecha": "2026-11-09T00:01:08Z",
     "es": [
       "Historial: la tarjeta Músculos muestra lo mismo que los resúmenes (más y menos trabajados, más y menos estirados)."
     ],
@@ -195,7 +201,7 @@
     ]
   },
   {
-    "fecha": "2026-11-09T13:30:00Z",
+    "fecha": "2026-11-08T23:59:34Z",
     "es": [
       "Resumen de la semana y del mes: también se indican los músculos menos trabajados y los menos estirados, para saber qué te conviene trabajar más."
     ],
@@ -207,7 +213,7 @@
     ]
   },
   {
-    "fecha": "2026-11-09T13:00:00Z",
+    "fecha": "2026-11-08T23:56:48Z",
     "es": [
       "Resumen de la semana y del mes: además de los músculos más trabajados, ahora salen también los más estirados, con sus minutos."
     ],
@@ -219,7 +225,7 @@
     ]
   },
   {
-    "fecha": "2026-11-09T12:30:00Z",
+    "fecha": "2026-11-08T23:50:39Z",
     "es": [
       "Resumen: la tarjeta del peso sale siempre. Con un solo peso anotado lo muestra; si esa semana o mes no lo anotaste, te recuerda el último; y si aún no tienes ninguno, te invita a anotarlo."
     ],
@@ -231,7 +237,7 @@
     ]
   },
   {
-    "fecha": "2026-11-09T12:00:00Z",
+    "fecha": "2026-11-08T23:45:20Z",
     "es": [
       "Resumen de la semana y del mes: las cuatro cifras quedan alineadas en dos columnas, y si no hay datos del periodo anterior se avisa una sola vez (antes salía repetido y sin traducir)."
     ],
@@ -243,7 +249,7 @@
     ]
   },
   {
-    "fecha": "2026-11-09T11:30:00Z",
+    "fecha": "2026-11-08T23:38:25Z",
     "es": [
       "Bajo las opciones de sexo, una nota explica para qué se usa: solo para calcular mejor las calorías cuando entrenas con el reloj conectado."
     ],
@@ -255,7 +261,7 @@
     ]
   },
   {
-    "fecha": "2026-11-09T11:00:00Z",
+    "fecha": "2026-11-08T23:31:52Z",
     "es": [
       "Mis datos: la tarjeta Objetivo muestra el peso objetivo y el porcentaje conseguido, cuánto te falta y un botón «Cambiar objetivo»."
     ],
@@ -267,7 +273,7 @@
     ]
   },
   {
-    "fecha": "2026-11-09T10:30:00Z",
+    "fecha": "2026-11-08T23:20:24Z",
     "es": [
       "Mis datos: el peso, ahora en tres tarjetas más claras. Peso (el actual en grande, cuánto has cambiado y la gráfica), Objetivo (cuánto te falta) e IMC (con una escala de colores que muestra dónde estás)."
     ],
@@ -279,7 +285,7 @@
     ]
   },
   {
-    "fecha": "2026-11-09T09:30:00Z",
+    "fecha": "2026-11-08T22:54:50Z",
     "es": [
       "Sexo: ahora hay cuatro opciones (Hombre, Mujer, LGTBIQ+ y Nada), centradas, en la bienvenida y en Mis datos."
     ],
@@ -291,7 +297,7 @@
     ]
   },
   {
-    "fecha": "2026-11-09T09:00:00Z",
+    "fecha": "2026-11-08T22:42:10Z",
     "es": [
       "Bienvenida: la primera vez que se abre la app, se elige el idioma y se rellenan los datos personales (nombre, sexo, edad, altura, peso y objetivo). Si falta la altura o el peso, la app avisa de lo que no podrá calcular."
     ],
@@ -303,7 +309,7 @@
     ]
   },
   {
-    "fecha": "2026-11-08T22:30:00Z",
+    "fecha": "2026-11-08T22:09:56Z",
     "es": [
       "En inglés, el botón de pausa del entrenamiento ahora dice «Pause»."
     ],
@@ -315,7 +321,7 @@
     ]
   },
   {
-    "fecha": "2026-11-08T21:50:00Z",
+    "fecha": "2026-11-08T21:38:23Z",
     "es": [
       "Nueva página de política de privacidad (en catalán, castellano e inglés): tus datos se guardan solo en tu móvil y la app no los envía a ningún sitio."
     ],
@@ -327,7 +333,7 @@
     ]
   },
   {
-    "fecha": "2026-11-08T20:30:00Z",
+    "fecha": "2026-11-08T20:22:54Z",
     "es": [
       "Las letras de la app van incluidas en ella: se ven bien sin conexión desde el primer día y ya no se descarga nada de Google."
     ],
@@ -339,7 +345,7 @@
     ]
   },
   {
-    "fecha": "2026-11-08T18:40:00Z",
+    "fecha": "2026-11-08T19:17:18Z",
     "es": [
       "Editar tabla: nuevo botón con un lápiz arriba a la derecha para cambiar el nombre de la tabla."
     ],
@@ -351,7 +357,7 @@
     ]
   },
   {
-    "fecha": "2026-11-08T11:50:00Z",
+    "fecha": "2026-11-08T11:35:12Z",
     "es": [
       "Vuelve el muñeco de antes en los ejercicios: se mueve de forma más limpia y natural que el cuerpo anatómico de prueba."
     ],
@@ -363,7 +369,7 @@
     ]
   },
   {
-    "fecha": "2026-11-08T10:20:00Z",
+    "fecha": "2026-11-08T10:31:28Z",
     "es": [
       "Nuevo muñeco de los ejercicios: un cuerpo anatómico con los músculos mucho más marcados, que se mueve en todos los ejercicios y sigue mostrando en rojo lo que trabaja y en turquesa lo que se estira."
     ],
@@ -375,7 +381,7 @@
     ]
   },
   {
-    "fecha": "2026-11-08T09:00:00Z",
+    "fecha": "2026-11-08T08:50:21Z",
     "es": [
       "Medallas: ordenadas por grupos (entrenamientos, constancia, tiempo, calorías, peso, fuerza, apartados y especiales), con un resumen arriba y 13 medallas nuevas."
     ],
@@ -387,7 +393,7 @@
     ]
   },
   {
-    "fecha": "2026-11-07T17:30:00Z",
+    "fecha": "2026-11-07T17:17:28Z",
     "es": [
       "El idioma se cambia ahora en Ajustes."
     ],
@@ -399,7 +405,7 @@
     ]
   },
   {
-    "fecha": "2026-11-07T12:30:00Z",
+    "fecha": "2026-11-07T17:09:04Z",
     "es": [
       "Historial: el resumen de arriba (racha, días, tiempo y calorías) ocupa mucho menos, en una sola tarjeta."
     ],
@@ -411,7 +417,7 @@
     ]
   },
   {
-    "fecha": "2026-11-07T12:10:00Z",
+    "fecha": "2026-11-07T11:49:47Z",
     "es": [
       "Inicio: la tarjeta de la tabla en uso muestra una imagen según los apartados que tiene (calentamiento, pesas, abdominales, estiramientos o una combinación)."
     ],
@@ -423,7 +429,7 @@
     ]
   },
   {
-    "fecha": "2026-11-07T11:40:00Z",
+    "fecha": "2026-11-07T11:35:29Z",
     "es": [
       "Inicio: en «Esta semana», toca un día marcado para ver su entrenamiento."
     ],
@@ -435,7 +441,7 @@
     ]
   },
   {
-    "fecha": "2026-11-07T10:55:00Z",
+    "fecha": "2026-11-07T10:43:13Z",
     "es": [
       "Historial: toca un día marcado en el calendario para ver su entrenamiento. La lista larga de entrenamientos desaparece."
     ],
@@ -447,7 +453,7 @@
     ]
   },
   {
-    "fecha": "2026-11-07T10:40:00Z",
+    "fecha": "2026-11-07T10:36:55Z",
     "es": [
       "Inicio: «Contenido de la tabla» sale justo debajo de la tabla en uso y solo muestra los apartados con ejercicios."
     ],
@@ -459,7 +465,7 @@
     ]
   },
   {
-    "fecha": "2026-11-07T09:40:00Z",
+    "fecha": "2026-11-07T09:50:14Z",
     "es": [
       "Historial: en el detalle de un entrenamiento, «Copiar a otro día» crea uno igual en la fecha que elijas (para recuperar uno que no se guardó)."
     ],
@@ -471,7 +477,7 @@
     ]
   },
   {
-    "fecha": "2026-11-07T09:20:00Z",
+    "fecha": "2026-11-07T08:54:44Z",
     "es": [
       "Arreglo: ya se puede volver a instalar la app desde Chrome (⋮ → Instalar aplicación)."
     ],
@@ -483,7 +489,7 @@
     ]
   },
   {
-    "fecha": "2026-11-07T09:00:00Z",
+    "fecha": "2026-11-07T08:40:42Z",
     "es": [
       "Icono con fondo negro.",
       "Inicio: toca «Tu semana» para ver qué mide cada anillo y cambiar tus metas de minutos y calorías.",
@@ -501,7 +507,7 @@
     ]
   },
   {
-    "fecha": "2026-11-07T01:10:00Z",
+    "fecha": "2026-11-07T00:56:48Z",
     "es": [
       "Icono con fondo azul marino y el dibujo más grande, para que se vea bien sobre fondos de pantalla oscuros. Para verlo, quita el icono y vuelve a instalar la app desde Chrome."
     ],
@@ -513,7 +519,7 @@
     ]
   },
   {
-    "fecha": "2026-11-07T01:00:00Z",
+    "fecha": "2026-11-07T00:46:16Z",
     "es": [
       "El icono de la app es más grande. Para verlo, quita el icono y vuelve a instalar la app desde Chrome (⋮ → Instalar aplicación)."
     ],
@@ -525,7 +531,7 @@
     ]
   },
   {
-    "fecha": "2026-11-07T00:55:00Z",
+    "fecha": "2026-11-07T00:43:42Z",
     "es": [
       "Icono nuevo: una casa naranja con una mancuerna dorada. Para verlo, borra el icono actual e instala la app otra vez desde Chrome (⋮ → Instalar aplicación)."
     ],
@@ -537,7 +543,7 @@
     ]
   },
   {
-    "fecha": "2026-11-07T00:40:00Z",
+    "fecha": "2026-11-07T00:32:55Z",
     "es": [
       "Frases motivadoras: ahora sale una distinta cada vez que abres Inicio, y hay 10 frases nuevas (40 en total).",
       "Al actualizar la app verás este resumen de lo que ha cambiado."
@@ -552,7 +558,7 @@
     ]
   },
   {
-    "fecha": "2026-11-07T00:28:00Z",
+    "fecha": "2026-11-07T00:32:55Z",
     "es": [
       "La frase motivadora de Inicio sale centrada y en dorado."
     ],
@@ -564,7 +570,7 @@
     ]
   },
   {
-    "fecha": "2026-11-07T00:24:00Z",
+    "fecha": "2026-11-07T00:32:55Z",
     "es": [
       "Mis datos: el apartado Peso, más ordenado, con el objetivo de peso dentro."
     ],
@@ -576,7 +582,7 @@
     ]
   },
   {
-    "fecha": "2026-11-07T00:18:00Z",
+    "fecha": "2026-11-07T00:32:55Z",
     "es": [
       "Nuevas pestañas: Medallas y Mis datos.",
       "Frases motivadoras: se activan o desactivan en Ajustes."
