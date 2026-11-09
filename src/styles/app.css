@@ -1163,3 +1163,9 @@ button.wd:active .wd-dot { transform: scale(.92); }
 .select-btn.on { background: var(--sec); color: #fff; }
 .select-btn.on .ico { color: #fff; }
 .select-btn:active { transform: scale(.97); }
+
+/* Ajustes → Pausa entre ejercicios: filas más juntas y contadores más pequeños */
+.rest-row:has(.sec-dot) { padding: 0; }
+.rest-row:has(.sec-dot) .stepper { padding: 0; min-width: 132px; gap: 4px; }
+.rest-row:has(.sec-dot) .stepper button { width: 34px; height: 34px; font-size: 1.2rem; border-radius: 10px; }
+.rest-row:has(.sec-dot) .stepper .secs { font-size: 1.1rem; }
