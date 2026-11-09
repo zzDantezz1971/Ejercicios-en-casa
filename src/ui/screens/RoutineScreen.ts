@@ -111,14 +111,14 @@ export class RoutineScreen implements Screen {
     );
     if (this.mode === 'fav') {
       this.hint.replaceChildren(this.favs().length
-        ? 'Tus ejercicios favoritos de este apartado. Toca uno para añadirlo a la tabla.'
-        : h('span', {}, 'Aún no tienes favoritos en este apartado. Abre un ejercicio con ', icon('info', 'ico inline'), ' y pulsa la estrella ', icon('star', 'ico inline'), '.'));
+        ? 'Tus ejercicios favoritos de este apartado. Pulsa Seleccionar para añadirlo a la tabla.'
+        : h('span', {}, 'Aún no tienes favoritos en este apartado. Toca un ejercicio y pulsa la estrella ', icon('star', 'ico inline'), '.'));
     } else if (this.mode === 'chosen') {
       this.hint.replaceChildren(n
         ? h('span', {}, 'Este es el orden en que se harán. Arrastra por el asa ', icon('tables', 'ico inline'), ' o usa las flechas para cambiarlo.')
         : 'Aún no has elegido ejercicios en este apartado. Márcalos en "Todos".');
     } else {
-      this.hint.replaceChildren('Toca un ejercicio para añadirlo al final de la tabla. Pulsa ', icon('info', 'ico inline'), ' para ver cómo se hace.');
+      this.hint.replaceChildren('Toca un ejercicio para ver cómo se hace. Pulsa Seleccionar para añadirlo al final de la tabla.');
     }
   }
 
@@ -289,19 +289,23 @@ export class RoutineScreen implements Screen {
       ex.viewLabel && !ex.pending ? h('span', { class: 'view-label' }, ex.viewLabel) : null, ex.oneSided ? sidesMark() : null,
       h('span', { class: 'sec-mark', title: SECTION_TITLES[ex.section], 'aria-label': SECTION_TITLES[ex.section] }, icon(SECTION_STYLE[ex.section].icon)));
     this.io.observe(fig);
+    const owned = new Set<string>(this.app.store.settings.equipment);
     const card = h('article', { class: 'ex-card' + (pos ? ' selected' : ''), style: { '--sec': SECTION_STYLE[ex.section].color } },
-      h('button', { class: 'ex-main', 'aria-pressed': String(!!pos), onclick: () => void this.toggle(ex) },
+      // toda la ficha (menos sus botones) abre el ejercicio: muñeco y cómo se hace
+      h('button', { class: 'ex-main', 'aria-label': `Cómo se hace: ${ex.name}`, onclick: () => this.app.push(new DetailScreen(this.app, ex)) },
         fig,
         h('span', { class: 'ex-name' }, pos ? h('span', { class: 'order' }, pos) : null, h('span', {}, ex.name, this.app.store.favorites.has(ex.id) ? icon('starFill', 'ico fav-star') : null)),
         h('span', { class: 'ex-zone' }, ex.zone, ex.oneSided ? h('span', { class: 'by-sides' }, icon('sides'), 'por lados') : null),
-        equipChips(ex.equip, new Set<string>(this.app.store.settings.equipment)),
+        equipChips(ex.equip, owned),
         badgeList(ex.badges)),
-      h('button', { class: 'info-btn', 'aria-label': `Cómo se hace: ${ex.name}`, onclick: () => this.app.push(new DetailScreen(this.app, ex)) }, icon('info')),
-      pos ? h('div', { class: 'stepper' },
-        h('button', { 'aria-label': 'Menos tiempo', onclick: () => this.adjust(ex, -STEP_SECONDS) }, '−'),
-        h('span', { class: 'secs' }, icon('clock'), `${secs} s`),
-        h('button', { 'aria-label': 'Más tiempo', onclick: () => this.adjust(ex, STEP_SECONDS) }, '+')) : null,
-      pos && usesWeight(ex) ? this.weightButton(ex, this.editor.weight(ex.section, ex.id)) : null,
+      h('div', { class: 'ex-actions' },
+        pos ? h('div', { class: 'stepper' },
+          h('button', { 'aria-label': 'Menos tiempo', onclick: () => this.adjust(ex, -STEP_SECONDS) }, '−'),
+          h('span', { class: 'secs' }, icon('clock'), `${secs} s`),
+          h('button', { 'aria-label': 'Más tiempo', onclick: () => this.adjust(ex, STEP_SECONDS) }, '+')) : null,
+        pos && usesWeight(ex) ? this.weightButton(ex, this.editor.weight(ex.section, ex.id)) : null,
+        h('button', { class: 'select-btn' + (pos ? ' on' : ''), 'aria-pressed': String(!!pos), onclick: () => void this.toggle(ex) },
+          ...(pos ? [icon('check'), h('span', {}, 'Seleccionado')] : [icon('plus'), h('span', {}, 'Seleccionar')]))),
     );
     return card;
   }

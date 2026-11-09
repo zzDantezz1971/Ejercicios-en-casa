@@ -1150,3 +1150,16 @@ button.wd:active .wd-dot { transform: scale(.92); }
 .ex-card .stepper button { width: 36px; height: 36px; font-size: 1.25rem; }
 .ex-card .stepper .secs { font-size: 1.02rem; white-space: nowrap; gap: 3px; }
 .ex-card .stepper .secs .ico { width: 14px; height: 14px; }
+
+/* Ficha de ejercicio al elegir: toda la ficha abre el ejercicio; abajo, segundos y botón Seleccionar */
+.ex-main { padding-bottom: 8px; flex: 1; }
+.ex-main .equip-chips, .ex-main .badges { padding: 0 10px; }
+.ex-actions { display: flex; flex-direction: column; gap: 8px; padding: 0 10px 10px; }
+.ex-actions .stepper { padding: 0; }
+.ex-card .ex-actions .weight-btn { margin: 0; align-self: stretch; justify-content: center; }
+.select-btn { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; padding: 9px 10px; border-radius: 12px; cursor: pointer;
+  border: 1.5px solid var(--sec); background: transparent; color: var(--fg); font: 700 .92rem var(--body); }
+.select-btn .ico { width: 16px; height: 16px; color: var(--sec); }
+.select-btn.on { background: var(--sec); color: #fff; }
+.select-btn.on .ico { color: #fff; }
+.select-btn:active { transform: scale(.97); }

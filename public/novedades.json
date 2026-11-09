@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-10T10:30:00Z",
+    "es": ["Fichas de ejercicios más claras: al tocar la ficha ves el muñeco y cómo se hace, y abajo de todo está el botón «Seleccionar» (o «Seleccionado» para quitarlo). El botón de información desaparece."],
+    "ca": ["Fitxes d’exercicis més clares: en tocar la fitxa veus el ninot i com es fa, i a baix de tot hi ha el botó «Selecciona» (o «Seleccionat» per treure’l). El botó d’informació desapareix."],
+    "en": ["Clearer exercise cards: tap a card to see the figure and how it’s done, and at the bottom there’s a “Select” button (or “Selected” to remove it). The info button is gone."]
+  },
+  {
     "fecha": "2026-11-10T10:00:00Z",
     "es": ["Al elegir ejercicios, cada ficha muestra el icono de su apartado (calentamiento, fuerza, abdominales o estiramientos), y los segundos caben en una sola línea."],
     "ca": ["En triar exercicis, cada fitxa mostra la icona del seu apartat (escalfament, força, abdominals o estiraments), i els segons caben en una sola línia."],
