@@ -21,3 +21,11 @@ export interface ExtraEx {
   ca: ExT;
   en: ExT;
 }
+
+/** Forma corta de escribir un ejercicio nuevo. */
+export function x(
+  s: SectionId, g: string | undefined, n: string, z: string, eq: string, m: string, one: boolean,
+  es: [string, string, string, string, string], ca: ExT, en: ExT, b?: Badge[],
+): ExtraEx {
+  return { s, g, n, z, eq: eq || undefined, m, one: one ? true : undefined, es, ca, en, b };
+}

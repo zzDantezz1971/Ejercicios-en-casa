@@ -1,11 +1,13 @@
 import type { ExT } from '../../i18n/ex1';
 import type { ExtraEx } from './types';
+import { LIBRE_A } from './libreA';
+import { GROUPS_B, LIBRE_B } from './libreB';
 
 /* Ejercicios nuevos por material (todavía sin animación). */
-export const EXTRAS: ExtraEx[] = [];
+export const EXTRAS: ExtraEx[] = [...LIBRE_A, ...LIBRE_B];
 
 /** Grupos nuevos de los apartados (traducciones). */
-export const EXTRA_GROUPS: Record<string, { ca: string; en: string }> = {};
+export const EXTRA_GROUPS: Record<string, { ca: string; en: string }> = { ...GROUPS_B };
 
 export function extraId(name: string): string {
   return name.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
