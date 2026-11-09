@@ -38,7 +38,7 @@ export class HistoryScreen implements Screen {
     if (this.filter && !names.includes(this.filter)) this.filter = null;
     const list = this.filter ? all.filter((e) => e.routineName === this.filter) : all;
     append(this.body,
-      backupDue(this.app) ? backupCard(this.app, { question: false }) : null,
+      backupDue(this.app) ? backupCard(this.app) : null,
       names.length > 1 ? this.filters(names) : null,
       this.records(list),
       this.calendar(list),

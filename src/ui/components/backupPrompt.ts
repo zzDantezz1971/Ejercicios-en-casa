@@ -1,3 +1,4 @@
+import { LOCALE } from '../../i18n';
 import { saveBackupFile } from '../../services/Backup';
 import type { App } from '../App';
 import { confirmDialog, h } from '../dom';
@@ -20,26 +21,25 @@ export function backupDue(app: App): boolean {
   return app.store.history.length > 0 && app.store.daysSinceBackup() >= BACKUP_EVERY_DAYS;
 }
 
-function sinceText(app: App): string {
+/** Recordatorio de la copia: cuánto hace de la última, por qué conviene y botones Cancelar / Hacer copia ahora. */
+export function backupCard(app: App): HTMLElement {
   const d = app.store.daysSinceBackup();
-  return d === Infinity ? 'Aún no has guardado ninguna copia de tus tablas e historial.' : `Hace ${d} días que no guardas copia de tus tablas e historial.`;
-}
-
-/** Tarjeta para guardar la copia; desaparece al guardarla o al pulsar "Ahora no". */
-export function backupCard(app: App, opts: { question: boolean }): HTMLElement {
+  const last = app.store.lastBackup;
+  const when = last ? new Date(last).toLocaleDateString(LOCALE, { day: 'numeric', month: 'long' }) : null;
   const card: HTMLElement = h('section', { class: 'card backup-prompt', role: 'region', 'aria-label': 'Copia de seguridad' },
     h('div', { class: 'bp-head' },
       h('span', { class: 'bp-icon' }, icon('copy')),
       h('div', {},
-        h('strong', {}, opts.question ? '¿Guardar copia de seguridad?' : 'Copia de seguridad pendiente'),
-        h('p', { class: 'muted small' }, sinceText(app)))),
+        h('strong', {}, d === Infinity ? 'Aún no has hecho ninguna copia de seguridad' : `Hace ${d} días que no haces copia de seguridad`),
+        h('p', { class: 'muted small' }, 'Para no perder tus tablas y tu historial si cambias de móvil o se borran los datos, deberías hacerla.'),
+        when ? h('p', { class: 'muted small' }, `Última copia: ${when}.`) : null)),
     h('div', { class: 'bp-actions' },
-      h('button', { class: 'btn ghost small', onclick: () => card.remove() }, 'Ahora no'),
+      h('button', { class: 'btn ghost small', onclick: () => card.remove() }, 'Cancelar'),
       h('button', {
         class: 'btn primary small',
         onclick: async () => {
           if (await saveBackupNow(app)) card.replaceChildren(h('p', { class: 'bp-done' }, icon('check'), 'Copia guardada'));
         },
-      }, icon('check'), 'Guardar en Drive')));
+      }, icon('copy'), 'Hacer copia ahora')));
   return card;
 }

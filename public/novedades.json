@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-09T22:35:05Z",
+    "es": ["Recordatorio del peso: ahora cada 15 días; dice cuánto hace que no te pesas y tu último peso, con un botón para ir a Mis datos.", "Recordatorio de la copia de seguridad: dice cuánto hace de la última y por qué conviene hacerla, con un botón para hacerla en ese momento."],
+    "ca": ["Recordatori del pes: ara cada 15 dies; diu quant fa que no et peses i el teu últim pes, amb un botó per anar a Les meves dades.", "Recordatori de la còpia de seguretat: diu quant fa de l'última i per què convé fer-la, amb un botó per fer-la en aquell moment."],
+    "en": ["Weight reminder: now every 15 days; it says how long since you last weighed yourself and your last weight, with a button to go to My details.", "Backup reminder: it says how long since the last one and why it's worth doing, with a button to back up right away."]
+  },
+  {
     "fecha": "2026-11-09T22:23:44Z",
     "es": ["Aviso de versión nueva: vuelve a su tamaño de antes y está un poco más abajo, para que tape del todo el saludo de detrás."],
     "ca": ["Avís de versió nova: torna a la mida d'abans i és una mica més avall, perquè tapi del tot la salutació del darrere."],
