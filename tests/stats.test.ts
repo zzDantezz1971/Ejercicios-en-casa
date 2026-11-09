@@ -6,7 +6,7 @@ import { exerciseWeights, weightSuggestion } from '../src/domain/weights';
 import { MUSCLES } from '../src/figure/anatomy';
 import { muscleLoad, loadWeights } from '../src/domain/muscleLoad';
 import { describe, expect, it } from 'vitest';
-import { bestStreak, routineNames, secondsBySection, topExercises } from '../src/domain/stats';
+import { bestStreak, routineNames, secondsBySection, topExercises, totalBySection } from '../src/domain/stats';
 import { summarizeHeart, type HistoryEntry } from '../src/domain/types';
 
 const entry = (date: string, extra: Partial<HistoryEntry> = {}): HistoryEntry => ({
@@ -31,6 +31,18 @@ describe('Estadísticas del historial', () => {
     const r = secondsBySection(h);
     expect(r.bySection).toEqual({ calentamiento: 30, pesas: 45, abdominales: 300, estiramientos: 300 });
     expect(r.approximate).toBe(true);
+  });
+
+  it('reparte la duración total entre apartados (con descansos), y la suma es la duración', () => {
+    const h = [
+      entry('2026-10-01T10:00', { durationSec: 150, items: [
+        { exerciseId: 'a', section: 'calentamiento', planned: 30, seconds: 30, completed: true },
+        { exerciseId: 'b', section: 'pesas', planned: 60, seconds: 60, completed: true },
+      ] }),
+    ];
+    const r = totalBySection(h);
+    expect(r.bySection).toEqual({ calentamiento: 50, pesas: 100, abdominales: 0, estiramientos: 0 });
+    expect(r.approximate).toBe(false);
   });
 
   it('ordena los ejercicios más hechos y los nombres de tabla', () => {

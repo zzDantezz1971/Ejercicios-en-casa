@@ -389,7 +389,7 @@ const ROWS: Row[] = [
   ['Mejor racha', 'Millor ratxa', 'Best streak'],
   ['Entreno más largo', 'Entrenament més llarg', 'Longest workout'],
   ['Récord de calorías', 'Rècord de calories', 'Most calories'],
-  ['Mejor semana', 'Millor setmana', 'Best week'],
+  ['Mejor mes', 'Millor mes', 'Best month'],
   ['días este mes', 'dies aquest mes', 'days this month'],
   ['Resumen semanal', 'Resum setmanal', 'Weekly summary'],
   ['Resumen del mes', 'Resum del mes', 'Monthly summary'],

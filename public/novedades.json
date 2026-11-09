@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-09T21:56:19Z",
+    "es": ["Historial: «Mejor semana» pasa a ser «Mejor mes».", "Resúmenes: ya no hay selector de semana o mes dentro (cada botón abre el suyo), y el tiempo por apartado es el total, con descansos incluidos."],
+    "ca": ["Historial: «Millor setmana» passa a ser «Millor mes».", "Resums: ja no hi ha selector de setmana o mes a dins (cada botó obre el seu), i el temps per apartat és el total, amb els descansos inclosos."],
+    "en": ["History: \"Best week\" is now \"Best month\".", "Summaries: no more week/month switch inside (each button opens its own), and the time per section is the total, rests included."]
+  },
+  {
     "fecha": "2026-11-09T21:46:04Z",
     "es": ["Historial reordenado: arriba tus récords (racha actual, mejor racha, entreno más largo, récord de calorías y mejor semana), luego el calendario y los botones de los resúmenes.", "Resúmenes semanal y mensual: ahora incluyen el tiempo por apartado; el cuadro de peso sale de aquí (lo tienes en Mis datos)."],
     "ca": ["Historial reordenat: a dalt els teus rècords (ratxa actual, millor ratxa, entrenament més llarg, rècord de calories i millor setmana), després el calendari i els botons dels resums.", "Resums setmanal i mensual: ara inclouen el temps per apartat; el requadre del pes surt d'aquí (el tens a Les meves dades)."],

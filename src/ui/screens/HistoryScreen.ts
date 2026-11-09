@@ -78,7 +78,7 @@ export class HistoryScreen implements Screen {
       chip('Todas', null), ...names.map((n) => chip(n, n)));
   }
 
-  /** Récords de siempre (con el filtro de tabla): rachas, entrenamiento más largo, más calorías y mejor semana. */
+  /** Récords de siempre (con el filtro de tabla): rachas, entrenamiento más largo, más calorías y mejor mes. */
   private records(list: readonly HistoryEntry[]): HTMLElement {
     const { app } = this;
     const now = new Date();
@@ -88,24 +88,20 @@ export class HistoryScreen implements Screen {
 
     let longest: HistoryEntry | null = null;
     let topKcal: { e: HistoryEntry; kcal: number } | null = null;
-    const weeks = new Map<number, { start: Date; days: Set<string>; sec: number }>();
+    const months = new Map<number, { start: Date; days: Set<string>; sec: number }>();
     for (const e of list) {
       if (!longest || e.durationSec > longest.durationSec) longest = e;
       const c = app.store.caloriesFor(e);
       if (c && (!topKcal || c.kcal > topKcal.kcal)) topKcal = { e, kcal: c.kcal };
-      const d = new Date(e.date), ws = startOfWeek(d);
-      const w = weeks.get(ws.getTime()) ?? { start: ws, days: new Set<string>(), sec: 0 };
-      w.days.add(dayKey(d));
-      w.sec += e.durationSec;
-      weeks.set(ws.getTime(), w);
+      const d = new Date(e.date), ms = new Date(d.getFullYear(), d.getMonth(), 1);
+      const m = months.get(ms.getTime()) ?? { start: ms, days: new Set<string>(), sec: 0 };
+      m.days.add(dayKey(d));
+      m.sec += e.durationSec;
+      months.set(ms.getTime(), m);
     }
-    // mejor semana: más días entrenados y, si empatan, más tiempo
-    const bw = [...weeks.values()].sort((a, b) => b.days.size - a.days.size || b.sec - a.sec)[0];
+    // mejor mes: más días entrenados y, si empatan, más tiempo
+    const bm = [...months.values()].sort((a, b) => b.days.size - a.days.size || b.sec - a.sec)[0];
 
-    // «19–25 oct.» (o «28 oct.–3 nov.» si cambia de mes)
-    const range = (a: Date, z: Date) => a.getMonth() === z.getMonth()
-      ? `${a.getDate()}–${z.getDate()} ${z.toLocaleDateString(LOCALE, { month: 'short' })}`
-      : `${a.getDate()} ${a.toLocaleDateString(LOCALE, { month: 'short' })}–${z.getDate()} ${z.toLocaleDateString(LOCALE, { month: 'short' })}`;
     const tile = (ic: IconName, value: string, label: string, sub: string | null, onclick?: () => void, sub2?: string) =>
       h(onclick ? 'button' : 'div', { class: 'rec-tile' + (onclick ? ' tap' : ''), ...(onclick ? { onclick } : {}) },
         h('span', { class: 'rec-top' }, icon(ic), h('span', { class: 'stat-value' }, value)),
@@ -119,8 +115,8 @@ export class HistoryScreen implements Screen {
       h('div', { class: 'rec-row' + (topKcal ? '' : ' two') },
         longest ? tile('clock', humanDuration(longest.durationSec), 'Entreno más largo', short(new Date(longest.date)), open(longest)) : null,
         topKcal ? tile('flame', `${topKcal.kcal} kcal`, 'Récord de calorías', short(new Date(topKcal.e.date)), open(topKcal.e)) : null,
-        bw ? tile('calendar', plural(bw.days.size, 'día', 'días'), 'Mejor semana', range(bw.start, addDays(bw.start, 6)),
-          () => app.push(new MonthScreen(app, undefined, 'week', bw.start)), humanDuration(bw.sec)) : null));
+        bm ? tile('calendar', plural(bm.days.size, 'día', 'días'), 'Mejor mes', bm.start.toLocaleDateString(LOCALE, { month: 'short', year: 'numeric' }),
+          () => app.push(new MonthScreen(app, bm.start, 'month')), humanDuration(bm.sec)) : null));
   }
 
   private calendar(list: readonly HistoryEntry[]): HTMLElement {

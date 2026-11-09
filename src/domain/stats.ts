@@ -41,6 +41,28 @@ export function secondsBySection(history: readonly HistoryEntry[]): { bySection:
   return { bySection: out, approximate };
 }
 
+/**
+ * Tiempo total de cada apartado (no solo el de los ejercicios): la duración de cada entrenamiento
+ * (con descansos y cuentas atrás) se reparte entre sus apartados según el tiempo de ejercicio de cada uno.
+ * La suma de todos los apartados es la duración total.
+ */
+export function totalBySection(history: readonly HistoryEntry[]): { bySection: Record<SectionId, number>; approximate: boolean } {
+  const out = Object.fromEntries(SECTION_IDS.map((s) => [s, 0])) as Record<SectionId, number>;
+  let approximate = false;
+  for (const e of history) {
+    const ex = Object.fromEntries(SECTION_IDS.map((s) => [s, 0])) as Record<SectionId, number>;
+    for (const i of e.items ?? []) ex[i.section] += i.seconds;
+    const sum = SECTION_IDS.reduce((n, s) => n + ex[s], 0);
+    if (sum > 0) {
+      for (const s of SECTION_IDS) out[s] += (e.durationSec * ex[s]) / sum;
+    } else if (e.sections.length) {
+      approximate = true;
+      for (const s of e.sections) out[s] += e.durationSec / e.sections.length;
+    }
+  }
+  return { bySection: out, approximate };
+}
+
 /** Ejercicios más hechos (completados), de más a menos. */
 export function topExercises(history: readonly HistoryEntry[], n = 5): Array<{ exerciseId: string; times: number; seconds: number; maxWeight?: number }> {
   const map = new Map<string, { times: number; seconds: number; maxWeight?: number }>();

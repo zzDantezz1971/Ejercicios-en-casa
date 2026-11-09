@@ -5,7 +5,7 @@ import { MUSCLES } from '../../figure/anatomy';
 import type { App, Screen } from '../App';
 import { bodyMaps } from '../components/bodyMaps';
 import { muscleLines } from '../components/muscleLines';
-import { secondsBySection } from '../../domain/stats';
+import { totalBySection } from '../../domain/stats';
 import { SECTION_IDS, SECTION_TITLES } from '../../domain/types';
 import { append, clear, h, humanDuration, kg } from '../dom';
 import { icon, SECTION_STYLE, type IconName } from '../icons';
@@ -17,13 +17,13 @@ export class MonthScreen implements Screen {
   private month: Date;
   private week: Date;
 
-  constructor(private readonly app: App, month: Date = monthStart(new Date()), private mode: 'week' | 'month' = 'month', week: Date = weekStart(new Date())) {
+  constructor(private readonly app: App, month: Date = monthStart(new Date()), private readonly mode: 'week' | 'month' = 'month', week: Date = weekStart(new Date())) {
     this.month = monthStart(month);
     this.week = weekStart(week);
     this.el.append(
       h('header', { class: 'bar sticky' },
         h('button', { class: 'icon-btn', 'aria-label': 'Volver', onclick: () => app.back() }, icon('back')),
-        h('span', { class: 'bar-title' }, 'Resumen')),
+        h('span', { class: 'bar-title' }, mode === 'week' ? 'Resumen semanal' : 'Resumen del mes')),
       this.body);
   }
 
@@ -64,9 +64,6 @@ export class MonthScreen implements Screen {
       this.render();
       window.scrollTo(0, 0);
     };
-    const seg = (m: 'week' | 'month', label: string) =>
-      h('button', { class: 'seg' + (this.mode === m ? ' on' : ''), 'aria-pressed': String(this.mode === m), onclick: () => { this.mode = m; this.render(); } }, label);
-    this.body.append(h('div', { class: 'segmented period-seg' }, seg('week', 'Semana'), seg('month', 'Mes')));
     append(this.body,
       h('div', { class: 'card-head month-nav' },
         h('button', { class: 'icon-btn small', 'aria-label': W ? 'Semana anterior' : 'Mes anterior', onclick: () => go(-1) }, icon('back')),
@@ -100,9 +97,9 @@ export class MonthScreen implements Screen {
         prev.sessions ? null : h('p', { class: 'ms-note' }, W ? 'No hay datos de la semana anterior para comparar.' : 'No hay datos del mes anterior para comparar.')),
     );
 
-    // Tiempo por apartado en este periodo
+    // Tiempo por apartado en este periodo (total: con descansos y cuentas atrás)
     {
-      const { bySection, approximate } = secondsBySection(cur.entries);
+      const { bySection, approximate } = totalBySection(cur.entries);
       const max = Math.max(...SECTION_IDS.map((sec) => bySection[sec]));
       if (max > 0) {
         this.body.append(h('section', { class: 'card' },
