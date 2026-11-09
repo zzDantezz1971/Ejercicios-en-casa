@@ -121,9 +121,7 @@ export class MonthScreen implements Screen {
 
     // Músculos
     const load = muscleLoad(cur.entries, (id) => this.app.catalog.get(id)?.muscles);
-    const worked = MUSCLES.filter((m) => load.work[m] > 0).sort((a, b) => load.work[b] - load.work[a]);
-    const stretched = MUSCLES.filter((m) => load.stretch[m] > 0).sort((a, b) => load.stretch[b] - load.stretch[a]);
-    if (worked.length || stretched.length) {
+    if (MUSCLES.some((m) => load.work[m] + load.stretch[m] > 0)) {
       const w = loadWeights(load);
       const img = (back: boolean) => {
         const el = h('img', { class: 'mm-img', alt: back ? 'Músculos de espaldas' : 'Músculos de frente' });

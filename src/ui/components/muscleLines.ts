@@ -1,10 +1,10 @@
 import { MUSCLE_NAMES, MUSCLES } from '../../figure/anatomy';
-import type { muscleLoad } from '../../domain/muscleLoad';
+import { totalLoad, type muscleLoad } from '../../domain/muscleLoad';
 import { h } from '../dom';
 
 type Load = ReturnType<typeof muscleLoad>;
 
-/** Líneas bajo el mapa de músculos (Historial y resúmenes): más y menos trabajados, más y menos estirados. */
+/** Líneas bajo el mapa de músculos (resúmenes): más y menos trabajados (fuerza y estiramientos cuentan igual). */
 export function muscleLines(load: Load): HTMLElement[] {
   const lines: HTMLElement[] = [];
   const block = (t: Record<string, number>, kind: 'work' | 'stretch', more: string, less: string) => {
@@ -18,7 +18,6 @@ export function muscleLines(load: Load): HTMLElement[] {
     lines.push(line('', more, top));
     if (low.length) lines.push(line(' less', less, low));
   };
-  block(load.work, 'work', 'Más trabajados: ', 'Menos trabajados: ');
-  block(load.stretch, 'stretch', 'Más estirados: ', 'Menos estirados: ');
+  block(totalLoad(load), 'work', 'Más trabajados: ', 'Menos trabajados: ');
   return lines;
 }

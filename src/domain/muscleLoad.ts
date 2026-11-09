@@ -35,8 +35,14 @@ export function muscleLoad(history: readonly HistoryEntry[], musclesOf: (exercis
   return { work, stretch, missing };
 }
 
-/** Pesos para colorear el maniquí: rojo según lo trabajado; turquesa suave si solo se ha estirado. */
+/** Tiempo total de cada músculo: trabajado y estirado cuentan igual (fuerza o estiramiento, el músculo trabaja). */
+export function totalLoad(load: MuscleLoad): Record<Muscle, number> {
+  return Object.fromEntries(MUSCLES.map((m) => [m, load.work[m] + load.stretch[m]])) as Record<Muscle, number>;
+}
+
+/** Pesos para colorear el maniquí: rojo más intenso cuanto más se ha trabajado (o estirado) cada músculo. */
 export function loadWeights(load: MuscleLoad): number[] {
-  const max = Math.max(1, ...MUSCLES.map((m) => load.work[m]));
-  return MUSCLES.map((m) => (load.work[m] > 0 ? 0.3 + 0.7 * (load.work[m] / max) : load.stretch[m] > 0 ? -0.55 : 0));
+  const t = totalLoad(load);
+  const max = Math.max(1, ...MUSCLES.map((m) => t[m]));
+  return MUSCLES.map((m) => (t[m] > 0 ? 0.3 + 0.7 * (t[m] / max) : 0));
 }

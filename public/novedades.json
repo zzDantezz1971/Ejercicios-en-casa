@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-09T22:20:11Z",
+    "es": ["Músculos de los resúmenes: solo «más trabajados» y «menos trabajados»; los estiramientos cuentan igual que la fuerza, y el muñeco va todo en rojo según lo trabajado."],
+    "ca": ["Músculs dels resums: només «més treballats» i «menys treballats»; els estiraments compten igual que la força, i el ninot va tot en vermell segons el que s'ha treballat."],
+    "en": ["Muscles in the summaries: just \"most worked\" and \"least worked\"; stretches count the same as strength, and the figure is all red according to the work done."]
+  },
+  {
     "fecha": "2026-11-09T22:15:03Z",
     "es": ["El aviso de versión nueva es un poco más grande.", "Músculos: en las cuatro líneas, la lista de músculos va siempre debajo del título."],
     "ca": ["L'avís de versió nova és una mica més gran.", "Músculs: a les quatre línies, la llista de músculs va sempre sota el títol."],
