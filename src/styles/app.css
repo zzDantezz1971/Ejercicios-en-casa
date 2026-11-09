@@ -1193,3 +1193,20 @@ button.wd:active .wd-dot { transform: scale(.92); }
 .rest-row:has(.sec-dot) .stepper { padding: 0; min-width: 132px; gap: 4px; }
 .rest-row:has(.sec-dot) .stepper button { width: 34px; height: 34px; font-size: 1.2rem; border-radius: 10px; }
 .rest-row:has(.sec-dot) .stepper .secs { font-size: 1.1rem; }
+
+/* Historial: cuadro de récords (2 arriba, 3 abajo) */
+.rec-card { padding: 4px; }
+.rec-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.rec-row.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.rec-row + .rec-row { border-top: 1px solid var(--line); }
+.rec-tile { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 2px; padding: 12px 4px; min-width: 0; background: none; border: 0; color: inherit; font: inherit; border-radius: 14px; }
+.rec-tile.tap { cursor: pointer; }
+.rec-tile.tap:active { background: var(--surface-2); }
+.rec-top { display: flex; align-items: center; gap: 5px; }
+.rec-top .ico { width: 20px; height: 20px; color: var(--sec-warm); }
+.rec-row.two .rec-tile:nth-child(2) .ico { color: #F5A524; }
+.rec-row:not(.two) .rec-tile:first-child .ico, .rec-row:not(.two) .rec-tile:last-child .ico { color: var(--accent-2); }
+.rec-top .stat-value { font-size: 1.35rem; white-space: nowrap; }
+.rec-row.two .rec-top .stat-value { font-size: 1.7rem; }
+.rec-label { font-size: .8rem; font-weight: 600; line-height: 1.2; }
+.rec-sub { font-size: .72rem; color: var(--muted); line-height: 1.2; }

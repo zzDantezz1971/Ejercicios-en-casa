@@ -5,9 +5,10 @@ import { MUSCLES } from '../../figure/anatomy';
 import type { App, Screen } from '../App';
 import { bodyMaps } from '../components/bodyMaps';
 import { muscleLines } from '../components/muscleLines';
-import { askWeight, fmtDiff, fmtKg } from '../components/weightCard';
+import { secondsBySection } from '../../domain/stats';
+import { SECTION_IDS, SECTION_TITLES } from '../../domain/types';
 import { append, clear, h, humanDuration, kg } from '../dom';
-import { icon, type IconName } from '../icons';
+import { icon, SECTION_STYLE, type IconName } from '../icons';
 
 /** Resumen de una semana (de lunes a domingo) o de un mes, comparado con el periodo anterior. */
 export class MonthScreen implements Screen {
@@ -99,32 +100,25 @@ export class MonthScreen implements Screen {
         prev.sessions ? null : h('p', { class: 'ms-note' }, W ? 'No hay datos de la semana anterior para comparar.' : 'No hay datos del mes anterior para comparar.')),
     );
 
-    // Peso: siempre hay tarjeta (con el cambio, con la única anotación, con la última conocida o para anotarlo)
+    // Tiempo por apartado en este periodo
     {
-      const end = W ? addWeeks(start, 1) : addMonths(start, 1);
-      const ws = this.app.store.weights;
-      const inside = ws.filter((w) => { const t = Date.parse(w.date); return t >= start.getTime() && t < end.getTime(); });
-      const before = ws.filter((w) => Date.parse(w.date) < start.getTime());
-      const addBtn = isNow ? h('button', { class: 'btn primary small', onclick: async () => { if (await askWeight(this.app)) this.render(); } }, icon('plus'), 'Anotar peso') : null;
-      const card = (...kids: Array<HTMLElement | null>) =>
-        this.body.append(h('section', { class: 'card month-weight' }, h('div', { class: 'card-head' }, h('h3', {}, 'Peso')), ...kids));
-      if (cur.weight) {
-        const d = cur.weight.to - cur.weight.from;
-        card(
-          h('div', { class: 'wc-now' }, h('strong', {}, fmtKg(cur.weight.to)),
-            h('span', { class: 'wc-diff' + (d < 0 ? ' down' : d > 0 ? ' up' : '') }, `${fmtDiff(d)} ${W ? 'esta semana' : 'este mes'}`)),
-          h('p', { class: 'muted small' }, `Empezaste ${W ? 'la semana' : 'el mes'} con ${fmtKg(cur.weight.from)}.`));
-      } else if (inside.length === 1) {
-        card(h('div', { class: 'wc-now' }, h('strong', {}, fmtKg(inside[0].kg))),
-          h('p', { class: 'muted small' }, 'Es tu primer peso anotado: a partir de ahora verás cómo cambia.'));
-      } else if (before.length) {
-        const lastW = before[before.length - 1];
-        const when = new Date(lastW.date).toLocaleDateString(LOCALE, { day: 'numeric', month: 'long' });
-        card(h('div', { class: 'mw-row' },
-          h('p', { class: 'muted small' }, `${W ? 'No anotaste el peso esta semana.' : 'No anotaste el peso este mes.'} El último: ${fmtKg(lastW.kg)} (${when}).`),
-          addBtn));
-      } else {
-        card(h('div', { class: 'mw-row' }, h('p', { class: 'muted small' }, 'Anota tu peso para ver aquí cómo cambia cada semana y cada mes.'), addBtn));
+      const { bySection, approximate } = secondsBySection(cur.entries);
+      const max = Math.max(...SECTION_IDS.map((sec) => bySection[sec]));
+      if (max > 0) {
+        this.body.append(h('section', { class: 'card' },
+          h('div', { class: 'card-head' }, h('h3', {}, 'Tiempo por apartado'), approximate ? h('span', { class: 'muted small' }, 'aprox.') : null),
+          ...SECTION_IDS.map((sec) => {
+            const st = SECTION_STYLE[sec];
+            const fill = h('span', { class: 'sb-fill' });
+            fill.style.width = `${(bySection[sec] / max) * 100}%`;
+            const r = h('div', { class: 'sb-row' },
+              h('span', { class: 'sec-dot' }, icon(st.icon)),
+              h('span', { class: 'sb-name' }, SECTION_TITLES[sec]),
+              h('span', { class: 'sb-bar' }, fill),
+              h('span', { class: 'sb-val' }, bySection[sec] ? humanDuration(bySection[sec]) : '—'));
+            r.style.setProperty('--sec', st.color);
+            return r;
+          })));
       }
     }
 

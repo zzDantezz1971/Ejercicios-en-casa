@@ -1,28 +1,21 @@
 import { LOCALE } from '../../i18n';
-import { bestStreak, routineNames, secondsBySection } from '../../domain/stats';
-import { loadWeights, muscleLoad } from '../../domain/muscleLoad';
-import { bodyMaps } from '../components/bodyMaps';
-import { muscleLines } from '../components/muscleLines';
+import { bestStreak, routineNames } from '../../domain/stats';
 import { MonthScreen } from './MonthScreen';
 import type { Store } from '../../domain/Store';
-import { SECTION_IDS, SECTION_TITLES, type HistoryEntry } from '../../domain/types';
+import { SECTION_TITLES, type HistoryEntry } from '../../domain/types';
 import type { App, Screen } from '../App';
-import { addDays, dayKey, minutesPerWeek, startOfWeek, streak, trainedDays, WEEKDAY_LETTERS } from '../dates';
+import { addDays, dayKey, startOfWeek, streak, trainedDays, WEEKDAY_LETTERS } from '../dates';
 import { append, clear, confirmDialog, h, humanDuration, plural } from '../dom';
 import { icon, SECTION_STYLE, type IconName } from '../icons';
 import { HistoryDetailScreen } from './HistoryDetailScreen';
 import { backupCard, backupDue } from '../components/backupPrompt';
 
-const NS = 'http://www.w3.org/2000/svg';
-
-/** Historial: resumen, minutos por semana, calendario y lista de entrenamientos. */
+/** Historial: récords, calendario y botones de los resúmenes semanal y mensual. */
 export class HistoryScreen implements Screen {
   readonly el = h('main', { class: 'screen history' });
   readonly tab = 'historial' as const;
   private body = h('div', { class: 'history-body' });
   private month = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
-  /** Periodo del mapa de músculos. */
-  private mapRange: 'week' | 'month' = 'week';
   /** Tabla por la que se filtra (null = todas). */
   private filter: string | null = null;
 
@@ -44,28 +37,14 @@ export class HistoryScreen implements Screen {
     const names = routineNames(all);
     if (this.filter && !names.includes(this.filter)) this.filter = null;
     const list = this.filter ? all.filter((e) => e.routineName === this.filter) : all;
-    const now = new Date();
-    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
-    const daysThisMonth = new Set(list.filter((e) => Date.parse(e.date) >= monthStart).map((e) => dayKey(new Date(e.date)))).size;
-    const total = list.reduce((n, e) => n + e.durationSec, 0);
-    const run = streak(list, now);
-
     append(this.body,
       backupDue(this.app) ? backupCard(this.app, { question: false }) : null,
       names.length > 1 ? this.filters(names) : null,
-      h('section', { class: 'stats-row four' },
-        stat('flame', String(run), run === 1 ? 'día seguido' : 'días seguidos'),
-        stat('trophy', String(bestStreak(list)), 'récord de racha'),
-        stat('calendar', String(daysThisMonth), 'días este mes'),
-        stat('clock', humanDuration(total), 'en total'),
-        ...this.kcalStats(list, now)),
-      this.chart(list),
+      this.records(list),
       this.calendar(list),
       h('div', { class: 'summary-btns' },
         h('button', { class: 'btn ghost', onclick: () => this.app.push(new MonthScreen(this.app, undefined, 'week')) }, icon('calendar'), 'Resumen semanal'),
         h('button', { class: 'btn ghost', onclick: () => this.app.push(new MonthScreen(this.app, undefined, 'month')) }, icon('calendar'), 'Resumen del mes')),
-      this.bySection(list),
-      this.muscleMap(list, now),
     );
 
     this.body.append(
@@ -79,17 +58,6 @@ export class HistoryScreen implements Screen {
         },
       }, icon('trash'), 'Borrar todo el historial'),
     );
-  }
-
-  /** Calorías de esta semana y de este mes (si hay peso en Mis datos). */
-  private kcalStats(list: readonly HistoryEntry[], now: Date): HTMLElement[] {
-    const st = this.app.store;
-    const week = startOfWeek(now).getTime();
-    const month = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
-    const w = st.totalCalories(list.filter((e) => Date.parse(e.date) >= week));
-    const m = st.totalCalories(list.filter((e) => Date.parse(e.date) >= month));
-    if (w === null || m === null) return [];
-    return [stat('flame', String(w), 'kcal esta semana'), stat('flame', String(m), 'kcal este mes')];
   }
 
   private rerender(): void {
@@ -110,88 +78,51 @@ export class HistoryScreen implements Screen {
       chip('Todas', null), ...names.map((n) => chip(n, n)));
   }
 
-  /** Mapa de músculos: el cuerpo de frente y de espaldas coloreado según lo trabajado en la semana o el mes. */
-  private muscleMap(list: readonly HistoryEntry[], now: Date): HTMLElement {
-    const from = this.mapRange === 'week' ? startOfWeek(now).getTime() : new Date(now.getFullYear(), now.getMonth(), 1).getTime();
-    const entries = list.filter((e) => Date.parse(e.date) >= from);
-    const load = muscleLoad(entries, (id) => this.app.catalog.get(id)?.muscles);
-    const weights = loadWeights(load);
-    const seg = (r: 'week' | 'month', label: string) =>
-      h('button', { class: 'seg' + (this.mapRange === r ? ' on' : ''), 'aria-pressed': String(this.mapRange === r), onclick: () => { this.mapRange = r; this.rerender(); } }, label);
-    const img = (back: boolean) => {
-      const el = h('img', { class: 'mm-img', alt: back ? 'Músculos de espaldas' : 'Músculos de frente' });
-      void bodyMaps().bodyMap(weights, back).then((u) => { if (u) el.src = u; else el.remove(); });
-      return h('figure', { class: 'mm-fig' }, el, h('figcaption', { class: 'muted small' }, back ? 'Detrás' : 'Delante'));
-    };
-    return h('section', { class: 'card muscle-map' },
-      h('div', { class: 'card-head' }, h('h3', {}, 'Músculos'), h('div', { class: 'segmented small' }, seg('week', 'Semana'), seg('month', 'Mes'))),
-      entries.length && load.missing < entries.length
-        ? h('div', { class: 'mm-figs' }, img(false), img(true))
-        : h('p', { class: 'muted small' }, entries.length ? 'Los entrenamientos de este periodo son de una versión anterior y no guardan el detalle de cada ejercicio.' : 'Aún no has entrenado en este periodo.'),
-      ...muscleLines(load));
-  }
+  /** Récords de siempre (con el filtro de tabla): rachas, entrenamiento más largo, más calorías y mejor semana. */
+  private records(list: readonly HistoryEntry[]): HTMLElement {
+    const { app } = this;
+    const now = new Date();
+    const short = (d: Date) => d.toLocaleDateString(LOCALE, { day: 'numeric', month: 'short' });
+    const open = (e: HistoryEntry) => () => app.push(new HistoryDetailScreen(app, e));
+    const run = streak(list, now), best = bestStreak(list);
 
-  /** Barras con el tiempo dedicado a cada apartado. */
-  private bySection(list: readonly HistoryEntry[]): HTMLElement | null {
-    const { bySection, approximate } = secondsBySection(list);
-    const max = Math.max(...SECTION_IDS.map((s) => bySection[s]));
-    if (max <= 0) return null;
-    return h('section', { class: 'card' },
-      h('div', { class: 'card-head' }, h('h3', {}, 'Tiempo por apartado'), approximate ? h('span', { class: 'muted small' }, 'aprox.') : null),
-      ...SECTION_IDS.map((s) => {
-        const st = SECTION_STYLE[s];
-        const fill = h('span', { class: 'sb-fill' });
-        fill.style.width = `${(bySection[s] / max) * 100}%`;
-        const r = h('div', { class: 'sb-row' },
-          h('span', { class: 'sec-dot' }, icon(st.icon)),
-          h('span', { class: 'sb-name' }, SECTION_TITLES[s]),
-          h('span', { class: 'sb-bar' }, fill),
-          h('span', { class: 'sb-val' }, bySection[s] ? humanDuration(bySection[s]) : '—'));
-        r.style.setProperty('--sec', st.color);
-        return r;
-      }));
-  }
-
-  /** Barras con los minutos de las últimas 8 semanas. */
-  private chart(list: readonly HistoryEntry[]): HTMLElement {
-    const weeks = minutesPerWeek(list, 8);
-    const max = Math.max(30, ...weeks.map((w) => w.minutes));
-    const nice = Math.ceil(max / 30) * 30;
-    const W = 320, H = 150, pad = { l: 30, r: 6, t: 14, b: 22 };
-    const bw = (W - pad.l - pad.r) / weeks.length;
-    const svg = document.createElementNS(NS, 'svg');
-    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
-    svg.setAttribute('class', 'chart');
-    svg.setAttribute('role', 'img');
-    svg.setAttribute('aria-label', 'Minutos entrenados por semana en las últimas 8 semanas');
-    const el = (tag: string, attrs: Record<string, string | number>, text?: string) => {
-      const e = document.createElementNS(NS, tag);
-      for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, String(v));
-      if (text) e.textContent = text;
-      svg.append(e);
-      return e;
-    };
-    const y = (m: number) => pad.t + (H - pad.t - pad.b) * (1 - m / nice);
-    for (const g of [0, nice / 2, nice]) {
-      el('line', { x1: pad.l, x2: W - pad.r, y1: y(g), y2: y(g), class: 'grid' });
-      el('text', { x: pad.l - 6, y: y(g), class: 'axis', 'text-anchor': 'end', 'dominant-baseline': 'central' }, String(g));
+    let longest: HistoryEntry | null = null;
+    let topKcal: { e: HistoryEntry; kcal: number } | null = null;
+    const weeks = new Map<number, { start: Date; days: Set<string>; sec: number }>();
+    for (const e of list) {
+      if (!longest || e.durationSec > longest.durationSec) longest = e;
+      const c = app.store.caloriesFor(e);
+      if (c && (!topKcal || c.kcal > topKcal.kcal)) topKcal = { e, kcal: c.kcal };
+      const d = new Date(e.date), ws = startOfWeek(d);
+      const w = weeks.get(ws.getTime()) ?? { start: ws, days: new Set<string>(), sec: 0 };
+      w.days.add(dayKey(d));
+      w.sec += e.durationSec;
+      weeks.set(ws.getTime(), w);
     }
-    weeks.forEach((w, i) => {
-      const x = pad.l + i * bw + bw * 0.18, bwi = bw * 0.64;
-      const last = i === weeks.length - 1;
-      if (w.minutes > 0) {
-        const top = y(w.minutes);
-        el('rect', { x, y: top, width: bwi, height: Math.max(2, H - pad.b - top), rx: 4, class: last ? 'bar now' : 'bar', style: `animation-delay:${i * 60}ms` });
-        if (last || w.minutes === Math.max(...weeks.map((q) => q.minutes))) el('text', { x: x + bwi / 2, y: top - 4, class: 'val', 'text-anchor': 'middle' }, String(Math.round(w.minutes)));
-      }
-      el('text', { x: x + bwi / 2, y: H - 6, class: 'axis', 'text-anchor': 'middle' }, last ? 'Esta' : `${w.start.getDate()}/${w.start.getMonth() + 1}`);
-    });
-    return h('section', { class: 'card chart-card' },
-      h('div', { class: 'card-head' }, h('h3', {}, 'Minutos por semana'), h('span', { class: 'muted small' }, 'Últimas 8 semanas')),
-      svg as unknown as HTMLElement);
+    // mejor semana: más días entrenados y, si empatan, más tiempo
+    const bw = [...weeks.values()].sort((a, b) => b.days.size - a.days.size || b.sec - a.sec)[0];
+
+    // «19–25 oct.» (o «28 oct.–3 nov.» si cambia de mes)
+    const range = (a: Date, z: Date) => a.getMonth() === z.getMonth()
+      ? `${a.getDate()}–${z.getDate()} ${z.toLocaleDateString(LOCALE, { month: 'short' })}`
+      : `${a.getDate()} ${a.toLocaleDateString(LOCALE, { month: 'short' })}–${z.getDate()} ${z.toLocaleDateString(LOCALE, { month: 'short' })}`;
+    const tile = (ic: IconName, value: string, label: string, sub: string | null, onclick?: () => void, sub2?: string) =>
+      h(onclick ? 'button' : 'div', { class: 'rec-tile' + (onclick ? ' tap' : ''), ...(onclick ? { onclick } : {}) },
+        h('span', { class: 'rec-top' }, icon(ic), h('span', { class: 'stat-value' }, value)),
+        h('span', { class: 'rec-label' }, label),
+        sub ? h('span', { class: 'rec-sub' }, sub) : null,
+        sub2 ? h('span', { class: 'rec-sub' }, sub2) : null);
+    return h('section', { class: 'card rec-card' },
+      h('div', { class: 'rec-row two' },
+        tile('flame', String(run), 'Racha actual', run === 1 ? 'día seguido' : 'días seguidos'),
+        tile('trophy', String(best), 'Mejor racha', best === 1 ? 'día seguido' : 'días seguidos')),
+      h('div', { class: 'rec-row' + (topKcal ? '' : ' two') },
+        longest ? tile('clock', humanDuration(longest.durationSec), 'Entreno más largo', short(new Date(longest.date)), open(longest)) : null,
+        topKcal ? tile('flame', `${topKcal.kcal} kcal`, 'Récord de calorías', short(new Date(topKcal.e.date)), open(topKcal.e)) : null,
+        bw ? tile('calendar', plural(bw.days.size, 'día', 'días'), 'Mejor semana', range(bw.start, addDays(bw.start, 6)),
+          () => app.push(new MonthScreen(app, undefined, 'week', bw.start)), humanDuration(bw.sec)) : null));
   }
 
-  /** Calendario del mes con los días entrenados. */
   private calendar(list: readonly HistoryEntry[]): HTMLElement {
     const days = trainedDays(list);
     const m = this.month;
@@ -221,10 +152,6 @@ export class HistoryScreen implements Screen {
       h('div', { class: 'cal-grid' }, ...cells),
       h('p', { class: 'muted small cal-hint' }, 'Toca un día marcado para ver su entrenamiento.'));
   }
-}
-
-function stat(ic: IconName, value: string, label: string): HTMLElement {
-  return h('div', { class: 'stat' }, icon(ic), h('span', { class: 'stat-value' }, value), h('span', { class: 'muted small' }, label));
 }
 
 function kcalTag(e: HistoryEntry, store: Store): HTMLElement | null {

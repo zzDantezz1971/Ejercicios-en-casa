@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-09T21:46:04Z",
+    "es": ["Historial reordenado: arriba tus récords (racha actual, mejor racha, entreno más largo, récord de calorías y mejor semana), luego el calendario y los botones de los resúmenes.", "Resúmenes semanal y mensual: ahora incluyen el tiempo por apartado; el cuadro de peso sale de aquí (lo tienes en Mis datos)."],
+    "ca": ["Historial reordenat: a dalt els teus rècords (ratxa actual, millor ratxa, entrenament més llarg, rècord de calories i millor setmana), després el calendari i els botons dels resums.", "Resums setmanal i mensual: ara inclouen el temps per apartat; el requadre del pes surt d'aquí (el tens a Les meves dades)."],
+    "en": ["History reorganised: your records at the top (current streak, best streak, longest workout, most calories and best week), then the calendar and the summary buttons.", "Weekly and monthly summaries: they now include time per section; the weight box has moved out (it's in My details)."]
+  },
+  {
     "fecha": "2026-11-09T21:23:38Z",
     "es": ["Historial: «Calorías calculadas con tu pulso, con 76,2 kg», sin el punto en medio."],
     "ca": ["Historial: «Calories calculades amb el teu pols, amb 76,2 kg», sense el punt al mig."],
