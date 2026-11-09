@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-09T21:18:23Z",
+    "es": ["Historial: los ejercicios de un entrenamiento salen en cuadrícula, 2 o 3 por fila según el ancho del móvil."],
+    "ca": ["Historial: els exercicis d'un entrenament surten en quadrícula, 2 o 3 per fila segons l'amplada del mòbil."],
+    "en": ["History: a workout's exercises are shown in a grid, 2 or 3 per row depending on the phone's width."]
+  },
+  {
     "fecha": "2026-11-09T21:16:24Z",
     "es": ["Historial, detalle de un entrenamiento: arriba, duración, calorías y tiempo haciendo ejercicio (fuera «Hechos» y «Saltados»).", "Historial: toca cualquier ejercicio de la lista para ver su ficha, con el muñeco y cómo se hace."],
     "ca": ["Historial, detall d'un entrenament: a dalt, durada, calories i temps fent exercici (fora «Fets» i «Saltats»).", "Historial: toca qualsevol exercici de la llista per veure'n la fitxa, amb el ninot i com es fa."],

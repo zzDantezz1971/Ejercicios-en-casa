@@ -30,20 +30,22 @@ export class HistoryDetailScreen implements Screen {
         h('span', { class: 'muted small' }, mmss(its.reduce((n, i) => n + i.seconds, 0))));
       head.style.setProperty('--sec', st.color);
       list.push(head);
+      // ejercicios en cuadrícula (2 o 3 por fila); tocar uno abre su ficha (muñeco, cómo se hace, músculos…)
+      const grid = h('div', { class: 'hd-grid' });
       for (const it of its) {
         const ex = app.catalog.get(it.exerciseId);
-        // tocar un ejercicio abre su ficha (muñeco, cómo se hace, músculos…)
-        const r = h(ex ? 'button' : 'div', { class: 'card hd-row' + (it.completed ? '' : ' skipped') + (ex ? ' tappable' : ''),
+        const status = it.completed ? '' : it.seconds > 0 ? 'Saltado a medias' : 'Saltado';
+        const r = h(ex ? 'button' : 'div', { class: 'card hd-row' + (it.completed ? '' : ' skipped'),
           ...(ex ? { 'aria-label': `Cómo se hace: ${ex.name}`, onclick: () => app.push(new DetailScreen(app, ex)) } : {}) },
-          h('span', { class: 'hd-mark' }, icon(it.completed ? 'check' : 'next')),
-          h('div', { class: 'hd-text' },
-            h('strong', {}, ex?.name ?? 'Ejercicio eliminado'),
-            h('span', { class: 'muted small' }, it.completed ? 'Hecho' : it.seconds > 0 ? 'Saltado a medias' : 'Saltado', it.weight ? ` · ${kg(it.weight)} por mancuerna` : '')),
-          h('span', { class: 'hd-secs' }, `${mmss(it.seconds)}`, h('span', { class: 'muted small' }, ` / ${mmss(it.planned)}`)),
-          ex ? icon('chevron', 'ico hd-chev') : null);
+          h('div', { class: 'hd-top' },
+            h('span', { class: 'hd-mark' }, icon(it.completed ? 'check' : 'next')),
+            h('span', { class: 'hd-secs' }, mmss(it.seconds), it.seconds < it.planned ? h('span', { class: 'muted small' }, ` / ${mmss(it.planned)}`) : null)),
+          h('strong', { class: 'hd-name' }, ex?.name ?? 'Ejercicio eliminado'),
+          status || it.weight ? h('span', { class: 'muted small hd-sub' }, status, status && it.weight ? ' · ' : '', it.weight ? kg(it.weight) : '') : null);
         r.style.setProperty('--sec', st.color);
-        list.push(r);
+        grid.append(r);
       }
+      list.push(grid);
     }
 
     const canRepeat = items.some((i) => app.catalog.has(i.exerciseId) && !app.store.hidden.has(i.exerciseId));
