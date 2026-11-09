@@ -38,7 +38,12 @@ export class Coach {
         switch (cue.type) {
           case 'count':
             sounds.count();
-            if (opts.countdown && cue.n >= 1 && cue.n <= 3) voice.say(T().count[cue.n], true);
+            // en el cambio de lado, el «tres» lo tapa el «Cambia de lado»: la voz dice solo «dos, uno»
+            if (opts.countdown && cue.n >= 1 && cue.n <= 3 && !(cue.side && cue.n === 3)) voice.say(T().count[cue.n], true);
+            break;
+          case 'go':
+            sounds.start();
+            haptics?.start();
             break;
           case 'start':
             sounds.start();

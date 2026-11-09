@@ -1,5 +1,8 @@
 import { SECTION_IDS, type ExerciseDef, type Routine, type SectionId, type Settings } from './types';
 
+/** Segundos de cuenta atrás (con el tiempo parado) para cambiar de lado en los ejercicios por lados. */
+export const SWITCH_PAUSE = 3;
+
 /** Un paso del entrenamiento. La sesión recorre la lista de pasos en orden. */
 export type Step =
   | { kind: 'countdown'; section: SectionId; seconds: number; next: ExerciseDef }
@@ -89,6 +92,7 @@ export class WorkoutPlan {
 
   /** Duración estimada en segundos (sin contar las esperas entre apartados). */
   get estimatedSeconds(): number {
-    return this.steps.reduce((sum, s) => sum + ('seconds' in s ? s.seconds : 0), 0);
+    // los ejercicios por lados suman la cuenta atrás del cambio de lado
+    return this.steps.reduce((sum, s) => sum + ('seconds' in s ? s.seconds : 0) + (s.kind === 'exercise' && s.switchAt !== undefined ? SWITCH_PAUSE : 0), 0);
   }
 }

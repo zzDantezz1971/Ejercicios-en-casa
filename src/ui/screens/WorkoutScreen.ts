@@ -25,6 +25,8 @@ export class WorkoutScreen implements Screen {
   private dotsFor: SectionId | null = null;
   private fadeTimer = 0;
   private pulsedAt = 0;
+  /** Se está mostrando la cuenta atrás del cambio de lado. */
+  private switchingShown = false;
 
   private ui = {
     secChip: h('span', { class: 'w-sec-chip' }),
@@ -76,7 +78,7 @@ export class WorkoutScreen implements Screen {
     });
 
     this.session.on('step', ({ step }) => this.onStep(step));
-    this.session.on('tick', (t) => this.onTick(t.remaining, t.elapsed, t.duration, t.step));
+    this.session.on('tick', (t) => this.onTick(t.remaining, t.elapsed, t.duration, t.step, t.switching));
     this.session.on('status', (s) => this.onStatus(s));
     this.session.on('cue', (c) => {
       const step = this.session.current;
@@ -201,6 +203,11 @@ export class WorkoutScreen implements Screen {
     u.breakPanel.hidden = step.kind !== 'sectionBreak';
     this.el.dataset.phase = step.kind;
     this.setSide(0);
+    if (this.switchingShown) {
+      this.switchingShown = false;
+      this.el.classList.remove('switching');
+      this.view?.freeze(false);
+    }
     const index = this.session.currentIndex;
     switch (step.kind) {
       case 'countdown':
@@ -255,14 +262,23 @@ export class WorkoutScreen implements Screen {
     }
   }
 
-  private onTick(remaining: number, elapsed: number, duration: number, step: Step): void {
-    this.ui.time.textContent = step.kind === 'exercise' ? mmss(Math.ceil(remaining)) : String(Math.ceil(remaining));
+  private onTick(remaining: number, elapsed: number, duration: number, step: Step, switching?: number): void {
+    // cambio de lado: el tiempo está parado y el anillo muestra la cuenta atrás de 3 s
+    const sw = switching !== undefined;
+    if (sw !== this.switchingShown) {
+      this.switchingShown = sw;
+      this.el.classList.toggle('switching', sw);
+      this.ui.phase.replaceChildren(...(sw ? [icon('sides'), 'Cambia de lado'] : []));
+      this.view?.freeze(sw);
+    }
+    this.ui.time.textContent = sw ? String(Math.ceil(switching)) : step.kind === 'exercise' ? mmss(Math.ceil(remaining)) : String(Math.ceil(remaining));
     const k = Math.min(1, elapsed / duration);
     this.ui.ringFg.setAttribute('stroke-dashoffset', String(RING_LEN * (1 - k)));
-    const last3 = remaining <= 3 && remaining > 0;
+    const left = sw ? switching : remaining;
+    const last3 = left <= 3 && left > 0;
     this.el.classList.toggle('last3', last3);
-    // un pulso del anillo con cada segundo de la cuenta atrás final
-    const sec = Math.ceil(remaining);
+    // un pulso del anillo con cada segundo de la cuenta atrás (final o del cambio de lado)
+    const sec = Math.ceil(left) + (sw ? 100 : 0);
     if (last3 && sec !== this.pulsedAt) {
       this.pulsedAt = sec;
       const ring = this.ui.ringFg.ownerSVGElement;
@@ -277,7 +293,7 @@ export class WorkoutScreen implements Screen {
     this.ui.pause.replaceChildren(icon(paused ? 'play' : 'pause'), h('span', {}, paused ? 'Seguir' : 'Pausa'));
     this.ui.pause.setAttribute('aria-label', paused ? 'Reanudar' : 'Pausar');
     this.el.classList.toggle('paused', paused);
-    this.view?.freeze(paused);
+    this.view?.freeze(paused || this.switchingShown);
   }
 
   /** Botón del pulso: conectar el reloj o mostrar las pulsaciones. */

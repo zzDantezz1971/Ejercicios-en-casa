@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-10T15:00:00Z",
+    "es": ["Ejercicios por lados: a mitad de tiempo el reloj se para, hay una cuenta atrás de 3 segundos para cambiar de lado y después sigue la otra mitad."],
+    "ca": ["Exercicis per costats: a la meitat del temps el rellotge s'atura, hi ha un compte enrere de 3 segons per canviar de costat i després continua l'altra meitat."],
+    "en": ["Exercises done on each side: halfway through, the clock stops for a 3-second countdown to switch sides, then the second half carries on."]
+  },
+  {
     "fecha": "2026-11-10T14:30:00Z",
     "es": ["Fichas de ejercicios: si el maniquí quedaba debajo de algún icono, ahora se aparta un poco o se hace algo más pequeño."],
     "ca": ["Fitxes d'exercicis: si el maniquí quedava sota alguna icona, ara s'aparta una mica o es fa una mica més petit."],

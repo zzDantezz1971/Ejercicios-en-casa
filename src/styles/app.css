@@ -325,6 +325,8 @@ button:focus-visible, input:focus-visible, label:focus-within { outline: 2px sol
 .workout { height: 100dvh; gap: 10px; padding-bottom: calc(14px + var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px))); --phase: var(--sec); }
 .workout[data-phase="rest"] { --phase: var(--rest); }
 .workout[data-phase="countdown"] { --phase: var(--prep); }
+.workout.switching { --phase: var(--prep); }
+.workout.switching .ring-fg { opacity: .35; }
 .workout .stage { aspect-ratio: auto; flex: 1 1 0; min-height: 180px; }
 .w-top { display: flex; align-items: center; gap: 10px; padding-top: 8px; }
 .w-where { display: flex; flex-direction: column; gap: 3px; flex: 1; min-width: 0; align-items: flex-start; }

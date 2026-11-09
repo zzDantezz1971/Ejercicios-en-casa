@@ -40,7 +40,7 @@ describe('WorkoutPlan', () => {
       'sectionBreak', 'countdown', 'exercise',
     ]);
     expect(plan.exerciseCount).toBe(4);
-    expect(plan.estimatedSeconds).toBe(10 * 3 + 20 + 5 + 10 + 40 + 30);
+    expect(plan.estimatedSeconds).toBe(10 * 3 + 20 + 5 + 10 + 40 + 3 + 30); // 3 s del cambio de lado
   });
 
   it('pone el cambio de lado a mitad del tiempo solo en ejercicios de un lado', () => {
@@ -90,8 +90,9 @@ describe('WorkoutSession', () => {
     expect(s.current?.kind).toBe('sectionBreak');
     s.continue();
     expect(s.current?.kind).toBe('countdown');
-    run(s, c, 10 + 40 + 1);
+    run(s, c, 10 + 40 + 3 + 1);
     expect(cues.filter((q) => q.type === 'switch')).toHaveLength(1);
+    expect(cues.filter((q) => q.type === 'go')).toHaveLength(1);
     s.continue();
     run(s, c, 10 + 30 + 1);
     expect(s.status).toBe('finished');
@@ -173,5 +174,42 @@ describe('Vueltas', () => {
     expect(exs.map((s) => (s.kind === 'exercise' ? `${s.exercise.id}${s.round}/${s.rounds}` : ''))).toEqual(['a1/3', 'b1/3', 'a2/3', 'b2/3', 'a3/3', 'b3/3']);
     expect(plan.steps.filter((s) => s.kind === 'rest')).toHaveLength(5);
     expect(plan.estimatedSeconds).toBe(10 + 3 * 30 + 5 * 5);
+  });
+});
+
+describe('Cambio de lado', () => {
+  it('a mitad de tiempo para el reloj 3 s con cuenta atrás y luego sigue la otra mitad', () => {
+    const r = emptyRoutine();
+    r.pesas = [{ exerciseId: 'c', seconds: 40 }];
+    const c = clock();
+    const s = new WorkoutSession(WorkoutPlan.build(r, catalog, DEFAULT_SETTINGS), c.now);
+    const cues: Cue[] = [];
+    let last: { remaining: number; switching?: number } = { remaining: 0 };
+    s.on('cue', (q) => cues.push(q));
+    s.on('tick', (t) => (last = t));
+    s.start();
+    run(s, c, 10); // cuenta atrás inicial
+    expect(s.current?.kind).toBe('exercise');
+    run(s, c, 21); // pasa la mitad (20 s)
+    expect(cues.filter((q) => q.type === 'switch')).toHaveLength(1);
+    expect(last.switching).toBeGreaterThan(0);
+    expect(last.remaining).toBe(20); // el tiempo está parado
+    expect(cues.filter((q) => q.type === 'count' && q.side).map((q) => (q as { n: number }).n)).toEqual([3, 2]);
+    run(s, c, 2.5);
+    expect(cues.some((q) => q.type === 'go')).toBe(true);
+    expect(last.switching).toBeUndefined();
+    expect(last.remaining).toBeGreaterThan(19);
+    expect(last.remaining).toBeLessThan(20);
+    run(s, c, 20);
+    expect(s.status).toBe('finished');
+  });
+
+  it('la duración estimada cuenta los 3 s del cambio de lado', () => {
+    const r = emptyRoutine();
+    r.pesas = [{ exerciseId: 'c', seconds: 40 }];
+    const plan = WorkoutPlan.build(r, catalog, DEFAULT_SETTINGS);
+    const first = plan.steps[0];
+    const countdown = first.kind === 'countdown' ? first.seconds : 0;
+    expect(plan.estimatedSeconds).toBe(countdown + 40 + 3);
   });
 });
