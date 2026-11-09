@@ -5,7 +5,7 @@ import { SECTION_IDS, SECTION_TITLES, usesWeight, type ExerciseDef, type Section
 import type { App, Screen } from '../App';
 import { append, clear, h, humanDuration, kg, plural, promptDialog, weightDialog } from '../dom';
 import { icon, SECTION_STYLE, zoneIcon } from '../icons';
-import { badgeList, equipChips } from '../components/badges';
+import { badgeList, equipMarks } from '../components/badges';
 import { canDo } from '../../domain/equipment';
 import { sortableList } from '../components/sortable';
 import { applyOrder, moveItem } from '../../domain/ordering';
@@ -285,18 +285,18 @@ export class RoutineScreen implements Screen {
   private card(ex: ExerciseDef): HTMLElement {
     const pos = this.editor.position(ex.section, ex.id);
     const secs = this.editor.seconds(ex.section, ex.id);
+    const owned = new Set<string>(this.app.store.settings.equipment);
     const img = h('img', { alt: '', class: 'thumb', 'data-id': ex.id });
     const fig = h('div', { class: 'thumb-box' + (ex.pending ? ' pending' : '') }, img, ex.pending ? h('span', { class: 'pending-label' }, 'Animación en preparación') : null,
+      equipMarks(ex.equip, owned),
       h('span', { class: 'sec-mark', title: SECTION_TITLES[ex.section], 'aria-label': SECTION_TITLES[ex.section] }, icon(SECTION_STYLE[ex.section].icon)));
     this.io.observe(fig);
-    const owned = new Set<string>(this.app.store.settings.equipment);
     const card = h('article', { class: 'ex-card' + (pos ? ' selected' : ''), style: { '--sec': SECTION_STYLE[ex.section].color } },
       // toda la ficha (menos sus botones) abre el ejercicio: muñeco y cómo se hace
       h('button', { class: 'ex-main', 'aria-label': `Cómo se hace: ${ex.name}`, onclick: () => this.app.push(new DetailScreen(this.app, ex)) },
         fig,
         h('span', { class: 'ex-name' }, pos ? h('span', { class: 'order' }, pos) : null, h('span', {}, ex.name, this.app.store.favorites.has(ex.id) ? icon('starFill', 'ico fav-star') : null)),
         h('span', { class: 'ex-zone' }, h('span', {}, ex.zone), ex.oneSided ? h('span', { class: 'by-sides' }, icon('sides'), 'por lados') : null),
-        equipChips(ex.equip, owned),
         badgeList(ex.badges)),
       h('div', { class: 'ex-actions' },
         pos ? h('div', { class: 'stepper' },

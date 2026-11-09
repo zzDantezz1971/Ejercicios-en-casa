@@ -29,3 +29,16 @@ export function equipChips(need: Equip[][] | undefined, owned?: ReadonlySet<stri
       ...alts.flatMap((e, i) => (i ? [h('span', { class: 'or' }, 'o'), h('span', {}, EQUIP_INFO[e].name)] : [h('span', {}, EQUIP_INFO[e].name)])));
   }));
 }
+
+/** Material sobre el maniquí (arriba a la izquierda): icono y nombre de cada aparato necesario;
+    si vale uno u otro, van en la misma pastilla. En naranja, lo que el usuario no tiene. */
+export function equipMarks(need: Equip[][] | undefined, owned?: ReadonlySet<string>): HTMLElement | null {
+  if (!need?.length) return null;
+  return h('span', { class: 'equip-marks' }, ...need.map((alts) => {
+    const ok = !owned || alts.some((e) => owned.has(e));
+    const label = alts.map((e) => EQUIP_INFO[e].name).join(' / ');
+    return h('span', { class: 'equip-mark' + (ok ? '' : ' missing'), title: label, 'aria-label': label },
+      icon(EQUIP_INFO[alts[0]].icon as IconName),
+      ...alts.flatMap((e, i) => (i ? [h('span', { class: 'or' }, 'o'), h('span', {}, EQUIP_INFO[e].name)] : [h('span', {}, EQUIP_INFO[e].name)])));
+  }));
+}

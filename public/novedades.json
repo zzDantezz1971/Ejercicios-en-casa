@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-10T13:20:00Z",
+    "es": ["Fichas de ejercicios: el material que hace falta sale arriba a la izquierda, con su icono (en naranja si no lo tienes)."],
+    "ca": ["Fitxes d'exercicis: el material que cal surt a dalt a l'esquerra, amb la seva icona (en taronja si no el tens)."],
+    "en": ["Exercise cards: the equipment needed now shows at the top left, with its icon (orange if you don't have it)."]
+  },
+  {
     "fecha": "2026-11-10T13:00:00Z",
     "es": ["Detalle del ejercicio y lista para ordenar: fuera el icono naranja y «de cara»; ahora pone «por lados» en azul."],
     "ca": ["Detall de l'exercici i llista per ordenar: fora la icona taronja i «de cara»; ara posa «per costats» en blau."],
