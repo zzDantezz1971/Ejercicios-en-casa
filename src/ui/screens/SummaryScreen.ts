@@ -6,8 +6,7 @@ import { checkAndCelebrate } from '../components/medals';
 import type { App, Screen } from '../App';
 import { h, humanDuration, kg } from '../dom';
 import { icon, SECTION_STYLE } from '../icons';
-import { backupCard, backupDue } from '../components/backupPrompt';
-import { WEIGHT_EVERY_DAYS, weightReminder } from '../components/weightReminder';
+import { remindersDue, showReminders } from '../components/weightReminder';
 
 /** Resumen al terminar, con una pequeña celebración si se completó. */
 export class SummaryScreen implements Screen {
@@ -48,9 +47,11 @@ export class SummaryScreen implements Screen {
         this.kcal(s, heart),
         this.weightTips(s),
         s.exercisesDone ? h('p', { class: 'muted small' }, 'Guardado en el historial.') : null,
-        s.exercisesDone && app.store.daysSinceWeight() >= WEIGHT_EVERY_DAYS ? weightReminder(app) : null,
-        s.exercisesDone && backupDue(app) ? backupCard(app) : null,
-        h('button', { class: 'btn primary block big', onclick: () => this.app.openTab('inicio') }, 'Volver al inicio')),
+        // los recordatorios (peso, copia) salen después, en una ventana, al volver al inicio
+        h('button', { class: 'btn primary block big', onclick: () => {
+          this.app.openTab('inicio');
+          if (s.exercisesDone && remindersDue(this.app)) showReminders(this.app);
+        } }, 'Volver al inicio')),
     );
   }
 
