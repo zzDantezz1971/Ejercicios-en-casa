@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-10T12:40:00Z",
+    "es": ["Fichas de ejercicios: fuera el icono naranja y el texto «De cara»; «por lados» va siempre debajo de la zona trabajada."],
+    "ca": ["Fitxes d'exercicis: fora la icona taronja i el text «De cara»; «per costats» va sempre sota la zona treballada."],
+    "en": ["Exercise cards: the orange icon and the \"Front view\" text are gone; \"each side\" now always sits below the worked area."]
+  },
+  {
     "fecha": "2026-11-10T12:20:00Z",
     "es": ["Interruptores: círculo un poco más pequeño y colores más suaves en modo oscuro, para que se vea centrado."],
     "ca": ["Interruptors: cercle una mica més petit i colors més suaus en mode fosc, perquè es vegi centrat."],

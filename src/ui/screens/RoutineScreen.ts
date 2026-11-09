@@ -286,7 +286,6 @@ export class RoutineScreen implements Screen {
     const secs = this.editor.seconds(ex.section, ex.id);
     const img = h('img', { alt: '', class: 'thumb', 'data-id': ex.id });
     const fig = h('div', { class: 'thumb-box' + (ex.pending ? ' pending' : '') }, img, ex.pending ? h('span', { class: 'pending-label' }, 'Animación en preparación') : null,
-      ex.viewLabel && !ex.pending ? h('span', { class: 'view-label' }, ex.viewLabel) : null, ex.oneSided ? sidesMark() : null,
       h('span', { class: 'sec-mark', title: SECTION_TITLES[ex.section], 'aria-label': SECTION_TITLES[ex.section] }, icon(SECTION_STYLE[ex.section].icon)));
     this.io.observe(fig);
     const owned = new Set<string>(this.app.store.settings.equipment);
@@ -295,7 +294,7 @@ export class RoutineScreen implements Screen {
       h('button', { class: 'ex-main', 'aria-label': `Cómo se hace: ${ex.name}`, onclick: () => this.app.push(new DetailScreen(this.app, ex)) },
         fig,
         h('span', { class: 'ex-name' }, pos ? h('span', { class: 'order' }, pos) : null, h('span', {}, ex.name, this.app.store.favorites.has(ex.id) ? icon('starFill', 'ico fav-star') : null)),
-        h('span', { class: 'ex-zone' }, ex.zone, ex.oneSided ? h('span', { class: 'by-sides' }, icon('sides'), 'por lados') : null),
+        h('span', { class: 'ex-zone' }, h('span', {}, ex.zone), ex.oneSided ? h('span', { class: 'by-sides' }, icon('sides'), 'por lados') : null),
         equipChips(ex.equip, owned),
         badgeList(ex.badges)),
       h('div', { class: 'ex-actions' },

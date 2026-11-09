@@ -240,7 +240,7 @@ button:focus-visible, input:focus-visible, label:focus-within { outline: 2px sol
   flex: none; min-width: 24px; height: 24px; border-radius: 8px; background: var(--sec); color: #FFFFFF;
   font: 700 1rem/24px var(--display); text-align: center; padding: 0 6px; margin-top: -2px;
 }
-.ex-zone { font-size: .8rem; color: var(--muted); padding: 0 10px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.ex-zone { font-size: .8rem; color: var(--muted); padding: 0 10px; display: flex; flex-direction: column; gap: 2px; align-items: flex-start; }
 .by-sides { display: inline-flex; align-items: center; gap: 3px; color: var(--accent-2); }
 .by-sides .ico { width: 14px; height: 14px; }
 .badges { display: flex; flex-wrap: wrap; gap: 4px; padding: 2px 10px 0; }
