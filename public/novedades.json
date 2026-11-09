@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-09T22:23:44Z",
+    "es": ["Aviso de versión nueva: vuelve a su tamaño de antes y está un poco más abajo, para que tape del todo el saludo de detrás."],
+    "ca": ["Avís de versió nova: torna a la mida d'abans i és una mica més avall, perquè tapi del tot la salutació del darrere."],
+    "en": ["New version notice: back to its previous size and slightly lower, so it fully covers the greeting behind it."]
+  },
+  {
     "fecha": "2026-11-09T22:20:11Z",
     "es": ["Músculos de los resúmenes: solo «más trabajados» y «menos trabajados»; los estiramientos cuentan igual que la fuerza, y el muñeco va todo en rojo según lo trabajado."],
     "ca": ["Músculs dels resums: només «més treballats» i «menys treballats»; els estiraments compten igual que la força, i el ninot va tot en vermell segons el que s'ha treballat."],
