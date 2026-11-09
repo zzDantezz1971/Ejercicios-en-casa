@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-10T11:30:00Z",
+    "es": ["Fichas de ejercicios: el icono del apartado es más pequeño y queda por encima del muñeco."],
+    "ca": ["Fitxes d’exercicis: la icona de l’apartat és més petita i queda per sobre del ninot."],
+    "en": ["Exercise cards: the section icon is smaller and sits above the figure."]
+  },
+  {
     "fecha": "2026-11-10T11:15:00Z",
     "es": ["Fichas de ejercicios: el icono del apartado pasa a la esquina de arriba a la derecha."],
     "ca": ["Fitxes d’exercicis: la icona de l’apartat passa a la cantonada de dalt a la dreta."],
