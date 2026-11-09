@@ -1143,7 +1143,7 @@ button.wd:active .wd-dot { transform: scale(.92); }
   background: var(--surface-2); border: 1px solid var(--sec); color: var(--fg); font: 700 .72rem/1 var(--body); box-shadow: 0 2px 6px rgb(0 0 0 / .3); }
 
 /* Fichas de ejercicios: icono del apartado y segundos en una sola línea */
-.sec-mark { position: absolute; right: 8px; bottom: 8px; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+.sec-mark { position: absolute; right: 8px; top: 8px; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
   background: rgb(10 13 18 / .72); border: 1.5px solid var(--sec); color: var(--sec); backdrop-filter: blur(6px); }
 .sec-mark .ico { width: 15px; height: 15px; }
 .ex-card .stepper { gap: 4px; }
