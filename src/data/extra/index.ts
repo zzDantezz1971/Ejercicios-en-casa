@@ -2,9 +2,11 @@ import type { ExT } from '../../i18n/ex1';
 import type { ExtraEx } from './types';
 import { LIBRE_A } from './libreA';
 import { GROUPS_B, LIBRE_B } from './libreB';
+import { MANCUERNAS } from './mancuernas';
+import { PESA_BARRA } from './pesaBarra';
 
 /* Ejercicios nuevos por material (todavía sin animación). */
-export const EXTRAS: ExtraEx[] = [...LIBRE_A, ...LIBRE_B];
+export const EXTRAS: ExtraEx[] = [...LIBRE_A, ...LIBRE_B, ...MANCUERNAS, ...PESA_BARRA];
 
 /** Grupos nuevos de los apartados (traducciones). */
 export const EXTRA_GROUPS: Record<string, { ca: string; en: string }> = { ...GROUPS_B };
