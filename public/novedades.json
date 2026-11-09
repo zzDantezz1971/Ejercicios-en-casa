@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-10T15:40:00Z",
+    "es": ["Entrenamiento: los avisos de arriba («Prepárate», «Descanso», «Cambio de lado») son más pequeños."],
+    "ca": ["Entrenament: els avisos de dalt («Prepara't», «Descans», «Canvi de costat») són més petits."],
+    "en": ["Workout: the labels at the top (\"Get ready\", \"Rest\", \"Switch sides\") are smaller."]
+  },
+  {
     "fecha": "2026-11-10T15:20:00Z",
     "es": ["Cambio de lado: primero se dice «Cambio de lado» y, al acabar la frase, empieza la cuenta atrás de 3 segundos.", "Entrenamiento: el botón «Conectar reloj» es más pequeño y ya no tapa al maniquí."],
     "ca": ["Canvi de costat: primer es diu «Canvi de costat» i, quan acaba la frase, comença el compte enrere de 3 segons.", "Entrenament: el botó «Connecta el rellotge» és més petit i ja no tapa el maniquí."],

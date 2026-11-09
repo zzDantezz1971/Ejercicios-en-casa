@@ -337,11 +337,11 @@ button:focus-visible, input:focus-visible, label:focus-within { outline: 2px sol
 .w-dots .dot.done { background: color-mix(in srgb, var(--sec) 60%, transparent); }
 .w-dots .dot.now { background: var(--sec); box-shadow: 0 0 10px color-mix(in srgb, var(--sec) 70%, transparent); }
 .w-phase {
-  position: absolute; top: 12px; left: 12px; display: inline-flex; align-items: center; gap: 6px;
-  font: 700 1.05rem var(--display); text-transform: uppercase; letter-spacing: .08em;
-  background: color-mix(in srgb, var(--phase) 22%, rgb(10 13 18 / .8)); color: var(--phase); border-radius: 999px; padding: 6px 12px;
+  position: absolute; top: 10px; left: 10px; display: inline-flex; align-items: center; gap: 5px;
+  font: 700 .8rem var(--display); text-transform: uppercase; letter-spacing: .07em;
+  background: color-mix(in srgb, var(--phase) 22%, rgb(10 13 18 / .8)); color: var(--phase); border-radius: 999px; padding: 4px 10px;
 }
-.w-phase .ico { width: 16px; height: 16px; }
+.w-phase .ico { width: 13px; height: 13px; }
 .w-phase:empty { display: none; }
 .w-info { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 16px; }
 .w-ring { width: clamp(118px, 34vw, 150px); height: auto; }
