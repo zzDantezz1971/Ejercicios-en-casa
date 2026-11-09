@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-09T21:23:38Z",
+    "es": ["Historial: «Calorías calculadas con tu pulso, con 76,2 kg», sin el punto en medio."],
+    "ca": ["Historial: «Calories calculades amb el teu pols, amb 76,2 kg», sense el punt al mig."],
+    "en": ["History: \"Calories calculated from your heart rate, at 76.2 kg\", without the dot in between."]
+  },
+  {
     "fecha": "2026-11-09T21:20:55Z",
     "es": ["Historial: la nota de debajo de los recuadros ahora dice «Calorías calculadas con tu pulso» (o «estimadas…»)."],
     "ca": ["Historial: la nota de sota els requadres ara diu «Calories calculades amb el teu pols» (o «estimades…»)."],
