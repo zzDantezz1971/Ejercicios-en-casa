@@ -4,9 +4,11 @@ import { LIBRE_A } from './libreA';
 import { GROUPS_B, LIBRE_B } from './libreB';
 import { MANCUERNAS } from './mancuernas';
 import { PESA_BARRA } from './pesaBarra';
+import { BANDAS_STEP } from './bandasStep';
+import { OTROS } from './otros';
 
 /* Ejercicios nuevos por material (todavía sin animación). */
-export const EXTRAS: ExtraEx[] = [...LIBRE_A, ...LIBRE_B, ...MANCUERNAS, ...PESA_BARRA];
+export const EXTRAS: ExtraEx[] = [...LIBRE_A, ...LIBRE_B, ...MANCUERNAS, ...PESA_BARRA, ...BANDAS_STEP, ...OTROS];
 
 /** Grupos nuevos de los apartados (traducciones). */
 export const EXTRA_GROUPS: Record<string, { ca: string; en: string }> = { ...GROUPS_B };
