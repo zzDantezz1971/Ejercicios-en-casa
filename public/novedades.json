@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-10T13:40:00Z",
+    "es": ["Fichas de ejercicios: el material se indica solo con su icono, arriba a la izquierda."],
+    "ca": ["Fitxes d'exercicis: el material s'indica només amb la seva icona, a dalt a l'esquerra."],
+    "en": ["Exercise cards: equipment is shown with just its icon, at the top left."]
+  },
+  {
     "fecha": "2026-11-10T13:20:00Z",
     "es": ["Fichas de ejercicios: el material que hace falta sale arriba a la izquierda, con su icono (en naranja si no lo tienes)."],
     "ca": ["Fitxes d'exercicis: el material que cal surt a dalt a l'esquerra, amb la seva icona (en taronja si no el tens)."],

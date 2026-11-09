@@ -30,15 +30,15 @@ export function equipChips(need: Equip[][] | undefined, owned?: ReadonlySet<stri
   }));
 }
 
-/** Material sobre el maniquí (arriba a la izquierda): icono y nombre de cada aparato necesario;
-    si vale uno u otro, van en la misma pastilla. En naranja, lo que el usuario no tiene. */
+/** Material sobre el maniquí (arriba a la izquierda): solo el icono de cada aparato necesario
+    (el nombre queda para lectores de pantalla); si vale uno u otro, van en la misma pastilla
+    separados por «/». En naranja, lo que el usuario no tiene. */
 export function equipMarks(need: Equip[][] | undefined, owned?: ReadonlySet<string>): HTMLElement | null {
   if (!need?.length) return null;
   return h('span', { class: 'equip-marks' }, ...need.map((alts) => {
     const ok = !owned || alts.some((e) => owned.has(e));
     const label = alts.map((e) => EQUIP_INFO[e].name).join(' / ');
     return h('span', { class: 'equip-mark' + (ok ? '' : ' missing'), title: label, 'aria-label': label },
-      icon(EQUIP_INFO[alts[0]].icon as IconName),
-      ...alts.flatMap((e, i) => (i ? [h('span', { class: 'or' }, 'o'), h('span', {}, EQUIP_INFO[e].name)] : [h('span', {}, EQUIP_INFO[e].name)])));
+      ...alts.flatMap((e, i) => (i ? [h('span', { class: 'or', 'aria-hidden': 'true' }, '/'), icon(EQUIP_INFO[e].icon as IconName)] : [icon(EQUIP_INFO[e].icon as IconName)])));
   }));
 }
