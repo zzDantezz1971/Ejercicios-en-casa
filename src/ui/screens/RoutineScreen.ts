@@ -272,7 +272,9 @@ export class RoutineScreen implements Screen {
     // con orden personalizado no hay subgrupos: la lista es libre
     const custom = !!this.app.store.customOrder(this.section);
     let group: string | undefined;
-    for (const ex of this.visible(this.section)) {
+    const owned = new Set<string>(this.app.store.settings.equipment);
+    const all = this.ordered(this.section);
+    for (const ex of all.filter((e) => canDo(e.equip, owned))) {
       if (!custom && ex.group && ex.group !== group) {
         group = ex.group;
         this.list.append(h('h2', { class: 'group-title zone-title' }, zoneIcon(group), group));
@@ -281,6 +283,8 @@ export class RoutineScreen implements Screen {
     }
     const note = this.equipNote(this.section);
     if (note) this.list.append(note);
+    // los que necesitan material que no se tiene van aparte, al final (y no se mezclan con los demás)
+    if (this.showAllEquip) all.filter((e) => !canDo(e.equip, owned)).forEach((ex) => this.list.append(this.card(ex)));
   }
 
   private card(ex: ExerciseDef): HTMLElement {
