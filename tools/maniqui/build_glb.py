@@ -6,6 +6,7 @@ import numpy as np
 
 SRC = sys.argv[1] if len(sys.argv) > 1 else 'Humanoide.glb'
 HEIGHT, FLOOR = 146.8, -68.72  # unidades del motor
+SHOES = os.environ.get('SHOES', '0') == '1'  # por defecto descalzo (como lo quiere el usuario)
 
 b = open(SRC, 'rb').read()
 L = struct.unpack('<I', b[12:16])[0]
@@ -128,8 +129,8 @@ for i, p in enumerate(P):
     elif bn.startswith('th'):
         t = tparam(p, segs[bn]); region[i] = 2 if t < 0.5 else (6 if t < 0.54 else 0)
     elif bn.startswith('sh'):
-        t = tparam(p, segs[bn]); region[i] = 4 if t > 0.86 else 0
-    elif bn.startswith('foot'): region[i] = 4
+        t = tparam(p, segs[bn]); region[i] = 4 if SHOES and t > 0.86 else 0
+    elif bn.startswith('foot'): region[i] = 4 if SHOES else 0
     elif bn == 'head' and lipW[i] > 0.6: region[i] = 5
 PART = {'hips': 0, 'chest': 0, 'head': 0, 'uaL': 1, 'faL': 1, 'uaR': 2, 'faR': 2, 'thL': 3, 'shL': 3, 'thR': 4, 'shR': 4,
         'footL': 5, 'footR': 5, 'handL': 6, 'handR': 6}
@@ -146,7 +147,7 @@ data = {
     'rest': {k: [out(a).tolist(), out(c).tolist()] for k, (a, c) in segs.items()},
     'eyes': {s: out(jp(f'eye.{s}')).tolist() for s in 'LR'},
     'eyeRadius': 0.013 * S,
-    'shoes': True,
+    'shoes': SHOES,
     'part': base64.b64encode(part.tobytes()).decode(),
     'fist': {'idx': base64.b64encode(np.nonzero(mF)[0].astype('<u2').tobytes()).decode(),
              'd': base64.b64encode((dF[mF] * S).astype('<f4').tobytes()).decode()},
