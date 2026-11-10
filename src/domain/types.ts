@@ -63,6 +63,8 @@ export interface MotionSpec {
   band?: 'feet' | 'hands' | 'knees' | 'ankles' | ((j: Record<string, [number, number]>) => [number, number]);
   /** Fitball: centro (2D) según las articulaciones de cada instante. */
   ball?: (j: Record<string, [number, number]>, pose: Record<string, number>) => [number, number];
+  /** Radio de la fitball (27 por defecto). */
+  ballR?: number;
   /** Comba entre las manos; su posición la da el ángulo `rp` de la postura (grados). */
   rope?: boolean;
   /** Rueda abdominal en las manos. */

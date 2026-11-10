@@ -312,7 +312,8 @@ export class MannequinScene {
       for (const k in P3) bb.expandByPoint(P3[k]);
       if (spec.ball) {
         const c = spec.ball(J, pose);
-        bb.expandByPoint(V(c[0] - 27, -c[1] - 27, 0)).expandByPoint(V(c[0] + 27, -c[1] + 27, 0));
+        const r = spec.ballR ?? 27;
+        bb.expandByPoint(V(c[0] - r, -c[1] - r, 0)).expandByPoint(V(c[0] + r, -c[1] + r, 0));
       }
     }
     bb.expandByScalar(10);
@@ -649,7 +650,7 @@ export class MannequinScene {
     if (g.ball && spec.ball) {
       const p = spec.ball(J2, pose);
       g.ball[0].position.set(p[0], -p[1], 0);
-      g.ball[0].scale.setScalar(27);
+      g.ball[0].scale.setScalar(spec.ballR ?? 27);
     }
     if (g.rope) {
       // comba: curva de una mano a la otra que pasa por un punto que gira alrededor del cuerpo

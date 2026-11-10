@@ -378,8 +378,9 @@ export const EXTRA_MOTIONS: Record<string, M> = {
     [{ tl: 216, tu: 224, hd: 228, ua: 322, fa: 322, th: -46, sn: -46, bp: 1 }, 100, 900], [{ tl: 180, hd: 182, ua: 182, fa: 182, th: -8, sn: -8, bp: 1 }, 200, 900],
     [{ tl: 216, tu: 224, hd: 228, ua: 322, fa: 322, th: -46, sn: -46, bp: 1 }, 0, 250], [{ tl: 216, tu: 224, hd: 228, ua: 322, fa: 322, th: -46, sn: -46, bp: 0 }, 100, 900]] },
   // las espinillas se quedan encima de la pelota (a su altura) y la pelota rueda bajo ellas; la cadera sube
-  'rodillas-al-pecho-en-fitball': { mat: 1, anchor: { j: 'haR', y: -3 }, ball: (J) => [J.anR[0] + (J.knR[0] - J.anR[0]) * 0.35, -27], f: [
-    [{ tl: 10, ua: 90, fa: 90, th: 179, sn: 179, ft: 120 }, 200, 800], [{ tl: 45, tu: 38, hd: 60, ua: 90, fa: 90, th: 62, sn: 188, ft: 200 }, 300, 800]] },
+  // pelota algo más pequeña (55 cm): los empeines se quedan encima y la pelota rueda bajo ellos; la cadera sube
+  'rodillas-al-pecho-en-fitball': { mat: 1, anchor: { j: 'haR', y: -3 }, ballR: 22, ball: (J) => [J.anR[0] - 3, -22], f: [
+    [{ tl: 10, ua: 90, fa: 90, th: 179, sn: 179, ft: 120 }, 200, 800], [{ tl: 45, tu: 38, hd: 60, ua: 90, fa: 90, th: 60, sn: 190, ft: 200 }, 300, 800]] },
   'sentadilla-en-pared-con-fitball': { plant: 'anR', ball: (J) => [J.mid[0] - 30, J.mid[1] + 4], props: (J, P) => P.wall(J.mid[0] - 58), f: [
     [{ tl: -92, th: 62, sn: 62, ft: -10, ua: 70, fa: -112 }, 200, 1000], [{ tl: -92, th: 2, sn: 90, ua: 40, fa: -140 }, 300, 1000]] },
   'hiperextension-en-fitball': { ball: (J) => [J.pel[0] + 4, -27], f: [
