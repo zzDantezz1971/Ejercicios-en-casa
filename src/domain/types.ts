@@ -50,6 +50,8 @@ export interface MotionSpec {
   props?: (j: Record<string, [number, number]>, p: PropHelpers) => PropOp[];
   /** Material que se mueve con el cuerpo (ver figure/Mannequin.ts, updateGear). */
   kb?: 'L' | 'R' | 'both';
+  /** Manos cerradas en puño (golpes, guardia). */
+  fist?: boolean;
   /** Barra con discos entre las dos manos. */
   bar?: boolean;
   /** Banda elástica: de las manos a los pies, entre las manos, entre rodillas o tobillos, o a un punto fijo (2D, en la postura inicial). */

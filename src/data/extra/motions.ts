@@ -7,6 +7,11 @@ import { benchLie, benchRow, KNEES, LYB, PLF, PLH, PRONE, QUAD, ROWB, SUP } from
 type M = MotionSpec;
 
 const GUARD = { ua: 62, fa: -112 }; // brazos en guardia, puños delante de la cara
+const GUARD_L = { ua: 75, fa: -15 }; // brazos en L delante del cuerpo (codos abajo, antebrazos al frente)
+const CHEST_ARMS = { ua: 72, fa: -20, zHL: 12, zHR: -12, zEL: 2, zER: -2 }; // brazos doblados delante del pecho
+// de frente, rodillas dobladas: el muslo se acorta (la rodilla va hacia delante) y el tobillo vuelve debajo del cuerpo
+const SQUAT_F = { sTh: 0.75, zAL: -22.5, zAR: -22.5, uaL: 100, faL: 70, uaR: 80, faR: 110, zEL: 8, zER: 8, zHL: 20, zHR: 20 };
+const TUCK_F = { sTh: 0.62, sSh: 0.85, zAL: -48, zAR: -48, uaL: 125, faL: 110, uaR: 55, faR: 70, zEL: 4, zER: 4, zHL: 10, zHR: 10 }; // en el aire, piernas recogidas
 const PLS = { tl: -162, th: 18, sn: 18, ft: 60, uaL: 90, faL: 180, uaR: -90, faR: -90, hd: -162 }; // plancha lateral (de frente)
 const LUNGE_R = { thR: 15, snR: 95, thL: 115, snL: 175, ftL: 40 };
 const LUNGE_L = { thL: 15, snL: 95, thR: 115, snR: 175, ftR: 40 };
@@ -64,26 +69,28 @@ export const EXTRA_MOTIONS: Record<string, M> = {
   'sentadilla-con-brazos-arriba': { plant: 'anR', f: [
     [{ ua: -95, fa: -95, hd: -94 }, 200, 950], [{ tl: -55, th: 5, sn: 115, ua: 0, fa: 0, hd: -62 }, 200, 950]] },
   'zancada-con-giro-de-tronco': { f: [
-    [{ ua: 70, fa: -170 }, 150, 800], [{ ...LUNGE_R, ua: 70, fa: -170, tw: 38 }, 300, 800],
-    [{ ua: 70, fa: -170 }, 150, 800], [{ ...LUNGE_L, ua: 70, fa: -170, tw: -38 }, 300, 800]] },
+    [{ ...CHEST_ARMS }, 150, 800], [{ ...LUNGE_R, ...CHEST_ARMS, tw: 38 }, 300, 800],
+    [{ ...CHEST_ARMS }, 150, 800], [{ ...LUNGE_L, ...CHEST_ARMS, tw: -38 }, 300, 800]] },
   'gusano-inchworm': { plant: 'anR', mat: 1, f: [
     [{}, 300, 1100],
-    [{ tl: 52, tu: 62, hd: 100, ua: 98, fa: 98, th: 84, sn: 96, ft: 0 }, 250, 1200],
-    [{ ...PLH, ft: 70 }, 500, 1200],
-    [{ tl: 52, tu: 62, hd: 100, ua: 98, fa: 98, th: 84, sn: 96, ft: 0 }, 250, 1200]] },
-  'patada-frontal-alterna': { f: [
-    [{ ...GUARD }, 120, 380], [{ ...GUARD, thR: -6, snR: -8, ftR: -40, thL: 95, snL: 92, tl: -98 }, 120, 380],
-    [{ ...GUARD }, 120, 380], [{ ...GUARD, thL: -6, snL: -8, ftL: -40, thR: 95, snR: 92, tl: -98 }, 120, 380]] },
+    // brazos un poco más cortos: la palma queda plana en el suelo y la muñeca algo levantada
+    [{ tl: 52, tu: 62, hd: 100, ua: 100, fa: 100, sa: 0.92, th: 84, sn: 96, ft: 0 }, 250, 1200],
+    [{ ...PLH, ft: 70, sa: 0.93 }, 500, 1200],
+    [{ tl: 52, tu: 62, hd: 100, ua: 100, fa: 100, sa: 0.92, th: 84, sn: 96, ft: 0 }, 250, 1200]] },
+  'patada-frontal-alterna': { fist: true, f: [
+    [{ ...GUARD_L }, 120, 380], [{ ...GUARD_L, thR: -6, snR: -8, ftR: -40, thL: 95, snL: 92, tl: -98 }, 120, 380],
+    [{ ...GUARD_L }, 120, 380], [{ ...GUARD_L, thL: -6, snL: -8, ftL: -40, thR: 95, snR: 92, tl: -98 }, 120, 380]] },
   'saltos-suaves-en-el-sitio': { f: [
     [{ th: 82, sn: 99, ua: 96, fa: 80 }, 0, 200], [{ th: 90, sn: 90, ft: 58, ua: 88, fa: 86 }, 0, 200]] },
-  'boxeo-con-desplazamiento': { f: [
+  'boxeo-con-desplazamiento': { fist: true, f: [
     [{ ...GUARD, thR: 76, snR: 100, thL: 104, snL: 96, x: 0 }, 60, 300],
     [{ ...GUARD, uaR: 2, faR: 0, tw: 20, thR: 76, snR: 100, thL: 104, snL: 96, x: 4 }, 60, 300],
     [{ ...GUARD, thR: 76, snR: 100, thL: 104, snL: 96, x: 6 }, 60, 300],
     [{ ...GUARD, uaL: 2, faL: 0, tw: -20, thR: 76, snR: 100, thL: 104, snL: 96, x: 2 }, 60, 300]] },
   'rotaciones-de-hombros': { per: 2200, fn: (t) => {
     const a = t * Math.PI * 2;
-    return { sa: 0.93 + 0.06 * Math.cos(a), ua: 90 + 9 * Math.sin(a), fa: 90 + 9 * Math.sin(a), hd: -92 };
+    // el hombro dibuja un círculo: arriba, atrás, abajo y adelante (y el brazo cuelga de él)
+    return { shu: 7 * Math.sin(a), shf: -6 * Math.cos(a), ua: 90 - 6 * Math.cos(a), fa: 90 - 6 * Math.cos(a), hd: -92 };
   } },
 
   // ── Abdominales ──
@@ -322,10 +329,13 @@ export const EXTRA_MOTIONS: Record<string, M> = {
     [{ uaL: 70, faL: -40, uaR: 110, faR: 220, zEL: 6, zER: 6, zHL: 12, zHR: 12 }, 200, 800], [{ uaL: 0, faL: 0, uaR: 180, faR: 180, sa: 0.36 }, 600, 800]] },
 
   // ── Step ──
+  // subir derecho, subir izquierdo, bajar derecho (hacia atrás) y bajar izquierdo
   'step-basico': { props: STEP(14), f: [
-    [{}, 0, 380], [{ thR: 20, snR: 100, ftR: 0 }, 0, 380], [{ x: 26, jy: 17 }, 0, 380], [{ x: 26, jy: 17, thL: 150, snL: 80 }, 0, 380]] },
+    [{}, 0, 380], [{ thR: 20, snR: 100, ftR: 0 }, 0, 380], [{ x: 26, jy: 17 }, 0, 380],
+    [{ x: 18, jy: 12, thL: 70, snL: 100, thR: 112, snR: 98 }, 0, 300], [{ thL: 20, snL: 100, ftL: 0 }, 0, 380]] },
   'step-en-v': { props: STEP(14), f: [
-    [{}, 0, 380], [{ thR: 20, snR: 100, ftR: 0, zAR: 8, zKR: 6 }, 0, 380], [{ x: 26, jy: 17, zAL: -8, zKL: -6, zAR: 8, zKR: 6 }, 0, 380], [{ x: 26, jy: 17, thL: 150, snL: 80, zAR: 8, zKR: 6 }, 0, 380]] },
+    [{}, 0, 380], [{ thR: 20, snR: 100, ftR: 0, zAR: 8, zKR: 6 }, 0, 380], [{ x: 26, jy: 17, zAL: -8, zKL: -6, zAR: 8, zKR: 6 }, 0, 380],
+    [{ x: 18, jy: 12, thL: 70, snL: 100, zAL: -8, zKL: -6, thR: 112, snR: 98 }, 0, 300], [{ thL: 20, snL: 100, ftL: 0, zAL: -8, zKL: -6 }, 0, 380]] },
   'subidas-al-step': { props: STEP(14), f: [
     [{ ...HIPS }, 150, 600], [{ ...HIPS, thR: 20, snR: 100, ftR: 0 }, 100, 650], [{ ...HIPS, x: 26, jy: 17 }, 250, 650], [{ ...HIPS, thR: 20, snR: 100, ftR: 0 }, 100, 600]] },
   'subida-al-step-con-rodilla-arriba': { props: STEP(14), f: [
@@ -339,8 +349,11 @@ export const EXTRA_MOTIONS: Record<string, M> = {
     [{ tl: -30, ua: 90, fa: 90, th: 150, sn: 150, ft: 70 }, 200, 750], [{ tl: -19, ua: 150, fa: 30, th: 161, sn: 161, ft: 80 }, 150, 850]] },
   'fondos-de-triceps-en-el-step': { plant: 'haR', anchor: { j: 'haR', y: -19 }, props: (J, P) => P.rect(J.haR[0] - 30, -17, 33, 17), f: [
     [{ ua: 105, fa: 100, th: 30, sn: 50 }, 150, 900], [{ ua: 165, fa: 92, th: 10, sn: 60 }, 150, 900]] },
-  'saltos-laterales-sobre-el-step': { v: 'front', props: (J, P) => P.rect(J.pel[0] + 15, -17, 30, 17), f: [
-    [{ x: -30 }, 60, 330], [{ x: 0, jy: 17 }, 60, 330], [{ x: 30 }, 60, 330], [{ x: 0, jy: 17 }, 60, 330]] },
+  // cada salto: rodillas dobladas al despegar y al caer, piernas recogidas en el aire
+  'saltos-laterales-sobre-el-step': { v: 'front', az: 38, props: (J, P) => P.rect(J.pel[0] + 15, -17, 30, 17), f: [
+    [{ x: -30, ...SQUAT_F }, 40, 200], [{ x: -15, jy: 26, ...TUCK_F }, 0, 200], [{ x: 0, jy: 17, ...SQUAT_F }, 40, 200],
+    [{ x: 15, jy: 26, ...TUCK_F }, 0, 200], [{ x: 30, ...SQUAT_F }, 40, 200], [{ x: 15, jy: 26, ...TUCK_F }, 0, 200],
+    [{ x: 0, jy: 17, ...SQUAT_F }, 40, 200], [{ x: -15, jy: 26, ...TUCK_F }, 0, 200]] },
   'gemelos-en-el-step': { props: (J, P) => [...P.rect(J.anR[0] - 20, -17, 30, 17), ...P.wall(J.haR[0] + 3)], f: [
     [{ jy: 17, uaR: 4, faR: -6, ftR: 0 }, 300, 900], [{ jy: 17, uaR: 4, faR: -6, ftR: -35, ftL: 10 }, 1600, 900]] },
 

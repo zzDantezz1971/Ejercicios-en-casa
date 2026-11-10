@@ -191,7 +191,7 @@ export class MannequinScene {
         old.dispose();
       }
       // puño para agarrar mancuernas; mano casi abierta para apoyarse
-      this.skinned.setFist(spec.db || spec.kb || spec.bar || spec.band === 'hands' || spec.band === 'feet' || typeof spec.band === 'function' || spec.rope || spec.wheel ? 1 : 0.2);
+      this.skinned.setFist(spec.fist || spec.db || spec.kb || spec.bar || spec.band === 'hands' || spec.band === 'feet' || typeof spec.band === 'function' || spec.rope || spec.wheel ? 1 : 0.2);
       this.buildDumbbells();
       this.buildGear();
     } else this.buildBody();

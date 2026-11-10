@@ -32,8 +32,8 @@ export const RAW_SECTIONS: RawSection[] = [
    [{thR:0,snR:90,uaL:45,faL:-30,uaR:125,faR:100},0,420],[{},0,420],
    [{thL:0,snL:90,uaR:45,faR:-30,uaL:125,faL:100},0,420],[{},0,420]]},
  {n:'Saltos de tijera (jumping jacks)',z:'Cuerpo entero',v:'front',f:[
-   [{uaL:100,faL:95,uaR:80,faR:85,thL:93,snL:93,thR:87,snR:87},80,360],
-   [{uaL:230,faL:245,uaR:-50,faR:-65,thL:108,snL:104,thR:72,snR:76},80,360]]},
+   [{uaL:100,faL:95,uaR:80,faR:85,thL:86,snL:86,thR:94,snR:94},80,330],
+   [{uaL:230,faL:245,uaR:-50,faR:-65,thL:108,snL:104,thR:72,snR:76},80,330]]},
  {n:'Círculos de brazos',z:'Hombros',v:'front',per:1300,fn:t=>{const a=t*Math.PI*2,s=Math.sin(a),c=(1+Math.cos(a))/2;
    return {uaL:180+9*s,faL:180+9*s+16*c,uaR:-9*s,faR:-9*s-16*c};}},
  {n:'Abrir y cerrar brazos (abrazos)',z:'Pecho y hombros',v:'front',f:[
@@ -47,8 +47,10 @@ export const RAW_SECTIONS: RawSection[] = [
    [{tl:-95,tu:-116,uaR:-118,faR:-158,uaL:118,faL:70},250,800],[{},100,800],
    [{tl:-85,tu:-64,uaL:298,faL:338,uaR:62,faR:110},250,800],[{},100,800]]},
  {n:'Talones al glúteo',z:'Piernas',f:[
-   [{thR:100,snR:215,uaL:60,faL:-40,uaR:120,faR:75},0,330],[{},0,330],
-   [{thL:100,snL:215,uaR:60,faR:-40,uaL:120,faL:75},0,330],[{},0,330]]},
+   [{tl:-94,thR:100,snR:250,ftR:200,thL:86,snL:96,ft:50,uaL:55,faL:-45,uaR:125,faR:85,jy:2},0,150],
+   [{tl:-94,thR:92,snR:120,thL:90,snL:100,ft:40,ua:92,fa:30,jy:5},0,150],
+   [{tl:-94,thL:100,snL:250,ftL:200,thR:86,snR:96,ft:50,uaR:55,faR:-45,uaL:125,faL:85,jy:2},0,150],
+   [{tl:-94,thL:92,snL:120,thR:90,snR:100,ft:40,ua:92,fa:30,jy:5},0,150]]},
  {n:'Sentadillas sin peso',z:'Piernas y glúteos',plant:'anR',f:[
    [{},200,900],[{tl:-55,th:5,sn:115,ua:0,fa:0,hd:-60},200,900]]},
  {n:'Zancadas alternas',z:'Piernas y glúteos',f:[
@@ -56,7 +58,7 @@ export const RAW_SECTIONS: RawSection[] = [
    [{ua:110,fa:-20},150,750],[{ua:110,fa:-20,thL:15,snL:95,thR:115,snR:175,ftR:40},200,750]]},
  {n:'Balanceo de pierna adelante y atrás',z:'Cadera',f:[
    [{ua:110,fa:-20,thR:-25,snR:-15},60,700],[{ua:110,fa:-20,thR:150,snR:160},60,700]]},
- {n:'Puñetazos al aire',z:'Brazos y hombros',f:[
+ {n:'Puñetazos al aire',z:'Brazos y hombros',fist:true,f:[
    [{thL:82,snL:96,thR:100,snR:86,uaR:0,faR:0,uaL:110,faL:-100,tw:-22},80,260],
    [{thL:82,snL:96,thR:100,snR:86,ua:110,fa:-100},40,260],
    [{thL:82,snL:96,thR:100,snR:86,uaL:0,faL:0,uaR:110,faR:-100,tw:22},80,260],

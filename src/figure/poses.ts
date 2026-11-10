@@ -25,7 +25,7 @@ export const LEN = { torso: 24, neck: 14, ua: 21, fa: 20.5, th: 34, sh: 33 };
 
 function base(v: string): Pose {
   return {
-    x: 0, jy: 0, rp: 0, bp: 0, tw: 0, lean: 0, zEL: 0, zER: 0, zHL: 0, zHR: 0, zKL: 0, zKR: 0, zAL: 0, zAR: 0, tl: -90,
+    x: 0, jy: 0, rp: 0, bp: 0, shu: 0, shf: 0, tw: 0, lean: 0, zEL: 0, zER: 0, zHL: 0, zHR: 0, zKL: 0, zKR: 0, zAL: 0, zAR: 0, tl: -90,
     // brazos colgando relajados: de frente, un poco separados del cuerpo
     uaL: v === 'front' ? 97 : 90, faL: v === 'front' ? 94 : 90, uaR: v === 'front' ? 83 : 90, faR: v === 'front' ? 86 : 90, thL: 90, snL: 90, thR: 90, snR: 90,
     ftL: v === 'side' ? 0 : 150, ftR: v === 'side' ? 0 : 30, saL: 1, saR: 1, sThL: 1, sThR: 1, sShL: 1, sShR: 1,
@@ -54,7 +54,8 @@ export function joints(v: string, o: Pose): Joints {
   J.neck = add(J.mid, dir(o.tu), LEN.torso);
   J.head = add(J.neck, dir(o.hd), LEN.neck);
   // articulación del hombro: bastante por debajo de la base del cuello, como en el cuerpo real
-  const sc = add(J.neck, dir(o.tu), -SHOULDER_DROP);
+  // shu / shf: hombros más arriba / más adelante (rotaciones de hombros, encogimientos)
+  const sc = add(add(J.neck, dir(o.tu), -SHOULDER_DROP + (o.shu ?? 0)), dir(o.tu + 90), o.shf ?? 0);
   if (v === 'side') {
     J.shoL = sc; J.shoR = sc; J.hipL = J.pel; J.hipR = J.pel;
   } else {
