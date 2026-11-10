@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-10T17:14:04Z",
+    "es": ["Mapa de músculos de los resúmenes con solo dos colores: rojo intenso para los más trabajados y amarillo muy claro para el resto."],
+    "ca": ["Mapa de músculs dels resums amb només dos colors: vermell intens per als més treballats i groc molt clar per a la resta."],
+    "en": ["Muscle map in the summaries with just two colours: deep red for the most worked and very light yellow for the rest."]
+  },
+  {
     "fecha": "2026-11-10T17:12:18Z",
     "es": ["Músculos de los resúmenes: los menos trabajados se pintan en amarillo pastel y los más trabajados en rojo, pasando por naranja, para ver bien la diferencia. El punto de «Menos trabajados» también es amarillo."],
     "ca": ["Músculs dels resums: els menys treballats es pinten de groc pastís i els més treballats de vermell, passant per taronja, per veure bé la diferència. El punt de «Menys treballats» també és groc."],

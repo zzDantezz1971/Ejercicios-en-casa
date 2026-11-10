@@ -1,5 +1,5 @@
 import { LOCALE } from '../../i18n';
-import { loadWeights, muscleLoad } from '../../domain/muscleLoad';
+import { mapWeights, muscleLoad } from '../../domain/muscleLoad';
 import { addMonths, addWeeks, monthKey, monthStart, monthStats, weekKey, weekStart, weekStats, type MonthStats } from '../../domain/monthSummary';
 import { MUSCLES } from '../../figure/anatomy';
 import type { App, Screen } from '../App';
@@ -122,7 +122,7 @@ export class MonthScreen implements Screen {
     // Músculos
     const load = muscleLoad(cur.entries, (id) => this.app.catalog.get(id)?.muscles);
     if (MUSCLES.some((m) => load.work[m] + load.stretch[m] > 0)) {
-      const w = loadWeights(load);
+      const w = mapWeights(load);
       const img = (back: boolean) => {
         const el = h('img', { class: 'mm-img', alt: back ? 'Músculos de espaldas' : 'Músculos de frente' });
         void bodyMaps().bodyMap(w, back).then((u) => { if (u) el.src = u; else el.remove(); });

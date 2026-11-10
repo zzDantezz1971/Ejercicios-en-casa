@@ -156,10 +156,11 @@ vec3 anatomy() {
     cov = max(cov, m[i] * step(0.001, w));
   }
   if (uMap > 0.5) {
-    // mapa: amarillo pastel (poco) a rojo (mucho); los pesos van de 0,22 a 1
+    // mapa de los resúmenes
     vec3 base = shorts ? vec3(0.12, 0.15, 0.2) : vec3(0.6, 0.64, 0.7);
-    float lvl = clamp((work / max(cov, 0.001) - 0.22) / 0.78, 0.0, 1.0);
-    vec3 hot = mix(vec3(1.0, 0.9, 0.55), vec3(0.9, 0.08, 0.16), lvl);
+    // dos colores: rojo intenso (más trabajados, peso 1) y amarillo muy claro (el resto)
+    float lvl = step(0.65, work / max(cov, 0.001));
+    vec3 hot = mix(vec3(1.0, 0.97, 0.8), vec3(0.9, 0.06, 0.14), lvl);
     float k2 = clamp(cov * (shorts ? 0.5 : 1.0), 0.0, 1.0);
     gHi = hot * k2 * 0.3;
     return mix(base, hot, k2) * (1.0 - 0.2 * lines * k2);
