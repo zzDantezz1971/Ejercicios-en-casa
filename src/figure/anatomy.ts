@@ -55,11 +55,12 @@ function b64(s: string): Uint8Array {
 const N = MUSCLES.length;
 
 /** Material del maniquí anatomía. */
-export function anatomyMaterial(g: THREE.BufferGeometry, d: SkinData, w: { L: number[]; R: number[] }): THREE.Material {
+/** `map`: mapa de los resúmenes (amarillo pastel = poco trabajado, rojo = mucho). */
+export function anatomyMaterial(g: THREE.BufferGeometry, d: SkinData, w: { L: number[]; R: number[]; map?: boolean }): THREE.Material {
   if (!g.getAttribute('aPart') && d.part) g.setAttribute('aPart', new THREE.BufferAttribute(Float32Array.from(b64(d.part)), 1));
   const P = (k: string, i: 0 | 1) => new THREE.Vector3(...(d.rest[k][i] as [number, number, number]));
   const uniforms = {
-    uWL: { value: w.L }, uWR: { value: w.R },
+    uWL: { value: w.L }, uWR: { value: w.R }, uMap: { value: w.map ? 1 : 0 },
     uShoL: { value: P('uaL', 0) }, uShoR: { value: P('uaR', 0) }, uElL: { value: P('uaL', 1) }, uElR: { value: P('uaR', 1) },
     uWrL: { value: P('faL', 1) }, uWrR: { value: P('faR', 1) },
     uHipL: { value: P('thL', 0) }, uHipR: { value: P('thR', 0) }, uKnL: { value: P('thL', 1) }, uKnR: { value: P('thR', 1) },
@@ -77,7 +78,7 @@ varying vec3 vRest;
 flat varying float vPart;
 uniform float uWL[${N}], uWR[${N}];
 uniform vec3 uShoL, uShoR, uElL, uElR, uWrL, uWrR, uHipL, uHipR, uKnL, uKnR, uAnL, uAnR;
-uniform float uWaistY, uShortT;
+uniform float uWaistY, uShortT, uMap;
 vec3 gHi;
 float band(float v, float a, float b, float s) { return smoothstep(a - s, a + s, v) * (1.0 - smoothstep(b - s, b + s, v)); }
 float along(vec3 p, vec3 a, vec3 dir) { return dot(p - a, dir) / dot(dir, dir); }
@@ -147,11 +148,21 @@ vec3 anatomy() {
     m[6] = (1.0 - smoothstep(0.1, 0.3, t)) * smoothstep(0.2, -0.6, r.z);
     shorts = t < uShortT && p.y < uWaistY;
   }
-  float work = 0.0, stretch = 0.0;
+  float work = 0.0, stretch = 0.0, cov = 0.0;
   for (int i = 0; i < ${N}; i++) {
     float w = mix(uWR[i], uWL[i], sideL);
     work = max(work, m[i] * max(w, 0.0));
     stretch = max(stretch, m[i] * max(-w, 0.0));
+    cov = max(cov, m[i] * step(0.001, w));
+  }
+  if (uMap > 0.5) {
+    // mapa: amarillo pastel (poco) a rojo (mucho); los pesos van de 0,22 a 1
+    vec3 base = shorts ? vec3(0.12, 0.15, 0.2) : vec3(0.6, 0.64, 0.7);
+    float lvl = clamp((work / max(cov, 0.001) - 0.22) / 0.78, 0.0, 1.0);
+    vec3 hot = mix(vec3(1.0, 0.9, 0.55), vec3(0.9, 0.08, 0.16), lvl);
+    float k2 = clamp(cov * (shorts ? 0.5 : 1.0), 0.0, 1.0);
+    gHi = hot * k2 * 0.3;
+    return mix(base, hot, k2) * (1.0 - 0.2 * lines * k2);
   }
   vec3 c = shorts ? vec3(0.12, 0.15, 0.2) : vec3(0.6, 0.64, 0.7);
   vec3 red = vec3(0.9, 0.08, 0.16), teal = vec3(0.0, 0.72, 0.66);
