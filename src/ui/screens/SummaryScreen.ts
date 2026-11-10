@@ -7,6 +7,7 @@ import type { App, Screen } from '../App';
 import { h, humanDuration, kg } from '../dom';
 import { icon, SECTION_STYLE } from '../icons';
 import { remindersDue, showReminders } from '../components/weightReminder';
+import { finishPhrase } from '../../services/Coach';
 
 /** Resumen al terminar, con una pequeña celebración si se completó. */
 export class SummaryScreen implements Screen {
@@ -14,6 +15,10 @@ export class SummaryScreen implements Screen {
 
   constructor(private readonly app: App, s: SessionSummary, tableName: string, heart?: HeartSummary | null) {
     const win = s.completed;
+    if (s.exercisesDone) {
+      const c = this.calories(s, heart);
+      this.phrase = finishPhrase(app.voice.lang, { name: app.store.settings.profile.name || undefined, completed: win, seconds: s.durationSec, kcal: c?.kcal });
+    }
     const name = app.store.settings.profile.name;
     const nm = name ? `, ${name}` : '';
     const confetti = win ? h('div', { class: 'confetti', 'aria-hidden': 'true' }, ...Array.from({ length: 36 }, (_, i) => {
@@ -49,17 +54,25 @@ export class SummaryScreen implements Screen {
         s.exercisesDone ? h('p', { class: 'muted small' }, 'Guardado en el historial.') : null,
         // los recordatorios (peso, copia) salen después, en una ventana, al volver al inicio
         h('button', { class: 'btn primary block big', onclick: () => {
+          this.app.voice.stop();
           this.app.openTab('inicio');
           if (s.exercisesDone && remindersDue(this.app)) showReminders(this.app);
         } }, 'Volver al inicio')),
     );
   }
 
+  /** Frase final que dice la voz al llegar al resumen. */
+  private phrase = '';
+
+  private calories(s: SessionSummary, heart?: HeartSummary | null) {
+    return caloriesOf({ date: s.startedAt.toISOString(), durationSec: s.durationSec, exercisesDone: s.exercisesDone, exercisesPlanned: s.exercisesPlanned,
+      sections: s.sections, completed: s.completed, items: s.items, ...(heart ? { heart } : {}) }, { ...this.app.store.settings.profile, weight: this.app.store.currentWeight });
+  }
+
   /** Calorías aproximadas, o cómo verlas si faltan los datos. */
   private kcal(s: SessionSummary, heart?: HeartSummary | null): HTMLElement | null {
     if (!s.exercisesDone) return null;
-    const c = caloriesOf({ date: s.startedAt.toISOString(), durationSec: s.durationSec, exercisesDone: s.exercisesDone, exercisesPlanned: s.exercisesPlanned,
-      sections: s.sections, completed: s.completed, items: s.items, ...(heart ? { heart } : {}) }, { ...this.app.store.settings.profile, weight: this.app.store.currentWeight });
+    const c = this.calories(s, heart);
     if (!c) return null;
     return h('p', { class: 'kcal-summary' }, icon('flame'), `Unas ${c.kcal} kcal`, h('span', { class: 'muted small' }, c.method === 'pulso' ? ' · con tu pulso' : ' · estimadas'));
   }
@@ -79,6 +92,8 @@ export class SummaryScreen implements Screen {
     // medallas nuevas tras este entrenamiento
     if (!this.checked) {
       this.checked = true;
+      // tras la fanfarria, la voz dice el resumen (se calla si se vuelve al inicio)
+      if (this.phrase) window.setTimeout(() => { if (this.app.current === this) this.app.voice.say(this.phrase); }, 1600);
       window.setTimeout(() => checkAndCelebrate(this.app), 900);
     }
   }
@@ -86,6 +101,7 @@ export class SummaryScreen implements Screen {
   private checked = false;
 
   onBack(): boolean {
+    this.app.voice.stop();
     this.app.openTab('inicio');
     return true;
   }

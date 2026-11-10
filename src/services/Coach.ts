@@ -9,18 +9,27 @@ type VoiceLang = 'es' | 'ca' | 'en';
 
 /** Frases que dice la voz, en cada idioma. */
 const VT: Record<VoiceLang, {
-  prepare: string; round: string; half: string; rest: string; secDone: string; sw: string; done: string; doneEarly: string; count: string[];
+  prepare: string; round: string; half: string; rest: string; secDone: string; sw: string; done: string; doneEarly: string; min: string; min1: string; kcal: string; count: string[];
 }> = {
   es: { prepare: '{s}. Prepárate. Primer ejercicio: {x}', round: 'Vuelta {a} de {b}. ', half: '. A mitad, cambio de lado', rest: 'Descanso. Siguiente: {x}',
-    secDone: '{a} terminado. Toca la pantalla para seguir con {b}', sw: 'Cambio de lado', done: '¡Buen trabajo{n}! Entrenamiento finalizado.', doneEarly: '¡Bien hecho{n}! Entrenamiento finalizado.', count: ['', 'uno', 'dos', 'tres'] },
+    secDone: '{a} terminado. Toca la pantalla para seguir con {b}', sw: 'Cambio de lado', done: '¡Buen trabajo{n}! Entrenamiento terminado.', doneEarly: '¡Bien hecho{n}! Entrenamiento terminado.', min: '{m} minutos', min1: 'un minuto', kcal: ' y {k} calorías quemadas',  count: ['', 'uno', 'dos', 'tres'] },
   ca: { prepare: '{s}. Prepara’t. Primer exercici: {x}', round: 'Volta {a} de {b}. ', half: '. A la meitat, canvi de costat', rest: 'Descans. Següent: {x}',
-    secDone: '{a}: fet. Toca la pantalla per continuar amb {b}', sw: 'Canvi de costat', done: 'Bona feina{n}! Entrenament acabat.', doneEarly: 'Ben fet{n}! Entrenament acabat.', count: ['', 'un', 'dos', 'tres'] },
+    secDone: '{a}: fet. Toca la pantalla per continuar amb {b}', sw: 'Canvi de costat', done: 'Bona feina{n}! Entrenament acabat.', doneEarly: 'Ben fet{n}! Entrenament acabat.', min: '{m} minuts', min1: 'un minut', kcal: ' i {k} calories cremades',  count: ['', 'un', 'dos', 'tres'] },
   en: { prepare: '{s}. Get ready. First exercise: {x}', round: 'Round {a} of {b}. ', half: '. Switch sides halfway', rest: 'Rest. Next up: {x}',
-    secDone: '{a} done. Tap the screen to continue with {b}', sw: 'Switch sides', done: 'Great job{n}! Workout complete.', doneEarly: 'Well done{n}! Workout complete.', count: ['', 'one', 'two', 'three'] },
+    secDone: '{a} done. Tap the screen to continue with {b}', sw: 'Switch sides', done: 'Great job{n}! Workout complete.', doneEarly: 'Well done{n}! Workout complete.', min: '{m} minutes', min1: 'one minute', kcal: ' and {k} calories burned',  count: ['', 'one', 'two', 'three'] },
 };
 
 function fill(t: string, v: Record<string, string | number>): string {
   return t.replace(/\{(\w+)\}/g, (_, k) => String(v[k] ?? ''));
+}
+
+/** Frase final: «¡Buen trabajo, David! Entrenamiento terminado. 24 minutos y 69 calorías quemadas.» */
+export function finishPhrase(lang: VoiceLang, o: { name?: string; completed: boolean; seconds: number; kcal?: number | null }): string {
+  const t = VT[lang];
+  const m = Math.max(1, Math.round(o.seconds / 60));
+  const mins = m === 1 ? t.min1 : fill(t.min, { m });
+  const kcal = o.kcal ? fill(t.kcal, { k: o.kcal }) : '';
+  return `${fill(o.completed ? t.done : t.doneEarly, { n: o.name ? `, ${o.name}` : '' })} ${mins}${kcal}.`;
 }
 
 /** Une la sesión con los pitidos y la voz: decide qué se dice y cuándo suena cada aviso. */
@@ -32,7 +41,6 @@ export class Coach {
     const T = () => VT[L()];
     // en la voz, los nombres de los apartados van en su idioma (si la voz cae al castellano, en castellano)
     const sec = (s: keyof typeof SECTION_TITLES) => (L() === 'es' ? SECTION_TITLES[s] : tr(SECTION_TITLES[s]));
-    const nm = opts.name ? `, ${opts.name}` : '';
     this.off.push(
       session.on('cue', (cue) => {
         switch (cue.type) {
@@ -76,12 +84,10 @@ export class Coach {
         }
       }),
       session.on('finished', (s) => {
+        // la frase final (con minutos y calorías) la dice la pantalla de resumen: ver finishPhrase
         if (s.completed) {
           sounds.finish();
           haptics?.finish();
-          voice.say(fill(T().done, { n: nm }));
-        } else if (s.exercisesDone > 0) {
-          voice.say(fill(T().doneEarly, { n: nm }));
         }
       }),
     );

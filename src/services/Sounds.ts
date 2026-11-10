@@ -26,19 +26,25 @@ export class Sounds {
   switchSide(): void {
     [0, 0.16, 0.32].forEach((d) => this.tone(1175, 0.11, d));
   }
+  /** Fanfarria final: arpegio que sube, un pequeño redoble y un acorde mayor que se mantiene y se apaga. */
   finish(): void {
-    [523, 659, 784, 1046].forEach((f, i) => this.tone(f, 0.22, i * 0.18));
+    [523, 659, 784].forEach((f, i) => this.tone(f, 0.16, i * 0.13, 'triangle', 0.4));
+    [1046, 1046].forEach((f, i) => this.tone(f, 0.1, 0.42 + i * 0.1, 'triangle', 0.35));
+    // acorde final (do mayor con la octava), con un brillo suave por encima
+    [523, 659, 784, 1046].forEach((f) => this.tone(f, 1.5, 0.66, 'triangle', 0.22));
+    this.tone(1568, 1.2, 0.7, 'sine', 0.1);
+    this.tone(2093, 0.9, 0.74, 'sine', 0.06);
   }
 
-  private tone(freq: number, dur: number, delay = 0): void {
+  private tone(freq: number, dur: number, delay = 0, type: OscillatorType = 'sine', peak = 0.5): void {
     if (!this.enabled || !this.ctx) return;
     const t = this.ctx.currentTime + delay;
     const osc = this.ctx.createOscillator();
     const gain = this.ctx.createGain();
-    osc.type = 'sine';
+    osc.type = type;
     osc.frequency.value = freq;
     gain.gain.setValueAtTime(0.0001, t);
-    gain.gain.exponentialRampToValueAtTime(0.5, t + 0.015);
+    gain.gain.exponentialRampToValueAtTime(peak, t + 0.015);
     gain.gain.exponentialRampToValueAtTime(0.0001, t + dur);
     osc.connect(gain).connect(this.ctx.destination);
     osc.start(t);
