@@ -329,8 +329,10 @@ export const EXTRA_MOTIONS: Record<string, M> = {
   'patada-de-gluteo-con-banda': { mat: 1, band: 'ankles', f: [[QUAD, 200, 700], [{ ...QUAD, thR: 182, snR: 182, ftR: 90 }, 300, 700]] },
   'puente-de-gluteos-con-banda': { mat: 1, band: 'knees', f: [
     [{ ...SUP, ...KNEES, zKL: -3, zKR: 3 }, 300, 1000], [{ ...SUP, tl: 140, tu: 165, th: -18, sn: 76.5, zKL: -5, zKR: 5 }, 900, 1000]] },
-  'press-pallof-con-banda': { v: 'front', band: (J) => [J.neck[0] + 75, J.neck[1] + 14], f: [
-    [{ uaL: 70, faL: -40, uaR: 110, faR: 220, zEL: 6, zER: 6, zHL: 12, zHR: 12 }, 200, 800], [{ uaL: 0, faL: 0, uaR: 180, faR: 180, sa: 0.36 }, 600, 800]] },
+  // de lado a la puerta (la banda viene del lado): manos en el pecho y se empujan rectas al frente sin girar
+  'press-pallof-con-banda': { v: 'front', az: 62, band: (J) => [J.neck[0] + 75, J.neck[1] + 14], f: [
+    [{ uaL: 70, faL: -40, uaR: 110, faR: 220, zEL: 6, zER: 6, zHL: 12, zHR: 12 }, 200, 800],
+    [{ uaL: 25, faL: 25, uaR: 155, faR: 155, sa: 0.18, zHL: 6, zHR: 6 }, 600, 800]] },
 
   // ── Step ──
   // subir derecho, subir izquierdo, bajar derecho (hacia atrás) y bajar izquierdo
@@ -362,8 +364,9 @@ export const EXTRA_MOTIONS: Record<string, M> = {
     [{ jy: 17, uaR: 4, faR: -6, ftR: 0 }, 300, 900], [{ jy: 17, uaR: 4, faR: -6, ftR: -35, ftL: 10 }, 1600, 900]] },
 
   // ── Fitball ──
-  'crunch-en-fitball': mocapCrunch({ tl: 172, tu: 168, hd: 172, th: 40, sn: 90, ua: 205, fa: 330 },
-    { tl: 180, tu: 205, hd: 214, ua: 240, fa: 365 }, { anchor: { j: 'pel', y: -58 }, ball: (J) => [J.pel[0] - 16, -27] }),
+  // manos junto a las orejas: codos hacia arriba y fuera, antebrazos de vuelta a la cabeza
+  'crunch-en-fitball': mocapCrunch({ tl: 172, tu: 168, hd: 172, th: 40, sn: 90, ua: 232, fa: 125, zEL: -4, zER: 4 },
+    { tl: 180, tu: 205, hd: 214, ua: 260, fa: 143 }, { anchor: { j: 'pel', y: -58 }, ball: (J) => [J.pel[0] - 16, -27] }),
   'puente-con-pies-en-fitball': { mat: 1, anchor: { j: 'anR', y: -52 }, ball: (J) => [J.anR[0] + 3, -27], f: [
     [{ ...SUP, th: -41, sn: -41, ft: -60 }, 200, 900], [{ ...SUP, tl: 158, th: -22, sn: -22, ft: -60 }, 600, 900]] },
   'curl-femoral-con-fitball': { mat: 1, anchor: { j: 'anR', y: -52 }, ball: (J) => [J.anR[0] + 4, -27], f: [
