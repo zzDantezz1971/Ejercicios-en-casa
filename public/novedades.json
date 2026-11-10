@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-10T17:49:13Z",
+    "es": ["Gráfica grande del peso: la fecha de un punto desaparece al tocar en cualquier otro sitio."],
+    "ca": ["Gràfica gran del pes: la data d'un punt desapareix en tocar a qualsevol altre lloc."],
+    "en": ["Large weight chart: a point's date disappears when you tap anywhere else."]
+  },
+  {
     "fecha": "2026-11-10T17:43:52Z",
     "es": ["Gráfica grande del peso: al tocar un punto sale solo la fecha, en corto (por ejemplo «5 nov.»), en una etiqueta pequeña que no tapa los otros puntos."],
     "ca": ["Gràfica gran del pes: en tocar un punt surt només la data, en curt (per exemple «5 de nov.»), en una etiqueta petita que no tapa els altres punts."],
