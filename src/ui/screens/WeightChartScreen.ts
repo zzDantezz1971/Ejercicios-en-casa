@@ -19,6 +19,9 @@ export class WeightChartScreen implements Screen {
   private chips = h('div', { class: 'wf-chips' });
   private stats = h('div', { class: 'wf-stats' });
   private onResize = () => this.draw();
+  /** Final de la ventana que se ve (se mueve arrastrando el dedo). */
+  private end = Date.now();
+  private plotW = 1;
 
   constructor(private readonly app: App) {
     this.el.append(h('div', { class: 'wf-rot' },
@@ -29,6 +32,37 @@ export class WeightChartScreen implements Screen {
       this.box));
     // tocar en cualquier sitio que no sea un punto quita la fecha que se estaba enseñando
     this.el.addEventListener('click', () => this.el.querySelector('.w-tip')?.remove());
+    this.dragToScroll();
+  }
+
+  private dragToScroll(): void {
+    // arrastrar el dedo a lo largo de la gráfica mueve las fechas (hacia atrás o hacia delante)
+    let start: { pos: number; end: number; id: number } | null = null, moved = false, raf = 0;
+    const along = (e: PointerEvent) => (window.innerHeight > window.innerWidth ? e.clientY : e.clientX); // en vertical va girada 90°
+    this.box.addEventListener('pointerdown', (e) => {
+      if (!this.range) return;
+      start = { pos: along(e), end: this.end, id: e.pointerId };
+      moved = false;
+    });
+    this.box.addEventListener('pointermove', (e) => {
+      if (!start || e.pointerId !== start.id) return;
+      const dx = along(e) - start.pos;
+      if (!moved && Math.abs(dx) < 6) return;
+      if (!moved) { moved = true; this.box.setPointerCapture(e.pointerId); }
+      const ms = (dx * this.range * 864e5) / this.plotW;
+      const first = this.app.store.weights.length ? Date.parse(this.app.store.weights[0].date) : Date.now();
+      // ni más allá de hoy ni antes del primer pesaje (con medio periodo de margen)
+      this.end = Math.min(Date.now(), Math.max(first + (this.range * 864e5) / 2, start.end - ms));
+      if (!raf) raf = requestAnimationFrame(() => { raf = 0; this.draw(); });
+    });
+    const stop = (e: PointerEvent) => {
+      if (!start || e.pointerId !== start.id) return;
+      start = null;
+      // tras arrastrar, que el "click" de soltar no enseñe ni quite fechas
+      if (moved) window.addEventListener('click', (c) => c.stopPropagation(), { capture: true, once: true });
+    };
+    this.box.addEventListener('pointerup', stop);
+    this.box.addEventListener('pointercancel', stop);
   }
 
   enter(): void {
@@ -46,11 +80,14 @@ export class WeightChartScreen implements Screen {
 
   private draw(): void {
     const all = this.app.store.weights;
-    const since = this.range ? Date.now() - this.range * 864e5 : -Infinity;
-    const pts = all.filter((p) => Date.parse(p.date) >= since);
+    const since = this.range ? this.end - this.range * 864e5 : -Infinity, until = this.range ? this.end : Infinity;
+    const pts = all.filter((p) => Date.parse(p.date) >= since && Date.parse(p.date) <= until);
+    // para que la línea llegue a los bordes: el pesaje anterior y el siguiente a la ventana (se recortan)
+    const before = all.filter((p) => Date.parse(p.date) < since).pop(), after = all.find((p) => Date.parse(p.date) > until);
+    const line = [...(before ? [before] : []), ...pts, ...(after ? [after] : [])];
     const opts: Array<[Range, string]> = [[30, '1 mes'], [90, '3 meses'], [180, '6 meses'], [365, '1 año'], [0, 'Todo']];
     this.chips.replaceChildren(...opts.map(([r, label]) =>
-      h('button', { class: 'chip-btn' + (r === this.range ? ' on' : ''), onclick: () => { this.range = r; this.draw(); } }, label)));
+      h('button', { class: 'chip-btn' + (r === this.range ? ' on' : ''), onclick: () => { this.range = r; this.end = Date.now(); this.draw(); } }, label)));
     if (pts.length) {
       const d = pts[pts.length - 1].kg - pts[0].kg;
       this.stats.replaceChildren(h('span', {}, fmtKg(pts[pts.length - 1].kg)),
@@ -60,8 +97,9 @@ export class WeightChartScreen implements Screen {
     const portrait = window.innerHeight > window.innerWidth;
     const W = Math.max(320, (portrait ? window.innerHeight : window.innerWidth) - 24);
     const H = Math.max(200, (portrait ? window.innerWidth : window.innerHeight) - 70);
-    this.box.replaceChildren(pts.length
-      ? bigChart(pts, this.app.store.settings.profile.goalKg ?? null, W, H, this.range ? [Date.now() - this.range * 864e5, Date.now()] : undefined)
+    this.plotW = W - 60;
+    this.box.replaceChildren(line.length
+      ? bigChart(line, this.app.store.settings.profile.goalKg ?? null, W, H, this.range ? [since, until] : undefined)
       : h('p', { class: 'muted wf-empty' }, 'No hay pesos anotados en este periodo.'));
   }
 }
@@ -131,10 +169,16 @@ function bigChart(points: ReadonlyArray<{ date: string; kg: number }>, goal: num
     el('text', { x: W - pad.r - 2, y: y(goal) - 5, class: 'w-goal-label', 'text-anchor': 'end' }, `Objetivo ${String(goal).replace('.', DEC)}`);
   }
   const P = points.map((p) => [x(Date.parse(p.date)), y(p.kg)] as const);
+  // lo que se sale por los lados (al arrastrar) se recorta
+  const clipId = `wclip${Math.round(Math.random() * 1e6)}`;
+  const defs = document.createElementNS(NS, 'defs');
+  defs.innerHTML = `<clipPath id="${clipId}"><rect x="${pad.l - 6}" y="0" width="${W - pad.l - pad.r + 12}" height="${H}"></rect></clipPath>`;
+  svg.append(defs);
+  const inside = (i: number) => P[i][0] >= pad.l - 6 && P[i][0] <= W - pad.r + 6;
   if (points.length > 1) {
     const curve = smoothPath(P);
-    el('path', { d: `${curve} L${P[P.length - 1][0]},${H - pad.b} L${P[0][0]},${H - pad.b} Z`, class: 'w-area' });
-    el('path', { d: curve, class: 'w-line' });
+    el('path', { d: `${curve} L${P[P.length - 1][0]},${H - pad.b} L${P[0][0]},${H - pad.b} Z`, class: 'w-area', 'clip-path': `url(#${clipId})` });
+    el('path', { d: curve, class: 'w-line', 'clip-path': `url(#${clipId})` });
   }
   // el valor encima de cada punto (si no hay demasiados)
   const label = points.length <= 24;
@@ -150,6 +194,7 @@ function bigChart(points: ReadonlyArray<{ date: string; kg: number }>, goal: num
     svg.append(tip);
   };
   points.forEach((p, i) => {
+    if (!inside(i)) return;
     el('circle', { cx: P[i][0], cy: P[i][1], r: i === points.length - 1 ? 5 : 3.5, class: i === points.length - 1 ? 'w-dot last' : 'w-dot' });
     // zona grande y transparente para tocar con el dedo
     el('circle', { cx: P[i][0], cy: P[i][1], r: 16, class: 'w-hit' }).addEventListener('click', (e) => { e.stopPropagation(); show(i); });

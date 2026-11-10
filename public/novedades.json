@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-10T17:57:17Z",
+    "es": ["Gráfica grande del peso: arrastra el dedo por la gráfica para ir hacia atrás (o adelante) en el tiempo; las fechas se mueven con él. Al elegir otro periodo vuelve a hoy."],
+    "ca": ["Gràfica gran del pes: arrossega el dit per la gràfica per anar enrere (o endavant) en el temps; les dates es mouen amb ell. En triar un altre període torna a avui."],
+    "en": ["Large weight chart: drag your finger across the chart to go back (or forward) in time; the dates move with it. Choosing another period goes back to today."]
+  },
+  {
     "fecha": "2026-11-10T17:49:13Z",
     "es": ["Gráfica grande del peso: la fecha de un punto desaparece al tocar en cualquier otro sitio."],
     "ca": ["Gràfica gran del pes: la data d'un punt desapareix en tocar a qualsevol altre lloc."],
