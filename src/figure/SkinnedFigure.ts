@@ -265,7 +265,7 @@ export class SkinnedFigure {
       // mano: sigue al antebrazo; apoyada en el suelo, se queda plana con los dedos hacia delante
       let Rhn = Rfa.clone();
       const faDir = ha.clone().sub(el).normalize();
-      const support = Math.min(1, Math.max(0, (13 - ha.y) / 5)) * Math.min(1, Math.max(0, (-faDir.y - 0.55) / 0.3));
+      const support = Math.min(1, Math.max(0, (13 - ha.y) / 5)) * Math.min(1, Math.max(0, (-faDir.y - 0.35) / 0.3));
       if (support > 0) {
         const fwd = V(0, 0, 1).transformDirection(Rc); fwd.y = 0;
         if (fwd.lengthSq() < 1e-4) fwd.set(1, 0, 0);
