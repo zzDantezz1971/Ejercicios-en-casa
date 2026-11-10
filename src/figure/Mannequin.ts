@@ -191,8 +191,9 @@ export class MannequinScene {
         old.dispose();
       }
       // puño para agarrar mancuernas; mano casi abierta para apoyarse
-      this.skinned.setFist(spec.db ? 1 : 0.2);
+      this.skinned.setFist(spec.db || spec.kb || spec.bar || spec.band === 'hands' || spec.band === 'feet' || typeof spec.band === 'function' || spec.rope || spec.wheel ? 1 : 0.2);
       this.buildDumbbells();
+      this.buildGear();
     } else this.buildBody();
     this.buildStage();
     this.placeCamera();
@@ -300,6 +301,10 @@ export class MannequinScene {
       const { pose, J } = motion.jointsAt((motion.total * i) / 40);
       const P3 = to3D(spec, view, J, pose);
       for (const k in P3) bb.expandByPoint(P3[k]);
+      if (spec.ball) {
+        const c = spec.ball(J, pose);
+        bb.expandByPoint(V(c[0] - 27, -c[1] - 27, 0)).expandByPoint(V(c[0] + 27, -c[1] + 27, 0));
+      }
     }
     bb.expandByScalar(10);
     bb.min.y = Math.min(bb.min.y, 0);
@@ -413,6 +418,7 @@ export class MannequinScene {
       // de frente y desde arriba (boca arriba) el lado "R" del motor es el izquierdo anatómico
       this.skinned.update(J, !side && !(T && motion.spec.prone), now);
       this.updateDumbbells(J, side);
+      this.updateGear(J, J2, pose, side);
       return;
     }
     const lateralAxis = side ? V(0, 0, 1) : T ? V(0, 1, 0) : V(0, 0, 1);
@@ -569,6 +575,92 @@ export class MannequinScene {
     }
 
     this.updateDumbbells(J, side);
+    this.updateGear(J, J2, pose, side);
+  }
+
+  /** Pesa rusa, barra, bandas, fitball, comba y rueda: se crean una vez y se colocan en cada instante. */
+  private gear: Record<string, THREE.Mesh[]> = {};
+  private bandFrom?: V3;
+  private buildGear(): void {
+    const spec = this.motion.spec, G = this.geo;
+    const iron = this.mat('#2E3440', 0.45, 0.35), steel = this.mat(this.pal.iron, 0.3, 0.4);
+    const many = (n: number, g: THREE.BufferGeometry, m: THREE.Material) => Array.from({ length: n }, () => this.add(g, m));
+    if (spec.kb) for (const h of spec.kb === 'both' ? ['L', 'R'] : [spec.kb]) this.gear['kb' + h] = [this.add(G.sph, iron), this.add(G.ring, iron)];
+    if (spec.bar) this.gear.bar = [this.add(G.cyl, steel), ...many(4, G.cyl, iron)];
+    if (spec.band) this.gear.band = many(2, G.cyl, this.mat(this.pal.band, 0.55));
+    if (spec.ball) this.gear.ball = [this.add(G.sph, this.mat('#4F7DF0', 0.35))];
+    if (spec.rope) this.gear.rope = many(14, G.cyl, this.mat('#F2A516', 0.5));
+    if (spec.wheel) this.gear.wheel = [this.add(G.cyl, iron), this.add(G.cyl, steel)];
+    if (typeof spec.band === 'function') {
+      const J0 = this.motion.place(this.motion.poseAt(0));
+      const p = spec.band(J0);
+      this.bandFrom = V(p[0], -p[1], 0);
+    }
+  }
+  private updateGear(J: Record<string, V3>, J2: Record<string, [number, number]>, pose: Record<string, number>, side: boolean): void {
+    const spec = this.motion.spec, g = this.gear;
+    const grip = (h: 'L' | 'R') => {
+      const u = J['ha' + h].clone().sub(J['el' + h]).normalize();
+      return J['ha' + h].clone().addScaledVector(u, this.skinned ? 5.2 : 3.4);
+    };
+    for (const h of ['L', 'R'] as const) {
+      const kb = g['kb' + h];
+      if (!kb) continue;
+      // con las dos manos (kb: 'both' en una sola pesa) se agarra por el centro
+      const c = spec.kb === 'both' && h === 'R' ? null : spec.kb === 'both' ? grip('L').lerp(grip('R'), 0.5) : grip(h);
+      kb.forEach((m) => (m.visible = !!c));
+      if (!c) continue;
+      kb[1].position.copy(c).add(V(0, -1.5, 0));
+      kb[1].scale.setScalar(3.6);
+      kb[1].rotation.set(0, side ? Math.PI / 2 : 0, 0);
+      kb[0].position.copy(c).add(V(0, -8.5, 0));
+      kb[0].scale.set(6.2, 5.8, 6.2);
+    }
+    if (g.bar) {
+      const a = grip('L'), b = grip('R'), c = a.clone().lerp(b, 0.5);
+      let ax = b.clone().sub(a);
+      if (ax.lengthSq() < 1) ax = side ? V(0, 0, 1) : V(1, 0, 0);
+      ax.normalize();
+      const end = (k: number) => c.clone().addScaledVector(ax, k);
+      this.seg(g.bar[0], end(-62), end(62), 1.2);
+      [[-48, -44], [-44, -40], [40, 44], [44, 48]].forEach(([p, q], i) => this.seg(g.bar[1 + i], end(p), end(q), i === 0 || i === 3 ? 9 : 12));
+    }
+    if (g.band) {
+      const pairs: Array<[V3, V3]> =
+        spec.band === 'hands' ? [[grip('L'), grip('R')]]
+        : spec.band === 'knees' ? [[J.knL, J.knR]]
+        : spec.band === 'ankles' ? [[J.anL, J.anR]]
+        : spec.band === 'feet' ? [[grip('L'), J.anL.clone().add(V(0, -2, 0))], [grip('R'), J.anR.clone().add(V(0, -2, 0))]]
+        : this.bandFrom ? [[this.bandFrom, grip('L')], [this.bandFrom, grip('R')]] : [];
+      g.band.forEach((m, i) => {
+        m.visible = !!pairs[i];
+        if (pairs[i]) this.seg(m, pairs[i][0], pairs[i][1], 0.9);
+      });
+    }
+    if (g.ball && spec.ball) {
+      const p = spec.ball(J2, pose);
+      g.ball[0].position.set(p[0], -p[1], 0);
+      g.ball[0].scale.setScalar(27);
+    }
+    if (g.rope) {
+      // comba: curva de una mano a la otra que pasa por un punto que gira alrededor del cuerpo
+      const a = grip('L'), b = grip('R'), mid = a.clone().lerp(b, 0.5);
+      const ang = ((pose.rp ?? 0) * Math.PI) / 180;
+      const fwd = side ? V(1, 0, 0) : V(0, 0, 1);
+      const top = J.head.y + 14, bottom = 0.6;
+      const cy = (top + bottom) / 2, ry = (top - bottom) / 2;
+      const P = V(mid.x, cy, mid.z).addScaledVector(fwd, 30 * Math.cos(ang));
+      P.y = cy - ry * Math.sin(ang);
+      const C = P.clone().multiplyScalar(2).sub(a.clone().add(b).multiplyScalar(0.5));
+      const pt = (t: number) => a.clone().multiplyScalar((1 - t) ** 2).add(C.clone().multiplyScalar(2 * t * (1 - t))).add(b.clone().multiplyScalar(t * t));
+      g.rope.forEach((m, i) => this.seg(m, pt(i / g.rope.length), pt((i + 1) / g.rope.length), 0.45));
+    }
+    if (g.wheel) {
+      const c = grip('L').lerp(grip('R'), 0.5).add(V(0, -4, 0));
+      const ax = side ? V(0, 0, 1) : V(1, 0, 0);
+      this.seg(g.wheel[0], c.clone().addScaledVector(ax, -3.5), c.clone().addScaledVector(ax, 3.5), 9);
+      this.seg(g.wheel[1], c.clone().addScaledVector(ax, -14), c.clone().addScaledVector(ax, 14), 1.1);
+    }
   }
 
   private updateDumbbells(J: Record<string, V3>, side: boolean): void {

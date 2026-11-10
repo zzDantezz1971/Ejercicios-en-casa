@@ -1,7 +1,7 @@
 /* Movimiento de los ejercicios nuevos (mismo formato que rawExercises.ts: ángulos por fotograma, ver figure/poses.ts).
    Los que no aparecen aquí siguen con "Animación en preparación". */
 import type { MotionSpec } from '../../domain/types';
-import { benchLie, KNEES, LYB, PLF, PLH, PRONE, QUAD } from '../rawExercises';
+import { benchLie, benchRow, KNEES, LYB, PLF, PLH, PRONE, QUAD, ROWB, SUP } from '../rawExercises';
 
 type M = MotionSpec;
 
@@ -13,6 +13,27 @@ const PUSH_DOWN = { tl: -10, ua: 150, fa: 30, th: 170, sn: 170, ft: 90 }; // fle
 const HIPS = { ua: 118, fa: 28 }; // manos en la cintura (vista lateral)
 const SUMO = { thL: 118, snL: 118, thR: 62, snR: 62, ftL: 170, ftR: 10, uaL: 74, faL: 66, uaR: 106, faR: 114, zEL: 6, zER: 6, zHL: 14, zHR: 14 };
 const SUMO_DOWN = { thL: 152, snL: 96, thR: 28, snR: 84, ftL: 170, ftR: 10, uaL: 74, faL: 66, uaR: 106, faR: 114, zEL: 6, zER: 6, zHL: 14, zHR: 14, zKL: 9, zKR: 9, lean: 16 };
+const HANG = { ua: -90, fa: -90, th: 96, sn: 112, ft: 60 }; // colgado de la barra
+const CHIN = { ua: 120, fa: -70, th: 96, sn: 112, ft: 60, hd: -96 }; // barbilla por encima de la barra
+const pullBar = (J: Record<string, [number, number]>, P: import('../../domain/types').PropHelpers) =>
+  P.rect(J.haR[0] - 2, J.haR[1] - 3, 4, 4).map((o) => ({ ...o, dep: 96 }));
+const STEP = (x0: number) => (J: Record<string, [number, number]>, P: import('../../domain/types').PropHelpers) => P.rect(J.pel[0] + x0, -17, 34, 17);
+const BAR_BACK = { ua: 150, fa: -40 }; // barra sobre la espalda alta
+const KB_CHEST = { ua: 75, fa: -60, zHL: 13, zHR: -13, zEL: 6, zER: -6 }; // pesa pegada al pecho
+const ROPE_ARMS = { ua: 98, fa: 35, zHL: -7, zHR: 7, zEL: -3, zER: 3 };
+const rope = (o: { back?: boolean; legs?: 'alt' | 'high'; side?: boolean }) => (t: number) => {
+  const turns = o.legs ? 2 : 1, a = 360 * turns * t, rp = o.back ? -a : a;
+  const k = Math.max(0, Math.cos(((a % 360) - 90) * (Math.PI / 180))) ** 2; // salto cuando la comba pasa por abajo
+  const odd = Math.floor(a / 360) % 2 === 1;
+  const p: Record<string, number> = { rp: rp + 90, jy: 5 * k, ft: 25 + 30 * k, th: 88, sn: 94, ...ROPE_ARMS };
+  if (o.legs) {
+    const lift = o.legs === 'high' ? { th: -5, sn: 80 } : { th: 70, sn: 125 };
+    const s2 = odd ? 'L' : 'R';
+    p['th' + s2] = 88 + (lift.th - 88) * k; p['sn' + s2] = 94 + (lift.sn - 94) * k;
+  }
+  if (o.side) p.x = odd ? 6 : -6;
+  return p;
+};
 const BEAR = { tl: -12, ua: 88, fa: 88, th: 92, sn: 168, ft: 90 }; // cuadrupedia con rodillas despegadas
 
 export const EXTRA_MOTIONS: Record<string, M> = {
@@ -202,6 +223,181 @@ export const EXTRA_MOTIONS: Record<string, M> = {
   'crunch-con-mancuerna': { mat: 1, db: 'R', anchor: { j: 'pel', y: -12.1 }, az: 20, el: 18, f: [
     [{ tl: 180, tu: 180, hd: 184, ...KNEES, ua: -30, fa: 195, zHL: 13, zHR: -13 }, 350, 850],
     [{ tl: 180, tu: 203, hd: 214, ...KNEES, ua: -7, fa: 218, zHL: 13, zHR: -13 }, 450, 850]] },
+
+  // ── Pesa rusa ──
+  'swing-con-pesa-rusa': { kb: 'both', plant: 'anR', f: [
+    [{ tl: -22, th: 78, sn: 100, ua: 112, fa: 118, hd: -36, zHL: 13, zHR: -13 }, 80, 550], [{ ua: -4, fa: -6, zHL: 13, zHR: -13 }, 80, 550]] },
+  'swing-a-una-mano-con-pesa-rusa': { kb: 'R', plant: 'anR', f: [
+    [{ tl: -22, th: 78, sn: 100, uaR: 112, faR: 118, uaL: 100, faL: 60, hd: -36, zHR: -8 }, 80, 550], [{ uaR: -4, faR: -6, uaL: 110, faL: 40 }, 80, 550]] },
+  'sentadilla-goblet-con-pesa-rusa': { kb: 'both', plant: 'anR', f: [
+    [{ ...KB_CHEST }, 200, 1000], [{ ...KB_CHEST, tl: -62, th: 5, sn: 115, ua: 62, fa: -85, hd: -70 }, 250, 1000]] },
+  'peso-muerto-con-pesa-rusa': { kb: 'both', plant: 'anR', f: [
+    [{ tl: -32, th: 58, sn: 112, ua: 92, fa: 92, hd: -40, zHL: 13, zHR: -13 }, 200, 1000], [{ ua: 90, fa: 90, zHL: 13, zHR: -13 }, 300, 1000]] },
+  'sentadilla-sumo-con-pesa-rusa': { v: 'front', kb: 'both', f: [
+    [{ ...SUMO, uaL: 70, faL: 72, uaR: 110, faR: 108, zEL: 4, zER: 4, zHL: 10, zHR: 10 }, 200, 1000],
+    [{ ...SUMO_DOWN, uaL: 72, faL: 74, uaR: 108, faR: 106, zEL: 6, zER: 6, zHL: 13, zHR: 13 }, 300, 1000]] },
+  'zancada-atras-con-pesa-rusa': { kb: 'both', f: [
+    [{ ...KB_CHEST }, 150, 800], [{ ...KB_CHEST, ...LUNGE_R }, 250, 800], [{ ...KB_CHEST }, 150, 800], [{ ...KB_CHEST, ...LUNGE_L }, 250, 800]] },
+  'remo-con-pesa-rusa': { kb: 'R', anchor: { j: 'knL', y: -38 }, props: benchRow, f: [
+    [{ ...ROWB, uaR: 90, faR: 90 }, 150, 800], [{ ...ROWB, uaR: 205, faR: 100 }, 150, 800]] },
+  'press-de-hombro-con-pesa-rusa': { v: 'front', kb: 'R', f: [
+    [{ uaR: 30, faR: -100, zER: 8, zHR: 8 }, 150, 1000], [{ uaR: -82, faR: -86 }, 200, 1000]] },
+  'cargada-con-pesa-rusa': { kb: 'R', plant: 'anR', f: [
+    [{ tl: -35, th: 72, sn: 108, uaR: 100, faR: 100, uaL: 100, faL: 70, hd: -45 }, 100, 600], [{ uaR: 62, faR: -112, uaL: 100, faL: 70 }, 350, 700]] },
+  'halo-con-pesa-rusa': { v: 'front', kb: 'both', per: 2600, fn: (t) => {
+    const a = t * Math.PI * 2, tx = 11 * Math.sin(a), tz = 12 * Math.cos(a), ty = -24;
+    const eL = [-15 + 21 * Math.cos((250 * Math.PI) / 180), 21 * Math.sin((250 * Math.PI) / 180) - 8], eR = [-eL[0], eL[1]];
+    const faL = (Math.atan2(ty - eL[1], tx - eL[0]) * 180) / Math.PI, faR = (Math.atan2(ty - eR[1], tx - eR[0]) * 180) / Math.PI;
+    return { uaL: 250, uaR: -70, faL, faR, zEL: 4 + tz * 0.4, zER: 4 + tz * 0.4, zHL: tz, zHR: tz };
+  } },
+  'molino-con-pesa-rusa': { kb: 'L', armsOut: true, f: [
+    [{ uaL: -88, faL: -88, saL: 0.95, uaR: 92, faR: 92, saR: 0.08, zKL: -7, zAL: -13, zKR: 7, zAR: 13, hd: -100 }, 300, 1100],
+    [{ tl: -14, tu: -6, hd: 20, uaR: 96, faR: 100, uaL: -88, faL: -88, saL: 0.95, zKL: -7, zAL: -13, zKR: 7, zAR: 13 }, 600, 1100]] },
+  'ocho-con-pesa-rusa': { kb: 'both', plant: 'anR', per: 2600, fn: (t) => {
+    const a = t * Math.PI * 2, z = 18 * Math.sin(a);
+    return { tl: -36, th: 72, sn: 108, hd: -46, ua: 96 + 10 * Math.sin(2 * a), fa: 98 + 10 * Math.sin(2 * a), zHL: 15.5 + z, zHR: -15.5 + z, zEL: 6 + z * 0.4, zER: -6 + z * 0.4 };
+  } },
+  'remo-alto-con-pesa-rusa': { v: 'front', kb: 'both', f: [
+    [{ uaL: 70, faL: 72, uaR: 110, faR: 108, zHL: 4, zHR: 4 }, 150, 800], [{ uaL: 160, faL: 0, uaR: 20, faR: 180, zHL: 6, zHR: 6 }, 200, 800]] },
+  'giro-ruso-con-pesa-rusa': { v: 'front', noGround: 1, mat: 'top', kb: 'both', f: [
+    [{ lean: -22, tw: -42, sa: 0.8, uaL: 85, faL: -45, uaR: 95, faR: -135, zEL: 12.6, zER: 12.6, zHL: 24.9, zHR: 24.9, thL: -125, snL: 95, thR: -55, snR: 85, sTh: 0.6 }, 150, 700],
+    [{ lean: -22, tw: 42, sa: 0.8, uaL: 85, faL: -45, uaR: 95, faR: -135, zEL: 12.6, zER: 12.6, zHL: 24.9, zHR: 24.9, thL: -125, snL: 95, thR: -55, snR: 85, sTh: 0.6 }, 150, 700]] },
+
+  // ── Barra ──
+  'sentadilla-con-barra': { bar: true, plant: 'anR', f: [
+    [{ ...BAR_BACK }, 200, 1000], [{ tl: -52, th: 5, sn: 114, ua: 188, fa: -2, hd: -62 }, 250, 1000]] },
+  'peso-muerto-con-barra': { bar: true, plant: 'anR', f: [
+    [{ tl: -30, th: 52, sn: 114, ua: 92, fa: 92, hd: -40 }, 200, 1100], [{ ua: 90, fa: 90 }, 300, 1100]] },
+  'peso-muerto-rumano-con-barra': { bar: true, plant: 'anR', f: [
+    [{ th: 88, sn: 94 }, 250, 1100], [{ tl: -18, th: 84, sn: 96, ua: 92, fa: 92, hd: -32 }, 300, 1100]] },
+  'zancada-con-barra': { bar: true, f: [
+    [{ ...BAR_BACK }, 150, 800], [{ ...BAR_BACK, ...LUNGE_R }, 250, 800], [{ ...BAR_BACK }, 150, 800], [{ ...BAR_BACK, ...LUNGE_L }, 250, 800]] },
+  'hip-thrust-con-barra': { bar: true, plant: 'anR', props: (J, P) => P.benchFlat(J.neck[0] - 34, J.neck[0] + 2, -J.neck[1] - 7), f: [
+    [{ tl: -155, hd: -150, th: -25, sn: 80, ua: 30, fa: 20 }, 200, 1000], [{ tl: -182, hd: -170, th: 0, sn: 90, ua: 6, fa: 0 }, 400, 1000]] },
+  'press-militar-con-barra': { bar: true, f: [[{ ua: 70, fa: -112 }, 150, 1000], [{ ua: -88, fa: -90, hd: -94 }, 200, 1000]] },
+  'remo-con-barra': { bar: true, plant: 'anR', f: [
+    [{ tl: -40, th: 80, sn: 100, ua: 90, fa: 90, hd: -50 }, 150, 800], [{ tl: -40, th: 80, sn: 100, ua: 200, fa: 98, hd: -50 }, 200, 800]] },
+  'curl-con-barra': { bar: true, f: [[{}, 150, 850], [{ ua: 85, fa: -50 }, 150, 850]] },
+  'encogimientos-con-barra': { bar: true, f: [[{}, 300, 700], [{ sa: 0.82, hd: -96 }, 500, 700]] },
+  'press-de-banca-con-barra': { bar: true, anchor: { j: 'pel', y: -40 }, props: benchLie, f: [
+    [{ ...LYB, ua: -90, fa: -90 }, 150, 1000], [{ ...LYB, ua: 30, fa: -90 }, 150, 1000]] },
+  'press-frances-con-barra': { bar: true, anchor: { j: 'pel', y: -40 }, props: benchLie, f: [
+    [{ ...LYB, ua: -105, fa: -105 }, 150, 1000], [{ ...LYB, ua: -105, fa: -190 }, 150, 1000]] },
+  'buenos-dias-con-barra': { bar: true, plant: 'anR', f: [
+    [{ ...BAR_BACK, th: 86, sn: 94 }, 250, 1100], [{ tl: -12, hd: -20, th: 84, sn: 96, ua: 228, fa: 38 }, 300, 1100]] },
+
+  // ── Bandas ──
+  'remo-con-banda': { mat: 1, band: 'feet', f: [
+    [{ th: 0, sn: 0, ft: -80, ua: 8, fa: 8, tl: -86 }, 150, 800], [{ th: 0, sn: 0, ft: -80, ua: 125, fa: 8, tl: -94, hd: -94 }, 250, 800]] },
+  'press-de-pecho-con-banda': { band: (J) => [J.neck[0] - 14, J.neck[1] + 12], f: [
+    [{ ua: 122, fa: -8 }, 150, 800], [{ ua: 2, fa: 0 }, 200, 800]] },
+  'aperturas-con-banda': { v: 'front', band: (J) => [J.neck[0], J.neck[1] + 10], f: [
+    [{ uaL: 180, faL: 172, uaR: 0, faR: 8 }, 150, 750], [{ uaL: 180, faL: 172, uaR: 0, faR: 8, saL: -0.35, saR: -0.35 }, 200, 750]] },
+  'separacion-de-banda': { v: 'front', band: 'hands', f: [
+    [{ uaL: 180, faL: 180, uaR: 0, faR: 0, saL: -0.31, saR: -0.31 }, 150, 800], [{ uaL: 180, faL: 180, uaR: 0, faR: 0 }, 300, 800]] },
+  'face-pull-con-banda': { band: (J) => [J.head[0] + 70, J.head[1] + 4], f: [
+    [{ ua: -4, fa: -4 }, 150, 800], [{ ua: 196, fa: -22, hd: -92 }, 300, 800]] },
+  'curl-con-banda': { band: 'feet', f: [[{}, 150, 850], [{ ua: 85, fa: -50 }, 150, 850]] },
+  'extension-de-triceps-con-banda': { band: (J) => [J.anL[0] - 4, J.anL[1] - 2], f: [
+    [{ ua: -100, fa: -250, thL: 104, snL: 100 }, 150, 1000], [{ ua: -100, fa: -95, thL: 104, snL: 100 }, 200, 1000]] },
+  'press-de-hombros-con-banda': { v: 'front', band: 'feet', f: [
+    [{ uaL: 180, faL: 270, uaR: 0, faR: -90 }, 150, 1000], [{ uaL: 260, faL: 265, uaR: -80, faR: -85 }, 150, 1000]] },
+  'elevaciones-laterales-con-banda': { v: 'front', band: 'feet', f: [
+    [{ uaL: 100, faL: 100, uaR: 80, faR: 80 }, 150, 900], [{ uaL: 180, faL: 190, uaR: 0, faR: -10 }, 150, 900]] },
+  'jalon-con-banda': { mat: 1, band: (J) => [J.head[0] + 30, J.head[1] - 46], f: [
+    [{ th: 90, sn: 180, ft: 180, ua: -68, fa: -68, hd: -96 }, 150, 800], [{ th: 90, sn: 180, ft: 180, ua: 115, fa: -60, hd: -92 }, 250, 800]] },
+  'sentadilla-con-banda': { band: 'feet', plant: 'anR', f: [
+    [{ ua: 70, fa: -112 }, 200, 1000], [{ tl: -58, th: 5, sn: 115, ua: 40, fa: -140, hd: -65 }, 250, 1000]] },
+  'caminata-lateral-con-banda': { v: 'front', band: 'knees', f: [
+    [{ x: 0, lean: 12, uaL: 120, faL: 30, uaR: 60, faR: 150 }, 80, 420],
+    [{ x: -7, lean: 12, thL: 104, snL: 104, thR: 86, snR: 86, uaL: 120, faL: 30, uaR: 60, faR: 150 }, 80, 420],
+    [{ x: -14, lean: 12, uaL: 120, faL: 30, uaR: 60, faR: 150 }, 80, 420],
+    [{ x: -7, lean: 12, thL: 94, snL: 94, thR: 76, snR: 76, uaL: 120, faL: 30, uaR: 60, faR: 150 }, 80, 420]] },
+  'abduccion-de-cadera-con-banda': { v: 'front', band: 'knees', anchor: { j: 'pel', y: -40 },
+    props: (J, P) => [...P.rect(J.pel[0] - 26, -34, 52, 6), ...P.line([J.pel[0] - 20, -29], [J.pel[0] - 20, 0], 4), ...P.line([J.pel[0] + 20, -29], [J.pel[0] + 20, 0], 4)], f: [
+    [{ thL: 100, thR: 80, sTh: 0.15, uaL: 120, faL: 60, uaR: 60, faR: 120 }, 200, 800], [{ thL: 116, thR: 64, sTh: 0.15, uaL: 120, faL: 60, uaR: 60, faR: 120 }, 500, 800]] },
+  'patada-de-gluteo-con-banda': { mat: 1, band: 'ankles', f: [[QUAD, 200, 700], [{ ...QUAD, thR: 182, snR: 182, ftR: 90 }, 300, 700]] },
+  'puente-de-gluteos-con-banda': { mat: 1, band: 'knees', f: [
+    [{ ...SUP, ...KNEES, zKL: -3, zKR: 3 }, 300, 1000], [{ ...SUP, tl: 140, tu: 165, th: -18, sn: 76.5, zKL: -5, zKR: 5 }, 900, 1000]] },
+  'press-pallof-con-banda': { v: 'front', band: (J) => [J.neck[0] + 75, J.neck[1] + 14], f: [
+    [{ uaL: 70, faL: -40, uaR: 110, faR: 220, zEL: 6, zER: 6, zHL: 12, zHR: 12 }, 200, 800], [{ uaL: 0, faL: 0, uaR: 180, faR: 180, sa: 0.36 }, 600, 800]] },
+
+  // ── Step ──
+  'step-basico': { props: STEP(14), f: [
+    [{}, 0, 380], [{ thR: 20, snR: 100, ftR: 0 }, 0, 380], [{ x: 26, jy: 17 }, 0, 380], [{ x: 26, jy: 17, thL: 150, snL: 80 }, 0, 380]] },
+  'step-en-v': { props: STEP(14), f: [
+    [{}, 0, 380], [{ thR: 20, snR: 100, ftR: 0, zAR: 8, zKR: 6 }, 0, 380], [{ x: 26, jy: 17, zAL: -8, zKL: -6, zAR: 8, zKR: 6 }, 0, 380], [{ x: 26, jy: 17, thL: 150, snL: 80, zAR: 8, zKR: 6 }, 0, 380]] },
+  'subidas-al-step': { props: STEP(14), f: [
+    [{ ...HIPS }, 150, 600], [{ ...HIPS, thR: 20, snR: 100, ftR: 0 }, 100, 650], [{ ...HIPS, x: 26, jy: 17 }, 250, 650], [{ ...HIPS, thR: 20, snR: 100, ftR: 0 }, 100, 600]] },
+  'subida-al-step-con-rodilla-arriba': { props: STEP(14), f: [
+    [{}, 150, 600], [{ thR: 20, snR: 100, ftR: 0, uaL: 60, faL: -30, uaR: 120, faR: 100 }, 100, 650],
+    [{ x: 26, jy: 17, thL: -8, snL: 82, uaR: 45, faR: -40, uaL: 125, faL: 100 }, 250, 650], [{ thR: 20, snR: 100, ftR: 0 }, 100, 600]] },
+  'zancada-atras-desde-el-step': { props: (J, P) => P.rect(J.anR[0] - 16, -17, 34, 17), plant: 'anR', f: [
+    [{ ...HIPS, jy: 17 }, 150, 800], [{ ...HIPS, thR: 14, snR: 139, thL: 128, snL: 142, ftL: 40 }, 300, 800]] },
+  'elevacion-de-talones-en-el-step': { props: (J, P) => [...P.rect(J.anR[0] - 20, -17, 30, 17), ...P.wall(J.haR[0] + 3)], f: [
+    [{ jy: 17, ft: -30, uaR: 4, faR: -6 }, 300, 900], [{ jy: 22, ft: 45, uaR: 4, faR: -6 }, 500, 900]] },
+  'flexiones-con-manos-en-el-step': { plant: 'haR', anchor: { j: 'haR', y: -19 }, props: (J, P) => P.rect(J.haR[0] - 16, -17, 30, 17), f: [
+    [{ tl: -30, ua: 90, fa: 90, th: 150, sn: 150, ft: 70 }, 200, 750], [{ tl: -19, ua: 150, fa: 30, th: 161, sn: 161, ft: 80 }, 150, 850]] },
+  'fondos-de-triceps-en-el-step': { plant: 'haR', anchor: { j: 'haR', y: -19 }, props: (J, P) => P.rect(J.haR[0] - 30, -17, 33, 17), f: [
+    [{ ua: 105, fa: 100, th: 30, sn: 50 }, 150, 900], [{ ua: 165, fa: 92, th: 10, sn: 60 }, 150, 900]] },
+  'saltos-laterales-sobre-el-step': { v: 'front', props: (J, P) => P.rect(J.pel[0] + 15, -17, 30, 17), f: [
+    [{ x: -30 }, 60, 330], [{ x: 0, jy: 17 }, 60, 330], [{ x: 30 }, 60, 330], [{ x: 0, jy: 17 }, 60, 330]] },
+  'gemelos-en-el-step': { props: (J, P) => [...P.rect(J.anR[0] - 20, -17, 30, 17), ...P.wall(J.haR[0] + 3)], f: [
+    [{ jy: 17, uaR: 4, faR: -6, ftR: 0 }, 300, 900], [{ jy: 17, uaR: 4, faR: -6, ftR: -35, ftL: 10 }, 1600, 900]] },
+
+  // ── Fitball ──
+  'crunch-en-fitball': { anchor: { j: 'pel', y: -58 }, ball: (J) => [J.pel[0] - 16, -27], f: [
+    [{ tl: 172, tu: 168, hd: 172, th: 40, sn: 90, ua: 205, fa: 330 }, 300, 900], [{ tl: 180, tu: 205, hd: 214, th: 40, sn: 90, ua: 240, fa: 5 }, 400, 900]] },
+  'puente-con-pies-en-fitball': { mat: 1, anchor: { j: 'anR', y: -52 }, ball: (J) => [J.anR[0] + 3, -27], f: [
+    [{ ...SUP, th: -41, sn: -41, ft: -60 }, 200, 900], [{ ...SUP, tl: 158, th: -22, sn: -22, ft: -60 }, 600, 900]] },
+  'curl-femoral-con-fitball': { mat: 1, anchor: { j: 'anR', y: -52 }, ball: (J) => [J.anR[0] + 4, -27], f: [
+    [{ ...SUP, tl: 141, th: -10, sn: -10, ft: -60 }, 200, 900], [{ ...SUP, tl: 131, th: -60, sn: 45, ft: -20 }, 300, 900]] },
+  'plancha-con-antebrazos-en-fitball': { anchor: { j: 'elR', y: -56 }, ball: (J) => [J.elR[0] + 8, -27], f: [
+    [{ tl: -40, ua: 90, fa: 0, th: 140, sn: 140, ft: 50 }, 1300, 1000], [{ tl: -41, ua: 92, fa: 2, th: 139, sn: 139, ft: 50 }, 1300, 1000]] },
+  'pase-de-fitball-manos-a-pies': { mat: 1, ball: (J, p) => {
+    const h = [(J.haL[0] + J.haR[0]) / 2, (J.haL[1] + J.haR[1]) / 2], f = [(J.anL[0] + J.anR[0]) / 2, (J.anL[1] + J.anR[1]) / 2];
+    const k = p.bp; return [h[0] + (f[0] - h[0]) * k, h[1] + (f[1] - h[1]) * k - 6];
+  }, f: [
+    [{ tl: 180, hd: 182, ua: 182, fa: 182, th: -4, sn: -4, bp: 0 }, 200, 900], [{ tl: 216, tu: 224, hd: 228, ua: 322, fa: 322, th: -46, sn: -46, bp: 0 }, 0, 250],
+    [{ tl: 216, tu: 224, hd: 228, ua: 322, fa: 322, th: -46, sn: -46, bp: 1 }, 100, 900], [{ tl: 180, hd: 182, ua: 182, fa: 182, th: -8, sn: -8, bp: 1 }, 200, 900],
+    [{ tl: 216, tu: 224, hd: 228, ua: 322, fa: 322, th: -46, sn: -46, bp: 1 }, 0, 250], [{ tl: 216, tu: 224, hd: 228, ua: 322, fa: 322, th: -46, sn: -46, bp: 0 }, 100, 900]] },
+  'rodillas-al-pecho-en-fitball': { mat: 1, plant: 'haR', ball: (J) => [(J.knR[0] + J.anR[0]) / 2, -27], f: [
+    [{ tl: -2, ua: 90, fa: 90, th: 179, sn: 179, ft: 120 }, 200, 800], [{ tl: -28, ua: 82, fa: 84, th: 70, sn: 170, ft: 160 }, 300, 800]] },
+  'sentadilla-en-pared-con-fitball': { plant: 'anR', ball: (J) => [J.mid[0] - 30, J.mid[1] + 4], props: (J, P) => P.wall(J.mid[0] - 58), f: [
+    [{ tl: -92, th: 62, sn: 62, ft: -10, ua: 70, fa: -112 }, 200, 1000], [{ tl: -92, th: 2, sn: 90, ua: 40, fa: -140 }, 300, 1000]] },
+  'hiperextension-en-fitball': { ball: (J) => [J.pel[0] + 4, -27], f: [
+    [{ tl: 40, tu: 48, hd: 70, ua: 80, fa: 80, th: 125, sn: 125, ft: 60 }, 200, 900], [{ tl: -40, tu: -45, hd: -40, ua: 160, fa: 160, th: 125, sn: 125, ft: 60 }, 400, 900]] },
+  'pecho-y-abdomen-sobre-fitball': { anchor: { j: 'mid', y: -60 }, armsOut: true, ball: (J) => [J.mid[0] + 2, -27], f: [
+    [{ tl: 168, tu: 160, hd: 150, ua: 165, fa: 165, sa: 0.3, th: 60, sn: 92 }, 1500, 1200], [{ tl: 166, tu: 150, hd: 140, ua: 160, fa: 160, sa: 0.25, th: 60, sn: 92 }, 1500, 1200]] },
+
+  // ── Barra de dominadas ──
+  dominadas: { anchor: { j: 'haR', y: -172 }, props: pullBar, f: [[HANG, 250, 1100], [CHIN, 300, 1100]] },
+  'dominadas-supinas': { anchor: { j: 'haR', y: -172 }, props: pullBar, f: [[HANG, 250, 1100], [CHIN, 300, 1100]] },
+  'dominadas-negativas': { anchor: { j: 'haR', y: -172 }, props: pullBar, f: [[CHIN, 300, 4500], [HANG, 300, 900]] },
+  'dominadas-con-banda': { anchor: { j: 'haR', y: -172 }, props: pullBar, f: [
+    [{ ...HANG, th: 70, sn: 165 }, 250, 1100], [{ ...CHIN, th: 70, sn: 165 }, 300, 1100]] },
+  'retraccion-escapular-colgado': { anchor: { j: 'haR', y: -172 }, props: pullBar, f: [[HANG, 300, 700], [{ ...HANG, sa: 0.9, hd: -94 }, 600, 700]] },
+  'elevaciones-de-rodillas-colgado': { anchor: { j: 'haR', y: -172 }, props: pullBar, f: [[{ ...HANG, th: 90, sn: 92 }, 200, 900], [{ ...HANG, th: -15, sn: 80, tl: -96 }, 300, 900]] },
+  'elevaciones-de-piernas-colgado': { anchor: { j: 'haR', y: -172 }, props: pullBar, f: [[{ ...HANG, th: 90, sn: 92 }, 200, 1000], [{ ...HANG, th: -2, sn: -2, ft: -40, tl: -98 }, 300, 1000]] },
+  'colgarse-de-la-barra': { anchor: { j: 'haR', y: -172 }, props: pullBar, f: [[{ ...HANG, th: 90, sn: 92, ft: 70 }, 1400, 1100], [{ ...HANG, th: 91, sn: 92, ft: 72, hd: -94 }, 1400, 1100]] },
+
+  // ── Comba ──
+  'saltar-a-la-comba': { rope: true, per: 620, fn: rope({}) },
+  'comba-alternando-pies': { rope: true, per: 1240, fn: rope({ legs: 'alt' }) },
+  'comba-con-rodillas-altas': { rope: true, per: 1400, fn: rope({ legs: 'high' }) },
+  'comba-hacia-atras': { rope: true, per: 680, fn: rope({ back: true }) },
+  'comba-con-saltos-laterales': { rope: true, per: 1300, fn: rope({ side: true, legs: undefined }) },
+
+  // ── Rueda abdominal ──
+  'rueda-abdominal-de-rodillas': { mat: 1, wheel: true, plant: 'knR', f: [
+    [{ tl: -30, ua: 85, fa: 85, th: 90, sn: 180, ft: 180 }, 200, 1100], [{ tl: -8, hd: -12, ua: 8, fa: 8, th: 152, sn: 180, ft: 180 }, 300, 1100]] },
+  'rueda-abdominal-de-pie': { mat: 1, wheel: true, plant: 'anR', f: [
+    [{ tl: 52, tu: 62, hd: 100, ua: 98, fa: 98, th: 84, sn: 96 }, 200, 1300], [{ tl: -4, hd: -10, ua: 6, fa: 6, th: 176, sn: 176, ft: 70 }, 300, 1300]] },
+  'rueda-abdominal-en-diagonal': { mat: 1, wheel: true, plant: 'knR', f: [
+    [{ tl: -30, ua: 85, fa: 85, th: 90, sn: 180, ft: 180 }, 150, 1000], [{ tl: -12, hd: -14, ua: 14, fa: 14, th: 146, sn: 180, ft: 180, zHL: 14, zHR: 14, zEL: 7, zER: 7 }, 250, 1000],
+    [{ tl: -30, ua: 85, fa: 85, th: 90, sn: 180, ft: 180 }, 150, 1000], [{ tl: -12, hd: -14, ua: 14, fa: 14, th: 146, sn: 180, ft: 180, zHL: -14, zHR: -14, zEL: -7, zER: -7 }, 250, 1000]] },
+  'plancha-con-rueda': { mat: 1, wheel: true, plant: 'knR', f: [
+    [{ tl: -30, ua: 85, fa: 85, th: 90, sn: 180, ft: 180 }, 200, 1000], [{ tl: -16, hd: -18, ua: 40, fa: 40, th: 128, sn: 180, ft: 180 }, 1500, 1000]] },
 
   // ── Estiramientos ──
   'postura-de-la-paloma': { mat: 1, f: [

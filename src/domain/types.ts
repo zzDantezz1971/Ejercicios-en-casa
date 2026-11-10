@@ -48,6 +48,18 @@ export interface MotionSpec {
   prone?: boolean;
   mark?: string[];
   props?: (j: Record<string, [number, number]>, p: PropHelpers) => PropOp[];
+  /** Material que se mueve con el cuerpo (ver figure/Mannequin.ts, updateGear). */
+  kb?: 'L' | 'R' | 'both';
+  /** Barra con discos entre las dos manos. */
+  bar?: boolean;
+  /** Banda elástica: de las manos a los pies, entre las manos, entre rodillas o tobillos, o a un punto fijo (2D, en la postura inicial). */
+  band?: 'feet' | 'hands' | 'knees' | 'ankles' | ((j: Record<string, [number, number]>) => [number, number]);
+  /** Fitball: centro (2D) según las articulaciones de cada instante. */
+  ball?: (j: Record<string, [number, number]>, pose: Record<string, number>) => [number, number];
+  /** Comba entre las manos; su posición la da el ángulo `rp` de la postura (grados). */
+  rope?: boolean;
+  /** Rueda abdominal en las manos. */
+  wheel?: boolean;
   /** Ángulo de cámara preferido en 3D (grados). */
   az?: number;
   el?: number;
