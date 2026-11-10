@@ -185,9 +185,10 @@ export class RoutineScreen implements Screen {
       const ex = this.app.catalog.get(it.exerciseId)!;
       const content = h('div', { class: 'row-ex' },
         h('span', { class: 'order' }, i + 1),
-        this.miniThumb(ex),
+        // tocar la miniatura o el nombre abre la ficha (cómo se hace)
+        h('button', { class: 'row-open', 'aria-label': `Cómo se hace: ${ex.name}`, onclick: () => this.app.push(new DetailScreen(this.app, ex)) }, this.miniThumb(ex)),
         h('div', { class: 'row-text' },
-          h('strong', {}, ex.name),
+          h('button', { class: 'row-open row-name', onclick: () => this.app.push(new DetailScreen(this.app, ex)) }, h('strong', {}, ex.name)),
           ex.oneSided ? h('span', { class: 'by-sides' }, icon('sides'), 'por lados') : null,
           h('div', { class: 'stepper inline' },
             h('button', { 'aria-label': 'Menos tiempo', onclick: () => this.adjust(ex, -STEP_SECONDS) }, '−'),
