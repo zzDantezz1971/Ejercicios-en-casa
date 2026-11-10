@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-10T10:45:50Z",
+    "es": ["Inicio: al tocar un apartado en «Contenido de la tabla» se ven solo los ejercicios de tu tabla (Elegidos), no todos los del apartado."],
+    "ca": ["Inici: en tocar un apartat a «Contingut de la taula» es veuen només els exercicis de la teva taula (Triats), no tots els de l'apartat."],
+    "en": ["Home: tapping a section in “Routine contents” now shows only the exercises in your routine (Chosen), not all the ones in the section."]
+  },
+  {
     "fecha": "2026-11-10T10:41:40Z",
     "es": ["Flexión hacia delante de pie: rehecha como el vídeo de referencia. Piernas casi rectas, espalda redondeada (no plana), cabeza a la altura de las rodillas y brazos colgando rectos hasta la punta de los pies, sin doblarse de más."],
     "ca": ["Flexió endavant dempeus: refeta com el vídeo de referència. Cames gairebé rectes, esquena arrodonida (no plana), cap a l'alçada dels genolls i braços penjant rectes fins a la punta dels peus, sense doblegar-se de més."],

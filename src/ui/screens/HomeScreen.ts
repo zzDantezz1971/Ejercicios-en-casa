@@ -178,7 +178,7 @@ export class HomeScreen implements Screen {
     const R = clampRounds(this.app.store.active.rounds?.[s]);
     const secs = items.reduce((n, i) => n + i.seconds, 0) * R;
     const st = SECTION_STYLE[s];
-    const row = h('button', { class: 'sec-row' + (items.length ? '' : ' empty'), onclick: () => this.app.push(new RoutineScreen(this.app, s)) },
+    const row = h('button', { class: 'sec-row' + (items.length ? '' : ' empty'), onclick: () => this.app.push(new RoutineScreen(this.app, s, items.length > 0)) },
       h('span', { class: 'sec-icon' }, icon(st.icon)),
       h('span', { class: 'sec-text' },
         h('strong', {}, SECTION_TITLES[s]),
