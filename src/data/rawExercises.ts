@@ -165,12 +165,12 @@ export const RAW_SECTIONS: RawSection[] = [
    [{...PLH,thR:25,snR:160,ftR:150},0,170],[{...PLH,thR:92,sThR:.42,snR:165,thL:92,sThL:.42,snL:165},0,170],[{...PLH,thL:25,snL:160,ftL:150},0,170],[{...PLH,thR:92,sThR:.42,snR:165,thL:92,sThL:.42,snL:165},0,170]]},
  {g:'Abdomen inferior'},
  {n:'Crunch inverso',z:'Abdomen inferior',mat:1,f:[
-   [{...SUP,th:-80,sn:10,ft:-40},150,900],[{...SUP,tl:168,th:-130,sn:-50,ft:-95},150,900]]},
+   [{...SUP,th:-80,sn:10,ft:-80},150,900],[{...SUP,tl:168,th:-130,sn:-50,ft:-140},150,900]]},
  {n:'Tijeras',z:'Abdomen inferior',mat:1,b:['caution'],f:[
    [{tl:180,tu:188,ua:0,fa:0,th:-18,sn:-18,zKL:-7,zAL:-14,zKR:7,zAR:14},0,330],
    [{tl:180,tu:188,ua:0,fa:0,th:-18,sn:-18,zKL:3,zAL:7,zKR:-3,zAR:-7},0,330]]},
  {n:'Elevaciones de piernas',z:'Abdomen inferior',mat:1,b:['caution'],f:[
-   [{...SUP,th:-8,sn:-8,ft:-55},150,1100],[{...SUP,th:-88,sn:-88,ft:-125},150,1100]]},
+   [{...SUP,th:-8,sn:-8,ft:-98},150,1100],[{...SUP,th:-88,sn:-88,ft:-178},150,1100]]},
  {n:'Rodillas al pecho sentado',z:'Abdomen',mat:1,f:[
    [{tl:-125,ua:135,fa:115,th:-15,sn:-15,ft:-60},100,800],[{tl:-125,tu:-112,ua:135,fa:115,th:-60,sn:45},100,800]]},
 ]},
