@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-10T01:09:20Z",
+    "es": ["Nuevo maniquí: el cuerpo hecho en Blender, descalzo, ahora hace todos los ejercicios de la app."],
+    "ca": ["Nou maniquí: el cos fet amb Blender, descalç, ara fa tots els exercicis de l'app."],
+    "en": ["New mannequin: the body made in Blender, barefoot, now does every exercise in the app."]
+  },
+  {
     "fecha": "2026-11-09T23:05:51Z",
     "es": ["Músculos de los resúmenes: vuelven los colores rojos (claro = poco, fuerte = mucho), ahora bien repartidos para ver la diferencia entre músculos, sin leyenda."],
     "ca": ["Músculs dels resums: tornen els colors vermells (clar = poc, fort = molt), ara ben repartits per veure la diferència entre músculs, sense llegenda."],
