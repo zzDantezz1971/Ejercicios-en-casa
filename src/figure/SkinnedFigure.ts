@@ -267,7 +267,8 @@ export class SkinnedFigure {
       const faDir = ha.clone().sub(el).normalize();
       const support = Math.min(1, Math.max(0, (13 - ha.y) / 5)) * Math.min(1, Math.max(0, (-faDir.y - 0.35) / 0.3));
       if (support > 0) {
-        const fwd = V(0, 0, 1).transformDirection(Rc); fwd.y = 0;
+        // hacia donde mira el cuerpo (de la línea de la cadera), aunque el tronco esté boca abajo
+        const fwd = hipX0.clone().cross(V(0, 1, 0)); fwd.y = 0;
         if (fwd.lengthSq() < 1e-4) fwd.set(1, 0, 0);
         fwd.normalize();
         const handNow = RF['hand' + side].dir.clone().transformDirection(Rfa);

@@ -60,8 +60,9 @@ def _rot(axis, ang):
 V_OPEN = V.copy()
 for side in 'LR':
     across = jp(f'finger5-1.{side}') - jp(f'finger2-1.{side}')
-    for f, angs in ((2, (80, 95, 60)), (3, (82, 95, 60)), (4, (84, 95, 60)), (5, (86, 95, 60)), (1, (25, 45, 35))):
-        for k in (1, 2, 3):
+    for f, angs in ((2, (85, 100, 70)), (3, (87, 100, 70)), (4, (89, 100, 70)), (5, (91, 100, 70)), (1, (25, 45, 35))):
+        # de la punta a la base: cada giro se hace sobre la articulación aún en su sitio (si no, el dedo se deforma)
+        for k in (3, 2, 1):
             w = np.zeros(nV)
             for kk in range(k, 4):
                 w += Wn.get(f'finger{f}-{kk}.{side}', 0)
@@ -69,7 +70,7 @@ for side in 'LR':
             if not len(idx): continue
             head = jp(f'finger{f}-{k}.{side}')
             # meñique - índice ya apunta al lado contrario en cada mano: el mismo signo sirve para las dos (antes la derecha se doblaba al revés)
-            axis = -across * float(os.environ.get('CL' if side == 'L' else 'CR', '1'))
+            axis = across * float(os.environ.get('CL' if side == 'L' else 'CR', '1'))
             for vi in idx:
                 R = _rot(axis, np.radians(angs[k - 1]) * min(1.0, w[vi]))
                 V[vi] = head + R @ (V[vi] - head)
