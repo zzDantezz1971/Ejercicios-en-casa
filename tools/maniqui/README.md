@@ -18,3 +18,10 @@ para generar la página de comparación.
   puesto por `build_meshy.py`; se retiró el mismo día (deformaciones y pies). La app vuelve a usar el anterior.
 - `maniqui_anterior.json` es el maniquí que había antes (MakeHuman, opción B). Para volver a él:
   `cp tools/maniqui/maniqui_anterior.json public/maniqui.json` (commit anterior al cambio: 0bd453d).
+
+## Maniquí del usuario (Blender + MPFB)
+
+- `Humanoide.glb`: cuerpo hecho por el usuario en Blender 5.2 con MPFB (MakeHuman), con su esqueleto y sus pesos.
+- `build_glb.py Humanoide.glb` lo convierte en `skin_glb.json` (mismo formato que `public/maniqui.json`):
+  junta los 160 huesos en los 15 de la app, escala a la altura del maniquí anterior y añade puño, ropa y labios.
+  Para probarlo en la app: `cp tools/maniqui/skin_glb.json public/maniqui.json`.
