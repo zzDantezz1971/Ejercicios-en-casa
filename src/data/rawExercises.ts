@@ -187,7 +187,7 @@ export const RAW_SECTIONS: RawSection[] = [
    [{uaR:-95,faR:120,uaL:305,faL:350,zER:-2,zHR:-13,zHL:-3},1300,900],[{},200,900],
    [{uaL:275,faL:60,uaR:-125,faR:190,zEL:-2,zHL:-13,zHR:-3},1300,900],[{},200,900]]},
  {n:'Estiramiento de antebrazos',z:'Antebrazos y muñecas',f:[
-   [{uaR:0,faR:0,uaL:30,faL:-20},1200,900],[{uaR:0,faR:0,uaL:28,faL:-14,tu:-88},1200,900]]},
+   [{uaR:0,faR:0,uaL:22,faL:-8,zEL:9,zHL:27},1200,900],[{uaR:0,faR:0,uaL:20,faL:-4,zEL:9,zHL:27,tu:-88},1200,900]]},
  {n:'Círculos de brazos hacia delante',z:'Hombros',armsOut:true,per:1150,fn:t=>{const a=90+360*t;return {thL:88,snL:95,thR:88,snR:95,ua:a,fa:a-10,sa:.95};}},
  {n:'Círculos de brazos hacia atrás',z:'Hombros y pecho',armsOut:true,per:1150,fn:t=>{const a=90-360*t;return {thL:88,snL:95,thR:88,snR:95,ua:a,fa:a+10,sa:.95};}},
  {g:'Pecho'},
