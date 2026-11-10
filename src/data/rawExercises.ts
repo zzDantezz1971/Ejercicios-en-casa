@@ -92,7 +92,7 @@ export const RAW_SECTIONS: RawSection[] = [
    [{tl:-145,th:5,sn:90,ua:-100,fa:-100},150,1000],[{tl:-145,th:5,sn:90,ua:60,fa:-95},150,1000]]},
  {n:'Aperturas con mancuernas',z:'Pecho',db:'both',armsOut:true,anchor:{j:'pel',y:-40},props:benchLie,f:[
    [{...LYB,ua:-90,fa:-90},150,1000],[{...LYB,ua:-80,fa:-75,sa:.22},150,1000]]},
- {n:'Pullover con mancuerna',z:'Pecho y espalda',db:'R',anchor:{j:'pel',y:-40},props:benchLie,f:[
+ {n:'Pullover con mancuerna',z:'Pecho y espalda',db:'two',anchor:{j:'pel',y:-40},props:benchLie,f:[
    [{...LYB,ua:270,fa:270},150,1100],[{...LYB,ua:195,fa:190},150,1100]]},
  {g:'Espalda'},
  {n:'Remo a una mano apoyado en banco',z:'Espalda',db:'R',anchor:{j:'knL',y:-38},props:benchRow,f:[
@@ -105,7 +105,7 @@ export const RAW_SECTIONS: RawSection[] = [
    [{},150,850],[{ua:85,fa:-50},150,850]]},
  {n:'Curl concentrado sentado',z:'Bíceps',db:'R',anchor:{j:'pel',y:-40},props:benchSeat,f:[
    [{...SEAT,tl:-50,tu:-45,uaL:60,faL:40,uaR:85,faR:85},150,900],[{...SEAT,tl:-50,tu:-45,uaL:60,faL:40,uaR:85,faR:-40},150,900]]},
- {n:'Extensión de tríceps por encima de la cabeza',z:'Tríceps',db:'R',anchor:{j:'pel',y:-40},props:benchSeat,f:[
+ {n:'Extensión de tríceps por encima de la cabeza',z:'Tríceps',db:'two',anchor:{j:'pel',y:-40},props:benchSeat,f:[
    [{...SEAT,ua:-100,fa:-95},150,1000],[{...SEAT,ua:-100,fa:-250},150,1000]]},
  {n:'Patada de tríceps apoyado en banco',z:'Tríceps',db:'R',anchor:{j:'knL',y:-38},props:benchRow,f:[
    [{...ROWB,uaR:170,faR:90},150,800],[{...ROWB,uaR:170,faR:170},150,800]]},
@@ -122,7 +122,7 @@ export const RAW_SECTIONS: RawSection[] = [
  {g:'Piernas y glúteos'},
  {n:'Sentadilla con mancuernas a los hombros',z:'Piernas y glúteos',db:'both',plant:'anR',f:[
    [{ua:70,fa:-112},200,1000],[{tl:-58,th:5,sn:115,ua:40,fa:-140,hd:-65},250,1000]]},
- {n:'Sentadilla sumo con mancuerna',z:'Aductores, glúteos y piernas',v:'front',db:'R',f:[
+ {n:'Sentadilla sumo con mancuerna',z:'Aductores, glúteos y piernas',v:'front',db:'two',f:[
    [{thL:118,snL:118,thR:62,snR:62,ftL:170,ftR:10,uaL:74,faL:66,uaR:106,faR:114,zEL:6,zER:6,zHL:14,zHR:14},200,1000],
    [{thL:152,snL:96,thR:28,snR:84,ftL:170,ftR:10,uaL:74,faL:66,uaR:106,faR:114,zEL:6,zER:6,zHL:14,zHR:14,zKL:9,zKR:9,lean:16},300,1000]]},
  {n:'Zancadas hacia delante con mancuernas',z:'Piernas y glúteos',db:'both',f:[

@@ -33,7 +33,8 @@ export interface MotionSpec {
   per?: number;
   anchor?: { j: string; y: number };
   plant?: string;
-  db?: 'L' | 'R' | 'both';
+  /** Mancuernas: en una mano, en las dos, o una sola cogida con las dos manos ('two'). */
+  db?: 'L' | 'R' | 'both' | 'two';
   mat?: boolean | number | 'top';
   noGround?: boolean | number;
   /** Altura del cuerpo sobre el suelo en vista desde arriba (p. ej. tumbado en el banco). */

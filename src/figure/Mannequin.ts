@@ -111,6 +111,15 @@ export function to3D(spec: MotionSpec, view: string, J: Joints, pose: Pose): Rec
     }
   }
   }
+  // Una mancuerna cogida con las dos manos (de lado): las manos se juntan en el centro
+  if (spec.db === 'two' && view !== 'top') {
+    const c = o.haL.clone().add(o.haR).multiplyScalar(0.5);
+    for (const s of ['L', 'R']) {
+      const k = s === 'L' ? -1 : 1;
+      o['ha' + s] = side ? V(c.x, c.y, k * 2.5) : V(c.x + (o['ha' + s].x < c.x ? -2.5 : 2.5), c.y, c.z);
+      if (side) o['el' + s].z *= 0.7;
+    }
+  }
   // Profundidad a mano (hacia la cámara de frente; hacia el lado cercano de lado): codo, mano, rodilla y pie.
   for (const s of ['L', 'R']) {
     o['el' + s].z += pose['zE' + s] ?? 0;
@@ -164,7 +173,7 @@ export class MannequinScene {
   private center = V();
   private size = V();
   private parts: Record<string, THREE.Mesh> = {};
-  private dumbbells: Array<{ hand: 'L' | 'R'; bar: THREE.Mesh; p1: THREE.Mesh; p2: THREE.Mesh }> = [];
+  private dumbbells: Array<{ hand: 'L' | 'R' | 'two'; bar: THREE.Mesh; p1: THREE.Mesh; p2: THREE.Mesh }> = [];
   private disposables: Array<{ dispose(): void }> = [];
   private skinData?: SkinData;
 
@@ -285,7 +294,7 @@ export class MannequinScene {
   private buildDumbbells(iron: THREE.Material = this.mat(this.pal.iron, 0.32, 0.3)): void {
     const G = this.geo;
     const db = this.motion.spec.db;
-    const hands: Array<'L' | 'R'> = db === 'both' ? ['L', 'R'] : db ? [db] : [];
+    const hands: Array<'L' | 'R' | 'two'> = db === 'both' ? ['L', 'R'] : db ? [db] : [];
     for (const hand of hands) this.dumbbells.push({ hand, bar: this.add(G.cyl, iron), p1: this.add(G.cyl, iron), p2: this.add(G.cyl, iron) });
   }
 
@@ -665,6 +674,18 @@ export class MannequinScene {
 
   private updateDumbbells(J: Record<string, V3>, side: boolean): void {
     for (const d of this.dumbbells) {
+      if (d.hand === 'two') {
+        // una sola mancuerna entre las dos manos, de pie a lo largo de los antebrazos
+        const gL = J.haL.clone().addScaledVector(J.haL.clone().sub(J.elL).normalize(), this.skinned ? 4.5 : 3);
+        const gR = J.haR.clone().addScaledVector(J.haR.clone().sub(J.elR).normalize(), this.skinned ? 4.5 : 3);
+        const u = J.haL.clone().sub(J.elL).add(J.haR.clone().sub(J.elR)).normalize();
+        const c = gL.lerp(gR, 0.5).addScaledVector(u, 2);
+        const a = c.clone().addScaledVector(u, -8), b = c.clone().addScaledVector(u, 8);
+        this.seg(d.bar, a, b, 1.3);
+        this.seg(d.p1, a.clone().addScaledVector(u, -1.6), a.clone().addScaledVector(u, 1.6), 5);
+        this.seg(d.p2, b.clone().addScaledVector(u, -1.6), b.clone().addScaledVector(u, 1.6), 5);
+        continue;
+      }
       const h = J['ha' + d.hand], u = h.clone().sub(J['el' + d.hand]).normalize();
       const grip = h.clone().addScaledVector(u, this.skinned ? 5.2 : 3.4);
       const ax = side ? V(0, 0, 1) : V(-u.y, u.x, 0).normalize();
