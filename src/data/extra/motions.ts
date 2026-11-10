@@ -1,6 +1,7 @@
 /* Movimiento de los ejercicios nuevos (mismo formato que rawExercises.ts: ángulos por fotograma, ver figure/poses.ts).
    Los que no aparecen aquí siguen con "Animación en preparación". */
 import type { MotionSpec } from '../../domain/types';
+import { mocap } from './mocap';
 import { benchLie, benchRow, KNEES, LYB, PLF, PLH, PRONE, QUAD, ROWB, SUP } from '../rawExercises';
 
 type M = MotionSpec;
@@ -92,9 +93,8 @@ export const EXTRA_MOTIONS: Record<string, M> = {
   'abdominal-en-v': { mat: 1, f: [
     [{ tl: 180, hd: 182, ua: 182, fa: 182, th: -2, sn: -2 }, 200, 950],
     [{ tl: 216, tu: 224, hd: 228, ua: 322, fa: 322, th: -46, sn: -46 }, 250, 950]] },
-  'abdominal-completo': { mat: 1, f: [
-    [{ tl: 180, hd: 184, ...KNEES, ua: -20, fa: 195 }, 250, 1100],
-    [{ tl: 252, hd: 256, ...KNEES, ua: 52, fa: 267 }, 250, 1100]] },
+  // movimiento real (Mixamo, «Situps»)
+  'abdominal-completo': mocap('abdominal-completo', { mat: 1, armsOut: true }),
   'patadas-de-aleteo': { mat: 1, f: [
     [{ tl: 180, tu: 186, ua: 0, fa: 0, thL: -10, snL: -10, thR: -22, snR: -22 }, 0, 230],
     [{ tl: 180, tu: 186, ua: 0, fa: 0, thR: -10, snR: -10, thL: -22, snL: -22 }, 0, 230]] },
