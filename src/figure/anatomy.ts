@@ -158,9 +158,9 @@ vec3 anatomy() {
   if (uMap > 0.5) {
     // mapa de los resúmenes
     vec3 base = shorts ? vec3(0.12, 0.15, 0.2) : vec3(0.6, 0.64, 0.7);
-    // dos colores: rojo intenso (más trabajados, peso 1) y amarillo muy claro (el resto)
+    // dos colores, solo en los trabajados: rojo pastel (más, peso 1) y naranja pastel (menos)
     float lvl = step(0.65, work / max(cov, 0.001));
-    vec3 hot = mix(vec3(1.0, 0.97, 0.8), vec3(0.9, 0.06, 0.14), lvl);
+    vec3 hot = mix(vec3(1.0, 0.78, 0.58), vec3(0.93, 0.42, 0.45), lvl);
     float k2 = clamp(cov * (shorts ? 0.5 : 1.0), 0.0, 1.0);
     gHi = hot * k2 * 0.3;
     return mix(base, hot, k2) * (1.0 - 0.2 * lines * k2);

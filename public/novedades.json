@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-10T17:18:01Z",
+    "es": ["Mapa de músculos de los resúmenes: rojo pastel para los más trabajados y naranja pastel suave para los menos trabajados; los que no se han trabajado quedan en gris y ya no salen en «Menos trabajados»."],
+    "ca": ["Mapa de músculs dels resums: vermell pastís per als més treballats i taronja pastís suau per als menys treballats; els que no s'han treballat queden en gris i ja no surten a «Menys treballats»."],
+    "en": ["Muscle map in the summaries: pastel red for the most worked and soft pastel orange for the least worked; muscles not worked stay grey and no longer appear under “Least worked”."]
+  },
+  {
     "fecha": "2026-11-10T17:14:04Z",
     "es": ["Mapa de músculos de los resúmenes con solo dos colores: rojo intenso para los más trabajados y amarillo muy claro para el resto."],
     "ca": ["Mapa de músculs dels resums amb només dos colors: vermell intens per als més treballats i groc molt clar per a la resta."],
