@@ -1274,3 +1274,8 @@ button.wd:active .wd-dot { transform: scale(.92); }
 .weight-chart.big .w-area { fill: color-mix(in srgb, var(--accent) 14%, transparent); stroke: none; }
 .weight-chart.big .w-line { stroke-width: 3; }
 .weight-chart .w-val { fill: var(--fg); font: 700 11px var(--body); font-variant-numeric: tabular-nums; }
+.wf-hint { display: flex; align-items: center; justify-content: center; gap: 6px; margin: 2px 0 0; font-size: .78rem; }
+.wf-hint .ico { width: 14px; height: 14px; }
+.weight-chart .w-hit { fill: transparent; cursor: pointer; }
+.weight-chart .w-tip rect { fill: var(--surface-2); stroke: var(--accent); stroke-width: 1; }
+.weight-chart .w-tip text { fill: var(--fg); font: 700 12px var(--body); }

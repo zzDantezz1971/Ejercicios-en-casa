@@ -39,6 +39,24 @@ export async function askWeight(app: App): Promise<boolean> {
   return true;
 }
 
+/** Curva suave (cúbica monótona: no se pasa por encima ni por debajo de los puntos) que une los puntos. */
+export function smoothPath(P: ReadonlyArray<readonly [number, number]>): string {
+  const n = P.length;
+  if (n < 2) return '';
+  if (n === 2) return `M${P[0][0]},${P[0][1]} L${P[1][0]},${P[1][1]}`;
+  const dx: number[] = [], m: number[] = [];
+  for (let i = 0; i < n - 1; i++) { dx.push(P[i + 1][0] - P[i][0]); m.push((P[i + 1][1] - P[i][1]) / (dx[i] || 1)); }
+  const t: number[] = [m[0]];
+  for (let i = 1; i < n - 1; i++) t.push(m[i - 1] * m[i] <= 0 ? 0 : (3 * (dx[i - 1] + dx[i])) / ((2 * dx[i] + dx[i - 1]) / m[i - 1] + (dx[i] + 2 * dx[i - 1]) / m[i]));
+  t.push(m[n - 2]);
+  let d = `M${P[0][0].toFixed(1)},${P[0][1].toFixed(1)}`;
+  for (let i = 0; i < n - 1; i++) {
+    const h3 = dx[i] / 3;
+    d += ` C${(P[i][0] + h3).toFixed(1)},${(P[i][1] + t[i] * h3).toFixed(1)} ${(P[i + 1][0] - h3).toFixed(1)},${(P[i + 1][1] - t[i + 1] * h3).toFixed(1)} ${P[i + 1][0].toFixed(1)},${P[i + 1][1].toFixed(1)}`;
+  }
+  return d;
+}
+
 /** Gráfica con la línea del peso a lo largo del tiempo. */
 export function weightChart(points: ReadonlyArray<{ date: string; kg: number }>, goal?: number | null): SVGSVGElement {
   const W = 320, H = 130, pad = { l: 34, r: 8, t: 10, b: 20 };
@@ -69,7 +87,7 @@ export function weightChart(points: ReadonlyArray<{ date: string; kg: number }>,
   const short = (d: string) => new Date(d).toLocaleDateString(LOCALE, { day: 'numeric', month: 'short' });
   el('text', { x: x(points[0].date), y: H - 4, class: 'axis', 'text-anchor': points.length > 1 ? 'start' : 'middle' }, short(points[0].date));
   if (points.length > 1) el('text', { x: W - pad.r, y: H - 4, class: 'axis', 'text-anchor': 'end' }, short(points[points.length - 1].date));
-  if (points.length > 1) el('polyline', { points: points.map((p) => `${x(p.date).toFixed(1)},${y(p.kg).toFixed(1)}`).join(' '), class: 'w-line', pathLength: 1 });
+  if (points.length > 1) el('path', { d: smoothPath(points.map((p) => [x(p.date), y(p.kg)] as const)), class: 'w-line', pathLength: 1 });
   points.forEach((p, i) => el('circle', { cx: x(p.date), cy: y(p.kg), r: i === points.length - 1 ? 4.5 : 3, class: i === points.length - 1 ? 'w-dot last' : 'w-dot' }));
   svg.setAttribute('aria-label', `Peso de ${fmtKg(points[0].kg)} a ${fmtKg(points[points.length - 1].kg)}`);
   return svg;
@@ -111,7 +129,8 @@ export function weightCards(app: App, onChange: () => void, onOpen: () => void, 
           h('div', {}, h('strong', { class: 'wa-kg' }, fmtKg(last.kg)), h('div', { class: 'wa-sub' }, chip, h('span', { class: 'muted small' }, when))),
           add),
         // tocar la gráfica la abre grande, en horizontal
-        h('button', { class: 'wf-open', 'aria-label': 'Ver la gráfica grande', onclick: onChart }, weightChart(ws, goal) as unknown as HTMLElement));
+        h('button', { class: 'wf-open', 'aria-label': 'Ver la gráfica grande', onclick: onChart }, weightChart(ws, goal) as unknown as HTMLElement),
+        h('p', { class: 'wf-hint muted small' }, icon('search'), 'Toca la gráfica para verla en grande'));
     })();
 
   // 2. Objetivo: "Peso objetivo 78,0 kg · 61 %", "Te faltan 2,6 kg", la barra y el botón Cambiar objetivo

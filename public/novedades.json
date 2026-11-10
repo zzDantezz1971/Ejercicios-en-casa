@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-10T17:38:16Z",
+    "es": ["Peso: debajo de la gráfica, un aviso de que al tocarla se ve en grande; la gráfica grande se abre en «1 mes»; al tocar un punto te dice su fecha y su peso; y los pesajes se unen con una línea curva y suave."],
+    "ca": ["Pes: sota la gràfica, un avís que en tocar-la es veu en gran; la gràfica gran s'obre en «1 mes»; en tocar un punt et diu la data i el pes; i les pesades s'uneixen amb una línia corba i suau."],
+    "en": ["Weight: under the chart, a note that tapping it shows it larger; the large chart opens on “1 month”; tapping a point shows its date and weight; and weigh-ins are joined by a smooth curved line."]
+  },
+  {
     "fecha": "2026-11-10T17:31:11Z",
     "es": ["Gráfica grande del peso: la flecha de volver ya funciona, y las fechas de abajo van por días (1 mes), por semanas (3 meses) o por meses (6 meses y 1 año), según el periodo elegido."],
     "ca": ["Gràfica gran del pes: la fletxa de tornar ja funciona, i les dates de sota van per dies (1 mes), per setmanes (3 mesos) o per mesos (6 mesos i 1 any), segons el període triat."],

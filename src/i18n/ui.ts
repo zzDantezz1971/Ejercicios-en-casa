@@ -190,6 +190,7 @@ const ROWS: Row[] = [
   ['días entrenados', 'dies entrenats', 'days trained'],
   ['Contenido de la tabla', 'Contingut de la taula', 'Routine contents'],
   ['Ver la gráfica grande', 'Veure la gràfica gran', 'View large chart'],
+  ['Toca la gráfica para verla en grande', 'Toca la gràfica per veure-la en gran', 'Tap the chart to see it larger'],
   ['1 mes', '1 mes', '1 month'],
   ['3 meses', '3 mesos', '3 months'],
   ['6 meses', '6 mesos', '6 months'],

@@ -2,7 +2,7 @@ import { DEC, LOCALE } from '../../i18n';
 import type { App, Screen } from '../App';
 import { h } from '../dom';
 import { icon } from '../icons';
-import { fmtDiff, fmtKg } from '../components/weightCard';
+import { fmtDiff, fmtKg, smoothPath } from '../components/weightCard';
 
 const NS = 'http://www.w3.org/2000/svg';
 type Range = 30 | 90 | 180 | 365 | 0;
@@ -14,7 +14,7 @@ type Range = 30 | 90 | 180 | 365 | 0;
  */
 export class WeightChartScreen implements Screen {
   readonly el = h('main', { class: 'weight-full' });
-  private range: Range = 0;
+  private range: Range = 30;
   private box = h('div', { class: 'wf-chart' });
   private chips = h('div', { class: 'wf-chips' });
   private stats = h('div', { class: 'wf-stats' });
@@ -130,13 +130,27 @@ function bigChart(points: ReadonlyArray<{ date: string; kg: number }>, goal: num
   }
   const P = points.map((p) => [x(Date.parse(p.date)), y(p.kg)] as const);
   if (points.length > 1) {
-    el('path', { d: `M${P[0][0]},${H - pad.b} ` + P.map(([a, b]) => `L${a.toFixed(1)},${b.toFixed(1)}`).join(' ') + ` L${P[P.length - 1][0]},${H - pad.b} Z`, class: 'w-area' });
-    el('polyline', { points: P.map(([a, b]) => `${a.toFixed(1)},${b.toFixed(1)}`).join(' '), class: 'w-line' });
+    const curve = smoothPath(P);
+    el('path', { d: `${curve} L${P[P.length - 1][0]},${H - pad.b} L${P[0][0]},${H - pad.b} Z`, class: 'w-area' });
+    el('path', { d: curve, class: 'w-line' });
   }
   // el valor encima de cada punto (si no hay demasiados)
   const label = points.length <= 24;
+  // al tocar un punto: su fecha y su peso en una etiqueta
+  const tip = document.createElementNS(NS, 'g');
+  tip.setAttribute('class', 'w-tip');
+  const show = (i: number) => {
+    const text = `${new Date(points[i].date).toLocaleDateString(LOCALE, { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric' })} · ${fmtKg(points[i].kg)}`;
+    const w = text.length * 6.6 + 18, bx = Math.min(W - pad.r - w, Math.max(pad.l, P[i][0] - w / 2));
+    const by = P[i][1] - 44 < pad.t ? P[i][1] + 14 : P[i][1] - 44;
+    tip.innerHTML = `<rect x="${bx}" y="${by}" width="${w}" height="26" rx="8"></rect><text x="${bx + w / 2}" y="${by + 17}" text-anchor="middle"></text>`;
+    tip.querySelector('text')!.textContent = text;
+    svg.append(tip);
+  };
   points.forEach((p, i) => {
     el('circle', { cx: P[i][0], cy: P[i][1], r: i === points.length - 1 ? 5 : 3.5, class: i === points.length - 1 ? 'w-dot last' : 'w-dot' });
+    // zona grande y transparente para tocar con el dedo
+    el('circle', { cx: P[i][0], cy: P[i][1], r: 16, class: 'w-hit' }).addEventListener('click', () => show(i));
     if (label || i === points.length - 1 || i === 0) el('text', { x: P[i][0], y: P[i][1] - 9, class: 'w-val', 'text-anchor': i === 0 ? 'start' : i === points.length - 1 ? 'end' : 'middle' }, p.kg.toFixed(1).replace('.', DEC));
   });
   return svg;
