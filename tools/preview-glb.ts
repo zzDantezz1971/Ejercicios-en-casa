@@ -1,9 +1,10 @@
-/* Vista previa del maniquí del usuario (Blender/MPFB) moviéndose; se publica como muestra, no forma parte de la app. */
+/* Vista previa del maniquí del usuario (Blender/MPFB): movimiento nuevo (columna curva, clavículas, manos apoyadas)
+   frente al de antes (15 huesos). Se publica como muestra, no forma parte de la app. */
 import { CATALOG } from '../src/data/catalog';
 import { FigureView } from '../src/figure/FigureView';
 import type { SkinData } from '../src/figure/SkinnedFigure';
 import skinNew from './maniqui/skin_glb.json';
-import skinApp from './skin_app.json';
+import skinApp from './skin_old.json';
 
 const LIST: Array<[string, string]> = [
   ['sentadillas-sin-peso', 'Sentadillas'], ['zancadas-alternas', 'Zancadas'], ['curl-de-biceps', 'Curl de bíceps'],

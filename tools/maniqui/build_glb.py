@@ -78,7 +78,8 @@ V_FIST = V.copy(); V[:] = V_OPEN
 pel = jp('spine05'); neck = jp('neck01'); mid = (pel + neck) / 2
 top = np.array([jp('head')[0], V[:, 1].max(), jp('head')[2]])
 headC = (jp('head') + top) / 2
-segs = {'hips': (pel, mid), 'chest': (mid, neck), 'head': (neck, headC)}
+s3 = jp('spine03'); s1 = jp('spine01'); hd0 = jp('head')
+segs = {'hips': (pel, s3), 'chest': (s1, neck), 'head': (hd0, headC)}
 for s in 'LR':
     segs['ua' + s] = (jp(f'upperarm01.{s}'), jp(f'lowerarm01.{s}'))
     segs['fa' + s] = (jp(f'lowerarm01.{s}'), jp(f'wrist.{s}'))
@@ -86,13 +87,21 @@ for s in 'LR':
     segs['th' + s] = (jp(f'upperleg01.{s}'), jp(f'lowerleg01.{s}'))
     segs['sh' + s] = (jp(f'lowerleg01.{s}'), jp(f'foot.{s}'))
     segs['foot' + s] = (jp(f'foot.{s}'), jp(f'toe1-1.{s}'))
+# huesos extra (columna en tres partes, cuello y clavículas): van al final para no cambiar los 15 de siempre
+segs['spine'] = (s3, s1)
+segs['neck'] = (neck, hd0)
+for s in 'LR':
+    segs['cla' + s] = (jp(f'clavicle.{s}'), jp(f'upperarm01.{s}'))
 BONES = list(segs)
 
 def mybone(mh):
     side = mh[-1] if mh.endswith(('.L', '.R')) else ''
     base = mh[:-2] if side else mh
-    if base in ('root', 'spine05', 'spine04', 'spine03', 'pelvis'): return 'hips'
-    if base in ('spine02', 'spine01', 'clavicle', 'breast'): return 'chest'
+    if base in ('root', 'spine05', 'spine04', 'pelvis'): return 'hips'
+    if base in ('spine03', 'spine02'): return 'spine'
+    if base in ('spine01', 'breast'): return 'chest'
+    if base == 'clavicle': return 'cla' + side
+    if base.startswith('neck'): return 'neck'
     if base in ('shoulder01', 'upperarm01', 'upperarm02'): return 'ua' + side
     if base in ('lowerarm01', 'lowerarm02'): return 'fa' + side
     if base == 'wrist' or base.startswith(('metacarpal', 'finger')): return 'hand' + side
@@ -122,7 +131,7 @@ lipW = sum((w for n, w in Wn.items() if n.split('.')[0].rstrip('0123456789') == 
 U = S / 8.4  # build_mh trabajaba en decímetros con escala 8.4: pasar sus márgenes a estas unidades
 for i, p in enumerate(P):
     bn = BONES[dom[i]]
-    if bn == 'chest': region[i] = 1
+    if bn in ('chest', 'spine') or bn.startswith('cla'): region[i] = 1
     elif bn == 'hips': region[i] = 1 if p[1] > pel[1] + 0.35 * 8.4 / S else 2
     elif bn.startswith('ua'):
         t = tparam(p, segs[bn]); region[i] = 1 if t < 0.42 else (6 if t < 0.47 else 0)
@@ -133,7 +142,7 @@ for i, p in enumerate(P):
     elif bn.startswith('foot'): region[i] = 4 if SHOES else 0
     elif bn == 'head' and lipW[i] > 0.6: region[i] = 5
 PART = {'hips': 0, 'chest': 0, 'head': 0, 'uaL': 1, 'faL': 1, 'uaR': 2, 'faR': 2, 'thL': 3, 'shL': 3, 'thR': 4, 'shR': 4,
-        'footL': 5, 'footR': 5, 'handL': 6, 'handR': 6}
+        'footL': 5, 'footR': 5, 'handL': 6, 'handR': 6, 'spine': 0, 'neck': 0, 'claL': 0, 'claR': 0}
 part = np.array([PART[BONES[d]] for d in dom], dtype=np.uint8); part[region == 5] = 7
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from smooth_regions import smooth_regions

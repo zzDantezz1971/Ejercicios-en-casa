@@ -12,7 +12,8 @@ export type Pose = Record<string, number>;
 const D = Math.PI / 180;
 const dir = (a: number): Pt => [Math.cos(a * D), Math.sin(a * D)];
 const add = (p: Pt, v: Pt, l: number): Pt => [p[0] + v[0] * l, p[1] + v[1] * l];
-const ease = (x: number) => 0.5 - 0.5 * Math.cos(Math.PI * x);
+// curva de "mínimo tirón": arranca y frena con suavidad, como un movimiento humano
+const ease = (x: number) => x * x * x * (10 + x * (6 * x - 15));
 const PAIRS = ['ua', 'fa', 'th', 'sn', 'ft', 'sa', 'sTh', 'sSh', 'zE', 'zH', 'zK', 'zA'];
 
 /** Media anchura de hombros (de frente), igual que el cuerpo del maniquí. */

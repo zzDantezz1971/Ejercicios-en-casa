@@ -13,7 +13,9 @@ const mood = (q.get('mood') ?? 'relaxed') as 'neutral' | 'effort' | 'relaxed' | 
 const W = Number(q.get('w') ?? 480);
 const times = q.get('t') ? q.get('t')!.split(',').map(Number) : [0, 0.25, 0.5, 0.75];
 const side = q.get('side') ? (Number(q.get('side')) as 1 | 2) : undefined;
-const list = SECTIONS.flatMap((s) => s.exercises).filter((e) => (ids ? ids.includes(e.id) : !sec || e.section === sec));
+const list = SECTIONS.flatMap((s) => s.exercises).filter((e) => (ids ? ids.includes(e.id) : !sec || e.section === sec))
+  // &anim=1: solo los ejercicios que ya tienen animación
+  .filter((e) => !q.get('anim') || !!e.motion.fn || (e.motion.f?.length ?? 0) > 1);
 const canvas = document.createElement('canvas');
 const r = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, preserveDrawingBuffer: true });
 r.shadowMap.enabled = true;

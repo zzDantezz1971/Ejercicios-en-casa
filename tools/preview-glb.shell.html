@@ -1,3 +1,4 @@
+<meta charset="utf-8">
 <title>Maniquí de Blender</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -30,21 +31,22 @@ h2{font-size:1.6rem;line-height:1.05}
 .stage canvas{display:block;width:100%;height:100%;touch-action:pan-y;cursor:grab}
 .hint{position:absolute;right:10px;bottom:6px;font-size:.72rem;color:var(--muted);pointer-events:none}
 .meta{color:var(--muted);font-size:.88rem;margin:0}
+ul.meta{padding-left:18px;display:flex;flex-direction:column;gap:2px}
 </style>
 <div class="wrap">
   <header>
-    <h1>Tu maniquí en movimiento</h1>
-    <p class="lead">El cuerpo que hiciste en Blender, descalzo, con las animaciones reales de la app. Elige un ejercicio y arrastra el dedo sobre la figura para girarla.</p>
+    <h1>Movimiento mejorado</h1>
+    <p class="lead">Tu maniquí con el movimiento nuevo, arriba, y como se movía antes, debajo. Elige un ejercicio y arrastra el dedo sobre la figura para girarla.</p>
   </header>
   <nav id="chips" aria-label="Ejercicio"></nav>
   <article class="card pick">
-    <div class="head"><span class="tag">Nuevo</span><h2>Tu maniquí de Blender</h2></div>
-    <div class="stage"><canvas data-fig="new" aria-label="Tu maniquí"></canvas><span class="hint">Arrastra para girar</span></div>
-    <p class="meta">MakeHuman (MPFB) con tu esqueleto y tus pesos. En rojo, los músculos que trabaja; en turquesa, los que estira.</p>
+    <div class="head"><span class="tag">Ahora</span><h2>Movimiento nuevo</h2></div>
+    <div class="stage"><canvas data-fig="new" aria-label="Movimiento nuevo"></canvas><span class="hint">Arrastra para girar</span></div>
+    <ul class="meta"><li>La espalda se curva en tres tramos y el cuello acompaña a la cabeza.</li><li>Los hombros suben al levantar los brazos.</li><li>Brazos y piernas giran sin retorcerse.</li><li>Las manos se quedan planas al apoyarse en el suelo.</li><li>Respira y acelera y frena con suavidad.</li></ul>
   </article>
   <article class="card">
-    <div class="head"><span class="tag">Ahora</span><h2>Maniquí actual de la app</h2></div>
-    <div class="stage"><canvas data-fig="app" aria-label="Maniquí actual"></canvas><span class="hint">Arrastra para girar</span></div>
-    <p class="meta">Para comparar: hace exactamente el mismo movimiento.</p>
+    <div class="head"><span class="tag">Antes</span><h2>Movimiento anterior</h2></div>
+    <div class="stage"><canvas data-fig="app" aria-label="Movimiento anterior"></canvas><span class="hint">Arrastra para girar</span></div>
+    <p class="meta">El mismo cuerpo con el esqueleto de antes (15 huesos), para comparar.</p>
   </article>
 </div>

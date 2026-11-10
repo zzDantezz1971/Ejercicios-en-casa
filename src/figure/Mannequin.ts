@@ -409,7 +409,7 @@ export class MannequinScene {
     const J = to3D(motion.spec, view, J2, pose);
     if (this.skinned) {
       // de frente y desde arriba (boca arriba) el lado "R" del motor es el izquierdo anatómico
-      this.skinned.update(J, !side && !(T && motion.spec.prone));
+      this.skinned.update(J, !side && !(T && motion.spec.prone), now);
       this.updateDumbbells(J, side);
       return;
     }
