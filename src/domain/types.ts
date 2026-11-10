@@ -51,6 +51,8 @@ export interface MotionSpec {
   props?: (j: Record<string, [number, number]>, p: PropHelpers) => PropOp[];
   /** Material que se mueve con el cuerpo (ver figure/Mannequin.ts, updateGear). */
   kb?: 'L' | 'R' | 'both';
+  /** Agarre martillo: las mancuernas de canto (palmas enfrentadas). */
+  hammer?: boolean;
   /** Manos cerradas en puño (golpes, guardia). */
   fist?: boolean;
   /** Barra con discos entre las dos manos. */

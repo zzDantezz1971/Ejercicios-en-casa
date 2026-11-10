@@ -126,8 +126,8 @@ export const RAW_SECTIONS: RawSection[] = [
    [{thL:118,snL:118,thR:62,snR:62,ftL:170,ftR:10,uaL:74,faL:66,uaR:106,faR:114,zEL:6,zER:6,zHL:14,zHR:14},200,1000],
    [{thL:152,snL:96,thR:28,snR:84,ftL:170,ftR:10,uaL:74,faL:66,uaR:106,faR:114,zEL:6,zER:6,zHL:14,zHR:14,zKL:9,zKR:9,lean:16},300,1000]]},
  {n:'Zancadas hacia delante con mancuernas',z:'Piernas y glúteos',db:'both',f:[
-   [{},150,800],[{thR:15,snR:95,thL:115,snL:175,ftL:40},250,800],
-   [{},150,800],[{thL:15,snL:95,thR:115,snR:175,ftR:40},250,800]]},
+   [{},150,800],[{x:47,thR:15,snR:95,thL:115,snL:175,ftL:40},250,800],
+   [{},150,800],[{x:47,thL:15,snL:95,thR:115,snR:175,ftR:40},250,800]]},
 ]},
 
 {id:'abdominales',title:'Abdominales',note:'Ordenados por zona, de arriba abajo.',groups:true,items:[

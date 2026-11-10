@@ -15,6 +15,9 @@ const TUCK_F = { sTh: 0.62, sSh: 0.85, zAL: -48, zAR: -48, uaL: 125, faL: 110, u
 const PLS = { tl: -162, th: 18, sn: 18, ft: 60, uaL: 90, faL: 180, uaR: -90, faR: -90, hd: -162 }; // plancha lateral (de frente)
 const LUNGE_R = { thR: 15, snR: 95, thL: 115, snL: 175, ftL: 40 };
 const LUNGE_L = { thL: 15, snL: 95, thR: 115, snR: 175, ftR: 40 };
+// zancada hacia atrás: el pie de delante no se mueve, el cuerpo baja hacia atrás con la otra pierna
+const LUNGE_BR = { ...LUNGE_R, x: -30 };
+const LUNGE_BL = { ...LUNGE_L, x: -30 };
 const PUSH_DOWN = { tl: -10, ua: 150, fa: 30, th: 170, sn: 170, ft: 90 }; // flexión abajo: manos bajo los hombros, codos atrás
 const HIPS = { ua: 118, fa: 28 }; // manos en la cintura (vista lateral)
 const SUMO = { thL: 118, snL: 118, thR: 62, snR: 62, ftL: 170, ftR: 10, uaL: 74, faL: 66, uaR: 106, faR: 114, zEL: 6, zER: 6, zHL: 14, zHR: 14 };
@@ -151,7 +154,7 @@ export const EXTRA_MOTIONS: Record<string, M> = {
     [{ ...HIPS, thR: 68, snR: 120, thL: 130, snL: 194, ftL: 180 }, 200, 950],
     [{ ...HIPS, tl: -80, thR: 26, snR: 138, thL: 139, snL: 236, ftL: 200 }, 250, 950]] },
   'zancada-atras': { f: [
-    [{ ...HIPS }, 150, 800], [{ ...HIPS, ...LUNGE_R }, 250, 800], [{ ...HIPS }, 150, 800], [{ ...HIPS, ...LUNGE_L }, 250, 800]] },
+    [{ ...HIPS }, 150, 800], [{ ...HIPS, ...LUNGE_BR }, 250, 800], [{ ...HIPS }, 150, 800], [{ ...HIPS, ...LUNGE_BL }, 250, 800]] },
   'sentadilla-con-salto': { f: [
     [{ tl: -55, th: 5, sn: 115, ua: 120, fa: 120, hd: -62 }, 120, 380], [{ jy: 14, ft: 60, ua: -80, fa: -80, hd: -96 }, 0, 260],
     [{ ft: 20, th: 70, sn: 108, ua: 80, fa: 60 }, 0, 260]] },
@@ -195,7 +198,7 @@ export const EXTRA_MOTIONS: Record<string, M> = {
     [{ tl: -28, th: 80, sn: 100, ua: 90, fa: 90, hd: -40 }, 150, 800], [{ tl: -28, th: 80, sn: 100, ua: 205, fa: 95, hd: -40 }, 200, 800]] },
   'remo-renegado': { mat: 1, db: 'both', f: [
     [PLH, 150, 600], [{ ...PLH, uaR: 205, faR: 100 }, 250, 600], [PLH, 150, 600], [{ ...PLH, uaL: 205, faL: 100 }, 250, 600]] },
-  'curl-martillo': { db: 'both', f: [[{}, 150, 850], [{ ua: 85, fa: -50 }, 150, 850]] },
+  'curl-martillo': { db: 'both', hammer: true, f: [[{}, 150, 850], [{ ua: 85, fa: -50 }, 150, 850]] },
   'curl-alterno-de-biceps': { db: 'both', f: [
     [{}, 100, 750], [{ uaR: 85, faR: -50 }, 150, 750], [{}, 100, 750], [{ uaL: 85, faL: -50 }, 150, 750]] },
   'press-frances-en-el-suelo': { mat: 1, db: 'both', f: [
@@ -205,7 +208,7 @@ export const EXTRA_MOTIONS: Record<string, M> = {
   'sentadilla-goblet-con-mancuerna': { db: 'two', plant: 'anR', f: [
     [{ ua: 75, fa: -60, zHL: 13, zHR: -13, zEL: 6, zER: -6 }, 200, 1000],
     [{ tl: -62, th: 5, sn: 115, ua: 62, fa: -85, zHL: 13, zHR: -13, zEL: 4, zER: -4, hd: -70 }, 250, 1000]] },
-  'zancada-atras-con-mancuernas': { db: 'both', f: [[{}, 150, 800], [LUNGE_R, 250, 800], [{}, 150, 800], [LUNGE_L, 250, 800]] },
+  'zancada-atras-con-mancuernas': { db: 'both', f: [[{}, 150, 800], [LUNGE_BR, 250, 800], [{}, 150, 800], [LUNGE_BL, 250, 800]] },
   'sentadilla-bulgara-con-mancuernas': { db: 'both', plant: 'anR', props: (J, P) => P.benchFlat(J.anL[0] - 20, J.anL[0] + 8, 42), f: [
     [{ thR: 68, snR: 120, thL: 130, snL: 194, ftL: 180 }, 200, 950],
     [{ tl: -80, thR: 26, snR: 138, thL: 139, snL: 236, ftL: 200 }, 250, 950]] },
@@ -243,7 +246,7 @@ export const EXTRA_MOTIONS: Record<string, M> = {
     [{ ...SUMO, uaL: 70, faL: 72, uaR: 110, faR: 108, zEL: 4, zER: 4, zHL: 10, zHR: 10 }, 200, 1000],
     [{ ...SUMO_DOWN, uaL: 72, faL: 74, uaR: 108, faR: 106, zEL: 6, zER: 6, zHL: 13, zHR: 13 }, 300, 1000]] },
   'zancada-atras-con-pesa-rusa': { kb: 'both', f: [
-    [{ ...KB_CHEST }, 150, 800], [{ ...KB_CHEST, ...LUNGE_R }, 250, 800], [{ ...KB_CHEST }, 150, 800], [{ ...KB_CHEST, ...LUNGE_L }, 250, 800]] },
+    [{ ...KB_CHEST }, 150, 800], [{ ...KB_CHEST, ...LUNGE_BR }, 250, 800], [{ ...KB_CHEST }, 150, 800], [{ ...KB_CHEST, ...LUNGE_BL }, 250, 800]] },
   'remo-con-pesa-rusa': { kb: 'R', anchor: { j: 'knL', y: -38 }, props: benchRow, f: [
     [{ ...ROWB, uaR: 90, faR: 90 }, 150, 800], [{ ...ROWB, uaR: 205, faR: 100 }, 150, 800]] },
   'press-de-hombro-con-pesa-rusa': { v: 'front', kb: 'R', f: [
@@ -277,7 +280,7 @@ export const EXTRA_MOTIONS: Record<string, M> = {
   'peso-muerto-rumano-con-barra': { bar: true, plant: 'anR', f: [
     [{ th: 88, sn: 94 }, 250, 1100], [{ tl: -18, th: 84, sn: 96, ua: 92, fa: 92, hd: -32 }, 300, 1100]] },
   'zancada-con-barra': { bar: true, f: [
-    [{ ...BAR_BACK }, 150, 800], [{ ...BAR_BACK, ...LUNGE_R }, 250, 800], [{ ...BAR_BACK }, 150, 800], [{ ...BAR_BACK, ...LUNGE_L }, 250, 800]] },
+    [{ ...BAR_BACK }, 150, 800], [{ ...BAR_BACK, ...LUNGE_BR }, 250, 800], [{ ...BAR_BACK }, 150, 800], [{ ...BAR_BACK, ...LUNGE_BL }, 250, 800]] },
   'hip-thrust-con-barra': { bar: true, plant: 'anR', props: (J, P) => P.benchFlat(J.neck[0] - 34, J.neck[0] + 2, -J.neck[1] - 7), f: [
     [{ tl: -155, hd: -150, th: -25, sn: 80, ua: 30, fa: 20 }, 200, 1000], [{ tl: -182, hd: -170, th: 0, sn: 90, ua: 6, fa: 0 }, 400, 1000]] },
   'press-militar-con-barra': { bar: true, f: [[{ ua: 70, fa: -112 }, 150, 1000], [{ ua: -88, fa: -90, hd: -94 }, 200, 1000]] },

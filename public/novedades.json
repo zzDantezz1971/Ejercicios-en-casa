@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-10T16:00:00Z",
+    "es": ["Fuerza, ejercicios repetidos: se quitan de la lista «Peso muerto rumano con mancuernas», «Curl alterno de bíceps» y «Dominadas supinas» (eran casi iguales a otros); si ya estaban en una tabla o en tu historial, se mantienen. «Curl martillo» lleva ahora las mancuernas de canto, y en las zancadas hacia atrás el paso se da de verdad hacia atrás (y en la de delante, hacia delante)."],
+    "ca": ["Força, exercicis repetits: es treuen de la llista «Pes mort romanès amb manuelles», «Curl altern de bíceps» i «Dominades supines» (eren gairebé iguals a d'altres); si ja eren en una taula o al teu historial, es mantenen. «Curl martell» porta ara les manuelles de cantell, i a les gambades enrere el pas es fa de debò enrere (i a la d'endavant, endavant)."],
+    "en": ["Strength, duplicate exercises: “Dumbbell Romanian deadlift”, “Alternating biceps curl” and “Chin-ups” are removed from the list (they were almost the same as others); if they were already in a routine or your history, they stay. The “Hammer curl” now holds the dumbbells upright, and in reverse lunges the step really goes backwards (and forwards in the forward one)."]
+  },
+  {
     "fecha": "2026-11-10T15:57:26Z",
     "es": ["Ejercicios con una sola mancuerna cogida con las dos manos (pullover, extensión de tríceps por encima de la cabeza, sentadilla sumo y goblet, hip thrust, swing, giro ruso, leñador y crunch con mancuerna): ahora el maniquí la sujeta con las dos manos juntas, en vez de llevarla en una mano y la otra vacía."],
     "ca": ["Exercicis amb una sola manuella agafada amb les dues mans (pullover, extensió de tríceps per sobre del cap, esquat sumo i goblet, hip thrust, swing, gir rus, llenyataire i crunch amb manuella): ara el maniquí la subjecta amb les dues mans juntes, en lloc de portar-la en una mà i l'altra buida."],

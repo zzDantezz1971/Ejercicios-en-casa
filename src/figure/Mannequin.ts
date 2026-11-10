@@ -688,7 +688,8 @@ export class MannequinScene {
       }
       const h = J['ha' + d.hand], u = h.clone().sub(J['el' + d.hand]).normalize();
       const grip = h.clone().addScaledVector(u, this.skinned ? 5.2 : 3.4);
-      const ax = side ? V(0, 0, 1) : V(-u.y, u.x, 0).normalize();
+      // martillo: la mancuerna de canto, perpendicular al antebrazo en el plano del movimiento
+      const ax = this.motion.spec.hammer && side ? V(-u.y, u.x, 0).normalize() : side ? V(0, 0, 1) : V(-u.y, u.x, 0).normalize();
       const a = grip.clone().addScaledVector(ax, -8), b = grip.clone().addScaledVector(ax, 8);
       this.seg(d.bar, a, b, 1.3);
       this.seg(d.p1, a.clone().addScaledVector(ax, -1.6), a.clone().addScaledVector(ax, 1.6), 5);
