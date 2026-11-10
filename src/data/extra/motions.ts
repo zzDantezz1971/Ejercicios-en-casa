@@ -1,7 +1,7 @@
 /* Movimiento de los ejercicios nuevos (mismo formato que rawExercises.ts: ángulos por fotograma, ver figure/poses.ts).
    Los que no aparecen aquí siguen con "Animación en preparación". */
 import type { MotionSpec } from '../../domain/types';
-import { mocap } from './mocap';
+import { mocap, mocapCrunch } from './mocap';
 import { benchLie, benchRow, KNEES, LYB, PLF, PLH, PRONE, QUAD, ROWB, SUP } from '../rawExercises';
 
 type M = MotionSpec;
@@ -220,9 +220,8 @@ export const EXTRA_MOTIONS: Record<string, M> = {
   'lenador-con-mancuerna': { v: 'front', db: 'R', f: [
     [{ tl: -84, tu: -80, uaL: 48, faL: 48, uaR: 82, faR: 82, zHL: 8, zHR: 8, tw: 22, thL: 100, snL: 100, thR: 80, snR: 80 }, 150, 800],
     [{ tl: -94, tu: -98, uaL: -120, faL: -125, saL: 0.78, uaR: -135, faR: -140, zHL: 8, zHR: 8, tw: -22, thL: 100, snL: 100, thR: 80, snR: 80 }, 200, 800]] },
-  'crunch-con-mancuerna': { mat: 1, db: 'R', anchor: { j: 'pel', y: -12.1 }, az: 20, el: 18, f: [
-    [{ tl: 180, tu: 180, hd: 184, ...KNEES, ua: -30, fa: 195, zHL: 13, zHR: -13 }, 350, 850],
-    [{ tl: 180, tu: 203, hd: 214, ...KNEES, ua: -7, fa: 218, zHL: 13, zHR: -13 }, 450, 850]] },
+  'crunch-con-mancuerna': mocapCrunch({ tl: 180, tu: 180, hd: 184, ...KNEES, ua: -30, fa: 195, zHL: 13, zHR: -13 },
+    { tu: 203, hd: 214, ua: -7, fa: 218 }, { mat: 1, db: 'R', anchor: { j: 'pel', y: -12.1 }, az: 20, el: 18 }),
 
   // ── Pesa rusa ──
   'swing-con-pesa-rusa': { kb: 'both', plant: 'anR', f: [
@@ -346,8 +345,8 @@ export const EXTRA_MOTIONS: Record<string, M> = {
     [{ jy: 17, uaR: 4, faR: -6, ftR: 0 }, 300, 900], [{ jy: 17, uaR: 4, faR: -6, ftR: -35, ftL: 10 }, 1600, 900]] },
 
   // ── Fitball ──
-  'crunch-en-fitball': { anchor: { j: 'pel', y: -58 }, ball: (J) => [J.pel[0] - 16, -27], f: [
-    [{ tl: 172, tu: 168, hd: 172, th: 40, sn: 90, ua: 205, fa: 330 }, 300, 900], [{ tl: 180, tu: 205, hd: 214, th: 40, sn: 90, ua: 240, fa: 5 }, 400, 900]] },
+  'crunch-en-fitball': mocapCrunch({ tl: 172, tu: 168, hd: 172, th: 40, sn: 90, ua: 205, fa: 330 },
+    { tl: 180, tu: 205, hd: 214, ua: 240, fa: 365 }, { anchor: { j: 'pel', y: -58 }, ball: (J) => [J.pel[0] - 16, -27] }),
   'puente-con-pies-en-fitball': { mat: 1, anchor: { j: 'anR', y: -52 }, ball: (J) => [J.anR[0] + 3, -27], f: [
     [{ ...SUP, th: -41, sn: -41, ft: -60 }, 200, 900], [{ ...SUP, tl: 158, th: -22, sn: -22, ft: -60 }, 600, 900]] },
   'curl-femoral-con-fitball': { mat: 1, anchor: { j: 'anR', y: -52 }, ball: (J) => [J.anR[0] + 4, -27], f: [
@@ -411,4 +410,15 @@ export const EXTRA_MOTIONS: Record<string, M> = {
     [{ ...PRONE, ua: 172, fa: 12 }, 400, 1200], [{ ...PRONE, tl: -6, tu: -60, hd: -64, ua: 158, fa: 36 }, 1500, 1200]] },
   'tibiales-sentado-sobre-los-talones': { mat: 1, f: [
     [{ th: 90, sn: 180, ft: 180, ua: 90, fa: 90 }, 400, 1300], [{ th: 8, sn: 182, ft: 180, tl: -88, ua: 82, fa: 58 }, 1600, 1300]] },
+};
+
+/** Ejercicios de antes (rawExercises.ts) con movimiento nuevo: sustituyen al de allí. */
+export const MOTION_OVERRIDES: Record<string, M> = {
+  // crunch con el tramo de subida del abdominal completo de Mixamo
+  'crunch-abdominal': mocapCrunch({ tl: 180, tu: 180, hd: 184, ...KNEES, ua: 2, fa: 2 }, { tu: 203, hd: 214, ua: -10, fa: -10 },
+    { mat: 1, anchor: { j: 'pel', y: -12.1 }, az: 20, el: 18 }),
+  'crunch-con-brazos-estirados': mocapCrunch({ tl: 180, tu: 180, hd: 184, ...KNEES, ua: 178, fa: 178 }, { tu: 204, hd: 212, ua: 228, fa: 226 },
+    { mat: 1, anchor: { j: 'pel', y: -12.1 }, az: 20, el: 18 }),
+  'crunch-con-piernas-a-90': mocapCrunch({ tl: 180, th: -90, sn: 0, ua: 10, fa: 10 }, { tu: 202, hd: 208, ua: -18, fa: -18 },
+    { mat: 1, anchor: { j: 'pel', y: -12.1 } }),
 };

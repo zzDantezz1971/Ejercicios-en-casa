@@ -6,7 +6,7 @@ import { MUSCLES_BY_EXERCISE } from './muscles';
 import { exerciseText } from '../i18n';
 import { parseNeed } from '../domain/equipment';
 import { EXTRAS, extraId } from './extra';
-import { EXTRA_MOTIONS } from './extra/motions';
+import { EXTRA_MOTIONS, MOTION_OVERRIDES } from './extra/motions';
 
 /** Material de los ejercicios de antes (los que usan mancuernas lo sacan del movimiento). */
 const NEEDS_BENCH = new Set([
@@ -75,8 +75,9 @@ function buildSections(): SectionInfo[] {
         group = raw.g;
         continue;
       }
-      const { n, z, g: _g, b, top: _top, ...motion } = raw;
+      const { n, z, g: _g, b, top: _top, ...rawMotion } = raw;
       const id = slug(n!);
+      const motion = MOTION_OVERRIDES[id] ?? rawMotion;
       // textos en el idioma elegido (el identificador sigue saliendo del nombre en castellano)
       const t = exerciseText(id);
       const desc = DESCRIPTIONS[id];

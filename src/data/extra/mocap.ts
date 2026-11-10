@@ -26,3 +26,43 @@ export function mocap(id: string, extra: Partial<MotionSpec> = {}, opts: { seate
     },
   };
 }
+
+/**
+ * Crunch a partir del abdominal completo de Mixamo: se usa solo el tramo en que se despegan los hombros
+ * (subida y bajada), con su curva de espalda, el gesto de la cabeza y su ritmo.
+ * `rest` es la postura tumbado y `top` la de arriba (lo que no sea tronco o cabeza se interpola igual).
+ */
+export function mocapCrunch(rest: Record<string, number>, top: Record<string, number>, extra: Partial<MotionSpec> = {}): MotionSpec {
+  const t = TAKES['abdominal-completo'];
+  const [iL, iU, iH] = ['tl', 'tu', 'hd'].map((k) => t.keys.indexOf(k));
+  const f0 = t.frames[0], PEAK = 5;
+  const d = (f: number[]) => ({ tl: f[iL] - f0[iL], tu: f[iU] - f0[iU], neck: f[iH] - f[iU] - (f0[iH] - f0[iU]) });
+  const peak = d(t.frames[PEAK]);
+  // subida (0→5), un momento arriba, bajada (29→34) y un momento abajo
+  const seq = [0, 1, 2, 3, 4, 5, 5, 5, 29, 30, 31, 32, 33, 34, 34, 34];
+  const r = { tu: rest.tl, ...rest } as Record<string, number>;
+  r.hd ??= r.tu;
+  const tt = { ...r, ...top };
+  const kTl = top.tl !== undefined ? (tt.tl - r.tl) / peak.tl : 0.2;
+  const kTu = (tt.tu - r.tu) / peak.tu;
+  const kNeck = Math.max(0.4, (tt.hd - tt.tu - (r.hd - r.tu)) / peak.neck);
+  const poses = seq.map((i) => {
+    const q = d(t.frames[i]), p = q.tu / peak.tu, o: Record<string, number> = {};
+    for (const k of new Set([...Object.keys(r), ...Object.keys(tt)])) o[k] = r[k] + (tt[k] - r[k]) * p;
+    o.tl = r.tl + kTl * q.tl;
+    o.tu = r.tu + kTu * q.tu;
+    o.hd = o.tu + (r.hd - r.tu) + kNeck * q.neck;
+    return o;
+  });
+  const n = poses.length;
+  return {
+    ...extra,
+    per: Math.round(n * 133),
+    fn: (u) => {
+      const x = u * n, i = Math.floor(x) % n, j = (i + 1) % n, k = x - Math.floor(x);
+      const o: Record<string, number> = {};
+      for (const key in poses[i]) o[key] = poses[i][key] + (poses[j][key] - poses[i][key]) * k;
+      return o;
+    },
+  };
+}
