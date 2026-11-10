@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-10T11:06:55Z",
+    "es": ["Contenido de la tabla: es solo para consultar; se quita el botón Editar (para editar, el botón de la tarjeta de la tabla)."],
+    "ca": ["Contingut de la taula: és només per consultar; es treu el botó Edita (per editar, el botó de la targeta de la taula)."],
+    "en": ["Routine contents is now view-only; the Edit button is gone (to edit, use the button on the routine card)."]
+  },
+  {
     "fecha": "2026-11-10T11:03:05Z",
     "es": ["Contenido de la tabla: al tocar un apartado se ven solo los ejercicios de ese apartado, con su número de orden dentro de la tabla."],
     "ca": ["Contingut de la taula: en tocar un apartat es veuen només els exercicis d'aquell apartat, amb el seu número d'ordre dins la taula."],

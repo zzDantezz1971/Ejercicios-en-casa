@@ -4,11 +4,10 @@ import type { App, Screen } from '../App';
 import { h, humanDuration, kg, plural } from '../dom';
 import { icon, SECTION_STYLE } from '../icons';
 import { DetailScreen } from './DetailScreen';
-import { RoutineScreen } from './RoutineScreen';
 
 /**
  * Ver la tabla en uso, solo para mirar: los ejercicios del apartado elegido (o todos), en el orden en que se harán,
- * en cuadrícula con su miniatura. Tocar uno abre su ficha. Para cambiar algo, el botón Editar.
+ * en cuadrícula con su miniatura. Tocar uno abre su ficha.
  */
 export class TableViewScreen implements Screen {
   readonly el = h('main', { class: 'screen table-view' });
@@ -63,8 +62,7 @@ export class TableViewScreen implements Screen {
     this.el.replaceChildren(
       h('header', { class: 'bar sticky' },
         h('button', { class: 'icon-btn', 'aria-label': 'Volver', onclick: () => app.back() }, icon('back')),
-        h('div', { class: 'titles' }, h('span', { class: 'subtitle' }, table.name), h('h1', {}, this.focus ? SECTION_TITLES[this.focus] : 'Contenido de la tabla')),
-        h('button', { class: 'btn ghost small', onclick: () => app.push(new RoutineScreen(app, this.focus)) }, icon('edit'), 'Editar')),
+        h('div', { class: 'titles' }, h('span', { class: 'subtitle' }, table.name), h('h1', {}, this.focus ? SECTION_TITLES[this.focus] : 'Contenido de la tabla'))),
       h('section', { class: 'detail-body tv-body' },
         this.focus ? null : h('div', { class: 'chips tv-chips' },
           h('span', { class: 'chip' }, icon('clock'), plan.isEmpty ? '—' : humanDuration(plan.estimatedSeconds)),
