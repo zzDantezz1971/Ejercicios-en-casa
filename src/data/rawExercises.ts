@@ -257,8 +257,8 @@ export const RAW_SECTIONS: RawSection[] = [
    [{ua:110,fa:-20,thR:0,snR:90,thL:104,snL:180,ftL:180},500,1100],[{ua:110,fa:-20,thR:0,snR:105,thL:110,snL:180,ftL:180},1500,1100]]},
  {g:'Aductores (ingles)'},
  {n:'Mariposa (aductores)',z:'Ingles y cadera',v:'front',noGround:1,mat:'top',f:[
-   [{thL:172,snL:20,thR:8,snR:160,ftL:0,ftR:180,uaL:110,faL:75,uaR:70,faR:105},150,700],
-   [{thL:160,snL:30,thR:20,snR:150,ftL:0,ftR:180,uaL:110,faL:75,uaR:70,faR:105},150,700]]},
+   [{thL:170,snL:22,thR:10,snR:158,ftL:0,ftR:180,uaL:100,faL:80,uaR:80,faR:100,zEL:6,zER:6,zHL:16,zHR:16},700,1600],
+   [{thL:170,snL:22,thR:10,snR:158,ftL:0,ftR:180,uaL:100,faL:80,uaR:80,faR:100,zEL:8,zER:8,zHL:20,zHR:20,lean:24},1400,1600]]},
  {n:'Zancada lateral',z:'Aductores',v:'front',plant:'anR',f:[
    [{thL:128,snL:128,thR:62,snR:100,tl:-84,uaL:55,faL:75,uaR:80,faR:100,zKR:12,lean:16},1400,1100],
    [{thL:122,snL:122,thR:55,snR:104,tl:-80,uaL:55,faL:75,uaR:80,faR:100,zKR:14,lean:18},1400,1100]]},
