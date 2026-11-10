@@ -34,6 +34,7 @@ for (const ex of list) {
     sc.mood = mood;
     sc.update(sc.motion.total * t);
     if (q.get('az')) { sc.azimuth = Number(q.get('az')); sc.placeCamera(); }
+    if (q.get('el')) { sc.elevation = Number(q.get('el')); sc.placeCamera(); }
     r.render(sc.scene, sc.camera);
     const img = document.createElement('img');
     img.src = canvas.toDataURL();
