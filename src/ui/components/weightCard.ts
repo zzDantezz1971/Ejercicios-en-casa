@@ -77,7 +77,7 @@ export function weightChart(points: ReadonlyArray<{ date: string; kg: number }>,
 
 /** Mis datos: tres tarjetas. Peso (el actual en grande, el cambio, botón para anotar y la gráfica),
     Objetivo (cuánto falta, con un solo botón para cambiarlo o quitarlo) e IMC (con su escala de colores). */
-export function weightCards(app: App, onChange: () => void, onOpen: () => void): HTMLElement[] {
+export function weightCards(app: App, onChange: () => void, onOpen: () => void, onChart: () => void = onOpen): HTMLElement[] {
   const ws = app.store.weights;
   const profile = app.store.settings.profile;
   const goal = profile.goalKg ?? null;
@@ -110,7 +110,8 @@ export function weightCards(app: App, onChange: () => void, onOpen: () => void):
         h('div', { class: 'wa-hero' },
           h('div', {}, h('strong', { class: 'wa-kg' }, fmtKg(last.kg)), h('div', { class: 'wa-sub' }, chip, h('span', { class: 'muted small' }, when))),
           add),
-        weightChart(ws, goal) as unknown as HTMLElement);
+        // tocar la gráfica la abre grande, en horizontal
+        h('button', { class: 'wf-open', 'aria-label': 'Ver la gráfica grande', onclick: onChart }, weightChart(ws, goal) as unknown as HTMLElement));
     })();
 
   // 2. Objetivo: "Peso objetivo 78,0 kg · 61 %", "Te faltan 2,6 kg", la barra y el botón Cambiar objetivo

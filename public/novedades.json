@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-10T17:27:23Z",
+    "es": ["Mis datos: al tocar la gráfica del peso se abre a pantalla completa y en horizontal (gira el móvil), con una línea por kilo, más fechas, el valor de cada pesaje, la línea del objetivo y botones para ver 1 mes, 3 meses, 6 meses, 1 año o todo."],
+    "ca": ["Les meves dades: en tocar la gràfica del pes s'obre a pantalla completa i en horitzontal (gira el mòbil), amb una línia per quilo, més dates, el valor de cada pesada, la línia de l'objectiu i botons per veure 1 mes, 3 mesos, 6 mesos, 1 any o tot."],
+    "en": ["My data: tapping the weight chart opens it full screen in landscape (turn your phone), with a line per kilo, more dates, the value of each weigh-in, the goal line and buttons to show 1 month, 3 months, 6 months, 1 year or all."]
+  },
+  {
     "fecha": "2026-11-10T17:18:01Z",
     "es": ["Mapa de músculos de los resúmenes: rojo pastel para los más trabajados y naranja pastel suave para los menos trabajados; los que no se han trabajado quedan en gris y ya no salen en «Menos trabajados»."],
     "ca": ["Mapa de músculs dels resums: vermell pastís per als més treballats i taronja pastís suau per als menys treballats; els que no s'han treballat queden en gris i ja no surten a «Menys treballats»."],

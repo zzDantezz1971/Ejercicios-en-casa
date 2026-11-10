@@ -4,6 +4,7 @@ import { weightCards } from '../components/weightCard';
 import { equipGrid } from '../components/equipGrid';
 import { EQUIPMENT, type Equip } from '../../domain/equipment';
 import { WeightScreen } from './WeightScreen';
+import { WeightChartScreen } from './WeightChartScreen';
 import type { App, Screen } from '../App';
 import { append, clear, h } from '../dom';
 
@@ -68,6 +69,6 @@ export class ProfileScreen implements Screen {
     append(this.body,
       this.profileCard(s),
       this.equipCard(s),
-      ...weightCards(this.app, () => this.render(), () => this.app.push(new WeightScreen(this.app))));
+      ...weightCards(this.app, () => this.render(), () => this.app.push(new WeightScreen(this.app)), () => this.app.push(new WeightChartScreen(this.app))));
   }
 }

@@ -1248,3 +1248,29 @@ button.wd:active .wd-dot { transform: scale(.92); }
 .tv-sec .muted { font-size: .78rem; }
 .tv-tile .by-sides { display: inline; }
 .table-view .bar .titles { flex: 1; min-width: 0; }
+
+/* Gráfica del peso grande, en horizontal (girada si el móvil está en vertical) */
+.wf-open { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; }
+.weight-full { position: fixed; inset: 0; z-index: 50; background: var(--bg); overflow: hidden; }
+.wf-rot { position: absolute; inset: 0; display: flex; flex-direction: column; padding: 8px 12px; gap: 4px; }
+@media (orientation: portrait) {
+  .wf-rot { inset: auto; top: 0; left: 100vw; width: 100vh; height: 100vw; transform: rotate(90deg); transform-origin: top left;
+    padding: max(8px, env(safe-area-inset-left, 0px)) max(12px, env(safe-area-inset-bottom, 0px)) 8px max(12px, env(safe-area-inset-top, 0px)); }
+}
+.wf-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.wf-title { font: 700 1.25rem var(--display); text-transform: uppercase; }
+.wf-stats { display: flex; gap: 8px; align-items: baseline; font-weight: 700; font-variant-numeric: tabular-nums; }
+.wf-diff { font-size: .85rem; color: var(--muted); }
+.wf-diff.down { color: var(--sec-stretch); }
+.wf-diff.up { color: #F5A524; }
+.wf-chips { display: flex; gap: 6px; margin-left: auto; flex-wrap: wrap; }
+.wf-chips .chip-btn { padding: 5px 10px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); color: var(--muted); font: 700 .8rem var(--body); cursor: pointer; }
+.wf-chips .chip-btn.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+.wf-chart { flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center; }
+.wf-empty { margin: auto; }
+.weight-chart.big { width: auto; height: auto; max-width: 100%; max-height: 100%; }
+.weight-chart.big .axis { font-size: 12px; }
+.weight-chart.big .grid.v { stroke-dasharray: 3 4; opacity: .7; }
+.weight-chart.big .w-area { fill: color-mix(in srgb, var(--accent) 14%, transparent); stroke: none; }
+.weight-chart.big .w-line { stroke-width: 3; }
+.weight-chart .w-val { fill: var(--fg); font: 700 11px var(--body); font-variant-numeric: tabular-nums; }
