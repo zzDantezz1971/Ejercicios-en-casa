@@ -70,9 +70,10 @@ export function to3D(spec: MotionSpec, view: string, J: Joints, pose: Pose): Rec
       o['ti' + s] = V(ti[0], 3.5, o['an' + s].z + 3);
       o['hip' + s] = V(J['hip' + s][0], baseY, 0);
     }
-    return o;
   }
   const side = view === 'side';
+  // sentado de frente (noGround) ya está colocado: solo le faltan la profundidad a mano y los giros de abajo
+  if (!(view === 'front' && spec.noGround)) {
   for (const k in J) {
     const s = k.slice(-1);
     let z = 0;
@@ -108,6 +109,7 @@ export function to3D(spec: MotionSpec, view: string, J: Joints, pose: Pose): Rec
       o['an' + s].z += dk + ds;
       o['ti' + s].z += dk + ds;
     }
+  }
   }
   // Profundidad a mano (hacia la cámara de frente; hacia el lado cercano de lado): codo, mano, rodilla y pie.
   for (const s of ['L', 'R']) {

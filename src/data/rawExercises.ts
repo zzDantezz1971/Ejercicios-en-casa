@@ -57,9 +57,9 @@ export const RAW_SECTIONS: RawSection[] = [
  {n:'Balanceo de pierna adelante y atrás',z:'Cadera',f:[
    [{ua:110,fa:-20,thR:-25,snR:-15},60,700],[{ua:110,fa:-20,thR:150,snR:160},60,700]]},
  {n:'Puñetazos al aire',z:'Brazos y hombros',f:[
-   [{thL:82,snL:96,thR:100,snR:86,uaR:0,faR:0,uaL:110,faL:-100},80,260],
+   [{thL:82,snL:96,thR:100,snR:86,uaR:0,faR:0,uaL:110,faL:-100,tw:-22},80,260],
    [{thL:82,snL:96,thR:100,snR:86,ua:110,fa:-100},40,260],
-   [{thL:82,snL:96,thR:100,snR:86,uaL:0,faL:0,uaR:110,faR:-100},80,260],
+   [{thL:82,snL:96,thR:100,snR:86,uaL:0,faL:0,uaR:110,faR:-100,tw:22},80,260],
    [{thL:82,snL:96,thR:100,snR:86,ua:110,fa:-100},40,260]]},
 ]},
 
@@ -143,8 +143,8 @@ export const RAW_SECTIONS: RawSection[] = [
    [{tl:180,tu:205,ua:-80,fa:200,thR:-120,snR:-30,thL:-20,snL:-15},60,480],
    [{tl:180,tu:200,ua:-80,fa:200,thL:-120,snL:-30,thR:-20,snR:-15},60,480]]},
  {n:'Giros rusos',z:'Oblicuos',v:'front',noGround:1,mat:'top',f:[
-   [{tu:-95,uaL:140,faL:150,uaR:160,faR:170,thL:-125,snL:95,thR:-55,snR:85,sTh:.6},100,600],
-   [{tu:-85,uaR:40,faR:30,uaL:20,faL:10,thL:-125,snL:95,thR:-55,snR:85,sTh:.6},100,600]]},
+   [{lean:-22,tw:-42,sa:.8,uaL:85,faL:-45,uaR:95,faR:-135,zEL:12.6,zER:12.6,zHL:24.9,zHR:24.9,thL:-125,snL:95,thR:-55,snR:85,sTh:.6},120,620],
+   [{lean:-22,tw:42,sa:.8,uaL:85,faL:-45,uaR:95,faR:-135,zEL:12.6,zER:12.6,zHL:24.9,zHR:24.9,thL:-125,snL:95,thR:-55,snR:85,sTh:.6},120,620]]},
  {n:'Toques de talón',z:'Oblicuos',v:'top',mat:'top',top:'Vista desde arriba',f:[
    [{thL:102,snL:96,thR:78,snR:84,sTh:.55,sSh:.5,tu:-72,hd:-74,uaL:96,faL:94,uaR:76,faR:80,saR:1.12},180,520],[{thL:102,snL:96,thR:78,snR:84,sTh:.55,sSh:.5,uaL:96,faL:94,uaR:84,faR:86},60,520],
    [{thL:102,snL:96,thR:78,snR:84,sTh:.55,sSh:.5,tu:-108,hd:-106,uaL:104,faL:100,saL:1.12,uaR:84,faR:86},180,520],[{thL:102,snL:96,thR:78,snR:84,sTh:.55,sSh:.5,uaL:96,faL:94,uaR:84,faR:86},60,520]]},
