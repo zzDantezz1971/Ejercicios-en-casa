@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-10T17:31:11Z",
+    "es": ["Gráfica grande del peso: la flecha de volver ya funciona, y las fechas de abajo van por días (1 mes), por semanas (3 meses) o por meses (6 meses y 1 año), según el periodo elegido."],
+    "ca": ["Gràfica gran del pes: la fletxa de tornar ja funciona, i les dates de sota van per dies (1 mes), per setmanes (3 mesos) o per mesos (6 mesos i 1 any), segons el període triat."],
+    "en": ["Large weight chart: the back arrow now works, and the dates along the bottom go by days (1 month), weeks (3 months) or months (6 months and 1 year), depending on the period chosen."]
+  },
+  {
     "fecha": "2026-11-10T17:27:23Z",
     "es": ["Mis datos: al tocar la gráfica del peso se abre a pantalla completa y en horizontal (gira el móvil), con una línea por kilo, más fechas, el valor de cada pesaje, la línea del objetivo y botones para ver 1 mes, 3 meses, 6 meses, 1 año o todo."],
     "ca": ["Les meves dades: en tocar la gràfica del pes s'obre a pantalla completa i en horitzontal (gira el mòbil), amb una línia per quilo, més dates, el valor de cada pesada, la línia de l'objectiu i botons per veure 1 mes, 3 mesos, 6 mesos, 1 any o tot."],

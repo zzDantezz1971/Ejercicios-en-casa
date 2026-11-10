@@ -42,11 +42,6 @@ export class WeightChartScreen implements Screen {
     try { screen.orientation?.unlock?.(); } catch { /* sin bloqueo */ }
   }
 
-  onBack(): boolean {
-    this.app.back();
-    return true;
-  }
-
   private draw(): void {
     const all = this.app.store.weights;
     const since = this.range ? Date.now() - this.range * 864e5 : -Infinity;
@@ -64,12 +59,39 @@ export class WeightChartScreen implements Screen {
     const W = Math.max(320, (portrait ? window.innerHeight : window.innerWidth) - 24);
     const H = Math.max(200, (portrait ? window.innerWidth : window.innerHeight) - 70);
     this.box.replaceChildren(pts.length
-      ? bigChart(pts, this.app.store.settings.profile.goalKg ?? null, W, H)
+      ? bigChart(pts, this.app.store.settings.profile.goalKg ?? null, W, H, this.range ? [Date.now() - this.range * 864e5, Date.now()] : undefined)
       : h('p', { class: 'muted wf-empty' }, 'No hay pesos anotados en este periodo.'));
   }
 }
 
-function bigChart(points: ReadonlyArray<{ date: string; kg: number }>, goal: number | null, W: number, H: number): SVGSVGElement {
+/** Marcas del eje de fechas según lo que abarca: días, semanas (lunes) o meses (día 1). */
+function dateTicks(t0: number, t1: number): { ticks: number[]; fmt: Intl.DateTimeFormatOptions } {
+  const days = (t1 - t0) / 864e5;
+  const ticks: number[] = [];
+  const d = new Date(t0);
+  d.setHours(0, 0, 0, 0);
+  if (days <= 45) {
+    // días: uno de cada N para que quepan unos 8
+    const every = Math.max(1, Math.ceil(days / 8));
+    for (; d.getTime() <= t1; d.setDate(d.getDate() + every)) if (d.getTime() >= t0) ticks.push(d.getTime());
+    return { ticks, fmt: { day: 'numeric', month: 'short' } };
+  }
+  if (days <= 130) {
+    // semanas: cada lunes
+    d.setDate(d.getDate() + ((8 - d.getDay()) % 7));
+    const every = days > 90 ? 2 : 1;
+    for (; d.getTime() <= t1; d.setDate(d.getDate() + 7 * every)) ticks.push(d.getTime());
+    return { ticks, fmt: { day: 'numeric', month: 'short' } };
+  }
+  // meses: el día 1 de cada mes (uno de cada dos si hay muchos)
+  d.setDate(1);
+  if (d.getTime() < t0) d.setMonth(d.getMonth() + 1);
+  const every = days > 400 ? 2 : 1;
+  for (; d.getTime() <= t1; d.setMonth(d.getMonth() + every)) ticks.push(d.getTime());
+  return { ticks, fmt: days > 330 ? { month: 'short', year: '2-digit' } : { month: 'long' } };
+}
+
+function bigChart(points: ReadonlyArray<{ date: string; kg: number }>, goal: number | null, W: number, H: number, domain?: [number, number]): SVGSVGElement {
   const pad = { l: 44, r: 16, t: 14, b: 28 };
   const svg = document.createElementNS(NS, 'svg');
   svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
@@ -78,7 +100,7 @@ function bigChart(points: ReadonlyArray<{ date: string; kg: number }>, goal: num
   svg.setAttribute('class', 'weight-chart big');
   const kgs = points.map((p) => p.kg).concat(goal ? [goal] : []);
   const lo = Math.floor(Math.min(...kgs) - 0.5), hi = Math.ceil(Math.max(...kgs) + 0.5);
-  const t0 = Date.parse(points[0].date), t1 = Date.parse(points[points.length - 1].date);
+  const t0 = domain ? domain[0] : Date.parse(points[0].date), t1 = domain ? domain[1] : Date.parse(points[points.length - 1].date);
   const x = (t: number) => pad.l + (t1 > t0 ? ((t - t0) / (t1 - t0)) * (W - pad.l - pad.r) : (W - pad.l - pad.r) / 2);
   const y = (kg: number) => pad.t + (H - pad.t - pad.b) * (1 - (kg - lo) / (hi - lo));
   const el = (tag: string, attrs: Record<string, string | number>, text?: string) => {
@@ -94,13 +116,13 @@ function bigChart(points: ReadonlyArray<{ date: string; kg: number }>, goal: num
     el('line', { x1: pad.l, x2: W - pad.r, y1: y(g), y2: y(g), class: 'grid' });
     el('text', { x: pad.l - 8, y: y(g), class: 'axis', 'text-anchor': 'end', 'dominant-baseline': 'central' }, String(g));
   }
-  // fechas: unas 6 repartidas
-  const nT = Math.min(6, Math.max(1, points.length));
-  for (let i = 0; i < nT; i++) {
-    const t = nT === 1 ? t0 : t0 + ((t1 - t0) * i) / (nT - 1);
-    el('line', { x1: x(t), x2: x(t), y1: pad.t, y2: H - pad.b, class: 'grid v' });
-    el('text', { x: x(t), y: H - 8, class: 'axis', 'text-anchor': i === 0 ? 'start' : i === nT - 1 ? 'end' : 'middle' },
-      new Date(t).toLocaleDateString(LOCALE, { day: 'numeric', month: 'short' }));
+  // fechas: por días, semanas o meses según el periodo
+  const { ticks, fmt } = dateTicks(t0, t1);
+  for (const t of ticks) {
+    const tx = x(t);
+    if (tx < pad.l + 12 || tx > W - pad.r - 12) continue;
+    el('line', { x1: tx, x2: tx, y1: pad.t, y2: H - pad.b, class: 'grid v' });
+    el('text', { x: tx, y: H - 8, class: 'axis', 'text-anchor': 'middle' }, new Date(t).toLocaleDateString(LOCALE, fmt));
   }
   if (goal) {
     el('line', { x1: pad.l, x2: W - pad.r, y1: y(goal), y2: y(goal), class: 'w-goal' });
