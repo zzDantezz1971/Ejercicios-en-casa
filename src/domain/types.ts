@@ -53,6 +53,8 @@ export interface MotionSpec {
   kb?: 'L' | 'R' | 'both';
   /** Agarre martillo: las mancuernas de canto (palmas enfrentadas). */
   hammer?: boolean;
+  /** Manos juntas (giros rusos…). */
+  clasp?: boolean;
   /** Manos cerradas en puño (golpes, guardia). */
   fist?: boolean;
   /** Barra con discos entre las dos manos. */

@@ -112,7 +112,7 @@ export function to3D(spec: MotionSpec, view: string, J: Joints, pose: Pose): Rec
   }
   }
   // Una mancuerna cogida con las dos manos (de lado): las manos se juntan en el centro
-  if (spec.db === 'two' && view !== 'top') {
+  if ((spec.db === 'two' || spec.clasp) && view !== 'top') {
     const c = o.haL.clone().add(o.haR).multiplyScalar(0.5);
     for (const s of ['L', 'R']) {
       const k = s === 'L' ? -1 : 1;

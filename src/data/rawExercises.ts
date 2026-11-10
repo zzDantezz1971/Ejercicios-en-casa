@@ -142,11 +142,11 @@ export const RAW_SECTIONS: RawSection[] = [
    [{tl:180,th:-90,sn:0,ua:10,fa:10},150,900],[{tl:180,tu:202,hd:208,th:-90,sn:0,ua:-18,fa:-18},250,900]]},
  {g:'Oblicuos'},
  {n:'Bicicleta',z:'Oblicuos',mat:1,f:[
-   [{tl:180,tu:205,ua:-80,fa:200,thR:-120,snR:-30,thL:-20,snL:-15},60,480],
-   [{tl:180,tu:200,ua:-80,fa:200,thL:-120,snL:-30,thR:-20,snR:-15},60,480]]},
- {n:'Giros rusos',z:'Oblicuos',v:'front',noGround:1,mat:'top',f:[
-   [{lean:-22,tw:-42,sa:.8,uaL:85,faL:-45,uaR:95,faR:-135,zEL:12.6,zER:12.6,zHL:24.9,zHR:24.9,thL:-125,snL:95,thR:-55,snR:85,sTh:.6},120,620],
-   [{lean:-22,tw:42,sa:.8,uaL:85,faL:-45,uaR:95,faR:-135,zEL:12.6,zER:12.6,zHL:24.9,zHR:24.9,thL:-125,snL:95,thR:-55,snR:85,sTh:.6},120,620]]},
+   [{tl:180,tu:208,hd:215,ua:205,fa:-40,sa:.72,zHL:10,zHR:-10,zER:6,thR:-120,snR:-30,thL:-20,snL:-15},60,480],
+   [{tl:180,tu:208,hd:215,ua:205,fa:-40,sa:.72,zHL:10,zHR:-10,zEL:-6,thL:-120,snL:-30,thR:-20,snR:-15},60,480]]},
+ {n:'Giros rusos',z:'Oblicuos',v:'front',noGround:1,mat:'top',clasp:true,f:[
+   [{lean:-22,tw:-42,sa:.8,uaL:105,faL:-45,uaR:75,faR:-135,zEL:12.6,zER:12.6,zHL:24.9,zHR:24.9,thL:-125,snL:95,thR:-55,snR:85,sTh:.6},120,620],
+   [{lean:-22,tw:42,sa:.8,uaL:105,faL:-45,uaR:75,faR:-135,zEL:12.6,zER:12.6,zHL:24.9,zHR:24.9,thL:-125,snL:95,thR:-55,snR:85,sTh:.6},120,620]]},
  {n:'Toques de talón',z:'Oblicuos',v:'top',mat:'top',top:'Vista desde arriba',f:[
    [{thL:102,snL:96,thR:70,snR:76,sTh:.55,sSh:.15,tu:-48,hd:-52,uaR:90,faR:90,saR:.945,uaL:116,faL:108},180,520],[{thL:102,snL:96,thR:78,snR:84,sTh:.55,sSh:.15,uaL:102,faL:98,uaR:78,faR:82},60,520],
    [{thL:110,snL:104,thR:78,snR:84,sTh:.55,sSh:.15,tu:-132,hd:-128,uaL:90,faL:90,saL:.945,uaR:64,faR:72},180,520],[{thL:102,snL:96,thR:78,snR:84,sTh:.55,sSh:.15,uaL:102,faL:98,uaR:78,faR:82},60,520]]},
@@ -161,13 +161,14 @@ export const RAW_SECTIONS: RawSection[] = [
  {n:'Dead bug (bicho muerto)',z:'Core profundo',mat:1,b:['lumbar'],f:[
    [{tl:180,ua:-90,fa:-90,th:-90,sn:0},150,800],[{tl:180,uaR:-90,faR:-90,uaL:-165,faL:-170,thL:-90,snL:0,thR:-15,snR:-12},300,800],
    [{tl:180,ua:-90,fa:-90,th:-90,sn:0},150,800],[{tl:180,uaL:-90,faL:-90,uaR:-165,faR:-170,thR:-90,snR:0,thL:-15,snL:-12},300,800]]},
- {n:'Escaladores',z:'Core y cardio',mat:1,f:[
-   [{...PLH,thR:60,snR:150},0,300],[{...PLH,thL:60,snL:150},0,300]]},
+ {n:'Escaladores',z:'Core y cardio',mat:1,anchor:{j:'haR',y:-3},f:[
+   [{...PLH,thR:25,snR:160,ftR:150},0,170],[{...PLH,thR:92,sThR:.42,snR:165,thL:92,sThL:.42,snL:165},0,170],[{...PLH,thL:25,snL:160,ftL:150},0,170],[{...PLH,thR:92,sThR:.42,snR:165,thL:92,sThL:.42,snL:165},0,170]]},
  {g:'Abdomen inferior'},
  {n:'Crunch inverso',z:'Abdomen inferior',mat:1,f:[
    [{...SUP,th:-80,sn:10},150,900],[{...SUP,tl:168,th:-130,sn:-50},150,900]]},
  {n:'Tijeras',z:'Abdomen inferior',mat:1,b:['caution'],f:[
-   [{tl:180,tu:188,ua:0,fa:0,thL:-10,snL:-10,thR:-28,snR:-28},0,320],[{tl:180,tu:188,ua:0,fa:0,thR:-10,snR:-10,thL:-28,snL:-28},0,320]]},
+   [{tl:180,tu:188,ua:0,fa:0,th:-18,sn:-18,zKL:-7,zAL:-14,zKR:7,zAR:14},0,330],
+   [{tl:180,tu:188,ua:0,fa:0,th:-18,sn:-18,zKL:3,zAL:7,zKR:-3,zAR:-7},0,330]]},
  {n:'Elevaciones de piernas',z:'Abdomen inferior',mat:1,b:['caution'],f:[
    [{...SUP,th:-8,sn:-8},150,1100],[{...SUP,th:-88,sn:-88},150,1100]]},
  {n:'Rodillas al pecho sentado',z:'Abdomen',mat:1,f:[

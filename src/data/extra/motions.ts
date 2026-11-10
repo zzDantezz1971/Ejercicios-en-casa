@@ -113,9 +113,10 @@ export const EXTRA_MOTIONS: Record<string, M> = {
     [{ uaL: 180, faL: 180, uaR: 0, faR: 0, th: 40, sn: 90, sTh: 0.7, sSh: 0.9, hd: -104 }, 250, 900],
     [{ uaL: 180, faL: 180, uaR: 0, faR: 0, th: 93, sn: 90, sTh: 0.2, sSh: 0.9 }, 150, 900],
     [{ uaL: 180, faL: 180, uaR: 0, faR: 0, th: 140, sn: 90, sTh: 0.7, sSh: 0.9, hd: -76 }, 250, 900]] },
-  'plancha-con-rodilla-al-codo': { mat: 1, f: [
-    [PLH, 150, 600], [{ ...PLH, thR: 52, snR: 150, zKR: 6 }, 250, 600],
-    [PLH, 150, 600], [{ ...PLH, thL: 52, snL: 150, zKL: -6 }, 250, 600]] },
+  'plancha-con-rodilla-al-codo': { mat: 1, anchor: { j: 'haR', y: -3 }, f: [
+    // la rodilla pasa por fuera (muslo hacia el lado) para no tocar el suelo
+    [PLH, 150, 300], [{ ...PLH, thR: 92, sThR: 0.42, snR: 165 }, 0, 300], [{ ...PLH, thR: 30, snR: 165, zKR: 6 }, 250, 300], [{ ...PLH, thR: 92, sThR: 0.42, snR: 165 }, 0, 300],
+    [PLH, 150, 300], [{ ...PLH, thL: 92, sThL: 0.42, snL: 165 }, 0, 300], [{ ...PLH, thL: 30, snL: 165, zKL: -6 }, 250, 300], [{ ...PLH, thL: 92, sThL: 0.42, snL: 165 }, 0, 300]] },
   'plancha-con-elevacion-de-pierna': { mat: 1, f: [
     [PLF, 300, 700], [{ ...PLF, thR: 186, snR: 186 }, 700, 700],
     [PLF, 300, 700], [{ ...PLF, thL: 186, snL: 186 }, 700, 700]] },
