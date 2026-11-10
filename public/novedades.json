@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-10T17:43:52Z",
+    "es": ["Gráfica grande del peso: al tocar un punto sale solo la fecha, en corto (por ejemplo «5 nov.»), en una etiqueta pequeña que no tapa los otros puntos."],
+    "ca": ["Gràfica gran del pes: en tocar un punt surt només la data, en curt (per exemple «5 de nov.»), en una etiqueta petita que no tapa els altres punts."],
+    "en": ["Large weight chart: tapping a point shows only the short date (e.g. “5 Nov”) in a small label that doesn't cover other points."]
+  },
+  {
     "fecha": "2026-11-10T17:38:16Z",
     "es": ["Peso: debajo de la gráfica, un aviso de que al tocarla se ve en grande; la gráfica grande se abre en «1 mes»; al tocar un punto te dice su fecha y su peso; y los pesajes se unen con una línea curva y suave."],
     "ca": ["Pes: sota la gràfica, un avís que en tocar-la es veu en gran; la gràfica gran s'obre en «1 mes»; en tocar un punt et diu la data i el pes; i les pesades s'uneixen amb una línia corba i suau."],

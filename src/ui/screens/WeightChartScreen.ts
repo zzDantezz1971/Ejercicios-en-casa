@@ -136,13 +136,13 @@ function bigChart(points: ReadonlyArray<{ date: string; kg: number }>, goal: num
   }
   // el valor encima de cada punto (si no hay demasiados)
   const label = points.length <= 24;
-  // al tocar un punto: su fecha y su peso en una etiqueta
+  // al tocar un punto: su fecha (corta) en una etiqueta pequeña, debajo del punto
   const tip = document.createElementNS(NS, 'g');
   tip.setAttribute('class', 'w-tip');
   const show = (i: number) => {
-    const text = `${new Date(points[i].date).toLocaleDateString(LOCALE, { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric' })} · ${fmtKg(points[i].kg)}`;
-    const w = text.length * 6.6 + 18, bx = Math.min(W - pad.r - w, Math.max(pad.l, P[i][0] - w / 2));
-    const by = P[i][1] - 44 < pad.t ? P[i][1] + 14 : P[i][1] - 44;
+    const text = new Date(points[i].date).toLocaleDateString(LOCALE, { day: 'numeric', month: 'short' });
+    const w = text.length * 6.6 + 14, bx = Math.min(W - pad.r - w, Math.max(pad.l, P[i][0] - w / 2));
+    const by = P[i][1] + 30 > H - pad.b ? P[i][1] - 50 : P[i][1] + 10;
     tip.innerHTML = `<rect x="${bx}" y="${by}" width="${w}" height="26" rx="8"></rect><text x="${bx + w / 2}" y="${by + 17}" text-anchor="middle"></text>`;
     tip.querySelector('text')!.textContent = text;
     svg.append(tip);
