@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-10T12:09:48Z",
+    "es": ["Voz al terminar: dice el tiempo exacto y las calorías así: «Tiempo de ejercicio: 24 minutos 12 segundos. Se han quemado 69 calorías aproximadamente»."],
+    "ca": ["Veu en acabar: diu el temps exacte i les calories així: «Temps d'exercici: 24 minuts 12 segons. S'han cremat aproximadament 69 calories»."],
+    "en": ["End-of-workout voice: it says the exact time and the calories like this: “Exercise time: 24 minutes 12 seconds. About 69 calories burned”."]
+  },
+  {
     "fecha": "2026-11-10T12:04:11Z",
     "es": ["Al terminar la tabla suena una fanfarria más vistosa y la voz dice «¡Buen trabajo, (nombre)! Entrenamiento terminado. X minutos y X calorías quemadas». Si pulsas «Volver al inicio», la voz se calla."],
     "ca": ["En acabar la taula sona una fanfàrria més vistosa i la veu diu «Bona feina, (nom)! Entrenament acabat. X minuts i X calories cremades». Si prems «Torna a l'inici», la veu es calla."],

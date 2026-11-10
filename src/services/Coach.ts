@@ -9,27 +9,33 @@ type VoiceLang = 'es' | 'ca' | 'en';
 
 /** Frases que dice la voz, en cada idioma. */
 const VT: Record<VoiceLang, {
-  prepare: string; round: string; half: string; rest: string; secDone: string; sw: string; done: string; doneEarly: string; min: string; min1: string; kcal: string; count: string[];
+  prepare: string; round: string; half: string; rest: string; secDone: string; sw: string; done: string; doneEarly: string; time: string; min: string; min1: string; sec: string; sec1: string; hr: string; hr1: string; kcal: string; count: string[];
 }> = {
   es: { prepare: '{s}. Prepárate. Primer ejercicio: {x}', round: 'Vuelta {a} de {b}. ', half: '. A mitad, cambio de lado', rest: 'Descanso. Siguiente: {x}',
-    secDone: '{a} terminado. Toca la pantalla para seguir con {b}', sw: 'Cambio de lado', done: '¡Buen trabajo{n}! Entrenamiento terminado.', doneEarly: '¡Bien hecho{n}! Entrenamiento terminado.', min: '{m} minutos', min1: 'un minuto', kcal: ' y {k} calorías quemadas',  count: ['', 'uno', 'dos', 'tres'] },
+    secDone: '{a} terminado. Toca la pantalla para seguir con {b}', sw: 'Cambio de lado', done: '¡Buen trabajo{n}! Entrenamiento terminado.', doneEarly: '¡Bien hecho{n}! Entrenamiento terminado.', time: 'Tiempo de ejercicio: {t}.', min: '{m} minutos', min1: 'un minuto', sec: '{m} segundos', sec1: 'un segundo', hr: '{m} horas', hr1: 'una hora', kcal: ' Se han quemado {k} calorías aproximadamente.',  count: ['', 'uno', 'dos', 'tres'] },
   ca: { prepare: '{s}. Prepara’t. Primer exercici: {x}', round: 'Volta {a} de {b}. ', half: '. A la meitat, canvi de costat', rest: 'Descans. Següent: {x}',
-    secDone: '{a}: fet. Toca la pantalla per continuar amb {b}', sw: 'Canvi de costat', done: 'Bona feina{n}! Entrenament acabat.', doneEarly: 'Ben fet{n}! Entrenament acabat.', min: '{m} minuts', min1: 'un minut', kcal: ' i {k} calories cremades',  count: ['', 'un', 'dos', 'tres'] },
+    secDone: '{a}: fet. Toca la pantalla per continuar amb {b}', sw: 'Canvi de costat', done: 'Bona feina{n}! Entrenament acabat.', doneEarly: 'Ben fet{n}! Entrenament acabat.', time: 'Temps d’exercici: {t}.', min: '{m} minuts', min1: 'un minut', sec: '{m} segons', sec1: 'un segon', hr: '{m} hores', hr1: 'una hora', kcal: ' S’han cremat aproximadament {k} calories.',  count: ['', 'un', 'dos', 'tres'] },
   en: { prepare: '{s}. Get ready. First exercise: {x}', round: 'Round {a} of {b}. ', half: '. Switch sides halfway', rest: 'Rest. Next up: {x}',
-    secDone: '{a} done. Tap the screen to continue with {b}', sw: 'Switch sides', done: 'Great job{n}! Workout complete.', doneEarly: 'Well done{n}! Workout complete.', min: '{m} minutes', min1: 'one minute', kcal: ' and {k} calories burned',  count: ['', 'one', 'two', 'three'] },
+    secDone: '{a} done. Tap the screen to continue with {b}', sw: 'Switch sides', done: 'Great job{n}! Workout complete.', doneEarly: 'Well done{n}! Workout complete.', time: 'Exercise time: {t}.', min: '{m} minutes', min1: 'one minute', sec: '{m} seconds', sec1: 'one second', hr: '{m} hours', hr1: 'one hour', kcal: ' About {k} calories burned.',  count: ['', 'one', 'two', 'three'] },
 };
 
 function fill(t: string, v: Record<string, string | number>): string {
   return t.replace(/\{(\w+)\}/g, (_, k) => String(v[k] ?? ''));
 }
 
-/** Frase final: «¡Buen trabajo, David! Entrenamiento terminado. 24 minutos y 69 calorías quemadas.» */
+/** Frase final: «¡Buen trabajo, David! Entrenamiento terminado. Tiempo de ejercicio: 24 minutos 12 segundos. Se han quemado 69 calorías aproximadamente.» */
 export function finishPhrase(lang: VoiceLang, o: { name?: string; completed: boolean; seconds: number; kcal?: number | null }): string {
   const t = VT[lang];
-  const m = Math.max(1, Math.round(o.seconds / 60));
-  const mins = m === 1 ? t.min1 : fill(t.min, { m });
+  // tiempo exacto: horas, minutos y segundos (sin las partes que valen cero)
+  const total = Math.max(1, Math.round(o.seconds));
+  const unit = (n: number, one: string, many: string) => (n === 1 ? one : fill(many, { m: n }));
+  const parts = [
+    Math.floor(total / 3600) ? unit(Math.floor(total / 3600), t.hr1, t.hr) : '',
+    Math.floor(total / 60) % 60 ? unit(Math.floor(total / 60) % 60, t.min1, t.min) : '',
+    total % 60 ? unit(total % 60, t.sec1, t.sec) : '',
+  ].filter(Boolean);
   const kcal = o.kcal ? fill(t.kcal, { k: o.kcal }) : '';
-  return `${fill(o.completed ? t.done : t.doneEarly, { n: o.name ? `, ${o.name}` : '' })} ${mins}${kcal}.`;
+  return `${fill(o.completed ? t.done : t.doneEarly, { n: o.name ? `, ${o.name}` : '' })} ${fill(t.time, { t: parts.join(' ') })}${kcal}`;
 }
 
 /** Une la sesión con los pitidos y la voz: decide qué se dice y cuándo suena cada aviso. */
