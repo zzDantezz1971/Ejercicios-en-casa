@@ -1,7 +1,7 @@
 /* Movimiento de los ejercicios nuevos (mismo formato que rawExercises.ts: ángulos por fotograma, ver figure/poses.ts).
    Los que no aparecen aquí siguen con "Animación en preparación". */
 import type { MotionSpec } from '../../domain/types';
-import { KNEES, PLF, PLH, PRONE, QUAD } from '../rawExercises';
+import { benchLie, KNEES, LYB, PLF, PLH, PRONE, QUAD } from '../rawExercises';
 
 type M = MotionSpec;
 
@@ -148,6 +148,60 @@ export const EXTRA_MOTIONS: Record<string, M> = {
   'oso-caminando': { mat: 1, f: [
     [{ ...BEAR, uaR: 72, faR: 76, thL: 80, snL: 160 }, 60, 450], [BEAR, 0, 350],
     [{ ...BEAR, uaL: 72, faL: 76, thR: 80, snR: 160 }, 60, 450], [BEAR, 0, 350]] },
+
+  // ── Mancuernas ──
+  'press-arnold': { v: 'front', db: 'both', f: [
+    [{ uaL: 100, faL: 280, uaR: 80, faR: -100, zEL: 10, zER: 10, zHL: 12, zHR: 12 }, 150, 1000], [{ uaL: 260, faL: 265, uaR: -80, faR: -85 }, 150, 1000]] },
+  'press-de-hombros-de-pie': { v: 'front', db: 'both', f: [
+    [{ uaL: 180, faL: 270, uaR: 0, faR: -90 }, 150, 1000], [{ uaL: 260, faL: 265, uaR: -80, faR: -85 }, 150, 1000]] },
+  'remo-al-menton': { v: 'front', db: 'both', f: [
+    [{ uaL: 92, faL: 86, uaR: 88, faR: 94, zHL: 5, zHR: 5 }, 150, 900], [{ uaL: 160, faL: 2, uaR: 20, faR: 178, zHL: 6, zHR: 6 }, 200, 900]] },
+  'press-de-suelo-con-mancuernas': { mat: 1, db: 'both', f: [
+    [{ tl: 180, ...KNEES, ua: -90, fa: -90 }, 150, 1000], [{ tl: 180, ...KNEES, ua: 12, fa: -90 }, 150, 1000]] },
+  'aperturas-inclinadas-con-mancuernas': { db: 'both', armsOut: true, anchor: { j: 'pel', y: -40 },
+    props: (J, P) => [...P.benchFlat(J.pel[0] - 16, J.pel[0] + 18), ...P.line([J.pel[0] - 8, -36], [J.pel[0] - 8 - 54 * 0.82, -36 - 54 * 0.57], 7)], f: [
+    [{ tl: -145, th: 5, sn: 90, ua: -100, fa: -100 }, 150, 1000], [{ tl: -145, th: 5, sn: 90, ua: -85, fa: -75, sa: 0.22 }, 150, 1000]] },
+  'press-de-banca-a-una-mano': { db: 'R', anchor: { j: 'pel', y: -40 }, props: benchLie, f: [
+    [{ ...LYB, uaR: -90, faR: -90, uaL: 20, faL: -30 }, 150, 1000], [{ ...LYB, uaR: 30, faR: -90, uaL: 20, faL: -30 }, 150, 1000]] },
+  'remo-inclinado-con-mancuernas': { db: 'both', plant: 'anR', f: [
+    [{ tl: -28, th: 80, sn: 100, ua: 90, fa: 90, hd: -40 }, 150, 800], [{ tl: -28, th: 80, sn: 100, ua: 205, fa: 95, hd: -40 }, 200, 800]] },
+  'remo-renegado': { mat: 1, db: 'both', f: [
+    [PLH, 150, 600], [{ ...PLH, uaR: 205, faR: 100 }, 250, 600], [PLH, 150, 600], [{ ...PLH, uaL: 205, faL: 100 }, 250, 600]] },
+  'curl-martillo': { db: 'both', f: [[{}, 150, 850], [{ ua: 85, fa: -50 }, 150, 850]] },
+  'curl-alterno-de-biceps': { db: 'both', f: [
+    [{}, 100, 750], [{ uaR: 85, faR: -50 }, 150, 750], [{}, 100, 750], [{ uaL: 85, faL: -50 }, 150, 750]] },
+  'press-frances-en-el-suelo': { mat: 1, db: 'both', f: [
+    [{ tl: 180, ...KNEES, ua: -105, fa: -105 }, 150, 1000], [{ tl: 180, ...KNEES, ua: -105, fa: -185 }, 150, 1000]] },
+  'peso-muerto-rumano-con-mancuernas': { db: 'both', plant: 'anR', f: [
+    [{ th: 88, sn: 94 }, 250, 1100], [{ tl: -18, th: 84, sn: 96, ua: 92, fa: 92, hd: -32 }, 300, 1100]] },
+  'sentadilla-goblet-con-mancuerna': { db: 'R', plant: 'anR', f: [
+    [{ ua: 75, fa: -60, zHL: 13, zHR: -13, zEL: 6, zER: -6 }, 200, 1000],
+    [{ tl: -62, th: 5, sn: 115, ua: 62, fa: -85, zHL: 13, zHR: -13, zEL: 4, zER: -4, hd: -70 }, 250, 1000]] },
+  'zancada-atras-con-mancuernas': { db: 'both', f: [[{}, 150, 800], [LUNGE_R, 250, 800], [{}, 150, 800], [LUNGE_L, 250, 800]] },
+  'sentadilla-bulgara-con-mancuernas': { db: 'both', plant: 'anR', props: (J, P) => P.benchFlat(J.anL[0] - 20, J.anL[0] + 8, 42), f: [
+    [{ thR: 68, snR: 120, thL: 130, snL: 194, ftL: 180 }, 200, 950],
+    [{ tl: -80, thR: 26, snR: 138, thL: 139, snL: 236, ftL: 200 }, 250, 950]] },
+  'elevacion-de-talones-con-mancuernas': { db: 'both', f: [[{}, 300, 700], [{ ft: 52 }, 600, 700]] },
+  'hip-thrust-con-mancuerna': { db: 'R', plant: 'anR', props: (J, P) => P.benchFlat(J.neck[0] - 34, J.neck[0] + 2, -J.neck[1] - 7), f: [
+    [{ tl: -155, hd: -150, th: -25, sn: 80, ua: 30, fa: 20, zHL: 13, zHR: -13 }, 200, 1000],
+    [{ tl: -182, hd: -170, th: 0, sn: 90, ua: 6, fa: 0, zHL: 13, zHR: -13 }, 400, 1000]] },
+  'subida-al-banco-con-mancuernas': { db: 'both', props: (J, P) => P.benchFlat(J.pel[0] + 16, J.pel[0] + 46, 42), f: [
+    [{}, 150, 650], [{ thR: -24, snR: 92, ftR: 0 }, 100, 750], [{ x: 30, jy: 42 }, 250, 750], [{ thR: -24, snR: 92, ftR: 0 }, 100, 650]] },
+  'thruster-con-mancuernas': { db: 'both', plant: 'anR', f: [
+    [{ ua: 70, fa: -112 }, 80, 650], [{ tl: -58, th: 5, sn: 115, ua: 40, fa: -140, hd: -65 }, 80, 650], [{ ua: -88, fa: -90, hd: -94 }, 250, 750]] },
+  'swing-con-mancuerna': { db: 'R', plant: 'anR', f: [
+    [{ tl: -22, th: 78, sn: 100, ua: 112, fa: 118, hd: -36, zHL: 13, zHR: -13 }, 80, 550], [{ ua: -4, fa: -6, zHL: 13, zHR: -13 }, 80, 550]] },
+  'marcha-del-granjero': { db: 'both', f: [
+    [{ thR: 55, snR: 118 }, 0, 420], [{}, 0, 420], [{ thL: 55, snL: 118 }, 0, 420], [{}, 0, 420]] },
+  'giro-ruso-con-mancuerna': { v: 'front', noGround: 1, mat: 'top', db: 'R', f: [
+    [{ lean: -22, tw: -42, sa: 0.8, uaL: 85, faL: -45, uaR: 95, faR: -135, zEL: 12.6, zER: 12.6, zHL: 24.9, zHR: 24.9, thL: -125, snL: 95, thR: -55, snR: 85, sTh: 0.6 }, 150, 700],
+    [{ lean: -22, tw: 42, sa: 0.8, uaL: 85, faL: -45, uaR: 95, faR: -135, zEL: 12.6, zER: 12.6, zHL: 24.9, zHR: 24.9, thL: -125, snL: 95, thR: -55, snR: 85, sTh: 0.6 }, 150, 700]] },
+  'lenador-con-mancuerna': { v: 'front', db: 'R', f: [
+    [{ tl: -84, tu: -80, uaL: 48, faL: 48, uaR: 82, faR: 82, zHL: 8, zHR: 8, tw: 22, thL: 100, snL: 100, thR: 80, snR: 80 }, 150, 800],
+    [{ tl: -94, tu: -98, uaL: -120, faL: -125, saL: 0.78, uaR: -135, faR: -140, zHL: 8, zHR: 8, tw: -22, thL: 100, snL: 100, thR: 80, snR: 80 }, 200, 800]] },
+  'crunch-con-mancuerna': { mat: 1, db: 'R', anchor: { j: 'pel', y: -12.1 }, az: 20, el: 18, f: [
+    [{ tl: 180, tu: 180, hd: 184, ...KNEES, ua: -30, fa: 195, zHL: 13, zHR: -13 }, 350, 850],
+    [{ tl: 180, tu: 203, hd: 214, ...KNEES, ua: -7, fa: 218, zHL: 13, zHR: -13 }, 450, 850]] },
 
   // ── Estiramientos ──
   'postura-de-la-paloma': { mat: 1, f: [
