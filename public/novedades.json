@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-10T11:03:05Z",
+    "es": ["Contenido de la tabla: al tocar un apartado se ven solo los ejercicios de ese apartado, con su número de orden dentro de la tabla."],
+    "ca": ["Contingut de la taula: en tocar un apartat es veuen només els exercicis d'aquell apartat, amb el seu número d'ordre dins la taula."],
+    "en": ["Routine contents: tapping a section shows only that section's exercises, with their position in the routine."]
+  },
+  {
     "fecha": "2026-11-10T10:58:52Z",
     "es": ["Nueva pantalla «Contenido de la tabla»: al tocar un apartado en el inicio se ve toda tu tabla en el orden en que se hará, por apartados y con miniaturas numeradas. Toca un ejercicio para ver cómo se hace. Para cambiar algo, botón Editar."],
     "ca": ["Nova pantalla «Contingut de la taula»: en tocar un apartat a l'inici es veu tota la teva taula en l'ordre en què es farà, per apartats i amb miniatures numerades. Toca un exercici per veure com es fa. Per canviar alguna cosa, botó Edita."],

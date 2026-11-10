@@ -7,28 +7,17 @@ import { DetailScreen } from './DetailScreen';
 import { RoutineScreen } from './RoutineScreen';
 
 /**
- * Ver la tabla en uso, solo para mirar: todos sus ejercicios en el orden en que se harán, por apartados,
+ * Ver la tabla en uso, solo para mirar: los ejercicios del apartado elegido (o todos), en el orden en que se harán,
  * en cuadrícula con su miniatura. Tocar uno abre su ficha. Para cambiar algo, el botón Editar.
  */
 export class TableViewScreen implements Screen {
   readonly el = h('main', { class: 'screen table-view' });
   private io = new IntersectionObserver((entries) => entries.forEach((e) => e.isIntersecting && this.loadThumb(e.target as HTMLElement)), { rootMargin: '300px' });
-  private sections: Partial<Record<SectionId, HTMLElement>> = {};
-  private first = true;
 
   constructor(private readonly app: App, private readonly focus?: SectionId) {}
 
   enter(): void {
     this.render();
-    // la primera vez, ir al apartado que se tocó en el inicio
-    // (el primero no: así se ve el resumen de arriba)
-    const firstSec = SECTION_IDS.find((s) => this.sections[s]);
-    if (this.first && this.focus && this.focus !== firstSec) {
-      const target = this.sections[this.focus];
-      // esperar a que la pantalla esté puesta en la página
-      if (target) setTimeout(() => target.scrollIntoView({ block: 'start' }), 80);
-    }
-    this.first = false;
   }
 
   dispose(): void {
@@ -39,10 +28,12 @@ export class TableViewScreen implements Screen {
     const { app } = this;
     const table = app.store.active;
     const plan = WorkoutPlan.build(table.routine, app.catalog, app.store.settings, table.rounds);
-    this.sections = {};
     const blocks: HTMLElement[] = [];
-    let n = 0;
+    // número de orden dentro de toda la tabla
+    let n = SECTION_IDS.slice(0, this.focus ? SECTION_IDS.indexOf(this.focus) : 0)
+      .reduce((t, s) => t + table.routine[s].filter((i) => app.catalog.has(i.exerciseId)).length, 0);
     for (const s of SECTION_IDS) {
+      if (this.focus && s !== this.focus) continue;
       const items = table.routine[s].filter((i) => app.catalog.has(i.exerciseId));
       if (!items.length) continue;
       const st = SECTION_STYLE[s];
@@ -52,7 +43,6 @@ export class TableViewScreen implements Screen {
         h('span', { class: 'sec-dot' }, icon(st.icon)), SECTION_TITLES[s],
         h('span', { class: 'muted small' }, `${plural(items.length, 'ejercicio', 'ejercicios')}${R > 1 ? ` × ${R} vueltas` : ''} · ${humanDuration(secs)}`));
       head.style.setProperty('--sec', st.color);
-      this.sections[s] = head;
       const grid = h('div', { class: 'hd-grid tv-grid' });
       for (const it of items) {
         const ex = app.catalog.get(it.exerciseId)!;
@@ -73,13 +63,13 @@ export class TableViewScreen implements Screen {
     this.el.replaceChildren(
       h('header', { class: 'bar sticky' },
         h('button', { class: 'icon-btn', 'aria-label': 'Volver', onclick: () => app.back() }, icon('back')),
-        h('div', { class: 'titles' }, h('span', { class: 'subtitle' }, 'Contenido de la tabla'), h('h1', {}, table.name)),
-        h('button', { class: 'btn ghost small', onclick: () => app.push(new RoutineScreen(app)) }, icon('edit'), 'Editar')),
+        h('div', { class: 'titles' }, h('span', { class: 'subtitle' }, table.name), h('h1', {}, this.focus ? SECTION_TITLES[this.focus] : 'Contenido de la tabla')),
+        h('button', { class: 'btn ghost small', onclick: () => app.push(new RoutineScreen(app, this.focus)) }, icon('edit'), 'Editar')),
       h('section', { class: 'detail-body tv-body' },
-        h('div', { class: 'chips tv-chips' },
+        this.focus ? null : h('div', { class: 'chips tv-chips' },
           h('span', { class: 'chip' }, icon('clock'), plan.isEmpty ? '—' : humanDuration(plan.estimatedSeconds)),
           h('span', { class: 'chip' }, icon('bolt'), plural(plan.exerciseCount, 'ejercicio', 'ejercicios'))),
-        h('p', { class: 'muted small' }, 'En el orden en que se harán. Toca un ejercicio para ver cómo se hace.'),
+        h('p', { class: 'muted small' }, 'Toca un ejercicio para ver cómo se hace.'),
         ...blocks),
     );
   }

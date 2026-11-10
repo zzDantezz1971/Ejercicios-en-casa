@@ -189,7 +189,7 @@ const ROWS: Row[] = [
   ['día entrenado', 'dia entrenat', 'day trained'],
   ['días entrenados', 'dies entrenats', 'days trained'],
   ['Contenido de la tabla', 'Contingut de la taula', 'Routine contents'],
-  ['En el orden en que se harán. Toca un ejercicio para ver cómo se hace.', 'En l’ordre en què es faran. Toca un exercici per veure com es fa.', 'In the order they’ll be done. Tap an exercise to see how it’s done.'],
+  ['Toca un ejercicio para ver cómo se hace.', 'Toca un exercici per veure com es fa.', 'Tap an exercise to see how it’s done.'],
   ['Días', 'Dies', 'Days'],
   ['{a} de 7', '{a} de 7', '{a} of 7'],
   ['Minutos', 'Minuts', 'Minutes'],
