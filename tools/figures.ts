@@ -35,6 +35,11 @@ for (const ex of list) {
     sc.update(sc.motion.total * t);
     if (q.get('az')) { sc.azimuth = Number(q.get('az')); sc.placeCamera(); }
     if (q.get('el')) { sc.elevation = Number(q.get('el')); sc.placeCamera(); }
+    // &crop=x,y,w (fracciones): ampliar una zona (p. ej. las manos)
+    if (q.get('crop')) {
+      const [cx, cy, cw] = q.get('crop')!.split(',').map(Number);
+      sc.camera.setViewOffset(1500, 1000, cx * 1500, cy * 1000, cw * 1500, cw * 1000);
+    }
     r.render(sc.scene, sc.camera);
     const img = document.createElement('img');
     img.src = canvas.toDataURL();

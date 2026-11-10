@@ -68,7 +68,8 @@ for side in 'LR':
             idx = np.nonzero(w > 0)[0]
             if not len(idx): continue
             head = jp(f'finger{f}-{k}.{side}')
-            axis = across * (1 if side == 'L' else -1) * float(os.environ.get('CURLSIGN', '-1'))
+            # meñique - índice ya apunta al lado contrario en cada mano: el mismo signo sirve para las dos (antes la derecha se doblaba al revés)
+            axis = -across * float(os.environ.get('CL' if side == 'L' else 'CR', '1'))
             for vi in idx:
                 R = _rot(axis, np.radians(angs[k - 1]) * min(1.0, w[vi]))
                 V[vi] = head + R @ (V[vi] - head)

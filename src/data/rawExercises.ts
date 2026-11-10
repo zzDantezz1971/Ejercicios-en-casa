@@ -59,10 +59,10 @@ export const RAW_SECTIONS: RawSection[] = [
  {n:'Balanceo de pierna adelante y atrás',z:'Cadera',f:[
    [{ua:110,fa:-20,thR:-25,snR:-15},60,700],[{ua:110,fa:-20,thR:150,snR:160},60,700]]},
  {n:'Puñetazos al aire',z:'Brazos y hombros',fist:true,f:[
-   [{thL:82,snL:96,thR:100,snR:86,uaR:0,faR:0,uaL:110,faL:-100,tw:-22},80,260],
-   [{thL:82,snL:96,thR:100,snR:86,ua:110,fa:-100},40,260],
-   [{thL:82,snL:96,thR:100,snR:86,uaL:0,faL:0,uaR:110,faR:-100,tw:22},80,260],
-   [{thL:82,snL:96,thR:100,snR:86,ua:110,fa:-100},40,260]]},
+   [{thL:82,snL:96,thR:100,snR:86,uaR:-2,faR:-2,zHR:-6,uaL:62,faL:-80,zEL:4,zHL:10,tw:-22},80,260],
+   [{thL:82,snL:96,thR:100,snR:86,ua:62,fa:-80,zEL:4,zER:-4,zHL:10,zHR:-10},40,260],
+   [{thL:82,snL:96,thR:100,snR:86,uaL:-2,faL:-2,zHL:6,uaR:62,faR:-80,zER:-4,zHR:-10,tw:22},80,260],
+   [{thL:82,snL:96,thR:100,snR:86,ua:62,fa:-80,zEL:4,zER:-4,zHL:10,zHR:-10},40,260]]},
 ]},
 
 {id:'pesas',title:'Fuerza',note:'Ordenados por zona, de arriba abajo. Los de espalda van apoyados en el banco para no cargar la zona lumbar.',groups:true,items:[

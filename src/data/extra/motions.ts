@@ -74,9 +74,9 @@ export const EXTRA_MOTIONS: Record<string, M> = {
   'gusano-inchworm': { plant: 'anR', mat: 1, f: [
     [{}, 300, 1100],
     // brazos un poco más cortos: la palma queda plana en el suelo y la muñeca algo levantada
-    [{ tl: 52, tu: 62, hd: 100, ua: 100, fa: 100, sa: 0.92, th: 84, sn: 96, ft: 0 }, 250, 1200],
+    [{ tl: 58, tu: 66, hd: 100, ua: 82, fa: 82, sa: 0.93, th: 80, sn: 97, ft: 0 }, 250, 1200],
     [{ ...PLH, ft: 70, sa: 0.93 }, 500, 1200],
-    [{ tl: 52, tu: 62, hd: 100, ua: 100, fa: 100, sa: 0.92, th: 84, sn: 96, ft: 0 }, 250, 1200]] },
+    [{ tl: 58, tu: 66, hd: 100, ua: 82, fa: 82, sa: 0.93, th: 80, sn: 97, ft: 0 }, 250, 1200]] },
   'patada-frontal-alterna': { fist: true, f: [
     [{ ...GUARD_L }, 120, 380], [{ ...GUARD_L, thR: -6, snR: -8, ftR: -40, thL: 95, snL: 92, tl: -98 }, 120, 380],
     [{ ...GUARD_L }, 120, 380], [{ ...GUARD_L, thL: -6, snL: -8, ftL: -40, thR: 95, snR: 92, tl: -98 }, 120, 380]] },
