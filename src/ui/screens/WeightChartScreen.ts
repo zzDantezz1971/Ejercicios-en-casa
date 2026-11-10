@@ -5,7 +5,7 @@ import { icon } from '../icons';
 import { fmtDiff, fmtKg, smoothPath } from '../components/weightCard';
 
 const NS = 'http://www.w3.org/2000/svg';
-type Range = 30 | 90 | 180 | 365 | 0;
+type Range = 30 | 180 | 0;
 
 /**
  * Gráfica del peso a pantalla completa y en horizontal: con el móvil en vertical se dibuja girada 90°
@@ -85,7 +85,7 @@ export class WeightChartScreen implements Screen {
     // para que la línea llegue a los bordes: el pesaje anterior y el siguiente a la ventana (se recortan)
     const before = all.filter((p) => Date.parse(p.date) < since).pop(), after = all.find((p) => Date.parse(p.date) > until);
     const line = [...(before ? [before] : []), ...pts, ...(after ? [after] : [])];
-    const opts: Array<[Range, string]> = [[30, '1 mes'], [90, '3 meses'], [180, '6 meses'], [365, '1 año'], [0, 'Todo']];
+    const opts: Array<[Range, string]> = [[30, '1 mes'], [180, '6 meses'], [0, 'Todo']];
     this.chips.replaceChildren(...opts.map(([r, label]) =>
       h('button', { class: 'chip-btn' + (r === this.range ? ' on' : ''), onclick: () => { this.range = r; this.end = Date.now(); this.draw(); } }, label)));
     if (pts.length) {

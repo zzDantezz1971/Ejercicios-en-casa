@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-10T17:59:25Z",
+    "es": ["Gráfica grande del peso: solo tres periodos, 1 mes, 6 meses y Todo; con el dedo puedes moverte hacia atrás en 1 mes y 6 meses."],
+    "ca": ["Gràfica gran del pes: només tres períodes, 1 mes, 6 mesos i Tot; amb el dit et pots moure enrere a 1 mes i 6 mesos."],
+    "en": ["Large weight chart: just three periods, 1 month, 6 months and All; drag to move back in time in 1 month and 6 months."]
+  },
+  {
     "fecha": "2026-11-10T17:57:17Z",
     "es": ["Gráfica grande del peso: arrastra el dedo por la gráfica para ir hacia atrás (o adelante) en el tiempo; las fechas se mueven con él. Al elegir otro periodo vuelve a hoy."],
     "ca": ["Gràfica gran del pes: arrossega el dit per la gràfica per anar enrere (o endavant) en el temps; les dates es mouen amb ell. En triar un altre període torna a avui."],
