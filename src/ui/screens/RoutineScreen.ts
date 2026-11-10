@@ -31,11 +31,9 @@ export class RoutineScreen implements Screen {
   private search = h('input', { type: 'search', id: 'ex-search', class: 'search-input', placeholder: 'Buscar ejercicio o zona', autocomplete: 'off', enterkeyhint: 'search' });
   private io = new IntersectionObserver((entries) => entries.forEach((e) => e.isIntersecting && this.loadThumb(e.target as HTMLElement)), { rootMargin: '300px' });
 
-  /** `onlyChosen`: abrir mostrando solo los ejercicios de la tabla (desde «Contenido de la tabla»). */
-  constructor(private readonly app: App, section?: SectionId, onlyChosen = false) {
+  constructor(private readonly app: App, section?: SectionId) {
     this.editor = new RoutineEditor(app.store.routine);
     if (section) this.section = section;
-    if (onlyChosen) this.mode = 'chosen';
     this.search.addEventListener('input', () => {
       this.query = this.search.value;
       this.renderList();

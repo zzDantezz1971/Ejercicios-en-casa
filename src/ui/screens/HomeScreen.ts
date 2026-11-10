@@ -6,6 +6,7 @@ import { addDays, dayKey, greeting, startOfWeek, streak, trainedDays, WEEKDAY_LE
 import { clear, h, humanDuration, plural } from '../dom';
 import { icon, SECTION_STYLE } from '../icons';
 import { RoutineScreen } from './RoutineScreen';
+import { TableViewScreen } from './TableViewScreen';
 import { startWorkout } from '../components/startWorkout';
 import { MonthScreen } from './MonthScreen';
 import { addMonths, addWeeks, monthKey, monthStart, weekKey, weekStart, weekStats } from '../../domain/monthSummary';
@@ -178,7 +179,7 @@ export class HomeScreen implements Screen {
     const R = clampRounds(this.app.store.active.rounds?.[s]);
     const secs = items.reduce((n, i) => n + i.seconds, 0) * R;
     const st = SECTION_STYLE[s];
-    const row = h('button', { class: 'sec-row' + (items.length ? '' : ' empty'), onclick: () => this.app.push(new RoutineScreen(this.app, s, items.length > 0)) },
+    const row = h('button', { class: 'sec-row' + (items.length ? '' : ' empty'), onclick: () => this.app.push(items.length ? new TableViewScreen(this.app, s) : new RoutineScreen(this.app, s)) },
       h('span', { class: 'sec-icon' }, icon(st.icon)),
       h('span', { class: 'sec-text' },
         h('strong', {}, SECTION_TITLES[s]),
