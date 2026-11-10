@@ -3,7 +3,7 @@ import type { ExerciseDef, SectionId } from '../domain/types';
 import { DESCRIPTIONS } from './descriptions';
 import { RAW_SECTIONS } from './rawExercises';
 import { MUSCLES_BY_EXERCISE } from './muscles';
-import { exerciseText } from '../i18n';
+import { exerciseText, LANG } from '../i18n';
 import { parseNeed } from '../domain/equipment';
 import { EXTRAS, extraId } from './extra';
 import { EXTRA_MOTIONS, MOTION_OVERRIDES } from './extra/motions';
@@ -51,6 +51,23 @@ const ONE_SIDED = new Set([
   'medio-triangulo',
 ]);
 
+/**
+ * Nombres sin la parte en inglés entre paréntesis (la voz en castellano o catalán la pronunciaba mal).
+ * El identificador sigue saliendo del nombre original, así las tablas y el historial guardados no cambian.
+ */
+const PLAIN_NAMES: Record<string, { es: string; ca: string }> = {
+  'saltos-de-tijera-jumping-jacks': { es: 'Saltos de tijera', ca: 'Salts de tisora' },
+  'dead-bug-bicho-muerto': { es: 'Bicho muerto', ca: 'Insecte mort' },
+  'bird-dog-perro-de-caza': { es: 'Perro de caza', ca: 'Gos de caça' },
+  'nadador-suave-superman-alterno': { es: 'Nadador suave', ca: 'Nedador suau' },
+  'skipping-rodillas-arriba': { es: 'Rodillas arriba', ca: 'Genolls amunt' },
+  'gusano-inchworm': { es: 'Gusano', ca: 'Cuc' },
+  'barquita-hollow-hold': { es: 'Barquita', ca: 'Barqueta' },
+};
+function plainName(id: string, name: string): string {
+  return LANG === 'en' ? name : (PLAIN_NAMES[id]?.[LANG] ?? name);
+}
+
 export function slug(name: string): string {
   return name
     .normalize('NFD')
@@ -83,7 +100,7 @@ function buildSections(): SectionInfo[] {
       const desc = DESCRIPTIONS[id];
       exercises.push({
         id,
-        name: t?.[0] ?? n!,
+        name: plainName(id, t?.[0] ?? n!),
         section: sec.id,
         zone: t?.[1] ?? z ?? '',
         group,
@@ -102,7 +119,7 @@ function buildSections(): SectionInfo[] {
       const t = exerciseText(id);
       const ex: ExerciseDef = {
         id,
-        name: t?.[0] ?? x.n,
+        name: plainName(id, t?.[0] ?? x.n),
         section: sec.id,
         zone: t?.[1] ?? x.z,
         group: x.g,

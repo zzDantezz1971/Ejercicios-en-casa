@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-10T12:16:05Z",
+    "es": ["Nombres sin la parte en inglés entre paréntesis, para que la voz los diga bien: Saltos de tijera, Rodillas arriba, Gusano, Barquita, Bicho muerto, Perro de caza y Nadador suave. Tus tablas y tu historial no cambian."],
+    "ca": ["Noms sense la part en anglès entre parèntesis, perquè la veu els digui bé: Salts de tisora, Genolls amunt, Cuc, Barqueta, Insecte mort, Gos de caça i Nedador suau. Les teves taules i el teu historial no canvien."],
+    "en": ["In Spanish and Catalan, exercise names no longer include the English name in brackets, so the voice reads them properly. Your routines and history are unchanged."]
+  },
+  {
     "fecha": "2026-11-10T12:09:48Z",
     "es": ["Voz al terminar: dice el tiempo exacto y las calorías así: «Tiempo de ejercicio: 24 minutos 12 segundos. Se han quemado 69 calorías aproximadamente»."],
     "ca": ["Veu en acabar: diu el temps exacte i les calories així: «Temps d'exercici: 24 minuts 12 segons. S'han cremat aproximadament 69 calories»."],
