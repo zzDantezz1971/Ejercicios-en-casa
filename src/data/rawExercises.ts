@@ -146,8 +146,8 @@ export const RAW_SECTIONS: RawSection[] = [
    [{lean:-22,tw:-42,sa:.8,uaL:85,faL:-45,uaR:95,faR:-135,zEL:12.6,zER:12.6,zHL:24.9,zHR:24.9,thL:-125,snL:95,thR:-55,snR:85,sTh:.6},120,620],
    [{lean:-22,tw:42,sa:.8,uaL:85,faL:-45,uaR:95,faR:-135,zEL:12.6,zER:12.6,zHL:24.9,zHR:24.9,thL:-125,snL:95,thR:-55,snR:85,sTh:.6},120,620]]},
  {n:'Toques de talón',z:'Oblicuos',v:'top',mat:'top',top:'Vista desde arriba',f:[
-   [{thL:102,snL:96,thR:78,snR:84,sTh:.55,sSh:.5,tu:-72,hd:-74,uaL:96,faL:94,uaR:76,faR:80,saR:1.12},180,520],[{thL:102,snL:96,thR:78,snR:84,sTh:.55,sSh:.5,uaL:96,faL:94,uaR:84,faR:86},60,520],
-   [{thL:102,snL:96,thR:78,snR:84,sTh:.55,sSh:.5,tu:-108,hd:-106,uaL:104,faL:100,saL:1.12,uaR:84,faR:86},180,520],[{thL:102,snL:96,thR:78,snR:84,sTh:.55,sSh:.5,uaL:96,faL:94,uaR:84,faR:86},60,520]]},
+   [{thL:102,snL:96,thR:70,snR:76,sTh:.55,sSh:.15,tu:-48,hd:-52,uaR:94,faR:92,saR:1.06,uaL:96,faL:94},180,520],[{thL:102,snL:96,thR:78,snR:84,sTh:.55,sSh:.15,uaL:96,faL:94,uaR:84,faR:86},60,520],
+   [{thL:110,snL:104,thR:78,snR:84,sTh:.55,sSh:.15,tu:-132,hd:-128,uaL:86,faL:88,saL:1.06,uaR:84,faR:86},180,520],[{thL:102,snL:96,thR:78,snR:84,sTh:.55,sSh:.15,uaL:96,faL:94,uaR:84,faR:86},60,520]]},
  {n:'Plancha lateral',z:'Oblicuos',v:'front',mat:1,f:[
    [{tl:-162,th:18,sn:18,ft:60,uaL:90,faL:180,uaR:-90,faR:-90,hd:-162},1300,1000],
    [{tl:-160,th:19,sn:19,ft:60,uaL:90,faL:180,uaR:-92,faR:-92,hd:-160},1300,1000]]},
