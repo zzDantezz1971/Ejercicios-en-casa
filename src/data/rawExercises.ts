@@ -277,11 +277,12 @@ export const RAW_SECTIONS: RawSection[] = [
    [{tl:180,thL:0,snL:0,ftL:-90,thR:-80,snR:-80,ftR:-170,ua:-35,fa:-15},1500,1200]]},
  {n:'Pinza sentado (piernas estiradas)',z:'Espalda y piernas',mat:1,b:['caution'],f:[
    [{th:-6,sn:4,ft:-90,ua:-60,fa:-60},300,1200],[{tl:-42,tu:-26,hd:-12,th:-6,sn:4,ft:-90,ua:5,fa:5},1500,1200]]},
- {n:'Flexión hacia delante de pie',z:'Isquiotibiales y espalda',plant:'anR',az:24,anchor:{j:'anR',y:-3},b:['caution'],f:[
-   [{},700,2200],
-   [{tl:40,tu:64,hd:92,ua:102,fa:104,th:70,sn:92},1200,700],
-   [{tl:44,tu:70,hd:96,ua:104,fa:106,th:69,sn:92},1200,1200],
-   [{tl:14,tu:50,hd:88,ua:92,fa:94,th:80,sn:92},0,1300]]},
+ {n:'Flexión hacia delante de pie',z:'Isquiotibiales y espalda',plant:'anR',anchor:{j:'anR',y:-3},b:['caution'],f:[
+   [{},700,1100],
+   [{tl:-25,tu:28,hd:72,ua:96,fa:96,th:88,sn:91},0,1100],
+   [{tl:8,tu:52,hd:94,ua:102,fa:100,th:80,sn:92},1000,700],
+   [{tl:11,tu:57,hd:98,ua:104,fa:102,th:79,sn:92},1000,1100],
+   [{tl:-25,tu:24,hd:78,ua:96,fa:96,th:88,sn:91},0,1200]]},
  {n:'Cuádriceps de pie',split:true,z:'Parte delantera del muslo',f:[
    [{},200,900],[{thR:95,snR:250,uaR:110,faR:100,uaL:-10,faL:-10},1500,900],
    [{},200,900],[{thL:95,snL:250,uaL:110,faL:100,uaR:-10,faR:-10},1500,900]]},
