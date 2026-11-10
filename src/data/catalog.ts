@@ -6,6 +6,7 @@ import { MUSCLES_BY_EXERCISE } from './muscles';
 import { exerciseText } from '../i18n';
 import { parseNeed } from '../domain/equipment';
 import { EXTRAS, extraId } from './extra';
+import { EXTRA_MOTIONS } from './extra/motions';
 
 /** Material de los ejercicios de antes (los que usan mancuernas lo sacan del movimiento). */
 const NEEDS_BENCH = new Set([
@@ -109,9 +110,10 @@ function buildSections(): SectionInfo[] {
         description: t ? { start: t[2], move: t[3], tip: t[4], mistakes: t[5] || undefined, easier: t[6] || undefined }
           : { start: x.es[0], move: x.es[1], tip: x.es[2], mistakes: x.es[3] || undefined, easier: x.es[4] || undefined },
         muscles: x.m,
-        motion: STILL,
+        motion: EXTRA_MOTIONS[id] ?? STILL,
+        viewLabel: EXTRA_MOTIONS[id]?.v === 'front' ? 'De frente' : undefined,
         equip: parseNeed(x.eq),
-        pending: true,
+        pending: !EXTRA_MOTIONS[id],
       };
       let at = -1;
       if (x.g) for (let i = exercises.length - 1; i >= 0; i--) if (exercises[i].group === x.g) { at = i; break; }

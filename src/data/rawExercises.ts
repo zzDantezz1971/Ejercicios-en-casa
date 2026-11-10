@@ -8,19 +8,19 @@ export type RawItem = MotionSpec & { n?: string; z?: string; g?: string; b?: Bad
 export interface RawSection { id: SectionId; title: string; note: string; groups?: boolean; items: RawItem[] }
 
 /* Posturas reutilizables */
-const SUP = { tl: 180, ua: 0, fa: 0 };                                    // tumbado boca arriba, cabeza a la izquierda
-const KNEES = { thL: -60, snL: 60, thR: -56, snR: 62 };                   // rodillas dobladas, pies en el suelo
-const PRONE = { tl: 0, th: 180, sn: 180, ft: 180 };                        // boca abajo, cabeza a la derecha
-const QUAD = { tl: -18, ua: 90, fa: 90, th: 90, sn: 180, ft: 180 };        // cuadrupedia
-const LYB = { tl: 180, th: 5, sn: 90 };                                   // tumbado en banco plano
-const SEAT = { th: 5, sn: 90 };                                           // sentado en banco
-const ROWB = { tl: -20, uaL: 90, faL: 90, thL: 90, snL: 180, ftL: 180, thR: 92, snR: 92 }; // rodilla y mano en el banco
-const PLH = { tl: -22, ua: 90, fa: 90, th: 158, sn: 158, ft: 90 };         // plancha alta
-const PLF = { tl: -11.5, ua: 90, fa: 0, th: 168.5, sn: 168.5, ft: 90 };    // plancha de antebrazos
-const benchLie = (J: Joints, P: PropHelpers): PropOp[] => P.benchFlat(J.head[0] - 4, J.pel[0] + 14);
-const benchRow = (J: Joints, P: PropHelpers): PropOp[] => P.benchFlat(J.anL[0] - 6, J.haL[0] + 10).map((o) => ({ ...o, z: -9, dep: 18 }));
-const benchSeat = (J: Joints, P: PropHelpers): PropOp[] => P.benchFlat(J.pel[0] - 22, J.pel[0] + 18);
-const inclineBack = (J: Joints, P: PropHelpers): PropOp[] => {
+export const SUP = { tl: 180, ua: 0, fa: 0 };                                    // tumbado boca arriba, cabeza a la izquierda
+export const KNEES = { thL: -60, snL: 60, thR: -56, snR: 62 };                   // rodillas dobladas, pies en el suelo
+export const PRONE = { tl: 0, th: 180, sn: 180, ft: 180 };                        // boca abajo, cabeza a la derecha
+export const QUAD = { tl: -18, ua: 90, fa: 90, th: 90, sn: 180, ft: 180 };        // cuadrupedia
+export const LYB = { tl: 180, th: 5, sn: 90 };                                   // tumbado en banco plano
+export const SEAT = { th: 5, sn: 90 };                                           // sentado en banco
+export const ROWB = { tl: -20, uaL: 90, faL: 90, thL: 90, snL: 180, ftL: 180, thR: 92, snR: 92 }; // rodilla y mano en el banco
+export const PLH = { tl: -22, ua: 90, fa: 90, th: 158, sn: 158, ft: 90 };         // plancha alta
+export const PLF = { tl: -11.5, ua: 90, fa: 0, th: 168.5, sn: 168.5, ft: 90 };    // plancha de antebrazos
+export const benchLie = (J: Joints, P: PropHelpers): PropOp[] => P.benchFlat(J.head[0] - 4, J.pel[0] + 14);
+export const benchRow = (J: Joints, P: PropHelpers): PropOp[] => P.benchFlat(J.anL[0] - 6, J.haL[0] + 10).map((o) => ({ ...o, z: -9, dep: 18 }));
+export const benchSeat = (J: Joints, P: PropHelpers): PropOp[] => P.benchFlat(J.pel[0] - 22, J.pel[0] + 18);
+export const inclineBack = (J: Joints, P: PropHelpers): PropOp[] => {
   const a: [number, number] = [J.pel[0] + 6.4 + 4 * 0.71, J.pel[1] + 6.4 - 4 * 0.71];
   const b: [number, number] = [a[0] + 40 * 0.71, a[1] - 40 * 0.71];
   return [...P.line(a, b, 7), ...P.line(a, [a[0], 0], 4), ...P.line([a[0] - 12, 0], [a[0] + 12, 0], 4)];
