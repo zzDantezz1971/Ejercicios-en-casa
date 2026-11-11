@@ -12,8 +12,10 @@
 
 ## Suscripción (1 €/mes o 10 €/año, con prueba gratis)
 
-La app ya lo tiene programado (`src/services/Access.ts`, pantalla `PaywallScreen`). Solo afecta a la app de Google Play;
-la web no se cobra. Falta configurarlo en Google:
+La app ya lo tiene programado (`src/services/Access.ts`, pantalla `PaywallScreen`). Modelo: versión gratis con un ejercicio
+de cada apartado (saltos de tijera, sentadillas sin peso, plancha frontal y gato-camello) y el resto con candado; la
+suscripción o un código lo desbloquean todo. Solo afecta a la app de Google Play; la web no se cobra (en Configuración hay
+una vista previa de la versión gratis). Falta configurarlo en Google:
 
 1. Play Console › Configuración › **Perfil de pagos** (datos fiscales y cuenta bancaria).
 2. Subir la app (aunque sea a prueba interna) para que Play Console deje crear productos.

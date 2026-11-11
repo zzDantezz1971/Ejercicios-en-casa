@@ -1,10 +1,10 @@
-import type { PlanOffer } from '../../services/Access';
+import { CAN_PAY, type PlanOffer } from '../../services/Access';
 import type { App, Screen } from '../App';
 import { confirmDialog, h } from '../dom';
 import { icon } from '../icons';
 
-/* Suscripción (app de Google Play): sin suscripción ni código no se puede usar la app.
-   Planes de Google Play con su prueba gratis, recuperar una compra y canjear un código. */
+/* Hacerse prémium (app de Google Play): planes con su prueba gratis, recuperar una compra y canjear un código.
+   Se abre al tocar un ejercicio de pago. En la web es solo una vista previa: no se puede pagar. */
 export class PaywallScreen implements Screen {
   readonly el = h('main', { class: 'screen welcome paywall' });
   private offers: PlanOffer[] | null = null;
@@ -31,6 +31,7 @@ export class PaywallScreen implements Screen {
   }
 
   private done(): void {
+    // todo desbloqueado: se vuelve a empezar desde Inicio para que se vea
     this.app.openTab('inicio');
   }
 
@@ -62,7 +63,7 @@ export class PaywallScreen implements Screen {
     const plans = this.offers;
     const trial = plans?.find((o) => o.trialDays > 0)?.trialDays ?? 0;
     const planCard = (o: PlanOffer) =>
-      h('button', { class: 'card pw-plan' + (o.plan === 'anual' ? ' best' : ''), disabled: this.busy, onclick: () => void this.buy(o) },
+      h('button', { class: 'card pw-plan' + (o.plan === 'anual' ? ' best' : ''), disabled: this.busy || !CAN_PAY, onclick: () => void this.buy(o) },
         h('div', { class: 'pw-plan-txt' },
           h('strong', {}, o.plan === 'anual' ? 'Anual' : 'Mensual'),
           h('span', { class: 'muted small' }, o.trialDays ? `${o.trialDays} días gratis y después ${o.price}` : o.price)),
@@ -79,13 +80,18 @@ export class PaywallScreen implements Screen {
     };
 
     this.el.replaceChildren(...[
-      h('div', { class: 'welcome-top' },
+      h('header', { class: 'bar' },
+        h('button', { class: 'icon-btn', 'aria-label': 'Volver', onclick: () => this.app.back() }, icon('back')),
+        h('span', { class: 'bar-title' }, 'Prémium')),
+      h('div', { class: 'welcome-top pw-top' },
         h('img', { class: 'welcome-logo', src: `${import.meta.env.BASE_URL}icon-192.png`, alt: '' }),
-        h('h1', {}, 'Ejercicios en casa'),
-        h('p', { class: 'muted' }, trial ? `Pruébala gratis ${trial} días. Después, elige cómo seguir.` : 'Elige un plan para empezar a entrenar.')),
+        h('h1', {}, 'Desbloquea todos los ejercicios'),
+        h('p', { class: 'muted' }, trial ? `Pruébalo gratis ${trial} días. Después, elige cómo seguir.` : 'Elige un plan para tenerlo todo.')),
       h('ul', { class: 'pw-perks' },
-        ...['Más de 200 ejercicios con muñeco animado', 'Tablas a tu medida, con voz y pitidos', 'Historial, medallas y seguimiento del peso'].map((t) =>
+        ...['Más de 200 ejercicios con muñeco animado', 'Arma tus tablas con los que quieras, con o sin material', 'Sin anuncios y sin límites'].map((t) =>
           h('li', {}, icon('check'), t))),
+      h('p', { class: 'muted small pw-free' }, 'Ahora tienes la versión gratis: un ejercicio de cada apartado, con todo lo demás de la app.'),
+      CAN_PAY ? null : h('p', { class: 'note pw-preview' }, icon('info'), 'Vista previa: en la versión web no se puede pagar. La suscripción solo funciona en la app de Google Play.'),
       h('section', { class: 'pw-plans' },
         ...(plans === null ? [h('p', { class: 'muted small' }, 'Cargando precios…')]
           : this.error ? [h('p', { class: 'muted small' }, 'No se han podido cargar los precios de Google Play. Comprueba la conexión y vuelve a intentarlo.')]
@@ -96,12 +102,12 @@ export class PaywallScreen implements Screen {
         (trial ? 'Durante la prueba no se cobra nada y puedes cancelar cuando quieras. ' : 'Puedes cancelar cuando quieras. ') +
         'Se cancela en Google Play › Pagos y suscripciones.'),
       h('div', { class: 'pw-links' },
-        h('button', { class: 'btn ghost small', disabled: this.busy, onclick: () => void this.restore() }, 'Ya estoy suscrito'),
+        h('button', { class: 'btn ghost small', disabled: this.busy || !CAN_PAY, onclick: () => void this.restore() }, 'Ya estoy suscrito'),
         h('button', { class: 'btn ghost small', onclick: () => { this.showCode = !this.showCode; this.render(); } }, 'Tengo un código')),
       this.showCode
         ? h('section', { class: 'card pw-code' },
           h('label', { class: 'small' }, 'Código de acceso'),
-          h('div', { class: 'pw-code-row' }, codeInput, h('button', { class: 'btn primary', onclick: () => void redeem() }, 'Validar')),
+          h('div', { class: 'pw-code-row' }, codeInput, h('button', { class: 'btn primary', disabled: !CAN_PAY, onclick: () => void redeem() }, 'Validar')),
           codeMsg)
         : null,
     ].filter((x): x is HTMLElement => !!x));

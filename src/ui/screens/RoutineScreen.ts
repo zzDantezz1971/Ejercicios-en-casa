@@ -176,9 +176,9 @@ export class RoutineScreen implements Screen {
       const content = h('div', { class: 'row-ex' },
         h('span', { class: 'order' }, i + 1),
         // tocar la miniatura o el nombre abre la ficha (cómo se hace)
-        h('button', { class: 'row-open', 'aria-label': `Cómo se hace: ${ex.name}`, onclick: () => this.app.push(new DetailScreen(this.app, ex)) }, this.miniThumb(ex)),
+        h('button', { class: 'row-open', 'aria-label': `Cómo se hace: ${ex.name}`, onclick: () => this.open(ex) }, this.miniThumb(ex)),
         h('div', { class: 'row-text' },
-          h('button', { class: 'row-open row-name', onclick: () => this.app.push(new DetailScreen(this.app, ex)) }, h('strong', {}, ex.name)),
+          h('button', { class: 'row-open row-name', onclick: () => this.open(ex) }, h('strong', {}, ex.name)),
           ex.oneSided ? h('span', { class: 'by-sides' }, icon('sides'), 'por lados') : null,
           h('div', { class: 'stepper inline' },
             h('button', { 'aria-label': 'Menos tiempo', onclick: () => this.adjust(ex, -STEP_SECONDS) }, '−'),
@@ -289,8 +289,15 @@ export class RoutineScreen implements Screen {
     if (this.showAllEquip) all.filter((e) => !canDo(e.equip, owned)).forEach((ex) => this.list.append(this.card(ex)));
   }
 
+  /** Abre la ficha del ejercicio; en la versión gratis, los de pago llevan a hacerse prémium. */
+  private open(ex: ExerciseDef): void {
+    if (this.app.access.canUse(ex.id)) this.app.push(new DetailScreen(this.app, ex));
+    else this.app.showPremium();
+  }
+
   private card(ex: ExerciseDef): HTMLElement {
     const pos = this.editor.position(ex.section, ex.id);
+    const locked = !this.app.access.canUse(ex.id);
     const secs = this.editor.seconds(ex.section, ex.id);
     const owned = new Set<string>(this.app.store.settings.equipment);
     const img = h('img', { alt: '', class: 'thumb', 'data-id': ex.id });
@@ -298,14 +305,18 @@ export class RoutineScreen implements Screen {
       equipMarks(ex.equip, owned),
       h('span', { class: 'sec-mark', title: SECTION_TITLES[ex.section], 'aria-label': SECTION_TITLES[ex.section] }, icon(SECTION_STYLE[ex.section].icon)));
     this.io.observe(fig);
-    const card = h('article', { class: 'ex-card' + (pos ? ' selected' : ''), style: { '--sec': SECTION_STYLE[ex.section].color } },
+    if (locked) fig.append(h('span', { class: 'lock-mark', 'aria-hidden': 'true' }, icon('lock')));
+    const card = h('article', { class: 'ex-card' + (pos ? ' selected' : '') + (locked ? ' locked' : ''), style: { '--sec': SECTION_STYLE[ex.section].color } },
       // toda la ficha (menos sus botones) abre el ejercicio: muñeco y cómo se hace
-      h('button', { class: 'ex-main', 'aria-label': `Cómo se hace: ${ex.name}`, onclick: () => this.app.push(new DetailScreen(this.app, ex)) },
+      h('button', { class: 'ex-main', 'aria-label': `Cómo se hace: ${ex.name}`, onclick: () => this.open(ex) },
         fig,
         h('span', { class: 'ex-name' }, pos ? h('span', { class: 'order' }, pos) : null, h('span', {}, ex.name, this.app.store.favorites.has(ex.id) ? icon('starFill', 'ico fav-star') : null)),
         h('span', { class: 'ex-zone' }, h('span', {}, ex.zone), ex.oneSided ? h('span', { class: 'by-sides' }, icon('sides'), 'por lados') : null),
         badgeList(ex.badges)),
-      h('div', { class: 'ex-actions' },
+      locked
+        ? h('div', { class: 'ex-actions' },
+          h('button', { class: 'select-btn premium', onclick: () => this.app.showPremium() }, icon('lock'), h('span', {}, 'Prémium')))
+        : h('div', { class: 'ex-actions' },
         pos ? h('div', { class: 'stepper' },
           h('button', { 'aria-label': 'Menos tiempo', onclick: () => this.adjust(ex, -STEP_SECONDS) }, '−'),
           h('span', { class: 'secs' }, icon('clock'), `${secs} s`),

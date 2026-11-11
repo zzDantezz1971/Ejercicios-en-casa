@@ -32,7 +32,7 @@ export class TablesScreen implements Screen {
   }
 
   private card(t: SavedRoutine, active: boolean): HTMLElement {
-    const plan = WorkoutPlan.build(t.routine, this.app.catalog, this.app.store.settings, t.rounds);
+    const plan = WorkoutPlan.build(this.app.playable(t.routine), this.app.catalog, this.app.store.settings, t.rounds);
     const total = Math.max(1, SECTION_IDS.reduce((n, s) => n + t.routine[s].length, 0));
     const mix = h('div', { class: 'mix' }, ...SECTION_IDS.filter((s) => t.routine[s].length).map((s) => {
       const seg = h('span', { title: `${SECTION_TITLES[s]}: ${t.routine[s].length}` });

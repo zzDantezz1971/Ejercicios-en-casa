@@ -4,7 +4,13 @@ import { IS_NATIVE } from '../platform/native';
 import { checkCode } from './accessCodes';
 
 /* Acceso a la app de Google Play: suscripción (1 €/mes o 10 €/año, con prueba gratis de Google)
-   o un código de acceso gratis. La versión web no se cobra. Sin suscripción ni código, la app se bloquea (opción A). */
+   o un código de acceso gratis. Sin suscripción ni código se usa la versión gratis (opción B): todo funciona,
+   pero solo con un ejercicio de cada apartado. La versión web no se cobra; ahí se puede activar una vista previa
+   de la versión gratis (solo en ese navegador) para ver cómo queda. */
+
+/** Ejercicios gratis: uno de cada apartado. */
+export const FREE_IDS: ReadonlySet<string> = new Set(['saltos-de-tijera-jumping-jacks', 'sentadillas-sin-peso', 'plancha-frontal', 'gato-camello']);
+const PREVIEW_KEY = 'vista-previa-gratis';
 
 /** Producto de suscripción en Play Console y sus dos planes base. */
 export const SUB_ID = 'premium';
@@ -31,19 +37,51 @@ export interface PlanOffer {
 
 export type AccessKind = 'web' | 'code' | 'sub' | 'none';
 
+/** En la web no se puede pagar ni canjear códigos (solo se ve la pantalla). */
+export const CAN_PAY = IS_NATIVE;
+
 export class Access {
   kind: AccessKind = IS_NATIVE ? 'none' : 'web';
   /** Nombre del código con el que se entra (si es por código). */
   codeName: string | null = null;
   private saved: Saved = {};
 
-  get locked(): boolean {
-    return this.kind === 'none';
+  /** Con suscripción o código (o en la web): todos los ejercicios. */
+  get premium(): boolean {
+    return this.kind !== 'none';
+  }
+
+  /** ¿Se puede usar este ejercicio? */
+  canUse(id: string): boolean {
+    return this.premium || FREE_IDS.has(id);
+  }
+
+  /** En la web: vista previa de la versión gratis (solo en este navegador). */
+  get previewing(): boolean {
+    return !IS_NATIVE && this.kind === 'none';
+  }
+
+  setPreview(on: boolean): void {
+    if (IS_NATIVE) return;
+    try {
+      if (on) localStorage.setItem(PREVIEW_KEY, '1');
+      else localStorage.removeItem(PREVIEW_KEY);
+    } catch {
+      /* sin almacenamiento: solo dura hasta recargar */
+    }
+    this.kind = on ? 'none' : 'web';
   }
 
   /** Al arrancar: código guardado o suscripción activa. */
   async init(): Promise<void> {
-    if (!IS_NATIVE) return;
+    if (!IS_NATIVE) {
+      try {
+        if (localStorage.getItem(PREVIEW_KEY) === '1') this.kind = 'none';
+      } catch {
+        /* sin almacenamiento */
+      }
+      return;
+    }
     try {
       const { value } = await Preferences.get({ key: KEY });
       this.saved = value ? (JSON.parse(value) as Saved) : {};
@@ -82,8 +120,9 @@ export class Access {
     }
   }
 
-  /** Precios y prueba gratis de los dos planes, tal como los da Google Play. */
+  /** Precios y prueba gratis de los dos planes, tal como los da Google Play (en la web, de muestra). */
   async offers(): Promise<PlanOffer[]> {
+    if (!IS_NATIVE) return [{ plan: 'anual', price: '10,00 €', trialDays: 7 }, { plan: 'mensual', price: '1,00 €', trialDays: 7 }];
     const { products } = await NativePurchases.getProducts({ productIdentifiers: [SUB_ID], productType: PURCHASE_TYPE.SUBS });
     const out: PlanOffer[] = [];
     for (const plan of Object.keys(PLANS) as PlanId[]) {

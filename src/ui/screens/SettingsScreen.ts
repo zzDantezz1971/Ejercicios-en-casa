@@ -231,19 +231,32 @@ export class SettingsScreen implements Screen {
         h('button', { class: 'btn ghost', onclick: () => void restore() }, icon('back'), 'Restaurar copia')));
   }
 
-  /** Suscripción de la app de Google Play (o acceso con código). */
+  /** Suscripción de la app de Google Play (o acceso con código); en la web, la vista previa de la versión gratis. */
   private accessCard(): HTMLElement {
     const a = this.app.access;
+    if (!IS_NATIVE) {
+      const on = a.previewing;
+      return h('section', { class: 'card setting rest-card lang-card' },
+        h('div', { class: 'rest-head' },
+          h('span', { class: 'set-icon' }, icon('lock')),
+          h('div', { class: 'set-text' }, h('strong', {}, 'Vista previa de la versión gratis'),
+            h('p', { class: 'muted small' }, 'Solo en este navegador: verás la app como alguien sin suscripción, con un ejercicio gratis de cada apartado. En la web no se paga nada.'))),
+        h('div', { class: 'segmented lang-segs' },
+          h('button', { class: 'seg' + (on ? '' : ' on'), 'aria-pressed': String(!on), onclick: () => { a.setPreview(false); this.render(); } }, 'Todo desbloqueado'),
+          h('button', { class: 'seg' + (on ? ' on' : ''), 'aria-pressed': String(on), onclick: () => { a.setPreview(true); this.render(); } }, 'Versión gratis')),
+        on ? h('button', { class: 'btn ghost block', onclick: () => this.app.showPremium() }, icon('star'), 'Ver la pantalla de Prémium') : null);
+    }
     const sub = a.kind === 'sub';
     return h('section', { class: 'card setting rest-card' },
       h('div', { class: 'rest-head' },
         h('span', { class: 'set-icon' }, icon('star')),
         h('div', { class: 'set-text' },
-          h('strong', {}, sub ? 'Suscripción activa' : a.kind === 'code' ? 'Acceso con código' : 'Sin suscripción'),
+          h('strong', {}, sub ? 'Suscripción activa' : a.kind === 'code' ? 'Acceso con código' : 'Versión gratis'),
           h('p', { class: 'muted small' }, sub
             ? 'Puedes cambiar de plan o cancelarla en Google Play.'
-            : a.kind === 'code' ? `Código: ${a.codeName ?? ''}. No se te cobra nada.` : ''))),
-      sub ? h('button', { class: 'btn ghost block', onclick: () => void a.manage() }, 'Gestionar en Google Play') : null);
+            : a.kind === 'code' ? `Código: ${a.codeName ?? ''}. No se te cobra nada.` : 'Un ejercicio de cada apartado. Hazte prémium para tenerlos todos.'))),
+      sub ? h('button', { class: 'btn ghost block', onclick: () => void a.manage() }, 'Gestionar en Google Play')
+        : a.kind === 'none' ? h('button', { class: 'btn primary block', onclick: () => this.app.showPremium() }, icon('star'), 'Hazte prémium') : null);
   }
 
   /** Estilo del maniquí: realista, dibujo o de piezas. */
@@ -262,7 +275,7 @@ export class SettingsScreen implements Screen {
     const s = this.app.store.settings;
     clear(this.body);
     this.body.append(
-      ...(IS_NATIVE ? [h('h3', { class: 'block-title' }, 'Suscripción'), this.accessCard()] : []),
+      h('h3', { class: 'block-title' }, IS_NATIVE ? 'Suscripción' : 'Prémium'), this.accessCard(),
       h('h3', { class: 'block-title' }, 'Apariencia'), this.themeCard(s), this.figureCard(s),
       h('h3', { class: 'block-title' }, 'Idioma'), this.langCard(),
       h('h3', { class: 'block-title' }, 'Tiempos'), this.restCard(s));

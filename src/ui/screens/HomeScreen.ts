@@ -27,7 +27,8 @@ export class HomeScreen implements Screen {
   private render(): void {
     const { app } = this;
     const table = app.store.active;
-    const plan = WorkoutPlan.build(table.routine, app.catalog, app.store.settings, table.rounds);
+    // en la versión gratis, solo los ejercicios gratis de la tabla
+    const plan = WorkoutPlan.build(app.playable(table.routine), app.catalog, app.store.settings, table.rounds);
     const now = new Date();
     clear(this.el);
 
@@ -89,6 +90,13 @@ export class HomeScreen implements Screen {
             h('button', { class: 'btn glass small', onclick: () => app.push(new RoutineScreen(app)) }, icon('edit'), 'Editar'),
             h('button', { class: 'btn glass small', onclick: () => app.openTab('tablas') }, icon('swap'), 'Cambiar tabla')))),
     );
+
+    // versión gratis: aviso si la tabla tiene ejercicios de pago (no se hacen)
+    const lockedN = SECTION_IDS.reduce((n, sec) => n + this.app.store.routine[sec].filter((i) => !this.app.access.canUse(i.exerciseId)).length, 0);
+    if (lockedN) {
+      this.el.append(h('button', { class: 'note pw-home', onclick: () => this.app.showPremium() }, icon('lock'),
+        h('span', {}, `Versión gratis: ${plural(lockedN, 'ejercicio', 'ejercicios')} de esta tabla son de Prémium y se saltan. `, h('strong', {}, 'Hazte prémium'))));
+    }
 
     // Apartados de la tabla (solo los que tienen ejercicios), justo debajo de la tabla en uso
     const withEx = SECTION_IDS.filter((sec) => this.app.store.routine[sec].some((i) => this.app.catalog.has(i.exerciseId)));

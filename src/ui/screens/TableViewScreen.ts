@@ -26,7 +26,7 @@ export class TableViewScreen implements Screen {
   private render(): void {
     const { app } = this;
     const table = app.store.active;
-    const plan = WorkoutPlan.build(table.routine, app.catalog, app.store.settings, table.rounds);
+    const plan = WorkoutPlan.build(app.playable(table.routine), app.catalog, app.store.settings, table.rounds);
     const blocks: HTMLElement[] = [];
     // número de orden dentro de toda la tabla
     let n = SECTION_IDS.slice(0, this.focus ? SECTION_IDS.indexOf(this.focus) : 0)
@@ -47,9 +47,11 @@ export class TableViewScreen implements Screen {
         const ex = app.catalog.get(it.exerciseId)!;
         n++;
         const img = h('img', { alt: '', class: 'thumb', 'data-id': ex.id });
-        const fig = h('div', { class: 'thumb-box tv-thumb' }, img, h('span', { class: 'tv-num' }, String(n)));
+        const locked = !app.access.canUse(ex.id);
+        const fig = h('div', { class: 'thumb-box tv-thumb' }, img, h('span', { class: 'tv-num' }, String(n)),
+          locked ? h('span', { class: 'lock-mark', 'aria-hidden': 'true' }, icon('lock')) : null);
         this.io.observe(fig);
-        const tile = h('button', { class: 'card hd-row tv-tile', 'aria-label': `Cómo se hace: ${ex.name}`, onclick: () => app.push(new DetailScreen(app, ex)) },
+        const tile = h('button', { class: 'card hd-row tv-tile' + (locked ? ' locked' : ''), 'aria-label': `Cómo se hace: ${ex.name}`, onclick: () => (app.access.canUse(ex.id) ? app.push(new DetailScreen(app, ex)) : app.showPremium()) },
           fig,
           h('strong', { class: 'hd-name' }, ex.name),
           h('span', { class: 'muted small hd-sub' }, `${it.seconds} s`, it.weight ? ` · ${kg(it.weight)}` : '', ex.oneSided ? ' · ' : '', ex.oneSided ? h('span', { class: 'by-sides' }, 'por lados') : null));

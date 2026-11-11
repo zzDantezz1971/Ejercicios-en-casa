@@ -1311,3 +1311,17 @@ button.wd:active .wd-dot { transform: scale(.92); }
 .hd-nav .btn { gap: 4px; padding-inline: 10px; min-width: 0; }
 .hd-nav .btn:disabled { visibility: hidden; }
 .hd-nav .muted { text-align: center; flex: 1; min-width: 0; }
+
+/* Versión gratis: ejercicios de pago con candado */
+.ex-card.locked .thumb-box img { filter: grayscale(.85) brightness(.6); }
+.ex-card.locked .ex-name, .ex-card.locked .ex-zone { opacity: .55; }
+.lock-mark { position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none; }
+.lock-mark svg { width: 34px; height: 34px; padding: 9px; border-radius: 50%; background: rgb(0 0 0 / .55); color: #fff; }
+.select-btn.premium { color: var(--warn, #F5A524); border-color: color-mix(in srgb, var(--warn, #F5A524) 45%, transparent); }
+.tv-tile.locked img, .hd-row.locked img { filter: grayscale(.85) brightness(.6); }
+.paywall .bar { margin-bottom: -24px; }
+.pw-top { padding-top: 8px; }
+.pw-free { margin: 0; text-align: center; }
+.pw-preview { margin: 0; }
+.pw-home { width: 100%; text-align: left; color: var(--fg); cursor: pointer; }
+.pw-home strong { color: var(--accent); }
