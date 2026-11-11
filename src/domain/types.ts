@@ -123,6 +123,9 @@ export function usesWeight(ex: Pick<ExerciseDef, 'motion' | 'equip'>): boolean {
 /** La rutina guarda los ejercicios elegidos de cada apartado en el orden en que se marcaron. */
 export type Routine = Record<SectionId, RoutineItem[]>;
 
+export const FIGURE_STYLES = ['real', 'toon', 'pieces'] as const;
+export type FigureStyle = (typeof FIGURE_STYLES)[number];
+
 export interface Settings {
   /** Pausa entre ejercicios de cada apartado (s). */
   rest: Record<SectionId, number>;
@@ -144,6 +147,8 @@ export interface Settings {
   lang: 'ca' | 'es' | 'en';
   /** Tema de la interfaz. */
   theme: 'dark' | 'light' | 'auto';
+  /** Estilo del maniquí: realista, dibujo (tonos planos y contorno) o de piezas simples. */
+  figureStyle: FigureStyle;
   /** Material que tiene el usuario (los ejercicios sin material se ven siempre). */
   equipment: Equip[];
   /** Metas de la semana en Inicio: minutos y calorías (null = lo de la semana pasada). */
@@ -181,6 +186,7 @@ export const DEFAULT_SETTINGS: Settings = {
   profile: { age: null, height: null, sex: 'h' },
   lang: 'ca',
   theme: 'dark',
+  figureStyle: 'real',
   equipment: [],
   weekGoals: { minutes: 150, kcal: null },
 };

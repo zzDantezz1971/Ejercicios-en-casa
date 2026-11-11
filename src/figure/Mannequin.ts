@@ -2,6 +2,8 @@ import * as THREE from 'three';
 import type { MotionSpec, PropOp } from '../domain/types';
 import { LEN, Motion, type Joints, type Pose, type Side } from './poses';
 import { anatomyMaterial } from './anatomy';
+import { getFigureStyle } from './skinAsset';
+import { toonify } from './toon';
 import { SkinnedFigure, type SkinData } from './SkinnedFigure';
 
 /* Maniquí 3D. Convierte las articulaciones del motor de posturas a 3D:
@@ -205,6 +207,8 @@ export class MannequinScene {
       this.buildGear();
     } else this.buildBody();
     this.buildStage();
+    // estilo dibujo (Configuración); el mapa de músculos de los resúmenes se queda como está
+    if (this.skinData && getFigureStyle() === 'toon' && !anatomy?.map) this.disposables.push(...toonify(this.scene));
     this.placeCamera();
   }
 

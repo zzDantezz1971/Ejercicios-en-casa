@@ -19,3 +19,16 @@ export async function loadSkin(timeoutMs = 6000): Promise<void> {
 export function getSkin(): SkinData | undefined {
   return skin;
 }
+
+/** Estilo del maniquí elegido en Configuración. */
+let style: 'real' | 'toon' | 'pieces' = 'real';
+export function setFigureStyle(s: typeof style): void {
+  style = s;
+}
+export function getFigureStyle(): typeof style {
+  return style;
+}
+/** Cuerpo para dibujar los ejercicios: el de piel, salvo que se haya elegido el maniquí de piezas. */
+export function getFigureSkin(): SkinData | undefined {
+  return style === 'pieces' ? undefined : skin;
+}

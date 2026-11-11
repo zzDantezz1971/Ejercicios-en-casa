@@ -4,7 +4,7 @@ import type { ExerciseDef, MotionSpec } from '../domain/types';
 import { MannequinScene, type Mood, type Palette } from './Mannequin';
 import type { Side } from './poses';
 import type { SkinData } from './SkinnedFigure';
-import { getSkin } from './skinAsset';
+import { getFigureSkin, getFigureStyle, getSkin } from './skinAsset';
 import { muscleWeights } from './anatomy';
 import { EQUIP_INFO } from '../domain/equipment';
 import { strokePath } from '../ui/icons';
@@ -35,7 +35,7 @@ export class FigureView {
   private frozenAt: number | null = null;
   private mood: Mood = 'relaxed';
 
-  constructor(private readonly canvas: HTMLCanvasElement, exercise: ExerciseDef, palette?: Palette, private readonly skin: SkinData | undefined = getSkin()) {
+  constructor(private readonly canvas: HTMLCanvasElement, exercise: ExerciseDef, palette?: Palette, private readonly skin: SkinData | undefined = getFigureSkin()) {
     this.renderer = makeRenderer(canvas);
     this.renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
     this.scene = new MannequinScene(exercise.motion, palette, undefined, skin, skin ? anatomyFor(exercise, undefined) : undefined);
@@ -156,8 +156,8 @@ export class Thumbnails {
   /** Miniatura del ejercicio. */
   get(ex: ExerciseDef): Promise<string> {
     if (ex.pending) return Promise.resolve(pendingThumb(ex));
-    const skin = getSkin();
-    return this.enqueue(`${skin ? 'a' : 'p'}:${ex.id}`, () => this.draw(ex, skin));
+    const skin = getFigureSkin();
+    return this.enqueue(`${skin ? 'a' : 'p'}:${getFigureStyle()}:${ex.id}`, () => this.draw(ex, skin));
   }
 
   /** Cuerpo de pie (de frente o de espaldas) con los músculos coloreados según `weights`. Vacío si no hay cuerpo realista. */

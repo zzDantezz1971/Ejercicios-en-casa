@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-11T10:49:49Z",
+    "es": ["Configuración › Apariencia: nuevo «Estilo del muñeco» para elegir cómo se ve el muñeco de los ejercicios: Realista (el de siempre), Dibujo (tonos planos y contorno) o Piezas (muñeco de piezas simples, sin músculos coloreados)."],
+    "ca": ["Configuració › Aparença: nou «Estil del ninot» per triar com es veu el ninot dels exercicis: Realista (el de sempre), Dibuix (tons plans i contorn) o Peces (ninot de peces simples, sense músculs acolorits)."],
+    "en": ["Settings › Appearance: new “Figure style” to choose how the exercise figure looks: Realistic (as before), Drawing (flat tones and outline) or Pieces (simple jointed figure, without coloured muscles)."]
+  },
+  {
     "fecha": "2026-11-11T10:38:43Z",
     "es": ["Buscador de Editar tabla: también encuentra los ejercicios que piden material que no tienes, y si buscas uno que eliminaste de la lista te lo dice.", "Giros de tronco: brazos doblados y relajados, con las manos delante del pecho, que siguen el giro."],
     "ca": ["Cercador d'Edita la taula: també troba els exercicis que demanen material que no tens, i si en cerques un que vas eliminar de la llista t'ho diu.", "Girs de tronc: braços doblegats i relaxats, amb les mans davant del pit, que segueixen el gir."],

@@ -1,3 +1,4 @@
+import { setFigureStyle } from '../figure/skinAsset';
 import { HeartRate } from '../services/HeartRate';
 import { durableStorage } from '../platform/durable';
 import { CATALOG, SECTIONS } from '../data/catalog';
@@ -81,6 +82,7 @@ export class App {
   }
 
   applySettings(): void {
+    setFigureStyle(this.store.settings.figureStyle);
     this.sounds.enabled = this.store.settings.sound;
     this.voice.enabled = this.store.settings.voice;
     this.haptics.enabled = this.store.settings.sound;

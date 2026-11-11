@@ -231,11 +231,23 @@ export class SettingsScreen implements Screen {
         h('button', { class: 'btn ghost', onclick: () => void restore() }, icon('back'), 'Restaurar copia')));
   }
 
+  /** Estilo del maniquí: realista, dibujo o de piezas. */
+  private figureCard(s: Settings): HTMLElement {
+    const opt = (t: Settings['figureStyle'], label: string) =>
+      h('button', { class: 'seg' + (s.figureStyle === t ? ' on' : ''), 'aria-pressed': String(s.figureStyle === t), onclick: () => this.update({ figureStyle: t }) }, label);
+    return h('section', { class: 'card setting rest-card lang-card' },
+      h('div', { class: 'rest-head' },
+        h('span', { class: 'set-icon' }, icon('user')),
+        h('div', { class: 'set-text' }, h('strong', {}, 'Estilo del muñeco'),
+          h('p', { class: 'muted small' }, 'Cómo se ve el muñeco que hace los ejercicios. El de piezas no colorea los músculos.'))),
+      h('div', { class: 'segmented lang-segs' }, opt('real', 'Realista'), opt('toon', 'Dibujo'), opt('pieces', 'Piezas')));
+  }
+
   private render(): void {
     const s = this.app.store.settings;
     clear(this.body);
     this.body.append(
-      h('h3', { class: 'block-title' }, 'Apariencia'), this.themeCard(s),
+      h('h3', { class: 'block-title' }, 'Apariencia'), this.themeCard(s), this.figureCard(s),
       h('h3', { class: 'block-title' }, 'Idioma'), this.langCard(),
       h('h3', { class: 'block-title' }, 'Tiempos'), this.restCard(s));
     // cuenta atrás y duración inicial: en una sola tarjeta, con el título y el contador en la misma fila
