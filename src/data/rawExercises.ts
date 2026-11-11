@@ -15,8 +15,8 @@ export const QUAD = { tl: -18, ua: 90, fa: 90, th: 90, sn: 180, ft: 180 };      
 export const LYB = { tl: 180, th: 5, sn: 90 };                                   // tumbado en banco plano
 export const SEAT = { th: 5, sn: 90 };                                           // sentado en banco
 export const ROWB = { tl: -20, uaL: 90, faL: 90, thL: 90, snL: 180, ftL: 180, thR: 92, snR: 92 }; // rodilla y mano en el banco
-export const PLH = { tl: -22, ua: 90, fa: 90, th: 158, sn: 158, ft: 90 };         // plancha alta
-export const PLF = { tl: -11.5, ua: 90, fa: 0, th: 168.5, sn: 168.5, ft: 90 };    // plancha de antebrazos
+export const PLH = { tl: -18.2, ua: 90, fa: 90, th: 161.8, sn: 161.8, ft: 90 };         // plancha alta
+export const PLF = { tl: -6.5, ua: 90, fa: 0, th: 173.5, sn: 173.5, ft: 90 };    // plancha de antebrazos
 export const benchLie = (J: Joints, P: PropHelpers): PropOp[] => P.benchFlat(J.head[0] - 4, J.pel[0] + 14);
 export const benchRow = (J: Joints, P: PropHelpers): PropOp[] => P.benchFlat(J.anL[0] - 6, J.haL[0] + 10).map((o) => ({ ...o, z: -9, dep: 18 }));
 export const benchSeat = (J: Joints, P: PropHelpers): PropOp[] => P.benchFlat(J.pel[0] - 22, J.pel[0] + 18);
@@ -152,17 +152,17 @@ export const RAW_SECTIONS: RawSection[] = [
    [{thL:102,snL:96,thR:70,snR:76,sTh:.55,sSh:.15,tu:-48,hd:-52,uaR:90,faR:90,saR:.945,uaL:116,faL:108},180,520],[{thL:102,snL:96,thR:78,snR:84,sTh:.55,sSh:.15,uaL:102,faL:98,uaR:78,faR:82},60,520],
    [{thL:110,snL:104,thR:78,snR:84,sTh:.55,sSh:.15,tu:-132,hd:-128,uaL:90,faL:90,saL:.945,uaR:64,faR:72},180,520],[{thL:102,snL:96,thR:78,snR:84,sTh:.55,sSh:.15,uaL:102,faL:98,uaR:78,faR:82},60,520]]},
  {n:'Plancha lateral',z:'Oblicuos',v:'front',mat:1,f:[
-   [{tl:-162,th:18,sn:18,ft:60,uaL:90,faL:180,uaR:-90,faR:-90,hd:-162},1300,1000],
-   [{tl:-160,th:19,sn:19,ft:60,uaL:90,faL:180,uaR:-92,faR:-92,hd:-160},1300,1000]]},
+   [{tl:-167,th:13,sn:13,ft:40,uaL:90,faL:180,uaR:-90,faR:-90,hd:-167},1300,1000],
+   [{tl:-166.5,th:13.5,sn:13.5,ft:40,uaL:90,faL:180,uaR:-92,faR:-92,hd:-166.5},1300,1000]]},
  {n:'Plancha lateral con elevación de cadera',z:'Oblicuos',v:'front',mat:1,plant:'anR',f:[
-   [{tl:-150,th:5,sn:5,ft:60,uaL:90,faL:180,uaR:20,faR:140,hd:-150},150,900],
-   [{tl:-162,th:18,sn:18,ft:60,uaL:90,faL:180,uaR:20,faR:140,hd:-162},150,900]]},
+   [{tl:-149,th:2,sn:2,ft:40,uaL:90,faL:180,uaR:20,faR:140,hd:-149},150,900],
+   [{tl:-167,th:13,sn:13,ft:40,uaL:90,faL:180,uaR:20,faR:140,hd:-167},150,900]]},
  {g:'Core completo'},
- {n:'Plancha frontal',z:'Core',mat:1,f:[[{...PLF,tl:-6.5,th:173.5,sn:173.5},1300,1000],[{...PLF,tl:-7.5,th:172.5,sn:172.5},1300,1000]]},
+ {n:'Plancha frontal',z:'Core',mat:1,f:[[PLF,1300,1000],[{...PLF,tl:-7.5,th:172.5,sn:172.5},1300,1000]]},
  {n:'Dead bug (bicho muerto)',z:'Core profundo',mat:1,b:['lumbar'],f:[
    [{tl:180,ua:-90,fa:-90,th:-90,sn:0},150,800],[{tl:180,uaR:-90,faR:-90,uaL:-165,faL:-170,thL:-90,snL:0,thR:-15,snR:-12},300,800],
    [{tl:180,ua:-90,fa:-90,th:-90,sn:0},150,800],[{tl:180,uaL:-90,faL:-90,uaR:-165,faR:-170,thR:-90,snR:0,thL:-15,snL:-12},300,800]]},
- {n:'Escaladores',z:'Core y cardio',mat:1,anchor:{j:'haR',y:-3},f:[
+ {n:'Escaladores',z:'Core y cardio',mat:1,anchor:{j:'haR',y:-3},handsDown:3,f:[
    [{...PLH,thR:25,snR:160,ftR:150},0,170],[{...PLH,thR:92,sThR:.42,snR:165,thL:92,sThL:.42,snL:165},0,170],[{...PLH,thL:25,snL:160,ftL:150},0,170],[{...PLH,thR:92,sThR:.42,snR:165,thL:92,sThL:.42,snL:165},0,170]]},
  {g:'Abdomen inferior'},
  {n:'Crunch inverso',z:'Abdomen inferior',mat:1,f:[

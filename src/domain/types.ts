@@ -36,6 +36,8 @@ export interface MotionSpec {
   /** Manos apoyadas en el suelo: no se mueven del sitio donde empiezan y el codo se dobla para llegar
       (número: altura de la muñeca sobre el suelo; true = 3.5). */
   handsDown?: boolean | number;
+  /** Con handsDown: las manos pueden avanzar por el suelo (oso, gusano); solo se fija la altura. */
+  handsSlide?: boolean;
   /** Mancuernas: en una mano, en las dos, o una sola cogida con las dos manos ('two'). */
   db?: 'L' | 'R' | 'both' | 'two';
   mat?: boolean | number | 'top';

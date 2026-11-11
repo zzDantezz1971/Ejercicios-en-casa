@@ -205,7 +205,16 @@ export class Motion {
     // jy: salto (el cuerpo entero sube esa altura sobre su apoyo)
     dy -= pose.jy ?? 0;
     for (const k in J) J[k] = [J[k][0] + dx, J[k][1] + dy];
-    if (this.handsAt) for (const s of ['L', 'R'] as const) handOnFloor(J, s, [this.handsAt[s], this.handsAt.y], LEN.ua * pose['sa' + s], LEN.fa * pose['sa' + s], this.view === 'side');
+    if (this.handsAt) {
+      const hy = this.handsAt.y;
+      for (const s of ['L', 'R'] as const) {
+        // solo la mano que está cerca del suelo; la que se levanta (toques de hombro, apertura en T...) va libre
+        const H = J['ha' + s], w = Math.min(1, Math.max(0, (H[1] - (hy - 16)) / 8));
+        if (w <= 0) continue;
+        const T: Pt = [this.spec.handsSlide ? H[0] : H[0] + (this.handsAt[s] - H[0]) * w, H[1] + (hy - H[1]) * w];
+        handOnFloor(J, s, T, LEN.ua * pose['sa' + s], LEN.fa * pose['sa' + s], this.view === 'side');
+      }
+    }
     return J;
   }
 
