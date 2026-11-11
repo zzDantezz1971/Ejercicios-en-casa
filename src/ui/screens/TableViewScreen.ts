@@ -40,7 +40,7 @@ export class TableViewScreen implements Screen {
       const secs = items.reduce((t, i) => t + i.seconds, 0) * R;
       const head = h('h3', { class: 'hd-sec tv-sec' },
         h('span', { class: 'sec-dot' }, icon(st.icon)), SECTION_TITLES[s],
-        h('span', { class: 'muted small' }, `${plural(items.length, 'ejercicio', 'ejercicios')}${R > 1 ? ` × ${R} vueltas` : ''} · ${humanDuration(secs)}`));
+        h('span', { class: 'muted small' }, `${plural(items.length, 'ejercicio', 'ejercicios')}${R > 1 ? ` x${R} vueltas` : ''} · ${humanDuration(secs)}`));
       head.style.setProperty('--sec', st.color);
       const grid = h('div', { class: 'hd-grid tv-grid' });
       for (const it of items) {

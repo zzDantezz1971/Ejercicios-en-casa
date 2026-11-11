@@ -711,7 +711,7 @@ button.hd-row { width: 100%; color: inherit; font: inherit; cursor: pointer; }
 .mu-line.stretch .mu-dot { background: #00B8A8; }
 
 /* Vueltas */
-.rounds-ctl { display: flex; align-items: center; gap: 8px; width: 100%; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 6px 8px 6px 12px; }
+.rounds-ctl { position: relative; cursor: pointer; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; width: 100%; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 6px 8px 6px 12px; }
 .rounds-ctl > .ico { color: var(--sec, var(--accent)); width: 18px; height: 18px; }
 .rounds-label { flex: 1; font-weight: 700; }
 .rounds-ctl .stepper.inline .secs { min-width: 48px; text-align: center; }
@@ -1325,3 +1325,6 @@ button.wd:active .wd-dot { transform: scale(.92); }
 .pw-preview { margin: 0; }
 .pw-home { width: 100%; text-align: left; color: var(--fg); cursor: pointer; }
 .pw-home strong { color: var(--accent); }
+.rounds-label { display: inline-flex; align-items: center; gap: 6px; }
+.rounds-info { width: 15px; height: 15px; color: var(--muted); }
+.rounds-tip { flex-basis: 100%; margin: 2px 0 4px; padding: 8px 10px; border-radius: 10px; background: var(--accent-soft); font-size: .88rem; line-height: 1.35; color: var(--fg); }

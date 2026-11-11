@@ -126,13 +126,24 @@ export class RoutineScreen implements Screen {
   private roundsControl(): HTMLElement {
     const r = clampRounds(this.app.store.active.rounds?.[this.section]);
     const set = (v: number) => { this.app.store.setRounds(this.section, v); this.refresh(); };
-    return h('div', { class: 'rounds-ctl' },
+    // al tocar el cuadro (no los botones) sale una nota corta que explica qué son las vueltas
+    const tip = h('div', { class: 'rounds-tip', role: 'status', hidden: true },
+      'Cuántas veces seguidas se repiten todos los ejercicios de este apartado. Con x2, por ejemplo, se hace la lista entera dos veces.');
+    let timer = 0;
+    const box: HTMLElement = h('div', { class: 'rounds-ctl', onclick: (ev: Event) => {
+      if ((ev.target as HTMLElement).closest('button')) return;
+      tip.hidden = !tip.hidden;
+      window.clearTimeout(timer);
+      if (!tip.hidden) timer = window.setTimeout(() => (tip.hidden = true), 5000);
+    } },
       icon('swap'),
-      h('span', { class: 'rounds-label' }, 'Vueltas'),
+      h('span', { class: 'rounds-label' }, 'Vueltas', icon('info', 'ico rounds-info')),
       h('div', { class: 'stepper inline' },
         h('button', { 'aria-label': 'Menos vueltas', disabled: r <= 1, onclick: () => set(r - 1) }, '−'),
-        h('span', { class: 'secs' }, `× ${r}`),
-        h('button', { 'aria-label': 'Más vueltas', disabled: r >= MAX_ROUNDS, onclick: () => set(r + 1) }, '+')));
+        h('span', { class: 'secs' }, `x${r}`),
+        h('button', { 'aria-label': 'Más vueltas', disabled: r >= MAX_ROUNDS, onclick: () => set(r + 1) }, '+')),
+      tip);
+    return box;
   }
 
   /** Ejercicios visibles de un apartado, en el orden elegido por el usuario. */

@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-11T21:38:06Z",
+    "es": ["Vueltas: el número se escribe con una x (x1, x2…). Al tocar el cuadro de Vueltas (fuera de + y −) sale una nota que explica qué son."],
+    "ca": ["Voltes: el número s'escriu amb una x (x1, x2…). En tocar el quadre de Voltes (fora de + i −) surt una nota que explica què són."],
+    "en": ["Rounds: the number is written with an x (x1, x2…). Tapping the Rounds box (outside + and −) shows a short note explaining what it means."]
+  },
+  {
     "fecha": "2026-11-11T21:33:27Z",
     "es": ["Peso muerto rumano con barra: la barra ya va por delante de los muslos al estar de pie y baja por delante de las piernas (antes se veía detrás del cuerpo)."],
     "ca": ["Pes mort romanès amb barra: la barra ja va per davant de les cuixes en estar dempeus i baixa per davant de les cames (abans es veia darrere del cos)."],

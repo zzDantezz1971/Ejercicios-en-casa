@@ -191,7 +191,7 @@ export class HomeScreen implements Screen {
       h('span', { class: 'sec-icon' }, icon(st.icon)),
       h('span', { class: 'sec-text' },
         h('strong', {}, SECTION_TITLES[s]),
-        h('span', { class: 'muted small' }, items.length ? `${plural(items.length, 'ejercicio', 'ejercicios')}${R > 1 ? ` × ${R} vueltas` : ''} · ${humanDuration(secs)}` : 'Sin ejercicios · toca para añadir')),
+        h('span', { class: 'muted small' }, items.length ? `${plural(items.length, 'ejercicio', 'ejercicios')}${R > 1 ? ` x${R} vueltas` : ''} · ${humanDuration(secs)}` : 'Sin ejercicios · toca para añadir')),
       icon('chevron', 'ico chev'));
     row.style.setProperty('--sec', st.color);
     return row;
