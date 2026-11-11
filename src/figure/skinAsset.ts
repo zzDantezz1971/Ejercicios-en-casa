@@ -21,7 +21,7 @@ export function getSkin(): SkinData | undefined {
 }
 
 /** Estilo del maniquí elegido en Configuración. */
-let style: 'real' | 'toon' | 'pieces' = 'real';
+let style: 'real' | 'toon' | 'pieces' = 'pieces';
 export function setFigureStyle(s: typeof style): void {
   style = s;
 }

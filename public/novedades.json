@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-11T15:27:31Z",
+    "es": ["El estilo del muñeco por defecto ahora es «Piezas». Puedes cambiarlo en Configuración › Apariencia › Estilo del muñeco."],
+    "ca": ["L'estil del ninot per defecte ara és «Peces». El pots canviar a Configuració › Aparença › Estil del ninot."],
+    "en": ["The default figure style is now “Pieces”. You can change it in Settings › Appearance › Figure style."]
+  },
+  {
     "fecha": "2026-11-11T15:23:58Z",
     "es": ["Dominadas en barra: la barra ya no se queda atrás al subir. Las manos no se separan de ella y es el cuerpo el que sube por detrás, así que la barra queda siempre delante del muñeco (dominadas, negativas, con banda y los ejercicios colgado)."],
     "ca": ["Dominades a la barra: la barra ja no es queda enrere en pujar. Les mans no se'n separen i és el cos el que puja per darrere, així que la barra queda sempre davant del ninot (dominades, negatives, amb banda i els exercicis penjat)."],

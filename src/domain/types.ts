@@ -187,7 +187,7 @@ export const DEFAULT_SETTINGS: Settings = {
   profile: { age: null, height: null, sex: 'h' },
   lang: 'ca',
   theme: 'dark',
-  figureStyle: 'real',
+  figureStyle: 'pieces',
   equipment: [],
   weekGoals: { minutes: 150, kcal: null },
 };
