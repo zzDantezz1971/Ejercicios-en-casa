@@ -673,6 +673,7 @@ const ROWS: Row[] = [
   ['Un ejercicio de cada apartado. Hazte prémium para tenerlos todos.', 'Un exercici de cada apartat. Fes-te prèmium per tenir-los tots.', 'One exercise per section. Go premium to get them all.'],
   ['Hazte prémium', 'Fes-te prèmium', 'Go premium'],
   ['Gratis', 'Gratis', 'Free'],
+  ['Voz, pitidos y cuenta atrás: entrena sin mirar el móvil', 'Veu, xiulets i compte enrere: entrena sense mirar el mòbil', 'Voice, beeps and countdowns: train without looking at your phone'],
   ['Conecta tu reloj y ve las pulsaciones', 'Connecta el teu rellotge i veu les pulsacions', 'Connect your watch and see your heart rate'],
   ['Historial, rachas y medallas para motivarte', 'Historial, ratxes i medalles per motivar-te', 'History, streaks and medals to keep you going'],
   ['Y mucho más', 'I molt més', 'And much more'],
