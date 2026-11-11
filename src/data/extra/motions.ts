@@ -228,7 +228,7 @@ export const EXTRA_MOTIONS: Record<string, M> = {
   'press-frances-en-el-suelo': { mat: 1, db: 'both', f: [
     [{ tl: 180, ...KNEES, ua: -105, fa: -105 }, 150, 1000], [{ tl: 180, ...KNEES, ua: -105, fa: -185 }, 150, 1000]] },
   'peso-muerto-rumano-con-mancuernas': { db: 'both', plant: 'anR', f: [
-    [{ th: 88, sn: 94, ua: 72, fa: 58 }, 250, 1100], [{ tl: -18, th: 84, sn: 96, ua: 80, fa: 72, hd: -32 }, 300, 1100]] },
+    [{ th: 88, sn: 94, ua: 66, fa: 34, zHL: 4, zHR: 4 }, 250, 1100], [{ tl: -18, th: 84, sn: 96, ua: 80, fa: 72, hd: -32 }, 300, 1100]] },
   'sentadilla-goblet-con-mancuerna': { db: 'two', plant: 'anR', f: [
     [{ ua: 75, fa: -60, zHL: 13, zHR: -13, zEL: 6, zER: -6 }, 200, 1000],
     [{ tl: -62, th: 5, sn: 115, ua: 62, fa: -85, zHL: 13, zHR: -13, zEL: 4, zER: -4, hd: -70 }, 250, 1000]] },
@@ -304,7 +304,8 @@ export const EXTRA_MOTIONS: Record<string, M> = {
   'peso-muerto-con-barra': { bar: true, plant: 'anR', f: [
     [{ tl: -30, th: 52, sn: 114, ua: 86, fa: 80, hd: -40 }, 200, 1100], [{ ...BAR_HANG }, 300, 1100]] },
   'peso-muerto-rumano-con-barra': { bar: true, plant: 'anR', f: [
-    [{ th: 88, sn: 94 }, 250, 1100], [{ tl: -18, th: 84, sn: 96, ua: 92, fa: 92, hd: -32 }, 300, 1100]] },
+    // barra delante de los muslos (de pie) y bajando pegada a las piernas por delante
+    [{ th: 88, sn: 94, ua: 72, fa: 56 }, 250, 1100], [{ tl: -18, th: 84, sn: 96, ua: 82, fa: 74, hd: -32 }, 300, 1100]] },
   'zancada-con-barra': { bar: true, f: [
     [{ ...BAR_BACK }, 150, 800], [{ ...BAR_BACK, ...LUNGE_BR }, 250, 800], [{ ...BAR_BACK }, 150, 800], [{ ...BAR_BACK, ...LUNGE_BL }, 250, 800]] },
   'hip-thrust-con-barra': { bar: true, plant: 'anR', props: (J, P) => P.benchFlat(J.neck[0] - 34, J.neck[0] + 2, -J.neck[1] - 7), f: [
