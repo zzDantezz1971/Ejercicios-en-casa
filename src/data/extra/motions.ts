@@ -190,7 +190,7 @@ export const EXTRA_MOTIONS: Record<string, M> = {
   'subida-a-silla': { props: (J, P) => P.benchFlat(J.pel[0] + 16, J.pel[0] + 46, 42), f: [
     [{ ...HIPS }, 150, 650], [{ ...HIPS, thR: -24, snR: 92, ftR: 0 }, 100, 750], [{ ...HIPS, x: 30, jy: 42 }, 250, 750],
     [{ ...HIPS, thR: -24, snR: 92, ftR: 0 }, 100, 650]] },
-  'patada-de-gluteo-en-cuadrupedia': { mat: 1, f: [[QUAD, 200, 700], [{ ...QUAD, thR: 186, snR: 272, ftR: 180 }, 300, 700]] },
+  'patada-de-gluteo-en-cuadrupedia': { mat: 1, handsDown: true, f: [[QUAD, 200, 700], [{ ...QUAD, thR: 186, snR: 272, ftR: 180 }, 300, 700]] },
   'abduccion-de-cadera-tumbado-de-lado': { v: 'front', mat: 1, f: [
     [{ tl: 180, hd: 186, th: 0, sn: 0, ft: -60, uaL: 182, faL: 250, uaR: 20, faR: 20 }, 200, 900],
     [{ tl: 180, hd: 186, thL: 0, snL: 0, thR: -40, snR: -40, ft: -60, uaL: 182, faL: 250, uaR: 20, faR: 20 }, 350, 900]] },
@@ -354,7 +354,7 @@ export const EXTRA_MOTIONS: Record<string, M> = {
   'abduccion-de-cadera-con-banda': { v: 'front', band: 'knees', anchor: { j: 'pel', y: -40 },
     props: (J, P) => [...P.rect(J.pel[0] - 26, -34, 52, 6), ...P.line([J.pel[0] - 20, -29], [J.pel[0] - 20, 0], 4), ...P.line([J.pel[0] + 20, -29], [J.pel[0] + 20, 0], 4)], f: [
     [{ thL: 100, thR: 80, sTh: 0.15, uaL: 120, faL: 60, uaR: 60, faR: 120 }, 200, 800], [{ thL: 116, thR: 64, sTh: 0.15, uaL: 120, faL: 60, uaR: 60, faR: 120 }, 500, 800]] },
-  'patada-de-gluteo-con-banda': { mat: 1, band: 'ankles', f: [[QUAD, 200, 700], [{ ...QUAD, thR: 182, snR: 182, ftR: 90 }, 300, 700]] },
+  'patada-de-gluteo-con-banda': { mat: 1, band: 'ankles', handsDown: true, f: [[QUAD, 200, 700], [{ ...QUAD, thR: 182, snR: 182, ftR: 90 }, 300, 700]] },
   'puente-de-gluteos-con-banda': { mat: 1, band: 'knees', f: [
     [{ ...SUP, ...KNEES, zKL: -3, zKR: 3 }, 300, 1000], [{ ...SUP, tl: 140, tu: 165, th: -18, sn: 76.5, zKL: -5, zKR: 5 }, 900, 1000]] },
   // de lado a la puerta (la banda viene del lado): manos en el pecho y se empujan rectas al frente sin girar
@@ -451,13 +451,13 @@ export const EXTRA_MOTIONS: Record<string, M> = {
     [{ tl: -30, ua: 85, fa: 85, th: 90, sn: 180, ft: 180 }, 200, 1000], [{ tl: -16, hd: -18, ua: 40, fa: 40, th: 128, sn: 180, ft: 180 }, 1500, 1000]] },
 
   // ── Estiramientos ──
-  'postura-de-la-paloma': { mat: 1, f: [
-    [{ tl: -72, tu: -78, hd: -80, ua: 98, fa: 92, thR: 30, snR: 165, sShR: 0.35, zAR: -12, thL: 174, snL: 178, ftL: 180 }, 1600, 1300],
-    [{ tl: -24, tu: -8, hd: 8, ua: 8, fa: 4, thR: 30, snR: 165, sShR: 0.35, zAR: -12, thL: 174, snL: 178, ftL: 180 }, 1600, 1300]] },
+  'postura-de-la-paloma': { mat: 1, handsDown: true, handsSlide: true, f: [
+    [{ tl: -72, tu: -78, hd: -80, ua: 98, fa: 92, thR: 6, snR: 175, sShR: 0.35, zAR: -12, thL: 174, snL: 178, ftL: 180 }, 1600, 1300],
+    [{ tl: -12, tu: 4, hd: 20, ua: 34, fa: 8, thR: 6, snR: 175, sShR: 0.35, zAR: -12, thL: 174, snL: 178, ftL: 180 }, 1600, 1300]] },
   'pecho-en-el-marco-de-la-puerta': { v: 'front', props: (J, P) => [...P.wall(J.elL[0] - 7), ...P.wall(J.elR[0] + 7)], f: [
     [{ uaL: 180, faL: -92, uaR: 0, faR: -88 }, 400, 1100], [{ uaL: 180, faL: -92, uaR: 0, faR: -88, lean: 12 }, 1600, 1100]] },
-  'perro-boca-abajo': { mat: 1, plant: 'haR', f: [
-    [{ ...QUAD, ft: 150 }, 500, 1300], [{ tl: 42, tu: 45, hd: 72, ua: 45, fa: 45, th: 125, sn: 125, ft: 20 }, 1700, 1300]] },
+  'perro-boca-abajo': { mat: 1, plant: 'haR', handsDown: true, f: [
+    [{ ...QUAD, ft: 150, tl: -4 }, 500, 1300], [{ tl: 42, tu: 45, hd: 72, ua: 45, fa: 45, th: 125, sn: 125, ft: 20 }, 1700, 1300]] },
   cobra: { mat: 1, anchor: { j: 'pel', y: -13.1 }, f: [
     [{ ...PRONE, ua: 172, fa: 12 }, 400, 1200], [{ ...PRONE, tl: -6, tu: -60, hd: -64, ua: 158, fa: 36 }, 1500, 1200]] },
   'tibiales-sentado-sobre-los-talones': { mat: 1, f: [

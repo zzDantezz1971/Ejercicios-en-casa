@@ -38,6 +38,8 @@ export interface MotionSpec {
   handsDown?: boolean | number;
   /** Con handsDown: las manos pueden avanzar por el suelo (oso, gusano); solo se fija la altura. */
   handsSlide?: boolean;
+  /** Con handsDown: solo esta mano (la otra se mueve libre, p. ej. hilo en la aguja). */
+  handsDownSide?: 'L' | 'R';
   /** Mancuernas: en una mano, en las dos, o una sola cogida con las dos manos ('two'). */
   db?: 'L' | 'R' | 'both' | 'two';
   mat?: boolean | number | 'top';

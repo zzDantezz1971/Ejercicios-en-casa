@@ -11,7 +11,7 @@ export interface RawSection { id: SectionId; title: string; note: string; groups
 export const SUP = { tl: 180, ua: 0, fa: 0 };                                    // tumbado boca arriba, cabeza a la izquierda
 export const KNEES = { thL: -60, snL: 60, thR: -56, snR: 62 };                   // rodillas dobladas, pies en el suelo
 export const PRONE = { tl: 0, th: 180, sn: 180, ft: 180 };                        // boca abajo, cabeza a la derecha
-export const QUAD = { tl: -18, ua: 90, fa: 90, th: 90, sn: 180, ft: 180 };        // cuadrupedia
+export const QUAD = { tl: -12, ua: 90, fa: 90, th: 90, sn: 180, ft: 180 };        // cuadrupedia
 export const LYB = { tl: 180, th: 5, sn: 90 };                                   // tumbado en banco plano
 export const SEAT = { th: 5, sn: 90 };                                           // sentado en banco
 export const ROWB = { tl: -20, uaL: 90, faL: 90, thL: 90, snL: 180, ftL: 180, thR: 92, snR: 92 }; // rodilla y mano en el banco
@@ -197,7 +197,7 @@ export const RAW_SECTIONS: RawSection[] = [
    [{tl:-128,tu:-120,hd:-100,ua:118,fa:100,sa:.9,th:-25,sn:65},500,1200],
    [{tl:-165,tu:-168,hd:-210,ua:95,fa:88,sa:.9,th:0,sn:90},1500,1200]]},
  {g:'Espalda alta y costados'},
- {n:'Hilo en la aguja',z:'Espalda alta',mat:1,f:[
+ {n:'Hilo en la aguja',z:'Espalda alta',mat:1,handsDown:true,handsDownSide:'L',f:[
    [{...QUAD,uaR:-90,faR:-90,hd:-40},600,1100],[{...QUAD,tu:-8,uaR:120,faR:150,hd:40},900,1100]]},
  {n:'Inclinación lateral de pie',split:true,z:'Costados y espalda',v:'front',f:[
    [{tl:-92,tu:-112,uaL:-100,faL:-122,uaR:-122,faR:-142},1300,1000],[{uaL:-95,faL:-86,uaR:-85,faR:-94},300,1000],
@@ -236,7 +236,7 @@ export const RAW_SECTIONS: RawSection[] = [
    [{uaL:-112,faL:-104,uaR:-68,faR:-76,thL:96,snL:76,thR:86,snR:104,sThL:.4,sThR:.4,sShL:.55,sShR:.45},250,1100],
    [{uaL:-112,faL:-104,uaR:-68,faR:-76,thL:176,snL:62,thR:166,snR:88,sThL:.95,sThR:.97,sShL:.7,sShR:.85,hd:-74},700,1100]]},
  {g:'Fortalecer zona lumbar (espalda sana)'},
- {n:'Bird-dog (perro de caza)',z:'Lumbar y core',mat:1,b:['lumbar'],f:[
+ {n:'Bird-dog (perro de caza)',z:'Lumbar y core',mat:1,b:['lumbar'],handsDown:true,f:[
    [QUAD,200,900],[{...QUAD,uaL:-5,faL:-5,thR:182,snR:182},1200,900],
    [QUAD,200,900],[{...QUAD,uaR:-5,faR:-5,thL:182,snL:182},1200,900]]},
  {n:'Puente de glúteos',z:'Glúteos y lumbar',mat:1,b:['lumbar'],f:[

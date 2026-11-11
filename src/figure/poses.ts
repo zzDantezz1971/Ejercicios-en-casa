@@ -208,6 +208,7 @@ export class Motion {
     if (this.handsAt) {
       const hy = this.handsAt.y;
       for (const s of ['L', 'R'] as const) {
+        if (this.spec.handsDownSide && this.spec.handsDownSide !== (this.mirrored ? (s === 'L' ? 'R' : 'L') : s)) continue;
         // solo la mano que está cerca del suelo; la que se levanta (toques de hombro, apertura en T...) va libre
         const H = J['ha' + s], w = Math.min(1, Math.max(0, (H[1] - (hy - 16)) / 8));
         if (w <= 0) continue;
