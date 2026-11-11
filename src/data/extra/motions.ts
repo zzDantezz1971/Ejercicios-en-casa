@@ -25,7 +25,8 @@ const SUMO_DOWN = { thL: 152, snL: 96, thR: 28, snR: 84, ftL: 170, ftR: 10, uaL:
 const HANG = { ua: -90, fa: -90, th: 96, sn: 112, ft: 60 }; // colgado de la barra
 const CHIN = { ua: 120, fa: -70, th: 96, sn: 112, ft: 60, hd: -96 }; // barbilla por encima de la barra
 const pullBar = (J: Record<string, [number, number]>, P: import('../../domain/types').PropHelpers) =>
-  P.rect(J.haR[0] - 2, J.haR[1] - 3, 4, 4).map((o) => ({ ...o, dep: 96 }));
+  // barra de dominadas: de color vivo y algo más gruesa para que se vea bien sobre el fondo oscuro
+  P.rect(J.haR[0] - 2.5, J.haR[1] - 3.5, 5, 5).map((o) => ({ ...o, dep: 96, color: '#F5A524' }));
 // el step: 17 cm de alto y ancho de verdad (en profundidad), para que quepan los dos pies separados
 const stepBox = (P: import('../../domain/types').PropHelpers, x: number, w: number) => P.rect(x, -17, w, 17).map((o) => ({ ...o, dep: 76 }));
 const STEP = (x0: number) => (J: Record<string, [number, number]>, P: import('../../domain/types').PropHelpers) => stepBox(P, J.pel[0] + x0, 34);

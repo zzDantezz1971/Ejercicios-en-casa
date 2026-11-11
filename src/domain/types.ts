@@ -75,7 +75,7 @@ export interface MotionSpec {
 }
 
 export type PropOp =
-  | { t: 'rect'; x: number; y: number; w: number; h: number; soft?: boolean; z?: number; dep?: number }
+  | { t: 'rect'; x: number; y: number; w: number; h: number; soft?: boolean; z?: number; dep?: number; color?: string }
   | { t: 'line'; a: [number, number]; b: [number, number]; w: number; soft?: boolean; z?: number; dep?: number };
 
 export interface PropHelpers {

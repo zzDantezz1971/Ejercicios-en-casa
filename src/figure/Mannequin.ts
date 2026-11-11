@@ -352,7 +352,7 @@ export class MannequinScene {
       return;
     }
     if (o.t === 'rect') {
-      const m = this.add(G.box, benchM);
+      const m = this.add(G.box, o.color ? this.mat(o.color, 0.35, 0.2) : benchM);
       const back = view === 'front' && o.soft;
       m.position.set(o.x + o.w / 2, -(o.y + o.h / 2), back ? -16 : z0);
       m.scale.set(o.w, o.h, back ? 6 : dep);
