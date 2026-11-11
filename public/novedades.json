@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-11T09:48:30Z",
+    "es": ["Copia de seguridad: al volver de guardarla en Drive la fecha de la última copia se actualiza. Si el móvil no confirma que se ha guardado, la app te lo pregunta."],
+    "ca": ["Còpia de seguretat: en tornar de desar-la a Drive, la data de l'última còpia s'actualitza. Si el mòbil no confirma que s'ha desat, l'aplicació t'ho pregunta."],
+    "en": ["Backup: after saving it to Drive, the date of your last backup now updates. If the phone doesn’t confirm it was saved, the app asks you."]
+  },
+  {
     "fecha": "2026-11-11T09:39:11Z",
     "es": ["Ajustes › Copia de seguridad: la fecha de la última copia se ve más clara, con cuántos días hace. Sale en naranja si no tienes ninguna o si tiene una semana o más."],
     "ca": ["Configuració › Còpia de seguretat: la data de l'última còpia es veu més clara, amb quants dies fa. Surt en taronja si no en tens cap o si té una setmana o més."],

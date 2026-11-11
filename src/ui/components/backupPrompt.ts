@@ -9,8 +9,14 @@ export const BACKUP_EVERY_DAYS = 7;
 /** Guarda la copia (menú de compartir → Drive). Devuelve true si se guardó. */
 export async function saveBackupNow(app: App): Promise<boolean> {
   app.haptics.tap();
+  const t0 = Date.now();
   const r = await saveBackupFile(app.store.exportBackup());
-  if (r === 'cancelled') return false;
+  if (r === 'cancelled') {
+    // Android a veces da el menú de compartir por cancelado aunque se haya guardado en Drive:
+    // si el menú ha estado abierto un rato (se ha ido a otra app), se pregunta.
+    if (Date.now() - t0 < 1500) return false;
+    if (!(await confirmDialog('¿Se ha guardado la copia?', 'Sí, guardada', 'No'))) return false;
+  }
   app.store.markBackedUp();
   if (r === 'downloaded') await confirmDialog('Copia guardada en Descargas. Puedes subirla a tu Drive desde la app de Drive.', 'Vale', '');
   return true;
