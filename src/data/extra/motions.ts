@@ -447,6 +447,10 @@ export const EXTRA_MOTIONS: Record<string, M> = {
 
 /** Ejercicios de antes (rawExercises.ts) con movimiento nuevo: sustituyen al de allí. */
 export const MOTION_OVERRIDES: Record<string, M> = {
+  // el tronco gira de verdad (la cadera mira al frente) y los brazos, sueltos, lo siguen: uno por delante y otro por detrás
+  'giros-de-tronco': { v: 'front', el: 22, f: [
+    [{ thL: 96, snL: 96, thR: 84, snR: 84, tw: 55, hd: -90, uaL: 112, faL: 150, zEL: 10, zHL: 22, uaR: 62, faR: 40, zER: -6, zHR: -10 }, 80, 650],
+    [{ thL: 96, snL: 96, thR: 84, snR: 84, tw: -55, hd: -90, uaR: 68, faR: 30, zER: 10, zHR: 22, uaL: 118, faL: 140, zEL: -6, zHL: -10 }, 80, 650]] },
   // de lado a una pared (detrás, paralela a la vista), apoyado con la mano de ese lado; la otra en la cintura
   'balanceo-de-pierna-adelante-y-atras': { props: (J) => [{ t: 'rect', x: J.pel[0] - 30, y: -135, w: 60, h: 135, z: -34, dep: 4 }], f: [
     [{ uaL: 92, faL: 80, zEL: -14, zHL: -26, uaR: 118, faR: 28, thR: -25, snR: -15 }, 60, 700],

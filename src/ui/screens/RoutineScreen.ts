@@ -260,7 +260,7 @@ export class RoutineScreen implements Screen {
       // Búsqueda en todos los apartados
       let found = 0;
       for (const sec of this.app.sections) {
-        const hits = this.visible(sec.id).filter((e) => normalize(`${e.name} ${e.zone} ${e.group ? tr(e.group) : ''}`).includes(q));
+        const hits = this.visible(sec.id).filter((e) => normalize(`${e.name} ${tr(e.name)} ${e.zone} ${tr(e.zone)} ${e.group ? tr(e.group) : ''}`).includes(q));
         if (!hits.length) continue;
         found += hits.length;
         this.list.append(h('h2', { class: 'group-title' }, sec.title));
@@ -387,6 +387,6 @@ export class RoutineScreen implements Screen {
 }
 
 function normalize(t: string): string {
-  return t.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  return t.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[’‘´`]/g, "'").replace(/·/g, '').toLowerCase();
 }
 
