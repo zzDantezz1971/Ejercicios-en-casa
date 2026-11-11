@@ -661,7 +661,7 @@ const ROWS: Row[] = [
   ['Desbloquea todos los ejercicios', 'Desbloqueja tots els exercicis', 'Unlock every exercise'],
   ['Pruébalo gratis {d} días. Después, elige cómo seguir.', 'Prova-ho gratis {d} dies. Després, tria com continuar.', 'Try it free for {d} days. Then choose how to continue.'],
   ['Elige un plan para tenerlo todo.', 'Tria un pla per tenir-ho tot.', 'Choose a plan to get everything.'],
-  ['Arma tus tablas con los que quieras, con o sin material', 'Munta les teves taules amb els que vulguis, amb material o sense', 'Build your routines with any exercise, with or without equipment'],
+  ['Arma tus tablas con los ejercicios que quieras, con o sin material', 'Munta les teves taules amb els exercicis que vulguis, amb material o sense', 'Build your routines with any exercises you like, with or without equipment'],
   ['Sin anuncios y sin límites', 'Sense anuncis i sense límits', 'No ads, no limits'],
   ['Ahora tienes la versión gratis: un ejercicio de cada apartado, con todo lo demás de la app.', 'Ara tens la versió gratuïta: un exercici de cada apartat, amb tota la resta de l’aplicació.', 'You’re on the free version: one exercise per section, with everything else in the app.'],
   ['Vista previa: en la versión web no se puede pagar. La suscripción solo funciona en la app de Google Play.', 'Vista prèvia: a la versió web no es pot pagar. La subscripció només funciona a l’aplicació de Google Play.', 'Preview: you can’t pay in the web version. The subscription only works in the Google Play app.'],
