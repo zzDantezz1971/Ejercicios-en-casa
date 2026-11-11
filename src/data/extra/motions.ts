@@ -417,15 +417,15 @@ export const EXTRA_MOTIONS: Record<string, M> = {
     [{ tl: 168, tu: 160, hd: 150, ua: 165, fa: 165, sa: 0.3, th: 60, sn: 92 }, 1500, 1200], [{ tl: 166, tu: 150, hd: 140, ua: 160, fa: 160, sa: 0.25, th: 60, sn: 92 }, 1500, 1200]] },
 
   // ── Barra de dominadas ──
-  dominadas: { fist: true, anchor: { j: 'haR', y: -172 }, props: pullBar, f: [[HANG, 250, 1100], [CHIN, 300, 1100]] },
-  'dominadas-supinas': { anchor: { j: 'haR', y: -172 }, props: pullBar, f: [[HANG, 250, 1100], [CHIN, 300, 1100]] },
-  'dominadas-negativas': { fist: true, anchor: { j: 'haR', y: -172 }, props: pullBar, f: [[CHIN, 300, 4500], [HANG, 300, 900]] },
-  'dominadas-con-banda': { fist: true, band: 'bar', anchor: { j: 'haR', y: -172 }, props: pullBar, f: [
+  dominadas: { fist: true, plant: 'haR', anchor: { j: 'haR', y: -172 }, props: pullBar, f: [[HANG, 250, 1100], [CHIN, 300, 1100]] },
+  'dominadas-supinas': { plant: 'haR', anchor: { j: 'haR', y: -172 }, props: pullBar, f: [[HANG, 250, 1100], [CHIN, 300, 1100]] },
+  'dominadas-negativas': { fist: true, plant: 'haR', anchor: { j: 'haR', y: -172 }, props: pullBar, f: [[CHIN, 300, 4500], [HANG, 300, 900]] },
+  'dominadas-con-banda': { fist: true, band: 'bar', plant: 'haR', anchor: { j: 'haR', y: -172 }, props: pullBar, f: [
     [{ ...HANG, th: 70, sn: 165 }, 250, 1100], [{ ...CHIN, th: 70, sn: 165 }, 300, 1100]] },
-  'retraccion-escapular-colgado': { fist: true, anchor: { j: 'haR', y: -172 }, props: pullBar, f: [[HANG, 300, 700], [{ ...HANG, sa: 0.9, hd: -94 }, 600, 700]] },
-  'elevaciones-de-rodillas-colgado': { fist: true, anchor: { j: 'haR', y: -172 }, props: pullBar, f: [[{ ...HANG, th: 90, sn: 92 }, 200, 900], [{ ...HANG, th: -15, sn: 80, tl: -96 }, 300, 900]] },
-  'elevaciones-de-piernas-colgado': { fist: true, anchor: { j: 'haR', y: -172 }, props: pullBar, f: [[{ ...HANG, th: 90, sn: 92 }, 200, 1000], [{ ...HANG, th: -2, sn: -2, ft: -40, tl: -98 }, 300, 1000]] },
-  'colgarse-de-la-barra': { fist: true, anchor: { j: 'haR', y: -172 }, props: pullBar, f: [[{ ...HANG, th: 90, sn: 92, ft: 70 }, 1400, 1100], [{ ...HANG, th: 91, sn: 92, ft: 72, hd: -94 }, 1400, 1100]] },
+  'retraccion-escapular-colgado': { fist: true, plant: 'haR', anchor: { j: 'haR', y: -172 }, props: pullBar, f: [[HANG, 300, 700], [{ ...HANG, sa: 0.9, hd: -94 }, 600, 700]] },
+  'elevaciones-de-rodillas-colgado': { fist: true, plant: 'haR', anchor: { j: 'haR', y: -172 }, props: pullBar, f: [[{ ...HANG, th: 90, sn: 92 }, 200, 900], [{ ...HANG, th: -15, sn: 80, tl: -96 }, 300, 900]] },
+  'elevaciones-de-piernas-colgado': { fist: true, plant: 'haR', anchor: { j: 'haR', y: -172 }, props: pullBar, f: [[{ ...HANG, th: 90, sn: 92 }, 200, 1000], [{ ...HANG, th: -2, sn: -2, ft: -40, tl: -98 }, 300, 1000]] },
+  'colgarse-de-la-barra': { fist: true, plant: 'haR', anchor: { j: 'haR', y: -172 }, props: pullBar, f: [[{ ...HANG, th: 90, sn: 92, ft: 70 }, 1400, 1100], [{ ...HANG, th: 91, sn: 92, ft: 72, hd: -94 }, 1400, 1100]] },
 
   // ── Comba ──
   'saltar-a-la-comba': { rope: true, per: 620, fn: rope({}) },
