@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-11T19:04:02Z",
+    "es": ["Resumen al terminar: la casilla «Apartado» se cambia por las calorías (kcal), y debajo se muestra tu racha de días seguidos entrenando."],
+    "ca": ["Resum en acabar: la casella «Apartat» es canvia per les calories (kcal), i a sota es mostra la teva ratxa de dies seguits entrenant."],
+    "en": ["Workout summary: the “Section” box is replaced by calories (kcal), and below it shows your streak of consecutive training days."]
+  },
+  {
     "fecha": "2026-11-11T18:55:41Z",
     "es": ["Al abrir un día de entrenamiento desde el calendario (el del Historial o la semana de Inicio), desliza el dedo a la derecha para ver el entrenamiento anterior y a la izquierda para el siguiente. También hay flechas con la fecha de cada uno."],
     "ca": ["En obrir un dia d'entrenament des del calendari (el de l'Historial o la setmana d'Inici), llisca el dit cap a la dreta per veure l'entrenament anterior i cap a l'esquerra per al següent. També hi ha fletxes amb la data de cadascun."],

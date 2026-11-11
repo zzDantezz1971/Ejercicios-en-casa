@@ -656,6 +656,8 @@ const ROWS: Row[] = [
   ['Antes de cada entrenamiento, pantalla para conectar el reloj.', 'Abans de cada entrenament, pantalla per connectar el rellotge.', 'Before each workout, a screen to connect the watch.'],
   ['Última copia: {d}', 'Última còpia: {d}', 'Last backup: {d}'],
   ['Aún no has guardado ninguna copia.', 'Encara no has desat cap còpia.', 'You haven’t saved a backup yet.'],
+  ['Primer día de racha', 'Primer dia de ratxa', 'First day of your streak'],
+  ['Racha de {n} días seguidos', 'Ratxa de {n} dies seguits', '{n}-day streak'],
   ['Desliza para cambiar de día', 'Llisca per canviar de dia', 'Swipe to change day'],
   ['Otros entrenamientos', 'Altres entrenaments', 'Other workouts'],
   ['Entrenamiento anterior', 'Entrenament anterior', 'Previous workout'],

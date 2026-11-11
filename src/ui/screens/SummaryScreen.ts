@@ -8,6 +8,7 @@ import { h, humanDuration, kg } from '../dom';
 import { icon, SECTION_STYLE } from '../icons';
 import { remindersDue, showReminders } from '../components/weightReminder';
 import { finishPhrase } from '../../services/Coach';
+import { streak } from '../dates';
 
 /** Resumen al terminar, con una pequeña celebración si se completó. */
 export class SummaryScreen implements Screen {
@@ -40,7 +41,7 @@ export class SummaryScreen implements Screen {
         h('div', { class: 'stats' },
           stat('clock', humanDuration(s.durationSec), 'Tiempo'),
           stat('bolt', `${s.exercisesDone}/${s.exercisesPlanned}`, 'Ejercicios'),
-          stat('target', String(s.sections.length), s.sections.length === 1 ? 'Apartado' : 'Apartados')),
+          stat('flame', s.exercisesDone ? String(this.calories(s, heart)?.kcal ?? '—') : '—', 'kcal')),
         s.sections.length
           ? h('div', { class: 'summary-secs' }, ...s.sections.map((x) => {
               const c = h('span', { class: 'sec-pill' }, icon(SECTION_STYLE[x].icon), SECTION_TITLES[x]);
@@ -49,7 +50,7 @@ export class SummaryScreen implements Screen {
             }))
           : null,
         heart ? h('p', { class: 'hr-summary' }, icon('heart'), `Pulso medio ${heart.avg} · máximo ${heart.max} ppm`) : null,
-        this.kcal(s, heart),
+        this.streakLine(s),
         this.weightTips(s),
         s.exercisesDone ? h('p', { class: 'muted small' }, 'Guardado en el historial.') : null,
         // los recordatorios (peso, copia) salen después, en una ventana, al volver al inicio
@@ -69,12 +70,12 @@ export class SummaryScreen implements Screen {
       sections: s.sections, completed: s.completed, items: s.items, ...(heart ? { heart } : {}) }, { ...this.app.store.settings.profile, weight: this.app.store.currentWeight });
   }
 
-  /** Calorías aproximadas, o cómo verlas si faltan los datos. */
-  private kcal(s: SessionSummary, heart?: HeartSummary | null): HTMLElement | null {
+  /** Racha de días seguidos entrenando (contando el de hoy). */
+  private streakLine(s: SessionSummary): HTMLElement | null {
     if (!s.exercisesDone) return null;
-    const c = this.calories(s, heart);
-    if (!c) return null;
-    return h('p', { class: 'kcal-summary' }, icon('flame'), `Unas ${c.kcal} kcal`, h('span', { class: 'muted small' }, c.method === 'pulso' ? ' · con tu pulso' : ' · estimadas'));
+    const today = { date: s.startedAt.toISOString() } as (typeof this.app.store.history)[number];
+    const n = streak([...this.app.store.history, today]);
+    return h('p', { class: 'kcal-summary' }, icon('calendar'), n === 1 ? 'Primer día de racha' : `Racha de ${n} días seguidos`);
   }
 
   /** Ejercicios en los que ya toca subir de peso. */
@@ -107,6 +108,6 @@ export class SummaryScreen implements Screen {
   }
 }
 
-function stat(ic: 'clock' | 'bolt' | 'target', value: string, label: string): HTMLElement {
+function stat(ic: 'clock' | 'bolt' | 'flame', value: string, label: string): HTMLElement {
   return h('div', { class: 'stat' }, icon(ic), h('span', { class: 'stat-value' }, value), h('span', { class: 'muted small' }, label));
 }
