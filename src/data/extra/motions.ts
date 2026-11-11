@@ -31,7 +31,9 @@ const pullBar = (J: Record<string, [number, number]>, P: import('../../domain/ty
 // el step: 17 cm de alto y ancho de verdad (en profundidad), para que quepan los dos pies separados
 const stepBox = (P: import('../../domain/types').PropHelpers, x: number, w: number) => P.rect(x, -17, w, 17).map((o) => ({ ...o, dep: 76 }));
 const STEP = (x0: number) => (J: Record<string, [number, number]>, P: import('../../domain/types').PropHelpers) => stepBox(P, J.pel[0] + x0, 34);
-const BAR_BACK = { ua: 150, fa: -40 }; // barra sobre la espalda alta
+const BAR_BACK = { ua: 158, fa: -30 }; // barra sobre la espalda alta
+// barra colgando delante de los muslos (brazos algo adelantados, para que no atraviese las piernas)
+const BAR_HANG = { ua: 78, fa: 66 };
 const KB_CHEST = { ua: 75, fa: -60, zHL: 13, zHR: -13, zEL: 6, zER: -6 }; // pesa pegada al pecho
 const ROPE_ARMS = { ua: 98, fa: 35, zHL: -7, zHR: 7, zEL: -3, zER: 3 };
 const rope = (o: { back?: boolean; legs?: 'alt' | 'high'; side?: boolean }) => (t: number) => {
@@ -226,7 +228,7 @@ export const EXTRA_MOTIONS: Record<string, M> = {
   'press-frances-en-el-suelo': { mat: 1, db: 'both', f: [
     [{ tl: 180, ...KNEES, ua: -105, fa: -105 }, 150, 1000], [{ tl: 180, ...KNEES, ua: -105, fa: -185 }, 150, 1000]] },
   'peso-muerto-rumano-con-mancuernas': { db: 'both', plant: 'anR', f: [
-    [{ th: 88, sn: 94 }, 250, 1100], [{ tl: -18, th: 84, sn: 96, ua: 92, fa: 92, hd: -32 }, 300, 1100]] },
+    [{ th: 88, sn: 94, ua: 72, fa: 58 }, 250, 1100], [{ tl: -18, th: 84, sn: 96, ua: 80, fa: 72, hd: -32 }, 300, 1100]] },
   'sentadilla-goblet-con-mancuerna': { db: 'two', plant: 'anR', f: [
     [{ ua: 75, fa: -60, zHL: 13, zHR: -13, zEL: 6, zER: -6 }, 200, 1000],
     [{ tl: -62, th: 5, sn: 115, ua: 62, fa: -85, zHL: 13, zHR: -13, zEL: 4, zER: -4, hd: -70 }, 250, 1000]] },
@@ -300,20 +302,20 @@ export const EXTRA_MOTIONS: Record<string, M> = {
   'sentadilla-con-barra': { bar: true, plant: 'anR', f: [
     [{ ...BAR_BACK }, 200, 1000], [{ tl: -52, th: 5, sn: 114, ua: 188, fa: -2, hd: -62 }, 250, 1000]] },
   'peso-muerto-con-barra': { bar: true, plant: 'anR', f: [
-    [{ tl: -30, th: 52, sn: 114, ua: 92, fa: 92, hd: -40 }, 200, 1100], [{ ua: 90, fa: 90 }, 300, 1100]] },
+    [{ tl: -30, th: 52, sn: 114, ua: 86, fa: 80, hd: -40 }, 200, 1100], [{ ...BAR_HANG }, 300, 1100]] },
   'peso-muerto-rumano-con-barra': { bar: true, plant: 'anR', f: [
     [{ th: 88, sn: 94 }, 250, 1100], [{ tl: -18, th: 84, sn: 96, ua: 92, fa: 92, hd: -32 }, 300, 1100]] },
   'zancada-con-barra': { bar: true, f: [
     [{ ...BAR_BACK }, 150, 800], [{ ...BAR_BACK, ...LUNGE_BR }, 250, 800], [{ ...BAR_BACK }, 150, 800], [{ ...BAR_BACK, ...LUNGE_BL }, 250, 800]] },
   'hip-thrust-con-barra': { bar: true, plant: 'anR', props: (J, P) => P.benchFlat(J.neck[0] - 34, J.neck[0] + 2, -J.neck[1] - 7), f: [
-    [{ tl: -155, hd: -150, th: -25, sn: 80, ua: 30, fa: 20 }, 200, 1000], [{ tl: -182, hd: -170, th: 0, sn: 90, ua: 6, fa: 0 }, 400, 1000]] },
-  'press-militar-con-barra': { bar: true, f: [[{ ua: 70, fa: -112 }, 150, 1000], [{ ua: -88, fa: -90, hd: -94 }, 200, 1000]] },
+    [{ tl: -155, hd: -150, th: -25, sn: 80, ua: 8, fa: -10 }, 200, 1000], [{ tl: -182, hd: -170, th: 0, sn: 90, ua: -14, fa: -22 }, 400, 1000]] },
+  'press-militar-con-barra': { bar: true, f: [[{ ua: 62, fa: -100, hd: -96 }, 150, 1000], [{ ua: -84, fa: -86, hd: -94 }, 200, 1000]] },
   'remo-con-barra': { bar: true, plant: 'anR', f: [
-    [{ tl: -40, th: 80, sn: 100, ua: 90, fa: 90, hd: -50 }, 150, 800], [{ tl: -40, th: 80, sn: 100, ua: 200, fa: 98, hd: -50 }, 200, 800]] },
-  'curl-con-barra': { bar: true, f: [[{}, 150, 850], [{ ua: 85, fa: -50 }, 150, 850]] },
-  'encogimientos-con-barra': { bar: true, f: [[{}, 300, 700], [{ sa: 0.82, hd: -96 }, 500, 700]] },
+    [{ tl: -40, th: 80, sn: 100, ua: 86, fa: 82, hd: -50 }, 150, 800], [{ tl: -40, th: 80, sn: 100, ua: 168, fa: 76, hd: -50 }, 200, 800]] },
+  'curl-con-barra': { bar: true, f: [[{ ...BAR_HANG }, 150, 850], [{ ua: 84, fa: -60 }, 150, 850]] },
+  'encogimientos-con-barra': { bar: true, f: [[{ ...BAR_HANG }, 300, 700], [{ ...BAR_HANG, shu: 6, hd: -96 }, 500, 700]] },
   'press-de-banca-con-barra': { bar: true, anchor: { j: 'pel', y: -40 }, props: benchLie, f: [
-    [{ ...LYB, ua: -90, fa: -90 }, 150, 1000], [{ ...LYB, ua: 30, fa: -90 }, 150, 1000]] },
+    [{ ...LYB, ua: -90, fa: -90 }, 150, 1000], [{ ...LYB, ua: 12, fa: -96 }, 150, 1000]] },
   'press-frances-con-barra': { bar: true, anchor: { j: 'pel', y: -40 }, props: benchLie, f: [
     [{ ...LYB, ua: -105, fa: -105 }, 150, 1000], [{ ...LYB, ua: -105, fa: -190 }, 150, 1000]] },
   'buenos-dias-con-barra': { bar: true, plant: 'anR', f: [
