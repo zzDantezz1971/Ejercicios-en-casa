@@ -1329,4 +1329,3 @@ button.wd:active .wd-dot { transform: scale(.92); }
 .rounds-info { width: 15px; height: 15px; color: var(--muted); }
 .rounds-tip { flex-basis: 100%; margin: 2px 0 4px; padding: 8px 10px; border-radius: 10px; background: var(--accent-soft); font-size: .88rem; line-height: 1.35; color: var(--fg); }
 .pw-pay { margin: 0; font-size: .92rem; }
-.pw-more { padding-left: 28px; color: var(--muted); font-style: italic; }
