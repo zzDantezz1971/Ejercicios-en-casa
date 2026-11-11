@@ -251,11 +251,11 @@ export class Store {
     try {
       raw = JSON.parse(text);
     } catch {
-      throw new Error('El archivo no es una copia de Ejercicios en casa.');
+      throw new Error('El archivo no es una copia de Kasa Fit.');
     }
     const o = raw as Record<string, unknown>;
     if (!o || typeof o !== 'object' || (o.app !== BACKUP_APP && !Array.isArray(o.routines))) {
-      throw new Error('El archivo no es una copia de Ejercicios en casa.');
+      throw new Error('El archivo no es una copia de Kasa Fit.');
     }
     const data = Store.migrate(o);
     if (typeof o.lastBackup === 'string') data.lastBackup = o.lastBackup;

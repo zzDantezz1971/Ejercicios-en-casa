@@ -4,7 +4,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 // android/app/src/main/res/values*/strings.xml.
 const config: CapacitorConfig = {
   appId: 'cat.ejercicisacasa.app',
-  appName: 'Exercicis a casa',
+  appName: 'Kasa Fit',
   webDir: 'dist-android',
   backgroundColor: '#0A0D12',
   android: { allowMixedContent: false },

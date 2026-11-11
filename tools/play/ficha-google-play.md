@@ -12,7 +12,7 @@ Idioma principal: **catalán (ca)**; traducciones: **castellano (es-ES)** e **in
 ## Català
 
 **Nom de l’app** (màx. 30)
-Exercicis a casa
+Kasa Fit: Exercicis a casa
 
 **Descripció breu** (màx. 80)
 Entrena a casa, accés en segons i sense registres. Senzill i sense anuncis.
@@ -47,7 +47,7 @@ En català, castellà i anglès.
 ## Castellano
 
 **Nombre de la app** (máx. 30)
-Ejercicios en casa
+Kasa Fit: Ejercicios en casa
 
 **Descripción breve** (máx. 80)
 Entrena en casa, acceso en segundos y sin registros. Sencillo y sin anuncios.
@@ -82,7 +82,7 @@ En catalán, castellano e inglés.
 ## English
 
 **App name** (max. 30)
-Home Workouts
+Kasa Fit: Home Workout
 
 **Short description** (max. 80)
 Train at home, access in seconds and no sign-up. Simple and ad-free.

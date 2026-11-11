@@ -1,4 +1,4 @@
-# Ejercicios en casa
+# Kasa Fit
 
 App para el móvil (Android) para hacer en casa rutinas de **calentamiento, pesas, abdominales y estiramientos**,
 con un maniquí 3D que enseña cada ejercicio.

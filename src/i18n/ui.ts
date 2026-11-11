@@ -403,7 +403,7 @@ const ROWS: Row[] = [
   ['Copia de seguridad pendiente', 'Còpia de seguretat pendent', 'Backup due'],
   ['Copia guardada', 'Còpia desada', 'Backup saved'],
   ['Guardar en Drive', 'Desa a Drive', 'Save to Drive'],
-  ['El archivo no es una copia de Ejercicios en casa.', 'El fitxer no és una còpia d’Ejercicios en casa.', 'This file isn’t an Ejercicios en casa backup.'],
+  ['El archivo no es una copia de Kasa Fit.', 'El fitxer no és una còpia de Kasa Fit.', 'This file isn’t a Kasa Fit backup.'],
 
   // ── Historial ──
   ['Aún no hay entrenamientos. Cuando termines el primero aparecerá aquí.', 'Encara no hi ha entrenaments. Quan acabis el primer, apareixerà aquí.', 'No workouts yet. When you finish your first one, it will show up here.'],
@@ -701,7 +701,7 @@ const ROWS: Row[] = [
   ['Ahorras 2 meses', 'T’estalvies 2 mesos', 'Save 2 months'],
   ['Código de acceso', 'Codi d’accés', 'Access code'],
   ['Este código no es válido.', 'Aquest codi no és vàlid.', 'This code isn’t valid.'],
-  ['Ejercicios en casa', 'Exercicis a casa', 'Home workouts'],
+  ['Kasa Fit', 'Kasa Fit', 'Kasa Fit'],
   ['Pruébala gratis {d} días. Después, elige cómo seguir.', 'Prova-la gratis {d} dies. Després, tria com continuar.', 'Try it free for {d} days. Then choose how to continue.'],
   ['Elige un plan para empezar a entrenar.', 'Tria un pla per començar a entrenar.', 'Choose a plan to start training.'],
   ['Más de 200 ejercicios con muñeco animado', 'Més de 200 exercicis amb ninot animat', 'Over 200 exercises with an animated figure'],

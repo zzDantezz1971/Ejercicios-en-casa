@@ -16,8 +16,8 @@ export default defineConfig(({ mode }) => ({
       registerType: 'prompt',
       includeAssets: ['icon.svg'],
       manifest: {
-        name: 'Ejercicios en casa',
-        short_name: 'Ejercicios',
+        name: 'Kasa Fit: Ejercicios en casa',
+        short_name: 'Kasa Fit',
         description: 'Rutinas de calentamiento, pesas, abdominales y estiramientos en casa.',
         lang: 'es',
         start_url: './',

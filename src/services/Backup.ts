@@ -21,7 +21,7 @@ export async function saveBackupFile(text: string): Promise<'shared' | 'download
     // App Android: se escribe el archivo y se abre el menú de compartir del sistema (Drive, correo, Archivos…)
     try {
       const { uri } = await Filesystem.writeFile({ path: name, data: text, directory: Directory.Cache, encoding: Encoding.UTF8 });
-      await Share.share({ title: 'Copia de Ejercicios en casa', files: [uri] });
+      await Share.share({ title: 'Copia de Kasa Fit', files: [uri] });
       return 'shared';
     } catch {
       return 'cancelled';
@@ -31,7 +31,7 @@ export async function saveBackupFile(text: string): Promise<'shared' | 'download
   const nav = navigator as Navigator & { canShare?: (d: ShareData) => boolean };
   if (nav.canShare?.({ files: [file] })) {
     try {
-      await nav.share({ files: [file], title: 'Copia de Ejercicios en casa' });
+      await nav.share({ files: [file], title: 'Copia de Kasa Fit' });
       return 'shared';
     } catch (e) {
       if ((e as DOMException)?.name === 'AbortError') return 'cancelled';

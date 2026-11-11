@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-11T22:40:11Z",
+    "es": ["¡La app se llama ahora Kasa Fit! Estrena icono: tejado dorado, una K, FIT y los colores de los cuatro apartados. Si la tienes en la pantalla de inicio, puede que tengas que quitarla y volver a añadirla para ver el icono y el nombre nuevos (tus datos no se pierden)."],
+    "ca": ["L'aplicació ara es diu Kasa Fit! Estrena icona: teulada daurada, una K, FIT i els colors dels quatre apartats. Si la tens a la pantalla d'inici, potser l'hauràs de treure i tornar a afegir per veure la icona i el nom nous (no perds les dades)."],
+    "en": ["The app is now called Kasa Fit! New icon too: a gold roof, a K, FIT and the colours of the four sections. If it’s on your home screen, you may need to remove it and add it again to see the new icon and name (your data is kept)."]
+  },
+  {
     "fecha": "2026-11-11T22:17:06Z",
     "es": ["El icono de la app instalada en la pantalla de inicio se ve más grande, como el de las demás apps."],
     "ca": ["La icona de l'aplicació instal·lada a la pantalla d'inici es veu més gran, com la de les altres aplicacions."],
