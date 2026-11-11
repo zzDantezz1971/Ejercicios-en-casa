@@ -9,7 +9,7 @@ import { checkCode } from './accessCodes';
    de la versión gratis (solo en ese navegador) para ver cómo queda. */
 
 /** Ejercicios gratis: uno de cada apartado. */
-export const FREE_IDS: ReadonlySet<string> = new Set(['saltos-de-tijera-jumping-jacks', 'sentadillas-sin-peso', 'plancha-frontal', 'gato-camello']);
+export const FREE_IDS: ReadonlySet<string> = new Set(['saltos-de-tijera-jumping-jacks', 'flexiones', 'plancha-frontal', 'gato-camello']);
 const PREVIEW_KEY = 'vista-previa-gratis';
 
 /** Producto de suscripción en Play Console y sus dos planes base. */

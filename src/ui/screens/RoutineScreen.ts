@@ -276,7 +276,13 @@ export class RoutineScreen implements Screen {
     let group: string | undefined;
     const owned = new Set<string>(this.app.store.settings.equipment);
     const all = this.ordered(this.section);
-    for (const ex of all.filter((e) => canDo(e.equip, owned))) {
+    // versión gratis: el ejercicio gratis del apartado va el primero, aparte
+    const free = this.app.access.premium ? [] : all.filter((e) => this.app.access.canUse(e.id));
+    if (free.length) {
+      this.list.append(h('h2', { class: 'group-title zone-title' }, icon('check'), 'Gratis'));
+      free.forEach((ex) => this.list.append(this.card(ex)));
+    }
+    for (const ex of all.filter((e) => canDo(e.equip, owned) && !free.includes(e))) {
       if (!custom && ex.group && ex.group !== group) {
         group = ex.group;
         this.list.append(h('h2', { class: 'group-title zone-title' }, zoneIcon(group), group));

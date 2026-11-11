@@ -85,8 +85,7 @@ export class PaywallScreen implements Screen {
         h('span', { class: 'bar-title' }, 'Prémium')),
       h('div', { class: 'welcome-top pw-top' },
         h('img', { class: 'welcome-logo', src: `${import.meta.env.BASE_URL}icon-192.png`, alt: '' }),
-        h('h1', {}, 'Desbloquea todos los ejercicios'),
-        h('p', { class: 'muted' }, trial ? `Pruébalo gratis ${trial} días. Después, elige cómo seguir.` : 'Elige un plan para tenerlo todo.')),
+        h('h1', {}, 'Desbloquea todos los ejercicios')),
       h('ul', { class: 'pw-perks' },
         ...['Más de 200 ejercicios con muñeco animado', 'Arma tus tablas con los que quieras, con o sin material', 'Sin anuncios y sin límites'].map((t) =>
           h('li', {}, icon('check'), t))),
@@ -97,10 +96,10 @@ export class PaywallScreen implements Screen {
           : this.error ? [h('p', { class: 'muted small' }, 'No se han podido cargar los precios de Google Play. Comprueba la conexión y vuelve a intentarlo.')]
           : [...plans.filter((o) => o.plan === 'anual'), ...plans.filter((o) => o.plan !== 'anual')].map(planCard))),
       this.error ? h('button', { class: 'btn ghost block', onclick: () => { this.offers = null; this.error = false; this.render(); void this.load(); } }, 'Reintentar') : null,
-      h('p', { class: 'muted small pw-legal' },
-        'La suscripción se renueva sola y se paga con tu cuenta de Google Play. ' +
-        (trial ? 'Durante la prueba no se cobra nada y puedes cancelar cuando quieras. ' : 'Puedes cancelar cuando quieras. ') +
-        'Se cancela en Google Play › Pagos y suscripciones.'),
+      // condiciones claras (Google lo exige): cobro con la cuenta de Google, renovación automática y cómo cancelar
+      h('p', { class: 'muted small pw-legal' }, trial
+        ? `Los primeros ${trial} días son gratis. Si no cancelas antes, Google Play cobra el plan elegido con el método de pago de tu cuenta de Google y lo renueva cada mes o cada año hasta que lo canceles. Si cancelas durante la prueba, no pagas nada. Se cancela en Google Play › Pagos y suscripciones.`
+        : 'Google Play cobra el plan elegido con el método de pago de tu cuenta de Google y lo renueva cada mes o cada año hasta que lo canceles. Se cancela en Google Play › Pagos y suscripciones.'),
       h('div', { class: 'pw-links' },
         h('button', { class: 'btn ghost small', disabled: this.busy || !CAN_PAY, onclick: () => void this.restore() }, 'Ya estoy suscrito'),
         h('button', { class: 'btn ghost small', onclick: () => { this.showCode = !this.showCode; this.render(); } }, 'Tengo un código')),
