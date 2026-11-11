@@ -5,7 +5,8 @@ Idioma principal: **catalán (ca)**; traducciones: **castellano (es-ES)** e **in
 
 - Política de privacidad: https://zzdantezz1971.github.io/Ejercicios-en-casa/privacidad.html
 - Correo de contacto: exercicisacasa.app@gmail.com
-- Categoría: Salud y forma física · Sin anuncios · Gratis
+- Categoría: Salud y forma física · Sin anuncios · Gratis con compras dentro de la app (suscripción Prémium: 1 €/mes o 10 €/año)
+- En Play Console › Contenido de la app: marcar «Contiene compras dentro de la aplicación».
 
 ---
 
@@ -26,7 +27,7 @@ Res de registres ni de formularis interminables. Obre l’app, tria l’idioma i
 Cada exercici t’explica com es fa i t’assenyala en vermell els músculs que treballes i en turquesa els que estires.
 
 QUÈ POTS FER
-• Crear les teves taules amb 89 exercicis i triar quant dura cadascun i el pes de les manuelles.
+• Crear les teves taules amb més de 200 exercicis i triar quant dura cadascun i el pes de les manuelles.
 • Entrenar amb compte enrere, avisos per veu i vibració, i la pantalla sempre encesa.
 • Connectar un rellotge o un pulsòmetre per Bluetooth i veure el pols mentre entrenes.
 • Consultar l’historial al calendari, els minuts de cada setmana i el resum de cada mes.
@@ -39,6 +40,9 @@ LES TEVES DADES SÓN TEVES
 • Tot es guarda només al teu mòbil, i entra a la còpia automàtica d’Android.
 • Sense anuncis i sense seguiment.
 • Pots fer i recuperar còpies de seguretat quan vulguis.
+
+GRATIS I PRÈMIUM
+Prova-la gratis amb un exercici de cada apartat i totes les funcions. Amb Prèmium (1 € al mes o 10 € l’any) desbloqueges tots els exercicis. Es paga i es cancel·la a Google Play.
 
 En català, castellà i anglès.
 
@@ -61,7 +65,7 @@ Nada de registros ni de formularios interminables. Abres la app, eliges el idiom
 Cada ejercicio te explica cómo se hace y te marca en rojo los músculos que trabajas y en turquesa los que estiras.
 
 QUÉ PUEDES HACER
-• Crear tus tablas con 89 ejercicios y elegir cuánto dura cada uno y el peso de las mancuernas.
+• Crear tus tablas con más de 200 ejercicios y elegir cuánto dura cada uno y el peso de las mancuernas.
 • Entrenar con cuenta atrás, avisos por voz y vibración, y la pantalla siempre encendida.
 • Conectar un reloj o un pulsómetro por Bluetooth y ver tu pulso mientras entrenas.
 • Consultar tu historial en el calendario, los minutos de cada semana y el resumen de cada mes.
@@ -74,6 +78,9 @@ TUS DATOS SON TUYOS
 • Todo se guarda solo en tu móvil, y entra en la copia automática de Android.
 • Sin anuncios y sin seguimiento.
 • Puedes hacer y recuperar copias de seguridad cuando quieras.
+
+GRATIS Y PRÉMIUM
+Pruébala gratis con un ejercicio de cada apartado y todas las funciones. Con Prémium (1 € al mes o 10 € al año) desbloqueas todos los ejercicios. Se paga y se cancela en Google Play.
 
 En catalán, castellano e inglés.
 
@@ -96,7 +103,7 @@ No sign-up and no endless forms. Open the app, pick your language and start trai
 Each exercise explains how to do it and highlights in red the muscles you work and in teal the ones you stretch.
 
 WHAT YOU CAN DO
-• Build your own tables from 89 exercises and choose how long each one lasts and your dumbbell weight.
+• Build your own routines from over 200 exercises and choose how long each one lasts and your dumbbell weight.
 • Train with a countdown, voice and vibration cues, and the screen always on.
 • Connect a watch or heart rate monitor over Bluetooth and see your heart rate as you train.
 • Check your history on the calendar, your minutes each week and your monthly summary.
@@ -109,5 +116,8 @@ YOUR DATA IS YOURS
 • Everything is stored only on your phone, and included in Android’s automatic backup.
 • No ads and no tracking.
 • Make and restore backups whenever you like.
+
+FREE AND PREMIUM
+Try it free with one exercise per section and every feature. With Premium (€1 a month or €10 a year) you unlock every exercise. Payment and cancellation are handled in Google Play.
 
 In Catalan, Spanish and English.
