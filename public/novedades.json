@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-11T11:50:44Z",
+    "es": ["Muñeco de piezas: ahora también lleva la comba, la pesa rusa, la barra, las bandas, el fitball y la rueda (antes no salían)."],
+    "ca": ["Ninot de peces: ara també porta la corda, la pesa russa, la barra, les bandes, el fitball i la roda (abans no sortien)."],
+    "en": ["Pieces figure: it now also shows the jump rope, kettlebell, barbell, bands, fitball and ab wheel (they were missing)."]
+  },
+  {
     "fecha": "2026-11-11T11:48:03Z",
     "es": ["Step en V: ahora cada pie sube a una esquina del step (piernas abiertas en V arriba) y baja al centro; el step es más ancho. Ya no se mueve igual que el step básico.", "Comba: ahora es rosa fuerte y más gruesa, para que se vea bien."],
     "ca": ["Step en V: ara cada peu puja a una cantonada del step (cames obertes en V a dalt) i baixa al centre; el step és més ample. Ja no es mou igual que el step bàsic.", "Corda: ara és rosa intens i més gruixuda, perquè es vegi bé."],

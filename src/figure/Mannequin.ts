@@ -293,6 +293,8 @@ export class MannequinScene {
     P.mouthFlat = this.add(G.box, M.mouth, false);
     P.mouthSmile = this.add(this.geo.smile, M.mouth, false);
     this.buildDumbbells(M.iron);
+    // pesa rusa, barra, bandas, fitball, comba y rueda: también con el maniquí de piezas
+    this.buildGear();
   }
 
   private buildDumbbells(iron: THREE.Material = this.mat(this.pal.iron, 0.32, 0.3)): void {
