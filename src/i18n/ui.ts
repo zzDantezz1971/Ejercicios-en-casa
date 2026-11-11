@@ -675,7 +675,7 @@ const ROWS: Row[] = [
   ['Gratis', 'Gratis', 'Free'],
   ['Conecta tu reloj y ve las pulsaciones', 'Connecta el teu rellotge i veu les pulsacions', 'Connect your watch and see your heart rate'],
   ['Historial, rachas y medallas para motivarte', 'Historial, ratxes i medalles per motivar-te', 'History, streaks and medals to keep you going'],
-  ['… y mucho más', '… i molt més', '… and much more'],
+  ['Y mucho más', 'I molt més', 'And much more'],
   ['Resumen de cada semana y de cada mes', 'Resum de cada setmana i de cada mes', 'Summary of every week and every month'],
   ['Menos de 1 € al mes con el plan anual', 'Menys d’1 € al mes amb el pla anual', 'Less than €1 a month with the yearly plan'],
   ['Un solo pago desbloquea toda la app', 'Un sol pagament desbloqueja tota l’aplicació', 'One payment unlocks the whole app'],
