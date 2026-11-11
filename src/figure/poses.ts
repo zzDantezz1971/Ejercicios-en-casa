@@ -73,6 +73,35 @@ export function joints(v: string, o: Pose): Joints {
   return J;
 }
 
+/** Pone la mano en `T` doblando el codo (el codo, del mismo lado que estaba). Si no llega, brazo estirado hacia ella. */
+function handOnFloor(J: Joints, s: 'L' | 'R', T: Pt, a: number, b: number, side: boolean): void {
+  const S = J['sho' + s], E0 = J['el' + s];
+  const dx = T[0] - S[0], dy = T[1] - S[1];
+  const d = Math.hypot(dx, dy);
+  if (d < 1e-6) return;
+  const ux = dx / d, uy = dy / d;
+  if (d >= a + b - 1e-6) {
+    J['el' + s] = [S[0] + ux * a, S[1] + uy * a];
+    J['ha' + s] = [S[0] + ux * (a + b), S[1] + uy * (a + b)];
+    return;
+  }
+  const along = (a * a - b * b + d * d) / (2 * d);
+  const h = Math.sqrt(Math.max(0, a * a - along * along));
+  const mx = S[0] + ux * along, my = S[1] + uy * along;
+  const e1: Pt = [mx - uy * h, my + ux * h], e2: Pt = [mx + uy * h, my - ux * h];
+  // el codo, del lado donde ya estaba doblado; con el brazo casi recto, hacia atrás (de lado) o hacia fuera (de frente)
+  const sideOf = (p: Pt) => (p[0] - S[0]) * uy - (p[1] - S[1]) * ux;
+  const s0 = sideOf(E0);
+  let pick: Pt;
+  if (Math.abs(s0) > 1.5) pick = Math.sign(sideOf(e1)) === Math.sign(s0) ? e1 : e2;
+  else {
+    const far = (p: Pt) => Math.abs(p[0] - J.pel[0]);
+    pick = side ? (far(e1) < far(e2) ? e1 : e2) : (far(e1) > far(e2) ? e1 : e2);
+  }
+  J['el' + s] = pick;
+  J['ha' + s] = [T[0], T[1]];
+}
+
 function lerp(a: Pose, b: Pose, k: number): Pose {
   const o: Pose = {};
   for (const key in a) o[key] = a[key] + (b[key] - a[key]) * k;
@@ -118,6 +147,8 @@ export class Motion {
   readonly mirrored: boolean;
   private readonly plant?: string;
   private readonly anchor?: { j: string; y: number };
+  /** Manos fijas en el suelo: dónde está cada una (x) y a qué altura queda la muñeca. */
+  private handsAt?: { L: number; R: number; y: number };
 
   constructor(readonly spec: MotionSpec, readonly side: Side = undefined) {
     this.view = spec.v ?? 'side';
@@ -136,6 +167,10 @@ export class Motion {
       this.total = this.frames.reduce((s, x) => s + x.h + x.d, 0);
     }
     if (this.plant) this.plantX = joints(this.view, this.poseAt(0))[this.plant][0];
+    if (spec.handsDown) {
+      const J0 = this.place(this.poseAt(0));
+      this.handsAt = { L: J0.haL[0], R: J0.haR[0], y: -(spec.handsDown === true ? 3.5 : spec.handsDown) };
+    }
   }
 
   poseAt(ms: number): Pose {
@@ -170,6 +205,7 @@ export class Motion {
     // jy: salto (el cuerpo entero sube esa altura sobre su apoyo)
     dy -= pose.jy ?? 0;
     for (const k in J) J[k] = [J[k][0] + dx, J[k][1] + dy];
+    if (this.handsAt) for (const s of ['L', 'R'] as const) handOnFloor(J, s, [this.handsAt[s], this.handsAt.y], LEN.ua * pose['sa' + s], LEN.fa * pose['sa' + s], this.view === 'side');
     return J;
   }
 

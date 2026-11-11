@@ -529,6 +529,17 @@ export class MannequinScene {
         const toOther = J['ha' + (s === 'L' ? 'R' : 'L')].clone().sub(ha);
         const acr = ortho(across, hu);
         if (toOther.lengthSq() > 4 && support > 0.5) thumbSign = Math.sign(acr.dot(toOther)) || sg;
+      } else if (!this.grips && ha.y < 13) {
+        // antebrazo tumbado en el suelo (plancha de antebrazos): mano boca abajo
+        const lying = Math.min(1, Math.max(0, (13 - ha.y) / 5)) * Math.min(1, Math.max(0, (0.45 - Math.abs(u.y)) / 0.2));
+        if (lying > 0) {
+          hu = u.clone().setY(u.y * (1 - lying)).normalize();
+          const flatAcross = V(0, 1, 0).cross(hu).normalize();
+          if (flatAcross.clone().cross(hu).y > 0) flatAcross.negate();
+          across = across.clone().lerp(flatAcross, lying);
+          const toOther = J['ha' + (s === 'L' ? 'R' : 'L')].clone().sub(ha);
+          if (toOther.lengthSq() > 4 && lying > 0.5) thumbSign = Math.sign(ortho(across, hu).dot(toOther)) || sg;
+        }
       }
       const acrossO = ortho(across, hu);
       const palmN = acrossO.clone().cross(hu).normalize();

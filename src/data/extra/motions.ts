@@ -145,7 +145,7 @@ export const EXTRA_MOTIONS: Record<string, M> = {
     [PLS, 300, 900], [{ ...PLS, uaR: 104, faR: 118, zER: -4, zHR: -8, hd: -150 }, 400, 900]] },
 
   // ── Fuerza sin material ──
-  flexiones: { mat: 1, plant: 'haR', f: [[PLH, 200, 750], [PUSH_DOWN, 150, 850]] },
+  flexiones: { mat: 1, plant: 'haR', handsDown: true, f: [[{ ...PLH, tl: -18.2, th: 161.8, sn: 161.8 }, 200, 750], [PUSH_DOWN, 150, 850]] },
   'flexiones-con-rodillas-apoyadas': { mat: 1, plant: 'knR', f: [
     [{ tl: -30, ua: 90, fa: 90, th: 149, sn: 180, ft: 180 }, 200, 750], [{ tl: -8, ua: 150, fa: 30, th: 155, sn: 180, ft: 180 }, 150, 850]] },
   'flexiones-inclinadas-en-silla': { plant: 'haR', anchor: { j: 'haR', y: -42 }, props: (J, P) => P.benchFlat(J.haR[0] - 16, J.haR[0] + 12, 42), f: [

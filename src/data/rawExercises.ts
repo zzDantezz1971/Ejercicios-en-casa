@@ -158,7 +158,7 @@ export const RAW_SECTIONS: RawSection[] = [
    [{tl:-150,th:5,sn:5,ft:60,uaL:90,faL:180,uaR:20,faR:140,hd:-150},150,900],
    [{tl:-162,th:18,sn:18,ft:60,uaL:90,faL:180,uaR:20,faR:140,hd:-162},150,900]]},
  {g:'Core completo'},
- {n:'Plancha frontal',z:'Core',mat:1,f:[[PLF,1300,1000],[{...PLF,tl:-13,th:167,sn:167},1300,1000]]},
+ {n:'Plancha frontal',z:'Core',mat:1,f:[[{...PLF,tl:-6.5,th:173.5,sn:173.5},1300,1000],[{...PLF,tl:-7.5,th:172.5,sn:172.5},1300,1000]]},
  {n:'Dead bug (bicho muerto)',z:'Core profundo',mat:1,b:['lumbar'],f:[
    [{tl:180,ua:-90,fa:-90,th:-90,sn:0},150,800],[{tl:180,uaR:-90,faR:-90,uaL:-165,faL:-170,thL:-90,snL:0,thR:-15,snR:-12},300,800],
    [{tl:180,ua:-90,fa:-90,th:-90,sn:0},150,800],[{tl:180,uaL:-90,faL:-90,uaR:-165,faR:-170,thR:-90,snR:0,thL:-15,snL:-12},300,800]]},
@@ -218,7 +218,7 @@ export const RAW_SECTIONS: RawSection[] = [
    [{ua:92,fa:92,sa:.08,zKL:-7,zAL:-13,zKR:7,zAR:13},250,1000],
    [{tl:-14,tu:-6,hd:20,uaL:96,faL:100,uaR:-88,faR:-88,saR:.95,zKL:-7,zAL:-13,zKR:7,zAR:13},650,1000]]},
  {g:'Zona lumbar'},
- {n:'Gato-camello',z:'Columna',mat:1,f:[[{...QUAD,tl:-38,tu:8,hd:70},400,1300],[{...QUAD,tl:2,tu:-34,hd:-45},400,1300]]},
+ {n:'Gato-camello',z:'Columna',mat:1,handsDown:true,f:[[{...QUAD,tl:-31,tu:15,hd:70},400,1300],[{...QUAD,tl:2,tu:-34,hd:-45},400,1300]]},
  {n:'Postura del niño',z:'Espalda y lumbar',mat:1,f:[
    [{tl:10,tu:15,hd:0,ua:0,fa:0,th:30,sn:180,ft:180},1400,1100],[{tl:7,tu:12,hd:-2,ua:-2,fa:0,th:30,sn:180,ft:180},1400,1100]]},
  {n:'Esfinge',z:'Lumbar',mat:1,f:[
