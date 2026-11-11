@@ -263,8 +263,8 @@ export const RAW_SECTIONS: RawSection[] = [
    [{thL:128,snL:128,thR:62,snR:100,tl:-84,uaL:55,faL:75,uaR:80,faR:100,zKR:12,lean:16},1400,1100],
    [{thL:122,snL:122,thR:55,snR:104,tl:-80,uaL:55,faL:75,uaR:80,faR:100,zKR:14,lean:18},1400,1100]]},
  {n:'Sentadilla sumo profunda',z:'Aductores y cadera',v:'front',f:[
-   [{thL:150,snL:95,thR:30,snR:85,ftL:170,ftR:10,uaL:100,faL:-62,uaR:80,faR:-118,zEL:6,zER:6,zHL:12,zHR:12,zKL:9,zKR:9,lean:14},1400,1100],
-   [{thL:158,snL:97,thR:22,snR:83,ftL:170,ftR:10,uaL:102,faL:-60,uaR:78,faR:-120,zEL:6,zER:6,zHL:12,zHR:12,zKL:10,zKR:10,lean:16},1400,1100]]},
+   [{thL:165,snL:100,thR:15,snR:80,ftL:170,ftR:10,uaL:128,faL:-28,uaR:52,faR:-152,zEL:14,zER:14,zHL:14,zHR:14,zKL:12,zKR:12,lean:42},1400,1100],
+   [{thL:170,snL:102,thR:10,snR:78,ftL:170,ftR:10,uaL:128,faL:-28,uaR:52,faR:-152,zEL:14,zER:14,zHL:14,zHR:14,zKL:13,zKR:13,lean:44},1400,1100]]},
  {n:'Apertura de piernas sentado',z:'Aductores e isquios',v:'front',noGround:1,mat:'top',b:['caution'],f:[
    [{thL:165,snL:165,thR:15,snR:15,ft:-90,uaL:110,faL:95,uaR:70,faR:85},1300,1200],
    [{thL:168,snL:168,thR:12,snR:12,ft:-90,tu:-92,uaL:100,faL:90,uaR:80,faR:90},1300,1200]]},

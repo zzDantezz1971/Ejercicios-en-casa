@@ -81,7 +81,7 @@ export type PropOp =
 export interface PropHelpers {
   benchFlat(x1: number, x2: number, h?: number): PropOp[];
   line(a: [number, number], b: [number, number], w?: number, soft?: boolean): PropOp[];
-  wall(x: number): PropOp[];
+  wall(x: number, h?: number, dep?: number): PropOp[];
   rect(x: number, y: number, w: number, h: number, soft?: boolean): PropOp[];
 }
 

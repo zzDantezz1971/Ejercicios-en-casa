@@ -32,7 +32,7 @@ describe('ejercicios nuevos', () => {
   it('sin nombres repetidos', () => {
     expect(new Set(ids).size).toBe(ids.length);
     const total = SECTIONS.reduce((a, s) => a + s.exercises.length, 0);
-    expect(CATALOG.size).toBe(total + 3); // + los retirados de las listas
+    expect(CATALOG.size).toBe(total + 4); // + los retirados de las listas
   });
   for (const x of EXTRAS) {
     it(x.n, () => {

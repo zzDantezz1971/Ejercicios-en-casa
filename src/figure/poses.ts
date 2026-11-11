@@ -86,7 +86,7 @@ export const PROPS: PropHelpers = {
     { t: 'line', a: [x2 - 6, -h + 5], b: [x2 - 6, 0], w: 4 },
   ],
   line: (a, b, w = 6, soft) => [{ t: 'line', a, b, w, soft }],
-  wall: (x) => [{ t: 'line', a: [x, 0], b: [x, -150], w: 5 }],
+  wall: (x, h = 150, dep) => [{ t: 'line', a: [x, 0], b: [x, -h], w: 5, dep }],
   rect: (x, y, w, h, soft) => [{ t: 'rect', x, y, w, h, soft }],
 };
 

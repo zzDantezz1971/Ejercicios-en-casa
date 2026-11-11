@@ -354,10 +354,12 @@ export class MannequinScene {
       return;
     }
     const a = V(o.a[0], -o.a[1], 0), b = V(o.b[0], -o.b[1], 0);
-    if (Math.abs(a.x - b.x) < 0.5 && Math.max(a.y, b.y) > 120) {
+    if (Math.abs(a.x - b.x) < 0.5 && Math.max(a.y, b.y) > 100) {
+      // pared: alta y ancha por defecto; con dep, un panel más estrecho que no tapa al muñeco
       const m = this.add(G.box, this.mat(this.pal.wall, 0.95));
-      m.position.set(a.x + 4, 75, -30);
-      m.scale.set(8, 150, 140);
+      const top = Math.max(a.y, b.y), wd = o.dep ?? 140;
+      m.position.set(a.x + 4, top / 2, o.dep ? -wd / 2 + 12 : -30);
+      m.scale.set(8, top, wd);
       bb.expandByPoint(V(a.x + 8, 0, 0));
     } else if (o.w >= 6) {
       const m = this.add(G.box, benchM);

@@ -360,7 +360,7 @@ export const EXTRA_MOTIONS: Record<string, M> = {
     [{ x: -30, ...SQUAT_F }, 40, 200], [{ x: -15, jy: 26, ...TUCK_F }, 0, 200], [{ x: 0, jy: 17, ...SQUAT_F }, 40, 200],
     [{ x: 15, jy: 26, ...TUCK_F }, 0, 200], [{ x: 30, ...SQUAT_F }, 40, 200], [{ x: 15, jy: 26, ...TUCK_F }, 0, 200],
     [{ x: 0, jy: 17, ...SQUAT_F }, 40, 200], [{ x: -15, jy: 26, ...TUCK_F }, 0, 200]] },
-  'gemelos-en-el-step': { props: (J, P) => [...P.rect(J.anR[0] - 20, -17, 30, 17), ...P.wall(J.haR[0] + 3)], f: [
+  'gemelos-en-el-step': { props: (J, P) => [...P.rect(J.anR[0] - 20, -17, 30, 17), ...P.wall(J.haR[0] + 3, 20 - J.haR[1], 50)], f: [
     [{ jy: 17, uaR: 4, faR: -6, ftR: 0 }, 300, 900], [{ jy: 17, uaR: 4, faR: -6, ftR: -35, ftL: 10 }, 1600, 900]] },
 
   // ── Fitball ──
