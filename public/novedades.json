@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-11T18:55:41Z",
+    "es": ["Al abrir un día de entrenamiento desde el calendario (el del Historial o la semana de Inicio), desliza el dedo a la derecha para ver el entrenamiento anterior y a la izquierda para el siguiente. También hay flechas con la fecha de cada uno."],
+    "ca": ["En obrir un dia d'entrenament des del calendari (el de l'Historial o la setmana d'Inici), llisca el dit cap a la dreta per veure l'entrenament anterior i cap a l'esquerra per al següent. També hi ha fletxes amb la data de cadascun."],
+    "en": ["When you open a workout day from the calendar (in History or the week on Home), swipe right to see the previous workout and left for the next one. There are also arrows with each date."]
+  },
+  {
     "fecha": "2026-11-11T17:43:24Z",
     "es": ["Preparada la suscripción para la app de Google Play: 1 € al mes o 10 € al año, con días de prueba gratis, y códigos de acceso gratis. En la versión web no cambia nada."],
     "ca": ["Preparada la subscripció per a l'aplicació de Google Play: 1 € al mes o 10 € l'any, amb dies de prova gratis, i codis d'accés gratuïts. A la versió web no canvia res."],

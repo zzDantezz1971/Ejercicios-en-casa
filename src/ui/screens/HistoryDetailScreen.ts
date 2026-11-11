@@ -49,6 +49,14 @@ export class HistoryDetailScreen implements Screen {
     }
 
     const canRepeat = items.some((i) => app.catalog.has(i.exerciseId) && !app.store.hidden.has(i.exerciseId));
+    // entrenamiento anterior y siguiente (por fecha), para pasar de uno a otro deslizando o con las flechas
+    const all = [...app.store.history].sort((a, b) => Date.parse(a.date) - Date.parse(b.date));
+    const pos = all.findIndex((x) => x === e || x.date === e.date);
+    const older = pos > 0 ? all[pos - 1] : null;
+    const newer = pos >= 0 && pos < all.length - 1 ? all[pos + 1] : null;
+    const short = (x: HistoryEntry) => new Date(x.date).toLocaleDateString(LOCALE, { day: 'numeric', month: 'short' });
+    this.older = older;
+    this.newer = newer;
     this.el.append(
       h('header', { class: 'bar sticky' },
         h('button', { class: 'icon-btn', 'aria-label': 'Volver', onclick: () => app.back() }, icon('back')),
@@ -57,6 +65,12 @@ export class HistoryDetailScreen implements Screen {
         e.routineName ? h('span', { class: 'h-name' }, e.routineName) : null,
         h('h2', { class: 'hd-date' }, d.toLocaleDateString(LOCALE, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })),
         h('p', { class: 'muted' }, `De ${hm(d)} a ${hm(end)}`),
+        older || newer
+          ? h('nav', { class: 'hd-nav', 'aria-label': 'Otros entrenamientos' },
+            h('button', { class: 'btn ghost small', disabled: !older, 'aria-label': 'Entrenamiento anterior', onclick: () => this.go(-1) }, icon('back'), older ? short(older) : ''),
+            h('span', { class: 'muted small' }, 'Desliza para cambiar de día'),
+            h('button', { class: 'btn ghost small', disabled: !newer, 'aria-label': 'Entrenamiento siguiente', onclick: () => this.go(1) }, newer ? short(newer) : '', icon('chevron')))
+          : null,
         h('section', { class: 'stats-row hd-stats' + (items.length ? '' : ' two') },
           stat('clock', humanDuration(e.durationSec), 'duración'),
           stat('flame', cal ? `${cal.kcal} kcal` : '—', 'calorías'),
@@ -74,6 +88,37 @@ export class HistoryDetailScreen implements Screen {
         h('button', { class: 'btn ghost block', onclick: () => this.copyToDay() }, icon('copy'), 'Copiar a otro día'),
         h('button', { class: 'btn danger block', onclick: () => void this.remove() }, icon('trash'), 'Borrar este entrenamiento')),
     );
+    if (older || newer) this.swipe();
+  }
+
+  private older: HistoryEntry | null = null;
+  private newer: HistoryEntry | null = null;
+
+  /** Pasa al entrenamiento anterior (-1) o al siguiente (1). */
+  private go(dir: -1 | 1): void {
+    const to = dir < 0 ? this.older : this.newer;
+    if (!to) return;
+    this.app.haptics.tap();
+    this.app.replace(new HistoryDetailScreen(this.app, to), dir < 0 ? 'back' : 'forward');
+  }
+
+  /** Deslizar el dedo a los lados: hacia la izquierda, el siguiente; hacia la derecha, el anterior. */
+  private swipe(): void {
+    let x0 = 0, y0 = 0, t0 = 0, on = false;
+    this.el.addEventListener('touchstart', (ev) => {
+      const t = ev.touches[0];
+      on = ev.touches.length === 1;
+      x0 = t.clientX; y0 = t.clientY; t0 = Date.now();
+    }, { passive: true });
+    this.el.addEventListener('touchend', (ev) => {
+      if (!on) return;
+      on = false;
+      const t = ev.changedTouches[0];
+      const dx = t.clientX - x0, dy = t.clientY - y0;
+      // gesto claramente horizontal, de al menos 60 px y rápido (no un arrastre lento para leer)
+      if (Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy) * 1.6 || Date.now() - t0 > 800) return;
+      this.go(dx < 0 ? 1 : -1);
+    }, { passive: true });
   }
 
   /** Crea un entrenamiento igual en otro día (para recuperar uno que no se guardó). */

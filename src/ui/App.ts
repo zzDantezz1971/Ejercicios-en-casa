@@ -115,12 +115,12 @@ export class App {
   }
 
   /** Sustituye la pantalla actual. */
-  replace(screen: Screen): void {
+  replace(screen: Screen, motion: 'forward' | 'back' | 'fade' = 'fade'): void {
     const old = this.stack.pop();
     old?.leave?.();
     old?.dispose?.();
     this.stack.push(screen);
-    this.show(screen, 'fade');
+    this.show(screen, motion);
   }
 
   /** Deja una única pantalla (una pestaña principal). */

@@ -1305,3 +1305,9 @@ button.wd:active .wd-dot { transform: scale(.92); }
 .pw-code-row { display: flex; gap: 8px; }
 .pw-code-row .text-input { flex: 1; min-width: 0; text-transform: uppercase; letter-spacing: .04em; }
 .pw-err { color: var(--danger); }
+
+/* Detalle de un entrenamiento: pasar al anterior o al siguiente */
+.hd-nav { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.hd-nav .btn { gap: 4px; padding-inline: 10px; min-width: 0; }
+.hd-nav .btn:disabled { visibility: hidden; }
+.hd-nav .muted { text-align: center; flex: 1; min-width: 0; }
