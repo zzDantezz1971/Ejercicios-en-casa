@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-11T11:48:03Z",
+    "es": ["Step en V: ahora cada pie sube a una esquina del step (piernas abiertas en V arriba) y baja al centro; el step es más ancho. Ya no se mueve igual que el step básico.", "Comba: ahora es rosa fuerte y más gruesa, para que se vea bien."],
+    "ca": ["Step en V: ara cada peu puja a una cantonada del step (cames obertes en V a dalt) i baixa al centre; el step és més ample. Ja no es mou igual que el step bàsic.", "Corda: ara és rosa intens i més gruixuda, perquè es vegi bé."],
+    "en": ["V-step: each foot now goes up to a corner of the step (legs open in a V on top) and comes down to the centre; the step is wider. It no longer moves like the basic step.", "Jump rope: now bright pink and thicker so it’s easy to see."]
+  },
+  {
     "fecha": "2026-11-11T10:49:49Z",
     "es": ["Configuración › Apariencia: nuevo «Estilo del muñeco» para elegir cómo se ve el muñeco de los ejercicios: Realista (el de siempre), Dibujo (tonos planos y contorno) o Piezas (muñeco de piezas simples, sin músculos coloreados)."],
     "ca": ["Configuració › Aparença: nou «Estil del ninot» per triar com es veu el ninot dels exercicis: Realista (el de sempre), Dibuix (tons plans i contorn) o Peces (ninot de peces simples, sense músculs acolorits)."],

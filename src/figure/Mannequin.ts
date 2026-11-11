@@ -605,7 +605,13 @@ export class MannequinScene {
     if (spec.bar) this.gear.bar = [this.add(G.cyl, steel), ...many(4, G.cyl, iron)];
     if (spec.band) this.gear.band = many(2, G.cyl, this.mat(this.pal.band, 0.55));
     if (spec.ball) this.gear.ball = [this.add(G.sph, this.mat('#4F7DF0', 0.35))];
-    if (spec.rope) this.gear.rope = many(14, G.cyl, this.mat('#F2A516', 0.5));
+    if (spec.rope) {
+      // comba de color vivo y algo brillante para que se vea sobre el fondo oscuro y sobre el cuerpo
+      const rm = this.mat('#FF2E88', 0.4);
+      rm.emissive = new THREE.Color('#FF2E88');
+      rm.emissiveIntensity = 0.45;
+      this.gear.rope = many(24, G.cyl, rm);
+    }
     if (spec.wheel) this.gear.wheel = [this.add(G.cyl, iron), this.add(G.cyl, steel)];
     if (typeof spec.band === 'function') {
       const J0 = this.motion.place(this.motion.poseAt(0));
@@ -669,7 +675,7 @@ export class MannequinScene {
       P.y = cy - ry * Math.sin(ang);
       const C = P.clone().multiplyScalar(2).sub(a.clone().add(b).multiplyScalar(0.5));
       const pt = (t: number) => a.clone().multiplyScalar((1 - t) ** 2).add(C.clone().multiplyScalar(2 * t * (1 - t))).add(b.clone().multiplyScalar(t * t));
-      g.rope.forEach((m, i) => this.seg(m, pt(i / g.rope.length), pt((i + 1) / g.rope.length), 0.45));
+      g.rope.forEach((m, i) => this.seg(m, pt(i / g.rope.length), pt((i + 1) / g.rope.length), 0.9));
     }
     if (g.wheel) {
       const c = grip('L').lerp(grip('R'), 0.5).add(V(0, -4, 0));

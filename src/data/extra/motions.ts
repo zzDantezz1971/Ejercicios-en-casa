@@ -352,9 +352,11 @@ export const EXTRA_MOTIONS: Record<string, M> = {
   'step-basico': { props: STEP(14), f: [
     [{}, 0, 380], [{ thR: 20, snR: 100, ftR: 0 }, 0, 380], [{ x: 26, jy: 17 }, 0, 380],
     [{ x: 18, jy: 12, thL: 70, snL: 100, thR: 112, snR: 98 }, 0, 300], [{ thL: 20, snL: 100, ftL: 0 }, 0, 380]] },
-  'step-en-v': { props: STEP(14), az: 58, f: [
-    [{}, 0, 380], [{ thR: 20, snR: 100, ftR: 0, zAR: 8, zKR: 6 }, 0, 380], [{ x: 26, jy: 17, zAL: -8, zKL: -6, zAR: 8, zKR: 6 }, 0, 380],
-    [{ x: 18, jy: 12, thL: 70, snL: 100, zAL: -8, zKL: -6, thR: 112, snR: 98 }, 0, 300], [{ thL: 20, snL: 100, ftL: 0, zAL: -8, zKL: -6 }, 0, 380]] },
+  // en V: cada pie sube a una esquina del step (piernas abiertas arriba) y baja al centro (pies juntos abajo)
+  'step-en-v': { props: (J, P) => STEP(14)(J, P).map((o) => ({ ...o, dep: 64 })), az: 58, f: [
+    [{}, 0, 380], [{ thR: 20, snR: 100, ftR: 0, zAR: 22, zKR: 14 }, 0, 380],
+    [{ x: 26, jy: 17, zAL: -22, zKL: -12, zAR: 22, zKR: 12 }, 0, 380],
+    [{ x: 18, jy: 12, thL: 70, snL: 100, zAL: -22, zKL: -14, thR: 112, snR: 98 }, 0, 300], [{ thL: 20, snL: 100, ftL: 0, zAL: -22, zKL: -14 }, 0, 380]] },
   'subidas-al-step': { props: STEP(14), f: [
     [{ ...HIPS }, 150, 600], [{ ...HIPS, thR: 20, snR: 100, ftR: 0 }, 100, 650], [{ ...HIPS, x: 26, jy: 17 }, 250, 650], [{ ...HIPS, thR: 20, snR: 100, ftR: 0 }, 100, 600]] },
   'subida-al-step-con-rodilla-arriba': { props: STEP(14), f: [
