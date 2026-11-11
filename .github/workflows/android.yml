@@ -38,7 +38,10 @@ jobs:
       - run: npm test
       - name: Versión
         run: echo "ANDROID_VERSION_NAME=$(date -u +%Y.%m.%d)-${{ github.run_number }}" >> "$GITHUB_ENV"
+      # clave de los códigos de acceso gratis (secreto ACCESS_CODE_SECRET); sin él, los códigos no funcionan
       - run: npm run build:android
+        env:
+          VITE_ACCESS_SECRET: ${{ secrets.ACCESS_CODE_SECRET }}
       - name: APK de prueba
         working-directory: android
         run: ./gradlew --no-daemon assembleDebug

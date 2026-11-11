@@ -231,6 +231,21 @@ export class SettingsScreen implements Screen {
         h('button', { class: 'btn ghost', onclick: () => void restore() }, icon('back'), 'Restaurar copia')));
   }
 
+  /** Suscripción de la app de Google Play (o acceso con código). */
+  private accessCard(): HTMLElement {
+    const a = this.app.access;
+    const sub = a.kind === 'sub';
+    return h('section', { class: 'card setting rest-card' },
+      h('div', { class: 'rest-head' },
+        h('span', { class: 'set-icon' }, icon('star')),
+        h('div', { class: 'set-text' },
+          h('strong', {}, sub ? 'Suscripción activa' : a.kind === 'code' ? 'Acceso con código' : 'Sin suscripción'),
+          h('p', { class: 'muted small' }, sub
+            ? 'Puedes cambiar de plan o cancelarla en Google Play.'
+            : a.kind === 'code' ? `Código: ${a.codeName ?? ''}. No se te cobra nada.` : ''))),
+      sub ? h('button', { class: 'btn ghost block', onclick: () => void a.manage() }, 'Gestionar en Google Play') : null);
+  }
+
   /** Estilo del maniquí: realista, dibujo o de piezas. */
   private figureCard(s: Settings): HTMLElement {
     const opt = (t: Settings['figureStyle'], label: string) =>
@@ -247,6 +262,7 @@ export class SettingsScreen implements Screen {
     const s = this.app.store.settings;
     clear(this.body);
     this.body.append(
+      ...(IS_NATIVE ? [h('h3', { class: 'block-title' }, 'Suscripción'), this.accessCard()] : []),
       h('h3', { class: 'block-title' }, 'Apariencia'), this.themeCard(s), this.figureCard(s),
       h('h3', { class: 'block-title' }, 'Idioma'), this.langCard(),
       h('h3', { class: 'block-title' }, 'Tiempos'), this.restCard(s));

@@ -13,6 +13,7 @@ import { MedalsScreen } from './ui/screens/MedalsScreen';
 import { ProfileScreen } from './ui/screens/ProfileScreen';
 import { TablesScreen } from './ui/screens/TablesScreen';
 import { WelcomeScreen } from './ui/screens/WelcomeScreen';
+import { PaywallScreen } from './ui/screens/PaywallScreen';
 import { firstRunOfNewVersion, initUpdates, onUpdateReady } from './services/Updates';
 import { showUpdateDialog } from './ui/components/updateDialog';
 import { h } from './ui/dom';
@@ -22,6 +23,9 @@ async function start(): Promise<void> {
   // El cuerpo del maniquí se carga antes de dibujar la primera figura.
   await loadSkin();
   const app = new App(document.getElementById('app')!);
+  // app de Google Play: suscripción o código (con un límite de tiempo por si Google Play no responde)
+  await Promise.race([app.access.init(), new Promise((r) => setTimeout(r, 8000))]);
+  app.setPaywall(() => new PaywallScreen(app));
   app.setTabs({
     inicio: () => new HomeScreen(app),
     tablas: () => new TablesScreen(app),

@@ -1,5 +1,6 @@
 import { setFigureStyle } from '../figure/skinAsset';
 import { HeartRate } from '../services/HeartRate';
+import { Access } from '../services/Access';
 import { durableStorage } from '../platform/durable';
 import { CATALOG, SECTIONS } from '../data/catalog';
 import { Store } from '../domain/Store';
@@ -48,6 +49,9 @@ export class App {
   readonly awake = new ScreenAwake();
   readonly thumbs = new Thumbnails();
   readonly heart = new HeartRate();
+  /** Suscripción o código (solo en la app de Google Play). */
+  readonly access = new Access();
+  private paywall: (() => Screen) | null = null;
   private stack: Screen[] = [];
   private scroll = new WeakMap<Screen, number>();
   private view = h('div', { class: 'view' });
@@ -71,9 +75,18 @@ export class App {
     this.tabFactory = factory;
   }
 
-  /** Abre una pestaña de la barra inferior. */
+  /** Pantalla de suscripción (se registra desde main para no tener dependencias circulares). */
+  setPaywall(factory: () => Screen): void {
+    this.paywall = factory;
+  }
+
+  /** Abre una pestaña de la barra inferior. Sin suscripción ni código, la de suscribirse. */
   openTab(id: TabId): void {
     if (!this.tabFactory) return;
+    if (this.access.locked && this.paywall) {
+      if (!this.current?.el.classList.contains('paywall')) this.home(this.paywall());
+      return;
+    }
     if (this.stack.length === 1 && this.current?.tab === id) {
       window.scrollTo({ top: 0, behavior: 'smooth' });
       return;

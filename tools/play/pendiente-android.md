@@ -9,3 +9,26 @@
 - Gráfico de la ficha de Play sin maniquís (o con el maniquí nuevo).
 - Compilar con el workflow manual de Android y probar el APK.
 - Crear la app en Play Console cuando acabe la verificación; prueba cerrada.
+
+## Suscripción (1 €/mes o 10 €/año, con prueba gratis)
+
+La app ya lo tiene programado (`src/services/Access.ts`, pantalla `PaywallScreen`). Solo afecta a la app de Google Play;
+la web no se cobra. Falta configurarlo en Google:
+
+1. Play Console › Configuración › **Perfil de pagos** (datos fiscales y cuenta bancaria).
+2. Subir la app (aunque sea a prueba interna) para que Play Console deje crear productos.
+3. Monetización › Productos › **Suscripciones** › crear la suscripción con ID **`premium`**.
+4. Dentro, dos **planes base** de renovación automática:
+   - ID **`mensual`**: 1 mes, 1,00 €.
+   - ID **`anual`**: 1 año, 10,00 €.
+5. En cada plan, una **oferta** «Prueba gratis» (7 o 14 días), para usuarios nuevos. Activar los planes y las ofertas.
+6. Para probar sin pagar: Configuración › **Pruebas de licencias** › añadir tu cuenta de Google.
+7. Ficha de Play: indicar que la app tiene compras dentro de la aplicación; en Seguridad de los datos, que los pagos los
+   gestiona Google Play (la app no guarda datos de pago).
+
+## Códigos de acceso gratis
+
+- Generador (privado): https://claude.ai/artifact/EKvF3G6CsbJ1gFWQ4ApaAW — crea la clave y los códigos.
+- La clave va como secreto de GitHub **`ACCESS_CODE_SECRET`** (Settings › Secrets and variables › Actions) antes de
+  compilar la app con el workflow «App Android». Sin ese secreto, los códigos no funcionan.
+- Para anular un código: añadir el nombre a `REVOKED` en `src/services/Access.ts` y publicar una versión nueva.

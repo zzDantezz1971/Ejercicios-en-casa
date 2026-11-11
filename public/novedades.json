@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-11T17:43:24Z",
+    "es": ["Preparada la suscripción para la app de Google Play: 1 € al mes o 10 € al año, con días de prueba gratis, y códigos de acceso gratis. En la versión web no cambia nada."],
+    "ca": ["Preparada la subscripció per a l'aplicació de Google Play: 1 € al mes o 10 € l'any, amb dies de prova gratis, i codis d'accés gratuïts. A la versió web no canvia res."],
+    "en": ["Subscription ready for the Google Play app: €1 a month or €10 a year, with free trial days, plus free access codes. Nothing changes in the web version."]
+  },
+  {
     "fecha": "2026-11-11T15:27:31Z",
     "es": ["El estilo del muñeco por defecto ahora es «Piezas». Puedes cambiarlo en Configuración › Apariencia › Estilo del muñeco."],
     "ca": ["L'estil del ninot per defecte ara és «Peces». El pots canviar a Configuració › Aparença › Estil del ninot."],
