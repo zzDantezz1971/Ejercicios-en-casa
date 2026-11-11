@@ -87,7 +87,7 @@ export class PaywallScreen implements Screen {
         h('img', { class: 'welcome-logo', src: `${import.meta.env.BASE_URL}icon-192.png`, alt: '' }),
         h('h1', {}, 'Desbloquea todos los ejercicios')),
       h('ul', { class: 'pw-perks' },
-        ...['Más de 200 ejercicios con muñeco animado', 'Arma tus tablas con los ejercicios que quieras, con o sin material', 'Sin anuncios y sin límites'].map((t) =>
+        ...['Más de 200 ejercicios con muñeco animado', 'Arma tus tablas con los ejercicios que quieras, con o sin material', 'Conecta tu reloj y ve las pulsaciones', 'Historial, rachas y medallas para motivarte', 'Resumen de cada semana y de cada mes'].map((t) =>
           h('li', {}, icon('check'), t))),
       h('p', { class: 'muted small pw-free' }, 'Ahora tienes la versión gratis: un ejercicio de cada apartado, con todo lo demás de la app.'),
       CAN_PAY ? null : h('p', { class: 'note pw-preview' }, icon('info'), 'Vista previa: en la versión web no se puede pagar. La suscripción solo funciona en la app de Google Play.'),
@@ -95,6 +95,8 @@ export class PaywallScreen implements Screen {
         ...(plans === null ? [h('p', { class: 'muted small' }, 'Cargando precios…')]
           : this.error ? [h('p', { class: 'muted small' }, 'No se han podido cargar los precios de Google Play. Comprueba la conexión y vuelve a intentarlo.')]
           : [...plans.filter((o) => o.plan === 'anual'), ...plans.filter((o) => o.plan !== 'anual')].map(planCard))),
+      this.error ? null : h('ul', { class: 'pw-perks pw-pay' },
+        ...['Menos de 1 € al mes con el plan anual', 'Un solo pago desbloquea toda la app', 'Cancela cuando quieras desde Google Play'].map((t) => h('li', {}, icon('check'), t))),
       this.error ? h('button', { class: 'btn ghost block', onclick: () => { this.offers = null; this.error = false; this.render(); void this.load(); } }, 'Reintentar') : null,
       // condiciones claras (Google lo exige): cobro con la cuenta de Google, renovación automática y cómo cancelar
       h('p', { class: 'muted small pw-legal' }, trial
