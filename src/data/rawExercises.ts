@@ -41,8 +41,9 @@ export const RAW_SECTIONS: RawSection[] = [
  {n:'Giros de tronco',z:'Columna',v:'front',f:[
    [{thL:96,snL:96,thR:84,snR:84,uaL:180,faL:180,uaR:0,faR:0,saR:-.55,hd:-96},80,650],
    [{thL:96,snL:96,thR:84,snR:84,uaL:180,faL:180,uaR:0,faR:0,saL:-.55,hd:-84},80,650]]},
- {n:'Círculos de cadera',z:'Cadera y lumbar',v:'front',per:2600,plant:'anL',fn:t=>{const c=Math.cos(t*Math.PI*2);
-   return {thL:96+8*c,snL:96+8*c,thR:84+8*c,snR:84+8*c,tl:-90-9*c,uaL:130,faL:25,uaR:50,faR:155};}},
+ {n:'Círculos de cadera',z:'Cadera y lumbar',v:'front',az:34,per:2600,plant:'anL',fn:t=>{const c=Math.cos(t*Math.PI*2),s=Math.sin(t*Math.PI*2);
+   // la cadera dibuja un círculo: de lado a lado y, a la vez, adelante (el tronco se va atrás) y atrás (el tronco adelante)
+   return {thL:96+10*c,snL:96+10*c,thR:84+10*c,snR:84+10*c,tl:-90-11*c,lean:8*s,zKL:-4*s,zKR:-4*s,uaL:130,faL:25,uaR:50,faR:155};}},
  {n:'Inclinaciones laterales de tronco',z:'Costados',v:'front',f:[
    [{tl:-95,tu:-116,uaR:-118,faR:-158,uaL:118,faL:70},250,800],[{},100,800],
    [{tl:-85,tu:-64,uaL:298,faL:338,uaR:62,faR:110},250,800],[{},100,800]]},
@@ -54,8 +55,8 @@ export const RAW_SECTIONS: RawSection[] = [
  {n:'Sentadillas sin peso',z:'Piernas y glúteos',plant:'anR',f:[
    [{},200,900],[{tl:-55,th:5,sn:115,ua:0,fa:0,hd:-60},200,900]]},
  {n:'Zancadas alternas',z:'Piernas y glúteos',f:[
-   [{ua:110,fa:-20},150,750],[{ua:110,fa:-20,thR:15,snR:95,thL:115,snL:175,ftL:40},200,750],
-   [{ua:110,fa:-20},150,750],[{ua:110,fa:-20,thL:15,snL:95,thR:115,snR:175,ftR:40},200,750]]},
+   [{ua:118,fa:28},150,750],[{ua:118,fa:28,thR:15,snR:95,thL:115,snL:175,ftL:40},200,750],
+   [{ua:118,fa:28},150,750],[{ua:118,fa:28,thL:15,snL:95,thR:115,snR:175,ftR:40},200,750]]},
  {n:'Balanceo de pierna adelante y atrás',z:'Cadera',f:[
    [{ua:110,fa:-20,thR:-25,snR:-15},60,700],[{ua:110,fa:-20,thR:150,snR:160},60,700]]},
  {n:'Puñetazos al aire',z:'Brazos y hombros',fist:true,f:[

@@ -31,7 +31,7 @@ const BAR_BACK = { ua: 150, fa: -40 }; // barra sobre la espalda alta
 const KB_CHEST = { ua: 75, fa: -60, zHL: 13, zHR: -13, zEL: 6, zER: -6 }; // pesa pegada al pecho
 const ROPE_ARMS = { ua: 98, fa: 35, zHL: -7, zHR: 7, zEL: -3, zER: 3 };
 const rope = (o: { back?: boolean; legs?: 'alt' | 'high'; side?: boolean }) => (t: number) => {
-  const turns = o.legs ? 2 : 1, a = 360 * turns * t, rp = o.back ? -a : a;
+  const turns = o.legs || o.side ? 2 : 1, a = 360 * turns * t, rp = o.back ? -a : a;
   const k = Math.max(0, Math.cos(((a % 360) - 90) * (Math.PI / 180))) ** 2; // salto cuando la comba pasa por abajo
   const odd = Math.floor(a / 360) % 2 === 1;
   const p: Record<string, number> = { rp: rp + 90, jy: 5 * k, ft: 25 + 30 * k, th: 88, sn: 94, ...ROPE_ARMS };
@@ -40,19 +40,28 @@ const rope = (o: { back?: boolean; legs?: 'alt' | 'high'; side?: boolean }) => (
     const s2 = odd ? 'L' : 'R';
     p['th' + s2] = 88 + (lift.th - 88) * k; p['sn' + s2] = 94 + (lift.sn - 94) * k;
   }
-  if (o.side) p.x = odd ? 6 : -6;
+  if (o.side) {
+    // de lado a lado (de perfil, en profundidad): los pies caen cada vez un poco a un lado y al otro
+    const sd = Math.max(-1, Math.min(1, -1.4 * Math.cos((Math.PI * a) / 360)));
+    p.zAL = p.zAR = 13 * sd; p.zKL = p.zKR = 7 * sd;
+  }
   return p;
 };
+// saltos de esquiador (de frente): pies juntos, rodillas dobladas al caer y algo recogidas en el aire
+const SKI_LAND = { sTh: 0.8, zAL: -18, zAR: -18, zKL: 3, zKR: 3, zEL: 4, zER: 4, zHL: 14, zHR: 14 };
+const SKI_AIR = { sTh: 0.72, sSh: 0.92, zAL: -32, zAR: -32, uaL: 100, faL: 96, uaR: 80, faR: 84, zEL: 4, zER: 4, zHL: 14, zHR: 14 };
+const BOX_ST = { thR: 70, snR: 106, thL: 108, snL: 104, ft: 84, lean: 6 }; // guardia: pie izquierdo delante, rodillas flexionadas
 const BEAR = { tl: -12, ua: 88, fa: 88, th: 92, sn: 168, ft: 90 }; // cuadrupedia con rodillas despegadas
 
 export const EXTRA_MOTIONS: Record<string, M> = {
   // ── Calentamiento ──
   'skipping-rodillas-arriba': { f: [
-    [{ thR: -8, snR: 78, uaL: 35, faL: -45, uaR: 130, faR: 105 }, 0, 250], [{ th: 88, sn: 96 }, 0, 190],
-    [{ thL: -8, snL: 78, uaR: 35, faR: -45, uaL: 130, faL: 105 }, 0, 250], [{ th: 88, sn: 96 }, 0, 190]] },
+    [{ thR: -8, snR: 78, uaL: 35, faL: -45, uaR: 130, faR: 105, ft: 70 }, 0, 230], [{ th: 86, sn: 100, jy: 4, ft: 60 }, 0, 170],
+    [{ thL: -8, snL: 78, uaR: 35, faR: -45, uaL: 130, faL: 105, ft: 70 }, 0, 230], [{ th: 86, sn: 100, jy: 4, ft: 60 }, 0, 170]] },
+  // saltos de lado a lado con los pies juntos: cae con las rodillas dobladas, en el aire las piernas recogidas
   'saltos-de-esquiador': { v: 'front', f: [
-    [{ x: -13, thL: 99, snL: 93, thR: 93, snR: 87, tl: -86, uaL: 104, faL: 70, uaR: 84, faR: 58, zEL: 4, zER: 4, zHL: 14, zHR: 14 }, 110, 380],
-    [{ x: 13, thR: 81, snR: 87, thL: 87, snL: 93, tl: -94, uaR: 76, faR: 110, uaL: 96, faL: 122, zEL: 4, zER: 4, zHL: 14, zHR: 14 }, 110, 380]] },
+    [{ x: -24, ...SKI_LAND, uaL: 108, faL: 74, uaR: 88, faR: 62 }, 90, 230], [{ x: 0, jy: 14, ...SKI_AIR }, 0, 230],
+    [{ x: 24, ...SKI_LAND, uaR: 72, faR: 106, uaL: 92, faL: 118 }, 90, 230], [{ x: 0, jy: 14, ...SKI_AIR }, 0, 230]] },
   'circulos-de-rodillas': { plant: 'anR', per: 2200, fn: (t) => {
     const a = t * Math.PI * 2, c = Math.cos(a), s = Math.sin(a);
     return { tl: -30, tu: -34, hd: -58, th: 32 + 6 * c, sn: 106 - 4 * c, zK: 4 * s, ua: 95 + 3 * c, fa: 108 + 2 * c };
@@ -66,9 +75,9 @@ export const EXTRA_MOTIONS: Record<string, M> = {
     [{ thL: 32, snL: 96, ftL: 10, uaR: 50, faR: -20, uaL: 120, faL: 100 }, 40, 220], [{ uaL: 90, faL: 60, uaR: 90, faR: 60 }, 0, 180]] },
   'paso-lateral-con-brazos': { v: 'front', f: [
     [{ x: 0 }, 100, 450],
-    [{ x: -11, thL: 106, snL: 106, thR: 86, snR: 86, uaL: 182, faL: 180, uaR: -2, faR: 0 }, 100, 450],
-    [{ x: -20 }, 100, 450],
-    [{ x: -9, thR: 74, snR: 74, thL: 94, snL: 94, uaL: 182, faL: 180, uaR: -2, faR: 0 }, 100, 450]] },
+    [{ x: -17, thL: 112, snL: 112, thR: 90, snR: 90, uaL: 182, faL: 180, uaR: -2, faR: 0 }, 100, 450],
+    [{ x: -34 }, 100, 450],
+    [{ x: -17, thR: 68, snR: 68, thL: 90, snL: 90, uaL: 182, faL: 180, uaR: -2, faR: 0 }, 100, 450]] },
   'sentadilla-con-brazos-arriba': { plant: 'anR', f: [
     [{ ua: -95, fa: -95, hd: -94 }, 200, 950], [{ tl: -55, th: 5, sn: 115, ua: 0, fa: 0, hd: -62 }, 200, 950]] },
   'zancada-con-giro-de-tronco': { f: [
@@ -86,10 +95,12 @@ export const EXTRA_MOTIONS: Record<string, M> = {
   'saltos-suaves-en-el-sitio': { f: [
     [{ th: 82, sn: 99, ua: 96, fa: 80 }, 0, 200], [{ th: 90, sn: 90, ft: 58, ua: 88, fa: 86 }, 0, 200]] },
   'boxeo-con-desplazamiento': { fist: true, f: [
-    [{ ...GUARD, thR: 76, snR: 100, thL: 104, snL: 96, x: 0 }, 60, 300],
-    [{ ...GUARD, uaR: 2, faR: 0, tw: 20, thR: 76, snR: 100, thL: 104, snL: 96, x: 4 }, 60, 300],
-    [{ ...GUARD, thR: 76, snR: 100, thL: 104, snL: 96, x: 6 }, 60, 300],
-    [{ ...GUARD, uaL: 2, faL: 0, tw: -20, thR: 76, snR: 100, thL: 104, snL: 96, x: 2 }, 60, 300]] },
+    [{ ...GUARD, ...BOX_ST, x: 0 }, 40, 300],
+    [{ ...GUARD, ...BOX_ST, uaR: 2, faR: 0, tw: 20, x: 14 }, 60, 300],
+    [{ ...GUARD, ...BOX_ST, thR: 70, snR: 104, x: 22 }, 40, 300],
+    [{ ...GUARD, ...BOX_ST, uaL: 2, faL: 0, tw: -20, x: 12 }, 60, 300],
+    [{ ...GUARD, ...BOX_ST, thL: 110, snL: 100, x: -4 }, 40, 300],
+    [{ ...GUARD, ...BOX_ST, uaR: 2, faR: 0, tw: 20, x: -10 }, 60, 300]] },
   'rotaciones-de-hombros': { per: 2200, fn: (t) => {
     const a = t * Math.PI * 2;
     // el hombro dibuja un círculo: arriba, atrás, abajo y adelante (y el brazo cuelga de él)
@@ -339,7 +350,7 @@ export const EXTRA_MOTIONS: Record<string, M> = {
   'step-basico': { props: STEP(14), f: [
     [{}, 0, 380], [{ thR: 20, snR: 100, ftR: 0 }, 0, 380], [{ x: 26, jy: 17 }, 0, 380],
     [{ x: 18, jy: 12, thL: 70, snL: 100, thR: 112, snR: 98 }, 0, 300], [{ thL: 20, snL: 100, ftL: 0 }, 0, 380]] },
-  'step-en-v': { props: STEP(14), f: [
+  'step-en-v': { props: STEP(14), az: 58, f: [
     [{}, 0, 380], [{ thR: 20, snR: 100, ftR: 0, zAR: 8, zKR: 6 }, 0, 380], [{ x: 26, jy: 17, zAL: -8, zKL: -6, zAR: 8, zKR: 6 }, 0, 380],
     [{ x: 18, jy: 12, thL: 70, snL: 100, zAL: -8, zKL: -6, thR: 112, snR: 98 }, 0, 300], [{ thL: 20, snL: 100, ftL: 0, zAL: -8, zKL: -6 }, 0, 380]] },
   'subidas-al-step': { props: STEP(14), f: [
@@ -407,7 +418,7 @@ export const EXTRA_MOTIONS: Record<string, M> = {
   'comba-alternando-pies': { rope: true, per: 1240, fn: rope({ legs: 'alt' }) },
   'comba-con-rodillas-altas': { rope: true, per: 1400, fn: rope({ legs: 'high' }) },
   'comba-hacia-atras': { rope: true, per: 680, fn: rope({ back: true }) },
-  'comba-con-saltos-laterales': { rope: true, per: 1300, fn: rope({ side: true, legs: undefined }) },
+  'comba-con-saltos-laterales': { rope: true, az: 62, per: 1300, fn: rope({ side: true, legs: undefined }) },
 
   // ── Rueda abdominal ──
   'rueda-abdominal-de-rodillas': { mat: 1, wheel: true, plant: 'knR', f: [
@@ -436,6 +447,10 @@ export const EXTRA_MOTIONS: Record<string, M> = {
 
 /** Ejercicios de antes (rawExercises.ts) con movimiento nuevo: sustituyen al de allí. */
 export const MOTION_OVERRIDES: Record<string, M> = {
+  // de lado a una pared (detrás, paralela a la vista), apoyado con la mano de ese lado; la otra en la cintura
+  'balanceo-de-pierna-adelante-y-atras': { props: (J) => [{ t: 'rect', x: J.pel[0] - 30, y: -135, w: 60, h: 135, z: -34, dep: 4 }], f: [
+    [{ uaL: 92, faL: 80, zEL: -14, zHL: -26, uaR: 118, faR: 28, thR: -25, snR: -15 }, 60, 700],
+    [{ uaL: 92, faL: 80, zEL: -14, zHL: -26, uaR: 118, faR: 28, thR: 150, snR: 160 }, 60, 700]] },
   // crunch con el tramo de subida del abdominal completo de Mixamo
   'crunch-abdominal': mocapCrunch({ tl: 180, tu: 180, hd: 184, ...KNEES, ua: 2, fa: 2 }, { tu: 203, hd: 214, ua: -10, fa: -10 },
     { mat: 1, anchor: { j: 'pel', y: -12.1 }, az: 20, el: 18 }),
