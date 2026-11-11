@@ -198,7 +198,8 @@ export class Motion {
     if (this.plant) dx = this.plantX - J[this.plant][0];
     if (this.anchor) dy = this.anchor.y - J[this.anchor.j][1];
     else if (this.view !== 'top') {
-      let m = J.head[1] + 10.5;
+      // la cabeza, la pelvis y el pecho tienen grosor: no pueden quedar hundidos en el suelo (tumbado)
+      let m = Math.max(J.head[1] + 10.5, J.pel[1] + 10.5, J.mid[1] + 10.5);
       for (const k in J) if (k !== 'head') m = Math.max(m, J[k][1]);
       dy = -2.6 - m;
     }
