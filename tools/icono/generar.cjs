@@ -31,12 +31,12 @@ const DENS = { ldpi: 36, mdpi: 48, hdpi: 72, xhdpi: 96, xxhdpi: 144, xxxhdpi: 19
   await shot(path.join(root, 'public/icon-192.png'), 192, 1, 'square');
   await shot(path.join(root, 'public/icon-512.png'), 512, 1, 'square');
   // máscara de Android/PWA: el dibujo dentro de la zona segura (80 %)
-  await shot(path.join(root, 'public/icon-maskable-512.png'), 512, 0.86, 'square');
+  await shot(path.join(root, 'public/icon-maskable-512.png'), 512, 1.0, 'square');
   for (const [d, px] of Object.entries(DENS)) {
     await shot(`${RES}/mipmap-${d}/ic_launcher.png`, px, 1, 'rounded');
     await shot(`${RES}/mipmap-${d}/ic_launcher_round.png`, px, 0.82, 'circle');
     // icono adaptable: el dibujo solo, centrado y pequeño (Android recorta los bordes)
-    await shot(`${RES}/mipmap-${d}/ic_launcher_foreground.png`, px, 0.74, 'square', true);
+    await shot(`${RES}/mipmap-${d}/ic_launcher_foreground.png`, px, 0.86, 'square', true);
   }
   await b.close();
   console.log('Iconos generados');
