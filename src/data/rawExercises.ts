@@ -192,7 +192,7 @@ export const RAW_SECTIONS: RawSection[] = [
  {n:'Círculos de brazos hacia delante',z:'Hombros',armsOut:true,per:1150,fn:t=>{const a=90+360*t;return {thL:88,snL:95,thR:88,snR:95,ua:a,fa:a-10,sa:.95};}},
  {n:'Círculos de brazos hacia atrás',z:'Hombros y pecho',armsOut:true,per:1150,fn:t=>{const a=90-360*t;return {thL:88,snL:95,thR:88,snR:95,ua:a,fa:a+10,sa:.95};}},
  {g:'Pecho'},
- {n:'Apertura de pecho con manos atrás',z:'Pecho y hombros',f:[[{ua:140,fa:140},300,900],[{ua:160,fa:162,tu:-96,hd:-104},1400,900]]},
+ {n:'Apertura de pecho con manos atrás',z:'Pecho y hombros',clasp:true,f:[[{ua:140,fa:140,zHL:14,zHR:-14,zEL:5,zER:-5},300,900],[{ua:160,fa:162,tu:-96,hd:-104,zHL:14,zHR:-14,zEL:5,zER:-5},1400,900]]},
  {n:'Mesa invertida',z:'Pecho, hombros y glúteos',mat:1,f:[
    [{tl:-128,tu:-120,hd:-100,ua:118,fa:100,sa:.9,th:-25,sn:65},500,1200],
    [{tl:-165,tu:-168,hd:-210,ua:95,fa:88,sa:.9,th:0,sn:90},1500,1200]]},
@@ -267,8 +267,8 @@ export const RAW_SECTIONS: RawSection[] = [
    [{thL:165,snL:100,thR:15,snR:80,ftL:170,ftR:10,uaL:128,faL:-28,uaR:52,faR:-152,zEL:14,zER:14,zHL:14,zHR:14,zKL:12,zKR:12,lean:42},1400,1100],
    [{thL:170,snL:102,thR:10,snR:78,ftL:170,ftR:10,uaL:128,faL:-28,uaR:52,faR:-152,zEL:14,zER:14,zHL:14,zHR:14,zKL:13,zKR:13,lean:44},1400,1100]]},
  {n:'Apertura de piernas sentado',z:'Aductores e isquios',v:'front',noGround:1,mat:'top',b:['caution'],f:[
-   [{thL:165,snL:165,thR:15,snR:15,ft:-90,uaL:110,faL:95,uaR:70,faR:85},1300,1200],
-   [{thL:168,snL:168,thR:12,snR:12,ft:-90,tu:-92,uaL:100,faL:90,uaR:80,faR:90},1300,1200]]},
+   [{thL:165,snL:165,thR:15,snR:15,ft:-90,lean:26,uaL:102,faL:94,uaR:78,faR:86,zEL:8,zER:8,zHL:22,zHR:22},1300,1200],
+   [{thL:168,snL:168,thR:12,snR:12,ft:-90,lean:38,uaL:98,faL:92,uaR:82,faR:88,zEL:12,zER:12,zHL:32,zHR:32},1300,1200]]},
  {n:'Rana',z:'Aductores y cadera',v:'top',prone:true,mat:'top',top:'Vista desde arriba',f:[
    [{uaL:-115,faL:-85,uaR:-65,faR:-95,thL:180,snL:90,thR:0,snR:90,sTh:.95},1300,1300],
    [{uaL:-125,faL:-88,uaR:-55,faR:-92,thL:176,snL:92,thR:4,snR:88,sTh:.95},1300,1300]]},
