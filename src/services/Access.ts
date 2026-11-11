@@ -122,16 +122,16 @@ export class Access {
 
   /** Precios y prueba gratis de los dos planes, tal como los da Google Play (en la web, de muestra). */
   async offers(): Promise<PlanOffer[]> {
-    if (!IS_NATIVE) return [{ plan: 'anual', price: '10,00 €', trialDays: 7 }, { plan: 'mensual', price: '1,00 €', trialDays: 7 }];
+    if (!IS_NATIVE) return [{ plan: 'anual', price: '10,00 €', trialDays: 0 }, { plan: 'mensual', price: '1,00 €', trialDays: 0 }];
     const { products } = await NativePurchases.getProducts({ productIdentifiers: [SUB_ID], productType: PURCHASE_TYPE.SUBS });
     const out: PlanOffer[] = [];
     for (const plan of Object.keys(PLANS) as PlanId[]) {
       const list = products.filter((p) => p.identifier === PLANS[plan]);
       if (!list.length) continue;
-      // si hay una oferta con prueba gratis, esa (Google solo la da a quien no la ha usado)
-      const trial = list.find((p) => trialDays(p) > 0);
-      const p = trial ?? list[0];
-      out.push({ plan, price: p.priceString, trialDays: trial ? trialDays(trial) : 0, offerToken: p.offerToken });
+      // sin prueba gratis: la versión gratis (un ejercicio por apartado) ya sirve para probar la app.
+      // Si en Play Console hubiera alguna oferta con prueba, se usa el plan base sin ella.
+      const p = list.find((x) => trialDays(x) === 0) ?? list[0];
+      out.push({ plan, price: p.priceString, trialDays: 0, offerToken: p.offerToken });
     }
     return out;
   }

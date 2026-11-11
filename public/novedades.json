@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-11T20:25:25Z",
+    "es": ["Pantalla Prémium: sin prueba gratis (la versión gratis ya sirve para probar la app), así que ya no aparece «7 días gratis». Cada plan dice si se paga cada mes o cada año."],
+    "ca": ["Pantalla Prèmium: sense prova gratis (la versió gratuïta ja serveix per provar l'aplicació), així que ja no surt «7 dies gratis». Cada pla diu si es paga cada mes o cada any."],
+    "en": ["Premium screen: no free trial (the free version already lets you try the app), so “7 days free” no longer appears. Each plan says whether it’s billed monthly or yearly."]
+  },
+  {
     "fecha": "2026-11-11T20:13:10Z",
     "es": ["Versión gratis: el ejercicio gratis de Fuerza ahora son las flexiones (la sentadilla sin peso es de Calentamiento), y en cada apartado el ejercicio gratis sale el primero de la lista. La pantalla Prémium explica mejor la prueba gratis y cómo se cobra."],
     "ca": ["Versió gratuïta: l'exercici gratuït de Força ara són les flexions (l'esquat sense pes és d'Escalfament), i a cada apartat l'exercici gratuït surt el primer de la llista. La pantalla Prèmium explica millor la prova gratis i com es cobra."],

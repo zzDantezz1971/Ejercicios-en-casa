@@ -66,7 +66,7 @@ export class PaywallScreen implements Screen {
       h('button', { class: 'card pw-plan' + (o.plan === 'anual' ? ' best' : ''), disabled: this.busy || !CAN_PAY, onclick: () => void this.buy(o) },
         h('div', { class: 'pw-plan-txt' },
           h('strong', {}, o.plan === 'anual' ? 'Anual' : 'Mensual'),
-          h('span', { class: 'muted small' }, o.trialDays ? `${o.trialDays} días gratis y después ${o.price}` : o.price)),
+          h('span', { class: 'muted small' }, o.trialDays ? `${o.trialDays} días gratis y después ${o.price}` : o.plan === 'anual' ? 'Un pago al año, se renueva cada año' : 'Un pago al mes, se renueva cada mes')),
         h('span', { class: 'pw-price' }, o.price, h('small', {}, o.plan === 'anual' ? '/año' : '/mes')),
         o.plan === 'anual' ? h('span', { class: 'pw-badge' }, 'Ahorras 2 meses') : null);
 

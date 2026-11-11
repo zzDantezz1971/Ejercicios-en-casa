@@ -10,7 +10,7 @@
 - Compilar con el workflow manual de Android y probar el APK.
 - Crear la app en Play Console cuando acabe la verificación; prueba cerrada.
 
-## Suscripción (1 €/mes o 10 €/año, con prueba gratis)
+## Suscripción (1 €/mes o 10 €/año, sin prueba gratis)
 
 La app ya lo tiene programado (`src/services/Access.ts`, pantalla `PaywallScreen`). Modelo: versión gratis con un ejercicio
 de cada apartado (saltos de tijera, flexiones, plancha frontal y gato-camello) y el resto con candado; la
@@ -23,7 +23,7 @@ una vista previa de la versión gratis). Falta configurarlo en Google:
 4. Dentro, dos **planes base** de renovación automática:
    - ID **`mensual`**: 1 mes, 1,00 €.
    - ID **`anual`**: 1 año, 10,00 €.
-5. En cada plan, una **oferta** «Prueba gratis» (7 o 14 días), para usuarios nuevos. Activar los planes y las ofertas.
+5. **Sin oferta de prueba gratis**: la versión gratis de la app ya sirve para probarla. Activar los dos planes.
 6. Para probar sin pagar: Configuración › **Pruebas de licencias** › añadir tu cuenta de Google.
 7. Ficha de Play: indicar que la app tiene compras dentro de la aplicación; en Seguridad de los datos, que los pagos los
    gestiona Google Play (la app no guarda datos de pago).
