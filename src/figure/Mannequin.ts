@@ -654,6 +654,7 @@ export class MannequinScene {
         spec.band === 'hands' ? [[grip('L'), grip('R')]]
         : spec.band === 'knees' ? [[J.knL, J.knR]]
         : spec.band === 'ankles' ? [[J.anL, J.anR]]
+        : spec.band === 'bar' ? [[grip('L'), J.knR.clone().add(V(0, -3, 0))], [grip('R'), J.knR.clone().add(V(0, -3, 0))]]
         : spec.band === 'feet' ? [[grip('L'), J.anL.clone().add(V(0, -2, 0))], [grip('R'), J.anR.clone().add(V(0, -2, 0))]]
         : this.bandFrom ? [[this.bandFrom, grip('L')], [this.bandFrom, grip('R')]] : [];
       g.band.forEach((m, i) => {

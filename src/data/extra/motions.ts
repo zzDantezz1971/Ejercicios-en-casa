@@ -23,7 +23,8 @@ const HIPS = { ua: 118, fa: 28 }; // manos en la cintura (vista lateral)
 const SUMO = { thL: 118, snL: 118, thR: 62, snR: 62, ftL: 170, ftR: 10, uaL: 74, faL: 66, uaR: 106, faR: 114, zEL: 6, zER: 6, zHL: 14, zHR: 14 };
 const SUMO_DOWN = { thL: 152, snL: 96, thR: 28, snR: 84, ftL: 170, ftR: 10, uaL: 74, faL: 66, uaR: 106, faR: 114, zEL: 6, zER: 6, zHL: 14, zHR: 14, zKL: 9, zKR: 9, lean: 16 };
 const HANG = { ua: -90, fa: -90, th: 96, sn: 112, ft: 60 }; // colgado de la barra
-const CHIN = { ua: 120, fa: -70, th: 96, sn: 112, ft: 60, hd: -96 }; // barbilla por encima de la barra
+// barbilla por encima de la barra: la barra queda delante de la parte alta del pecho y la cabeza algo atrás
+const CHIN = { ua: 105, fa: -44, th: 96, sn: 112, ft: 60, hd: -100 };
 const pullBar = (J: Record<string, [number, number]>, P: import('../../domain/types').PropHelpers) =>
   // barra de dominadas: de color vivo y algo más gruesa para que se vea bien sobre el fondo oscuro
   P.rect(J.haR[0] - 2.5, J.haR[1] - 3.5, 5, 5).map((o) => ({ ...o, dep: 96, color: '#F5A524' }));
@@ -419,7 +420,7 @@ export const EXTRA_MOTIONS: Record<string, M> = {
   dominadas: { fist: true, anchor: { j: 'haR', y: -172 }, props: pullBar, f: [[HANG, 250, 1100], [CHIN, 300, 1100]] },
   'dominadas-supinas': { anchor: { j: 'haR', y: -172 }, props: pullBar, f: [[HANG, 250, 1100], [CHIN, 300, 1100]] },
   'dominadas-negativas': { fist: true, anchor: { j: 'haR', y: -172 }, props: pullBar, f: [[CHIN, 300, 4500], [HANG, 300, 900]] },
-  'dominadas-con-banda': { fist: true, anchor: { j: 'haR', y: -172 }, props: pullBar, f: [
+  'dominadas-con-banda': { fist: true, band: 'bar', anchor: { j: 'haR', y: -172 }, props: pullBar, f: [
     [{ ...HANG, th: 70, sn: 165 }, 250, 1100], [{ ...CHIN, th: 70, sn: 165 }, 300, 1100]] },
   'retraccion-escapular-colgado': { fist: true, anchor: { j: 'haR', y: -172 }, props: pullBar, f: [[HANG, 300, 700], [{ ...HANG, sa: 0.9, hd: -94 }, 600, 700]] },
   'elevaciones-de-rodillas-colgado': { fist: true, anchor: { j: 'haR', y: -172 }, props: pullBar, f: [[{ ...HANG, th: 90, sn: 92 }, 200, 900], [{ ...HANG, th: -15, sn: 80, tl: -96 }, 300, 900]] },
