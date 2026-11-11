@@ -1,7 +1,12 @@
 # Ficha de Google Play
 
 Textos para copiar en Play Console → Presencia en Google Play → Ficha principal.
-Idioma principal: **catalán (ca)**; traducciones: **castellano (es-ES)** e **inglés (en-GB / en-US)**.
+Idioma principal: **catalán (ca)**; traducción: **inglés (en-GB / en-US)**.
+
+**Estrategia (decidida):** de momento la ficha de Play solo en **catalán** (principal) e **inglés**, para diferenciarse:
+quien tenga el móvil en castellano (o en otro idioma sin ficha) verá la ficha **en catalán**. La app por dentro sigue
+en catalán, castellano e inglés. Si funciona con quien busca en catalán, más adelante se añade la traducción al
+castellano (el texto ya está preparado abajo, en «Castellano», pero **no se sube todavía**).
 
 - Política de privacidad: https://zzdantezz1971.github.io/Ejercicios-en-casa/privacidad.html
 - Correo de contacto: exercicisacasa.app@gmail.com
@@ -48,7 +53,7 @@ En català, castellà i anglès.
 
 ---
 
-## Castellano
+## Castellano (preparado, NO subir todavía)
 
 **Nombre de la app** (máx. 30)
 Kasa Fit: Ejercicios en casa
