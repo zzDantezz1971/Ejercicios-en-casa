@@ -282,10 +282,17 @@ export class RoutineScreen implements Screen {
       this.list.append(h('h2', { class: 'group-title zone-title' }, icon('check'), 'Gratis'));
       free.forEach((ex) => this.list.append(this.card(ex)));
     }
+    // tras el gratis, el resto va bajo su propio título (si el apartado no tiene subgrupos, uno de «Prémium»)
+    let restTitled = !free.length;
     for (const ex of all.filter((e) => canDo(e.equip, owned) && !free.includes(e))) {
       if (!custom && ex.group && ex.group !== group) {
         group = ex.group;
         this.list.append(h('h2', { class: 'group-title zone-title' }, zoneIcon(group), group));
+        restTitled = true;
+      }
+      if (!restTitled) {
+        this.list.append(h('h2', { class: 'group-title zone-title' }, icon('lock'), 'Prémium'));
+        restTitled = true;
       }
       this.list.append(this.card(ex));
     }
