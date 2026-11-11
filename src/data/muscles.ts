@@ -80,7 +80,7 @@ export const MUSCLES_BY_EXERCISE: Record<string, string> = {
   'isquiotibiales-tumbado': '-isquios@R -gemelos@R',
   'cuadriceps-de-pie': '-cuadriceps@R',
   'gemelos-contra-la-pared': '-gemelos@L',
-  'flexores-de-cadera-rodilla-en-el-suelo': '-cuadriceps@L',
+  'flexores-de-cadera-rodilla-en-el-suelo': '-cuadriceps@L -aductores',
   'pinza-sentado-piernas-estiradas': '-isquios -lumbar -gemelos',
   'flexion-hacia-delante-de-pie': '-isquios -lumbar -gemelos',
   'mariposa-aductores': '-aductores',

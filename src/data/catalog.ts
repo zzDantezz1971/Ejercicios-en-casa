@@ -63,6 +63,9 @@ const PLAIN_NAMES: Record<string, { es: string; ca: string }> = {
   'skipping-rodillas-arriba': { es: 'Rodillas arriba', ca: 'Genolls amunt' },
   'gusano-inchworm': { es: 'Gusano', ca: 'Cuc' },
   'barquita-hollow-hold': { es: 'Barquita', ca: 'Barqueta' },
+  'mariposa-aductores': { es: 'Mariposa', ca: 'Papallona' },
+  // antes «Flexores de cadera (rodilla en el suelo)»: ahora es la postura de la lagartija (mismo identificador)
+  'flexores-de-cadera-rodilla-en-el-suelo': { es: 'Postura de la lagartija', ca: 'Postura del llangardaix' },
 };
 function plainName(id: string, name: string): string {
   return LANG === 'en' ? name : (PLAIN_NAMES[id]?.[LANG] ?? name);

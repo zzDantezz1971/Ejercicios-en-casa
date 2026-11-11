@@ -528,11 +528,11 @@ export const DESCRIPTIONS: Record<string, ExerciseDescription> = {
     easier: 'Pie de atrás más cerca.',
   },
   'flexores-de-cadera-rodilla-en-el-suelo': {
-    start: 'Rodilla de atrás en el suelo (sobre un cojín) y pie de delante apoyado, como en una zancada.',
-    move: 'Lleva la cadera hacia delante y abajo hasta notar el estiramiento delante de la cadera de atrás. Mantén. A mitad del tiempo cambia.',
-    tip: 'Aprieta el glúteo de la pierna de atrás. Clave para la lumbar si pasas mucho tiempo sentado.',
-    mistakes: 'Arquear la espalda.',
-    easier: 'Menos avance.',
+    start: 'En zancada baja: rodilla de atrás en el suelo (sobre un cojín), pie de delante adelantado y las dos manos en el suelo por dentro de ese pie.',
+    move: 'Lleva la cadera hacia delante y abajo, alargando la pierna de atrás y con el pecho hacia delante, hasta notar el estiramiento en la ingle y delante de la cadera de atrás. Mantén y respira. A mitad del tiempo cambia de pierna.',
+    tip: 'Espalda recta y cuello largo. Ve bajando poco a poco, sin prisa.',
+    mistakes: 'Hundir los hombros o arquear la zona lumbar.',
+    easier: 'Manos sobre unos libros o un bloque, o menos avance de la cadera.',
   },
   'pinza-sentado-piernas-estiradas': {
     start: 'Sentado con las piernas estiradas al frente.',

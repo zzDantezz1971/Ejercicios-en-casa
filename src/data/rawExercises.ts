@@ -254,8 +254,11 @@ export const RAW_SECTIONS: RawSection[] = [
  {n:'Figura 4 (glúteo y piriforme)',z:'Glúteos y cadera',mat:1,f:[
    [{tl:180,thL:-110,snL:-20,thR:-60,sThR:.7,snR:206,sShR:.8,ua:-40,fa:0},900,1100],
    [{tl:180,thL:-122,snL:-30,thR:-70,sThR:.7,snR:198,sShR:.8,ua:-50,fa:5},1200,1100]]},
- {n:'Flexores de cadera (rodilla en el suelo)',z:'Cadera y lumbar',mat:1,f:[
-   [{ua:110,fa:-20,thR:0,snR:90,thL:104,snL:180,ftL:180},500,1100],[{ua:110,fa:-20,thR:0,snR:105,thL:110,snL:180,ftL:180},1500,1100]]},
+ {n:'Flexores de cadera (rodilla en el suelo)',z:'Cadera e ingles',mat:1,f:[
+   // postura de la lagartija: rodilla de atrás en el suelo, pie de delante adelantado y las dos manos en el suelo
+   // por dentro de ese pie; la cadera baja hacia delante y abajo y el pecho va hacia delante
+   [{tl:-42,tu:-38,hd:-24,ua:92,fa:92,thR:-6,snR:94,thL:112,snL:180,ftL:180},800,1300],
+   [{tl:-28,tu:-24,hd:-12,ua:96,fa:84,sa:.94,thR:-14,snR:100,thL:140,snL:180,ftL:180},1600,1300]]},
  {g:'Aductores (ingles)'},
  {n:'Mariposa (aductores)',z:'Ingles y cadera',v:'front',noGround:1,mat:'top',f:[
    [{thL:170,snL:22,thR:10,snR:158,ftL:0,ftR:180,uaL:100,faL:80,uaR:80,faR:100,zEL:6,zER:6,zHL:16,zHR:16},700,1600],
@@ -272,9 +275,9 @@ export const RAW_SECTIONS: RawSection[] = [
  {n:'Rana',z:'Aductores y cadera',v:'top',prone:true,mat:'top',top:'Vista desde arriba',f:[
    [{uaL:-115,faL:-85,uaR:-65,faR:-95,thL:180,snL:90,thR:0,snR:90,sTh:.95},1300,1300],
    [{uaL:-125,faL:-88,uaR:-55,faR:-92,thL:176,snL:92,thR:4,snR:88,sTh:.95},1300,1300]]},
- {n:'Mariposa tumbado',z:'Aductores',v:'top',mat:'top',top:'Vista desde arriba',b:['lumbar'],f:[
-   [{uaL:150,faL:150,uaR:30,faR:30,thL:140,snL:50,thR:40,snR:130,sTh:.85,sSh:.95},1400,1200],
-   [{uaL:150,faL:150,uaR:30,faR:30,thL:150,snL:40,thR:30,snR:140,sTh:.75,sSh:.95},1400,1200]]},
+ {n:'Mariposa tumbado',z:'Aductores',mat:1,az:72,el:24,b:['lumbar'],f:[
+   [{...SUP,thL:-56,snL:66,thR:-56,snR:66,zKL:-15,zKR:15,zAL:4,zAR:-4},900,1300],
+   [{...SUP,thL:-18,snL:132,thR:-18,snR:132,zKL:-30,zKR:30,zAL:22,zAR:-22},1500,1300]]},
  {g:'Piernas'},
  {n:'Isquiotibiales tumbado',z:'Parte trasera del muslo',mat:1,f:[
    [{tl:180,thL:0,snL:0,ftL:-90,thR:-40,snR:-40,ftR:-130,ua:-18,fa:-10},300,1200],
