@@ -105,7 +105,7 @@ export const RAW_SECTIONS: RawSection[] = [
  {n:'Curl de bíceps',z:'Bíceps',db:'both',f:[
    [{},150,850],[{ua:85,fa:-50},150,850]]},
  {n:'Curl concentrado sentado',z:'Bíceps',db:'R',anchor:{j:'pel',y:-40},props:benchSeat,f:[
-   [{...SEAT,tl:-50,tu:-45,uaL:60,faL:40,uaR:85,faR:85},150,900],[{...SEAT,tl:-50,tu:-45,uaL:60,faL:40,uaR:85,faR:-40},150,900]]},
+   [{...SEAT,tl:-50,tu:-45,uaL:80,faL:72,uaR:85,faR:85},150,900],[{...SEAT,tl:-50,tu:-45,uaL:80,faL:72,uaR:85,faR:-40},150,900]]},
  {n:'Extensión de tríceps por encima de la cabeza',z:'Tríceps',db:'two',anchor:{j:'pel',y:-40},props:benchSeat,f:[
    [{...SEAT,ua:-100,fa:-95},150,1000],[{...SEAT,ua:-100,fa:-250},150,1000]]},
  {n:'Patada de tríceps apoyado en banco',z:'Tríceps',db:'R',anchor:{j:'knL',y:-38},props:benchRow,f:[
