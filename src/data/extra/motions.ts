@@ -26,7 +26,9 @@ const HANG = { ua: -90, fa: -90, th: 96, sn: 112, ft: 60 }; // colgado de la bar
 const CHIN = { ua: 120, fa: -70, th: 96, sn: 112, ft: 60, hd: -96 }; // barbilla por encima de la barra
 const pullBar = (J: Record<string, [number, number]>, P: import('../../domain/types').PropHelpers) =>
   P.rect(J.haR[0] - 2, J.haR[1] - 3, 4, 4).map((o) => ({ ...o, dep: 96 }));
-const STEP = (x0: number) => (J: Record<string, [number, number]>, P: import('../../domain/types').PropHelpers) => P.rect(J.pel[0] + x0, -17, 34, 17);
+// el step: 17 cm de alto y ancho de verdad (en profundidad), para que quepan los dos pies separados
+const stepBox = (P: import('../../domain/types').PropHelpers, x: number, w: number) => P.rect(x, -17, w, 17).map((o) => ({ ...o, dep: 76 }));
+const STEP = (x0: number) => (J: Record<string, [number, number]>, P: import('../../domain/types').PropHelpers) => stepBox(P, J.pel[0] + x0, 34);
 const BAR_BACK = { ua: 150, fa: -40 }; // barra sobre la espalda alta
 const KB_CHEST = { ua: 75, fa: -60, zHL: 13, zHR: -13, zEL: 6, zER: -6 }; // pesa pegada al pecho
 const ROPE_ARMS = { ua: 98, fa: 35, zHL: -7, zHR: 7, zEL: -3, zER: 3 };
@@ -353,7 +355,7 @@ export const EXTRA_MOTIONS: Record<string, M> = {
     [{}, 0, 380], [{ thR: 20, snR: 100, ftR: 0 }, 0, 380], [{ x: 26, jy: 17 }, 0, 380],
     [{ x: 18, jy: 12, thL: 70, snL: 100, thR: 112, snR: 98 }, 0, 300], [{ thL: 20, snL: 100, ftL: 0 }, 0, 380]] },
   // en V: cada pie sube a una esquina del step (piernas abiertas arriba) y baja al centro (pies juntos abajo)
-  'step-en-v': { props: (J, P) => STEP(14)(J, P).map((o) => ({ ...o, dep: 64 })), az: 58, f: [
+  'step-en-v': { props: STEP(14), az: 58, f: [
     [{}, 0, 380], [{ thR: 20, snR: 100, ftR: 0, zAR: 22, zKR: 14 }, 0, 380],
     [{ x: 26, jy: 17, zAL: -22, zKL: -12, zAR: 22, zKR: 12 }, 0, 380],
     [{ x: 18, jy: 12, thL: 70, snL: 100, zAL: -22, zKL: -14, thR: 112, snR: 98 }, 0, 300], [{ thL: 20, snL: 100, ftL: 0, zAL: -22, zKL: -14 }, 0, 380]] },
@@ -362,20 +364,20 @@ export const EXTRA_MOTIONS: Record<string, M> = {
   'subida-al-step-con-rodilla-arriba': { props: STEP(14), f: [
     [{}, 150, 600], [{ thR: 20, snR: 100, ftR: 0, uaL: 60, faL: -30, uaR: 120, faR: 100 }, 100, 650],
     [{ x: 26, jy: 17, thL: -8, snL: 82, uaR: 45, faR: -40, uaL: 125, faL: 100 }, 250, 650], [{ thR: 20, snR: 100, ftR: 0 }, 100, 600]] },
-  'zancada-atras-desde-el-step': { props: (J, P) => P.rect(J.anR[0] - 16, -17, 34, 17), plant: 'anR', f: [
+  'zancada-atras-desde-el-step': { props: (J, P) => stepBox(P, J.anR[0] - 16, 34), plant: 'anR', f: [
     [{ ...HIPS, jy: 17 }, 150, 800], [{ ...HIPS, thR: 14, snR: 139, thL: 128, snL: 142, ftL: 40 }, 300, 800]] },
-  'elevacion-de-talones-en-el-step': { props: (J, P) => [...P.rect(J.anR[0] - 20, -17, 30, 17), ...P.wall(J.haR[0] + 3)], f: [
+  'elevacion-de-talones-en-el-step': { props: (J, P) => [...stepBox(P, J.anR[0] - 20, 30), ...P.wall(J.haR[0] + 3, 20 - J.haR[1], 50)], f: [
     [{ jy: 17, ft: -30, uaR: 4, faR: -6 }, 300, 900], [{ jy: 22, ft: 45, uaR: 4, faR: -6 }, 500, 900]] },
-  'flexiones-con-manos-en-el-step': { plant: 'haR', anchor: { j: 'haR', y: -19 }, props: (J, P) => P.rect(J.haR[0] - 16, -17, 30, 17), f: [
+  'flexiones-con-manos-en-el-step': { plant: 'haR', anchor: { j: 'haR', y: -19 }, props: (J, P) => stepBox(P, J.haR[0] - 16, 30), f: [
     [{ tl: -30, ua: 90, fa: 90, th: 150, sn: 150, ft: 70 }, 200, 750], [{ tl: -19, ua: 150, fa: 30, th: 161, sn: 161, ft: 80 }, 150, 850]] },
-  'fondos-de-triceps-en-el-step': { plant: 'haR', anchor: { j: 'haR', y: -19 }, props: (J, P) => P.rect(J.haR[0] - 30, -17, 33, 17), f: [
+  'fondos-de-triceps-en-el-step': { plant: 'haR', anchor: { j: 'haR', y: -19 }, props: (J, P) => stepBox(P, J.haR[0] - 30, 33), f: [
     [{ ua: 105, fa: 100, th: 30, sn: 50 }, 150, 900], [{ ua: 165, fa: 92, th: 10, sn: 60 }, 150, 900]] },
   // cada salto: rodillas dobladas al despegar y al caer, piernas recogidas en el aire
-  'saltos-laterales-sobre-el-step': { v: 'front', az: 38, props: (J, P) => P.rect(J.pel[0] + 15, -17, 30, 17), f: [
+  'saltos-laterales-sobre-el-step': { v: 'front', az: 38, props: (J, P) => stepBox(P, J.pel[0] + 15, 30), f: [
     [{ x: -30, ...SQUAT_F }, 40, 200], [{ x: -15, jy: 26, ...TUCK_F }, 0, 200], [{ x: 0, jy: 17, ...SQUAT_F }, 40, 200],
     [{ x: 15, jy: 26, ...TUCK_F }, 0, 200], [{ x: 30, ...SQUAT_F }, 40, 200], [{ x: 15, jy: 26, ...TUCK_F }, 0, 200],
     [{ x: 0, jy: 17, ...SQUAT_F }, 40, 200], [{ x: -15, jy: 26, ...TUCK_F }, 0, 200]] },
-  'gemelos-en-el-step': { props: (J, P) => [...P.rect(J.anR[0] - 20, -17, 30, 17), ...P.wall(J.haR[0] + 3, 20 - J.haR[1], 50)], f: [
+  'gemelos-en-el-step': { props: (J, P) => [...stepBox(P, J.anR[0] - 20, 30), ...P.wall(J.haR[0] + 3, 20 - J.haR[1], 50)], f: [
     [{ jy: 17, uaR: 4, faR: -6, ftR: 0 }, 300, 900], [{ jy: 17, uaR: 4, faR: -6, ftR: -35, ftL: 10 }, 1600, 900]] },
 
   // ── Fitball ──
