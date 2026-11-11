@@ -655,6 +655,7 @@ const ROWS: Row[] = [
   ['Antes de cada entrenamiento, pantalla para conectar el reloj.', 'Abans de cada entrenament, pantalla per connectar el rellotge.', 'Before each workout, a screen to connect the watch.'],
   ['Última copia: {d}', 'Última còpia: {d}', 'Last backup: {d}'],
   ['Aún no has guardado ninguna copia.', 'Encara no has desat cap còpia.', 'You haven’t saved a backup yet.'],
+  ['{a}. Conviene hacer otra.', '{a}. Convé fer-ne una altra.', '{a}. Time to make another one.'],
   ['¿Restaurar la copia del {d}? Tiene {a} y {b}. Se sustituirá todo lo que hay ahora en la app.', 'Vols restaurar la còpia del {d}? Té {a} i {b}. Se substituirà tot el que hi ha ara a l’aplicació.', 'Restore the backup from {d}? It has {a} and {b}. Everything currently in the app will be replaced.'],
   ['¿Restaurar la copia? Tiene {a} y {b}. Se sustituirá todo lo que hay ahora en la app.', 'Vols restaurar la còpia? Té {a} i {b}. Se substituirà tot el que hi ha ara a l’aplicació.', 'Restore the backup? It has {a} and {b}. Everything currently in the app will be replaced.'],
   ['Restaurar', 'Restaura', 'Restore'],

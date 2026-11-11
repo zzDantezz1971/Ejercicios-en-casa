@@ -539,6 +539,12 @@ button.hd-row { width: 100%; color: inherit; font: inherit; cursor: pointer; }
 .backup { display: flex; flex-direction: column; gap: 10px; padding: 14px; }
 .backup-head { display: flex; gap: 12px; align-items: flex-start; }
 .backup-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.backup-last { display: flex; gap: 10px; align-items: center; padding: 10px 12px; border-radius: 12px; background: color-mix(in srgb, var(--good) 12%, transparent); color: var(--fg); }
+.backup-last > div { display: flex; flex-direction: column; gap: 2px; }
+.backup-last .small { color: var(--muted); }
+.backup-last svg { flex: none; width: 20px; height: 20px; color: var(--good); }
+.backup-last.old { background: color-mix(in srgb, var(--warn) 14%, transparent); }
+.backup-last.old svg { color: var(--warn); }
 
 /* Marca de ejercicio por lados sobre el maniquí (pequeña, solo el icono) */
 .sides-mark {

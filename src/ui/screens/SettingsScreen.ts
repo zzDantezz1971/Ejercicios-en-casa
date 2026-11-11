@@ -7,7 +7,7 @@ import { IS_NATIVE } from '../../platform/native';
 import { Store } from '../../domain/Store';
 import { SECTION_IDS, SECTION_TITLES, type Settings } from '../../domain/types';
 import { pickBackupFile } from '../../services/Backup';
-import { saveBackupNow } from '../components/backupPrompt';
+import { BACKUP_EVERY_DAYS, saveBackupNow } from '../components/backupPrompt';
 import type { App, Screen } from '../App';
 import { append, clear, confirmDialog, h, plural } from '../dom';
 import { icon, SECTION_STYLE, type IconName } from '../icons';
@@ -184,8 +184,19 @@ export class SettingsScreen implements Screen {
   /** Guardar una copia (para Drive) y restaurarla. */
   private backupSection(): HTMLElement {
     const last = this.app.store.lastBackup;
-    const msg = h('p', { class: 'muted small', 'aria-live': 'polite' },
-      last ? `Última copia: ${new Date(last).toLocaleDateString(LOCALE, { day: 'numeric', month: 'long', year: 'numeric' })}` : 'Aún no has guardado ninguna copia.');
+    const days = this.app.store.daysSinceBackup();
+    // la fecha bien visible; en naranja si no hay copia o tiene una semana o más (como el aviso de Inicio)
+    const old = days >= BACKUP_EVERY_DAYS;
+    // días de calendario (una copia de anteayer por la noche es «Hace 2 días», aunque no hayan pasado 48 h)
+    const midnight = (d: Date) => new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
+    const cal = last ? Math.round((midnight(new Date()) - midnight(new Date(last))) / 864e5) : 0;
+    const ago = cal <= 0 ? 'Hoy' : cal === 1 ? 'Ayer' : `Hace ${cal} días`;
+    const msg = h('div', { class: `backup-last${old ? ' old' : ''}`, 'aria-live': 'polite' },
+      icon(old ? 'info' : 'check'),
+      last
+        ? h('div', {}, h('strong', {}, `Última copia: ${new Date(last).toLocaleDateString(LOCALE, { day: 'numeric', month: 'long', year: 'numeric' })}`),
+          h('span', { class: 'small' }, old ? `${ago}. Conviene hacer otra.` : ago))
+        : h('strong', {}, 'Aún no has guardado ninguna copia.'));
     const save = async () => {
       if (await saveBackupNow(this.app)) this.render();
     };

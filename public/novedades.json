@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-11T09:39:11Z",
+    "es": ["Ajustes › Copia de seguridad: la fecha de la última copia se ve más clara, con cuántos días hace. Sale en naranja si no tienes ninguna o si tiene una semana o más."],
+    "ca": ["Configuració › Còpia de seguretat: la data de l'última còpia es veu més clara, amb quants dies fa. Surt en taronja si no en tens cap o si té una setmana o més."],
+    "en": ["Settings › Backup: the date of your last backup is easier to see, with how many days ago it was. It turns orange if you have none or it’s a week old or more."]
+  },
+  {
     "fecha": "2026-11-11T09:28:47Z",
     "es": ["Sentadilla sumo profunda: ahora baja más, con las manos juntas delante del pecho y los codos empujando las rodillas hacia fuera.", "Gemelos en el step: la pared es más pequeña y ya no tapa el muñeco.", "Se quita «Elevación de brazos en Y boca abajo» de la lista de ejercicios."],
     "ca": ["Esquat sumo profund: ara baixa més, amb les mans juntes davant del pit i els colzes empenyent els genolls cap a fora.", "Bessons al step: la paret és més petita i ja no tapa el ninot.", "Es treu «Elevació de braços en Y de bocaterrosa» de la llista d'exercicis."],
