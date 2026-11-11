@@ -182,8 +182,12 @@ export class MannequinScene {
   /** Maniquí de una sola pieza con piel (si se le pasan datos de malla). */
   private skinned: SkinnedFigure | null = null;
 
+  /** Agarra algo con las manos (mancuernas, barra, banda, comba...): puño cerrado. */
+  private readonly grips: boolean;
+
   constructor(spec: MotionSpec, private readonly pal: Palette = DEFAULT_PALETTE, side: Side = undefined, skin?: SkinData, anatomy?: { L: number[]; R: number[]; map?: boolean }) {
     this.motion = new Motion(spec, side);
+    this.grips = !!(spec.fist || spec.db || spec.kb || spec.bar || spec.band === 'hands' || spec.band === 'feet' || typeof spec.band === 'function' || spec.rope || spec.wheel);
     this.skinData = skin;
     const view = this.motion.view;
     this.azimuth = spec.az ?? (view === 'side' ? 32 : view === 'top' ? 12 : 18);
@@ -202,7 +206,7 @@ export class MannequinScene {
         old.dispose();
       }
       // puño para agarrar mancuernas; mano casi abierta para apoyarse
-      this.skinned.setFist(spec.fist || spec.db || spec.kb || spec.bar || spec.band === 'hands' || spec.band === 'feet' || typeof spec.band === 'function' || spec.rope || spec.wheel ? 1 : 0.2);
+      this.skinned.setFist(this.grips ? 1 : 0.2);
       this.buildDumbbells();
       this.buildGear();
     } else this.buildBody();
@@ -503,20 +507,53 @@ export class MannequinScene {
       this.ball(P['el' + s], el, 3.4);
       this.seg(P['wrist' + s], ha.clone().lerp(el, 0.05), ha.clone().lerp(el, 0.15), 3.55);
 
-      // Mano: palma, dedos y pulgar
-      const across = side ? V(0, 0, 1) : V(0, 0, 1).cross(u).normalize();
-      const acrossO = ortho(across, u);
-      const palmN = acrossO.clone().cross(u).normalize();
-      this.oriented(P['palm' + s], ha.clone().addScaledVector(u, 2.5), u, acrossO, 3.1, 2.9, 1.6);
+      // Mano: palma, dedos y pulgar. Sigue al antebrazo; apoyada en el suelo se dobla por la muñeca y queda
+      // plana con los dedos hacia delante; si agarra algo, puño cerrado.
+      let hu = u.clone();
+      let across = side ? V(0, 0, 1) : V(0, 0, 1).cross(u).normalize();
+      let thumbSign = sg;
+      const support = this.grips ? 0 : Math.min(1, Math.max(0, (13 - ha.y) / 5)) * Math.min(1, Math.max(0, (-u.y - 0.35) / 0.3));
+      if (support > 0) {
+        // dedos hacia la cabeza o hacia donde mira el cuerpo, en horizontal
+        let ahead = bodyLat.clone().cross(V(0, 1, 0));
+        ahead.y = 0;
+        if (ahead.lengthSq() < 1e-4) ahead = V(1, 0, 0);
+        ahead.normalize();
+        if (ahead.dot(fwd.clone().add(tUp)) < 0) ahead.negate();
+        const target = ahead.multiplyScalar(0.95).add(V(0, -0.3, 0)).normalize();
+        hu = u.clone().lerp(target, support).normalize();
+        // palma hacia el suelo y pulgar hacia la otra mano
+        let flatAcross = V(0, 1, 0).cross(hu).normalize();
+        if (flatAcross.clone().cross(hu).y > 0) flatAcross.negate();
+        across = across.clone().lerp(flatAcross, support);
+        const toOther = J['ha' + (s === 'L' ? 'R' : 'L')].clone().sub(ha);
+        const acr = ortho(across, hu);
+        if (toOther.lengthSq() > 4 && support > 0.5) thumbSign = Math.sign(acr.dot(toOther)) || sg;
+      }
+      const acrossO = ortho(across, hu);
+      const palmN = acrossO.clone().cross(hu).normalize();
+      const fist = this.grips;
+      this.oriented(P['palm' + s], ha.clone().addScaledVector(hu, 2.5), hu, acrossO, fist ? 2.8 : 3.1, 2.9, fist ? 1.9 : 1.6);
       for (let f = 0; f < 4; f++) {
         const off = (f - 1.5) * 1.35;
-        const base = ha.clone().addScaledVector(u, 4.6).addScaledVector(acrossO, off);
-        const len = f === 0 || f === 3 ? 3.1 : 3.7;
-        this.seg(P[`fing${f}${s}`], base, base.clone().addScaledVector(u, len).addScaledVector(palmN, 0.9), 0.68);
+        if (fist) {
+          // dedos doblados hacia la palma
+          const base = ha.clone().addScaledVector(hu, 4.4).addScaledVector(acrossO, off);
+          this.seg(P[`fing${f}${s}`], base.clone().addScaledVector(palmN, -0.3), base.clone().addScaledVector(hu, 0.6).addScaledVector(palmN, 2.4), 0.8);
+        } else {
+          const base = ha.clone().addScaledVector(hu, 4.6).addScaledVector(acrossO, off);
+          const len = f === 0 || f === 3 ? 3.1 : 3.7;
+          this.seg(P[`fing${f}${s}`], base, base.clone().addScaledVector(hu, len).addScaledVector(palmN, support > 0 ? 0.9 * (1 - support) : 0.9), 0.68);
+        }
       }
-      const thumbSide = acrossO.clone().multiplyScalar(sg);
-      this.seg(P['thumb' + s], ha.clone().addScaledVector(u, 1.4).addScaledVector(thumbSide, 2.5),
-        ha.clone().addScaledVector(u, 4.6).addScaledVector(thumbSide, 3.5).addScaledVector(palmN, 0.8), 0.95);
+      const thumbSide = acrossO.clone().multiplyScalar(thumbSign);
+      if (fist) {
+        this.seg(P['thumb' + s], ha.clone().addScaledVector(hu, 1.6).addScaledVector(thumbSide, 2.4),
+          ha.clone().addScaledVector(hu, 3.6).addScaledVector(thumbSide, 0.6).addScaledVector(palmN, 2.2), 0.95);
+      } else {
+        this.seg(P['thumb' + s], ha.clone().addScaledVector(hu, 1.4).addScaledVector(thumbSide, 2.5),
+          ha.clone().addScaledVector(hu, 4.6).addScaledVector(thumbSide, 3.5).addScaledVector(palmN, 0.8), 0.95);
+      }
       if (s === 'L') {
         // esfera del reloj sobre la muñeca izquierda
         const wc = ha.clone().lerp(el, 0.1).addScaledVector(palmN, -3.3);
