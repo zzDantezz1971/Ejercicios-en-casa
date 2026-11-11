@@ -16,6 +16,36 @@ const side = q.get('side') ? (Number(q.get('side')) as 1 | 2) : undefined;
 const list = SECTIONS.flatMap((s) => s.exercises).filter((e) => (ids ? ids.includes(e.id) : !sec || e.section === sec))
   // &anim=1: solo los ejercicios que ya tienen animación
   .filter((e) => !q.get('anim') || !!e.motion.fn || (e.motion.f?.length ?? 0) > 1);
+// &style=toon (dibujo: tonos planos y contorno) | flat (silueta plana, sin luces)
+const style = q.get('style');
+const ramp = (() => {
+  const t = new THREE.DataTexture(new Uint8Array([105, 105, 105, 255, 255, 255, 255, 255]), 2, 1);
+  t.minFilter = t.magFilter = THREE.NearestFilter;
+  t.needsUpdate = true;
+  return t;
+})();
+const outlineMat = new THREE.MeshBasicMaterial({ color: '#05070A', side: THREE.BackSide });
+outlineMat.onBeforeCompile = (sh) => {
+  sh.vertexShader = sh.vertexShader.replace('#include <begin_vertex>', '#include <begin_vertex>\ntransformed += normalize(normal) * 1.1;');
+};
+function stylize(scene: THREE.Scene): void {
+  const meshes: THREE.Mesh[] = [];
+  scene.traverse((o) => { if ((o as THREE.Mesh).isMesh) meshes.push(o as THREE.Mesh); });
+  for (const m of meshes) {
+    const old = m.material as THREE.MeshStandardMaterial;
+    if (Array.isArray(old) || !(old as THREE.MeshStandardMaterial).isMeshStandardMaterial) continue; // sombra del suelo
+    const base = { color: old.color, map: old.map, vertexColors: old.vertexColors, transparent: old.transparent, opacity: old.opacity, side: old.side };
+    const nm = style === 'flat' ? new THREE.MeshBasicMaterial(base) : new THREE.MeshToonMaterial({ ...base, gradientMap: ramp });
+    if (old.onBeforeCompile) nm.onBeforeCompile = old.onBeforeCompile;
+    m.material = nm;
+    if (style !== 'toon' || !(m as THREE.SkinnedMesh).isSkinnedMesh) continue; // contorno solo en el muñeco
+    // contorno: la misma malla un poco hinchada, por detrás y en oscuro
+    const sk = m as THREE.SkinnedMesh;
+    const o = sk.isSkinnedMesh ? new THREE.SkinnedMesh(sk.geometry, outlineMat) : new THREE.Mesh(m.geometry, outlineMat);
+    if (sk.isSkinnedMesh) (o as THREE.SkinnedMesh).bind(sk.skeleton, sk.bindMatrix);
+    m.add(o);
+  }
+}
 const canvas = document.createElement('canvas');
 const r = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, preserveDrawingBuffer: true });
 r.shadowMap.enabled = true;
@@ -33,6 +63,7 @@ for (const ex of list) {
     sc.setAspect(1.5);
     sc.mood = mood;
     sc.update(sc.motion.total * t);
+    if (style) stylize(sc.scene);
     if (q.get('az')) { sc.azimuth = Number(q.get('az')); sc.placeCamera(); }
     if (q.get('el')) { sc.elevation = Number(q.get('el')); sc.placeCamera(); }
     // &crop=x,y,w (fracciones): ampliar una zona (p. ej. las manos)
