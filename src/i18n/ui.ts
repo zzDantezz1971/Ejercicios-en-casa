@@ -253,6 +253,7 @@ const ROWS: Row[] = [
   ['Más tiempo', 'Més temps', 'More time'],
   ['Quitar {x} de la tabla', 'Treu {x} de la taula', 'Remove {x} from the routine'],
   ['No hay ejercicios que coincidan con "{q}".', 'No hi ha cap exercici que coincideixi amb «{q}».', 'No exercises match “{q}”.'],
+  ['Lo eliminaste de la lista: {e}.', 'El vas eliminar de la llista: {e}.', 'You deleted it from the list: {e}.'],
   ['Cómo se hace: {x}', 'Com es fa: {x}', 'How to do it: {x}'],
   ['Peso de {x}: {w} por mancuerna. Cambiar', 'Pes de {x}: {w} per manuella. Canvia’l', 'Weight for {x}: {w} per dumbbell. Change'],
   ['Peso de {x}: sin peso. Cambiar', 'Pes de {x}: sense pes. Canvia’l', 'Weight for {x}: no weight. Change'],

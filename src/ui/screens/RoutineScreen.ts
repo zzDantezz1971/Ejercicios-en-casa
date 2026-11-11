@@ -142,14 +142,6 @@ export class RoutineScreen implements Screen {
     return applyOrder(sec.exercises, this.app.store.customOrder(sectionId)).filter((e) => !hidden.has(e.id));
   }
 
-  /** Ejercicios que se pueden hacer con el material que tiene el usuario (o todos, si los pide ver). */
-  private visible(sectionId: SectionId): ExerciseDef[] {
-    const all = this.ordered(sectionId);
-    if (this.showAllEquip) return all;
-    const owned = new Set<string>(this.app.store.settings.equipment);
-    return all.filter((e) => canDo(e.equip, owned));
-  }
-
   /** Aviso al final de la lista: cuántos ejercicios necesitan material que no tiene, y botón para verlos. */
   private equipNote(sectionId: SectionId): HTMLElement | null {
     const owned = new Set<string>(this.app.store.settings.equipment);
@@ -258,15 +250,25 @@ export class RoutineScreen implements Screen {
     const q = normalize(this.query.trim());
     if (q) {
       // Búsqueda en todos los apartados
+      // se busca en el nombre que se ve (traducido), en castellano (el identificador) y en la zona;
+      // también salen los que piden material que no tienes (al final de cada apartado)
+      const match = (e: ExerciseDef) => normalize(`${e.name} ${tr(e.name)} ${e.id.replace(/-/g, ' ')} ${e.zone} ${tr(e.zone)} ${e.group ? tr(e.group) : ''}`).includes(q);
+      const owned = new Set<string>(this.app.store.settings.equipment);
       let found = 0;
       for (const sec of this.app.sections) {
-        const hits = this.visible(sec.id).filter((e) => normalize(`${e.name} ${tr(e.name)} ${e.zone} ${tr(e.zone)} ${e.group ? tr(e.group) : ''}`).includes(q));
+        const all = this.ordered(sec.id).filter(match);
+        const hits = [...all.filter((e) => canDo(e.equip, owned)), ...all.filter((e) => !canDo(e.equip, owned))];
         if (!hits.length) continue;
         found += hits.length;
         this.list.append(h('h2', { class: 'group-title' }, sec.title));
         hits.forEach((ex) => this.list.append(this.card(ex)));
       }
-      if (!found) this.list.append(h('p', { class: 'empty-state' }, `No hay ejercicios que coincidan con "${this.query.trim()}".`));
+      if (!found) {
+        this.list.append(h('p', { class: 'empty-state' }, `No hay ejercicios que coincidan con "${this.query.trim()}".`));
+        // los que se han eliminado de la lista no salen, pero se avisa
+        const gone = this.app.sections.flatMap((sec) => sec.exercises).filter((e) => this.app.store.hidden.has(e.id) && match(e));
+        if (gone.length) this.list.append(h('p', { class: 'muted small empty-state' }, `Lo eliminaste de la lista: ${gone.map((e) => e.name).join(', ')}.`));
+      }
       return;
     }
     // con orden personalizado no hay subgrupos: la lista es libre

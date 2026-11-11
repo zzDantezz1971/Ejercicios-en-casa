@@ -51,6 +51,8 @@ const rope = (o: { back?: boolean; legs?: 'alt' | 'high'; side?: boolean }) => (
 const SKI_LAND = { sTh: 0.8, zAL: -18, zAR: -18, zKL: 3, zKR: 3, zEL: 4, zER: 4, zHL: 14, zHR: 14 };
 const SKI_AIR = { sTh: 0.72, sSh: 0.92, zAL: -32, zAR: -32, uaL: 100, faL: 96, uaR: 80, faR: 84, zEL: 4, zER: 4, zHL: 14, zHR: 14 };
 const BOX_ST = { thR: 70, snR: 106, thL: 108, snL: 104, ft: 84, lean: 6 }; // guardia: pie izquierdo delante, rodillas flexionadas
+// giros de tronco (de frente): codos junto al cuerpo y manos sueltas delante de la barriga
+const TWIST_ARMS = { uaL: 112, faL: -10, uaR: 68, faR: 190, zEL: 8, zER: 8, zHL: 26, zHR: 26 };
 const BEAR = { tl: -12, ua: 88, fa: 88, th: 92, sn: 168, ft: 90 }; // cuadrupedia con rodillas despegadas
 
 export const EXTRA_MOTIONS: Record<string, M> = {
@@ -449,8 +451,8 @@ export const EXTRA_MOTIONS: Record<string, M> = {
 export const MOTION_OVERRIDES: Record<string, M> = {
   // el tronco gira de verdad (la cadera mira al frente) y los brazos, sueltos, lo siguen: uno por delante y otro por detrás
   'giros-de-tronco': { v: 'front', el: 22, f: [
-    [{ thL: 96, snL: 96, thR: 84, snR: 84, tw: 55, hd: -90, uaL: 112, faL: 150, zEL: 10, zHL: 22, uaR: 62, faR: 40, zER: -6, zHR: -10 }, 80, 650],
-    [{ thL: 96, snL: 96, thR: 84, snR: 84, tw: -55, hd: -90, uaR: 68, faR: 30, zER: 10, zHR: 22, uaL: 118, faL: 140, zEL: -6, zHL: -10 }, 80, 650]] },
+    [{ thL: 96, snL: 96, thR: 84, snR: 84, tw: 55, hd: -90, ...TWIST_ARMS }, 80, 650],
+    [{ thL: 96, snL: 96, thR: 84, snR: 84, tw: -55, hd: -90, ...TWIST_ARMS }, 80, 650]] },
   // de lado a una pared (detrás, paralela a la vista), apoyado con la mano de ese lado; la otra en la cintura
   'balanceo-de-pierna-adelante-y-atras': { props: (J) => [{ t: 'rect', x: J.pel[0] - 30, y: -135, w: 60, h: 135, z: -34, dep: 4 }], f: [
     [{ uaL: 92, faL: 80, zEL: -14, zHL: -26, uaR: 118, faR: 28, thR: -25, snR: -15 }, 60, 700],

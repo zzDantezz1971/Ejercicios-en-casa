@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-11T10:38:43Z",
+    "es": ["Buscador de Editar tabla: también encuentra los ejercicios que piden material que no tienes, y si buscas uno que eliminaste de la lista te lo dice.", "Giros de tronco: brazos doblados y relajados, con las manos delante del pecho, que siguen el giro."],
+    "ca": ["Cercador d'Edita la taula: també troba els exercicis que demanen material que no tens, i si en cerques un que vas eliminar de la llista t'ho diu.", "Girs de tronc: braços doblegats i relaxats, amb les mans davant del pit, que segueixen el gir."],
+    "en": ["Edit routine search: it also finds exercises that need equipment you don’t have, and tells you if you search for one you deleted from the list.", "Torso twists: bent, relaxed arms with the hands in front of the chest, following the turn."]
+  },
+  {
     "fecha": "2026-11-11T10:03:52Z",
     "es": ["Editar tabla: el buscador encuentra los ejercicios por el nombre en catalán e inglés (antes solo en castellano).", "Giros de tronco: ahora el tronco gira de verdad a cada lado, con la cadera mirando al frente y los brazos sueltos siguiendo el giro."],
     "ca": ["Edita la taula: el cercador troba els exercicis pel nom en català i anglès (abans només en castellà).", "Girs de tronc: ara el tronc gira de debò a cada costat, amb el maluc mirant endavant i els braços solts seguint el gir."],
