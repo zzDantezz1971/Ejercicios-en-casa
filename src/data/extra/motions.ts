@@ -121,7 +121,7 @@ export const EXTRA_MOTIONS: Record<string, M> = {
     [{ tl: 180, hd: 182, ua: 182, fa: 182, th: -2, sn: -2 }, 200, 950],
     [{ tl: 216, tu: 224, hd: 228, ua: 322, fa: 322, th: -46, sn: -46 }, 250, 950]] },
   // movimiento real (Mixamo, «Situps»)
-  'abdominal-completo': mocap('abdominal-completo', { mat: 1, armsOut: true }, { seated: true }),
+  'abdominal-completo': mocap('abdominal-completo', { mat: 1 }, { seated: true, crossArms: true }),
   'patadas-de-aleteo': { mat: 1, f: [
     [{ tl: 180, tu: 186, ua: 0, fa: 0, thL: -10, snL: -10, thR: -22, snR: -22 }, 0, 230],
     [{ tl: 180, tu: 186, ua: 0, fa: 0, thR: -10, snR: -10, thL: -22, snL: -22 }, 0, 230]] },
@@ -245,8 +245,8 @@ export const EXTRA_MOTIONS: Record<string, M> = {
   'marcha-del-granjero': { db: 'both', f: [
     [{ thR: 55, snR: 118 }, 0, 420], [{}, 0, 420], [{ thL: 55, snL: 118 }, 0, 420], [{}, 0, 420]] },
   'giro-ruso-con-mancuerna': { v: 'front', noGround: 1, mat: 'top', db: 'two', f: [
-    [{ lean: -22, tw: -42, sa: 0.8, uaL: 85, faL: -45, uaR: 95, faR: -135, zEL: 12.6, zER: 12.6, zHL: 24.9, zHR: 24.9, thL: -125, snL: 95, thR: -55, snR: 85, sTh: 0.6 }, 150, 700],
-    [{ lean: -22, tw: 42, sa: 0.8, uaL: 85, faL: -45, uaR: 95, faR: -135, zEL: 12.6, zER: 12.6, zHL: 24.9, zHR: 24.9, thL: -125, snL: 95, thR: -55, snR: 85, sTh: 0.6 }, 150, 700]] },
+    [{ lean: -22, tw: -55, sa: 0.8, uaL: 96, faL: 34, uaR: 84, faR: 146, zEL: 12, zER: 12, zHL: 30, zHR: 30, thL: -125, snL: 95, thR: -55, snR: 85, sTh: 0.6 }, 150, 700],
+    [{ lean: -22, tw: 55, sa: 0.8, uaL: 96, faL: 34, uaR: 84, faR: 146, zEL: 12, zER: 12, zHL: 30, zHR: 30, thL: -125, snL: 95, thR: -55, snR: 85, sTh: 0.6 }, 150, 700]] },
   'lenador-con-mancuerna': { v: 'front', db: 'two', f: [
     [{ tl: -84, tu: -80, uaL: 48, faL: 48, uaR: 82, faR: 82, zHL: 8, zHR: 8, tw: 22, thL: 100, snL: 100, thR: 80, snR: 80 }, 150, 800],
     [{ tl: -94, tu: -98, uaL: -120, faL: -125, saL: 0.78, uaR: -135, faR: -140, zHL: 8, zHR: 8, tw: -22, thL: 100, snL: 100, thR: 80, snR: 80 }, 200, 800]] },
@@ -291,8 +291,8 @@ export const EXTRA_MOTIONS: Record<string, M> = {
     [{ uaL: 88, faL: 88, uaR: 92, faR: 92, zHL: 10, zHR: 10, lean: 22, sTh: 0.86, zAL: -12, zAR: -12, zKL: 4, zKR: 4 }, 150, 800],
     [{ uaL: 160, faL: 0, uaR: 20, faR: 180, zHL: 6, zHR: 6 }, 200, 800]] },
   'giro-ruso-con-pesa-rusa': { v: 'front', noGround: 1, mat: 'top', kb: 'both', f: [
-    [{ lean: -22, tw: -42, sa: 0.8, uaL: 85, faL: -45, uaR: 95, faR: -135, zEL: 12.6, zER: 12.6, zHL: 24.9, zHR: 24.9, thL: -125, snL: 95, thR: -55, snR: 85, sTh: 0.6 }, 150, 700],
-    [{ lean: -22, tw: 42, sa: 0.8, uaL: 85, faL: -45, uaR: 95, faR: -135, zEL: 12.6, zER: 12.6, zHL: 24.9, zHR: 24.9, thL: -125, snL: 95, thR: -55, snR: 85, sTh: 0.6 }, 150, 700]] },
+    [{ lean: -22, tw: -55, sa: 0.8, uaL: 96, faL: 34, uaR: 84, faR: 146, zEL: 12, zER: 12, zHL: 30, zHR: 30, thL: -125, snL: 95, thR: -55, snR: 85, sTh: 0.6 }, 150, 700],
+    [{ lean: -22, tw: 55, sa: 0.8, uaL: 96, faL: 34, uaR: 84, faR: 146, zEL: 12, zER: 12, zHL: 30, zHR: 30, thL: -125, snL: 95, thR: -55, snR: 85, sTh: 0.6 }, 150, 700]] },
 
   // ── Barra ──
   'sentadilla-con-barra': { bar: true, plant: 'anR', f: [
@@ -421,9 +421,9 @@ export const EXTRA_MOTIONS: Record<string, M> = {
   'dominadas-con-banda': { fist: true, anchor: { j: 'haR', y: -172 }, props: pullBar, f: [
     [{ ...HANG, th: 70, sn: 165 }, 250, 1100], [{ ...CHIN, th: 70, sn: 165 }, 300, 1100]] },
   'retraccion-escapular-colgado': { fist: true, anchor: { j: 'haR', y: -172 }, props: pullBar, f: [[HANG, 300, 700], [{ ...HANG, sa: 0.9, hd: -94 }, 600, 700]] },
-  'elevaciones-de-rodillas-colgado': { anchor: { j: 'haR', y: -172 }, props: pullBar, f: [[{ ...HANG, th: 90, sn: 92 }, 200, 900], [{ ...HANG, th: -15, sn: 80, tl: -96 }, 300, 900]] },
-  'elevaciones-de-piernas-colgado': { anchor: { j: 'haR', y: -172 }, props: pullBar, f: [[{ ...HANG, th: 90, sn: 92 }, 200, 1000], [{ ...HANG, th: -2, sn: -2, ft: -40, tl: -98 }, 300, 1000]] },
-  'colgarse-de-la-barra': { anchor: { j: 'haR', y: -172 }, props: pullBar, f: [[{ ...HANG, th: 90, sn: 92, ft: 70 }, 1400, 1100], [{ ...HANG, th: 91, sn: 92, ft: 72, hd: -94 }, 1400, 1100]] },
+  'elevaciones-de-rodillas-colgado': { fist: true, anchor: { j: 'haR', y: -172 }, props: pullBar, f: [[{ ...HANG, th: 90, sn: 92 }, 200, 900], [{ ...HANG, th: -15, sn: 80, tl: -96 }, 300, 900]] },
+  'elevaciones-de-piernas-colgado': { fist: true, anchor: { j: 'haR', y: -172 }, props: pullBar, f: [[{ ...HANG, th: 90, sn: 92 }, 200, 1000], [{ ...HANG, th: -2, sn: -2, ft: -40, tl: -98 }, 300, 1000]] },
+  'colgarse-de-la-barra': { fist: true, anchor: { j: 'haR', y: -172 }, props: pullBar, f: [[{ ...HANG, th: 90, sn: 92, ft: 70 }, 1400, 1100], [{ ...HANG, th: 91, sn: 92, ft: 72, hd: -94 }, 1400, 1100]] },
 
   // ── Comba ──
   'saltar-a-la-comba': { rope: true, per: 620, fn: rope({}) },
@@ -468,7 +468,8 @@ export const MOTION_OVERRIDES: Record<string, M> = {
     [{ uaL: 92, faL: 80, zEL: -14, zHL: -26, uaR: 118, faR: 28, thR: -25, snR: -15 }, 60, 700],
     [{ uaL: 92, faL: 80, zEL: -14, zHL: -26, uaR: 118, faR: 28, thR: 150, snR: 160 }, 60, 700]] },
   // crunch con el tramo de subida del abdominal completo de Mixamo
-  'crunch-abdominal': mocapCrunch({ tl: 180, tu: 180, hd: 184, ...KNEES, ua: 2, fa: 2 }, { tu: 203, hd: 214, ua: -10, fa: -10 },
+  // brazos cruzados sobre el pecho
+  'crunch-abdominal': mocapCrunch({ tl: 180, tu: 180, hd: 184, ...KNEES, ua: -22, fa: 176, zHL: 16, zHR: -16, zEL: 6, zER: -6 }, { tu: 203, hd: 214, ua: 1, fa: 199 },
     { mat: 1, anchor: { j: 'pel', y: -12.1 }, az: 20, el: 18 }),
   'crunch-con-brazos-estirados': mocapCrunch({ tl: 180, tu: 180, hd: 184, ...KNEES, ua: 178, fa: 178 }, { tu: 204, hd: 212, ua: 228, fa: 226 },
     { mat: 1, anchor: { j: 'pel', y: -12.1 }, az: 20, el: 18 }),
