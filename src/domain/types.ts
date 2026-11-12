@@ -65,6 +65,8 @@ export interface MotionSpec {
   /** Material que se mueve con el cuerpo (ver figure/Mannequin.ts, updateGear). */
   /** Pesa rusa: en una mano, cogida con las dos, o 'up': en la mano que está más arriba (pasa de una a otra). */
   kb?: 'L' | 'R' | 'both' | 'up';
+  /** La pesa rusa boca abajo (la bola por encima de las manos), como en el halo. */
+  kbUp?: boolean;
   /** Repite los fotogramas reflejados: el ejercicio alterna los dos lados (sin hacerse por lados). */
   alternate?: boolean;
   /** Agarre martillo: las mancuernas de canto (palmas enfrentadas). */

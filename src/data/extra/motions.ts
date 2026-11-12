@@ -297,11 +297,26 @@ export const EXTRA_MOTIONS: Record<string, M> = {
     [{ uaR: 30, faR: -100, zER: 8, zHR: 8 }, 150, 1000], [{ uaR: -82, faR: -86 }, 200, 1000]] },
   'cargada-con-pesa-rusa': { kb: 'R', plant: 'anR', f: [
     [{ tl: -35, th: 72, sn: 108, uaR: 100, faR: 100, uaL: 100, faL: 70, hd: -45 }, 100, 600], [{ uaR: 62, faR: -112, uaL: 100, faL: 70 }, 350, 700]] },
-  'halo-con-pesa-rusa': { v: 'front', kb: 'both', per: 2600, fn: (t) => {
-    const a = t * Math.PI * 2, tx = 11 * Math.sin(a), tz = 12 * Math.cos(a), ty = -24;
-    const eL = [-15 + 21 * Math.cos((250 * Math.PI) / 180), 21 * Math.sin((250 * Math.PI) / 180) - 8], eR = [-eL[0], eL[1]];
-    const faL = (Math.atan2(ty - eL[1], tx - eL[0]) * 180) / Math.PI, faR = (Math.atan2(ty - eR[1], tx - eR[0]) * 180) / Math.PI;
-    return { uaL: 250, uaR: -70, faL, faR, zEL: 4 + tz * 0.4, zER: 4 + tz * 0.4, zHL: tz, zHR: tz };
+  // halo: la pesa boca abajo (cogida por el asa con las dos manos) da vueltas alrededor de la cabeza, a la altura de la
+  // frente y separada de ella. Los brazos se calculan (dos huesos) para que las manos sigan de verdad el círculo.
+  'halo-con-pesa-rusa': { v: 'front', kb: 'both', kbUp: true, per: 3200, fn: (t) => {
+    const a = t * Math.PI * 2, R = 19;
+    // por delante pasa más baja (a la altura de la barbilla) y por detrás, más alta (a la altura de la nuca)
+    const tx = R * Math.sin(a), tz = R * Math.cos(a), ty = -57 + 6 * Math.cos(a);
+    const UA = 21, FA = 20.5;
+    const arm = (sx: number) => {
+      const S = [sx, -40], dx = tx - S[0], dy = ty - S[1];
+      const d = Math.min(UA + FA - 0.5, Math.hypot(dx, dy));
+      const base = Math.atan2(dy, dx);
+      const k = Math.acos(Math.max(-1, Math.min(1, (UA * UA + d * d - FA * FA) / (2 * UA * d))));
+      // el codo hacia fuera (lejos del centro)
+      const ua = base + (sx < 0 ? k : -k);
+      const E = [S[0] + UA * Math.cos(ua), S[1] + UA * Math.sin(ua)];
+      const fa = Math.atan2(ty - E[1], tx - E[0]);
+      return [(ua * 180) / Math.PI, (fa * 180) / Math.PI];
+    };
+    const [uaL, faL] = arm(-15), [uaR, faR] = arm(15);
+    return { uaL, faL, uaR, faR, zEL: tz * 0.45, zER: tz * 0.45, zHL: tz, zHR: tz };
   } },
   // de frente y alternando: la pesa arriba en una mano, inclinación hacia el otro lado (la otra mano baja por la pierna);
   // al subir, la pesa pasa a la otra mano por encima de la cabeza y se repite hacia el otro lado

@@ -820,10 +820,11 @@ export class MannequinScene {
       }
       kb.forEach((m) => (m.visible = !!c));
       if (!c) continue;
-      kb[1].position.copy(c).add(V(0, -1.5, 0));
+      const flip = spec.kbUp ? -1 : 1;
+      kb[1].position.copy(c).add(V(0, -1.5 * flip, 0));
       kb[1].scale.setScalar(3.6);
       kb[1].rotation.set(0, side ? Math.PI / 2 : 0, 0);
-      kb[0].position.copy(c).add(V(0, -8.5, 0));
+      kb[0].position.copy(c).add(V(0, -8.5 * flip, 0));
       kb[0].scale.set(6.2, 5.8, 6.2);
     }
     if (g.bar) {
