@@ -7,7 +7,6 @@ import { benchLie, benchRow, KNEES, LYB, PLF, PLH, PRONE, QUAD, ROWB, SUP } from
 type M = MotionSpec;
 
 const GUARD = { ua: 62, fa: -112 }; // brazos en guardia, puños delante de la cara
-const GUARD_L = { ua: 75, fa: -15 }; // brazos en L delante del cuerpo (codos abajo, antebrazos al frente)
 const CHEST_ARMS = { ua: 72, fa: -20, zHL: 12, zHR: -12, zEL: 2, zER: -2 }; // brazos doblados delante del pecho
 // de frente, rodillas dobladas: el muslo se acorta (la rodilla va hacia delante) y el tobillo vuelve debajo del cuerpo
 const SQUAT_F = { sTh: 0.75, zAL: -22.5, zAR: -22.5, uaL: 100, faL: 70, uaR: 80, faR: 110, zEL: 8, zER: 8, zHL: 20, zHR: 20 };
@@ -113,9 +112,16 @@ export const EXTRA_MOTIONS: Record<string, M> = {
       [step(0.25, 'L'), 0, 280], [mix(0.25), 80, 280],
       [A, 250, 1100]] } as M;
   })(),
-  'patada-frontal-alterna': { fist: true, f: [
-    [{ ...GUARD_L }, 120, 380], [{ ...GUARD_L, thR: -6, snR: -8, ftR: -40, thL: 95, snL: 92, tl: -98 }, 120, 380],
-    [{ ...GUARD_L }, 120, 380], [{ ...GUARD_L, thL: -6, snL: -8, ftL: -40, thR: 95, snR: 92, tl: -98 }, 120, 380]] },
+  // brazos doblados a los lados del cuerpo (codos atrás, antebrazos al frente); sube la rodilla y estira la pierna al frente
+  // sin bloquear la rodilla, la recoge y baja; cambia de pierna
+  'patada-frontal-alterna': (() => {
+    const ARMS = { ua: 100, fa: 12 };
+    const chamber = (s: 'L' | 'R') => ({ ...ARMS, ['th' + s]: 18, ['sn' + s]: 100, tl: -92 });
+    const kick = (s: 'L' | 'R') => ({ ...ARMS, ['th' + s]: 12, ['sn' + s]: 48, ['ft' + s]: -15, tl: -97 });
+    return { fist: true, f: [
+      [ARMS, 120, 260], [chamber('R'), 0, 200], [kick('R'), 90, 200], [chamber('R'), 0, 260],
+      [ARMS, 120, 260], [chamber('L'), 0, 200], [kick('L'), 90, 200], [chamber('L'), 0, 260]] } as M;
+  })(),
   'saltos-suaves-en-el-sitio': { f: [
     [{ th: 82, sn: 99, ua: 96, fa: 80 }, 0, 200], [{ th: 90, sn: 90, ft: 58, ua: 88, fa: 86 }, 0, 200]] },
   'boxeo-con-desplazamiento': { fist: true, f: [
