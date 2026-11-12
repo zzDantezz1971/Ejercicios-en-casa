@@ -281,6 +281,10 @@ button:focus-visible, input:focus-visible, label:focus-within { outline: 2px sol
 }
 .w-sec-chip .ico { width: 18px; height: 18px; }
 .detail-body { display: flex; flex-direction: column; gap: 12px; }
+.detail-pager { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: -2px; }
+.detail-pager .icon-btn { width: 36px; height: 36px; }
+.detail-pager .icon-btn:disabled { opacity: .3; }
+.detail-pager span { text-align: center; }
 .detail-body h2 { font-size: 2.1rem; line-height: 1.02; text-transform: uppercase; }
 .detail-body .badges { padding: 0; }
 .note { display: flex; gap: 10px; align-items: flex-start; background: var(--accent-soft); border-radius: 14px; padding: 12px 14px; font-size: .94rem; }

@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-12T09:16:14Z",
+    "es": ["En la ficha de un ejercicio, desliza el dedo a la izquierda para ver el siguiente de la lista y a la derecha para volver al anterior (también con las flechas de debajo del muñeco). Funciona desde la lista de ejercicios, tu tabla y el historial."],
+    "ca": ["A la fitxa d'un exercici, llisca el dit cap a l'esquerra per veure el següent de la llista i cap a la dreta per tornar a l'anterior (també amb les fletxes de sota el ninot). Funciona des de la llista d'exercicis, la teva taula i l'historial."],
+    "en": ["On an exercise's page, swipe left to see the next one in the list and right to go back to the previous one (or use the arrows below the figure). It works from the exercise list, your routine and your history."]
+  },
+  {
     "fecha": "2026-11-12T09:06:27Z",
     "es": ["Tumbado o sentado con las piernas estiradas (esfinge, cobra, nadador, paloma, Y-T-W, remo con banda…): las piernas descansan en el suelo, ya no parece que el cuerpo flote.", "Esfinge: los antebrazos apoyados en el suelo. Postura del niño: brazos y manos estirados en el suelo."],
     "ca": ["Estirat o assegut amb les cames estirades (esfinx, cobra, nedador, colom, Y-T-W, rem amb banda…): les cames reposen a terra, ja no sembla que el cos suri.", "Esfinx: els avantbraços recolzats a terra. Postura del nen: braços i mans estirats a terra."],

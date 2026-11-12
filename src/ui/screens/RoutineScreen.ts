@@ -184,6 +184,7 @@ export class RoutineScreen implements Screen {
     if (!items.length) return;
     const rows = items.map((it, i) => {
       const ex = this.app.catalog.get(it.exerciseId)!;
+      this.shown.push(ex);
       const content = h('div', { class: 'row-ex' },
         h('span', { class: 'order' }, i + 1),
         // tocar la miniatura o el nombre abre la ficha (cómo se hace)
@@ -251,6 +252,7 @@ export class RoutineScreen implements Screen {
   private renderList(): void {
     this.io.disconnect();
     clear(this.list);
+    this.shown = [];
     this.list.className = this.mode === 'all' || this.mode === 'fav' ? 'ex-grid' : 'ex-rows';
     if (this.mode === 'fav') {
       this.favs().forEach((ex) => this.list.append(this.card(ex)));
@@ -315,11 +317,15 @@ export class RoutineScreen implements Screen {
 
   /** Abre la ficha del ejercicio; en la versión gratis, los de pago llevan a hacerse prémium. */
   private open(ex: ExerciseDef): void {
-    if (this.app.access.canUse(ex.id)) this.app.push(new DetailScreen(this.app, ex));
+    if (this.app.access.canUse(ex.id)) this.app.push(new DetailScreen(this.app, ex, this.shown));
     else this.app.showPremium();
   }
 
+  /** Ejercicios de la lista que se ve, en su orden (para pasar de uno a otro en la ficha). */
+  private shown: ExerciseDef[] = [];
+
   private card(ex: ExerciseDef): HTMLElement {
+    this.shown.push(ex);
     const pos = this.editor.position(ex.section, ex.id);
     const locked = !this.app.access.canUse(ex.id);
     const secs = this.editor.seconds(ex.section, ex.id);

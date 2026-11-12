@@ -1,6 +1,6 @@
 import { LOCALE, DEC } from '../../i18n';
 import { WorkoutPlan } from '../../domain/WorkoutPlan';
-import { SECTION_IDS, SECTION_TITLES, emptyRoutine, type HeartSummary, type HistoryEntry, type SavedRoutine } from '../../domain/types';
+import { SECTION_IDS, SECTION_TITLES, emptyRoutine, type ExerciseDef, type HeartSummary, type HistoryEntry, type SavedRoutine } from '../../domain/types';
 import type { App, Screen } from '../App';
 import { confirmDialog, h, humanDuration, kg, mmss } from '../dom';
 import { icon, SECTION_STYLE } from '../icons';
@@ -18,6 +18,8 @@ export class HistoryDetailScreen implements Screen {
     const end = new Date(d.getTime() + (e.durationSec + (e.pausedSec ?? 0)) * 1000);
     const hm = (x: Date) => x.toLocaleTimeString(LOCALE, { hour: '2-digit', minute: '2-digit' });
     const items = e.items ?? [];
+    // ejercicios de este entrenamiento, por apartados: desde la ficha se pasa de uno a otro deslizando el dedo
+    const shown = SECTION_IDS.flatMap((s) => items.filter((i) => i.section === s)).map((i) => app.catalog.get(i.exerciseId)).filter((x): x is ExerciseDef => !!x);
     const activeSec = items.reduce((n, i) => n + i.seconds, 0);
     const cal = app.store.caloriesFor(e);
 
@@ -36,7 +38,7 @@ export class HistoryDetailScreen implements Screen {
         const ex = app.catalog.get(it.exerciseId);
         const status = it.completed ? '' : it.seconds > 0 ? 'Saltado a medias' : 'Saltado';
         const r = h(ex ? 'button' : 'div', { class: 'card hd-row' + (it.completed ? '' : ' skipped'),
-          ...(ex ? { 'aria-label': `Cómo se hace: ${ex.name}`, onclick: () => (app.access.canUse(ex.id) ? app.push(new DetailScreen(app, ex)) : app.showPremium()) } : {}) },
+          ...(ex ? { 'aria-label': `Cómo se hace: ${ex.name}`, onclick: () => (app.access.canUse(ex.id) ? app.push(new DetailScreen(app, ex, shown)) : app.showPremium()) } : {}) },
           h('div', { class: 'hd-top' },
             h('span', { class: 'hd-mark' }, icon(it.completed ? 'check' : 'next')),
             h('span', { class: 'hd-secs' }, mmss(it.seconds), it.seconds < it.planned ? h('span', { class: 'muted small' }, ` / ${mmss(it.planned)}`) : null)),

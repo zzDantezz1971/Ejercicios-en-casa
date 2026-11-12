@@ -690,6 +690,7 @@ const ROWS: Row[] = [
   ['Primer día de racha', 'Primer dia de ratxa', 'First day of your streak'],
   ['Racha de {n} días seguidos', 'Ratxa de {n} dies seguits', '{n}-day streak'],
   ['Desliza para cambiar de día', 'Llisca per canviar de dia', 'Swipe to change day'],
+  ['Desliza para cambiar de ejercicio', 'Llisca per canviar d’exercici', 'Swipe to change exercise'],
   ['Otros entrenamientos', 'Altres entrenaments', 'Other workouts'],
   ['Entrenamiento anterior', 'Entrenament anterior', 'Previous workout'],
   ['Entrenamiento siguiente', 'Entrenament següent', 'Next workout'],

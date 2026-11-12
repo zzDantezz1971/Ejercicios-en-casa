@@ -1,5 +1,5 @@
 import { WorkoutPlan, clampRounds } from '../../domain/WorkoutPlan';
-import { SECTION_IDS, SECTION_TITLES, type SectionId } from '../../domain/types';
+import { SECTION_IDS, SECTION_TITLES, type ExerciseDef, type SectionId } from '../../domain/types';
 import type { App, Screen } from '../App';
 import { h, humanDuration, kg, plural } from '../dom';
 import { icon, SECTION_STYLE } from '../icons';
@@ -28,6 +28,8 @@ export class TableViewScreen implements Screen {
     const table = app.store.active;
     const plan = WorkoutPlan.build(app.playable(table.routine), app.catalog, app.store.settings, table.rounds);
     const blocks: HTMLElement[] = [];
+    // todos los ejercicios que se ven, en orden: desde la ficha se pasa de uno a otro deslizando el dedo
+    const shown: ExerciseDef[] = [];
     // número de orden dentro de toda la tabla
     let n = SECTION_IDS.slice(0, this.focus ? SECTION_IDS.indexOf(this.focus) : 0)
       .reduce((t, s) => t + table.routine[s].filter((i) => app.catalog.has(i.exerciseId)).length, 0);
@@ -45,13 +47,14 @@ export class TableViewScreen implements Screen {
       const grid = h('div', { class: 'hd-grid tv-grid' });
       for (const it of items) {
         const ex = app.catalog.get(it.exerciseId)!;
+        shown.push(ex);
         n++;
         const img = h('img', { alt: '', class: 'thumb', 'data-id': ex.id });
         const locked = !app.access.canUse(ex.id);
         const fig = h('div', { class: 'thumb-box tv-thumb' }, img, h('span', { class: 'tv-num' }, String(n)),
           locked ? h('span', { class: 'lock-mark', 'aria-hidden': 'true' }, icon('lock')) : null);
         this.io.observe(fig);
-        const tile = h('button', { class: 'card hd-row tv-tile' + (locked ? ' locked' : ''), 'aria-label': `Cómo se hace: ${ex.name}`, onclick: () => (app.access.canUse(ex.id) ? app.push(new DetailScreen(app, ex)) : app.showPremium()) },
+        const tile = h('button', { class: 'card hd-row tv-tile' + (locked ? ' locked' : ''), 'aria-label': `Cómo se hace: ${ex.name}`, onclick: () => (app.access.canUse(ex.id) ? app.push(new DetailScreen(app, ex, shown)) : app.showPremium()) },
           fig,
           h('strong', { class: 'hd-name' }, ex.name),
           h('span', { class: 'muted small hd-sub' }, `${it.seconds} s`, it.weight ? ` · ${kg(it.weight)}` : '', ex.oneSided ? ' · ' : '', ex.oneSided ? h('span', { class: 'by-sides' }, 'por lados') : null));

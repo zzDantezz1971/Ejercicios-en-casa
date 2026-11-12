@@ -33,7 +33,11 @@ export class DetailScreen implements Screen {
     this.paintFav();
   }
 
-  constructor(private readonly app: App, private readonly ex: ExerciseDef) {
+  /**
+   * @param list ejercicios de la lista desde la que se abrió, en su orden: deslizando el dedo a los lados
+   * se pasa al siguiente o al anterior.
+   */
+  constructor(private readonly app: App, private readonly ex: ExerciseDef, private readonly list: readonly ExerciseDef[] = []) {
     this.paintFav();
     const d = ex.description;
     this.el.style.setProperty('--sec', SECTION_STYLE[ex.section].color);
@@ -64,6 +68,50 @@ export class DetailScreen implements Screen {
           : h('p', { class: 'muted' }, 'Descripción en preparación.'),
         this.action),
     );
+    const nav = this.neighbours();
+    if (nav.prev || nav.next) {
+      this.el.querySelector('.detail-body')!.prepend(h('div', { class: 'detail-pager' },
+        h('button', { class: 'icon-btn small', 'aria-label': 'Anterior', disabled: !nav.prev, onclick: () => this.go(-1) }, icon('prev')),
+        h('span', { class: 'muted small' }, `${nav.pos} / ${nav.total}`, ' · ', 'Desliza para cambiar de ejercicio'),
+        h('button', { class: 'icon-btn small', 'aria-label': 'Siguiente', disabled: !nav.next, onclick: () => this.go(1) }, icon('next'))));
+      this.swipe();
+    }
+  }
+
+  /** Ejercicios de al lado en la lista (sin contar los bloqueados ni los eliminados). */
+  private neighbours(): { prev?: ExerciseDef; next?: ExerciseDef; pos: number; total: number } {
+    const usable = this.list.filter((e, i, a) => a.findIndex((x) => x.id === e.id) === i && this.app.access.canUse(e.id) && !this.app.store.hidden.has(e.id));
+    const i = usable.findIndex((e) => e.id === this.ex.id);
+    if (i < 0) return { pos: 0, total: 0 };
+    return { prev: usable[i - 1], next: usable[i + 1], pos: i + 1, total: usable.length };
+  }
+
+  /** Pasa al ejercicio anterior (-1) o al siguiente (1) de la lista. */
+  private go(dir: -1 | 1): void {
+    const n = this.neighbours();
+    const to = dir < 0 ? n.prev : n.next;
+    if (!to) return;
+    this.app.haptics.tap();
+    window.scrollTo(0, 0);
+    this.app.replace(new DetailScreen(this.app, to, this.list), dir < 0 ? 'back' : 'forward');
+  }
+
+  /** Deslizar el dedo a los lados (fuera del muñeco, que se gira arrastrando): izquierda, siguiente; derecha, anterior. */
+  private swipe(): void {
+    let x0 = 0, y0 = 0, t0 = 0, on = false;
+    this.el.addEventListener('touchstart', (ev) => {
+      const t = ev.touches[0];
+      on = ev.touches.length === 1 && !(ev.target as Element).closest?.('.stage');
+      x0 = t.clientX; y0 = t.clientY; t0 = Date.now();
+    }, { passive: true });
+    this.el.addEventListener('touchend', (ev) => {
+      if (!on) return;
+      on = false;
+      const t = ev.changedTouches[0];
+      const dx = t.clientX - x0, dy = t.clientY - y0;
+      if (Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy) * 1.6 || Date.now() - t0 > 800) return;
+      this.go(dx < 0 ? 1 : -1);
+    }, { passive: true });
   }
 
   enter(): void {
