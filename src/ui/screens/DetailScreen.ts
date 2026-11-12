@@ -93,7 +93,7 @@ export class DetailScreen implements Screen {
     if (!to || this.turning) return;
     if (reducedMotion()) return this.open(to, dir, 'fade');
     const peek = this.peek(to, dir);
-    this.turn(dir, to, peek, 0);
+    this.turn(dir, peek, 0);
   }
 
   private turning = false;
@@ -117,17 +117,13 @@ export class DetailScreen implements Screen {
     }
   }
 
-  /** El ejercicio de al lado, debajo de la hoja: una imagen fija (el muñeco animado sale al soltar). */
-  private peek(to: ExerciseDef, dir: -1 | 1): { el: HTMLElement; shade: HTMLElement; set: (p: number) => void } {
-    const img = h('img', { alt: '', class: 'thumb' });
-    void this.app.thumbs.get(to).then((url) => (img.src = url));
-    const el = h('div', { class: 'page-peek detail', 'aria-hidden': 'true' },
-      h('div', { class: 'peek-inner detail-body' },
-        h('div', { class: 'stage peek-stage' }, img),
-        h('h2', {}, to.name),
-        h('p', { class: 'muted' }, to.zone)));
-    el.style.setProperty('--sec', SECTION_STYLE[to.section].color);
+  /** El ejercicio de al lado, debajo de la hoja: su ficha completa, ya montada (el muñeco quieto hasta que se suelta). */
+  private peek(to: ExerciseDef, dir: -1 | 1): { el: HTMLElement; shade: HTMLElement; set: (p: number) => void; screen: DetailScreen } {
+    const screen = new DetailScreen(this.app, to, this.list);
+    const el = h('div', { class: 'page-peek', 'aria-hidden': 'true' }, screen.el);
     document.body.append(el);
+    // el muñeco se prepara en el siguiente fotograma (así el dedo no nota el trabajo)
+    requestAnimationFrame(() => { if (el.isConnected) screen.prime(); });
     const shade = h('div', { class: 'page-shade' });
     this.el.append(shade);
     this.el.classList.add('page-lifted');
@@ -136,11 +132,23 @@ export class DetailScreen implements Screen {
       el.style.transform = `translateX(${(1 - p) * 40 * dir}px) scale(${0.92 + p * 0.08})`;
     };
     set(0);
-    return { el, shade, set };
+    return { el, shade, set, screen };
+  }
+
+  /** Monta el muñeco (dibuja una imagen quieta) sin empezar a moverlo. */
+  prime(): void {
+    this.view ??= new FigureView(this.canvas, this.ex);
+  }
+
+  /** Deja la ficha de al lado sin usar. */
+  private drop(peek: ReturnType<DetailScreen['peek']>): void {
+    peek.el.remove();
+    peek.shade.remove();
+    peek.screen.dispose();
   }
 
   /** Termina de pasar la hoja (hacia el lado de dir) y abre el ejercicio de al lado. */
-  private turn(dir: -1 | 1, to: ExerciseDef, peek: ReturnType<DetailScreen['peek']>, from: number): void {
+  private turn(dir: -1 | 1, peek: ReturnType<DetailScreen['peek']>, from: number): void {
     this.turning = true;
     const w = window.innerWidth || 400;
     const ease = 'cubic-bezier(.3, .7, .3, 1)';
@@ -155,13 +163,12 @@ export class DetailScreen implements Screen {
       peek.set(1);
     });
     window.setTimeout(() => {
-      this.open(to, dir, 'none');
-      // la imagen fija se va cuando el muñeco animado ya está en su sitio
-      window.setTimeout(() => {
-        peek.el.style.transition = 'opacity .18s ease-out';
-        peek.el.style.opacity = '0';
-        window.setTimeout(() => peek.el.remove(), 200);
-      }, 60);
+      // la ficha de debajo pasa a ser la pantalla (es la misma: no hay salto)
+      peek.screen.prime();
+      this.app.haptics.tap();
+      window.scrollTo(0, 0);
+      this.app.replace(peek.screen, 'none');
+      peek.el.remove();
     }, 330);
   }
 
@@ -180,8 +187,7 @@ export class DetailScreen implements Screen {
       this.el.style.transition = '';
       this.el.style.transformOrigin = '';
       this.el.classList.remove('page-lifted');
-      peek?.el.remove();
-      peek?.shade.remove();
+      if (peek) this.drop(peek);
     }, 300);
   }
 
@@ -220,12 +226,12 @@ export class DetailScreen implements Screen {
       if (!to) {
         // no hay más: se estira un poco
         dx = mx * 0.22;
-        if (peek) { peek.el.remove(); peek.shade.remove(); peek = null; }
+        if (peek) { this.drop(peek); peek = null; }
         this.place(dx, null);
         return;
       }
       if (!peek || peekDir !== dir) {
-        if (peek) { peek.el.remove(); peek.shade.remove(); }
+        if (peek) this.drop(peek);
         peek = this.peek(to, dir as -1 | 1);
         peekDir = dir;
       }
@@ -251,7 +257,7 @@ export class DetailScreen implements Screen {
       }
       if (pass && to && peek) {
         const p = peek; peek = null;
-        this.turn(dir, to, p, dx);
+        this.turn(dir, p, dx);
       } else {
         this.settle(peek);
         peek = null;
