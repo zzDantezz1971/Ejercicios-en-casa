@@ -380,7 +380,9 @@ export const EXTRA_MOTIONS: Record<string, M> = {
   'aperturas-con-banda': { v: 'front', band: (J) => [J.neck[0], J.neck[1] + 10], f: [
     [{ uaL: 180, faL: 172, uaR: 0, faR: 8 }, 150, 750], [{ uaL: 180, faL: 172, uaR: 0, faR: 8, saL: -0.35, saR: -0.35 }, 200, 750]] },
   'separacion-de-banda': { v: 'front', band: 'hands', f: [
-    [{ uaL: 180, faL: 180, uaR: 0, faR: 0, saL: -0.31, saR: -0.31 }, 150, 800], [{ uaL: 180, faL: 180, uaR: 0, faR: 0 }, 300, 800]] },
+    // brazos al frente con las manos juntas y, al abrir, las manos un poco por delante: la banda pasa por delante del pecho
+    [{ uaL: 180, faL: 180, uaR: 0, faR: 0, saL: -0.31, saR: -0.31, zEL: 18, zER: 18, zHL: 38, zHR: 38 }, 150, 800],
+    [{ uaL: 180, faL: 180, uaR: 0, faR: 0, zEL: 6, zER: 6, zHL: 14, zHR: 14 }, 300, 800]] },
   'face-pull-con-banda': { band: (J) => [J.head[0] + 70, J.head[1] + 4], f: [
     [{ ua: -4, fa: -4 }, 150, 800], [{ ua: 196, fa: -22, hd: -92 }, 300, 800]] },
   'curl-con-banda': { band: 'feet', f: [[{}, 150, 850], [{ ua: 85, fa: -50 }, 150, 850]] },
