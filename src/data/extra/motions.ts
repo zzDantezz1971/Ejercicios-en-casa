@@ -299,13 +299,22 @@ export const EXTRA_MOTIONS: Record<string, M> = {
     [{ tl: -35, th: 72, sn: 108, uaR: 100, faR: 100, uaL: 100, faL: 70, hd: -45 }, 100, 600], [{ uaR: 62, faR: -112, uaL: 100, faL: 70 }, 350, 700]] },
   // halo: la pesa boca abajo (cogida por el asa con las dos manos) da vueltas alrededor de la cabeza, a la altura de la
   // frente y separada de ella. Los brazos se calculan (dos huesos) para que las manos sigan de verdad el círculo.
+  // halo: la pesa boca abajo (cogida por el asa con las dos manos) da vueltas alrededor de la cabeza, separada de ella.
+  // Los hombros acompañan: sube el del brazo que pasa por encima de la cabeza, los dos se elevan cuando la pesa va por
+  // detrás y el tronco gira un poco con ella. Los brazos se calculan (dos huesos) para que las manos sigan el círculo.
   'halo-con-pesa-rusa': { v: 'front', kb: 'both', kbUp: true, per: 3200, fn: (t) => {
     const a = t * Math.PI * 2, R = 19;
     // por delante pasa más baja (a la altura de la barbilla) y por detrás, más alta (a la altura de la nuca)
-    const tx = R * Math.sin(a), tz = R * Math.cos(a), ty = -57 + 6 * Math.cos(a);
+    const X = R * Math.sin(a), Z = R * Math.cos(a), ty = -57 + 6 * Math.cos(a);
+    const tw = 10 * Math.sin(a);
+    // las manos se calculan en el sistema del tronco ya girado
+    const r = (tw * Math.PI) / 180, c = Math.cos(r), sn = Math.sin(r);
+    const tx = X * c - Z * sn, tz = X * sn + Z * c;
+    const back = Math.max(0, -Math.cos(a));
+    const shuL = 1.5 + 3 * back + 4 * Math.max(0, Math.sin(a)), shuR = 1.5 + 3 * back + 4 * Math.max(0, -Math.sin(a));
     const UA = 21, FA = 20.5;
-    const arm = (sx: number) => {
-      const S = [sx, -40], dx = tx - S[0], dy = ty - S[1];
+    const arm = (sx: number, up: number) => {
+      const S = [sx, -40 - up], dx = tx - S[0], dy = ty - S[1];
       const d = Math.min(UA + FA - 0.5, Math.hypot(dx, dy));
       const base = Math.atan2(dy, dx);
       const k = Math.acos(Math.max(-1, Math.min(1, (UA * UA + d * d - FA * FA) / (2 * UA * d))));
@@ -315,8 +324,8 @@ export const EXTRA_MOTIONS: Record<string, M> = {
       const fa = Math.atan2(ty - E[1], tx - E[0]);
       return [(ua * 180) / Math.PI, (fa * 180) / Math.PI];
     };
-    const [uaL, faL] = arm(-15), [uaR, faR] = arm(15);
-    return { uaL, faL, uaR, faR, zEL: tz * 0.45, zER: tz * 0.45, zHL: tz, zHR: tz };
+    const [uaL, faL] = arm(-15, shuL), [uaR, faR] = arm(15, shuR);
+    return { uaL, faL, uaR, faR, shuL, shuR, tw, hd: -90 + 5 * Math.sin(a), zEL: tz * 0.45, zER: tz * 0.45, zHL: tz, zHR: tz };
   } },
   // de frente y alternando: la pesa arriba en una mano, inclinación hacia el otro lado (la otra mano baja por la pierna);
   // al subir, la pesa pasa a la otra mano por encima de la cabeza y se repite hacia el otro lado
