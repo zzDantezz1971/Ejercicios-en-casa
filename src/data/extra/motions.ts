@@ -206,10 +206,10 @@ export const EXTRA_MOTIONS: Record<string, M> = {
     [{ uaR: 4, faR: -6, uaL: 94, faL: 90 }, 300, 700], [{ uaR: 4, faR: -6, uaL: 94, faL: 90, ft: 52 }, 600, 700]] },
   // de pie con la espalda en la pared y los pies a un paso, se desliza hasta quedar sentado (rodillas a 90°) y aguanta;
   // los pies a la distancia justa para que la cadera quede siempre junto a la pared
-  'sentadilla-isometrica-en-la-pared': { plant: 'anR', props: (J, P) => P.wall(J.pel[0] - 11), f: [
-    [{ tl: -92, th: 59.5, sn: 59.5, ft: 0, ua: 92, fa: 90, hd: -92 }, 700, 1700],
-    [{ tl: -92, th: 0, sn: 90, ua: 90, fa: 30, hd: -92 }, 1600, 900],
-    [{ tl: -91, th: 2, sn: 90, ua: 90, fa: 28, hd: -90 }, 1600, 1500]] },
+  'sentadilla-isometrica-en-la-pared': { plant: 'anR', props: (J, P) => P.wall(J.pel[0] - 13.5), f: [
+    [{ tl: -90.5, th: 59.5, sn: 59.5, ft: 0, ua: 92, fa: 90, hd: -92 }, 700, 1700],
+    [{ tl: -90.5, th: 0, sn: 90, ua: 90, fa: 30, hd: -92 }, 1600, 900],
+    [{ tl: -90, th: 2, sn: 90, ua: 90, fa: 28, hd: -90 }, 1600, 1500]] },
   'subida-a-silla': { props: (J, P) => P.benchFlat(J.pel[0] + 16, J.pel[0] + 46, 42), f: [
     [{ ...HIPS }, 150, 650], [{ ...HIPS, thR: -24, snR: 92, ftR: 0 }, 100, 750], [{ ...HIPS, x: 30, jy: 42 }, 250, 750],
     [{ ...HIPS, thR: -24, snR: 92, ftR: 0 }, 100, 650]] },
