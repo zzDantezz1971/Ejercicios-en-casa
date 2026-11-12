@@ -172,7 +172,8 @@ export const EXTRA_MOTIONS: Record<string, M> = {
     [{ tl: -45, ua: 90, fa: 90, th: 135, sn: 135, ft: 60 }, 200, 750], [{ tl: -32, ua: 150, fa: 30, th: 148, sn: 148, ft: 70 }, 150, 850]] },
   'flexiones-declinadas': { mat: 1, plant: 'haR', props: (J, P) => P.benchFlat(J.anR[0] - 16, J.anR[0] + 12, 40), f: [
     [{ tl: -2, ua: 90, fa: 90, th: 179, sn: 179, ft: 90 }, 200, 750], [{ tl: 10, ua: 150, fa: 30, th: 190, sn: 190, ft: 90 }, 150, 850]] },
-  'flexiones-con-apertura-en-t': { mat: 1, plant: 'haR', handsDown: true, f: [
+  // fijo por los pies: con la mano derecha fija, al levantarla se movía todo el cuerpo
+  'flexiones-con-apertura-en-t': { mat: 1, plant: 'anR', handsDown: true, f: [
     [PLH, 100, 650], [PUSH_DOWN, 100, 750], [PLH, 100, 500], [{ ...PLH, uaL: -88, faL: -88, saL: 0.95, hd: -40 }, 450, 600],
     [PLH, 100, 650], [PUSH_DOWN, 100, 750], [PLH, 100, 500], [{ ...PLH, uaR: -88, faR: -88, saR: 0.95, hd: -40 }, 450, 600]] },
   'flexiones-en-pica': { mat: 1, plant: 'haR', f: [
@@ -340,8 +341,9 @@ export const EXTRA_MOTIONS: Record<string, M> = {
   } },
   'remo-alto-con-pesa-rusa': { v: 'front', kb: 'both', f: [
     // abajo: cadera atrás y rodillas dobladas, la pesa entre las piernas; arriba: cadera extendida y codos altos
-    [{ uaL: 88, faL: 88, uaR: 92, faR: 92, zHL: 10, zHR: 10, lean: 22, sTh: 0.86, zAL: -12, zAR: -12, zKL: 4, zKR: 4 }, 150, 800],
-    [{ uaL: 160, faL: 0, uaR: 20, faR: 180, zHL: 6, zHR: 6 }, 200, 800]] },
+    // piernas bien abiertas (como en la sentadilla sumo) para que se vea la pesa pasar entre ellas
+    [{ thL: 132, snL: 104, thR: 48, snR: 76, ftL: 180, ftR: 0, zKL: 6, zKR: 6, uaL: 86, faL: 88, uaR: 94, faR: 92, zHL: 9, zHR: 9, lean: 22 }, 150, 800],
+    [{ thL: 116, snL: 116, thR: 64, snR: 64, ftL: 180, ftR: 0, uaL: 160, faL: 0, uaR: 20, faR: 180, zHL: 6, zHR: 6 }, 200, 800]] },
   'giro-ruso-con-pesa-rusa': { v: 'front', noGround: 1, mat: 'top', kb: 'both', f: [
     [{ lean: -22, tw: -55, sa: 0.8, uaL: 100, faL: 2, uaR: 80, faR: 178, zEL: 14, zER: 14, zHL: 34, zHR: 34, thL: -125, snL: 95, thR: -55, snR: 85, sTh: 0.6 }, 150, 700],
     [{ lean: -22, tw: 55, sa: 0.8, uaL: 100, faL: 2, uaR: 80, faR: 178, zEL: 14, zER: 14, zHL: 34, zHR: 34, thL: -125, snL: 95, thR: -55, snR: 85, sTh: 0.6 }, 150, 700]] },
