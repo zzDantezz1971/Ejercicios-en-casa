@@ -782,7 +782,9 @@ export class MannequinScene {
     const spec = this.motion.spec, G = this.geo;
     const iron = this.mat('#2E3440', 0.45, 0.35), steel = this.mat(this.pal.iron, 0.3, 0.4);
     const many = (n: number, g: THREE.BufferGeometry, m: THREE.Material) => Array.from({ length: n }, () => this.add(g, m));
-    if (spec.kb) for (const h of spec.kb === 'both' ? ['L', 'R'] : spec.kb === 'up' ? ['L'] : [spec.kb]) this.gear['kb' + h] = [this.add(G.sph, iron), this.add(G.ring, iron)];
+    // pesa rusa: gris, del mismo color que las mancuernas
+    const kbM = this.mat(this.pal.iron, 0.32, 0.3);
+    if (spec.kb) for (const h of spec.kb === 'both' ? ['L', 'R'] : spec.kb === 'up' ? ['L'] : [spec.kb]) this.gear['kb' + h] = [this.add(G.sph, kbM), this.add(G.ring, kbM)];
     if (spec.bar) this.gear.bar = [this.add(G.cyl, steel), ...many(4, G.cyl, iron)];
     if (spec.band) this.gear.band = many(2, G.cyl, this.mat(this.pal.band, 0.55));
     if (spec.ball) this.gear.ball = [this.add(G.sph, this.mat('#4F7DF0', 0.35))];
