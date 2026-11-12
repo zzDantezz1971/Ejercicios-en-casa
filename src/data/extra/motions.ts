@@ -204,12 +204,22 @@ export const EXTRA_MOTIONS: Record<string, M> = {
     [{ ft: 20, th: 70, sn: 108, ua: 80, fa: 60 }, 0, 260]] },
   'elevacion-de-talones-de-pie': { props: (J, P) => P.wall(J.haR[0] + 3, 20 - J.haR[1], 50), f: [
     [{ uaR: 4, faR: -6, uaL: 94, faL: 90 }, 300, 700], [{ uaR: 4, faR: -6, uaL: 94, faL: 90, ft: 52 }, 600, 700]] },
-  // de pie con la espalda en la pared y los pies a un paso, se desliza hasta quedar sentado (rodillas a 90°) y aguanta;
-  // los pies a la distancia justa para que la cadera quede siempre junto a la pared
-  'sentadilla-isometrica-en-la-pared': { plant: 'anR', props: (J, P) => P.wall(J.pel[0] - 13.5), f: [
-    [{ tl: -90.5, th: 59.5, sn: 59.5, ft: 0, ua: 92, fa: 90, hd: -92 }, 700, 1700],
-    [{ tl: -90.5, th: 0, sn: 90, ua: 90, fa: 30, hd: -92 }, 1600, 900],
-    [{ tl: -90, th: 2, sn: 90, ua: 90, fa: 28, hd: -90 }, 1600, 1500]] },
+  // de pie con la espalda en la pared y los pies a un paso, baja deslizándose hasta quedar sentado (rodillas a 90°), aguanta
+  // y vuelve a subir. Las piernas se calculan en cada instante (dos huesos) para que la cadera baje recta, pegada a la pared,
+  // con los pies quietos. La pared, justo detrás de lo que más sobresale de la espalda (la nuca y los glúteos).
+  'sentadilla-isometrica-en-la-pared': { plant: 'anR', per: 9000, props: (J, P) => P.wall(J.pel[0] - 18.3), fn: (t) => {
+    const sm = (x: number) => x * x * (3 - 2 * x);
+    // 0 = de pie, 1 = sentado
+    const k = t < 0.08 ? 0 : t < 0.26 ? sm((t - 0.08) / 0.18) : t < 0.8 ? 1 : t < 0.95 ? 1 - sm((t - 0.8) / 0.15) : 0;
+    const TH = 34, SH = 33, D = 34; // muslo, espinilla y distancia de la cadera a los tobillos
+    const H = Math.sqrt((TH + SH) ** 2 - D * D) * (1 - k) + SH * k - 0.01; // altura de la cadera sobre el tobillo
+    const d = Math.hypot(D, H), base = Math.atan2(H, D);
+    const a = Math.acos(Math.max(-1, Math.min(1, (TH * TH + d * d - SH * SH) / (2 * TH * d))));
+    const th = ((base - a) * 180) / Math.PI; // rodilla hacia delante y arriba
+    const kx = TH * Math.cos(base - a), ky = TH * Math.sin(base - a);
+    const sn = (Math.atan2(H - ky, D - kx) * 180) / Math.PI;
+    return { tl: -90.5, th, sn, ft: 0, ua: 92 - 2 * k, fa: 90 - 60 * k, hd: -92 };
+  } },
   'subida-a-silla': { props: (J, P) => P.benchFlat(J.pel[0] + 16, J.pel[0] + 46, 42), f: [
     [{ ...HIPS }, 150, 650], [{ ...HIPS, thR: -24, snR: 92, ftR: 0 }, 100, 750], [{ ...HIPS, x: 30, jy: 42 }, 250, 750],
     [{ ...HIPS, thR: -24, snR: 92, ftR: 0 }, 100, 650]] },
