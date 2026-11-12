@@ -67,8 +67,8 @@ function frameMatrix(dir: V3, ref: V3): THREE.Matrix4 {
   return new THREE.Matrix4().makeBasis(x, y, z);
 }
 
-/** Cuánto se levanta la punta del pie (radianes); 0: planos en el suelo (mapa de músculos). */
-const FOOT_LIFT = 0;
+/** Cuánto se levanta la punta del pie (radianes). */
+const FOOT_LIFT = 0.17;
 
 /** Articulaciones 3D tal como las da el motor (pel, mid, neck, head, shoL, elL, haL, hipL, knL, anL, tiL...). */
 export type Joints3D = Record<string, V3>;
@@ -288,13 +288,10 @@ export class SkinnedFigure {
       place('th' + side, Rth, hip, hip.distanceTo(kn));
       const Rsh = limbRot('sh' + side, Rth, an.clone().sub(kn), RF['th' + side].dir);
       place('sh' + side, Rsh, kn, kn.distanceTo(an));
-      // el pie: el hueso del modelo baja en reposo del tobillo a los dedos (unos 27°); el motor da el pie
-      // horizontal, así que se inclina lo mismo hacia abajo para que la planta quede plana en el suelo
+      // el pie, con la punta un poco levantada (el del modelo acaba en punta y parecía de puntillas)
       const fDir = ti.clone().sub(an).normalize();
       const fLat = fDir.clone().cross(V(0, 1, 0));
-      const rd = RF['foot' + side].dir;
-      const restPitch = Math.atan2(-rd.y, Math.hypot(rd.x, rd.z));
-      if (fLat.lengthSq() > 1e-4) fDir.applyAxisAngle(fLat.normalize(), -restPitch - FOOT_LIFT);
+      if (fLat.lengthSq() > 1e-4) fDir.applyAxisAngle(fLat.normalize(), -FOOT_LIFT);
       const Rft = limbRot('foot' + side, Rsh, fDir, RF['sh' + side].dir);
       // más largo y ancho que el que da el motor (a medida del muñeco de piezas), que se veía muy pequeño
       place('foot' + side, Rft, an, RF['foot' + side].len * scaleAll * 1.12, 1.3);
