@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-12T15:49:06Z",
+    "es": ["Resumen semanal y mensual: la casilla «Entrenamientos» (casi igual que «Días entrenados») se cambia por las pulsaciones medias de los entrenamientos hechos con el reloj, comparadas con el periodo anterior."],
+    "ca": ["Resum setmanal i mensual: la casella «Entrenaments» (gairebé igual que «Dies entrenats») es canvia per les pulsacions mitjanes dels entrenaments fets amb el rellotge, comparades amb el període anterior."],
+    "en": ["Weekly and monthly summary: the «Workouts» box (almost the same as «Days trained») is replaced by your average heart rate in workouts done with the watch, compared with the previous period."]
+  },
+  {
     "fecha": "2026-11-12T15:41:14Z",
     "es": ["Mapa de músculos: los hombros y el pecho se pintan con bordes limpios, sin manchas ni trozos sueltos donde se juntan; el color pasa de un músculo a otro de forma suave."],
     "ca": ["Mapa de músculs: les espatlles i el pit es pinten amb vores netes, sense taques ni trossos solts on s'ajunten; el color passa d'un múscul a l'altre de manera suau."],

@@ -1098,7 +1098,7 @@ button.wd:active .wd-dot { transform: scale(.92); }
 .month-stat:nth-child(1) .ms-top .ico { color: var(--sec-warm); }
 .month-stat:nth-child(2) .ms-top .ico { color: #F5A524; }
 .month-stat:nth-child(3) .ms-top .ico { color: var(--accent-2); }
-.month-stat:nth-child(4) .ms-top .ico { color: var(--accent); }
+.month-stat:nth-child(4) .ms-top .ico { color: #E5484D; }  /* corazón: pulsaciones */
 .month-grid .stat-value { font: 700 1.6rem/1 var(--display); white-space: nowrap; }
 .ms-label { color: var(--muted); font-size: .9rem; line-height: 1.2; }
 .ms-label::first-letter { text-transform: uppercase; }

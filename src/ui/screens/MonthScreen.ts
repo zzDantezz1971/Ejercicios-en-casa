@@ -6,7 +6,7 @@ import type { App, Screen } from '../App';
 import { bodyMaps } from '../components/bodyMaps';
 import { muscleLines } from '../components/muscleLines';
 import { totalBySection } from '../../domain/stats';
-import { SECTION_IDS, SECTION_TITLES } from '../../domain/types';
+import { SECTION_IDS, SECTION_TITLES, type HistoryEntry } from '../../domain/types';
 import { append, clear, h, humanDuration, kg } from '../dom';
 import { icon, SECTION_STYLE, type IconName } from '../icons';
 
@@ -82,6 +82,12 @@ export class MonthScreen implements Screen {
       if (Math.abs(d) < 1e-9) return h('span', { class: 'delta same' }, `igual que ${prevName}`);
       return h('span', { class: 'delta ' + (d > 0 ? 'up' : 'down') }, `${d > 0 ? '↑' : '↓'} ${unit(Math.abs(d))} ${d > 0 ? 'más' : 'menos'} que ${prevName}`);
     };
+    const avgHr = (es: HistoryEntry[]): number | null => {
+      const withHr = es.filter((e) => (e.heart?.avg ?? 0) > 0);
+      const t = withHr.reduce((n, e) => n + Math.max(1, e.durationSec), 0);
+      return t ? Math.round(withHr.reduce((n, e) => n + e.heart!.avg * Math.max(1, e.durationSec), 0) / t) : null;
+    };
+    const curHr = avgHr(cur.entries), prevHr = prev.sessions ? avgHr(prev.entries) : null;
     const tile = (ic: IconName, value: string, label: string, delta: HTMLElement | null) =>
       h('div', { class: 'month-stat' },
         h('div', { class: 'ms-top' }, icon(ic), h('span', { class: 'stat-value' }, value)),
@@ -92,7 +98,9 @@ export class MonthScreen implements Screen {
         tile('calendar', String(cur.days), cur.days === 1 ? 'día entrenado' : 'días entrenados', cmp(cur.days, prev.days, (n) => `${n} ${n === 1 ? 'día' : 'días'}`)),
         tile('clock', humanDuration(cur.seconds), 'en total', cmp(cur.seconds, prev.seconds, (n) => humanDuration(n))),
         tile('flame', cur.kcal != null ? String(cur.kcal) : '—', 'kcal', cur.kcal != null && prev.kcal != null ? cmp(cur.kcal, prev.kcal, (n) => `${n} kcal`) : cur.kcal == null ? h('span', { class: 'ms-hint' }, 'Anota tu peso') : null),
-        tile('bolt', String(cur.sessions), cur.sessions === 1 ? 'entrenamiento' : 'entrenamientos', cmp(cur.sessions, prev.sessions, (n) => String(n))),
+        // pulsaciones medias (solo los entrenamientos hechos con el reloj; ponderadas por su duración)
+        tile('heart', curHr != null ? String(curHr) : '—', 'ppm de media',
+          curHr != null && prevHr != null ? cmp(curHr, prevHr, (n) => `${n} ppm`) : curHr == null ? h('span', { class: 'ms-hint' }, 'Conecta el reloj') : null),
         // sin el periodo anterior, un solo aviso en vez de repetirlo en cada casilla
         prev.sessions ? null : h('p', { class: 'ms-note' }, W ? 'No hay datos de la semana anterior para comparar.' : 'No hay datos del mes anterior para comparar.')),
     );

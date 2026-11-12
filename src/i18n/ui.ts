@@ -488,6 +488,8 @@ const ROWS: Row[] = [
   ['No hay datos de la semana anterior para comparar.', 'No hi ha dades de la setmana anterior per comparar.', 'No data from the previous week to compare with.'],
   ['No hay datos del mes anterior para comparar.', 'No hi ha dades del mes anterior per comparar.', 'No data from the previous month to compare with.'],
   ['Anota tu peso', 'Anota el teu pes', 'Log your weight'],
+  ['ppm de media', 'ppm de mitjana', 'bpm on average'],
+  ['Conecta el reloj', 'Connecta el rellotge', 'Connect your watch'],
   ['Es tu primer peso anotado: a partir de ahora verás cómo cambia.', 'És el primer pes que has anotat: a partir d’ara veuràs com canvia.', 'This is your first weight entry: from now on you’ll see how it changes.'],
   ['No anotaste el peso esta semana. El último: {w} ({d}).', 'No vas anotar el pes aquesta setmana. L’últim: {w} ({d}).', 'You didn’t log your weight this week. Last one: {w} ({d}).'],
   ['No anotaste el peso este mes. El último: {w} ({d}).', 'No vas anotar el pes aquest mes. L’últim: {w} ({d}).', 'You didn’t log your weight this month. Last one: {w} ({d}).'],
