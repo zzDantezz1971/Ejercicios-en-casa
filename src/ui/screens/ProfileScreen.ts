@@ -7,8 +7,6 @@ import { WeightScreen } from './WeightScreen';
 import { WeightChartScreen } from './WeightChartScreen';
 import type { App, Screen } from '../App';
 import { append, clear, h } from '../dom';
-import { icon } from '../icons';
-import { pickFace } from '../components/faceEditor';
 
 /** Mis datos: nombre, edad, altura, sexo, idioma y todo lo del peso (IMC, objetivo, histórico). */
 export class ProfileScreen implements Screen {
@@ -56,30 +54,6 @@ export class ProfileScreen implements Screen {
       h('div', { class: 'sex-wrap' }, h('div', { class: 'segmented sex-segs', role: 'group', 'aria-label': 'Sexo' }, ...SEXES.map(sexBtn)), h('p', { class: 'sex-note' }, 'Solo se usa para calcular mejor las calorías cuando entrenas con el reloj conectado.')));
   }
 
-  /** Tu cara en el muñeco (prémium): una foto de frente, recortada y pasada a dibujo. */
-  private faceCard(s: Settings): HTMLElement {
-    const p = s.profile;
-    const premium = this.app.access.premium;
-    const pick = async () => {
-      const r = await pickFace();
-      if (r) this.update({ profile: { ...this.app.store.settings.profile, face: r.url, faceSkin: r.skin } });
-    };
-    const body = !premium
-      ? [h('p', { class: 'muted small' }, 'Pon tu cara en el muñeco que hace los ejercicios, en forma de dibujo.'),
-         h('button', { class: 'btn primary block', onclick: () => this.app.showPremium() }, icon('star'), 'Hazte prémium')]
-      : p.face
-        ? [h('div', { class: 'face-row' },
-             h('img', { class: 'face-thumb', src: p.face, alt: 'Tu cara en el muñeco' }),
-             h('div', { class: 'face-btns' },
-               h('button', { class: 'btn ghost small', onclick: () => void pick() }, icon('edit'), 'Cambiar foto'),
-               h('button', { class: 'btn ghost small danger-text', onclick: () => this.update({ profile: { ...this.app.store.settings.profile, face: undefined, faceSkin: undefined } }) }, icon('trash'), 'Quitar')))]
-        : [h('p', { class: 'muted small' }, 'Elige una foto tuya de frente: la encuadras y se pasa a dibujo. La foto no sale de tu móvil.'),
-           h('button', { class: 'btn primary block', onclick: () => void pick() }, icon('plus'), 'Añadir foto')];
-    return h('section', { class: 'card face-card' },
-      h('div', { class: 'card-head' }, h('h3', {}, 'Tu cara en el muñeco'), premium ? null : h('span', { class: 'premium-chip' }, icon('lock'), 'Prémium')),
-      ...body);
-  }
-
   /** Mi material: el que se marque decide qué ejercicios con material se ven. */
   private equipCard(s: Settings): HTMLElement {
     const sel = new Set<Equip>(s.equipment);
@@ -94,7 +68,6 @@ export class ProfileScreen implements Screen {
     clear(this.body);
     append(this.body,
       this.profileCard(s),
-      this.faceCard(s),
       this.equipCard(s),
       ...weightCards(this.app, () => this.render(), () => this.app.push(new WeightScreen(this.app)), () => this.app.push(new WeightChartScreen(this.app))));
   }

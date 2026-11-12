@@ -1,5 +1,4 @@
 import { setFigureStyle } from '../figure/skinAsset';
-import { setFace, setFaceGate } from '../figure/faceAsset';
 import { HeartRate } from '../services/HeartRate';
 import { Access } from '../services/Access';
 import { durableStorage } from '../platform/durable';
@@ -107,9 +106,6 @@ export class App {
 
   applySettings(): void {
     setFigureStyle(this.store.settings.figureStyle);
-    // cara del usuario en el muñeco (prémium)
-    setFaceGate(() => this.access.premium);
-    setFace(this.store.settings.profile.face, this.store.settings.profile.faceSkin);
     this.sounds.enabled = this.store.settings.sound;
     this.voice.enabled = this.store.settings.voice;
     this.haptics.enabled = this.store.settings.sound;

@@ -1340,20 +1340,3 @@ body:has(.page-lifted) { overflow-x: hidden; }
 .page-lifted { position: relative; z-index: 2; background: var(--bg); box-shadow: 0 0 48px rgba(0, 0, 0, .55); will-change: transform; backface-visibility: hidden; }
 .page-shade { position: absolute; inset: 0; z-index: 60; pointer-events: none; opacity: 0; }
 .page-peek { position: fixed; inset: 0; z-index: 1; background: var(--bg); pointer-events: none; overflow: hidden; will-change: transform, opacity; }
-
-/* Tu cara en el muñeco (Mis datos) y su editor */
-.face-card { display: flex; flex-direction: column; gap: 10px; }
-.premium-chip { display: inline-flex; align-items: center; gap: 4px; font-size: .74rem; font-weight: 700; color: #F5C451; background: rgb(245 196 81 / .12); padding: 3px 8px; border-radius: 999px; }
-.premium-chip .ico { width: 12px; height: 12px; }
-.face-row { display: flex; align-items: center; gap: 14px; }
-.face-thumb { width: 76px; height: 76px; border-radius: 50%; object-fit: cover; background: var(--stage); border: 1px solid var(--line); flex: none; }
-.face-btns { display: flex; flex-direction: column; gap: 8px; flex: 1; }
-.danger-text { color: #FF6B6B; }
-.face-editor .dialog { gap: 12px; max-width: 340px; }
-.fe-stage { display: flex; justify-content: center; }
-.fe-view { width: 280px; height: 280px; border-radius: 16px; background: #000; touch-action: none; cursor: grab; max-width: 100%; }
-.fe-zoom-row { display: flex; align-items: center; gap: 10px; }
-.fe-zoom-row .ico { width: 18px; height: 18px; color: var(--muted); flex: none; }
-.fe-zoom { flex: 1; accent-color: var(--accent); }
-.fe-result { display: flex; align-items: center; gap: 12px; }
-.fe-prev { width: 72px; height: 72px; border-radius: 50%; background: var(--stage); border: 1px solid var(--line); }

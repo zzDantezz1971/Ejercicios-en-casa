@@ -189,10 +189,6 @@ export interface Profile {
   sex: Sex;
   /** Peso al que se quiere llegar (kg). */
   goalKg?: number | null;
-  /** Cara para el muñeco (prémium): imagen ya pasada a dibujo, con el óvalo transparente alrededor (data URL). */
-  face?: string;
-  /** Color de la piel de esa cara (#rrggbb), para el resto del muñeco. */
-  faceSkin?: string;
 }
 
 export const DEFAULT_SETTINGS: Settings = {
