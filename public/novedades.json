@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-12T16:00:00Z",
+    "es": ["Nuevo icono: la K algo más pequeña y «Fit» más grande, para que se lea mejor."],
+    "ca": ["Nova icona: la K una mica més petita i «Fit» més gran, perquè es llegeixi millor."],
+    "en": ["New icon: a slightly smaller K and a bigger «Fit», so it reads better."]
+  },
+  {
     "fecha": "2026-11-12T15:52:16Z",
     "es": ["Resumen semanal y mensual: se quitan la mejor racha y la tabla más usada del final."],
     "ca": ["Resum setmanal i mensual: es treuen la millor ratxa i la taula més feta servir del final."],
