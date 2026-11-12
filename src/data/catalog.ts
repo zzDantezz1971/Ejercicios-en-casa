@@ -55,20 +55,27 @@ const ONE_SIDED = new Set([
  * Nombres sin la parte en inglés entre paréntesis (la voz en castellano o catalán la pronunciaba mal).
  * El identificador sigue saliendo del nombre original, así las tablas y el historial guardados no cambian.
  */
-const PLAIN_NAMES: Record<string, { es: string; ca: string }> = {
+const PLAIN_NAMES: Record<string, { es: string; ca: string; en?: string }> = {
   'saltos-de-tijera-jumping-jacks': { es: 'Saltos de tijera', ca: 'Salts de tisora' },
   'dead-bug-bicho-muerto': { es: 'Bicho muerto', ca: 'Insecte mort' },
   'bird-dog-perro-de-caza': { es: 'Perro de caza', ca: 'Gos de caça' },
-  'nadador-suave-superman-alterno': { es: 'Nadador suave', ca: 'Nedador suau' },
   'skipping-rodillas-arriba': { es: 'Rodillas arriba', ca: 'Genolls amunt' },
   'gusano-inchworm': { es: 'Gusano', ca: 'Cuc' },
   'barquita-hollow-hold': { es: 'Barquita', ca: 'Barqueta' },
   'mariposa-aductores': { es: 'Mariposa', ca: 'Papallona' },
   // antes «Flexores de cadera (rodilla en el suelo)»: ahora es la postura de la lagartija (mismo identificador)
   'flexores-de-cadera-rodilla-en-el-suelo': { es: 'Postura de la lagartija', ca: 'Postura del llangardaix' },
+  // sin paréntesis en el nombre
+  'abrir-y-cerrar-brazos-abrazos': { es: 'Abrir y cerrar brazos', ca: 'Obrir i tancar braços', en: 'Arm swings' },
+  'pajaros-elevaciones-posteriores': { es: 'Pájaros', ca: 'Ocells' },
+  'press-frances-tumbado': { es: 'Press francés tumbado', ca: 'Press francès estirat', en: 'Lying tricep extension' },
+  'plancha-a-flexion-arriba-y-abajo': { es: 'Plancha a flexión', ca: 'Planxa a flexió' },
+  'figura-4-gluteo-y-piriforme': { es: 'Estiramiento en figura 4', ca: 'Estirament en figura 4', en: 'Figure-4 stretch' },
+  'pinza-sentado-piernas-estiradas': { es: 'Pinza sentado', ca: 'Pinça assegut' },
+  'nadador-suave-superman-alterno': { es: 'Nadador suave', ca: 'Nedador suau', en: 'Gentle swimmers' },
 };
 function plainName(id: string, name: string): string {
-  return LANG === 'en' ? name : (PLAIN_NAMES[id]?.[LANG] ?? name);
+  return PLAIN_NAMES[id]?.[LANG] ?? name;
 }
 
 export function slug(name: string): string {

@@ -20,8 +20,8 @@ const LUNGE_BR = { ...LUNGE_R, x: -30 };
 const LUNGE_BL = { ...LUNGE_L, x: -30 };
 const PUSH_DOWN = { tl: -10, ua: 150, fa: 30, th: 170, sn: 170, ft: 90 }; // flexión abajo: manos bajo los hombros, codos atrás
 const HIPS = { ua: 118, fa: 28 }; // manos en la cintura (vista lateral)
-const SUMO = { thL: 118, snL: 118, thR: 62, snR: 62, ftL: 170, ftR: 10, uaL: 74, faL: 66, uaR: 106, faR: 114, zEL: 6, zER: 6, zHL: 14, zHR: 14 };
-const SUMO_DOWN = { thL: 152, snL: 96, thR: 28, snR: 84, ftL: 170, ftR: 10, uaL: 74, faL: 66, uaR: 106, faR: 114, zEL: 6, zER: 6, zHL: 14, zHR: 14, zKL: 9, zKR: 9, lean: 16 };
+const SUMO = { thL: 118, snL: 118, thR: 62, snR: 62, ftL: 180, ftR: 0, uaL: 74, faL: 66, uaR: 106, faR: 114, zEL: 6, zER: 6, zHL: 14, zHR: 14 };
+const SUMO_DOWN = { thL: 152, snL: 96, thR: 28, snR: 84, ftL: 180, ftR: 0, uaL: 74, faL: 66, uaR: 106, faR: 114, zEL: 6, zER: 6, zHL: 14, zHR: 14, zKL: 9, zKR: 9, lean: 16 };
 const HANG = { ua: -90, fa: -90, th: 96, sn: 112, ft: 60 }; // colgado de la barra
 // barbilla por encima de la barra: la barra queda delante de la parte alta del pecho y la cabeza algo atrás
 const CHIN = { ua: 105, fa: -44, th: 96, sn: 112, ft: 60, hd: -100 };

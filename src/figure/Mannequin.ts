@@ -85,6 +85,15 @@ export function to3D(spec: MotionSpec, view: string, J: Joints, pose: Pose): Rec
     }
     o[k] = V(J[k][0], -J[k][1], z);
   }
+  if (!side) {
+    // de frente, el pie dibujado de lado en 2D apunta en realidad hacia delante (hacia la cámara), un poco abierto;
+    // lo que sube o baja en 2D (punta hacia abajo) se mantiene
+    for (const s of ['L', 'R']) {
+      const an = o['an' + s], ti = o['ti' + s];
+      const dx = ti.x - an.x, dy = ti.y - an.y, h = Math.abs(dx);
+      o['ti' + s] = V(an.x + Math.sign(dx) * h * 0.3, an.y + dy, an.z + h * 0.95);
+    }
+  }
   // Un brazo o muslo "acortado" en 2D (escala < 1) apunta en realidad hacia la cámara o hacia el lado:
   // se recupera esa profundidad para que en 3D se mueva de verdad en vez de encogerse.
   const depth = (scale: number, len: number) => len * Math.sqrt(Math.max(0, 1 - scale * scale));

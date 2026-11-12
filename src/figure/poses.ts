@@ -28,7 +28,7 @@ function base(v: string): Pose {
     x: 0, jy: 0, rp: 0, bp: 0, shu: 0, shf: 0, tw: 0, lean: 0, zEL: 0, zER: 0, zHL: 0, zHR: 0, zKL: 0, zKR: 0, zAL: 0, zAR: 0, tl: -90,
     // brazos colgando relajados: de frente, un poco separados del cuerpo
     uaL: v === 'front' ? 97 : 90, faL: v === 'front' ? 94 : 90, uaR: v === 'front' ? 83 : 90, faR: v === 'front' ? 86 : 90, thL: 90, snL: 90, thR: 90, snR: 90,
-    ftL: v === 'side' ? 0 : 150, ftR: v === 'side' ? 0 : 30, saL: 1, saR: 1, sThL: 1, sThR: 1, sShL: 1, sShR: 1,
+    ftL: v === 'side' ? 0 : 180, ftR: 0, saL: 1, saR: 1, sThL: 1, sThR: 1, sShL: 1, sShR: 1,
   };
 }
 

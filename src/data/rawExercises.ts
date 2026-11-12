@@ -124,8 +124,8 @@ export const RAW_SECTIONS: RawSection[] = [
  {n:'Sentadilla con mancuernas a los hombros',z:'Piernas y glúteos',db:'both',plant:'anR',f:[
    [{ua:70,fa:-112},200,1000],[{tl:-58,th:5,sn:115,ua:40,fa:-140,hd:-65},250,1000]]},
  {n:'Sentadilla sumo con mancuerna',z:'Aductores, glúteos y piernas',v:'front',db:'two',f:[
-   [{thL:118,snL:118,thR:62,snR:62,ftL:170,ftR:10,uaL:74,faL:66,uaR:106,faR:114,zEL:6,zER:6,zHL:14,zHR:14},200,1000],
-   [{thL:152,snL:96,thR:28,snR:84,ftL:170,ftR:10,uaL:74,faL:66,uaR:106,faR:114,zEL:6,zER:6,zHL:14,zHR:14,zKL:9,zKR:9,lean:16},300,1000]]},
+   [{thL:118,snL:118,thR:62,snR:62,ftL:180,ftR:0,uaL:74,faL:66,uaR:106,faR:114,zEL:6,zER:6,zHL:14,zHR:14},200,1000],
+   [{thL:152,snL:96,thR:28,snR:84,ftL:180,ftR:0,uaL:74,faL:66,uaR:106,faR:114,zEL:6,zER:6,zHL:14,zHR:14,zKL:9,zKR:9,lean:16},300,1000]]},
  {n:'Zancadas hacia delante con mancuernas',z:'Piernas y glúteos',db:'both',f:[
    [{},150,800],[{x:47,thR:15,snR:95,thL:115,snL:175,ftL:40},250,800],
    [{},150,800],[{x:47,thL:15,snL:95,thR:115,snR:175,ftR:40},250,800]]},
@@ -267,8 +267,8 @@ export const RAW_SECTIONS: RawSection[] = [
    [{thL:128,snL:128,thR:62,snR:100,tl:-84,uaL:55,faL:75,uaR:80,faR:100,zKR:12,lean:16},1400,1100],
    [{thL:122,snL:122,thR:55,snR:104,tl:-80,uaL:55,faL:75,uaR:80,faR:100,zKR:14,lean:18},1400,1100]]},
  {n:'Sentadilla sumo profunda',z:'Aductores y cadera',v:'front',f:[
-   [{thL:165,snL:100,thR:15,snR:80,ftL:170,ftR:10,uaL:128,faL:-28,uaR:52,faR:-152,zEL:14,zER:14,zHL:14,zHR:14,zKL:12,zKR:12,lean:42},1400,1100],
-   [{thL:170,snL:102,thR:10,snR:78,ftL:170,ftR:10,uaL:128,faL:-28,uaR:52,faR:-152,zEL:14,zER:14,zHL:14,zHR:14,zKL:13,zKR:13,lean:44},1400,1100]]},
+   [{thL:165,snL:100,thR:15,snR:80,ftL:180,ftR:0,uaL:128,faL:-28,uaR:52,faR:-152,zEL:14,zER:14,zHL:14,zHR:14,zKL:12,zKR:12,lean:42},1400,1100],
+   [{thL:170,snL:102,thR:10,snR:78,ftL:180,ftR:0,uaL:128,faL:-28,uaR:52,faR:-152,zEL:14,zER:14,zHL:14,zHR:14,zKL:13,zKR:13,lean:44},1400,1100]]},
  {n:'Apertura de piernas sentado',z:'Aductores e isquios',v:'front',noGround:1,mat:'top',b:['caution'],f:[
    [{thL:165,snL:165,thR:15,snR:15,ft:-90,lean:26,uaL:102,faL:94,uaR:78,faR:86,zEL:8,zER:8,zHL:22,zHR:22},1300,1200],
    [{thL:168,snL:168,thR:12,snR:12,ft:-90,lean:38,uaL:98,faL:92,uaR:82,faR:88,zEL:12,zER:12,zHL:32,zHR:32},1300,1200]]},
