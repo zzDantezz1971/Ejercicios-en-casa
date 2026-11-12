@@ -239,21 +239,6 @@ export const RAW_SECTIONS: RawSection[] = [
    [{uaL:-112,faL:-104,uaR:-68,faR:-76,thL:14,snL:92,thR:4,snR:118,sThL:.97,sThR:.95,sShL:.85,sShR:.7,hd:-106},700,1100],
    [{uaL:-112,faL:-104,uaR:-68,faR:-76,thL:96,snL:76,thR:86,snR:104,sThL:.4,sThR:.4,sShL:.55,sShR:.45},250,1100],
    [{uaL:-112,faL:-104,uaR:-68,faR:-76,thL:176,snL:62,thR:166,snR:88,sThL:.95,sThR:.97,sShL:.7,sShR:.85,hd:-74},700,1100]]},
- {g:'Fortalecer zona lumbar (espalda sana)'},
- {n:'Bird-dog (perro de caza)',z:'Lumbar y core',mat:1,b:['lumbar'],handsDown:true,f:[
-   [QUAD,200,900],[{...QUAD,uaL:-5,faL:-5,thR:182,snR:182},1200,900],
-   [QUAD,200,900],[{...QUAD,uaR:-5,faR:-5,thL:182,snL:182},1200,900]]},
- {n:'Puente de glúteos',feetDown:true,z:'Glúteos y lumbar',mat:1,b:['lumbar'],f:[
-   [{...SUP,...KNEES},300,1000],[{...SUP,tl:140,tu:165,th:-18,sn:76.5},900,1000]]},
- {n:'Puente a una pierna',feetDown:true,z:'Glúteos y lumbar',mat:1,b:['lumbar'],f:[
-   [{...SUP,thL:-60,snL:60,thR:-22,snR:-22},300,1000],[{...SUP,tl:140,tu:165,thL:-18,snL:76.5,thR:-27,snR:-27},900,1000]]},
- {n:'Nadador suave (superman alterno)',anchor:{j:'pel',y:-13.1},z:'Lumbar y espalda',mat:1,b:['lumbar','gentle'],f:[
-   [{...PRONE,ua:0,fa:0},200,900],[{...PRONE,ua:0,fa:0,tu:-6,hd:-10,uaL:-12,faL:-12,thR:190,snR:192},900,900],
-   [{...PRONE,ua:0,fa:0},200,900],[{...PRONE,ua:0,fa:0,tu:-6,hd:-10,uaR:-12,faR:-12,thL:190,snL:192},900,900]]},
- {n:'Retroversión pélvica',feetDown:true,anchor:{j:'pel',y:-13.1},z:'Lumbar',mat:1,b:['lumbar'],mark:['pel'],f:[
-   [{...SUP,...KNEES},500,900],[{...SUP,...KNEES,tl:177,thL:-63,thR:-59},1200,900]]},
- {n:'Elevación de brazos en Y boca abajo',anchor:{j:'pel',y:-13.1},z:'Espalda alta y postura',mat:1,b:['lumbar'],f:[
-   [{...PRONE,ua:0,fa:0},300,900],[{...PRONE,tu:-5,hd:-10,ua:-14,fa:-14},1100,900]]},
  {g:'Cadera y glúteos'},
  {n:'Figura 4 (glúteo y piriforme)',z:'Glúteos y cadera',mat:1,f:[
    [{tl:180,thL:-110,snL:-20,thR:-60,sThR:.7,snR:206,sShR:.8,ua:-40,fa:0},900,1100],
@@ -299,5 +284,20 @@ export const RAW_SECTIONS: RawSection[] = [
    [{},200,900],[{thL:95,snL:250,uaL:110,faL:100,uaR:-10,faR:-10},1500,900]]},
  {n:'Gemelos contra la pared',z:'Gemelos',az:-32,props:(J,P)=>P.wall(J.haR[0]+4),f:[
    [{tl:-70,ua:-15,fa:-15,thR:60,snR:100,thL:113,snL:113},1300,1000],[{tl:-66,ua:-12,fa:-12,thR:55,snR:105,thL:115,snL:115},1300,1000]]},
+ {g:'Fortalecer zona lumbar (espalda sana)'},
+ {n:'Bird-dog (perro de caza)',z:'Lumbar y core',mat:1,b:['lumbar'],handsDown:true,f:[
+   [QUAD,200,900],[{...QUAD,uaL:-5,faL:-5,thR:182,snR:182},1200,900],
+   [QUAD,200,900],[{...QUAD,uaR:-5,faR:-5,thL:182,snL:182},1200,900]]},
+ {n:'Puente de glúteos',feetDown:true,z:'Glúteos y lumbar',mat:1,b:['lumbar'],f:[
+   [{...SUP,...KNEES},300,1000],[{...SUP,tl:140,tu:165,th:-18,sn:76.5},900,1000]]},
+ {n:'Puente a una pierna',feetDown:true,z:'Glúteos y lumbar',mat:1,b:['lumbar'],f:[
+   [{...SUP,thL:-60,snL:60,thR:-22,snR:-22},300,1000],[{...SUP,tl:140,tu:165,thL:-18,snL:76.5,thR:-27,snR:-27},900,1000]]},
+ {n:'Nadador suave (superman alterno)',anchor:{j:'pel',y:-13.1},z:'Lumbar y espalda',mat:1,b:['lumbar','gentle'],f:[
+   [{...PRONE,ua:0,fa:0},200,900],[{...PRONE,ua:0,fa:0,tu:-6,hd:-10,uaL:-12,faL:-12,thR:190,snR:192},900,900],
+   [{...PRONE,ua:0,fa:0},200,900],[{...PRONE,ua:0,fa:0,tu:-6,hd:-10,uaR:-12,faR:-12,thL:190,snL:192},900,900]]},
+ {n:'Retroversión pélvica',feetDown:true,anchor:{j:'pel',y:-13.1},z:'Lumbar',mat:1,b:['lumbar'],mark:['pel'],f:[
+   [{...SUP,...KNEES},500,900],[{...SUP,...KNEES,tl:177,thL:-63,thR:-59},1200,900]]},
+ {n:'Elevación de brazos en Y boca abajo',anchor:{j:'pel',y:-13.1},z:'Espalda alta y postura',mat:1,b:['lumbar'],f:[
+   [{...PRONE,ua:0,fa:0},300,900],[{...PRONE,tu:-5,hd:-10,ua:-14,fa:-14},1100,900]]},
 ]},
 ];

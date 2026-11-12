@@ -19,7 +19,10 @@ export type ListSort = 'zona' | 'musculo' | 'material' | 'az';
 const HEAD_TO_TOE: Muscle[] = ['cuello', 'trapecio', 'deltoides', 'pecho', 'espalda', 'biceps', 'triceps', 'antebrazo',
   'abdominales', 'oblicuos', 'lumbar', 'gluteos', 'aductores', 'cuadriceps', 'isquios', 'gemelos'];
 /** Músculo principal: el primero que trabaja (o, si solo estira, el primero). */
+/** Donde lo buscaría la gente aunque el primer músculo sea otro (coincide con su zona). */
+const MAIN_MUSCLE: Record<string, Muscle> = { 'mesa-invertida': 'pecho', 'esfinge': 'lumbar', 'cobra': 'lumbar' };
 function mainMuscle(e: ExerciseDef): Muscle | undefined {
+  if (MAIN_MUSCLE[e.id]) return MAIN_MUSCLE[e.id];
   const t = parseMuscles(e.muscles);
   return (t.find((x) => x.kind === 'work') ?? t[0])?.muscle;
 }

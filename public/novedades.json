@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-12T23:54:58Z",
+    "es": ["Orden por músculo: «Mesa invertida» sale en Pecho, y «Cobra» y «Esfinge» en Zona lumbar.", "Estiramientos: el grupo «Fortalecer zona lumbar» va ahora al final."],
+    "ca": ["Ordre per múscul: «Taula invertida» surt a Pit, i «Cobra» i «Esfinx» a Zona lumbar.", "Estiraments: el grup «Enfortir la zona lumbar» ara va al final."],
+    "en": ["Muscle order: «Reverse tabletop» now appears under Chest, and «Cobra» and «Sphinx» under Lower back.", "Stretches: the «Strengthen the lower back» group now goes last."]
+  },
+  {
     "fecha": "2026-11-12T23:49:22Z",
     "es": ["Orden «Zona del cuerpo»: los ejercicios que piden material que no tienes, al mostrarlos, también salen agrupados por zona.", "Abdominales: los grupos van de arriba abajo (superior, oblicuos, inferior y core completo)."],
     "ca": ["Ordre «Zona del cos»: els exercicis que demanen material que no tens, quan els mostres, també surten agrupats per zona.", "Abdominals: els grups van de dalt a baix (superior, oblics, inferior i core complet)."],
