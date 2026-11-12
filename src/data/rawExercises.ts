@@ -27,13 +27,8 @@ export const inclineBack = (J: Joints, P: PropHelpers): PropOp[] => {
 };
 
 export const RAW_SECTIONS: RawSection[] = [
-{id:'calentamiento',title:'Calentamiento',note:'Has pedido unos 10. Te propongo 12 para que puedas descartar.',items:[
- {n:'Marcha en el sitio',z:'Cuerpo entero',f:[
-   [{thR:0,snR:90,uaL:45,faL:-30,uaR:125,faR:100},0,420],[{},0,420],
-   [{thL:0,snL:90,uaR:45,faR:-30,uaL:125,faL:100},0,420],[{},0,420]]},
- {n:'Saltos de tijera (jumping jacks)',z:'Cuerpo entero',v:'front',f:[
-   [{uaL:100,faL:95,uaR:80,faR:85,thL:86,snL:86,thR:94,snR:94},80,330],
-   [{uaL:230,faL:245,uaR:-50,faR:-65,thL:108,snL:104,thR:72,snR:76},80,330]]},
+{id:'calentamiento',title:'Calentamiento',note:'Has pedido unos 10. Te propongo 12 para que puedas descartar.',groups:true,items:[
+ {g:'Movilidad articular'},
  {n:'Círculos de brazos',z:'Hombros',v:'front',per:1300,fn:t=>{const a=t*Math.PI*2,s=Math.sin(a),c=(1+Math.cos(a))/2;
    return {uaL:180+9*s,faL:180+9*s+16*c,uaR:-9*s,faR:-9*s-16*c};}},
  {n:'Abrir y cerrar brazos (abrazos)',z:'Pecho y hombros',v:'front',f:[
@@ -41,17 +36,30 @@ export const RAW_SECTIONS: RawSection[] = [
  {n:'Giros de tronco',z:'Columna',v:'front',f:[
    [{thL:96,snL:96,thR:84,snR:84,uaL:180,faL:180,uaR:0,faR:0,saR:-.55,hd:-96},80,650],
    [{thL:96,snL:96,thR:84,snR:84,uaL:180,faL:180,uaR:0,faR:0,saL:-.55,hd:-84},80,650]]},
- {n:'Círculos de cadera',z:'Cadera y lumbar',v:'front',az:34,per:2600,plant:'anL',fn:t=>{const c=Math.cos(t*Math.PI*2),s=Math.sin(t*Math.PI*2);
-   // la cadera dibuja un círculo: de lado a lado y, a la vez, adelante (el tronco se va atrás) y atrás (el tronco adelante)
-   return {thL:96+10*c,snL:96+10*c,thR:84+10*c,snR:84+10*c,tl:-90-11*c,lean:8*s,zKL:-4*s,zKR:-4*s,uaL:130,faL:25,uaR:50,faR:155};}},
  {n:'Inclinaciones laterales de tronco',z:'Costados',v:'front',f:[
    [{tl:-95,tu:-116,uaR:-118,faR:-158,uaL:118,faL:70},250,800],[{},100,800],
    [{tl:-85,tu:-64,uaL:298,faL:338,uaR:62,faR:110},250,800],[{},100,800]]},
+ {n:'Círculos de cadera',z:'Cadera y lumbar',v:'front',az:34,per:2600,plant:'anL',fn:t=>{const c=Math.cos(t*Math.PI*2),s=Math.sin(t*Math.PI*2);
+   // la cadera dibuja un círculo: de lado a lado y, a la vez, adelante (el tronco se va atrás) y atrás (el tronco adelante)
+   return {thL:96+10*c,snL:96+10*c,thR:84+10*c,snR:84+10*c,tl:-90-11*c,lean:8*s,zKL:-4*s,zKR:-4*s,uaL:130,faL:25,uaR:50,faR:155};}},
+ {g:'Subir pulsaciones'},
+ {n:'Marcha en el sitio',z:'Cuerpo entero',f:[
+   [{thR:0,snR:90,uaL:45,faL:-30,uaR:125,faR:100},0,420],[{},0,420],
+   [{thL:0,snL:90,uaR:45,faR:-30,uaL:125,faL:100},0,420],[{},0,420]]},
+ {n:'Saltos de tijera (jumping jacks)',z:'Cuerpo entero',v:'front',f:[
+   [{uaL:100,faL:95,uaR:80,faR:85,thL:86,snL:86,thR:94,snR:94},80,330],
+   [{uaL:230,faL:245,uaR:-50,faR:-65,thL:108,snL:104,thR:72,snR:76},80,330]]},
  {n:'Talones al glúteo',z:'Piernas',f:[
    [{tl:-94,thR:100,snR:250,ftR:200,thL:86,snL:96,ft:50,uaL:55,faL:-45,uaR:125,faR:85,jy:2},0,150],
    [{tl:-94,thR:92,snR:120,thL:90,snL:100,ft:40,ua:92,fa:30,jy:5},0,150],
    [{tl:-94,thL:100,snL:250,ftL:200,thR:86,snR:96,ft:50,uaR:55,faR:-45,uaL:125,faL:85,jy:2},0,150],
    [{tl:-94,thL:92,snL:120,thR:90,snR:100,ft:40,ua:92,fa:30,jy:5},0,150]]},
+ {n:'Puñetazos al aire',z:'Brazos y hombros',fist:true,f:[
+   [{thL:82,snL:96,thR:100,snR:86,uaR:-2,faR:-2,zHR:-6,uaL:62,faL:-80,zEL:4,zHL:10,tw:-22},80,260],
+   [{thL:82,snL:96,thR:100,snR:86,ua:62,fa:-80,zEL:4,zER:-4,zHL:10,zHR:-10},40,260],
+   [{thL:82,snL:96,thR:100,snR:86,uaL:-2,faL:-2,zHL:6,uaR:62,faR:-80,zER:-4,zHR:-10,tw:22},80,260],
+   [{thL:82,snL:96,thR:100,snR:86,ua:62,fa:-80,zEL:4,zER:-4,zHL:10,zHR:-10},40,260]]},
+ {g:'Activación dinámica'},
  {n:'Sentadillas sin peso',z:'Piernas y glúteos',plant:'anR',f:[
    [{},200,900],[{tl:-55,th:5,sn:115,ua:0,fa:0,hd:-60},200,900]]},
  {n:'Zancadas alternas',z:'Piernas y glúteos',f:[
@@ -59,11 +67,6 @@ export const RAW_SECTIONS: RawSection[] = [
    [{ua:118,fa:28},150,750],[{ua:118,fa:28,thL:15,snL:95,thR:115,snR:175,ftR:40},200,750]]},
  {n:'Balanceo de pierna adelante y atrás',z:'Cadera',f:[
    [{ua:110,fa:-20,thR:-25,snR:-15},60,700],[{ua:110,fa:-20,thR:150,snR:160},60,700]]},
- {n:'Puñetazos al aire',z:'Brazos y hombros',fist:true,f:[
-   [{thL:82,snL:96,thR:100,snR:86,uaR:-2,faR:-2,zHR:-6,uaL:62,faL:-80,zEL:4,zHL:10,tw:-22},80,260],
-   [{thL:82,snL:96,thR:100,snR:86,ua:62,fa:-80,zEL:4,zER:-4,zHL:10,zHR:-10},40,260],
-   [{thL:82,snL:96,thR:100,snR:86,uaL:-2,faL:-2,zHL:6,uaR:62,faR:-80,zER:-4,zHR:-10,tw:22},80,260],
-   [{thL:82,snL:96,thR:100,snR:86,ua:62,fa:-80,zEL:4,zER:-4,zHL:10,zHR:-10},40,260]]},
 ]},
 
 {id:'pesas',title:'Fuerza',note:'Ordenados por zona, de arriba abajo. Los de espalda van apoyados en el banco para no cargar la zona lumbar.',groups:true,items:[

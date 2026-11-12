@@ -90,6 +90,10 @@ export const EX4: Record<string, { ca: ExT; en: ExT }> = {
 
 /** Títulos de zona (grupos de las listas). */
 export const GROUPS: Record<string, { ca: string; en: string }> = {
+  'Movilidad articular': { ca: 'Mobilitat articular', en: 'Joint mobility' },
+  'Subir pulsaciones': { ca: 'Pujar pulsacions', en: 'Raise your heart rate' },
+  'Activación dinámica': { ca: 'Activació dinàmica', en: 'Dynamic activation' },
+  'Con comba y step': { ca: 'Amb corda i step', en: 'With rope and step' },
   'Cuello y trapecio': { ca: 'Coll i trapezi', en: 'Neck and traps' },
   'Hombros': { ca: 'Espatlles', en: 'Shoulders' },
   'Pecho': { ca: 'Pit', en: 'Chest' },
