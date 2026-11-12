@@ -1106,8 +1106,8 @@ button.wd:active .wd-dot { transform: scale(.92); }
 .ms-note { grid-column: 1 / -1; margin: 0; padding: 10px 8px 8px; border-top: 1px solid var(--line); text-align: center; color: var(--muted); font-size: .82rem; }
 .mw-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .mw-row p { margin: 0; }
-.mm-line .mu-dot.work { background: #ED6B73; }
-.mm-line.less .mu-dot { background: #FFC794; opacity: 1; }
+.mm-line .mu-dot.work { background: #E5484D; }
+.mm-line.less .mu-dot { background: #F0A0A3; opacity: 1; }
 
 /* ── Ajustes: cuenta atrás y duración inicial, compactas ── */
 .setting-list { display: flex; flex-direction: column; gap: 0; padding-top: 6px; padding-bottom: 6px; }

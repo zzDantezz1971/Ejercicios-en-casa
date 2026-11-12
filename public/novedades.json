@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-12T10:08:06Z",
+    "es": ["Mapa de músculos de los resúmenes con un solo color: rojo vivo en los más trabajados y rojo suave en los que se trabajaron algo (antes eran rojo y amarillo)."],
+    "ca": ["Mapa de músculs dels resums amb un sol color: vermell viu als més treballats i vermell suau als que s'han treballat una mica (abans eren vermell i groc)."],
+    "en": ["Muscle map in the summaries uses a single colour: bright red for the most worked muscles and soft red for those worked a little (they used to be red and yellow)."]
+  },
+  {
     "fecha": "2026-11-12T10:01:07Z",
     "es": ["La app arranca más rápido y gasta menos datos: ya no descarga el muñeco realista. El mapa de músculos de los resúmenes se ve igual, pero ahora se pinta con unas imágenes ligeras."],
     "ca": ["L'app arrenca més ràpid i gasta menys dades: ja no descarrega el ninot realista. El mapa de músculs dels resums es veu igual, però ara es pinta amb unes imatges lleugeres."],

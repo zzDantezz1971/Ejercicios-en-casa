@@ -53,7 +53,7 @@ export function loadWeights(load: MuscleLoad): number[] {
   return MUSCLES.map((m) => (t[m] > 0 ? 0.22 + 0.78 * (0.6 * rank.get(m)! + 0.4 * (t[m] / max)) : 0));
 }
 
-/** Para el mapa de los resúmenes: los 5 más trabajados valen 1 (rojo) y el resto de trabajados 0,3 (amarillo claro). */
+/** Para el mapa de los resúmenes: los 5 más trabajados valen 1 (rojo vivo) y el resto de trabajados 0,3 (rojo suave). */
 export function mapWeights(load: MuscleLoad, top = 5): number[] {
   const t = totalLoad(load);
   const best = new Set(MUSCLES.filter((m) => t[m] > 0).sort((a, b) => t[b] - t[a]).slice(0, top));

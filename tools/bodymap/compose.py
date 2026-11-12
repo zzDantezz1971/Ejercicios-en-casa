@@ -17,10 +17,10 @@ def compose(png, box, weights, W=440, H=660):
     cov = np.maximum(m1 * (w1 > 0.001), m2 * (w2 > 0.001))
     work = np.maximum(m1 * np.maximum(w1, 0), m2 * np.maximum(w2, 0))
     lvl = (work / np.maximum(cov, 0.001) >= 0.65)[..., None]
-    hot = np.where(lvl, np.array([0.93, 0.42, 0.45]), np.array([1.0, 0.78, 0.58]))
+    hot = np.array([0.85, 0.12, 0.15])
     shorts = (flag > 191)[..., None]
     base = np.where(shorts, np.array([0.12, 0.15, 0.2]), np.array([0.6, 0.64, 0.7]))
-    k2 = np.clip(cov[..., None] * np.where(shorts, 0.5, 1.0), 0, 1)
+    k2 = np.clip(cov[..., None] * np.where(shorts, 0.5, 1.0) * np.where(lvl, 1.0, 0.45), 0, 1)
     alb = (base * (1 - k2) + hot * k2) * (1 - 0.2 * lines[..., None] * k2)
     L = (D[..., 1] / 255 * 2)[..., None]
     col = lin2srgb(alb * L + hot * k2 * 0.3) * 255

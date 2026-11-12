@@ -36,7 +36,11 @@ const toSrgb = (x: number) => {
   return 255 * (x <= 0.0031308 ? x * 12.92 : 1.055 * x ** (1 / 2.4) - 0.055);
 };
 
-/** Colorea el mapa: rojo pastel = de lo más trabajado (peso 1), naranja pastel = algo (peso menor). */
+/** Un solo color, rojo vivo: entero en lo más trabajado (peso 1) y suave (más transparente) en lo que se trabajó algo. */
+const hot = [0.85, 0.12, 0.15];
+const SOFT = 0.45;
+
+/** Colorea el mapa de músculos. */
 function paint(src: ImageData, box: readonly number[], weights: number[]): string {
   const [x0, y0, bw, bh] = box;
   const out = new ImageData(W, H);
@@ -54,11 +58,10 @@ function paint(src: ImageData, box: readonly number[], weights: number[]): strin
       const m1 = s[a + 1] / 255, m2 = s[b] / 255, w1 = wt(s[a]), w2 = wt(s[a + 2]);
       const cov = Math.max(w1 > 0.001 ? m1 : 0, w2 > 0.001 ? m2 : 0);
       const work = Math.max(m1 * Math.max(w1, 0), m2 * Math.max(w2, 0));
-      const red = work / Math.max(cov, 0.001) >= 0.65;
-      const hot = red ? [0.93, 0.42, 0.45] : [1, 0.78, 0.58];
+      const strong = work / Math.max(cov, 0.001) >= 0.65;
       const shorts = flag > 191;
       const base = shorts ? [0.12, 0.15, 0.2] : [0.6, 0.64, 0.7];
-      const k = Math.min(1, cov * (shorts ? 0.5 : 1));
+      const k = Math.min(1, cov * (shorts ? 0.5 : 1) * (strong ? 1 : SOFT));
       const dark = 1 - 0.2 * (s[b + 1] / 255) * k;
       const L = (s[d + 1] / 255) * 2;
       for (let ch = 0; ch < 3; ch++) o[t + ch] = toSrgb((base[ch] * (1 - k) + hot[ch] * k) * dark * L + hot[ch] * k * 0.3);
