@@ -38,6 +38,8 @@ export interface MotionSpec {
   handsDown?: boolean | number;
   /** Pies fijos en el suelo: el tobillo cercano al suelo baja hasta él (puente, crunch... tumbado con rodillas dobladas). */
   feetDown?: boolean;
+  /** No bajar al suelo las piernas estiradas cuando está tumbado o sentado. */
+  noSettle?: boolean;
   /** Con handsDown: las manos pueden avanzar por el suelo (oso, gusano); solo se fija la altura. */
   handsSlide?: boolean;
   /** Con handsDown: solo esta mano (la otra se mueve libre, p. ej. hilo en la aguja). */

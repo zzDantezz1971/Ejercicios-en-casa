@@ -221,6 +221,28 @@ export class Motion {
     // jy: salto (el cuerpo entero sube esa altura sobre su apoyo)
     dy -= pose.jy ?? 0;
     for (const k in J) J[k] = [J[k][0] + dx, J[k][1] + dy];
+    if (this.view === 'side' && !this.spec.noSettle) {
+      // tumbado o sentado con las piernas estiradas: la pierna descansa en el suelo (no flota a la altura de la cadera)
+      for (const s of ['L', 'R']) {
+        const H = J['hip' + s], K = J['kn' + s], A = J['an' + s];
+        if (-H[1] > 15) continue;
+        const kh = -K[1], ah = -A[1];
+        if (kh <= 5.5 || kh > 15 || ah > 15) continue;
+        const tl = Math.hypot(K[0] - H[0], K[1] - H[1]);
+        const dyK = -5.5 - H[1];
+        if (Math.abs(dyK) >= tl) continue;
+        const nK: Pt = [H[0] + Math.sign(K[0] - H[0] || 1) * Math.sqrt(tl * tl - dyK * dyK), -5.5];
+        const sl = Math.hypot(A[0] - K[0], A[1] - K[1]);
+        let nA: Pt = [nK[0] + (A[0] - K[0]), nK[1] + (A[1] - K[1])];
+        if (-nA[1] > 4) {
+          const dyA = -4 - nK[1];
+          nA = [nK[0] + Math.sign(A[0] - K[0] || 1) * Math.sqrt(Math.max(0, sl * sl - dyA * dyA)), -4];
+        }
+        const T = J['ti' + s];
+        J['ti' + s] = [nA[0] + (T[0] - A[0]), nA[1] + (T[1] - A[1])];
+        J['kn' + s] = nK; J['an' + s] = nA;
+      }
+    }
     if (this.feetAt) {
       // el tobillo que está cerca del suelo baja hasta él (y se queda donde estaba al empezar); el que se levanta va libre
       for (const s of ['L', 'R'] as const) {

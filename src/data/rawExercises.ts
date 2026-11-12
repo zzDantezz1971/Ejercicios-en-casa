@@ -221,9 +221,9 @@ export const RAW_SECTIONS: RawSection[] = [
  {g:'Zona lumbar'},
  {n:'Gato-camello',z:'Columna',mat:1,handsDown:true,f:[[{...QUAD,tl:-31,tu:15,hd:70},400,1300],[{...QUAD,tl:2,tu:-34,hd:-45},400,1300]]},
  {n:'Postura del niño',z:'Espalda y lumbar',mat:1,f:[
-   [{tl:10,tu:15,hd:0,ua:0,fa:0,th:30,sn:180,ft:180},1400,1100],[{tl:7,tu:12,hd:-2,ua:-2,fa:0,th:30,sn:180,ft:180},1400,1100]]},
+   [{tl:10,tu:15,hd:0,ua:16,fa:16,th:30,sn:180,ft:180},1400,1100],[{tl:7,tu:12,hd:-2,ua:15,fa:15,th:30,sn:180,ft:180},1400,1100]]},
  {n:'Esfinge',z:'Lumbar',mat:1,f:[
-   [{...PRONE,tl:-4,tu:-35,ua:80,fa:0,sa:.6},300,1200],[{...PRONE,tl:-5,tu:-55,hd:-50,ua:90,fa:0,sa:.75},1500,1200]]},
+   [{...PRONE,tl:-4,tu:-35,ua:80,fa:0},300,1200],[{...PRONE,tl:-5,tu:-41,hd:-42,ua:88,fa:0},1500,1200]]},
  {n:'Rodillas al pecho tumbado',z:'Lumbar',mat:1,f:[
    [{tl:180,th:-125,sn:15,ua:-40,fa:-20},800,1100],[{tl:180,th:-140,sn:5,ua:-48,fa:-12},1200,1100]]},
  {n:'Torsión lumbar tumbado',split:true,z:'Lumbar y glúteos',v:'top',mat:'top',top:'Vista desde arriba',f:[
