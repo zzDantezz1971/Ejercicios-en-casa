@@ -75,8 +75,12 @@ export function to3D(spec: MotionSpec, view: string, J: Joints, pose: Pose): Rec
       const up = pel[1] - kn[1];
       o['kn' + s] = up > 4 ? V(kn[0], baseY + up * 0.9, 20) : V(kn[0], 8, 8 + Math.max(0, kn[1] - pel[1]));
       o['an' + s] = V(an[0], 4, up > 4 ? 32 : 14 + Math.max(0, an[1] - pel[1]));
-      o['ti' + s] = V(ti[0], 3.5, o['an' + s].z + 3);
+      // pierna estirada (abierta a un lado): la punta del pie mira al techo; con la rodilla doblada, hacia delante
+      const straight = up <= 4 && Math.abs(pose['sn' + s] - pose['th' + s]) < 25;
+      o['ti' + s] = straight ? o['an' + s].clone().add(V(0, 6.5, 2.5)) : V(ti[0], 3.5, o['an' + s].z + 3);
       o['hip' + s] = V(J['hip' + s][0], baseY, 0);
+      // las manos apoyadas no se hunden en el suelo
+      if (o['ha' + s].y < 3) o['ha' + s].y = 3;
     }
   }
   const side = view === 'side';
@@ -346,8 +350,11 @@ export class MannequinScene {
 
     if (spec.mat) {
       const m = this.add(G.box, this.mat(this.pal.mat, 0.9), false);
-      m.position.set((bb.min.x + bb.max.x) / 2, 0.6, view === 'top' ? (bb.min.z + bb.max.z) / 2 : 0);
-      m.scale.set(bb.max.x - bb.min.x + 12, 1.2, view === 'top' ? bb.max.z - bb.min.z + 12 : 62);
+      // vista de arriba o sentado en el suelo visto de frente: la esterilla abarca todo el cuerpo (manos delante incluidas)
+      const fit = view === 'top' || (view === 'front' && !!spec.noGround);
+      const zMin = Math.min(bb.min.z, -31), zMax = Math.max(bb.max.z, 31);
+      m.position.set((bb.min.x + bb.max.x) / 2, 0.6, view === 'top' ? (bb.min.z + bb.max.z) / 2 : fit ? (zMin + zMax) / 2 : 0);
+      m.scale.set(bb.max.x - bb.min.x + 12, 1.2, view === 'top' ? bb.max.z - bb.min.z + 12 : fit ? zMax - zMin + 6 : 62);
     }
     const benchM = this.mat(this.pal.bench, 0.6), legM = this.mat(this.pal.benchLeg, 0.4, 0.5);
     for (const o of motion.props()) this.addProp(o, view, bb, benchM, legM);
