@@ -8,8 +8,12 @@ import type { SkinData } from '../src/figure/SkinnedFigure';
 import { MUSCLES } from '../src/figure/anatomy';
 
 const BODY_SPEC: MotionSpec = { v: 'front', f: [[{ uaL: 100, faL: 96, uaR: 80, faR: 84 }]] };
-const W = 220, H = 330;
-const skin: SkinData = await (await fetch('./skin_new.json')).json();
+const q = new URLSearchParams(location.search);
+// &res=3: más resolución (solo para mirar de cerca, no para empaquetar)
+const RES = Number(q.get('res') ?? 1);
+const W = 220 * RES, H = 330 * RES;
+// cuerpo con cara de adulto (tools/bodymap/adult_face.py); &skin=new para el original
+const skin: SkinData = await (await fetch(`./skin_${q.get('skin') ?? 'map'}.json`)).json();
 // datos sin suavizado (son números); la imagen con luces, suavizada como en la app
 const mk = (aa: boolean) => {
   const c = document.createElement('canvas');
@@ -20,7 +24,7 @@ const mk = (aa: boolean) => {
 };
 const rData = mk(false), rLit = mk(true);
 // &test=0:1,11:0.3 : además, el mapa de verdad con esos pesos (para comprobar)
-const test = new URLSearchParams(location.search).get('test');
+const test = q.get('test');
 const zero = MUSCLES.map(() => 0);
 const out: Record<string, string> = {};
 for (const back of [false, true]) {
@@ -28,7 +32,14 @@ for (const back of [false, true]) {
     const r = debug === 0 || debug === 9 ? rLit : rData, c = r.domElement;
     const w = debug === 9 ? MUSCLES.map((_, i) => Number(test!.split(',').find((t) => t.startsWith(i + ':'))?.split(':')[1] ?? 0)) : zero;
     const sc = new MannequinScene(BODY_SPEC, undefined, undefined, skin, { L: w, R: w, map: true, debug: debug === 9 ? 0 : debug });
-    sc.scene.traverse((o) => { if ((o as THREE.Mesh).material instanceof THREE.ShadowMaterial) o.visible = false; });
+    sc.scene.traverse((o) => {
+      const m = (o as THREE.Mesh).material as THREE.MeshStandardMaterial;
+      // sin sombra en el suelo, y el cuerpo sin sombras sobre sí mismo (dejaban manchas en anillos en el pecho y la cabeza)
+      if (m instanceof THREE.ShadowMaterial) o.visible = false;
+      o.receiveShadow = false;
+      // ojos: el blanco, gris claro (con blanco puro la mirada parecía de niño)
+      else if (!(o as THREE.SkinnedMesh).isSkinnedMesh && m?.color && m.color.getHex() === 0xffffff) m.color.set('#B9BEC6');
+    });
     sc.azimuth = back ? 180 : 0;
     sc.elevation = 6;
     sc.setAspect(W / H);
