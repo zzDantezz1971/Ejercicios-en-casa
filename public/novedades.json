@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-12T10:01:07Z",
+    "es": ["La app arranca más rápido y gasta menos datos: ya no descarga el muñeco realista. El mapa de músculos de los resúmenes se ve igual, pero ahora se pinta con unas imágenes ligeras."],
+    "ca": ["L'app arrenca més ràpid i gasta menys dades: ja no descarrega el ninot realista. El mapa de músculs dels resums es veu igual, però ara es pinta amb unes imatges lleugeres."],
+    "en": ["The app starts faster and uses less data: it no longer downloads the realistic figure. The muscle map in the summaries looks the same, but it is now drawn from lightweight images."]
+  },
+  {
     "fecha": "2026-11-12T09:51:12Z",
     "es": ["Un solo muñeco: los ejercicios se ven siempre con el muñeco de piezas. Se quita de Configuración la opción de elegir el realista o el de dibujo."],
     "ca": ["Un sol ninot: els exercicis es veuen sempre amb el ninot de peces. Es treu de Configuració l'opció de triar el realista o el de dibuix."],

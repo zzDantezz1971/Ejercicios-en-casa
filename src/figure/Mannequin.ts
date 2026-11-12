@@ -204,7 +204,7 @@ export class MannequinScene {
   /** Agarra algo con las manos (mancuernas, barra, banda, comba...): puño cerrado. */
   private readonly grips: boolean;
 
-  constructor(spec: MotionSpec, private readonly pal: Palette = DEFAULT_PALETTE, side: Side = undefined, skin?: SkinData, anatomy?: { L: number[]; R: number[]; map?: boolean }) {
+  constructor(spec: MotionSpec, private readonly pal: Palette = DEFAULT_PALETTE, side: Side = undefined, skin?: SkinData, anatomy?: { L: number[]; R: number[]; map?: boolean; debug?: number }) {
     this.motion = new Motion(spec, side);
     this.grips = !!(spec.fist || spec.db || spec.kb || spec.bar || spec.band === 'hands' || spec.band === 'feet' || typeof spec.band === 'function' || spec.rope || spec.wheel);
     this.skinData = skin;
@@ -220,7 +220,7 @@ export class MannequinScene {
         const old = this.skinned.mesh.material as THREE.Material;
         // de frente y desde arriba el cuerpo 3D tiene izquierda y derecha cambiadas respecto a la animación
         const swap = view !== 'side' && !(view === 'top' && spec.prone);
-        const w = swap ? { L: anatomy.R, R: anatomy.L, map: anatomy.map } : anatomy;
+        const w = swap ? { L: anatomy.R, R: anatomy.L, map: anatomy.map, debug: anatomy.debug } : anatomy;
         this.skinned.mesh.material = anatomyMaterial(this.skinned.mesh.geometry, this.skinData, w);
         old.dispose();
       }

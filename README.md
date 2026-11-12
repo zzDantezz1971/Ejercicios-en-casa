@@ -43,7 +43,13 @@ su descripción en `src/data/descriptions.ts` y, si se hace por lados, su id en 
 
 ## Maniquí
 
-El cuerpo del maniquí (`public/maniqui.json`) parte del modelo base de [MakeHuman](http://www.makehumancommunity.org)
-(malla, esqueleto, pesos y ajustes de forma), publicado con licencia **CC0**. Se genera con
+Los ejercicios se dibujan con el maniquí de piezas (`src/figure/Mannequin.ts`).
+
+El maniquí realista (`tools/skin_new.json`) ya no se descarga en la app: solo se usa para sacar los mapas de músculos
+de los resúmenes (`public/mapa-musculos-delante.png` y `-detras.png`), que la app colorea según lo entrenado
+(`src/ui/components/bodyMaps.ts`). Para volver a generarlos: `npm run dev`, `node tools/bodymap.cjs 5174 carpeta` y
+`python3 tools/bodymap/pack.py carpeta public` (el recorte que imprime va en `BOX` de `bodyMaps.ts`).
+Ese cuerpo parte del modelo base de [MakeHuman](http://www.makehumancommunity.org)
+(malla, esqueleto, pesos y ajustes de forma), publicado con licencia **CC0**, y se genera con
 `tools/maniqui/build_mh.py`: hombre joven atlético, calvo, con la ropa de la app y la mano en puño como forma
-alternativa para agarrar mancuernas. Si el archivo no se puede cargar, la app usa el maniquí de piezas.
+alternativa para agarrar mancuernas.

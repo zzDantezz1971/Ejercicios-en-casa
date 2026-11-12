@@ -56,11 +56,12 @@ const N = MUSCLES.length;
 
 /** Material del maniquí anatomía. */
 /** `map`: mapa de los resúmenes (amarillo pastel = poco trabajado, rojo = mucho). */
-export function anatomyMaterial(g: THREE.BufferGeometry, d: SkinData, w: { L: number[]; R: number[]; map?: boolean }): THREE.Material {
+/** `debug` (solo para generar los mapas de los resúmenes, tools/bodymap): 2 = músculos dominantes, 3 = segundo músculo, líneas y pantalón, 4 = marca de piel (magenta). */
+export function anatomyMaterial(g: THREE.BufferGeometry, d: SkinData, w: { L: number[]; R: number[]; map?: boolean; debug?: number }): THREE.Material {
   if (!g.getAttribute('aPart') && d.part) g.setAttribute('aPart', new THREE.BufferAttribute(Float32Array.from(b64(d.part)), 1));
   const P = (k: string, i: 0 | 1) => new THREE.Vector3(...(d.rest[k][i] as [number, number, number]));
   const uniforms = {
-    uWL: { value: w.L }, uWR: { value: w.R }, uMap: { value: w.map ? 1 : 0 },
+    uWL: { value: w.L }, uWR: { value: w.R }, uMap: { value: w.map ? 1 : 0 }, uDebug: { value: w.debug ?? 0 },
     uShoL: { value: P('uaL', 0) }, uShoR: { value: P('uaR', 0) }, uElL: { value: P('uaL', 1) }, uElR: { value: P('uaR', 1) },
     uWrL: { value: P('faL', 1) }, uWrR: { value: P('faR', 1) },
     uHipL: { value: P('thL', 0) }, uHipR: { value: P('thR', 0) }, uKnL: { value: P('thL', 1) }, uKnR: { value: P('thR', 1) },
@@ -78,8 +79,9 @@ varying vec3 vRest;
 flat varying float vPart;
 uniform float uWL[${N}], uWR[${N}];
 uniform vec3 uShoL, uShoR, uElL, uElR, uWrL, uWrR, uHipL, uHipR, uKnL, uKnR, uAnL, uAnR;
-uniform float uWaistY, uShortT, uMap;
+uniform float uWaistY, uShortT, uMap, uDebug;
 vec3 gHi;
+vec3 gDbg;
 float band(float v, float a, float b, float s) { return smoothstep(a - s, a + s, v) * (1.0 - smoothstep(b - s, b + s, v)); }
 float along(vec3 p, vec3 a, vec3 dir) { return dot(p - a, dir) / dot(dir, dir); }
 vec3 radial(vec3 p, vec3 a, vec3 dir) { float t = along(p, a, dir); return normalize(p - (a + dir * t) + vec3(1e-4)); }
@@ -155,6 +157,16 @@ vec3 anatomy() {
     stretch = max(stretch, m[i] * max(-w, 0.0));
     cov = max(cov, m[i] * step(0.001, w));
   }
+  if (uDebug > 0.5) {
+    float b1 = 0.0, b2 = 0.0, i1 = 255.0, i2 = 255.0;
+    for (int i = 0; i < ${N}; i++) {
+      if (m[i] > b1) { b2 = b1; i2 = i1; b1 = m[i]; i1 = float(i); }
+      else if (m[i] > b2) { b2 = m[i]; i2 = float(i); }
+    }
+    if (b1 < 0.004) i1 = 255.0;
+    if (b2 < 0.004) i2 = 255.0;
+    gDbg = uDebug < 2.5 ? vec3(i1 / 255.0, clamp(b1, 0.0, 1.0), i2 / 255.0) : uDebug < 3.5 ? vec3(clamp(b2, 0.0, 1.0), clamp(lines, 0.0, 1.0), shorts ? 1.0 : 0.0) : vec3(1.0, 0.0, 1.0);
+  }
   if (uMap > 0.5) {
     // mapa de los resúmenes
     vec3 base = shorts ? vec3(0.12, 0.15, 0.2) : vec3(0.6, 0.64, 0.7);
@@ -176,7 +188,8 @@ vec3 anatomy() {
   return c;
 }`)
       .replace('vec4 diffuseColor = vec4( diffuse, opacity );', 'vec4 diffuseColor = vec4( anatomy(), opacity );')
-      .replace('#include <emissivemap_fragment>', '#include <emissivemap_fragment>\ntotalEmissiveRadiance += gHi;');
+      .replace('#include <emissivemap_fragment>', '#include <emissivemap_fragment>\ntotalEmissiveRadiance += gHi;')
+      .replace('#include <dithering_fragment>', '#include <dithering_fragment>\nif (uDebug > 0.5) gl_FragColor = vec4(gDbg, 1.0);');
   };
   return mat;
 }

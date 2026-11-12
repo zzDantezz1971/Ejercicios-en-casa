@@ -4,7 +4,6 @@ import '@fontsource/barlow/latin-600.css';
 import '@fontsource/barlow-condensed/latin-600.css';
 import '@fontsource/barlow-condensed/latin-700.css';
 import './styles/app.css';
-import { loadSkin } from './figure/skinAsset';
 import { App } from './ui/App';
 import { HistoryScreen } from './ui/screens/HistoryScreen';
 import { HomeScreen } from './ui/screens/HomeScreen';
@@ -20,8 +19,6 @@ import { h } from './ui/dom';
 import { startTranslating } from './i18n';
 
 async function start(): Promise<void> {
-  // El cuerpo del maniquí se carga antes de dibujar la primera figura.
-  await loadSkin();
   const app = new App(document.getElementById('app')!);
   // app de Google Play: suscripción o código (con un límite de tiempo por si Google Play no responde)
   await Promise.race([app.access.init(), new Promise((r) => setTimeout(r, 8000))]);

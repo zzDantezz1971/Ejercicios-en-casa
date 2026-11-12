@@ -1,16 +1,14 @@
 import * as THREE from 'three';
 import { findFit, markZones } from './thumbFit';
-import type { ExerciseDef, MotionSpec } from '../domain/types';
+import type { ExerciseDef } from '../domain/types';
 import { MannequinScene, type Mood, type Palette } from './Mannequin';
 import type { Side } from './poses';
 import type { SkinData } from './SkinnedFigure';
-import { getFigureSkin, getFigureStyle, getSkin } from './skinAsset';
+import { getFigureSkin, getFigureStyle } from './skinAsset';
 import { muscleWeights } from './anatomy';
 import { EQUIP_INFO } from '../domain/equipment';
 import { strokePath } from '../ui/icons';
 
-/** Postura de pie, brazos algo separados, para el mapa de músculos. */
-const BODY_SPEC: MotionSpec = { v: 'front', f: [[{ uaL: 100, faL: 96, uaR: 80, faR: 84 }]] };
 
 /** Músculos a marcar en el maniquí anatomía. */
 function anatomyFor(ex: ExerciseDef, side: Side): { L: number[]; R: number[] } {
@@ -158,27 +156,6 @@ export class Thumbnails {
     if (ex.pending) return Promise.resolve(pendingThumb(ex));
     const skin = getFigureSkin();
     return this.enqueue(`${skin ? 'a' : 'p'}:${getFigureStyle()}:${ex.id}`, () => this.draw(ex, skin));
-  }
-
-  /** Cuerpo de pie (de frente o de espaldas) con los músculos coloreados según `weights`. Vacío si no hay cuerpo realista. */
-  bodyMap(weights: number[], back: boolean): Promise<string> {
-    const skin = getSkin();
-    if (!skin) return Promise.resolve('');
-    return this.enqueue(`map5:${back ? 1 : 0}:${weights.map((w) => w.toFixed(2)).join(',')}`, () => {
-      const r = this.ensureRenderer();
-      const sc = new MannequinScene(BODY_SPEC, this.palette, undefined, skin, { L: weights, R: weights, map: true });
-      // sin sombra en el suelo (ensuciaba el texto de debajo)
-      sc.scene.traverse((o) => { if ((o as THREE.Mesh).material instanceof THREE.ShadowMaterial) o.visible = false; });
-      sc.azimuth = back ? 180 : 0;
-      sc.elevation = 6;
-      sc.setAspect(this.w / this.h);
-      sc.placeCamera();
-      sc.update(0);
-      r.render(sc.scene, sc.camera);
-      const url = r.domElement.toDataURL('image/webp', 0.9);
-      sc.dispose();
-      return url;
-    });
   }
 
   private enqueue(key: string, render: () => string): Promise<string> {
