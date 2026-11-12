@@ -510,6 +510,7 @@ const ROWS: Row[] = [
   ['Pelo, cejas y barba', 'Cabell, celles i barba', 'Hair, eyebrows and beard'],
   ['Pantalla', 'Pantalla', 'Display'],
   ['Muñeco', 'Ninot', 'Figure'],
+  ['Motivación', 'Motivació', 'Motivation'],
   ['Cuerpo y pelo', 'Cos i cabell', 'Body and hair'],
   ['Cuerpo', 'Cos', 'Body'],
   ['Peinado', 'Pentinat', 'Hairstyle'],

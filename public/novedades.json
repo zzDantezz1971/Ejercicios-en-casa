@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-12T18:30:24Z",
+    "es": ["Configuración: el apartado de las frases motivadoras se llama ahora «Motivación» (antes «Inicio»)."],
+    "ca": ["Configuració: l'apartat de les frases motivadores ara es diu «Motivació» (abans «Inici»)."],
+    "en": ["Settings: the motivational quotes section is now called «Motivation» (formerly «Home»)."]
+  },
+  {
     "fecha": "2026-11-12T18:27:13Z",
     "es": ["Configuración más ordenada: primero Idioma, luego Pantalla (antes «Apariencia») y un apartado nuevo, Muñeco, para personalizarlo. Se quita el peinado rapado."],
     "ca": ["Configuració més ordenada: primer Idioma, després Pantalla (abans «Aparença») i un apartat nou, Ninot, per personalitzar-lo. Es treu el pentinat rapat."],

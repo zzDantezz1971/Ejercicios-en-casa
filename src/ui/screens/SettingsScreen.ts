@@ -315,7 +315,7 @@ export class SettingsScreen implements Screen {
           }[this.app.voice.lang]);
         },
       }, icon('volume'), 'Probar sonido y voz'),
-      h('h3', { class: 'block-title' }, 'Inicio'),
+      h('h3', { class: 'block-title' }, 'Motivación'),
       toggle('phrases', 'bolt', 'Frases motivadoras', 'Una frase distinta cada día en Inicio.'),
       h('h3', { class: 'block-title' }, 'Reloj'),
       this.watchSection(),
