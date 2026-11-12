@@ -124,7 +124,8 @@ vec3 anatomy() {
     m[5] = (1.0 - smoothstep(0.85, 1.0, ax / 12.5 + abs(p.y - 52.5) / 7.5)) * smoothstep(1.5, -1.0, p.z - 1.0);
     m[6] = ell(q, vec2(6.2, 4.5), vec2(7.0, 7.8)) * back;
     m[7] = dl;
-    m[15] = ell(vec2(ax, p.y), vec2(2.5, 59.0), vec2(3.6, 3.6)) * smoothstep(-2.0, 1.0, p.z);
+    // cuello: por debajo de la mandíbula; lo que sobresale por delante del cuello (la barbilla) no
+    m[15] = ell(vec2(ax, p.y), vec2(2.5, 56.0), vec2(3.6, 3.4)) * smoothstep(-2.0, 1.0, p.z) * (1.0 - smoothstep(8.5, 10.0, p.z));
     shorts = p.y < uWaistY && p.y > -8.0;
   } else if (part == 1 || part == 2) {
     sideL = part == 1 ? 1.0 : 0.0;
