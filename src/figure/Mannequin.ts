@@ -570,7 +570,8 @@ export class MannequinScene {
       inner = inner.lengthSq() > 9 ? inner.normalize() : ortho(fwd, aDir);
       const armOut = ortho(bodyLat.clone().multiplyScalar(sg), aDir);
       this.seg(P['ua' + s], sho, el, 3.8);
-      const am = this.look.body === 'woman' ? 0.84 : 1;
+      // sin mangas o con manga larga los músculos del brazo quedan a la vista: más suaves para que no parezcan bultos
+      const am = (this.look.body === 'woman' ? 0.84 : 1) * (this.look.top === 'tee' ? 1 : 0.8);
       this.oriented(P['bic' + s], sho.clone().lerp(el, 0.58).addScaledVector(inner, 1.5 * am), aDir, armOut, 7, 3.5 * am, 3.4 * am);
       this.oriented(P['tri' + s], sho.clone().lerp(el, 0.5).addScaledVector(inner, -1.4 * am), aDir, armOut, 7.5, 3.4 * am, 3.3 * am);
       this.seg(P['sl' + s], sho, sho.clone().lerp(el, 0.5), 5.2);
