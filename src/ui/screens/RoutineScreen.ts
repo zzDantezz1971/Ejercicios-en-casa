@@ -10,6 +10,20 @@ import { canDo } from '../../domain/equipment';
 import { sortableList } from '../components/sortable';
 import { applyOrder, moveItem } from '../../domain/ordering';
 import { DetailScreen } from './DetailScreen';
+import { MUSCLE_NAMES, parseMuscles, type Muscle } from '../../figure/anatomy';
+import { EQUIPMENT, EQUIP_INFO } from '../../domain/equipment';
+import type { IconName } from '../icons';
+
+export type ListSort = 'zona' | 'musculo' | 'material' | 'az';
+/** Músculos de la cabeza a los pies (orden «Por músculo»). */
+const HEAD_TO_TOE: Muscle[] = ['cuello', 'trapecio', 'deltoides', 'pecho', 'espalda', 'biceps', 'triceps', 'antebrazo',
+  'abdominales', 'oblicuos', 'lumbar', 'gluteos', 'aductores', 'cuadriceps', 'isquios', 'gemelos'];
+/** Músculo principal: el primero que trabaja (o, si solo estira, el primero). */
+function mainMuscle(e: ExerciseDef): Muscle | undefined {
+  const t = parseMuscles(e.muscles);
+  return (t.find((x) => x.kind === 'work') ?? t[0])?.muscle;
+}
+const byName = (a: ExerciseDef, b: ExerciseDef) => tr(a.name).localeCompare(tr(b.name));
 
 /** Preparar rutina: elegir ejercicios por apartado (se numeran en el orden en que se marcan) y su duración. */
 export class RoutineScreen implements Screen {
@@ -104,11 +118,24 @@ export class RoutineScreen implements Screen {
       h('button', { class: 'seg' + (this.mode === m ? ' on' : ''), 'aria-pressed': String(this.mode === m), onclick: () => { this.mode = m; this.clearSearch(); window.scrollTo(0, 0); this.render(); } }, label);
     append(this.toolbar,
       h('div', { class: 'segmented' }, seg('all', 'Todos'), seg('fav', h('span', { class: 'seg-fav' }, icon('starFill'), 'Favoritos')), seg('chosen', `Elegidos (${n})`)),
-      this.mode === 'all'
+      // tu propio orden (arrastrando) se ve con «Por zona»
+      this.mode === 'all' && this.sort === 'zona'
         ? h('button', { class: 'btn ghost small', onclick: () => { this.mode = 'sorting'; this.clearSearch(); window.scrollTo(0, 0); this.render(); } }, icon('tables'), 'Ordenar lista')
         : null,
       n ? this.roundsControl() : null,
     );
+    // ordenar la lista por zona (la de siempre o la personalizada), músculo, material o nombre
+    if (this.mode === 'all') {
+      const cur = this.sort;
+      const sel = h('select', { class: 'sort-select', 'aria-label': 'Ordenar por', onchange: (e: Event) => {
+        this.app.store.saveSettings({ ...this.app.store.settings, listSort: (e.target as HTMLSelectElement).value as ListSort });
+        window.scrollTo(0, 0);
+        this.render();
+      } },
+        ...([['zona', 'Por zona'], ['musculo', 'Por músculo (de cabeza a pies)'], ['material', 'Por material'], ['az', 'Alfabético (A-Z)']] as Array<[ListSort, string]>)
+          .map(([v, label]) => h('option', { value: v, selected: v === cur }, label)));
+      this.toolbar.append(h('label', { class: 'sort-row' }, icon('tables'), h('span', { class: 'muted small' }, 'Ordenar:'), sel));
+    }
     if (this.mode === 'fav') {
       this.hint.replaceChildren(this.favs().length
         ? 'Tus ejercicios favoritos de este apartado. Pulsa Seleccionar para añadirlo a la tabla.'
@@ -147,6 +174,10 @@ export class RoutineScreen implements Screen {
   }
 
   /** Ejercicios visibles de un apartado, en el orden elegido por el usuario. */
+  private get sort(): ListSort {
+    return this.app.store.settings.listSort ?? 'zona';
+  }
+
   private ordered(sectionId: SectionId): ExerciseDef[] {
     const sec = this.app.sections.find((s) => s.id === sectionId)!;
     const hidden = this.app.store.hidden;
@@ -297,7 +328,10 @@ export class RoutineScreen implements Screen {
     }
     // tras el gratis, el resto va bajo su propio título (si el apartado no tiene subgrupos, uno de «Prémium»)
     let restTitled = !free.length;
-    for (const ex of all.filter((e) => canDo(e.equip, owned) && !free.includes(e))) {
+    const rest = all.filter((e) => canDo(e.equip, owned) && !free.includes(e));
+    if (this.sort !== 'zona') {
+      this.renderSorted(rest);
+    } else for (const ex of rest) {
       if (!custom && ex.group && ex.group !== group) {
         group = ex.group;
         this.list.append(h('h2', { class: 'group-title zone-title' }, zoneIcon(group), group));
@@ -311,6 +345,10 @@ export class RoutineScreen implements Screen {
     }
     const note = this.equipNote(this.section);
     if (note) this.list.append(note);
+    if (this.sort !== 'zona' && this.showAllEquip) {
+      this.renderSorted(all.filter((e) => !canDo(e.equip, owned)));
+      return;
+    }
     // los que necesitan material que no se tiene van aparte, al final (y no se mezclan con los demás)
     if (this.showAllEquip) all.filter((e) => !canDo(e.equip, owned)).forEach((ex) => this.list.append(this.card(ex)));
   }
@@ -323,6 +361,38 @@ export class RoutineScreen implements Screen {
 
   /** Ejercicios de la lista que se ve, en su orden (para pasar de uno a otro en la ficha). */
   private shown: ExerciseDef[] = [];
+
+  /** Lista ordenada por músculo, material o nombre, con un título por grupo (salvo en A-Z). */
+  private renderSorted(list: ExerciseDef[]): void {
+    const sort = this.sort;
+    if (sort === 'az') {
+      [...list].sort(byName).forEach((ex) => this.list.append(this.card(ex)));
+      return;
+    }
+    const groups = new Map<string, { title: string; icon: SVGSVGElement; rank: number; items: ExerciseDef[] }>();
+    for (const ex of list) {
+      let key: string, title: string, ic: SVGSVGElement, rank: number;
+      if (sort === 'musculo') {
+        const m = mainMuscle(ex);
+        key = m ?? '-'; rank = m ? HEAD_TO_TOE.indexOf(m) : 99;
+        title = m ? MUSCLE_NAMES[m] : 'Otros';
+        ic = zoneIcon(m ?? '');
+      } else {
+        const eq = (ex.equip ?? []).map((g) => g[0]);
+        key = eq.join('+') || '-';
+        rank = eq.length ? Math.min(...eq.map((x) => EQUIPMENT.indexOf(x as (typeof EQUIPMENT)[number]))) * 10 + eq.length : -1;
+        title = eq.length ? eq.map((x) => tr(EQUIP_INFO[x as (typeof EQUIPMENT)[number]].name)).join(' + ') : 'Sin material';
+        ic = icon((eq.length ? EQUIP_INFO[eq[0] as (typeof EQUIPMENT)[number]].icon : 'check') as IconName);
+      }
+      const g = groups.get(key) ?? { title, icon: ic, rank, items: [] };
+      g.items.push(ex);
+      groups.set(key, g);
+    }
+    for (const g of [...groups.values()].sort((a, b) => a.rank - b.rank || a.title.localeCompare(b.title))) {
+      this.list.append(h('h2', { class: 'group-title zone-title' }, g.icon, g.title));
+      g.items.sort(byName).forEach((ex) => this.list.append(this.card(ex)));
+    }
+  }
 
   private card(ex: ExerciseDef): HTMLElement {
     this.shown.push(ex);

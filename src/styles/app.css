@@ -1359,3 +1359,6 @@ body:has(.page-lifted) { overflow-x: hidden; }
 .chip.on { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 700; }
 .chips.locked .chip { opacity: .55; }
 .look-save { position: sticky; bottom: 0; padding: 12px 0 calc(12px + env(safe-area-inset-bottom, 0px)); background: linear-gradient(to top, var(--bg) 70%, transparent); z-index: 3; }
+.sort-row { display: flex; align-items: center; gap: 8px; width: 100%; }
+.sort-row .ico { width: 16px; height: 16px; color: var(--muted); }
+.sort-select { flex: 1; min-width: 0; background: var(--surface-2); color: var(--fg); border: 1px solid var(--line); border-radius: 12px; padding: 8px 10px; font: inherit; font-size: .9rem; }
