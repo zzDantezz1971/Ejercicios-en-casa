@@ -67,8 +67,8 @@ function frameMatrix(dir: V3, ref: V3): THREE.Matrix4 {
   return new THREE.Matrix4().makeBasis(x, y, z);
 }
 
-/** Cuánto se levanta la punta del pie (radianes). */
-const FOOT_LIFT = 0.17;
+/** Cuánto se levanta la punta del pie (radianes); 0: planos en el suelo (mapa de músculos). */
+const FOOT_LIFT = 0;
 
 /** Articulaciones 3D tal como las da el motor (pel, mid, neck, head, shoL, elL, haL, hipL, knL, anL, tiL...). */
 export type Joints3D = Record<string, V3>;

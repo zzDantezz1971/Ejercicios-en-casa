@@ -142,9 +142,8 @@ for cy, ry in ((35.0, 2.7), (29.9, 2.6), (24.8, 2.7)):
         packs = np.maximum(packs, sm(np.clip(1 - e, 0, 1)) ** 0.7)
 lower = sm(np.clip(1 - ((ax / 5.5) ** 2 + ((y - 19.5) / 4.0) ** 2), 0, 1)) * 0.7
 D += front * (np.maximum(packs, lower) * 0.5 - g(x, 0, 0.7) * 0.12)
-# dorsales: espalda en V (más ancha arriba por los lados y detrás)
-D += trunk * g(y, 41.0, 5.0) * up(ax, 8.5, 12.5) * 0.7
-D += trunk * g(y, 40.0, 6.0) * up(-z, 0.0, 4.0) * up(ax, 3.0, 8.0) * 0.5
+# dorsales: algo de volumen detrás, sin ensanchar la espalda (se veía demasiado ancha)
+D += trunk * g(y, 40.0, 6.0) * up(-z, 0.0, 4.0) * up(ax, 3.0, 8.0) * 0.3
 # hombros (deltoides) y brazos (bíceps y tríceps)
 for k, s in (('uaL', 1), ('uaR', -1)):
     a = np.array(d['rest'][k][0]); b = np.array(d['rest'][k][1])
@@ -156,7 +155,7 @@ for k, s in (('uaL', 1), ('uaR', -1)):
     arm = np.isin(PART, [1, 2]) & sidew
     # deltoides: hacia el lado (no hacia arriba, que hacía pico)
     side_out = np.clip(rn[:, 0] * s, 0, 1)
-    D += g(t, 0.16, 0.14) * side_out * arm * 0.75
+    D += g(t, 0.16, 0.14) * side_out * arm * 0.3
     D += g(t, 0.5, 0.2) * np.clip(rn[:, 2], 0, 1) * arm * 0.5
     D += g(t, 0.45, 0.22) * np.clip(-rn[:, 2], 0, 1) * arm * 0.4
 # muslos: cuádriceps (delante y por fuera), la «lágrima» por dentro encima de la rodilla, isquios detrás
