@@ -162,8 +162,9 @@ export const RAW_SECTIONS: RawSection[] = [
  {n:'Dead bug (bicho muerto)',z:'Core profundo',mat:1,b:['lumbar'],f:[
    [{tl:180,ua:-90,fa:-90,th:-90,sn:0},150,800],[{tl:180,uaR:-90,faR:-90,uaL:-165,faL:-170,thL:-90,snL:0,thR:-15,snR:-12},300,800],
    [{tl:180,ua:-90,fa:-90,th:-90,sn:0},150,800],[{tl:180,uaL:-90,faL:-90,uaR:-165,faR:-170,thR:-90,snR:0,thL:-15,snL:-12},300,800]]},
- {n:'Escaladores',z:'Core y cardio',mat:1,handsDown:3,f:[
-   [{...PLH,thR:25,snR:160,ftR:150},0,170],[{...PLH,thR:92,sThR:.42,snR:165,thL:92,sThL:.42,snL:165},0,170],[{...PLH,thL:25,snL:160,ftL:150},0,170],[{...PLH,thR:92,sThR:.42,snR:165,thL:92,sThL:.42,snL:165},0,170]]},
+ {n:'Escaladores',z:'Core y cardio',mat:1,handsDown:3,anchor:{j:'pel',y:-40},f:[
+   // cadera a la altura de los hombros; una rodilla al pecho (pie en el aire) y la otra pierna estirada atrás, de puntillas
+   [{...PLH,tl:-7,thR:42,snR:195,ftR:200,thL:155,snL:155},150,130],[{...PLH,tl:-7,thL:42,snL:195,ftL:200,thR:155,snR:155},150,130]]},
  {g:'Abdomen inferior'},
  {n:'Crunch inverso',z:'Abdomen inferior',mat:1,f:[
    [{...SUP,th:-80,sn:10,ft:-80},150,900],[{...SUP,tl:168,th:-130,sn:-50,ft:-140},150,900]]},

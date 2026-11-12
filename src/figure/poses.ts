@@ -242,6 +242,15 @@ export class Motion {
         J['ti' + s] = add(J['an' + s], dir(a), 9);
       }
     }
+    if (this.view !== 'top') {
+      // la punta del pie nunca se mete en el suelo: si bajaría de él, el pie gira y se apoya plano
+      for (const s of ['L', 'R']) {
+        const A = J['an' + s], T = J['ti' + s];
+        if (T[1] <= -1 || A[1] >= -1) continue;
+        const len = Math.hypot(T[0] - A[0], T[1] - A[1]), dy = -1 - A[1];
+        J['ti' + s] = [A[0] + Math.sign(T[0] - A[0] || 1) * Math.sqrt(Math.max(0, len * len - dy * dy)), -1];
+      }
+    }
     if (this.handsAt) {
       const hy = this.handsAt.y;
       for (const s of ['L', 'R'] as const) {
