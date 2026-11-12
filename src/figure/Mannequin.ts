@@ -594,6 +594,11 @@ export class MannequinScene {
         if (ahead.lengthSq() < 1e-4) ahead = V(1, 0, 0);
         ahead.normalize();
         if (ahead.dot(fwd.clone().add(tUp)) < 0) ahead.negate();
+        // con las manos por delante de los pies (plancha, gusano, perro boca abajo, doblado hasta el suelo), los dedos
+        // apuntan hacia el lado contrario a los pies; si no, con el tronco boca abajo quedaban del revés
+        const feet = J.anL.clone().add(J.anR).multiplyScalar(0.5);
+        const away = ha.clone().sub(feet); away.y = 0;
+        if (away.lengthSq() > 25 && ahead.dot(away) < 0) ahead.negate();
         const target = ahead.multiplyScalar(0.95).add(V(0, -0.3, 0)).normalize();
         hu = u.clone().lerp(target, support).normalize();
         // palma hacia el suelo y pulgar hacia la otra mano

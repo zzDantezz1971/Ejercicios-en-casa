@@ -95,12 +95,24 @@ export const EXTRA_MOTIONS: Record<string, M> = {
   'zancada-con-giro-de-tronco': { f: [
     [{ ...CHEST_ARMS }, 150, 800], [{ ...LUNGE_R, ...CHEST_ARMS, tw: 38 }, 300, 800],
     [{ ...CHEST_ARMS }, 150, 800], [{ ...LUNGE_L, ...CHEST_ARMS, tw: -38 }, 300, 800]] },
-  'gusano-inchworm': { plant: 'anR', mat: 1, handsDown: true, handsSlide: true, f: [
-    [{}, 300, 1100],
-    // brazos un poco más cortos: la palma queda plana en el suelo y la muñeca algo levantada
-    [{ tl: 58, tu: 66, hd: 100, ua: 82, fa: 82, sa: 0.93, th: 80, sn: 97, ft: 0 }, 250, 1200],
-    [{ ...PLH, ft: 70, sa: 0.93 }, 500, 1200],
-    [{ tl: 58, tu: 66, hd: 100, ua: 82, fa: 82, sa: 0.93, th: 80, sn: 97, ft: 0 }, 250, 1200]] },
+  // gusano: de pie, se dobla hasta apoyar las manos y las va avanzando a pasos (una y otra) hasta la plancha;
+  // luego vuelve igual, a pasos, hasta doblarse y subir
+  'gusano-inchworm': (() => {
+    const A = { tl: 58, tu: 66, hd: 100, ua: 82, fa: 82, sa: 0.93, th: 80, sn: 97, ft: 0 };
+    const B: Record<string, number> = { ...PLH, ft: 70, sa: 0.93 };
+    const mix = (t: number) => Object.fromEntries(Object.keys(A).map((k) => [k, (A as Record<string, number>)[k] + ((B[k] ?? (A as Record<string, number>)[k]) - (A as Record<string, number>)[k]) * t]));
+    // una mano un poco levantada y adelantada (paso)
+    const step = (t: number, s: 'L' | 'R') => { const m = mix(t); return { ...m, ['ua' + s]: m.ua - 16, ['fa' + s]: m.fa - 22 }; };
+    return { plant: 'anR', mat: 1, handsDown: true, handsSlide: true, f: [
+      [{}, 300, 1100],
+      [A, 250, 450],
+      [step(0.25, 'L'), 0, 280], [mix(0.25), 80, 280], [step(0.5, 'R'), 0, 280], [mix(0.5), 80, 280],
+      [step(0.75, 'L'), 0, 280], [mix(0.75), 80, 280], [step(1, 'R'), 0, 280],
+      [B, 500, 450],
+      [step(0.75, 'L'), 0, 280], [mix(0.75), 80, 280], [step(0.5, 'R'), 0, 280], [mix(0.5), 80, 280],
+      [step(0.25, 'L'), 0, 280], [mix(0.25), 80, 280],
+      [A, 250, 1100]] } as M;
+  })(),
   'patada-frontal-alterna': { fist: true, f: [
     [{ ...GUARD_L }, 120, 380], [{ ...GUARD_L, thR: -6, snR: -8, ftR: -40, thL: 95, snL: 92, tl: -98 }, 120, 380],
     [{ ...GUARD_L }, 120, 380], [{ ...GUARD_L, thL: -6, snL: -8, ftL: -40, thR: 95, snR: 92, tl: -98 }, 120, 380]] },
