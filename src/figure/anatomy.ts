@@ -61,7 +61,7 @@ export function anatomyMaterial(g: THREE.BufferGeometry, d: SkinData, w: { L: nu
   if (!g.getAttribute('aPart') && d.part) g.setAttribute('aPart', new THREE.BufferAttribute(Float32Array.from(b64(d.part)), 1));
   const P = (k: string, i: 0 | 1) => new THREE.Vector3(...(d.rest[k][i] as [number, number, number]));
   const uniforms = {
-    uWL: { value: w.L }, uWR: { value: w.R }, uMap: { value: w.map ? 1 : 0 }, uDebug: { value: w.debug ?? 0 },
+    uWL: { value: w.L }, uWR: { value: w.R }, uMap: { value: w.map ? 1 : 0 }, uDebug: { value: w.debug ?? 0 }, uUseRest: { value: 0 },
     uShoL: { value: P('uaL', 0) }, uShoR: { value: P('uaR', 0) }, uElL: { value: P('uaL', 1) }, uElR: { value: P('uaR', 1) },
     uWrL: { value: P('faL', 1) }, uWrR: { value: P('faR', 1) },
     uHipL: { value: P('thL', 0) }, uHipR: { value: P('thR', 0) }, uKnL: { value: P('thL', 1) }, uKnR: { value: P('thR', 1) },
@@ -72,8 +72,8 @@ export function anatomyMaterial(g: THREE.BufferGeometry, d: SkinData, w: { L: nu
   mat.onBeforeCompile = (sh) => {
     Object.assign(sh.uniforms, uniforms);
     sh.vertexShader = sh.vertexShader
-      .replace('#include <common>', '#include <common>\nattribute float aPart;\nvarying vec3 vRest;\nflat varying float vPart;')
-      .replace('#include <begin_vertex>', '#include <begin_vertex>\nvRest = position;\nvPart = aPart;');
+      .replace('#include <common>', '#include <common>\nattribute float aPart;\nattribute vec3 aRest;\nuniform float uUseRest;\nvarying vec3 vRest;\nflat varying float vPart;')
+      .replace('#include <begin_vertex>', '#include <begin_vertex>\nvRest = uUseRest > 0.5 ? aRest : position;\nvPart = aPart;');
     sh.fragmentShader = sh.fragmentShader.replace('#include <common>', `#include <common>
 varying vec3 vRest;
 flat varying float vPart;
@@ -192,5 +192,7 @@ vec3 anatomy() {
       .replace('#include <emissivemap_fragment>', '#include <emissivemap_fragment>\ntotalEmissiveRadiance += gHi;')
       .replace('#include <dithering_fragment>', '#include <dithering_fragment>\nif (uDebug > 0.5) gl_FragColor = vec4(gDbg, 1.0);');
   };
+  // tools/bodymap: cuerpo ya colocado (no se deforma al dibujar) con la postura de reposo en `aRest`
+  mat.userData.anatomyUniforms = uniforms;
   return mat;
 }
