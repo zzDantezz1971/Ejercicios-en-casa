@@ -116,8 +116,8 @@ export const EXTRA_MOTIONS: Record<string, M> = {
   // sin bloquear la rodilla, la recoge y baja; cambia de pierna
   'patada-frontal-alterna': (() => {
     const ARMS = { ua: 100, fa: 12 };
-    const chamber = (s: 'L' | 'R') => ({ ...ARMS, ['th' + s]: 18, ['sn' + s]: 100, tl: -92 });
-    const kick = (s: 'L' | 'R') => ({ ...ARMS, ['th' + s]: 12, ['sn' + s]: 48, ['ft' + s]: -15, tl: -97 });
+    const chamber = (s: 'L' | 'R') => ({ ...ARMS, ['th' + s]: -8, ['sn' + s]: 88, tl: -92 });
+    const kick = (s: 'L' | 'R') => ({ ...ARMS, ['th' + s]: -22, ['sn' + s]: 8, ['ft' + s]: -40, tl: -100 });
     return { fist: true, f: [
       [ARMS, 120, 260], [chamber('R'), 0, 200], [kick('R'), 90, 200], [chamber('R'), 0, 260],
       [ARMS, 120, 260], [chamber('L'), 0, 200], [kick('L'), 90, 200], [chamber('L'), 0, 260]] } as M;
