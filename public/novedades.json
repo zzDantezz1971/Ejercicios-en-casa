@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-12T23:49:22Z",
+    "es": ["Orden «Zona del cuerpo»: los ejercicios que piden material que no tienes, al mostrarlos, también salen agrupados por zona.", "Abdominales: los grupos van de arriba abajo (superior, oblicuos, inferior y core completo)."],
+    "ca": ["Ordre «Zona del cos»: els exercicis que demanen material que no tens, quan els mostres, també surten agrupats per zona.", "Abdominals: els grups van de dalt a baix (superior, oblics, inferior i core complet)."],
+    "en": ["«Body area» order: exercises that need equipment you don't have are now grouped by area too when you show them.", "Abs: groups now go from top to bottom (upper, obliques, lower and full core)."]
+  },
+  {
     "fecha": "2026-11-12T23:45:15Z",
     "es": ["Calentamiento ahora tiene grupos: Movilidad articular, Subir pulsaciones, Activación dinámica y Con comba y step."],
     "ca": ["L'escalfament ara té grups: Mobilitat articular, Pujar pulsacions, Activació dinàmica i Amb corda i step."],

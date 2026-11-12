@@ -350,7 +350,17 @@ export class RoutineScreen implements Screen {
       return;
     }
     // los que necesitan material que no se tiene van aparte, al final (y no se mezclan con los demás)
-    if (this.showAllEquip) all.filter((e) => !canDo(e.equip, owned)).forEach((ex) => this.list.append(this.card(ex)));
+    // (también agrupados por zona, si el apartado tiene subgrupos)
+    if (this.showAllEquip) {
+      let g: string | undefined;
+      for (const ex of all.filter((e) => !canDo(e.equip, owned))) {
+        if (!custom && ex.group && ex.group !== g) {
+          g = ex.group;
+          this.list.append(h('h2', { class: 'group-title zone-title' }, zoneIcon(g), g));
+        }
+        this.list.append(this.card(ex));
+      }
+    }
   }
 
   /** Abre la ficha del ejercicio; en la versión gratis, los de pago llevan a hacerse prémium. */

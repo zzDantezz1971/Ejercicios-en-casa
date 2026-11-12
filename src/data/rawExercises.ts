@@ -160,14 +160,6 @@ export const RAW_SECTIONS: RawSection[] = [
  {n:'Plancha lateral con elevación de cadera',z:'Oblicuos',v:'front',mat:1,plant:'anR',f:[
    [{tl:-149,th:2,sn:2,ft:40,uaL:90,faL:180,uaR:20,faR:140,hd:-149},150,900],
    [{tl:-167,th:13,sn:13,ft:40,uaL:90,faL:180,uaR:20,faR:140,hd:-167},150,900]]},
- {g:'Core completo'},
- {n:'Plancha frontal',z:'Core',mat:1,f:[[PLF,1300,1000],[{...PLF,tl:-7.5,th:172.5,sn:172.5},1300,1000]]},
- {n:'Dead bug (bicho muerto)',z:'Core profundo',mat:1,b:['lumbar'],f:[
-   [{tl:180,ua:-90,fa:-90,th:-90,sn:0},150,800],[{tl:180,uaR:-90,faR:-90,uaL:-165,faL:-170,thL:-90,snL:0,thR:-15,snR:-12},300,800],
-   [{tl:180,ua:-90,fa:-90,th:-90,sn:0},150,800],[{tl:180,uaL:-90,faL:-90,uaR:-165,faR:-170,thR:-90,snR:0,thL:-15,snL:-12},300,800]]},
- {n:'Escaladores',z:'Core y cardio',mat:1,handsDown:3,anchor:{j:'pel',y:-40},f:[
-   // cadera a la altura de los hombros; una rodilla al pecho (pie en el aire) y la otra pierna estirada atrás, de puntillas
-   [{...PLH,tl:-7,thR:42,snR:195,ftR:200,thL:155,snL:155},150,130],[{...PLH,tl:-7,thL:42,snL:195,ftL:200,thR:155,snR:155},150,130]]},
  {g:'Abdomen inferior'},
  {n:'Crunch inverso',z:'Abdomen inferior',mat:1,f:[
    [{...SUP,th:-80,sn:10,ft:-80},150,900],[{...SUP,tl:168,th:-130,sn:-50,ft:-140},150,900]]},
@@ -178,6 +170,14 @@ export const RAW_SECTIONS: RawSection[] = [
    [{...SUP,th:-8,sn:-8,ft:-98},150,1100],[{...SUP,th:-88,sn:-88,ft:-178},150,1100]]},
  {n:'Rodillas al pecho sentado',z:'Abdomen',mat:1,f:[
    [{tl:-125,ua:135,fa:115,th:-15,sn:-15,ft:-60},100,800],[{tl:-125,tu:-112,ua:135,fa:115,th:-60,sn:45},100,800]]},
+ {g:'Core completo'},
+ {n:'Plancha frontal',z:'Core',mat:1,f:[[PLF,1300,1000],[{...PLF,tl:-7.5,th:172.5,sn:172.5},1300,1000]]},
+ {n:'Dead bug (bicho muerto)',z:'Core profundo',mat:1,b:['lumbar'],f:[
+   [{tl:180,ua:-90,fa:-90,th:-90,sn:0},150,800],[{tl:180,uaR:-90,faR:-90,uaL:-165,faL:-170,thL:-90,snL:0,thR:-15,snR:-12},300,800],
+   [{tl:180,ua:-90,fa:-90,th:-90,sn:0},150,800],[{tl:180,uaL:-90,faL:-90,uaR:-165,faR:-170,thR:-90,snR:0,thL:-15,snL:-12},300,800]]},
+ {n:'Escaladores',z:'Core y cardio',mat:1,handsDown:3,anchor:{j:'pel',y:-40},f:[
+   // cadera a la altura de los hombros; una rodilla al pecho (pie en el aire) y la otra pierna estirada atrás, de puntillas
+   [{...PLH,tl:-7,thR:42,snR:195,ftR:200,thL:155,snL:155},150,130],[{...PLH,tl:-7,thL:42,snL:195,ftL:200,thR:155,snR:155},150,130]]},
 ]},
 
 {id:'estiramientos',title:'Estiramientos',note:'Te propongo 26: estiramientos de todo el cuerpo y, al final, 6 ejercicios suaves para fortalecer la zona lumbar.',groups:true,items:[
