@@ -42,6 +42,8 @@ export interface MotionSpec {
   handsDownSide?: 'L' | 'R';
   /** Mancuernas: en una mano, en las dos, o una sola cogida con las dos manos ('two'). */
   db?: 'L' | 'R' | 'both' | 'two';
+  /** Con db 'two': la mancuerna va cruzada, cogida por los dos extremos (no a lo largo de los antebrazos). */
+  dbAcross?: boolean;
   mat?: boolean | number | 'top';
   noGround?: boolean | number;
   /** Altura del cuerpo sobre el suelo en vista desde arriba (p. ej. tumbado en el banco). */

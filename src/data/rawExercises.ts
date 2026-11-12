@@ -143,8 +143,8 @@ export const RAW_SECTIONS: RawSection[] = [
    [{tl:180,th:-90,sn:0,ua:10,fa:10},150,900],[{tl:180,tu:202,hd:208,th:-90,sn:0,ua:-18,fa:-18},250,900]]},
  {g:'Oblicuos'},
  {n:'Bicicleta',z:'Oblicuos',mat:1,f:[
-   [{tl:180,tu:208,hd:215,ua:205,fa:-40,sa:.72,zHL:10,zHR:-10,zER:6,thR:-120,snR:-30,thL:-20,snL:-15},60,480],
-   [{tl:180,tu:208,hd:215,ua:205,fa:-40,sa:.72,zHL:10,zHR:-10,zEL:-6,thL:-120,snL:-30,thR:-20,snR:-15},60,480]]},
+   [{tl:180,tu:208,hd:215,ua:215,fa:140,sa:.72,zHL:10,zHR:-10,zER:6,thR:-120,snR:-30,thL:-20,snL:-15},60,480],
+   [{tl:180,tu:208,hd:215,ua:215,fa:140,sa:.72,zHL:10,zHR:-10,zEL:-6,thL:-120,snL:-30,thR:-20,snR:-15},60,480]]},
  {n:'Giros rusos',z:'Oblicuos',v:'front',noGround:1,mat:'top',clasp:true,f:[
    [{lean:-22,tw:-55,sa:.8,uaL:104,faL:28,uaR:76,faR:152,zEL:12,zER:12,zHL:30,zHR:30,thL:-125,snL:95,thR:-55,snR:85,sTh:.6},120,620],
    [{lean:-22,tw:55,sa:.8,uaL:104,faL:28,uaR:76,faR:152,zEL:12,zER:12,zHL:30,zHR:30,thL:-125,snL:95,thR:-55,snR:85,sTh:.6},120,620]]},
@@ -162,7 +162,7 @@ export const RAW_SECTIONS: RawSection[] = [
  {n:'Dead bug (bicho muerto)',z:'Core profundo',mat:1,b:['lumbar'],f:[
    [{tl:180,ua:-90,fa:-90,th:-90,sn:0},150,800],[{tl:180,uaR:-90,faR:-90,uaL:-165,faL:-170,thL:-90,snL:0,thR:-15,snR:-12},300,800],
    [{tl:180,ua:-90,fa:-90,th:-90,sn:0},150,800],[{tl:180,uaL:-90,faL:-90,uaR:-165,faR:-170,thR:-90,snR:0,thL:-15,snL:-12},300,800]]},
- {n:'Escaladores',z:'Core y cardio',mat:1,anchor:{j:'haR',y:-3},handsDown:3,f:[
+ {n:'Escaladores',z:'Core y cardio',mat:1,handsDown:3,f:[
    [{...PLH,thR:25,snR:160,ftR:150},0,170],[{...PLH,thR:92,sThR:.42,snR:165,thL:92,sThL:.42,snL:165},0,170],[{...PLH,thL:25,snL:160,ftL:150},0,170],[{...PLH,thR:92,sThR:.42,snR:165,thL:92,sThL:.42,snL:165},0,170]]},
  {g:'Abdomen inferior'},
  {n:'Crunch inverso',z:'Abdomen inferior',mat:1,f:[

@@ -56,7 +56,13 @@ export function to3D(spec: MotionSpec, view: string, J: Joints, pose: Pose): Rec
       const kneeDy = rise(pose['sTh' + s], 34) * (spec.legsDown ? -1 : 1);
       o['kn' + s].y = Math.max(4, base + kneeDy);
       o['an' + s].y = Math.max(3.5, o['kn' + s].y - rise(pose['sSh' + s], 33));
-      o['ti' + s].y = o['an' + s].y;
+      // pie: apoyado, plano y en la prolongación de la espinilla; en el aire, en L (punta hacia arriba)
+      const an = o['an' + s], fl = V(an.x - o['kn' + s].x, 0, an.z - o['kn' + s].z);
+      if (fl.lengthSq() < 0.01) fl.set(J['ti' + s][0] - J['an' + s][0], 0, J['ti' + s][1] - J['an' + s][1]);
+      if (fl.lengthSq() < 0.01) fl.set(0, 0, 1);
+      fl.normalize();
+      const w = Math.min(1, Math.max(0, (an.y - 5) / 8));
+      o['ti' + s] = an.clone().addScaledVector(fl.multiplyScalar(1 - w).add(V(0, w, 0)).normalize(), 7);
     }
     return o;
   }
@@ -747,6 +753,16 @@ export class MannequinScene {
 
   private updateDumbbells(J: Record<string, V3>, side: boolean): void {
     for (const d of this.dumbbells) {
+      if (d.hand === 'two' && this.motion.spec.dbAcross) {
+        // una mancuerna cruzada, cogida por los dos extremos (p. ej. sobre el pecho en el crunch)
+        const ax = J.haR.clone().sub(J.haL).normalize();
+        const c = J.haL.clone().lerp(J.haR, 0.5);
+        const a = c.clone().addScaledVector(ax, -10), b = c.clone().addScaledVector(ax, 10);
+        this.seg(d.bar, a, b, 1.3);
+        this.seg(d.p1, a.clone().addScaledVector(ax, -1.6), a.clone().addScaledVector(ax, 1.6), 5);
+        this.seg(d.p2, b.clone().addScaledVector(ax, -1.6), b.clone().addScaledVector(ax, 1.6), 5);
+        continue;
+      }
       if (d.hand === 'two') {
         // una sola mancuerna entre las dos manos, de pie a lo largo de los antebrazos
         const gL = J.haL.clone().addScaledVector(J.haL.clone().sub(J.elL).normalize(), this.skinned ? 4.5 : 3);

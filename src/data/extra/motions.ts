@@ -256,8 +256,8 @@ export const EXTRA_MOTIONS: Record<string, M> = {
   'lenador-con-mancuerna': { v: 'front', db: 'two', f: [
     [{ tl: -84, tu: -80, uaL: 48, faL: 48, uaR: 82, faR: 82, zHL: 8, zHR: 8, tw: 22, thL: 100, snL: 100, thR: 80, snR: 80 }, 150, 800],
     [{ tl: -94, tu: -98, uaL: -120, faL: -125, saL: 0.78, uaR: -135, faR: -140, zHL: 8, zHR: 8, tw: -22, thL: 100, snL: 100, thR: 80, snR: 80 }, 200, 800]] },
-  'crunch-con-mancuerna': mocapCrunch({ tl: 180, tu: 180, hd: 184, ...KNEES, ua: -30, fa: 195, zHL: 13, zHR: -13 },
-    { tu: 203, hd: 214, ua: -7, fa: 218 }, { mat: 1, db: 'two', anchor: { j: 'pel', y: -12.1 }, az: 20, el: 18 }),
+  'crunch-con-mancuerna': mocapCrunch({ tl: 180, tu: 180, hd: 184, ...KNEES, ua: -100, fa: 30, zHL: 8, zHR: -8, zEL: 10, zER: -10 },
+    { tu: 203, hd: 214, ua: -77, fa: 53 }, { mat: 1, db: 'two', dbAcross: true, anchor: { j: 'pel', y: -12.1 }, az: 20, el: 18 }),
 
   // ── Pesa rusa ──
   'swing-con-pesa-rusa': { kb: 'both', plant: 'anR', f: [
@@ -297,8 +297,8 @@ export const EXTRA_MOTIONS: Record<string, M> = {
     [{ uaL: 88, faL: 88, uaR: 92, faR: 92, zHL: 10, zHR: 10, lean: 22, sTh: 0.86, zAL: -12, zAR: -12, zKL: 4, zKR: 4 }, 150, 800],
     [{ uaL: 160, faL: 0, uaR: 20, faR: 180, zHL: 6, zHR: 6 }, 200, 800]] },
   'giro-ruso-con-pesa-rusa': { v: 'front', noGround: 1, mat: 'top', kb: 'both', f: [
-    [{ lean: -22, tw: -55, sa: 0.8, uaL: 96, faL: 34, uaR: 84, faR: 146, zEL: 12, zER: 12, zHL: 30, zHR: 30, thL: -125, snL: 95, thR: -55, snR: 85, sTh: 0.6 }, 150, 700],
-    [{ lean: -22, tw: 55, sa: 0.8, uaL: 96, faL: 34, uaR: 84, faR: 146, zEL: 12, zER: 12, zHL: 30, zHR: 30, thL: -125, snL: 95, thR: -55, snR: 85, sTh: 0.6 }, 150, 700]] },
+    [{ lean: -22, tw: -55, sa: 0.8, uaL: 100, faL: 2, uaR: 80, faR: 178, zEL: 14, zER: 14, zHL: 34, zHR: 34, thL: -125, snL: 95, thR: -55, snR: 85, sTh: 0.6 }, 150, 700],
+    [{ lean: -22, tw: 55, sa: 0.8, uaL: 100, faL: 2, uaR: 80, faR: 178, zEL: 14, zER: 14, zHL: 34, zHR: 34, thL: -125, snL: 95, thR: -55, snR: 85, sTh: 0.6 }, 150, 700]] },
 
   // ── Barra ──
   'sentadilla-con-barra': { bar: true, plant: 'anR', f: [

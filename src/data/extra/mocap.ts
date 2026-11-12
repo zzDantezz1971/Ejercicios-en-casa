@@ -22,6 +22,8 @@ export function mocap(id: string, extra: Partial<MotionSpec> = {}, opts: { seate
       t.keys.forEach((key, q) => (o[key] = a[q] + (b[q] - a[q]) * k));
       // tumbado la cadera queda algo más alta que sentado (el grosor de la espalda), sin despegarse
       if (opts.seated && iTl >= 0) o.jy = 2.5 * Math.min(1, Math.max(0, (270 - o.tl) / 90));
+      // pies apoyados en el suelo: planos (en la toma quedaban de puntillas)
+      if (opts.seated) o.ftL = o.ftR = 0;
       // brazos cruzados sobre el pecho: siguen al tronco (mismo ángulo respecto al pecho que en el crunch)
       if (opts.crossArms) {
         const c = o.tl;

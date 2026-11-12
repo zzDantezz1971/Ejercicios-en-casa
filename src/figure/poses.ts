@@ -42,6 +42,9 @@ function resolve(v: string, p: Pose): Pose {
     }
   }
   const o = { ...base(v), ...q };
+  // pie sin ángulo indicado: plano si está en el suelo; en el aire, en L con la espinilla (ver place)
+  o.ftAutoL = 'ftL' in q ? 0 : 1;
+  o.ftAutoR = 'ftR' in q ? 0 : 1;
   if (o.tu == null) o.tu = o.tl;
   if (o.hd == null) o.hd = o.tu;
   return o;
@@ -206,6 +209,16 @@ export class Motion {
     // jy: salto (el cuerpo entero sube esa altura sobre su apoyo)
     dy -= pose.jy ?? 0;
     for (const k in J) J[k] = [J[k][0] + dx, J[k][1] + dy];
+    if (this.view === 'side') {
+      // pie en el aire sin ángulo indicado: en L con la espinilla (talón abajo, punta hacia arriba), no estirado
+      for (const s of ['L', 'R']) {
+        const auto = pose['ftAuto' + s] ?? 0, h = -J['an' + s][1];
+        const w = auto * Math.min(1, Math.max(0, (h - 7) / 8));
+        if (w <= 0) continue;
+        const a = pose['ft' + s] + (pose['sn' + s] - 90 - pose['ft' + s]) * w;
+        J['ti' + s] = add(J['an' + s], dir(a), 9);
+      }
+    }
     if (this.handsAt) {
       const hy = this.handsAt.y;
       for (const s of ['L', 'R'] as const) {
