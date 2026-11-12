@@ -3,7 +3,7 @@ import type { MotionSpec, PropOp } from '../domain/types';
 import { LEN, Motion, type Joints, type Pose, type Side } from './poses';
 import { anatomyMaterial } from './anatomy';
 import { getFigureStyle } from './skinAsset';
-import { getLook, hairColor, type Look } from './look';
+import { getLook, lookHair, type Look } from './look';
 import { toonify } from './toon';
 import { SkinnedFigure, type SkinData } from './SkinnedFigure';
 
@@ -44,7 +44,7 @@ export const DEFAULT_PALETTE: Palette = {
 
 /** Paleta con los colores elegidos en «Personaliza el muñeco». */
 export function lookPalette(l: Look = getLook()): Palette {
-  return { ...DEFAULT_PALETTE, skin: l.skin, shirt: l.shirt, shorts: l.shorts, shoe: l.shoe, brow: hairColor(l.skin) };
+  return { ...DEFAULT_PALETTE, skin: l.skin, shirt: l.shirt, shorts: l.shorts, shoe: l.shoe, brow: lookHair(l) };
 }
 
 const SIDE_W = { arm: 15.5, leg: 8.5 };
@@ -268,6 +268,9 @@ export class MannequinScene {
     box: new THREE.BoxGeometry(1, 1, 1),
     ring: new THREE.TorusGeometry(1, 0.13, 8, 28),
     smile: new THREE.TorusGeometry(1, 0.17, 8, 18, SMILE_ARC),
+    // casquetes de esfera para el pelo (el polo hacia +y)
+    cap: new THREE.SphereGeometry(1, 32, 18, 0, Math.PI * 2, 0, 1.38),
+    capWide: new THREE.SphereGeometry(1, 32, 22, 0, Math.PI * 2, 0, 2.2),
   };
   /** Desfase del parpadeo para que no parpadeen todos a la vez. */
   private blinkOffset = Math.random() * 4000;
@@ -291,26 +294,33 @@ export class MannequinScene {
       stripe: this.mat(p.stripe, 0.6), band: this.mat(p.band, 0.6), watch: this.mat('#15181D', 0.3, 0.3),
       watchFace: this.mat('#9FB4FF', 0.2, 0.2), mouth: this.mat('#7A3B32', 0.6),
     };
+    const L0 = this.look;
+    // tipo de ropa (prémium): mallas largas, camiseta sin mangas o de manga larga
+    const legM = L0.bottom === 'leggings' ? M.shorts : M.skin;
+    const armM = L0.top === 'long' ? M.shirt : M.skin;
+    const shoM = L0.top === 'tank' ? M.skin : M.shirt;
     for (const s of ['L', 'R']) {
       // piernas: muslo con pantalón, músculos, rodilla, gemelo, calcetín y zapatilla
-      P['th' + s] = this.add(G.tap, M.shorts); P['ths' + s] = this.add(G.tap, M.skin);
-      P['quad' + s] = this.add(G.sph, M.skin); P['calf' + s] = this.add(G.sph, M.skin);
-      P['sh' + s] = this.add(G.tap, M.skin);
+      P['th' + s] = this.add(G.tap, M.shorts); P['ths' + s] = this.add(G.tap, legM);
+      P['quad' + s] = this.add(G.sph, legM); P['calf' + s] = this.add(G.sph, legM);
+      P['sh' + s] = this.add(G.tap, legM);
       P['hem' + s] = this.add(G.cyl, M.stripe); P['sideStripe' + s] = this.add(G.box, M.stripe, false);
       P['sock' + s] = this.add(G.cyl, M.stripe);
       P['shoe' + s] = this.add(G.sph, M.shoe); P['sole' + s] = this.add(G.sph, M.sole);
       P['lace1' + s] = this.add(G.box, M.stripe, false); P['lace2' + s] = this.add(G.box, M.stripe, false);
       // brazos: manga con franja, bíceps, tríceps, antebrazo, muñequera o reloj
-      P['ua' + s] = this.add(G.tap, M.skin); P['fa' + s] = this.add(G.tap, M.skin);
-      P['bic' + s] = this.add(G.sph, M.skin); P['tri' + s] = this.add(G.sph, M.skin); P['fore' + s] = this.add(G.sph, M.skin);
+      P['ua' + s] = this.add(G.tap, armM); P['fa' + s] = this.add(G.tap, armM);
+      P['bic' + s] = this.add(G.sph, armM); P['tri' + s] = this.add(G.sph, armM); P['fore' + s] = this.add(G.sph, armM);
       P['sl' + s] = this.add(G.tap, M.shirt); P['slStripe' + s] = this.add(G.cyl, M.stripe);
+      if (L0.top === 'tank') { P['sl' + s].visible = false; P['slStripe' + s].visible = false; }
       P['wrist' + s] = this.add(G.cyl, s === 'L' ? M.watch : M.band);
-      for (const j of ['kn', 'el', 'an']) P[j + s] = this.add(G.sph, M.skin);
+      for (const j of ['kn', 'el', 'an']) P[j + s] = this.add(G.sph, j === 'kn' ? legM : j === 'el' ? armM : M.skin);
+      if (L0.bottom === 'leggings') P['hem' + s].visible = false;
       // mano: palma, cuatro dedos y pulgar
       P['palm' + s] = this.add(G.sph, M.skin);
       for (let f = 0; f < 4; f++) P[`fing${f}${s}`] = this.add(G.cyl, M.skin);
       P['thumb' + s] = this.add(G.cyl, M.skin);
-      P['shoB' + s] = this.add(G.sph, M.shirt); P['hipB' + s] = this.add(G.sph, M.shorts); P['pec' + s] = this.add(G.sph, M.shirt);
+      P['shoB' + s] = this.add(G.sph, shoM); P['hipB' + s] = this.add(G.sph, M.shorts); P['pec' + s] = this.add(G.sph, M.shirt);
       // cara
       P['ear' + s] = this.add(G.sph, M.skin); P['eye' + s] = this.add(G.sph, M.eye, false);
       P['pupil' + s] = this.add(G.sph, M.pupil, false); P['brow' + s] = this.add(G.box, M.brow, false);
@@ -323,8 +333,18 @@ export class MannequinScene {
     P.nose = this.add(G.sph, M.skin, false);
     P.mouthFlat = this.add(G.box, M.mouth, false);
     P.mouthSmile = this.add(this.geo.smile, M.mouth, false);
-    // gafas y barba (prémium)
+    // pelo y pestañas (prémium)
     const look = getLook();
+    if (look.hair !== 'none') {
+      const hm = this.mat(lookHair(look), 0.85);
+      const H = look.hair;
+      P.hairCap = this.add(H === 'bob' || H === 'long' ? G.capWide : G.cap, hm, false);
+      if (H === 'long') P.hairBack = this.add(G.sph, hm, false);
+      if (H === 'ponytail') { P.hairTie = this.add(G.sph, hm, false); P.hairTail = this.add(G.tap, hm, false); }
+      if (H === 'bun') P.hairBun = this.add(G.sph, hm, false);
+    }
+    if (look.body === 'woman') for (const s of ['L', 'R']) P['lash' + s] = this.add(G.box, M.pupil, false);
+    // gafas y barba (prémium)
     if (look.glasses !== 'none') {
       const sun = look.glasses === 'sun';
       const frame = this.mat(sun ? '#1A1A1A' : '#2B2B2B', 0.35, 0.4);
@@ -338,7 +358,7 @@ export class MannequinScene {
       P.glassBridge = this.add(G.box, frame, false);
     }
     if (look.beard !== 'none') {
-      const beardM = this.mat(hairColor(look.skin), 0.95);
+      const beardM = this.mat(lookHair(look), 0.95);
       if (look.beard === 'stubble') { beardM.transparent = true; beardM.opacity = 0.45; }
       P.beard = this.add(G.sph, beardM, false);
       P.moustache = this.add(G.box, beardM, false);
@@ -519,7 +539,8 @@ export class MannequinScene {
       this.seg(P['th' + s], hip, hip.clone().lerp(kn, 0.55), 6.4);
       this.seg(P['hem' + s], hip.clone().lerp(kn, 0.52), hip.clone().lerp(kn, 0.56), 6.5);
       this.oriented(P['sideStripe' + s], hip.clone().lerp(kn, 0.27).addScaledVector(legOut, 6.15), tDir, legOut, tLen * 0.5, 0.6, 1.8);
-      this.oriented(P['quad' + s], hip.clone().lerp(kn, 0.66).addScaledVector(legFront, 1.7), tDir, legOut, 7.5, 4.4, 4.2);
+      const fm = this.look.body === 'woman' ? 0.88 : 1;
+      this.oriented(P['quad' + s], hip.clone().lerp(kn, 0.66).addScaledVector(legFront, 1.7 * fm), tDir, legOut, 7.5, 4.4 * fm, 4.2 * fm);
       this.seg(P['sh' + s], kn, an, 4.0);
       const sLen = sDir.length();
       sDir.normalize();
@@ -549,12 +570,13 @@ export class MannequinScene {
       inner = inner.lengthSq() > 9 ? inner.normalize() : ortho(fwd, aDir);
       const armOut = ortho(bodyLat.clone().multiplyScalar(sg), aDir);
       this.seg(P['ua' + s], sho, el, 3.8);
-      this.oriented(P['bic' + s], sho.clone().lerp(el, 0.58).addScaledVector(inner, 1.5), aDir, armOut, 7, 3.5, 3.4);
-      this.oriented(P['tri' + s], sho.clone().lerp(el, 0.5).addScaledVector(inner, -1.4), aDir, armOut, 7.5, 3.4, 3.3);
+      const am = this.look.body === 'woman' ? 0.84 : 1;
+      this.oriented(P['bic' + s], sho.clone().lerp(el, 0.58).addScaledVector(inner, 1.5 * am), aDir, armOut, 7, 3.5 * am, 3.4 * am);
+      this.oriented(P['tri' + s], sho.clone().lerp(el, 0.5).addScaledVector(inner, -1.4 * am), aDir, armOut, 7.5, 3.4 * am, 3.3 * am);
       this.seg(P['sl' + s], sho, sho.clone().lerp(el, 0.5), 5.2);
       this.seg(P['slStripe' + s], sho.clone().lerp(el, 0.43), sho.clone().lerp(el, 0.49), 5.35);
       this.seg(P['fa' + s], el, ha, 3.2);
-      this.oriented(P['fore' + s], el.clone().lerp(ha, 0.3), u, armOut, 6, 3.7, 3.4);
+      this.oriented(P['fore' + s], el.clone().lerp(ha, 0.3), u, armOut, 6, 3.7 * am, 3.4 * am);
       this.ball(P['el' + s], el, 3.4);
       this.seg(P['wrist' + s], ha.clone().lerp(el, 0.05), ha.clone().lerp(el, 0.15), 3.55);
 
@@ -622,13 +644,18 @@ export class MannequinScene {
         this.seg(P.watchFace, wc, wc.clone().addScaledVector(palmN, -0.9), 1.9);
       }
 
-      this.ball(P['shoB' + s], sho, 6.2);
-      this.ball(P['hipB' + s], hip, 6.5);
+      const W = this.look.body === 'woman';
+      // sin mangas, el hombro es de piel: más pequeño para que no parezca una bola
+      this.ball(P['shoB' + s], sho, (W ? 5.4 : 6.2) * (this.look.top === 'tank' ? 0.8 : 1));
+      this.ball(P['hipB' + s], hip, W ? 7.0 : 6.5);
     }
 
     // Tronco con respiración
     const breath = 1 + 0.035 * Math.sin(sec * (2 * Math.PI / 3.8));
-    const wC = side ? [8.8, 13.2] : [13.2, 8.8], wB = side ? [6.6, 10.8] : [11, 6.6], wP = side ? [8, 11.5] : [11.4, 8];
+    // mujer: pecho algo más estrecho, cintura más fina y caderas más anchas (mismo esqueleto y movimientos)
+    const fem = this.look.body === 'woman';
+    const kC = fem ? 0.9 : 1, kB = fem ? 0.8 : 1, kP = fem ? 1.15 : 1;
+    const wC = side ? [8.8, 13.2 * kC] : [13.2 * kC, 8.8], wB = side ? [6.6 * kB, 10.8 * kB] : [11 * kB, 6.6 * kB], wP = side ? [8.3 * (fem ? 1.04 : 1), 11.5 * kP] : [11.4 * kP, 8 * (fem ? 1.04 : 1)];
     const ell = (mesh: THREE.Mesh, a: V3, b: V3, rx: number, rz: number) => {
       this.seg(mesh, a, b, 1);
       const L = mesh.scale.y;
@@ -640,10 +667,11 @@ export class MannequinScene {
     const chestC = J.mid.clone().lerp(J.neck, 0.68);
     for (const s of ['L', 'R']) {
       const sg = s === 'L' ? -1 : 1;
-      this.oriented(P['pec' + s], chestC.clone().addScaledVector(fwd, 5.7 * breath).addScaledVector(bodyLat, 4.9 * sg), tUp, bodyLat, 3.3, 6.2, 2.6);
+      if (fem) this.oriented(P['pec' + s], chestC.clone().addScaledVector(tUp, -2.2).addScaledVector(fwd, 6.3 * breath).addScaledVector(bodyLat, 4.3 * sg), tUp, bodyLat, 3.9, 4.4, 3.5);
+      else this.oriented(P['pec' + s], chestC.clone().addScaledVector(fwd, 5.7 * breath).addScaledVector(bodyLat, 4.9 * sg), tUp, bodyLat, 3.3, 6.2, 2.6);
     }
-    this.oriented(P.traps, J.neck.clone().addScaledVector(tUp, -3).addScaledVector(fwd, -1.5), bodyLat, tUp, 9.5, 3.6, 4.6);
-    this.oriented(P.glutes, J.pel.clone().addScaledVector(fwd, -4.6).addScaledVector(tUp, -1.5), bodyLat, tUp, 10.5, 6, 5);
+    this.oriented(P.traps, J.neck.clone().addScaledVector(tUp, -3).addScaledVector(fwd, -1.5), bodyLat, tUp, fem ? 8 : 9.5, fem ? 2.8 : 3.6, fem ? 3.8 : 4.6);
+    this.oriented(P.glutes, J.pel.clone().addScaledVector(fwd, fem ? -5 : -4.6).addScaledVector(tUp, -1.5), bodyLat, tUp, fem ? 11.2 : 10.5, fem ? 6.4 : 6, fem ? 5.6 : 5);
 
     // Cabeza con pequeños movimientos naturales
     const up0 = J.head.clone().sub(J.neck).normalize();
@@ -692,6 +720,28 @@ export class MannequinScene {
       this.smileAt(P.mouthSmile, mouthAt.clone().addScaledVector(up, R * curve), lat, up, face, R, curve);
     }
 
+    // pelo: casquete sobre la cabeza (inclinado hacia atrás para dejar la frente) y, según el peinado, melena, coleta o moño
+    if (P.hairCap) {
+      const H = this.look.hair;
+      const wide = H === 'bob' || H === 'long';
+      const tilt = wide ? 1.32 : 0.62; // cuánto se inclina el casquete hacia atrás (rad): deja la frente y la cara
+      const axis = up.clone().multiplyScalar(Math.cos(tilt)).addScaledVector(face, -Math.sin(tilt));
+      const k = H === 'buzz' ? 1.06 : H === 'short' ? 1.12 : wide ? 1.11 : 1.08;
+      this.oriented(P.hairCap, head.clone().addScaledVector(face, wide ? -0.6 : -0.2), axis, lat, 10 * k, 8.6 * k * (wide ? 1.04 : 1), 9.2 * k);
+      if (P.hairBack) this.oriented(P.hairBack, head.clone().addScaledVector(up, -8).addScaledVector(face, -5.2), up, lat, 9.5, 8.6, 3.6);
+      if (P.hairTie) {
+        const tie = head.clone().addScaledVector(face, -9.4).addScaledVector(up, 1.5);
+        this.ball(P.hairTie, tie, 2.2);
+        const tip = tie.clone().addScaledVector(face, -2.2).addScaledVector(up, -13);
+        this.seg(P.hairTail, tip, tie.clone().addScaledVector(up, -0.5), 1.9);
+      }
+      if (P.hairBun) this.ball(P.hairBun, head.clone().addScaledVector(up, 8.4).addScaledVector(face, -5), 4.2);
+    }
+    // pestañas (mujer): un trazo oscuro encima de cada ojo
+    if (P.lashL) for (const s of ['L', 'R']) {
+      const sg = s === 'L' ? -1 : 1;
+      this.oriented(P['lash' + s], head.clone().addScaledVector(face, 8.95).addScaledVector(up, 2.75).addScaledVector(lat, 3.4 * sg), lat.clone().addScaledVector(up, -0.25 * sg), up, 2.9, 0.42, 0.5);
+    }
     // gafas: aros delante de los ojos, puente sobre la nariz y patillas hacia las orejas
     if (P.glassBridge) {
       for (const s of ['L', 'R']) {

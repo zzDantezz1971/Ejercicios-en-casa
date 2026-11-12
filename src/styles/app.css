@@ -1354,3 +1354,8 @@ body:has(.page-lifted) { overflow-x: hidden; }
 .look-open .rest-head > .ico:last-child { margin-left: auto; color: var(--muted); }
 .look-screen .settings-body { gap: 14px; }
 .look-screen .look-stage { position: sticky; top: 60px; z-index: 3; aspect-ratio: 16 / 9; box-shadow: 0 10px 20px rgb(0 0 0 / .35); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { border: 1px solid var(--line); background: var(--surface-2); color: var(--fg); border-radius: 999px; padding: 8px 14px; font: inherit; font-size: .9rem; cursor: pointer; }
+.chip.on { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 700; }
+.chips.locked .chip { opacity: .55; }
+.look-save { position: sticky; bottom: 0; padding: 12px 0 calc(12px + env(safe-area-inset-bottom, 0px)); background: linear-gradient(to top, var(--bg) 70%, transparent); z-index: 3; }

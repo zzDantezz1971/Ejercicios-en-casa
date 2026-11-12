@@ -1,5 +1,5 @@
 import { FigureView } from '../../figure/FigureView';
-import { DEFAULT_LOOK, setLook, SHIRT_COLORS, SHOE_COLORS, SHORTS_COLORS, SKIN_TONES, type Beard, type Glasses, type Look } from '../../figure/look';
+import { DEFAULT_LOOK, HAIR_COLORS, lookHair, setLook, SHIRT_COLORS, SHOE_COLORS, SHORTS_COLORS, SKIN_TONES, type Beard, type Body, type Bottom, type Glasses, type Hair, type Look, type Top } from '../../figure/look';
 import type { ExerciseDef } from '../../domain/types';
 import type { App, Screen } from '../App';
 import { clear, h } from '../dom';
@@ -69,36 +69,53 @@ export class LookScreen implements Screen {
 
   private render(): void {
     const l = this.look, premium = this.app.access.premium;
-    const swatches = (title: string, colors: string[], key: 'skin' | 'shirt' | 'shorts' | 'shoe') =>
+    const swatches = (title: string, colors: string[], key: 'skin' | 'shirt' | 'shorts' | 'shoe' | 'hairColor', cur: string) =>
       h('div', { class: 'look-row' },
         h('strong', {}, title),
         h('div', { class: 'swatches', role: 'group', 'aria-label': title },
           ...colors.map((c) => {
-            const b = h('button', { class: 'swatch' + (l[key].toLowerCase() === c.toLowerCase() ? ' on' : ''), 'aria-pressed': String(l[key].toLowerCase() === c.toLowerCase()), 'aria-label': c, onclick: () => this.set({ [key]: c }) });
+            const on = cur.toLowerCase() === c.toLowerCase();
+            const b = h('button', { class: 'swatch' + (on ? ' on' : ''), 'aria-pressed': String(on), 'aria-label': c, onclick: () => this.set({ [key]: c }) });
             b.style.setProperty('--c', c);
             return b;
           })));
-    const segs = <T extends string>(title: string, opts: Array<[T, string]>, cur: T, key: 'glasses' | 'beard') =>
-      h('div', { class: 'look-row' },
+    // opciones prémium: sin prémium se ven, pero al tocarlas lleva a hacerse prémium
+    const chips = <K extends 'glasses' | 'beard' | 'hair' | 'top' | 'bottom' | 'body'>(title: string, key: K, opts: Array<[Look[K], string]>) => {
+      const cur = premium ? l[key] : DEFAULT_LOOK[key];
+      return h('div', { class: 'look-row' },
         h('strong', {}, title),
-        h('div', { class: 'segmented' + (premium ? '' : ' locked') },
+        h('div', { class: 'chips' + (premium ? '' : ' locked'), role: 'group', 'aria-label': title },
           ...opts.map(([v, label]) => h('button', {
-            class: 'seg' + (cur === v ? ' on' : ''), 'aria-pressed': String(cur === v),
+            class: 'chip' + (cur === v ? ' on' : ''), 'aria-pressed': String(cur === v),
             onclick: () => (premium ? this.set({ [key]: v } as Partial<Look>) : this.app.showPremium()),
           }, label))));
+    };
+    const lock = premium ? null : h('span', { class: 'premium-chip' }, icon('lock'), 'Prémium');
     clear(this.body);
     this.body.append(
       h('section', { class: 'card look-card' },
         h('div', { class: 'card-head' }, h('h3', {}, 'Colores')),
-        swatches('Piel', SKIN_TONES, 'skin'),
-        swatches('Camiseta', SHIRT_COLORS, 'shirt'),
-        swatches('Pantalón', SHORTS_COLORS, 'shorts'),
-        swatches('Zapatillas', SHOE_COLORS, 'shoe')),
+        swatches('Piel', SKIN_TONES, 'skin', l.skin),
+        swatches('Pelo, cejas y barba', HAIR_COLORS, 'hairColor', lookHair(l)),
+        swatches('Camiseta', SHIRT_COLORS, 'shirt', l.shirt),
+        swatches('Pantalón', SHORTS_COLORS, 'shorts', l.shorts),
+        swatches('Zapatillas', SHOE_COLORS, 'shoe', l.shoe)),
       h('section', { class: 'card look-card' },
-        h('div', { class: 'card-head' }, h('h3', {}, 'Complementos'), premium ? null : h('span', { class: 'premium-chip' }, icon('lock'), 'Prémium')),
-        segs<Glasses>('Gafas', [['none', 'Sin gafas'], ['normal', 'Graduadas'], ['sun', 'De sol']], premium ? l.glasses : 'none', 'glasses'),
-        segs<Beard>('Barba', [['none', 'Sin barba'], ['stubble', 'De unos días'], ['full', 'Poblada']], premium ? l.beard : 'none', 'beard'),
+        h('div', { class: 'card-head' }, h('h3', {}, 'Cuerpo y pelo'), lock),
+        chips<'body'>('Cuerpo', 'body', [['man', 'Hombre'], ['woman', 'Mujer']] as Array<[Body, string]>),
+        chips<'hair'>('Peinado', 'hair', [['none', 'Sin pelo'], ['buzz', 'Rapado'], ['short', 'Corto'], ['bob', 'Media melena'], ['long', 'Melena'], ['ponytail', 'Coleta'], ['bun', 'Moño']] as Array<[Hair, string]>)),
+      h('section', { class: 'card look-card' },
+        h('div', { class: 'card-head' }, h('h3', {}, 'Ropa'), lock?.cloneNode(true) ?? null),
+        chips<'top'>('Camiseta', 'top', [['tee', 'Manga corta'], ['tank', 'Sin mangas'], ['long', 'Manga larga']] as Array<[Top, string]>),
+        chips<'bottom'>('Pantalones', 'bottom', [['shorts', 'Corto'], ['leggings', 'Mallas largas']] as Array<[Bottom, string]>)),
+      h('section', { class: 'card look-card' },
+        h('div', { class: 'card-head' }, h('h3', {}, 'Complementos'), lock?.cloneNode(true) ?? null),
+        chips<'glasses'>('Gafas', 'glasses', [['none', 'Sin gafas'], ['normal', 'Graduadas'], ['sun', 'De sol']] as Array<[Glasses, string]>),
+        chips<'beard'>('Barba', 'beard', [['none', 'Sin barba'], ['stubble', 'De unos días'], ['full', 'Poblada']] as Array<[Beard, string]>),
         premium ? null : h('button', { class: 'btn primary block', onclick: () => this.app.showPremium() }, icon('star'), 'Hazte prémium')),
-      h('button', { class: 'btn ghost block', onclick: () => this.set({ ...DEFAULT_LOOK, ...(premium ? {} : { glasses: l.glasses, beard: l.beard }) }) }, 'Volver al muñeco de siempre'));
+      h('button', { class: 'btn ghost block', onclick: () => this.set({ ...DEFAULT_LOOK, hairColor: undefined }) }, 'Volver al muñeco de siempre'),
+      // los cambios ya se guardan al momento; el botón da la sensación de aceptar y vuelve atrás
+      h('div', { class: 'look-save' },
+        h('button', { class: 'btn primary block big', onclick: () => { this.app.haptics.tap(); this.app.back(); } }, icon('check'), 'Guardar')));
   }
 }

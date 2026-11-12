@@ -92,7 +92,7 @@ export class SettingsScreen implements Screen {
     return h('button', { class: 'card setting rest-card look-open', onclick: () => this.app.push(new LookScreen(this.app)) },
       h('div', { class: 'rest-head' },
         h('span', { class: 'set-icon' }, icon('user')),
-        h('div', { class: 'set-text' }, h('strong', {}, 'Personaliza el muñeco'), h('p', { class: 'muted small' }, 'Colores de piel y ropa, gafas y barba.')),
+        h('div', { class: 'set-text' }, h('strong', {}, 'Personaliza el muñeco'), h('p', { class: 'muted small' }, 'Colores de piel, pelo y ropa, peinado, gafas y barba.')),
         icon('chevron')));
   }
 
