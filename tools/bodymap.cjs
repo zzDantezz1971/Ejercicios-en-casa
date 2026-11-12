@@ -8,7 +8,7 @@ const fs = require('fs');
   const p = await b.newPage();
   p.on('pageerror', (e) => console.log('ERR', e.message));
   await p.goto(`http://127.0.0.1:${port}/tools/bodymap.html?test=${test}${extra ? '&' + extra : ''}`);
-  await p.waitForFunction(() => document.body.dataset.done, null, { timeout: 120000 });
+  await p.waitForFunction(() => document.body.dataset.done, null, { timeout: 900000 });
   const maps = await p.evaluate(() => window.maps);
   fs.mkdirSync(dir, { recursive: true });
   for (const [k, v] of Object.entries(maps)) fs.writeFileSync(`${dir}/${k}.png`, Buffer.from(v.split(',')[1], 'base64'));
