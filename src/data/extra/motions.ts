@@ -417,7 +417,8 @@ export const EXTRA_MOTIONS: Record<string, M> = {
     [{ x: -7, lean: 12, thL: 94, snL: 94, thR: 76, snR: 76, uaL: 120, faL: 30, uaR: 60, faR: 150 }, 80, 420]] },
   'abduccion-de-cadera-con-banda': { v: 'front', band: 'knees', anchor: { j: 'pel', y: -40 },
     props: (J, P) => [...P.rect(J.pel[0] - 26, -34, 52, 6), ...P.line([J.pel[0] - 20, -29], [J.pel[0] - 20, 0], 4), ...P.line([J.pel[0] + 20, -29], [J.pel[0] + 20, 0], 4)], f: [
-    [{ thL: 100, thR: 80, sTh: 0.15, uaL: 120, faL: 60, uaR: 60, faR: 120 }, 200, 800], [{ thL: 116, thR: 64, sTh: 0.15, uaL: 120, faL: 60, uaR: 60, faR: 120 }, 500, 800]] },
+    [{ thL: 100, thR: 80, sTh: 0.15, uaL: 120, faL: 60, uaR: 60, faR: 120 }, 200, 800], // al abrir, los muslos giran hacia los lados: se ven más largos y las rodillas quedan bien separadas
+    [{ thL: 152, thR: 28, sTh: 0.5, zKL: 8, zKR: 8, uaL: 120, faL: 60, uaR: 60, faR: 120 }, 500, 800]] },
   'patada-de-gluteo-con-banda': { mat: 1, band: 'ankles', handsDown: true, f: [[QUAD, 200, 700], [{ ...QUAD, thR: 182, snR: 182, ftR: 90 }, 300, 700]] },
   'puente-de-gluteos-con-banda': { mat: 1, feetDown: true, band: 'knees', f: [
     [{ ...SUP, ...KNEES, zKL: -3, zKR: 3 }, 300, 1000], [{ ...SUP, tl: 140, tu: 165, th: -18, sn: 76.5, zKL: -5, zKR: 5 }, 900, 1000]] },
