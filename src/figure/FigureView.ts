@@ -5,6 +5,7 @@ import { MannequinScene, type Mood, type Palette } from './Mannequin';
 import type { Side } from './poses';
 import type { SkinData } from './SkinnedFigure';
 import { getFigureSkin, getFigureStyle } from './skinAsset';
+import { faceVersion } from './faceAsset';
 import { muscleWeights } from './anatomy';
 import { EQUIP_INFO } from '../domain/equipment';
 import { strokePath } from '../ui/icons';
@@ -155,7 +156,7 @@ export class Thumbnails {
   get(ex: ExerciseDef): Promise<string> {
     if (ex.pending) return Promise.resolve(pendingThumb(ex));
     const skin = getFigureSkin();
-    return this.enqueue(`${skin ? 'a' : 'p'}:${getFigureStyle()}:${ex.id}`, () => this.draw(ex, skin));
+    return this.enqueue(`${skin ? 'a' : 'p'}:${getFigureStyle()}:f${faceVersion()}:${ex.id}`, () => this.draw(ex, skin));
   }
 
   private enqueue(key: string, render: () => string): Promise<string> {

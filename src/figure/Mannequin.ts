@@ -3,6 +3,7 @@ import type { MotionSpec, PropOp } from '../domain/types';
 import { LEN, Motion, type Joints, type Pose, type Side } from './poses';
 import { anatomyMaterial } from './anatomy';
 import { getFigureStyle } from './skinAsset';
+import { faceCap, getFace } from './faceAsset';
 import { toonify } from './toon';
 import { SkinnedFigure, type SkinData } from './SkinnedFigure';
 
@@ -274,10 +275,14 @@ export class MannequinScene {
     return x;
   }
 
+  /** Con la cara del usuario: cabeza algo mayor (estilo cabezón) y sin los ojos, cejas, nariz y boca de dibujo. */
+  private hasFace = false;
+
   private buildBody(): void {
     const p = this.pal, P = this.parts, G = this.geo;
+    const userFace = getFace();
     const M = {
-      skin: this.mat(p.skin, 0.55), shirt: this.mat(p.shirt, 0.7), shorts: this.mat(p.shorts, 0.75),
+      skin: this.mat(userFace ? userFace.skin : p.skin, 0.55), shirt: this.mat(p.shirt, 0.7), shorts: this.mat(p.shorts, 0.75),
       shoe: this.mat(p.shoe, 0.5), sole: this.mat(p.sole, 0.8), brow: this.mat(p.brow, 0.8),
       eye: this.mat('#FFFFFF', 0.3), pupil: this.mat('#1C1C1C', 0.3), iron: this.mat(p.iron, 0.32, 0.3),
       stripe: this.mat(p.stripe, 0.6), band: this.mat(p.band, 0.6), watch: this.mat('#15181D', 0.3, 0.3),
@@ -315,6 +320,13 @@ export class MannequinScene {
     P.nose = this.add(G.sph, M.skin, false);
     P.mouthFlat = this.add(G.box, M.mouth, false);
     P.mouthSmile = this.add(this.geo.smile, M.mouth, false);
+    if (userFace) {
+      const fm = new THREE.MeshStandardMaterial({ map: userFace.tex, transparent: true, roughness: 0.7, metalness: 0, depthWrite: false });
+      this.disposables.push(fm);
+      P.face = this.add(faceCap(), fm, false);
+      this.hasFace = true;
+      for (const k of ['eyeL', 'eyeR', 'pupilL', 'pupilR', 'browL', 'browR', 'nose', 'mouthFlat', 'mouthSmile', 'jaw']) P[k].visible = false;
+    }
     this.buildDumbbells(M.iron);
     // pesa rusa, barra, bandas, fitball, comba y rueda: también con el maniquí de piezas
     this.buildGear();
@@ -628,11 +640,23 @@ export class MannequinScene {
       .normalize();
     const face = ortho(face0, up);
     const lat = up.clone().cross(face).normalize();
-    const head = J.neck.clone().addScaledVector(up, 14);
+    // con la cara del usuario, cabeza algo mayor (estilo cabezón) para que la cara se vea bien
+    const HS = this.hasFace ? 1.22 : 1;
+    const head = J.neck.clone().addScaledVector(up, 14 + 10 * (HS - 1));
     this.seg(P.neck, J.neck.clone().addScaledVector(up0, -3), J.neck.clone().addScaledVector(up0, 6), 3.4);
     // cuello de la camiseta
     this.ringAround(P.collar, J.neck.clone().addScaledVector(tUp, -1.2), tUp, 4.6);
-    this.oriented(P.head, head, up, lat, 10, 8.6, 9.2);
+    this.oriented(P.head, head, up, lat, 10 * HS, 8.6 * HS, 9.2 * HS);
+    if (this.hasFace) {
+      this.oriented(P.face, head, up, lat, 10 * HS * 1.012, 8.6 * HS * 1.012, 9.2 * HS * 1.012);
+      for (const s of ['L', 'R']) {
+        const sg = s === 'L' ? -1 : 1;
+        this.oriented(P['ear' + s], head.clone().addScaledVector(lat, 8.5 * HS * sg).addScaledVector(face, -0.5).addScaledVector(up, -0.5), up, face, 2.6 * HS, 1.8 * HS, 1.1 * HS);
+      }
+      this.updateDumbbells(J, side);
+      this.updateGear(J, J2, pose, side);
+      return;
+    }
     this.oriented(P.jaw, head.clone().addScaledVector(up, -4.2).addScaledVector(face, 3.4), up, lat, 4.6, 5.4, 5.6);
 
     // Cara: parpadeo, cejas y boca según la expresión
