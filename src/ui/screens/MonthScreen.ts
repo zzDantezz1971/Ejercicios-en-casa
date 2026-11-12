@@ -150,10 +150,5 @@ export class MonthScreen implements Screen {
           icon('trophy'), h('span', { class: 'rec-name' }, this.app.catalog.get(r.exerciseId)?.name ?? ''),
           h('span', { class: 'rec-kg' }, r.from != null ? `${kg(r.from)} → ${kg(r.to)}` : kg(r.to)))))));
     }
-
-    // Racha y tabla
-    append(this.body, h('section', { class: 'card month-extra' },
-      h('p', {}, icon('flame'), h('strong', {}, 'Mejor racha: '), `${cur.bestStreak} ${cur.bestStreak === 1 ? 'día' : 'días seguidos'}`),
-      cur.topTable ? h('p', {}, icon('tables'), h('strong', {}, 'Tabla más usada: '), `${cur.topTable.name} (${cur.topTable.times} ${cur.topTable.times === 1 ? 'vez' : 'veces'})`) : null));
   }
 }

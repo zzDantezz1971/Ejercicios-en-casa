@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-12T15:52:16Z",
+    "es": ["Resumen semanal y mensual: se quitan la mejor racha y la tabla más usada del final."],
+    "ca": ["Resum setmanal i mensual: es treuen la millor ratxa i la taula més feta servir del final."],
+    "en": ["Weekly and monthly summary: the best streak and most-used routine at the end have been removed."]
+  },
+  {
     "fecha": "2026-11-12T15:49:06Z",
     "es": ["Resumen semanal y mensual: la casilla «Entrenamientos» (casi igual que «Días entrenados») se cambia por las pulsaciones medias de los entrenamientos hechos con el reloj, comparadas con el periodo anterior."],
     "ca": ["Resum setmanal i mensual: la casella «Entrenaments» (gairebé igual que «Dies entrenats») es canvia per les pulsacions mitjanes dels entrenaments fets amb el rellotge, comparades amb el període anterior."],
