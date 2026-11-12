@@ -109,9 +109,14 @@ def normals(P):
     return N / np.maximum(np.linalg.norm(N, axis=1, keepdims=True), 1e-9)
 body = (np.isin(PART, [0, 1, 2, 3, 4]) & (P[:, 1] < 56.0)).astype(float)[:, None]
 # pezones más disimulados: se alisa un poco esa zona (en reposo; la diferencia pasa a la malla colocada)
-nip = (g(np.abs(P[:, 0]), 6.3, 1.6) * g(P[:, 1], 43.0, 1.6) * up(P[:, 2], 6.0, 9.0) * (PART == 0))[:, None]
-for _ in range(12):
+nip = (g(np.abs(P[:, 0]), 6.7, 2.6) * g(P[:, 1], 37.3, 2.6) * up(P[:, 2], 4.0, 8.0) * (PART == 0))[:, None]
+for _ in range(40):
     P = P + 0.5 * nip * Lap(P)
+# pecho: se alisa toda la parte delantera (la malla traía líneas y pliegues que, al dar volumen, parecían cortes)
+chw = (np.clip(1 - ((np.abs(P[:, 0]) / 13.5) ** 2 + ((P[:, 1] - 41.0) / 9.5) ** 2), 0, 1) ** 0.5 * up(P[:, 2], 3.0, 7.0) * (PART == 0))[:, None]
+for _ in range(60):
+    P = P + 0.5 * chw * Lap(P)
+    P = P - 0.53 * chw * Lap(P)
 # hombros redondeados: la esquina de arriba y por fuera (en pico) se alisa
 shw = np.zeros(len(P))
 for k, s_ in (('uaL', 1), ('uaR', -1)):
@@ -126,13 +131,30 @@ N = normals(P)
 x, y, z = P[:, 0], P[:, 1], P[:, 2]
 ax = np.abs(x); sx = np.sign(x)
 trunk = (PART == 0).astype(float) * (y < 56.0)
+# coordenadas en la postura del mapa (brazos abajo): el pecho se diseña con ellas
+xp, yp, zp = PP[:, 0], PP[:, 1], PP[:, 2]
+axp = np.abs(xp)
 
 D = np.zeros(n)
-# pectorales: abombados, con el borde de abajo bien marcado (la sombra la hace la luz, no un trazo)
+# pectorales: forma de abanico del esternón a la axila; borde de abajo nítido que sube en diagonal hacia la axila,
+# arriba se funde con la clavícula; surco del esternón en el centro
 for side in (1, -1):
-    dx, dy = (x - 7.0 * side) / 7.4, (y - 44.6) / 5.4
-    r2 = dx * dx + np.where(dy < 0, (dy * 2.2) ** 2, dy * dy)   # por abajo cae rápido: borde inferior marcado
-    D += np.clip(1 - r2, 0, 1) ** 0.75 * 2.0 * up(z, 3.0, 8.0) * trunk
+    u = x * side
+    uc = np.clip(u, 0, 14)
+    y_low = 34.6 - 0.05 * uc + 0.28 * np.clip(uc - 8.5, 0, None) ** 2   # pezón dentro del pectoral, abajo y por fuera
+    y_top = 50.5 - 0.2 * uc
+    v = (y - y_low) / np.maximum(y_top - y_low, 1e-3)
+    bottom = sm(up(y, y_low - 0.5, y_low + 1.6))
+    top = 1 - sm(up(v, 0.55, 1.05))
+    lateral = sm(up(u, 0.0, 1.3)) * (1 - sm(up(u, 10.5, 14.5)))
+    thick = 0.65 + 0.35 * g(u, 6.0, 4.0) * g(v, 0.3, 0.35)
+    D += bottom * top * lateral * thick * 2.4 * up(z, -2.0, 3.0) * trunk
+# surco del esternón entre los pectorales y surco entre pectoral y hombro (deltopectoral)
+D -= g(x, 0, 0.8) * up(y, 33.0, 35.0) * (1 - up(y, 47.0, 50.0)) * 0.45 * up(z, 4.0, 8.0) * trunk
+for side in (1, -1):
+    u = x * side
+    line = u - (12.2 - 0.25 * (y - 44.0))           # de la axila hacia la clavícula
+    D -= g(line, 0, 0.9) * up(y, 40.0, 43.0) * (1 - up(y, 50.0, 52.5)) * 0.5 * up(z, -1.0, 4.0) * (y < 56.0)
 # abdominales: tableta de tres filas (relieve suave) y surco central poco profundo
 front = up(z, 5.0, 9.0) * trunk * up(y, 15.0, 18.0) * (1 - up(y, 38.5, 40.5))
 packs = np.zeros(n)
@@ -141,7 +163,7 @@ for cy, ry in ((35.0, 2.7), (29.9, 2.6), (24.8, 2.7)):
         e = ((x - cx) / 3.0) ** 2 + ((y - cy) / ry) ** 2
         packs = np.maximum(packs, sm(np.clip(1 - e, 0, 1)) ** 0.7)
 lower = sm(np.clip(1 - ((ax / 5.5) ** 2 + ((y - 19.5) / 4.0) ** 2), 0, 1)) * 0.7
-D += front * (np.maximum(packs, lower) * 0.5 - g(x, 0, 0.7) * 0.12)
+D += front * (np.maximum(packs, lower) * 0.75 - g(x, 0, 0.7) * 0.2)
 # dorsales: algo de volumen detrás, sin ensanchar la espalda (se veía demasiado ancha)
 D += trunk * g(y, 40.0, 6.0) * up(-z, 0.0, 4.0) * up(ax, 3.0, 8.0) * 0.3
 # hombros (deltoides) y brazos (bíceps y tríceps)
@@ -175,7 +197,8 @@ for k, part, s in (('thL', 3, 1), ('thR', 4, -1)):
 # el relieve se difumina un poco para que las formas se fundan entre sí
 for _ in range(8):
     D = D + 0.5 * Lap(D) * body[:, 0]
-P = P + N * (D * MU)[:, None]
+DN = N * (D * MU)[:, None]   # relieve de los músculos (se pone otra vez sobre la malla colocada)
+P = P + DN
 
 
 x, y, z = P[:, 0].copy(), P[:, 1].copy(), P[:, 2].copy()
@@ -205,10 +228,16 @@ def grow(p, w):
     return PIV + (p - PIV) * (1 + (HS - 1) * w)
 Q = grow(np.stack([x, y, z], 1), up(y, 56.5, 60.5)[:, None])
 
-# lo esculpido (en reposo) se pasa a la malla colocada con el giro de sus huesos
-delta = Q - P0
+# lo retocado en reposo (cara, cabeza, alisados) se pasa a la malla colocada con el giro de sus huesos;
+# el relieve de los músculos no: se esculpe directamente sobre la malla colocada
+delta = Q - P0 - DN
 Al = skin_mats(SI, SW)[:, :3, :3]
 QP = PP + np.einsum('vij,vj->vi', Al, delta)
+# al bajar los brazos la piel del pecho y los hombros se arrugaba (pliegues en arco): se alisa en la postura final
+for _ in range(80):
+    QP = QP + 0.5 * chw * Lap(QP)
+    QP = QP - 0.53 * chw * Lap(QP)
+QP = QP + normals(QP) * (D * MU)[:, None]
 
 d['count'] = int(n)
 d['pos'] = base64.b64encode(Q.astype('<f4').tobytes()).decode()

@@ -88,7 +88,7 @@ for (const back of [false, true]) {
       // ojos: el blanco, gris claro (con blanco puro la mirada parecía de niño)
       else if (!(o as THREE.SkinnedMesh).isSkinnedMesh && m?.color && m.color.getHex() === 0xffffff) m.color.set('#B9BEC6');
     });
-    sc.azimuth = back ? 180 : 0;
+    sc.azimuth = q.get('az') ? Number(q.get('az')) : back ? 180 : 0;
     sc.elevation = 6;
     sc.setAspect(W / H);
     sc.placeCamera();
