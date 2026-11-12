@@ -36,6 +36,8 @@ export interface MotionSpec {
   /** Manos apoyadas en el suelo: no se mueven del sitio donde empiezan y el codo se dobla para llegar
       (número: altura de la muñeca sobre el suelo; true = 3.5). */
   handsDown?: boolean | number;
+  /** Pies fijos en el suelo: el tobillo cercano al suelo baja hasta él (puente, crunch... tumbado con rodillas dobladas). */
+  feetDown?: boolean;
   /** Con handsDown: las manos pueden avanzar por el suelo (oso, gusano); solo se fija la altura. */
   handsSlide?: boolean;
   /** Con handsDown: solo esta mano (la otra se mueve libre, p. ej. hilo en la aguja). */

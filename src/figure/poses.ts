@@ -78,31 +78,37 @@ export function joints(v: string, o: Pose): Joints {
 
 /** Pone la mano en `T` doblando el codo (el codo, del mismo lado que estaba). Si no llega, brazo estirado hacia ella. */
 function handOnFloor(J: Joints, s: 'L' | 'R', T: Pt, a: number, b: number, side: boolean): void {
-  const S = J['sho' + s], E0 = J['el' + s];
+  // con el brazo casi recto, el codo hacia atrás (de lado) o hacia fuera (de frente)
+  const far = (p: Pt) => Math.abs(p[0] - J.pel[0]);
+  limbTo(J, ['sho', 'el', 'ha'], s, T, a, b, (e1, e2) => side ? (far(e1) < far(e2) ? e1 : e2) : (far(e1) > far(e2) ? e1 : e2));
+}
+
+/** Pie en el suelo: la rodilla se dobla hacia donde ya lo estaba (o hacia arriba con la pierna casi recta). */
+function footOnFloor(J: Joints, s: 'L' | 'R', T: Pt, a: number, b: number): void {
+  limbTo(J, ['hip', 'kn', 'an'], s, T, a, b, (e1, e2) => (e1[1] < e2[1] ? e1 : e2));
+}
+
+/** Cinemática inversa de dos huesos: lleva el extremo (mano o tobillo) al punto T. */
+function limbTo(J: Joints, [r, m, e]: [string, string, string], s: 'L' | 'R', T: Pt, a: number, b: number, fallback: (e1: Pt, e2: Pt) => Pt): void {
+  const S = J[r + s], E0 = J[m + s];
   const dx = T[0] - S[0], dy = T[1] - S[1];
   const d = Math.hypot(dx, dy);
   if (d < 1e-6) return;
   const ux = dx / d, uy = dy / d;
   if (d >= a + b - 1e-6) {
-    J['el' + s] = [S[0] + ux * a, S[1] + uy * a];
-    J['ha' + s] = [S[0] + ux * (a + b), S[1] + uy * (a + b)];
+    J[m + s] = [S[0] + ux * a, S[1] + uy * a];
+    J[e + s] = [S[0] + ux * (a + b), S[1] + uy * (a + b)];
     return;
   }
   const along = (a * a - b * b + d * d) / (2 * d);
   const h = Math.sqrt(Math.max(0, a * a - along * along));
   const mx = S[0] + ux * along, my = S[1] + uy * along;
   const e1: Pt = [mx - uy * h, my + ux * h], e2: Pt = [mx + uy * h, my - ux * h];
-  // el codo, del lado donde ya estaba doblado; con el brazo casi recto, hacia atrás (de lado) o hacia fuera (de frente)
+  // la articulación del medio, del lado donde ya estaba doblada
   const sideOf = (p: Pt) => (p[0] - S[0]) * uy - (p[1] - S[1]) * ux;
   const s0 = sideOf(E0);
-  let pick: Pt;
-  if (Math.abs(s0) > 1.5) pick = Math.sign(sideOf(e1)) === Math.sign(s0) ? e1 : e2;
-  else {
-    const far = (p: Pt) => Math.abs(p[0] - J.pel[0]);
-    pick = side ? (far(e1) < far(e2) ? e1 : e2) : (far(e1) > far(e2) ? e1 : e2);
-  }
-  J['el' + s] = pick;
-  J['ha' + s] = [T[0], T[1]];
+  J[m + s] = Math.abs(s0) > 1.5 ? (Math.sign(sideOf(e1)) === Math.sign(s0) ? e1 : e2) : fallback(e1, e2);
+  J[e + s] = [T[0], T[1]];
 }
 
 function lerp(a: Pose, b: Pose, k: number): Pose {
@@ -152,6 +158,8 @@ export class Motion {
   private readonly anchor?: { j: string; y: number };
   /** Manos fijas en el suelo: dónde está cada una (x) y a qué altura queda la muñeca. */
   private handsAt?: { L: number; R: number; y: number };
+  /** Pies fijos en el suelo (tumbado boca arriba con las rodillas dobladas: puente...). */
+  private feetAt?: { L: number; R: number };
 
   constructor(readonly spec: MotionSpec, readonly side: Side = undefined) {
     this.view = spec.v ?? 'side';
@@ -170,6 +178,10 @@ export class Motion {
       this.total = this.frames.reduce((s, x) => s + x.h + x.d, 0);
     }
     if (this.plant) this.plantX = joints(this.view, this.poseAt(0))[this.plant][0];
+    if (spec.feetDown) {
+      const J0 = this.place(this.poseAt(0));
+      this.feetAt = { L: J0.anL[0], R: J0.anR[0] };
+    }
     if (spec.handsDown) {
       const J0 = this.place(this.poseAt(0));
       this.handsAt = { L: J0.haL[0], R: J0.haR[0], y: -(spec.handsDown === true ? 3.5 : spec.handsDown) };
@@ -209,6 +221,17 @@ export class Motion {
     // jy: salto (el cuerpo entero sube esa altura sobre su apoyo)
     dy -= pose.jy ?? 0;
     for (const k in J) J[k] = [J[k][0] + dx, J[k][1] + dy];
+    if (this.feetAt) {
+      // el tobillo que está cerca del suelo baja hasta él (y se queda donde estaba al empezar); el que se levanta va libre
+      for (const s of ['L', 'R'] as const) {
+        const A = J['an' + s], w = Math.min(1, Math.max(0, (A[1] + 26) / 8));
+        if (w <= 0) continue;
+        const T: Pt = [A[0] + (this.feetAt[s] - A[0]) * w, A[1] + (-3.4 - A[1]) * w];
+        const tx = J['ti' + s][0] - A[0], ty = J['ti' + s][1] - A[1];
+        footOnFloor(J, s, T, LEN.th * pose['sTh' + s], LEN.sh * pose['sSh' + s]);
+        J['ti' + s] = [T[0] + tx, T[1] + ty];
+      }
+    }
     if (this.view === 'side') {
       // pie en el aire sin ángulo indicado: en L con la espinilla (talón abajo, punta hacia arriba), no estirado
       for (const s of ['L', 'R']) {

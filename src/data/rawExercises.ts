@@ -133,10 +133,10 @@ export const RAW_SECTIONS: RawSection[] = [
 
 {id:'abdominales',title:'Abdominales',note:'Ordenados por zona, de arriba abajo.',groups:true,items:[
  {g:'Abdomen superior'},
- {n:'Crunch abdominal',z:'Abdomen',mat:1,anchor:{j:'pel',y:-12.1},az:20,el:18,f:[
+ {n:'Crunch abdominal',feetDown:true,z:'Abdomen',mat:1,anchor:{j:'pel',y:-12.1},az:20,el:18,f:[
    [{tl:180,tu:180,hd:184,...KNEES,ua:2,fa:2},350,850],
    [{tl:180,tu:203,hd:214,...KNEES,ua:-10,fa:-10},450,850]]},
- {n:'Crunch con brazos estirados',z:'Abdomen',mat:1,anchor:{j:'pel',y:-12.1},az:20,el:18,f:[
+ {n:'Crunch con brazos estirados',feetDown:true,z:'Abdomen',mat:1,anchor:{j:'pel',y:-12.1},az:20,el:18,f:[
    [{tl:180,tu:180,hd:184,...KNEES,ua:178,fa:178},300,850],
    [{tl:180,tu:204,hd:212,...KNEES,ua:228,fa:226},400,850]]},
  {n:'Crunch con piernas a 90°',z:'Abdomen',mat:1,anchor:{j:'pel',y:-12.1},f:[
@@ -239,14 +239,14 @@ export const RAW_SECTIONS: RawSection[] = [
  {n:'Bird-dog (perro de caza)',z:'Lumbar y core',mat:1,b:['lumbar'],handsDown:true,f:[
    [QUAD,200,900],[{...QUAD,uaL:-5,faL:-5,thR:182,snR:182},1200,900],
    [QUAD,200,900],[{...QUAD,uaR:-5,faR:-5,thL:182,snL:182},1200,900]]},
- {n:'Puente de glúteos',z:'Glúteos y lumbar',mat:1,b:['lumbar'],f:[
+ {n:'Puente de glúteos',feetDown:true,z:'Glúteos y lumbar',mat:1,b:['lumbar'],f:[
    [{...SUP,...KNEES},300,1000],[{...SUP,tl:140,tu:165,th:-18,sn:76.5},900,1000]]},
- {n:'Puente a una pierna',z:'Glúteos y lumbar',mat:1,b:['lumbar'],f:[
+ {n:'Puente a una pierna',feetDown:true,z:'Glúteos y lumbar',mat:1,b:['lumbar'],f:[
    [{...SUP,thL:-60,snL:60,thR:-22,snR:-22},300,1000],[{...SUP,tl:140,tu:165,thL:-18,snL:76.5,thR:-27,snR:-27},900,1000]]},
  {n:'Nadador suave (superman alterno)',anchor:{j:'pel',y:-13.1},z:'Lumbar y espalda',mat:1,b:['lumbar','gentle'],f:[
    [{...PRONE,ua:0,fa:0},200,900],[{...PRONE,ua:0,fa:0,tu:-6,hd:-10,uaL:-12,faL:-12,thR:190,snR:192},900,900],
    [{...PRONE,ua:0,fa:0},200,900],[{...PRONE,ua:0,fa:0,tu:-6,hd:-10,uaR:-12,faR:-12,thL:190,snL:192},900,900]]},
- {n:'Retroversión pélvica',anchor:{j:'pel',y:-13.1},z:'Lumbar',mat:1,b:['lumbar'],mark:['pel'],f:[
+ {n:'Retroversión pélvica',feetDown:true,anchor:{j:'pel',y:-13.1},z:'Lumbar',mat:1,b:['lumbar'],mark:['pel'],f:[
    [{...SUP,...KNEES},500,900],[{...SUP,...KNEES,tl:177,thL:-63,thR:-59},1200,900]]},
  {n:'Elevación de brazos en Y boca abajo',anchor:{j:'pel',y:-13.1},z:'Espalda alta y postura',mat:1,b:['lumbar'],f:[
    [{...PRONE,ua:0,fa:0},300,900],[{...PRONE,tu:-5,hd:-10,ua:-14,fa:-14},1100,900]]},

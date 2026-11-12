@@ -497,7 +497,8 @@ export class MannequinScene {
       if (footDir.lengthSq() < 0.01) footDir.set(1, 0, 0);
       footDir.normalize();
       const fc = an.clone().addScaledVector(footDir, 3.2);
-      const shoeUp = ortho(V(0, 1, 0).sub(footDir.clone().multiplyScalar(footDir.y)), footDir);
+      // empeine hacia la espinilla y su parte delantera: con el pie en punta (boca abajo, de rodillas) la suela mira arriba
+      const shoeUp = ortho(sDir.clone().multiplyScalar(-1).add(ortho(legFront, sDir)), footDir);
       this.oriented(P['shoe' + s], fc, footDir, lateralAxis, 6.4, 3.6, 3.4);
       this.oriented(P['sole' + s], fc.clone().addScaledVector(shoeUp, -1.6), footDir, lateralAxis, 6.6, 3.8, 1.4);
       for (const [k, off] of [['lace1', 0.3], ['lace2', 2.4]] as const) {

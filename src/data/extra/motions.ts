@@ -22,9 +22,9 @@ const PUSH_DOWN = { tl: -10, ua: 150, fa: 30, th: 170, sn: 170, ft: 90 }; // fle
 const HIPS = { ua: 118, fa: 28 }; // manos en la cintura (vista lateral)
 const SUMO = { thL: 118, snL: 118, thR: 62, snR: 62, ftL: 180, ftR: 0, uaL: 74, faL: 66, uaR: 106, faR: 114, zEL: 6, zER: 6, zHL: 14, zHR: 14 };
 const SUMO_DOWN = { thL: 152, snL: 96, thR: 28, snR: 84, ftL: 180, ftR: 0, uaL: 74, faL: 66, uaR: 106, faR: 114, zEL: 6, zER: 6, zHL: 14, zHR: 14, zKL: 9, zKR: 9, lean: 16 };
-const HANG = { ua: -90, fa: -90, th: 96, sn: 112, ft: 60 }; // colgado de la barra
+const HANG = { ua: -90, fa: -90, th: 96, sn: 112 }; // colgado de la barra
 // barbilla por encima de la barra: la barra queda delante de la parte alta del pecho y la cabeza algo atrás
-const CHIN = { ua: 105, fa: -44, th: 96, sn: 112, ft: 60, hd: -100 };
+const CHIN = { ua: 105, fa: -44, th: 96, sn: 112, hd: -100 };
 const pullBar = (J: Record<string, [number, number]>, P: import('../../domain/types').PropHelpers) =>
   // barra de dominadas: de color vivo y algo más gruesa para que se vea bien sobre el fondo oscuro
   P.rect(J.haR[0] - 2.5, J.haR[1] - 3.5, 5, 5).map((o) => ({ ...o, dep: 96, color: '#F5A524' }));
@@ -68,8 +68,8 @@ const BEAR = { tl: 3, ua: 88, fa: 88, th: 92, sn: 176, ft: 60 }; // cuadrupedia 
 export const EXTRA_MOTIONS: Record<string, M> = {
   // ── Calentamiento ──
   'skipping-rodillas-arriba': { f: [
-    [{ thR: -8, snR: 78, uaL: 35, faL: -45, uaR: 130, faR: 105, ft: 70 }, 0, 230], [{ th: 86, sn: 100, jy: 4, ft: 60 }, 0, 170],
-    [{ thL: -8, snL: 78, uaR: 35, faR: -45, uaL: 130, faL: 105, ft: 70 }, 0, 230], [{ th: 86, sn: 100, jy: 4, ft: 60 }, 0, 170]] },
+    [{ thR: -8, snR: 78, uaL: 35, faL: -45, uaR: 130, faR: 105 }, 0, 230], [{ th: 86, sn: 100, jy: 4 }, 0, 170],
+    [{ thL: -8, snL: 78, uaR: 35, faR: -45, uaL: 130, faL: 105 }, 0, 230], [{ th: 86, sn: 100, jy: 4 }, 0, 170]] },
   // saltos de lado a lado con los pies juntos: cae con las rodillas dobladas, en el aire las piernas recogidas
   'saltos-de-esquiador': { v: 'front', f: [
     [{ x: -24, ...SKI_LAND, uaL: 108, faL: 74, uaR: 88, faR: 62 }, 90, 230], [{ x: 0, jy: 14, ...SKI_AIR }, 0, 230],
@@ -213,7 +213,7 @@ export const EXTRA_MOTIONS: Record<string, M> = {
     [{ uaL: 180, faL: 270, uaR: 0, faR: -90 }, 150, 1000], [{ uaL: 260, faL: 265, uaR: -80, faR: -85 }, 150, 1000]] },
   'remo-al-menton': { v: 'front', db: 'both', f: [
     [{ uaL: 92, faL: 86, uaR: 88, faR: 94, zHL: 5, zHR: 5 }, 150, 900], [{ uaL: 160, faL: 2, uaR: 20, faR: 178, zHL: 6, zHR: 6 }, 200, 900]] },
-  'press-de-suelo-con-mancuernas': { mat: 1, db: 'both', f: [
+  'press-de-suelo-con-mancuernas': { mat: 1, feetDown: true, db: 'both', f: [
     [{ tl: 180, ...KNEES, ua: -90, fa: -90 }, 150, 1000], [{ tl: 180, ...KNEES, ua: 12, fa: -90 }, 150, 1000]] },
   'aperturas-inclinadas-con-mancuernas': { db: 'both', armsOut: true, anchor: { j: 'pel', y: -40 },
     props: (J, P) => [...P.benchFlat(J.pel[0] - 16, J.pel[0] + 18), ...P.line([J.pel[0] - 8, -36], [J.pel[0] - 8 - 54 * 0.82, -36 - 54 * 0.57], 7)], f: [
@@ -227,7 +227,7 @@ export const EXTRA_MOTIONS: Record<string, M> = {
   'curl-martillo': { db: 'both', hammer: true, f: [[{}, 150, 850], [{ ua: 85, fa: -50 }, 150, 850]] },
   'curl-alterno-de-biceps': { db: 'both', f: [
     [{}, 100, 750], [{ uaR: 85, faR: -50 }, 150, 750], [{}, 100, 750], [{ uaL: 85, faL: -50 }, 150, 750]] },
-  'press-frances-en-el-suelo': { mat: 1, db: 'both', f: [
+  'press-frances-en-el-suelo': { mat: 1, feetDown: true, db: 'both', f: [
     [{ tl: 180, ...KNEES, ua: -105, fa: -105 }, 150, 1000], [{ tl: 180, ...KNEES, ua: -105, fa: -185 }, 150, 1000]] },
   'peso-muerto-rumano-con-mancuernas': { db: 'both', plant: 'anR', f: [
     [{ th: 88, sn: 94, ua: 66, fa: 34, zHL: 4, zHR: 4 }, 250, 1100], [{ tl: -18, th: 84, sn: 96, ua: 80, fa: 72, hd: -32 }, 300, 1100]] },
@@ -257,7 +257,7 @@ export const EXTRA_MOTIONS: Record<string, M> = {
     [{ tl: -84, tu: -80, uaL: 48, faL: 48, uaR: 82, faR: 82, zHL: 8, zHR: 8, tw: 22, thL: 100, snL: 100, thR: 80, snR: 80 }, 150, 800],
     [{ tl: -94, tu: -98, uaL: -120, faL: -125, saL: 0.78, uaR: -135, faR: -140, zHL: 8, zHR: 8, tw: -22, thL: 100, snL: 100, thR: 80, snR: 80 }, 200, 800]] },
   'crunch-con-mancuerna': mocapCrunch({ tl: 180, tu: 180, hd: 184, ...KNEES, ua: -100, fa: 30, zHL: 8, zHR: -8, zEL: 10, zER: -10 },
-    { tu: 203, hd: 214, ua: -77, fa: 53 }, { mat: 1, db: 'two', dbAcross: true, anchor: { j: 'pel', y: -12.1 }, az: 20, el: 18 }),
+    { tu: 203, hd: 214, ua: -77, fa: 53 }, { mat: 1, feetDown: true, db: 'two', dbAcross: true, anchor: { j: 'pel', y: -12.1 }, az: 20, el: 18 }),
 
   // ── Pesa rusa ──
   'swing-con-pesa-rusa': { kb: 'both', plant: 'anR', f: [
@@ -355,7 +355,7 @@ export const EXTRA_MOTIONS: Record<string, M> = {
     props: (J, P) => [...P.rect(J.pel[0] - 26, -34, 52, 6), ...P.line([J.pel[0] - 20, -29], [J.pel[0] - 20, 0], 4), ...P.line([J.pel[0] + 20, -29], [J.pel[0] + 20, 0], 4)], f: [
     [{ thL: 100, thR: 80, sTh: 0.15, uaL: 120, faL: 60, uaR: 60, faR: 120 }, 200, 800], [{ thL: 116, thR: 64, sTh: 0.15, uaL: 120, faL: 60, uaR: 60, faR: 120 }, 500, 800]] },
   'patada-de-gluteo-con-banda': { mat: 1, band: 'ankles', handsDown: true, f: [[QUAD, 200, 700], [{ ...QUAD, thR: 182, snR: 182, ftR: 90 }, 300, 700]] },
-  'puente-de-gluteos-con-banda': { mat: 1, band: 'knees', f: [
+  'puente-de-gluteos-con-banda': { mat: 1, feetDown: true, band: 'knees', f: [
     [{ ...SUP, ...KNEES, zKL: -3, zKR: 3 }, 300, 1000], [{ ...SUP, tl: 140, tu: 165, th: -18, sn: 76.5, zKL: -5, zKR: 5 }, 900, 1000]] },
   // de lado a la puerta (la banda viene del lado): manos en el pecho y se empujan rectas al frente sin girar
   'press-pallof-con-banda': { v: 'front', az: 62, band: (J) => [J.neck[0] + 75, J.neck[1] + 14], f: [
@@ -429,8 +429,8 @@ export const EXTRA_MOTIONS: Record<string, M> = {
     [{ ...HANG, th: 70, sn: 165 }, 250, 1100], [{ ...CHIN, th: 70, sn: 165 }, 300, 1100]] },
   'retraccion-escapular-colgado': { fist: true, plant: 'haR', anchor: { j: 'haR', y: -172 }, props: pullBar, f: [[HANG, 300, 700], [{ ...HANG, sa: 0.9, hd: -94 }, 600, 700]] },
   'elevaciones-de-rodillas-colgado': { fist: true, plant: 'haR', anchor: { j: 'haR', y: -172 }, props: pullBar, f: [[{ ...HANG, th: 90, sn: 92 }, 200, 900], [{ ...HANG, th: -15, sn: 80, tl: -96 }, 300, 900]] },
-  'elevaciones-de-piernas-colgado': { fist: true, plant: 'haR', anchor: { j: 'haR', y: -172 }, props: pullBar, f: [[{ ...HANG, th: 90, sn: 92 }, 200, 1000], [{ ...HANG, th: -2, sn: -2, ft: -40, tl: -98 }, 300, 1000]] },
-  'colgarse-de-la-barra': { fist: true, plant: 'haR', anchor: { j: 'haR', y: -172 }, props: pullBar, f: [[{ ...HANG, th: 90, sn: 92, ft: 70 }, 1400, 1100], [{ ...HANG, th: 91, sn: 92, ft: 72, hd: -94 }, 1400, 1100]] },
+  'elevaciones-de-piernas-colgado': { fist: true, plant: 'haR', anchor: { j: 'haR', y: -172 }, props: pullBar, f: [[{ ...HANG, th: 90, sn: 92 }, 200, 1000], [{ ...HANG, th: -2, sn: -2, tl: -98 }, 300, 1000]] },
+  'colgarse-de-la-barra': { fist: true, plant: 'haR', anchor: { j: 'haR', y: -172 }, props: pullBar, f: [[{ ...HANG, th: 90, sn: 92 }, 1400, 1100], [{ ...HANG, th: 91, sn: 92, hd: -94 }, 1400, 1100]] },
 
   // ── Comba ──
   'saltar-a-la-comba': { rope: true, per: 620, fn: rope({}) },
@@ -477,9 +477,9 @@ export const MOTION_OVERRIDES: Record<string, M> = {
   // crunch con el tramo de subida del abdominal completo de Mixamo
   // brazos cruzados sobre el pecho
   'crunch-abdominal': mocapCrunch({ tl: 180, tu: 180, hd: 184, ...KNEES, ua: -22, fa: 176, zHL: 16, zHR: -16, zEL: 6, zER: -6 }, { tu: 203, hd: 214, ua: 1, fa: 199 },
-    { mat: 1, anchor: { j: 'pel', y: -12.1 }, az: 20, el: 18 }),
+    { mat: 1, feetDown: true, anchor: { j: 'pel', y: -12.1 }, az: 20, el: 18 }),
   'crunch-con-brazos-estirados': mocapCrunch({ tl: 180, tu: 180, hd: 184, ...KNEES, ua: 178, fa: 178 }, { tu: 204, hd: 212, ua: 228, fa: 226 },
-    { mat: 1, anchor: { j: 'pel', y: -12.1 }, az: 20, el: 18 }),
+    { mat: 1, feetDown: true, anchor: { j: 'pel', y: -12.1 }, az: 20, el: 18 }),
   'crunch-con-piernas-a-90': mocapCrunch({ tl: 180, th: -90, sn: 0, ua: 10, fa: 10 }, { tu: 202, hd: 208, ua: -18, fa: -18 },
     { mat: 1, anchor: { j: 'pel', y: -12.1 } }),
 };
