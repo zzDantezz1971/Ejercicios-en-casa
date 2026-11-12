@@ -155,7 +155,8 @@ function buildSections(): SectionInfo[] {
 // retirados de las listas (siguen existiendo para el historial y las tablas que ya los tengan)
 const RETIRED = new Set(['peso-muerto-rumano-con-mancuernas', 'curl-alterno-de-biceps', 'dominadas-supinas', 'elevacion-de-brazos-en-y-boca-abajo',
   // muy parecidos a otros con el mismo material
-  'zancada-atras-con-mancuernas', 'press-de-hombros-de-pie', 'aperturas-inclinadas-con-mancuernas', 'press-inclinado-con-mancuernas', 'swing-a-una-mano-con-pesa-rusa']);
+  'zancada-atras-con-mancuernas', 'press-de-hombros-de-pie', 'aperturas-inclinadas-con-mancuernas', 'press-inclinado-con-mancuernas', 'swing-a-una-mano-con-pesa-rusa',
+  'subida-al-step-con-rodilla-arriba', 'dominadas-negativas', 'caminata-lateral-con-banda']);
 const ALL_SECTIONS: SectionInfo[] = buildSections();
 export const SECTIONS: SectionInfo[] = ALL_SECTIONS.map((s) => ({ ...s, exercises: s.exercises.filter((e) => !RETIRED.has(e.id)) }));
 export const CATALOG: Catalog = new Map(ALL_SECTIONS.flatMap((s) => s.exercises).map((e) => [e.id, e]));

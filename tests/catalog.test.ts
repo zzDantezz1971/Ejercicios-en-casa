@@ -9,8 +9,8 @@ const all = SECTIONS.flatMap((s) => s.exercises);
 
 describe('Catálogo de ejercicios', () => {
   it('no repite identificadores', () => {
-    // el catálogo tiene también los retirados (9), que no salen en las listas
-    expect(CATALOG.size).toBe(all.length + 9);
+    // el catálogo tiene también los retirados (12), que no salen en las listas
+    expect(CATALOG.size).toBe(all.length + 12);
   });
 
   it('todos los ejercicios tienen descripción completa', () => {
