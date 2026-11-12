@@ -1,8 +1,9 @@
 /* Mapas de músculos de los resúmenes (cuerpo de frente y de espaldas con los músculos trabajados coloreados).
    Se colorean a partir de unas imágenes de datos sacadas una vez del maniquí realista (tools/bodymap), así la app
-   no tiene que descargar ese maniquí. Cada imagen lleva 4 paneles con el mismo recorte, uno debajo de otro:
+   no tiene que descargar ese maniquí. Cada imagen lleva 5 paneles con el mismo recorte, uno debajo de otro:
    A = (músculo 1, cobertura 1, músculo 2)   B = (cobertura 2, líneas, 0 fuera / 128 piel / 255 pantalón)
-   C = color con luces, sin músculos          D = (transparencia, luz / 2, 0) */
+   C = color con luces, sin músculos          D = (transparencia, luz / 2, cobertura 3)
+   E = (músculo 3, 0, 0) */
 
 const W = 440, H = 660;
 /** Recorte de cada vista dentro de la imagen final (x, y, ancho, alto); lo da tools/bodymap/pack.py. */
@@ -49,19 +50,19 @@ function paint(src: ImageData, box: readonly number[], weights: number[]): strin
   const wt = (i: number) => (i < weights.length ? weights[i] : 0);
   for (let y = 0; y < bh; y++) {
     for (let x = 0; x < bw; x++) {
-      const a = (y * bw + x) * 4, b = a + panel, c = b + panel, d = c + panel;
+      const a = (y * bw + x) * 4, b = a + panel, c = b + panel, d = c + panel, e = d + panel;
       const t = ((y + y0) * W + x + x0) * 4;
       o[t + 3] = s[d];
       if (!s[d]) continue;
       const flag = s[b + 2];
       if (flag < 64) { o[t] = s[c]; o[t + 1] = s[c + 1]; o[t + 2] = s[c + 2]; continue; }
       const m1 = s[a + 1] / 255, m2 = s[b] / 255, w1 = wt(s[a]), w2 = wt(s[a + 2]);
-      const cov = Math.max(w1 > 0.001 ? m1 : 0, w2 > 0.001 ? m2 : 0);
-      const work = Math.max(m1 * Math.max(w1, 0), m2 * Math.max(w2, 0));
-      const strong = work / Math.max(cov, 0.001) >= 0.65;
+      // cada músculo aporta su intensidad (entera si es de lo más trabajado, suave si algo) y se queda la mayor:
+      // así, donde se tocan dos músculos el color pasa de uno a otro de forma continua, sin manchas
+      const amt = (m: number, w: number) => m * (w >= 0.65 ? 1 : w > 0.001 ? SOFT : 0);
       const shorts = flag > 191;
       const base = shorts ? [0.12, 0.15, 0.2] : [0.6, 0.64, 0.7];
-      const k = Math.min(1, cov * (shorts ? 0.5 : 1) * (strong ? 1 : SOFT));
+      const k = Math.min(1, Math.max(amt(m1, w1), amt(m2, w2), amt(s[d + 2] / 255, wt(s[e]))) * (shorts ? 0.5 : 1));
       const dark = 1 - 0.2 * (s[b + 1] / 255) * k;
       const L = (s[d + 1] / 255) * 2;
       for (let ch = 0; ch < 3; ch++) o[t + ch] = toSrgb((base[ch] * (1 - k) + hot[ch] * k) * dark * L + hot[ch] * k * 0.3);

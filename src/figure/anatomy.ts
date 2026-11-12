@@ -56,7 +56,7 @@ const N = MUSCLES.length;
 
 /** Material del maniquí anatomía. */
 /** `map`: mapa de los resúmenes (rojo suave = poco trabajado, rojo vivo = mucho). */
-/** `debug` (solo para generar los mapas de los resúmenes, tools/bodymap): 2 = músculos dominantes, 3 = segundo músculo, líneas y pantalón, 4 = marca de piel (magenta). */
+/** `debug` (solo para generar los mapas de los resúmenes, tools/bodymap): 2 = músculos dominantes, 3 = segundo músculo, líneas y pantalón, 4 = marca de piel (magenta), 5 = tercer músculo. */
 export function anatomyMaterial(g: THREE.BufferGeometry, d: SkinData, w: { L: number[]; R: number[]; map?: boolean; debug?: number }): THREE.Material {
   if (!g.getAttribute('aPart') && d.part) g.setAttribute('aPart', new THREE.BufferAttribute(Float32Array.from(b64(d.part)), 1));
   const P = (k: string, i: 0 | 1) => new THREE.Vector3(...(d.rest[k][i] as [number, number, number]));
@@ -133,7 +133,10 @@ vec3 anatomy() {
     float t = along(p, sho, el - sho);
     vec3 r = radial(p, sho, el - sho);
     float tf = along(p, el, wr - el);
-    m[7] = max(dl, 1.0 - smoothstep(0.18, 0.32, t));
+    // la malla del brazo entra un poco en el pecho (con borde irregular): ahí, por dentro del hombro, se pinta como el tronco
+    float armw = smoothstep(-0.06, 0.06, t);
+    m[7] = max(dl, armw * (1.0 - smoothstep(0.18, 0.32, t)));
+    m[0] = (1.0 - armw) * ell(q, vec2(8.0, 45.5), vec2(8.5, 5.8)) * front;
     m[8] = spindle(t, 0.22, 0.92, r.z, 0.42);
     m[9] = spindle(t, 0.14, 0.95, -r.z, 0.45);
     m[10] = spindle(tf, 0.0, 0.85, 1.0, 1.0) * 0.9;
@@ -160,14 +163,18 @@ vec3 anatomy() {
     cov = max(cov, m[i] * step(0.001, w));
   }
   if (uDebug > 0.5) {
-    float b1 = 0.0, b2 = 0.0, i1 = 255.0, i2 = 255.0;
+    float b1 = 0.0, b2 = 0.0, b3 = 0.0, i1 = 255.0, i2 = 255.0, i3 = 255.0;
     for (int i = 0; i < ${N}; i++) {
-      if (m[i] > b1) { b2 = b1; i2 = i1; b1 = m[i]; i1 = float(i); }
-      else if (m[i] > b2) { b2 = m[i]; i2 = float(i); }
+      if (m[i] > b1) { b3 = b2; i3 = i2; b2 = b1; i2 = i1; b1 = m[i]; i1 = float(i); }
+      else if (m[i] > b2) { b3 = b2; i3 = i2; b2 = m[i]; i2 = float(i); }
+      else if (m[i] > b3) { b3 = m[i]; i3 = float(i); }
     }
     if (b1 < 0.004) i1 = 255.0;
     if (b2 < 0.004) i2 = 255.0;
-    gDbg = uDebug < 2.5 ? vec3(i1 / 255.0, clamp(b1, 0.0, 1.0), i2 / 255.0) : uDebug < 3.5 ? vec3(clamp(b2, 0.0, 1.0), clamp(lines, 0.0, 1.0), shorts ? 1.0 : 0.0) : vec3(1.0, 0.0, 1.0);
+    if (b3 < 0.004) i3 = 255.0;
+    gDbg = uDebug < 2.5 ? vec3(i1 / 255.0, clamp(b1, 0.0, 1.0), i2 / 255.0)
+      : uDebug < 3.5 ? vec3(clamp(b2, 0.0, 1.0), clamp(lines, 0.0, 1.0), shorts ? 1.0 : 0.0)
+      : uDebug < 4.5 ? vec3(1.0, 0.0, 1.0) : vec3(i3 / 255.0, clamp(b3, 0.0, 1.0), 0.0);
   }
   if (uMap > 0.5) {
     // mapa de los resúmenes

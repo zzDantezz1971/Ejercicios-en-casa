@@ -28,7 +28,7 @@ const test = q.get('test');
 const zero = MUSCLES.map(() => 0);
 const out: Record<string, string> = {};
 for (const back of [false, true]) {
-  for (const debug of [0, 2, 3, 4, ...(test ? [9] : [])]) {
+  for (const debug of [0, 2, 3, 4, 5, ...(test ? [9] : [])]) {
     const r = debug === 0 || debug === 9 ? rLit : rData, c = r.domElement;
     const w = debug === 9 ? MUSCLES.map((_, i) => Number(test!.split(',').find((t) => t.startsWith(i + ':'))?.split(':')[1] ?? 0)) : zero;
     const sc = new MannequinScene(BODY_SPEC, undefined, undefined, skin, { L: w, R: w, map: true, debug: debug === 9 ? 0 : debug });
