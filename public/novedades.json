@@ -763,230 +763,479 @@
   },
   {
     "fecha": "2026-11-09T00:53:16Z",
-    "es": ["52 ejercicios nuevos más: 16 con bandas elásticas, 10 con step, 9 con fitball, 8 con barra de dominadas, 5 con comba y 4 con rueda abdominal. En total hay 151 ejercicios nuevos (49 sin material) y 240 en la app. Todavía sin animación."],
-    "ca": ["52 exercicis nous més: 16 amb bandes elàstiques, 10 amb step, 9 amb fitball, 8 amb barra de dominades, 5 amb corda de saltar i 4 amb roda abdominal. En total hi ha 151 exercicis nous (49 sense material) i 240 a l’app. Encara sense animació."],
-    "en": ["52 more new exercises: 16 with resistance bands, 10 with a step, 9 with an exercise ball, 8 with a pull-up bar, 5 with a skipping rope and 4 with an ab wheel. That makes 151 new exercises (49 with no equipment) and 240 in the app. No animation yet."]
+    "es": [
+      "52 ejercicios nuevos más: 16 con bandas elásticas, 10 con step, 9 con fitball, 8 con barra de dominadas, 5 con comba y 4 con rueda abdominal. En total hay 151 ejercicios nuevos (49 sin material) y 240 en la app. Todavía sin animación."
+    ],
+    "ca": [
+      "52 exercicis nous més: 16 amb bandes elàstiques, 10 amb step, 9 amb fitball, 8 amb barra de dominades, 5 amb corda de saltar i 4 amb roda abdominal. En total hi ha 151 exercicis nous (49 sense material) i 240 a l’app. Encara sense animació."
+    ],
+    "en": [
+      "52 more new exercises: 16 with resistance bands, 10 with a step, 9 with an exercise ball, 8 with a pull-up bar, 5 with a skipping rope and 4 with an ab wheel. That makes 151 new exercises (49 with no equipment) and 240 in the app. No animation yet."
+    ]
   },
   {
     "fecha": "2026-11-09T00:49:27Z",
-    "es": ["50 ejercicios nuevos con material: 24 con mancuernas (press Arnold, remo renegado, curl martillo, sentadilla goblet, thruster…), 14 con pesa rusa (swing, cargada, molino, halo…) y 12 con barra con discos (sentadilla, peso muerto, press militar, hip thrust…). Todavía sin animación."],
-    "ca": ["50 exercicis nous amb material: 24 amb manuelles (press Arnold, rem renegat, curl martell, esquat goblet, thruster…), 14 amb pesa russa (swing, estrebada, molí, halo…) i 12 amb barra amb discos (esquat, pes mort, press militar, hip thrust…). Encara sense animació."],
-    "en": ["50 new equipment exercises: 24 with dumbbells (Arnold press, renegade row, hammer curl, goblet squat, thruster…), 14 with a kettlebell (swing, clean, windmill, halo…) and 12 with a barbell (squat, deadlift, overhead press, hip thrust…). No animation yet."]
+    "es": [
+      "50 ejercicios nuevos con material: 24 con mancuernas (press Arnold, remo renegado, curl martillo, sentadilla goblet, thruster…), 14 con pesa rusa (swing, cargada, molino, halo…) y 12 con barra con discos (sentadilla, peso muerto, press militar, hip thrust…). Todavía sin animación."
+    ],
+    "ca": [
+      "50 exercicis nous amb material: 24 amb manuelles (press Arnold, rem renegat, curl martell, esquat goblet, thruster…), 14 amb pesa russa (swing, estrebada, molí, halo…) i 12 amb barra amb discos (esquat, pes mort, press militar, hip thrust…). Encara sense animació."
+    ],
+    "en": [
+      "50 new equipment exercises: 24 with dumbbells (Arnold press, renegade row, hammer curl, goblet squat, thruster…), 14 with a kettlebell (swing, clean, windmill, halo…) and 12 with a barbell (squat, deadlift, overhead press, hip thrust…). No animation yet."
+    ]
   },
   {
     "fecha": "2026-11-09T00:45:33Z",
-    "es": ["49 ejercicios nuevos sin material: flexiones de varios tipos, sentadilla búlgara, zancada atrás, burpees, barquita, abdominal en V, postura de la paloma, perro boca abajo y muchos más. Todavía no tienen animación del muñeco, pero sí la explicación completa."],
-    "ca": ["49 exercicis nous sense material: flexions de diversos tipus, esquat búlgar, gambada enrere, burpees, barqueta, abdominal en V, postura del colom, gos cap per avall i molts més. Encara no tenen animació del ninot, però sí l’explicació completa."],
-    "en": ["49 new no-equipment exercises: several kinds of push-ups, Bulgarian split squats, reverse lunges, burpees, hollow holds, V-ups, pigeon pose, downward dog and many more. They don’t have the figure animation yet, but they do have the full instructions."]
+    "es": [
+      "49 ejercicios nuevos sin material: flexiones de varios tipos, sentadilla búlgara, zancada atrás, burpees, barquita, abdominal en V, postura de la paloma, perro boca abajo y muchos más. Todavía no tienen animación del muñeco, pero sí la explicación completa."
+    ],
+    "ca": [
+      "49 exercicis nous sense material: flexions de diversos tipus, esquat búlgar, gambada enrere, burpees, barqueta, abdominal en V, postura del colom, gos cap per avall i molts més. Encara no tenen animació del ninot, però sí l’explicació completa."
+    ],
+    "en": [
+      "49 new no-equipment exercises: several kinds of push-ups, Bulgarian split squats, reverse lunges, burpees, hollow holds, V-ups, pigeon pose, downward dog and many more. They don’t have the figure animation yet, but they do have the full instructions."
+    ]
   },
   {
     "fecha": "2026-11-09T00:40:35Z",
-    "es": ["Material: al empezar (y en Mis datos → Mi material) marcas el material que tienes: mancuernas, pesa rusa, barra con discos, banco, bandas elásticas, step, fitball, barra de dominadas, comba o rueda abdominal. Al elegir ejercicios solo ves los que puedes hacer; los demás se pueden mostrar con un toque.", "El apartado «Pesas» pasa a llamarse «Fuerza».", "En cada ejercicio se indica el material que necesita."],
-    "ca": ["Material: en començar (i a Les meves dades → El meu material) marques el material que tens: manuelles, pesa russa, barra amb discos, banc, bandes elàstiques, step, fitball, barra de dominades, corda de saltar o roda abdominal. En triar exercicis només veus els que pots fer; els altres es poden mostrar amb un toc.", "L’apartat «Peses» passa a dir-se «Força».", "A cada exercici s’indica el material que necessita."],
-    "en": ["Equipment: when you start (and in My details → My equipment) you tick the equipment you have: dumbbells, kettlebell, barbell, bench, resistance bands, step, exercise ball, pull-up bar, skipping rope or ab wheel. When choosing exercises you only see the ones you can do; the rest can be shown with one tap.", "The “Weights” section is now called “Strength”.", "Each exercise shows the equipment it needs."]
+    "es": [
+      "Material: al empezar (y en Mis datos → Mi material) marcas el material que tienes: mancuernas, pesa rusa, barra con discos, banco, bandas elásticas, step, fitball, barra de dominadas, comba o rueda abdominal. Al elegir ejercicios solo ves los que puedes hacer; los demás se pueden mostrar con un toque.",
+      "El apartado «Pesas» pasa a llamarse «Fuerza».",
+      "En cada ejercicio se indica el material que necesita."
+    ],
+    "ca": [
+      "Material: en començar (i a Les meves dades → El meu material) marques el material que tens: manuelles, pesa russa, barra amb discos, banc, bandes elàstiques, step, fitball, barra de dominades, corda de saltar o roda abdominal. En triar exercicis només veus els que pots fer; els altres es poden mostrar amb un toc.",
+      "L’apartat «Peses» passa a dir-se «Força».",
+      "A cada exercici s’indica el material que necessita."
+    ],
+    "en": [
+      "Equipment: when you start (and in My details → My equipment) you tick the equipment you have: dumbbells, kettlebell, barbell, bench, resistance bands, step, exercise ball, pull-up bar, skipping rope or ab wheel. When choosing exercises you only see the ones you can do; the rest can be shown with one tap.",
+      "The “Weights” section is now called “Strength”.",
+      "Each exercise shows the equipment it needs."
+    ]
   },
   {
     "fecha": "2026-11-09T00:09:49Z",
-    "es": ["Modo claro: en Ajustes → Apariencia puedes elegir Oscuro, Claro o Automático (el mismo modo que tu móvil).", "Ajustes más compactos: la cuenta atrás y la duración inicial van juntas en una sola tarjeta."],
-    "ca": ["Mode clar: a Configuració → Aparença pots triar Fosc, Clar o Automàtic (el mateix mode que el teu mòbil).", "Configuració més compacta: el compte enrere i la durada inicial van junts en una sola targeta."],
-    "en": ["Light mode: in Settings → Appearance you can choose Dark, Light or Automatic (the same mode as your phone).", "More compact settings: the countdown and the default duration now share a single card."]
+    "es": [
+      "Modo claro: en Ajustes → Apariencia puedes elegir Oscuro, Claro o Automático (el mismo modo que tu móvil).",
+      "Ajustes más compactos: la cuenta atrás y la duración inicial van juntas en una sola tarjeta."
+    ],
+    "ca": [
+      "Mode clar: a Configuració → Aparença pots triar Fosc, Clar o Automàtic (el mateix mode que el teu mòbil).",
+      "Configuració més compacta: el compte enrere i la durada inicial van junts en una sola targeta."
+    ],
+    "en": [
+      "Light mode: in Settings → Appearance you can choose Dark, Light or Automatic (the same mode as your phone).",
+      "More compact settings: the countdown and the default duration now share a single card."
+    ]
   },
   {
     "fecha": "2026-11-09T00:01:08Z",
-    "es": ["Historial: la tarjeta Músculos muestra lo mismo que los resúmenes (más y menos trabajados, más y menos estirados)."],
-    "ca": ["Historial: la targeta Músculs mostra el mateix que els resums (més i menys treballats, més i menys estirats)."],
-    "en": ["History: the Muscles card now shows the same as the summaries (most and least worked, most and least stretched)."]
+    "es": [
+      "Historial: la tarjeta Músculos muestra lo mismo que los resúmenes (más y menos trabajados, más y menos estirados)."
+    ],
+    "ca": [
+      "Historial: la targeta Músculs mostra el mateix que els resums (més i menys treballats, més i menys estirats)."
+    ],
+    "en": [
+      "History: the Muscles card now shows the same as the summaries (most and least worked, most and least stretched)."
+    ]
   },
   {
     "fecha": "2026-11-08T23:59:34Z",
-    "es": ["Resumen de la semana y del mes: también se indican los músculos menos trabajados y los menos estirados, para saber qué te conviene trabajar más."],
-    "ca": ["Resum de la setmana i del mes: també s’indiquen els músculs menys treballats i els menys estirats, per saber què et convé treballar més."],
-    "en": ["Weekly and monthly summary: the least worked and least stretched muscles are now shown too, so you know what to focus on."]
+    "es": [
+      "Resumen de la semana y del mes: también se indican los músculos menos trabajados y los menos estirados, para saber qué te conviene trabajar más."
+    ],
+    "ca": [
+      "Resum de la setmana i del mes: també s’indiquen els músculs menys treballats i els menys estirats, per saber què et convé treballar més."
+    ],
+    "en": [
+      "Weekly and monthly summary: the least worked and least stretched muscles are now shown too, so you know what to focus on."
+    ]
   },
   {
     "fecha": "2026-11-08T23:56:48Z",
-    "es": ["Resumen de la semana y del mes: además de los músculos más trabajados, ahora salen también los más estirados, con sus minutos."],
-    "ca": ["Resum de la setmana i del mes: a més dels músculs més treballats, ara també surten els més estirats, amb els seus minuts."],
-    "en": ["Weekly and monthly summary: as well as the most worked muscles, the most stretched ones are now shown too, with their minutes."]
+    "es": [
+      "Resumen de la semana y del mes: además de los músculos más trabajados, ahora salen también los más estirados, con sus minutos."
+    ],
+    "ca": [
+      "Resum de la setmana i del mes: a més dels músculs més treballats, ara també surten els més estirats, amb els seus minuts."
+    ],
+    "en": [
+      "Weekly and monthly summary: as well as the most worked muscles, the most stretched ones are now shown too, with their minutes."
+    ]
   },
   {
     "fecha": "2026-11-08T23:50:39Z",
-    "es": ["Resumen: la tarjeta del peso sale siempre. Con un solo peso anotado lo muestra; si esa semana o mes no lo anotaste, te recuerda el último; y si aún no tienes ninguno, te invita a anotarlo."],
-    "ca": ["Resum: la targeta del pes surt sempre. Amb un sol pes anotat el mostra; si aquella setmana o mes no el vas anotar, et recorda l’últim; i si encara no en tens cap, et convida a anotar-lo."],
-    "en": ["Summary: the weight card is always shown. With a single entry it shows it; if you didn’t log your weight that week or month, it reminds you of the last one; and if you have none yet, it invites you to log it."]
+    "es": [
+      "Resumen: la tarjeta del peso sale siempre. Con un solo peso anotado lo muestra; si esa semana o mes no lo anotaste, te recuerda el último; y si aún no tienes ninguno, te invita a anotarlo."
+    ],
+    "ca": [
+      "Resum: la targeta del pes surt sempre. Amb un sol pes anotat el mostra; si aquella setmana o mes no el vas anotar, et recorda l’últim; i si encara no en tens cap, et convida a anotar-lo."
+    ],
+    "en": [
+      "Summary: the weight card is always shown. With a single entry it shows it; if you didn’t log your weight that week or month, it reminds you of the last one; and if you have none yet, it invites you to log it."
+    ]
   },
   {
     "fecha": "2026-11-08T23:45:20Z",
-    "es": ["Resumen de la semana y del mes: las cuatro cifras quedan alineadas en dos columnas, y si no hay datos del periodo anterior se avisa una sola vez (antes salía repetido y sin traducir)."],
-    "ca": ["Resum de la setmana i del mes: les quatre xifres queden alineades en dues columnes, i si no hi ha dades del període anterior s’avisa una sola vegada (abans sortia repetit i sense traduir)."],
-    "en": ["Weekly and monthly summary: the four figures are now lined up in two columns, and if there’s no data from the previous period you’re told just once (it used to be repeated and untranslated)."]
+    "es": [
+      "Resumen de la semana y del mes: las cuatro cifras quedan alineadas en dos columnas, y si no hay datos del periodo anterior se avisa una sola vez (antes salía repetido y sin traducir)."
+    ],
+    "ca": [
+      "Resum de la setmana i del mes: les quatre xifres queden alineades en dues columnes, i si no hi ha dades del període anterior s’avisa una sola vegada (abans sortia repetit i sense traduir)."
+    ],
+    "en": [
+      "Weekly and monthly summary: the four figures are now lined up in two columns, and if there’s no data from the previous period you’re told just once (it used to be repeated and untranslated)."
+    ]
   },
   {
     "fecha": "2026-11-08T23:38:25Z",
-    "es": ["Bajo las opciones de sexo, una nota explica para qué se usa: solo para calcular mejor las calorías cuando entrenas con el reloj conectado."],
-    "ca": ["Sota les opcions de sexe, una nota explica per a què s’usa: només per calcular millor les calories quan entrenes amb el rellotge connectat."],
-    "en": ["A note under the sex options now explains what it’s for: only to work out calories more accurately when you train with your watch connected."]
+    "es": [
+      "Bajo las opciones de sexo, una nota explica para qué se usa: solo para calcular mejor las calorías cuando entrenas con el reloj conectado."
+    ],
+    "ca": [
+      "Sota les opcions de sexe, una nota explica per a què s’usa: només per calcular millor les calories quan entrenes amb el rellotge connectat."
+    ],
+    "en": [
+      "A note under the sex options now explains what it’s for: only to work out calories more accurately when you train with your watch connected."
+    ]
   },
   {
     "fecha": "2026-11-08T23:31:52Z",
-    "es": ["Mis datos: la tarjeta Objetivo muestra el peso objetivo y el porcentaje conseguido, cuánto te falta y un botón «Cambiar objetivo»."],
-    "ca": ["Les meves dades: la targeta Objectiu mostra el pes objectiu i el percentatge aconseguit, quant et falta i un botó «Canvia l’objectiu»."],
-    "en": ["My details: the Goal card shows your target weight and the percentage reached, how far you have to go and a “Change goal” button."]
+    "es": [
+      "Mis datos: la tarjeta Objetivo muestra el peso objetivo y el porcentaje conseguido, cuánto te falta y un botón «Cambiar objetivo»."
+    ],
+    "ca": [
+      "Les meves dades: la targeta Objectiu mostra el pes objectiu i el percentatge aconseguit, quant et falta i un botó «Canvia l’objectiu»."
+    ],
+    "en": [
+      "My details: the Goal card shows your target weight and the percentage reached, how far you have to go and a “Change goal” button."
+    ]
   },
   {
     "fecha": "2026-11-08T23:20:24Z",
-    "es": ["Mis datos: el peso, ahora en tres tarjetas más claras. Peso (el actual en grande, cuánto has cambiado y la gráfica), Objetivo (cuánto te falta) e IMC (con una escala de colores que muestra dónde estás)."],
-    "ca": ["Les meves dades: el pes, ara en tres targetes més clares. Pes (l’actual en gran, quant has canviat i la gràfica), Objectiu (quant et falta) i IMC (amb una escala de colors que mostra on ets)."],
-    "en": ["My details: weight now comes in three clearer cards. Weight (your current weight in large type, how much it has changed and the chart), Goal (how far you have to go) and BMI (with a colour scale showing where you are)."]
+    "es": [
+      "Mis datos: el peso, ahora en tres tarjetas más claras. Peso (el actual en grande, cuánto has cambiado y la gráfica), Objetivo (cuánto te falta) e IMC (con una escala de colores que muestra dónde estás)."
+    ],
+    "ca": [
+      "Les meves dades: el pes, ara en tres targetes més clares. Pes (l’actual en gran, quant has canviat i la gràfica), Objectiu (quant et falta) i IMC (amb una escala de colors que mostra on ets)."
+    ],
+    "en": [
+      "My details: weight now comes in three clearer cards. Weight (your current weight in large type, how much it has changed and the chart), Goal (how far you have to go) and BMI (with a colour scale showing where you are)."
+    ]
   },
   {
     "fecha": "2026-11-08T22:54:50Z",
-    "es": ["Sexo: ahora hay cuatro opciones (Hombre, Mujer, LGTBIQ+ y Nada), centradas, en la bienvenida y en Mis datos."],
-    "ca": ["Sexe: ara hi ha quatre opcions (Home, Dona, LGTBIQ+ i Cap), centrades, a la benvinguda i a Les meves dades."],
-    "en": ["Sex: there are now four options (Male, Female, LGBTIQ+ and None), centred, on the welcome screen and in My details."]
+    "es": [
+      "Sexo: ahora hay cuatro opciones (Hombre, Mujer, LGTBIQ+ y Nada), centradas, en la bienvenida y en Mis datos."
+    ],
+    "ca": [
+      "Sexe: ara hi ha quatre opcions (Home, Dona, LGTBIQ+ i Cap), centrades, a la benvinguda i a Les meves dades."
+    ],
+    "en": [
+      "Sex: there are now four options (Male, Female, LGBTIQ+ and None), centred, on the welcome screen and in My details."
+    ]
   },
   {
     "fecha": "2026-11-08T22:42:10Z",
-    "es": ["Bienvenida: la primera vez que se abre la app, se elige el idioma y se rellenan los datos personales (nombre, sexo, edad, altura, peso y objetivo). Si falta la altura o el peso, la app avisa de lo que no podrá calcular."],
-    "ca": ["Benvinguda: la primera vegada que s’obre l’app, es tria l’idioma i s’omplen les dades personals (nom, sexe, edat, alçada, pes i objectiu). Si falta l’alçada o el pes, l’app avisa del que no podrà calcular."],
-    "en": ["Welcome: the first time the app is opened, you choose the language and fill in your details (name, sex, age, height, weight and goal). If height or weight is missing, the app tells you what it won’t be able to work out."]
+    "es": [
+      "Bienvenida: la primera vez que se abre la app, se elige el idioma y se rellenan los datos personales (nombre, sexo, edad, altura, peso y objetivo). Si falta la altura o el peso, la app avisa de lo que no podrá calcular."
+    ],
+    "ca": [
+      "Benvinguda: la primera vegada que s’obre l’app, es tria l’idioma i s’omplen les dades personals (nom, sexe, edat, alçada, pes i objectiu). Si falta l’alçada o el pes, l’app avisa del que no podrà calcular."
+    ],
+    "en": [
+      "Welcome: the first time the app is opened, you choose the language and fill in your details (name, sex, age, height, weight and goal). If height or weight is missing, the app tells you what it won’t be able to work out."
+    ]
   },
   {
     "fecha": "2026-11-08T22:09:56Z",
-    "es": ["En inglés, el botón de pausa del entrenamiento ahora dice «Pause»."],
-    "ca": ["En anglès, el botó de pausa de l’entrenament ara diu «Pause»."],
-    "en": ["The workout pause button now correctly reads “Pause”."]
+    "es": [
+      "En inglés, el botón de pausa del entrenamiento ahora dice «Pause»."
+    ],
+    "ca": [
+      "En anglès, el botó de pausa de l’entrenament ara diu «Pause»."
+    ],
+    "en": [
+      "The workout pause button now correctly reads “Pause”."
+    ]
   },
   {
     "fecha": "2026-11-08T21:38:23Z",
-    "es": ["Nueva página de política de privacidad (en catalán, castellano e inglés): tus datos se guardan solo en tu móvil y la app no los envía a ningún sitio."],
-    "ca": ["Nova pàgina de política de privacitat (en català, castellà i anglès): les teves dades es guarden només al teu mòbil i l’app no les envia enlloc."],
-    "en": ["New privacy policy page (in Catalan, Spanish and English): your data stays on your phone and the app never sends it anywhere."]
+    "es": [
+      "Nueva página de política de privacidad (en catalán, castellano e inglés): tus datos se guardan solo en tu móvil y la app no los envía a ningún sitio."
+    ],
+    "ca": [
+      "Nova pàgina de política de privacitat (en català, castellà i anglès): les teves dades es guarden només al teu mòbil i l’app no les envia enlloc."
+    ],
+    "en": [
+      "New privacy policy page (in Catalan, Spanish and English): your data stays on your phone and the app never sends it anywhere."
+    ]
   },
   {
     "fecha": "2026-11-08T20:22:54Z",
-    "es": ["Las letras de la app van incluidas en ella: se ven bien sin conexión desde el primer día y ya no se descarga nada de Google."],
-    "ca": ["Les lletres de l’app hi van incloses: es veuen bé sense connexió des del primer dia i ja no es descarrega res de Google."],
-    "en": ["The app’s fonts are now built in: they look right offline from day one and nothing is downloaded from Google any more."]
+    "es": [
+      "Las letras de la app van incluidas en ella: se ven bien sin conexión desde el primer día y ya no se descarga nada de Google."
+    ],
+    "ca": [
+      "Les lletres de l’app hi van incloses: es veuen bé sense connexió des del primer dia i ja no es descarrega res de Google."
+    ],
+    "en": [
+      "The app’s fonts are now built in: they look right offline from day one and nothing is downloaded from Google any more."
+    ]
   },
   {
     "fecha": "2026-11-08T19:17:18Z",
-    "es": ["Editar tabla: nuevo botón con un lápiz arriba a la derecha para cambiar el nombre de la tabla."],
-    "ca": ["Edita la taula: botó nou amb un llapis a dalt a la dreta per canviar el nom de la taula."],
-    "en": ["Edit table: new pencil button at the top right to rename the table."]
+    "es": [
+      "Editar tabla: nuevo botón con un lápiz arriba a la derecha para cambiar el nombre de la tabla."
+    ],
+    "ca": [
+      "Edita la taula: botó nou amb un llapis a dalt a la dreta per canviar el nom de la taula."
+    ],
+    "en": [
+      "Edit table: new pencil button at the top right to rename the table."
+    ]
   },
   {
     "fecha": "2026-11-08T11:35:12Z",
-    "es": ["Vuelve el muñeco de antes en los ejercicios: se mueve de forma más limpia y natural que el cuerpo anatómico de prueba."],
-    "ca": ["Torna el ninot d’abans als exercicis: es mou de manera més neta i natural que el cos anatòmic de prova."],
-    "en": ["The previous exercise figure is back: it moves more cleanly and naturally than the trial anatomical body."]
+    "es": [
+      "Vuelve el muñeco de antes en los ejercicios: se mueve de forma más limpia y natural que el cuerpo anatómico de prueba."
+    ],
+    "ca": [
+      "Torna el ninot d’abans als exercicis: es mou de manera més neta i natural que el cos anatòmic de prova."
+    ],
+    "en": [
+      "The previous exercise figure is back: it moves more cleanly and naturally than the trial anatomical body."
+    ]
   },
   {
     "fecha": "2026-11-08T10:31:28Z",
-    "es": ["Nuevo muñeco de los ejercicios: un cuerpo anatómico con los músculos mucho más marcados, que se mueve en todos los ejercicios y sigue mostrando en rojo lo que trabaja y en turquesa lo que se estira."],
-    "ca": ["Nou ninot dels exercicis: un cos anatòmic amb els músculs molt més marcats, que es mou en tots els exercicis i continua mostrant en vermell el que treballa i en turquesa el que s’estira."],
-    "en": ["New exercise figure: an anatomical body with much more defined muscles, animated in every exercise and still showing in red what works and in teal what stretches."]
+    "es": [
+      "Nuevo muñeco de los ejercicios: un cuerpo anatómico con los músculos mucho más marcados, que se mueve en todos los ejercicios y sigue mostrando en rojo lo que trabaja y en turquesa lo que se estira."
+    ],
+    "ca": [
+      "Nou ninot dels exercicis: un cos anatòmic amb els músculs molt més marcats, que es mou en tots els exercicis i continua mostrant en vermell el que treballa i en turquesa el que s’estira."
+    ],
+    "en": [
+      "New exercise figure: an anatomical body with much more defined muscles, animated in every exercise and still showing in red what works and in teal what stretches."
+    ]
   },
   {
     "fecha": "2026-11-08T08:50:21Z",
-    "es": ["Medallas: ordenadas por grupos (entrenamientos, constancia, tiempo, calorías, peso, fuerza, apartados y especiales), con un resumen arriba y 13 medallas nuevas."],
-    "ca": ["Medalles: ordenades per grups (entrenaments, constància, temps, calories, pes, força, apartats i especials), amb un resum a dalt i 13 medalles noves."],
-    "en": ["Medals: sorted into groups (workouts, consistency, time, calories, weight, strength, sections and special), with a summary at the top and 13 new medals."]
+    "es": [
+      "Medallas: ordenadas por grupos (entrenamientos, constancia, tiempo, calorías, peso, fuerza, apartados y especiales), con un resumen arriba y 13 medallas nuevas."
+    ],
+    "ca": [
+      "Medalles: ordenades per grups (entrenaments, constància, temps, calories, pes, força, apartats i especials), amb un resum a dalt i 13 medalles noves."
+    ],
+    "en": [
+      "Medals: sorted into groups (workouts, consistency, time, calories, weight, strength, sections and special), with a summary at the top and 13 new medals."
+    ]
   },
   {
     "fecha": "2026-11-07T17:17:28Z",
-    "es": ["El idioma se cambia ahora en Ajustes."],
-    "ca": ["L’idioma ara es canvia a Configuració."],
-    "en": ["The language is now changed in Settings."]
+    "es": [
+      "El idioma se cambia ahora en Ajustes."
+    ],
+    "ca": [
+      "L’idioma ara es canvia a Configuració."
+    ],
+    "en": [
+      "The language is now changed in Settings."
+    ]
   },
   {
     "fecha": "2026-11-07T17:09:04Z",
-    "es": ["Historial: el resumen de arriba (racha, días, tiempo y calorías) ocupa mucho menos, en una sola tarjeta."],
-    "ca": ["Historial: el resum de dalt (ratxa, dies, temps i calories) ocupa molt menys, en una sola targeta."],
-    "en": ["History: the summary at the top (streak, days, time and calories) takes up much less space, in a single card."]
+    "es": [
+      "Historial: el resumen de arriba (racha, días, tiempo y calorías) ocupa mucho menos, en una sola tarjeta."
+    ],
+    "ca": [
+      "Historial: el resum de dalt (ratxa, dies, temps i calories) ocupa molt menys, en una sola targeta."
+    ],
+    "en": [
+      "History: the summary at the top (streak, days, time and calories) takes up much less space, in a single card."
+    ]
   },
   {
     "fecha": "2026-11-07T11:49:47Z",
-    "es": ["Inicio: la tarjeta de la tabla en uso muestra una imagen según los apartados que tiene (calentamiento, pesas, abdominales, estiramientos o una combinación)."],
-    "ca": ["Inici: la targeta de la taula en ús mostra una imatge segons els apartats que té (escalfament, peses, abdominals, estiraments o una combinació)."],
-    "en": ["Home: the current routine card shows an image based on its sections (warm-up, weights, abs, stretches or a combination)."]
+    "es": [
+      "Inicio: la tarjeta de la tabla en uso muestra una imagen según los apartados que tiene (calentamiento, pesas, abdominales, estiramientos o una combinación)."
+    ],
+    "ca": [
+      "Inici: la targeta de la taula en ús mostra una imatge segons els apartats que té (escalfament, peses, abdominals, estiraments o una combinació)."
+    ],
+    "en": [
+      "Home: the current routine card shows an image based on its sections (warm-up, weights, abs, stretches or a combination)."
+    ]
   },
   {
     "fecha": "2026-11-07T11:35:29Z",
-    "es": ["Inicio: en «Esta semana», toca un día marcado para ver su entrenamiento."],
-    "ca": ["Inici: a «Aquesta setmana», toca un dia marcat per veure’n l’entrenament."],
-    "en": ["Home: in “This week”, tap a highlighted day to see its workout."]
+    "es": [
+      "Inicio: en «Esta semana», toca un día marcado para ver su entrenamiento."
+    ],
+    "ca": [
+      "Inici: a «Aquesta setmana», toca un dia marcat per veure’n l’entrenament."
+    ],
+    "en": [
+      "Home: in “This week”, tap a highlighted day to see its workout."
+    ]
   },
   {
     "fecha": "2026-11-07T10:43:13Z",
-    "es": ["Historial: toca un día marcado en el calendario para ver su entrenamiento. La lista larga de entrenamientos desaparece."],
-    "ca": ["Historial: toca un dia marcat al calendari per veure’n l’entrenament. La llista llarga d’entrenaments desapareix."],
-    "en": ["History: tap a highlighted day on the calendar to see its workout. The long list of workouts is gone."]
+    "es": [
+      "Historial: toca un día marcado en el calendario para ver su entrenamiento. La lista larga de entrenamientos desaparece."
+    ],
+    "ca": [
+      "Historial: toca un dia marcat al calendari per veure’n l’entrenament. La llista llarga d’entrenaments desapareix."
+    ],
+    "en": [
+      "History: tap a highlighted day on the calendar to see its workout. The long list of workouts is gone."
+    ]
   },
   {
     "fecha": "2026-11-07T10:36:55Z",
-    "es": ["Inicio: «Contenido de la tabla» sale justo debajo de la tabla en uso y solo muestra los apartados con ejercicios."],
-    "ca": ["Inici: «Contingut de la taula» surt just a sota de la taula en ús i només mostra els apartats amb exercicis."],
-    "en": ["Home: “Routine contents” now appears right below the current routine and only shows sections with exercises."]
+    "es": [
+      "Inicio: «Contenido de la tabla» sale justo debajo de la tabla en uso y solo muestra los apartados con ejercicios."
+    ],
+    "ca": [
+      "Inici: «Contingut de la taula» surt just a sota de la taula en ús i només mostra els apartats amb exercicis."
+    ],
+    "en": [
+      "Home: “Routine contents” now appears right below the current routine and only shows sections with exercises."
+    ]
   },
   {
     "fecha": "2026-11-07T09:50:14Z",
-    "es": ["Historial: en el detalle de un entrenamiento, «Copiar a otro día» crea uno igual en la fecha que elijas (para recuperar uno que no se guardó)."],
-    "ca": ["Historial: al detall d’un entrenament, «Copia a un altre dia» en crea un d’igual en la data que triïs (per recuperar-ne un que no es va desar)."],
-    "en": ["History: in a workout’s details, “Copy to another day” creates an identical one on the date you choose (to recover one that wasn’t saved)."]
+    "es": [
+      "Historial: en el detalle de un entrenamiento, «Copiar a otro día» crea uno igual en la fecha que elijas (para recuperar uno que no se guardó)."
+    ],
+    "ca": [
+      "Historial: al detall d’un entrenament, «Copia a un altre dia» en crea un d’igual en la data que triïs (per recuperar-ne un que no es va desar)."
+    ],
+    "en": [
+      "History: in a workout’s details, “Copy to another day” creates an identical one on the date you choose (to recover one that wasn’t saved)."
+    ]
   },
   {
     "fecha": "2026-11-07T08:54:44Z",
-    "es": ["Arreglo: ya se puede volver a instalar la app desde Chrome (⋮ → Instalar aplicación)."],
-    "ca": ["Correcció: ja es pot tornar a instal·lar l’aplicació des de Chrome (⋮ → Instal·la l’aplicació)."],
-    "en": ["Fix: the app can be installed again from Chrome (⋮ → Install app)."]
+    "es": [
+      "Arreglo: ya se puede volver a instalar la app desde Chrome (⋮ → Instalar aplicación)."
+    ],
+    "ca": [
+      "Correcció: ja es pot tornar a instal·lar l’aplicació des de Chrome (⋮ → Instal·la l’aplicació)."
+    ],
+    "en": [
+      "Fix: the app can be installed again from Chrome (⋮ → Install app)."
+    ]
   },
   {
     "fecha": "2026-11-07T08:40:42Z",
-    "es": ["Icono con fondo negro.", "Inicio: toca «Tu semana» para ver qué mide cada anillo y cambiar tus metas de minutos y calorías.", "Medallas: toca una medalla para abrir su ficha, con la fecha en que la conseguiste."],
-    "ca": ["Icona amb fons negre.", "Inici: toca «La teva setmana» per veure què mesura cada anell i canviar els objectius de minuts i calories.", "Medalles: toca una medalla per obrir-ne la fitxa, amb la data en què la vas aconseguir."],
-    "en": ["Icon with a black background.", "Home: tap “Your week” to see what each ring measures and change your minutes and calories goals.", "Medals: tap a medal to open its details, including the date you earned it."]
+    "es": [
+      "Icono con fondo negro.",
+      "Inicio: toca «Tu semana» para ver qué mide cada anillo y cambiar tus metas de minutos y calorías.",
+      "Medallas: toca una medalla para abrir su ficha, con la fecha en que la conseguiste."
+    ],
+    "ca": [
+      "Icona amb fons negre.",
+      "Inici: toca «La teva setmana» per veure què mesura cada anell i canviar els objectius de minuts i calories.",
+      "Medalles: toca una medalla per obrir-ne la fitxa, amb la data en què la vas aconseguir."
+    ],
+    "en": [
+      "Icon with a black background.",
+      "Home: tap “Your week” to see what each ring measures and change your minutes and calories goals.",
+      "Medals: tap a medal to open its details, including the date you earned it."
+    ]
   },
   {
     "fecha": "2026-11-07T00:56:48Z",
-    "es": ["Icono con fondo azul marino y el dibujo más grande, para que se vea bien sobre fondos de pantalla oscuros. Para verlo, quita el icono y vuelve a instalar la app desde Chrome."],
-    "ca": ["Icona amb fons blau marí i el dibuix més gran, perquè es vegi bé sobre fons de pantalla foscos. Per veure-la, treu la icona i torna a instal·lar l’aplicació des de Chrome."],
-    "en": ["Icon with a navy blue background and a bigger drawing, so it stands out on dark wallpapers. To see it, remove the icon and install the app again from Chrome."]
+    "es": [
+      "Icono con fondo azul marino y el dibujo más grande, para que se vea bien sobre fondos de pantalla oscuros. Para verlo, quita el icono y vuelve a instalar la app desde Chrome."
+    ],
+    "ca": [
+      "Icona amb fons blau marí i el dibuix més gran, perquè es vegi bé sobre fons de pantalla foscos. Per veure-la, treu la icona i torna a instal·lar l’aplicació des de Chrome."
+    ],
+    "en": [
+      "Icon with a navy blue background and a bigger drawing, so it stands out on dark wallpapers. To see it, remove the icon and install the app again from Chrome."
+    ]
   },
   {
     "fecha": "2026-11-07T00:46:16Z",
-    "es": ["El icono de la app es más grande. Para verlo, quita el icono y vuelve a instalar la app desde Chrome (⋮ → Instalar aplicación)."],
-    "ca": ["La icona de l’aplicació és més gran. Per veure-la, treu la icona i torna a instal·lar l’aplicació des de Chrome (⋮ → Instal·la l’aplicació)."],
-    "en": ["The app icon is bigger. To see it, remove the icon and install the app again from Chrome (⋮ → Install app)."]
+    "es": [
+      "El icono de la app es más grande. Para verlo, quita el icono y vuelve a instalar la app desde Chrome (⋮ → Instalar aplicación)."
+    ],
+    "ca": [
+      "La icona de l’aplicació és més gran. Per veure-la, treu la icona i torna a instal·lar l’aplicació des de Chrome (⋮ → Instal·la l’aplicació)."
+    ],
+    "en": [
+      "The app icon is bigger. To see it, remove the icon and install the app again from Chrome (⋮ → Install app)."
+    ]
   },
   {
     "fecha": "2026-11-07T00:43:42Z",
-    "es": ["Icono nuevo: una casa naranja con una mancuerna dorada. Para verlo, borra el icono actual e instala la app otra vez desde Chrome (⋮ → Instalar aplicación)."],
-    "ca": ["Icona nova: una casa taronja amb una manuella daurada. Per veure-la, esborra la icona actual i torna a instal·lar l’aplicació des de Chrome (⋮ → Instal·la l’aplicació)."],
-    "en": ["New icon: an orange house with a gold dumbbell. To see it, remove the current icon and install the app again from Chrome (⋮ → Install app)."]
+    "es": [
+      "Icono nuevo: una casa naranja con una mancuerna dorada. Para verlo, borra el icono actual e instala la app otra vez desde Chrome (⋮ → Instalar aplicación)."
+    ],
+    "ca": [
+      "Icona nova: una casa taronja amb una manuella daurada. Per veure-la, esborra la icona actual i torna a instal·lar l’aplicació des de Chrome (⋮ → Instal·la l’aplicació)."
+    ],
+    "en": [
+      "New icon: an orange house with a gold dumbbell. To see it, remove the current icon and install the app again from Chrome (⋮ → Install app)."
+    ]
   },
   {
     "fecha": "2026-11-07T00:32:55Z",
-    "es": ["Frases motivadoras: ahora sale una distinta cada vez que abres Inicio, y hay 10 frases nuevas (40 en total).", "Al actualizar la app verás este resumen de lo que ha cambiado."],
-    "ca": ["Frases motivadores: ara en surt una de diferent cada vegada que obres Inici, i hi ha 10 frases noves (40 en total).", "En actualitzar l’aplicació veuràs aquest resum del que ha canviat."],
-    "en": ["Motivational phrases: a different one now appears every time you open Home, and there are 10 new phrases (40 in total).", "When you update the app you’ll see this summary of what has changed."]
+    "es": [
+      "Frases motivadoras: ahora sale una distinta cada vez que abres Inicio, y hay 10 frases nuevas (40 en total).",
+      "Al actualizar la app verás este resumen de lo que ha cambiado."
+    ],
+    "ca": [
+      "Frases motivadores: ara en surt una de diferent cada vegada que obres Inici, i hi ha 10 frases noves (40 en total).",
+      "En actualitzar l’aplicació veuràs aquest resum del que ha canviat."
+    ],
+    "en": [
+      "Motivational phrases: a different one now appears every time you open Home, and there are 10 new phrases (40 in total).",
+      "When you update the app you’ll see this summary of what has changed."
+    ]
   },
   {
     "fecha": "2026-11-07T00:32:55Z",
-    "es": ["La frase motivadora de Inicio sale centrada y en dorado."],
-    "ca": ["La frase motivadora d’Inici surt centrada i en daurat."],
-    "en": ["The motivational phrase on Home is now centred and in gold."]
+    "es": [
+      "La frase motivadora de Inicio sale centrada y en dorado."
+    ],
+    "ca": [
+      "La frase motivadora d’Inici surt centrada i en daurat."
+    ],
+    "en": [
+      "The motivational phrase on Home is now centred and in gold."
+    ]
   },
   {
     "fecha": "2026-11-07T00:32:55Z",
-    "es": ["Mis datos: el apartado Peso, más ordenado, con el objetivo de peso dentro."],
-    "ca": ["Les meves dades: l’apartat Pes, més ordenat, amb l’objectiu de pes a dins."],
-    "en": ["My details: the Weight section is tidier and now includes the weight goal."]
+    "es": [
+      "Mis datos: el apartado Peso, más ordenado, con el objetivo de peso dentro."
+    ],
+    "ca": [
+      "Les meves dades: l’apartat Pes, més ordenat, amb l’objectiu de pes a dins."
+    ],
+    "en": [
+      "My details: the Weight section is tidier and now includes the weight goal."
+    ]
   },
   {
     "fecha": "2026-11-07T00:32:55Z",
-    "es": ["Nuevas pestañas: Medallas y Mis datos.", "Frases motivadoras: se activan o desactivan en Ajustes."],
-    "ca": ["Pestanyes noves: Medalles i Les meves dades.", "Frases motivadores: s’activen o es desactiven a Configuració."],
-    "en": ["New tabs: Medals and My details.", "Motivational phrases: turn them on or off in Settings."]
+    "es": [
+      "Nuevas pestañas: Medallas y Mis datos.",
+      "Frases motivadoras: se activan o desactivan en Ajustes."
+    ],
+    "ca": [
+      "Pestanyes noves: Medalles i Les meves dades.",
+      "Frases motivadores: s’activen o es desactiven a Configuració."
+    ],
+    "en": [
+      "New tabs: Medals and My details.",
+      "Motivational phrases: turn them on or off in Settings."
+    ]
   }
 ]
