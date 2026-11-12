@@ -47,7 +47,8 @@ Los ejercicios se dibujan con el maniquí de piezas (`src/figure/Mannequin.ts`).
 
 El maniquí realista (`tools/skin_new.json`) ya no se descarga en la app: solo se usa para sacar los mapas de músculos
 de los resúmenes (`public/mapa-musculos-delante.png` y `-detras.png`), que la app colorea según lo entrenado
-(`src/ui/components/bodyMaps.ts`). Para volver a generarlos: `npm run dev`, `node tools/bodymap.cjs 5174 carpeta` y
+(`src/ui/components/bodyMaps.ts`). Para volver a generarlos: `python3 tools/bodymap/adult_face.py tools/skin_new.json tools/skin_map.json`
+(cara de hombre adulto y cabeza algo mayor), `npm run dev`, `node tools/bodymap.cjs 5174 carpeta` y
 `python3 tools/bodymap/pack.py carpeta public` (el recorte que imprime va en `BOX` de `bodyMaps.ts`).
 Ese cuerpo parte del modelo base de [MakeHuman](http://www.makehumancommunity.org)
 (malla, esqueleto, pesos y ajustes de forma), publicado con licencia **CC0**, y se genera con

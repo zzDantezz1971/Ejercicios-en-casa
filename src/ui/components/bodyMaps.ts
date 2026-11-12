@@ -6,7 +6,7 @@
 
 const W = 440, H = 660;
 /** Recorte de cada vista dentro de la imagen final (x, y, ancho, alto); lo da tools/bodymap/pack.py. */
-const BOX = { delante: [154, 127, 132, 403], detras: [153, 126, 134, 411] } as const;
+const BOX = { delante: [154, 121, 132, 409], detras: [153, 120, 134, 417] } as const;
 type View = keyof typeof BOX;
 
 const data = new Map<View, Promise<ImageData | null>>();
