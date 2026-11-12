@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-12T09:51:12Z",
+    "es": ["Un solo muñeco: los ejercicios se ven siempre con el muñeco de piezas. Se quita de Configuración la opción de elegir el realista o el de dibujo."],
+    "ca": ["Un sol ninot: els exercicis es veuen sempre amb el ninot de peces. Es treu de Configuració l'opció de triar el realista o el de dibuix."],
+    "en": ["Just one figure: exercises are always shown with the pieces figure. The option to choose the realistic or drawing figure has been removed from Settings."]
+  },
+  {
     "fecha": "2026-11-12T09:46:04Z",
     "es": ["Muñeco realista: los pies tienen un tamaño más natural y quedan planos; ya no parecen pequeños ni de puntillas."],
     "ca": ["Ninot realista: els peus tenen una mida més natural i queden plans; ja no semblen petits ni de puntetes."],
