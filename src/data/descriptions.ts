@@ -326,7 +326,7 @@ export const DESCRIPTIONS: Record<string, ExerciseDescription> = {
   /* ───────────── Estiramientos ───────────── */
   'inclinacion-lateral-de-cuello': {
     start: 'Sentado o de pie, espalda recta y hombros relajados.',
-    move: 'Inclina la cabeza llevando la oreja hacia el hombro y mantén. A mitad del tiempo cambia de lado.',
+    move: 'Inclina la cabeza llevando la oreja hacia un hombro, mantén unos segundos y cambia al otro lado. Ve alternando.',
     tip: 'Respira despacio. El hombro contrario baja, no sube.',
     mistakes: 'Girar la cabeza o forzar con la mano.',
     easier: 'Menos inclinación.',
@@ -438,7 +438,7 @@ export const DESCRIPTIONS: Record<string, ExerciseDescription> = {
   },
   'medio-triangulo': {
     start: 'De pie con las piernas bien separadas y los pies en paralelo.',
-    move: 'Desliza una mano por la pierna hacia abajo y sube el otro brazo por encima de la cabeza, inclinándote hacia el lado. Mantén y cambia de lado a mitad del tiempo.',
+    move: 'Desliza una mano por la pierna hacia abajo y sube el otro brazo por encima de la cabeza, inclinándote hacia el lado. Mantén unos segundos y cambia al otro lado. Ve alternando.',
     tip: 'Espalda erguida y pelvis adelantada: la inclinación es lateral, no hacia delante. Respira hondo.',
     mistakes: 'Inclinarte hacia delante o girar la pelvis.',
     easier: 'Baja la mano solo hasta el muslo.',
@@ -494,7 +494,7 @@ export const DESCRIPTIONS: Record<string, ExerciseDescription> = {
   },
   'inclinacion-lateral-de-pie': {
     start: 'De pie, brazos por encima de la cabeza.',
-    move: 'Inclina el tronco hacia un lado estirando el costado contrario. Mantén y cambia de lado a mitad del tiempo.',
+    move: 'Inclina el tronco hacia un lado estirando el costado contrario, mantén unos segundos y cambia al otro lado. Ve alternando.',
     tip: 'Crece hacia arriba antes de inclinarte.',
     mistakes: 'Inclinarte hacia delante.',
     easier: 'Una mano en la cintura.',
@@ -557,7 +557,7 @@ export const DESCRIPTIONS: Record<string, ExerciseDescription> = {
   },
   'zancada-lateral': {
     start: 'De pie, piernas muy separadas.',
-    move: 'Dobla una rodilla llevando el peso a ese lado con la otra pierna estirada. Mantén. A mitad del tiempo cambia.',
+    move: 'Dobla una rodilla llevando el peso a ese lado con la otra pierna estirada. Mantén unos segundos y pasa al otro lado sin mover los pies. Ve alternando.',
     tip: 'Los pies apoyados del todo y la espalda recta.',
     mistakes: 'Que la rodilla doblada se vaya hacia dentro.',
     easier: 'Baja menos.',

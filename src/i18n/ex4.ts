@@ -47,8 +47,8 @@ export const EX4: Record<string, { ca: ExT; en: ExT }> = {
     en: ['Butterfly stretch', 'Groin and hips', 'Sit, bring the soles of your feet together and let your knees fall out to the sides.', 'Hold your feet and let your knees sink. You can gently move them up and down.', 'Back straight. The closer your feet are to your body, the more intense.', 'Pushing your knees down hard.', 'Feet further away or back against a wall.'],
   },
   'zancada-lateral': {
-    ca: ['Gambada lateral', 'Adductors', 'Dempeus, cames molt separades.', 'Doblega un genoll portant el pes cap a aquell costat amb l’altra cama estirada. Aguanta. A la meitat del temps canvia.', 'Els peus ben recolzats i l’esquena recta.', 'Que el genoll doblegat vagi cap a dins.', 'Baixa menys.'],
-    en: ['Side lunge stretch', 'Adductors', 'Stand with your legs wide apart.', 'Bend one knee, shifting your weight to that side with the other leg straight. Hold. Halfway through, switch.', 'Feet fully planted and back straight.', 'Letting the bent knee cave inwards.', 'Go less deep.'],
+    ca: ['Gambada lateral', 'Adductors', 'Dempeus, cames molt separades.', 'Doblega un genoll portant el pes cap a aquell costat amb l’altra cama estirada. Aguanta uns segons i passa a l’altre costat sense moure els peus. Ves alternant.', 'Els peus ben recolzats i l’esquena recta.', 'Que el genoll doblegat vagi cap a dins.', 'Baixa menys.'],
+    en: ['Side lunge stretch', 'Adductors', 'Stand with your legs wide apart.', 'Bend one knee, shifting your weight to that side with the other leg straight. Hold for a few seconds and move to the other side without moving your feet. Keep alternating.', 'Feet fully planted and back straight.', 'Letting the bent knee cave inwards.', 'Go less deep.'],
   },
   'sentadilla-sumo-profunda': {
     ca: ['Esquat sumo profund', 'Adductors i maluc', 'Dempeus, cames molt obertes i puntes cap enfora.', 'Baixa el maluc i empeny els genolls cap enfora amb els colzes, mans juntes davant del pit. Aguanta.', 'Talons a terra i pit amunt.', 'Que s’aixequin els talons.', 'Agafa’t a alguna cosa al davant o baixa menys.'],

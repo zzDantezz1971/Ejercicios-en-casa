@@ -33,22 +33,18 @@ const ONE_SIDED = new Set([
   'plancha-lateral',
   'plancha-lateral-con-elevacion-de-cadera',
   'inclinaciones-laterales-con-mancuerna',
-  'inclinacion-lateral-de-cuello',
   'hombro-cruzado',
   'triceps-detras-de-la-cabeza',
   'estiramiento-de-antebrazos',
   'torsion-lumbar-tumbado',
   'torsion-de-columna-con-piernas-cruzadas',
   'hilo-en-la-aguja',
-  'inclinacion-lateral-de-pie',
   'figura-4-gluteo-y-piriforme',
   'isquiotibiales-tumbado',
   'cuadriceps-de-pie',
   'gemelos-contra-la-pared',
   'flexores-de-cadera-rodilla-en-el-suelo',
   'puente-a-una-pierna',
-  'zancada-lateral',
-  'medio-triangulo',
 ]);
 
 /**

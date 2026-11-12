@@ -63,7 +63,10 @@ export interface MotionSpec {
   mark?: string[];
   props?: (j: Record<string, [number, number]>, p: PropHelpers) => PropOp[];
   /** Material que se mueve con el cuerpo (ver figure/Mannequin.ts, updateGear). */
-  kb?: 'L' | 'R' | 'both';
+  /** Pesa rusa: en una mano, cogida con las dos, o 'up': en la mano que está más arriba (pasa de una a otra). */
+  kb?: 'L' | 'R' | 'both' | 'up';
+  /** Repite los fotogramas reflejados: el ejercicio alterna los dos lados (sin hacerse por lados). */
+  alternate?: boolean;
   /** Agarre martillo: las mancuernas de canto (palmas enfrentadas). */
   hammer?: boolean;
   /** Manos juntas (giros rusos…). */

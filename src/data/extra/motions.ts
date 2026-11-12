@@ -285,9 +285,13 @@ export const EXTRA_MOTIONS: Record<string, M> = {
     const faL = (Math.atan2(ty - eL[1], tx - eL[0]) * 180) / Math.PI, faR = (Math.atan2(ty - eR[1], tx - eR[0]) * 180) / Math.PI;
     return { uaL: 250, uaR: -70, faL, faR, zEL: 4 + tz * 0.4, zER: 4 + tz * 0.4, zHL: tz, zHR: tz };
   } },
-  'molino-con-pesa-rusa': { kb: 'L', armsOut: true, f: [
-    [{ uaL: -88, faL: -88, saL: 0.95, uaR: 92, faR: 92, saR: 0.08, zKL: -7, zAL: -13, zKR: 7, zAR: 13, hd: -100 }, 300, 1100],
-    [{ tl: -14, tu: -6, hd: 20, uaR: 96, faR: 100, uaL: -88, faL: -88, saL: 0.95, zKL: -7, zAL: -13, zKR: 7, zAR: 13 }, 600, 1100]] },
+  // de frente y alternando: la pesa arriba en una mano, inclinación hacia el otro lado (la otra mano baja por la pierna);
+  // al subir, la pesa pasa a la otra mano por encima de la cabeza y se repite hacia el otro lado
+  'molino-con-pesa-rusa': { v: 'front', kb: 'up', alternate: true, f: [
+    [{ thL: 110, snL: 110, thR: 70, snR: 70, uaR: -90, faR: -90, uaL: 100, faL: 97, hd: -102 }, 250, 1100],
+    [{ thL: 110, snL: 110, thR: 70, snR: 70, tl: -112, tu: -146, hd: -120, uaR: -90, faR: -90, uaL: 108, faL: 110 }, 600, 1100],
+    [{ thL: 110, snL: 110, thR: 70, snR: 70, uaR: -90, faR: -90, uaL: 100, faL: 97, hd: -102 }, 100, 700],
+    [{ thL: 110, snL: 110, thR: 70, snR: 70, uaR: -97, faR: -97, uaL: -83, faL: -83, hd: -96 }, 250, 700]] },
   'ocho-con-pesa-rusa': { kb: 'both', plant: 'anR', per: 2600, fn: (t) => {
     const a = t * Math.PI * 2, z = 18 * Math.sin(a);
     return { tl: -36, th: 72, sn: 108, hd: -46, ua: 96 + 10 * Math.sin(2 * a), fa: 98 + 10 * Math.sin(2 * a), zHL: 15.5 + z, zHR: -15.5 + z, zEL: 6 + z * 0.4, zER: -6 + z * 0.4 };

@@ -674,7 +674,7 @@ export class MannequinScene {
     const spec = this.motion.spec, G = this.geo;
     const iron = this.mat('#2E3440', 0.45, 0.35), steel = this.mat(this.pal.iron, 0.3, 0.4);
     const many = (n: number, g: THREE.BufferGeometry, m: THREE.Material) => Array.from({ length: n }, () => this.add(g, m));
-    if (spec.kb) for (const h of spec.kb === 'both' ? ['L', 'R'] : [spec.kb]) this.gear['kb' + h] = [this.add(G.sph, iron), this.add(G.ring, iron)];
+    if (spec.kb) for (const h of spec.kb === 'both' ? ['L', 'R'] : spec.kb === 'up' ? ['L'] : [spec.kb]) this.gear['kb' + h] = [this.add(G.sph, iron), this.add(G.ring, iron)];
     if (spec.bar) this.gear.bar = [this.add(G.cyl, steel), ...many(4, G.cyl, iron)];
     if (spec.band) this.gear.band = many(2, G.cyl, this.mat(this.pal.band, 0.55));
     if (spec.ball) this.gear.ball = [this.add(G.sph, this.mat('#4F7DF0', 0.35))];
@@ -702,7 +702,14 @@ export class MannequinScene {
       const kb = g['kb' + h];
       if (!kb) continue;
       // con las dos manos (kb: 'both' en una sola pesa) se agarra por el centro
-      const c = spec.kb === 'both' && h === 'R' ? null : spec.kb === 'both' ? grip('L').lerp(grip('R'), 0.5) : grip(h);
+      let c = spec.kb === 'both' && h === 'R' ? null : spec.kb === 'both' ? grip('L').lerp(grip('R'), 0.5) : grip(h);
+      if (spec.kb === 'up') {
+        // en la mano de arriba; con las dos manos juntas por encima de la cabeza pasa de una a otra
+        const gL = grip('L'), gR = grip('R');
+        const dy = gL.y - gR.y, close = Math.min(1, Math.max(0, (14 - gL.distanceTo(gR)) / 8));
+        const w = close > 0 ? 0.5 + Math.max(-0.5, Math.min(0.5, dy / 12)) * (1 - close) : dy >= 0 ? 1 : 0;
+        c = gR.clone().lerp(gL, w);
+      }
       kb.forEach((m) => (m.visible = !!c));
       if (!c) continue;
       kb[1].position.copy(c).add(V(0, -1.5, 0));

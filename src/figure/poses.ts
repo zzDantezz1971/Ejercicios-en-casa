@@ -175,6 +175,8 @@ export class Motion {
         const r = resolve(this.view, p);
         return { p: this.mirrored ? mirrorPose(this.view, r) : r, h: h ?? 300, d: d ?? 800 };
       });
+      // alternate: tras los fotogramas, los mismos reflejados (el ejercicio va de un lado al otro sin pararse)
+      if (spec.alternate) this.frames = this.frames.concat(this.frames.map((x) => ({ ...x, p: mirrorPose(this.view, x.p) })));
       this.total = this.frames.reduce((s, x) => s + x.h + x.d, 0);
     }
     if (this.plant) this.plantX = joints(this.view, this.poseAt(0))[this.plant][0];
