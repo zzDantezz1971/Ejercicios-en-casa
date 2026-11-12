@@ -159,6 +159,8 @@ export interface Settings {
   /** Al empezar, preguntar por el reloj (pulsaciones) si no está conectado. */
   askWatch: boolean;
   /** Datos personales para calcular las calorías. */
+  /** Aspecto del muñeco (Configuración › Personaliza el muñeco). */
+  look?: Partial<import('../figure/look').Look>;
   profile: Profile;
   /** Idioma de la app. */
   lang: 'ca' | 'es' | 'en';

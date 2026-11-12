@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-12T17:58:10Z",
+    "es": ["Nuevo: personaliza el muñeco (Configuración › Personaliza el muñeco). Elige el color de la piel, la camiseta, el pantalón y las zapatillas; con prémium, también gafas (graduadas o de sol) y barba. Se ve en todos los ejercicios."],
+    "ca": ["Nou: personalitza el ninot (Configuració › Personalitza el ninot). Tria el color de la pell, la samarreta, el pantaló i les sabatilles; amb prèmium, també ulleres (graduades o de sol) i barba. Es veu a tots els exercicis."],
+    "en": ["New: customise the figure (Settings › Customise the figure). Choose the colour of the skin, T-shirt, shorts and trainers; with premium, also glasses (regular or sunglasses) and a beard. It shows in every exercise."]
+  },
+  {
     "fecha": "2026-11-12T17:36:44Z",
     "es": ["Se retira «Tu cara en el muñeco» de Mis datos: el muñeco vuelve a tener su cara de siempre. Más adelante llegará una versión mejor."],
     "ca": ["Es retira «La teva cara al ninot» de Les meves dades: el ninot torna a tenir la seva cara de sempre. Més endavant arribarà una versió millor."],

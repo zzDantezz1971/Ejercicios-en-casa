@@ -1340,3 +1340,17 @@ body:has(.page-lifted) { overflow-x: hidden; }
 .page-lifted { position: relative; z-index: 2; background: var(--bg); box-shadow: 0 0 48px rgba(0, 0, 0, .55); will-change: transform; backface-visibility: hidden; }
 .page-shade { position: absolute; inset: 0; z-index: 60; pointer-events: none; opacity: 0; }
 .page-peek { position: fixed; inset: 0; z-index: 1; background: var(--bg); pointer-events: none; overflow: hidden; will-change: transform, opacity; }
+
+/* Personaliza el muñeco */
+.look-stage { margin-bottom: 14px; }
+.look-card { display: flex; flex-direction: column; gap: 14px; }
+.look-row { display: flex; flex-direction: column; gap: 8px; }
+.look-row strong { font-size: .92rem; }
+.swatches { display: flex; flex-wrap: wrap; gap: 10px; }
+.swatch { width: 34px; height: 34px; border-radius: 50%; background: var(--c); border: 2px solid var(--line); padding: 0; cursor: pointer; box-shadow: inset 0 0 0 2px rgb(0 0 0 / .12); }
+.swatch.on { border-color: var(--fg); box-shadow: 0 0 0 3px var(--accent); }
+.look-card .segmented.locked .seg { opacity: .55; }
+.look-open { width: 100%; text-align: left; cursor: pointer; }
+.look-open .rest-head > .ico:last-child { margin-left: auto; color: var(--muted); }
+.look-screen .settings-body { gap: 14px; }
+.look-screen .look-stage { position: sticky; top: 60px; z-index: 3; aspect-ratio: 16 / 9; box-shadow: 0 10px 20px rgb(0 0 0 / .35); }

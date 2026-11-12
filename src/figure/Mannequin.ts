@@ -3,6 +3,7 @@ import type { MotionSpec, PropOp } from '../domain/types';
 import { LEN, Motion, type Joints, type Pose, type Side } from './poses';
 import { anatomyMaterial } from './anatomy';
 import { getFigureStyle } from './skinAsset';
+import { getLook, hairColor, type Look } from './look';
 import { toonify } from './toon';
 import { SkinnedFigure, type SkinData } from './SkinnedFigure';
 
@@ -40,6 +41,11 @@ export const DEFAULT_PALETTE: Palette = {
   stripe: '#F3F5F8', band: '#FF7A33',
   iron: '#C9D0DA', bench: '#2B323D', benchLeg: '#8893A3', mat: '#26365C', wall: '#262E39',
 };
+
+/** Paleta con los colores elegidos en «Personaliza el muñeco». */
+export function lookPalette(l: Look = getLook()): Palette {
+  return { ...DEFAULT_PALETTE, skin: l.skin, shirt: l.shirt, shorts: l.shorts, shoe: l.shoe, brow: hairColor(l.skin) };
+}
 
 const SIDE_W = { arm: 15.5, leg: 8.5 };
 
@@ -204,7 +210,7 @@ export class MannequinScene {
   /** Agarra algo con las manos (mancuernas, barra, banda, comba...): puño cerrado. */
   private readonly grips: boolean;
 
-  constructor(spec: MotionSpec, private readonly pal: Palette = DEFAULT_PALETTE, side: Side = undefined, skin?: SkinData, anatomy?: { L: number[]; R: number[]; map?: boolean; debug?: number }) {
+  constructor(spec: MotionSpec, private readonly pal: Palette = lookPalette(), side: Side = undefined, skin?: SkinData, anatomy?: { L: number[]; R: number[]; map?: boolean; debug?: number }) {
     this.motion = new Motion(spec, side);
     this.grips = !!(spec.fist || spec.db || spec.kb || spec.bar || spec.band === 'hands' || spec.band === 'feet' || typeof spec.band === 'function' || spec.rope || spec.wheel);
     this.skinData = skin;
@@ -274,6 +280,8 @@ export class MannequinScene {
     return x;
   }
 
+  private readonly look = getLook();
+
   private buildBody(): void {
     const p = this.pal, P = this.parts, G = this.geo;
     const M = {
@@ -315,6 +323,26 @@ export class MannequinScene {
     P.nose = this.add(G.sph, M.skin, false);
     P.mouthFlat = this.add(G.box, M.mouth, false);
     P.mouthSmile = this.add(this.geo.smile, M.mouth, false);
+    // gafas y barba (prémium)
+    const look = getLook();
+    if (look.glasses !== 'none') {
+      const sun = look.glasses === 'sun';
+      const frame = this.mat(sun ? '#1A1A1A' : '#2B2B2B', 0.35, 0.4);
+      const lens = new THREE.MeshStandardMaterial({ color: sun ? '#14181E' : '#CFE3FF', roughness: 0.12, metalness: 0.3, transparent: !sun, opacity: sun ? 1 : 0.25 });
+      this.disposables.push(lens);
+      for (const s of ['L', 'R']) {
+        P['glassRim' + s] = this.add(this.geo.ring, frame, false);
+        P['glassLens' + s] = this.add(G.cyl, lens, false);
+        P['glassArm' + s] = this.add(G.box, frame, false);
+      }
+      P.glassBridge = this.add(G.box, frame, false);
+    }
+    if (look.beard !== 'none') {
+      const beardM = this.mat(hairColor(look.skin), 0.95);
+      if (look.beard === 'stubble') { beardM.transparent = true; beardM.opacity = 0.45; }
+      P.beard = this.add(G.sph, beardM, false);
+      P.moustache = this.add(G.box, beardM, false);
+    }
     this.buildDumbbells(M.iron);
     // pesa rusa, barra, bandas, fitball, comba y rueda: también con el maniquí de piezas
     this.buildGear();
@@ -652,7 +680,8 @@ export class MannequinScene {
       this.oriented(P['brow' + s], head.clone().addScaledVector(face, 7.9).addScaledVector(up, browH).addScaledVector(lat, 3.2 * sg), browAlong, up, 1.7, 0.55, 0.6);
     }
     this.oriented(P.nose, head.clone().addScaledVector(face, 9.3).addScaledVector(up, -1.2), up, lat, 2.0, 1.3, 1.6);
-    const mouthAt = head.clone().addScaledVector(face, 8.3).addScaledVector(up, -4.9);
+    // con barba, la boca un poco más adelante para que se vea por encima
+    const mouthAt = head.clone().addScaledVector(face, P.beard ? 9.1 : 8.3).addScaledVector(up, -4.9);
     P.mouthFlat.visible = mood === 'effort';
     P.mouthSmile.visible = mood !== 'effort';
     if (mood === 'effort') {
@@ -661,6 +690,29 @@ export class MannequinScene {
       const R = mood === 'happy' ? 2.7 : mood === 'relaxed' ? 2.3 : 2.0;
       const curve = mood === 'neutral' ? 0.6 : 1;
       this.smileAt(P.mouthSmile, mouthAt.clone().addScaledVector(up, R * curve), lat, up, face, R, curve);
+    }
+
+    // gafas: aros delante de los ojos, puente sobre la nariz y patillas hacia las orejas
+    if (P.glassBridge) {
+      for (const s of ['L', 'R']) {
+        const sg = s === 'L' ? -1 : 1;
+        const c = head.clone().addScaledVector(face, 9.35).addScaledVector(up, 1.4).addScaledVector(lat, 3.2 * sg);
+        P['glassRim' + s].position.copy(c);
+        P['glassRim' + s].quaternion.setFromUnitVectors(V(0, 0, 1), face);
+        P['glassRim' + s].scale.set(2.35, 2.35, 2.0);
+        this.oriented(P['glassLens' + s], c.clone().addScaledVector(face, -0.05), face, up, 0.12, 2.15, 1.85);
+        const arm0 = head.clone().addScaledVector(face, 8.6).addScaledVector(up, 1.6).addScaledVector(lat, 5.5 * sg);
+        const arm1 = head.clone().addScaledVector(face, 0.5).addScaledVector(up, 1.2).addScaledVector(lat, 8.3 * sg);
+        this.oriented(P['glassArm' + s], arm0.clone().lerp(arm1, 0.5), arm1.clone().sub(arm0), up, arm0.distanceTo(arm1), 0.45, 0.45);
+      }
+      this.oriented(P.glassBridge, head.clone().addScaledVector(face, 9.7).addScaledVector(up, 1.8), lat, up, 1.6, 0.45, 0.45);
+    }
+    // barba: por la mandíbula y la barbilla, y bigote
+    if (P.beard) {
+      const full = this.look.beard === 'full';
+      // por la mandíbula y la barbilla, por debajo de la boca; el bigote encima de la boca
+      this.oriented(P.beard, head.clone().addScaledVector(up, full ? -6.0 : -5.6).addScaledVector(face, full ? 3.6 : 3.4), up, lat, full ? 4.8 : 4.3, full ? 6.5 : 6.0, full ? 6.3 : 6.0);
+      this.oriented(P.moustache, head.clone().addScaledVector(face, 9.45).addScaledVector(up, -3.4), lat, up, full ? 3.6 : 3.2, full ? 0.9 : 0.6, 0.7);
     }
 
     this.updateDumbbells(J, side);

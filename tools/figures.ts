@@ -5,8 +5,11 @@ import { SECTIONS } from '../src/data/catalog';
 import { MannequinScene } from '../src/figure/Mannequin';
 import type { SkinData } from '../src/figure/SkinnedFigure';
 import { muscleWeights } from '../src/figure/anatomy';
+import { setLook } from '../src/figure/look';
 
 const q = new URLSearchParams(location.search);
+// &look={"glasses":"sun",...}: aspecto del muñeco (como en «Personaliza el muñeco»)
+if (q.get('look')) setLook(JSON.parse(q.get('look')!), () => true);
 const ids = q.get('ids')?.split(',');
 const sec = q.get('s');
 const mood = (q.get('mood') ?? 'relaxed') as 'neutral' | 'effort' | 'relaxed' | 'happy';

@@ -1,4 +1,5 @@
 import { setFigureStyle } from '../figure/skinAsset';
+import { setLook } from '../figure/look';
 import { HeartRate } from '../services/HeartRate';
 import { Access } from '../services/Access';
 import { durableStorage } from '../platform/durable';
@@ -106,6 +107,8 @@ export class App {
 
   applySettings(): void {
     setFigureStyle(this.store.settings.figureStyle);
+    // aspecto del muñeco (las gafas y la barba, solo con prémium)
+    setLook(this.store.settings.look, () => this.access.premium);
     this.sounds.enabled = this.store.settings.sound;
     this.voice.enabled = this.store.settings.voice;
     this.haptics.enabled = this.store.settings.sound;

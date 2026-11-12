@@ -9,6 +9,7 @@ import { SECTION_IDS, SECTION_TITLES, type Settings } from '../../domain/types';
 import { pickBackupFile } from '../../services/Backup';
 import { BACKUP_EVERY_DAYS, saveBackupNow } from '../components/backupPrompt';
 import type { App, Screen } from '../App';
+import { LookScreen } from './LookScreen';
 import { append, clear, confirmDialog, h, plural } from '../dom';
 import { icon, SECTION_STYLE, type IconName } from '../icons';
 
@@ -86,6 +87,15 @@ export class SettingsScreen implements Screen {
 
   /** Idioma de la app: al cambiarlo se recarga para pintarlo todo de nuevo. */
   /** Modo oscuro, claro o el del sistema. */
+  /** Personaliza el muñeco: abre su pantalla. */
+  private lookCard(): HTMLElement {
+    return h('button', { class: 'card setting rest-card look-open', onclick: () => this.app.push(new LookScreen(this.app)) },
+      h('div', { class: 'rest-head' },
+        h('span', { class: 'set-icon' }, icon('user')),
+        h('div', { class: 'set-text' }, h('strong', {}, 'Personaliza el muñeco'), h('p', { class: 'muted small' }, 'Colores de piel y ropa, gafas y barba.')),
+        icon('chevron')));
+  }
+
   private themeCard(s: Settings): HTMLElement {
     const pick = (t: Settings['theme']) => {
       this.update({ theme: t });
@@ -264,7 +274,7 @@ export class SettingsScreen implements Screen {
     clear(this.body);
     this.body.append(
       h('h3', { class: 'block-title' }, IS_NATIVE ? 'Suscripción' : 'Prémium'), this.accessCard(),
-      h('h3', { class: 'block-title' }, 'Apariencia'), this.themeCard(s),
+      h('h3', { class: 'block-title' }, 'Apariencia'), this.themeCard(s), this.lookCard(),
       h('h3', { class: 'block-title' }, 'Idioma'), this.langCard(),
       h('h3', { class: 'block-title' }, 'Tiempos'), this.restCard(s));
     // cuenta atrás y duración inicial: en una sola tarjeta, con el título y el contador en la misma fila
