@@ -511,6 +511,7 @@ const ROWS: Row[] = [
   ['Pantalla', 'Pantalla', 'Display'],
   ['Muñeco', 'Ninot', 'Figure'],
   ['Motivación', 'Motivació', 'Motivation'],
+  ['Nombre', 'Nom', 'Name'],
   ['Cuerpo y pelo', 'Cos i cabell', 'Body and hair'],
   ['Cuerpo', 'Cos', 'Body'],
   ['Peinado', 'Pentinat', 'Hairstyle'],

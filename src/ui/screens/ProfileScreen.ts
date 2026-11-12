@@ -46,7 +46,7 @@ export class ProfileScreen implements Screen {
       h('button', { class: 'seg' + (p.sex === v ? ' on' : ''), 'aria-pressed': String(p.sex === v), onclick: () => set({ sex: v }) }, SEX_LABELS[v]);
     return h('section', { class: 'card setting rest-card' },
       h('div', { class: 'rest-row profile-row name-row' },
-        h('label', { class: 'rest-name', for: 'set-name' }, 'Nombre o alias'),
+        h('label', { class: 'rest-name', for: 'set-name' }, 'Nombre'),
         h('input', { id: 'set-name', class: 'text-input small', type: 'text', maxlength: 24, placeholder: 'Cómo quieres que te llame', value: p.name ?? '', autocomplete: 'off',
           onchange: (e: Event) => set({ name: (e.target as HTMLInputElement).value.replace(/\s+/g, ' ').trim() || undefined }) })),
       stepper('Edad', p.age, 'años', 50, 1, 15, 99, (v) => set({ age: v })),

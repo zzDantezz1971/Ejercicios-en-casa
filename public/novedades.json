@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-12T19:25:04Z",
+    "es": ["Mis datos: el campo se llama ahora simplemente «Nombre»."],
+    "ca": ["Les meves dades: el camp ara es diu simplement «Nom»."],
+    "en": ["My details: the field is now simply called «Name»."]
+  },
+  {
     "fecha": "2026-11-12T18:30:24Z",
     "es": ["Configuración: el apartado de las frases motivadoras se llama ahora «Motivación» (antes «Inicio»)."],
     "ca": ["Configuració: l'apartat de les frases motivadores ara es diu «Motivació» (abans «Inici»)."],
