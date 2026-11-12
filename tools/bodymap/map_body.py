@@ -112,6 +112,16 @@ body = (np.isin(PART, [0, 1, 2, 3, 4]) & (P[:, 1] < 56.0)).astype(float)[:, None
 nip = (g(np.abs(P[:, 0]), 6.3, 1.6) * g(P[:, 1], 43.0, 1.6) * up(P[:, 2], 6.0, 9.0) * (PART == 0))[:, None]
 for _ in range(12):
     P = P + 0.5 * nip * Lap(P)
+# hombros redondeados: la esquina de arriba y por fuera (en pico) se alisa
+shw = np.zeros(len(P))
+for k, s_ in (('uaL', 1), ('uaR', -1)):
+    a_ = np.array(d['rest'][k][0])
+    c_ = a_ + np.array([1.8 * s_, 3.0, 0.0])
+    shw = np.maximum(shw, np.exp(-np.sum((P - c_) ** 2, 1) / 5.5 ** 2))
+shw = shw[:, None] * (P[:, 1] < 56.0)[:, None]
+for _ in range(80):
+    P = P + 0.5 * shw * Lap(P)
+    P = P - 0.52 * shw * Lap(P)
 N = normals(P)
 x, y, z = P[:, 0], P[:, 1], P[:, 2]
 ax = np.abs(x); sx = np.sign(x)
@@ -144,7 +154,9 @@ for k, s in (('uaL', 1), ('uaR', -1)):
     rn = radial / np.maximum(np.linalg.norm(radial, axis=1, keepdims=True), 1e-6)
     sidew = (np.sign(x) == s) & (y < 56.0)
     arm = np.isin(PART, [1, 2]) & sidew
-    D += g(t, 0.06, 0.16) * sidew * (np.isin(PART, [1, 2]) | (np.linalg.norm(v, axis=1) < 7)) * 0.7
+    # deltoides: hacia el lado (no hacia arriba, que hacía pico)
+    side_out = np.clip(rn[:, 0] * s, 0, 1)
+    D += g(t, 0.16, 0.14) * side_out * arm * 0.75
     D += g(t, 0.5, 0.2) * np.clip(rn[:, 2], 0, 1) * arm * 0.5
     D += g(t, 0.45, 0.22) * np.clip(-rn[:, 2], 0, 1) * arm * 0.4
 # muslos: cuádriceps (delante y por fuera), la «lágrima» por dentro encima de la rodilla, isquios detrás
@@ -156,9 +168,11 @@ for k, part, s in (('thL', 3, 1), ('thR', 4, -1)):
     rn = radial / np.maximum(np.linalg.norm(radial, axis=1, keepdims=True), 1e-6)
     leg = (PART == part).astype(float)
     fr, outer, inner = np.clip(rn[:, 2], 0, 1), np.clip(rn[:, 0] * s, 0, 1), np.clip(-rn[:, 0] * s, 0, 1)
-    D += leg * g(t, 0.5, 0.26) * np.clip(fr * 0.8 + outer * 0.5, 0, 1) * 0.75
-    D += leg * g(t, 0.8, 0.09) * np.clip(fr * 0.5 + inner, 0, 1) * 0.45
-    D += leg * g(t, 0.5, 0.26) * np.clip(-rn[:, 2], 0, 1) * 0.35
+    # (nada por dentro: los muslos se juntaban; al revés, la cara interna se afina un poco)
+    D += leg * g(t, 0.5, 0.26) * np.clip(fr * 0.8 + outer * 0.5 - inner, 0, 1) * 0.75
+    D += leg * g(t, 0.8, 0.09) * np.clip(fr * 0.6 + inner * 0.4, 0, 1) * 0.4
+    D += leg * g(t, 0.5, 0.26) * np.clip(-rn[:, 2] - inner * 0.5, 0, 1) * 0.35
+    D -= leg * g(t, 0.38, 0.32) * inner ** 2 * 1.0
 # el relieve se difumina un poco para que las formas se fundan entre sí
 for _ in range(8):
     D = D + 0.5 * Lap(D) * body[:, 0]
