@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-12T18:27:13Z",
+    "es": ["Configuración más ordenada: primero Idioma, luego Pantalla (antes «Apariencia») y un apartado nuevo, Muñeco, para personalizarlo. Se quita el peinado rapado."],
+    "ca": ["Configuració més ordenada: primer Idioma, després Pantalla (abans «Aparença») i un apartat nou, Ninot, per personalitzar-lo. Es treu el pentinat rapat."],
+    "en": ["Tidier Settings: Language first, then Display (formerly «Appearance») and a new Figure section to customise it. The buzz cut hairstyle has been removed."]
+  },
+  {
     "fecha": "2026-11-12T18:11:20Z",
     "es": ["Personaliza el muñeco, más opciones: color del pelo (gratis) y, con prémium, cuerpo de hombre o de mujer, peinado (rapado, corto, media melena, melena, coleta o moño), camiseta de manga corta, sin mangas o de manga larga y pantalón corto o mallas largas. Y un botón de Guardar."],
     "ca": ["Personalitza el ninot, més opcions: color del cabell (gratis) i, amb prèmium, cos d'home o de dona, pentinat (rapat, curt, mitja melena, melena, cua o monyo), samarreta de màniga curta, sense mànigues o de màniga llarga i pantaló curt o malles llargues. I un botó de Desa."],

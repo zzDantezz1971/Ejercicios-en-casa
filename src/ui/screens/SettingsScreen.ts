@@ -274,8 +274,9 @@ export class SettingsScreen implements Screen {
     clear(this.body);
     this.body.append(
       h('h3', { class: 'block-title' }, IS_NATIVE ? 'Suscripción' : 'Prémium'), this.accessCard(),
-      h('h3', { class: 'block-title' }, 'Apariencia'), this.themeCard(s), this.lookCard(),
       h('h3', { class: 'block-title' }, 'Idioma'), this.langCard(),
+      h('h3', { class: 'block-title' }, 'Pantalla'), this.themeCard(s),
+      h('h3', { class: 'block-title' }, 'Muñeco'), this.lookCard(),
       h('h3', { class: 'block-title' }, 'Tiempos'), this.restCard(s));
     // cuenta atrás y duración inicial: en una sola tarjeta, con el título y el contador en la misma fila
     this.body.append(h('section', { class: 'card setting-list' },

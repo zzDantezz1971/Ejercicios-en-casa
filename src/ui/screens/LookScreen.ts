@@ -103,7 +103,7 @@ export class LookScreen implements Screen {
       h('section', { class: 'card look-card' },
         h('div', { class: 'card-head' }, h('h3', {}, 'Cuerpo y pelo'), lock),
         chips<'body'>('Cuerpo', 'body', [['man', 'Hombre'], ['woman', 'Mujer']] as Array<[Body, string]>),
-        chips<'hair'>('Peinado', 'hair', [['none', 'Sin pelo'], ['buzz', 'Rapado'], ['short', 'Corto'], ['bob', 'Media melena'], ['long', 'Melena'], ['ponytail', 'Coleta'], ['bun', 'Moño']] as Array<[Hair, string]>)),
+        chips<'hair'>('Peinado', 'hair', [['none', 'Sin pelo'], ['short', 'Corto'], ['bob', 'Media melena'], ['long', 'Melena'], ['ponytail', 'Coleta'], ['bun', 'Moño']] as Array<[Hair, string]>)),
       h('section', { class: 'card look-card' },
         h('div', { class: 'card-head' }, h('h3', {}, 'Ropa'), lock?.cloneNode(true) ?? null),
         chips<'top'>('Camiseta', 'top', [['tee', 'Manga corta'], ['tank', 'Sin mangas'], ['long', 'Manga larga']] as Array<[Top, string]>),

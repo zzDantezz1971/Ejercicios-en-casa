@@ -726,7 +726,7 @@ export class MannequinScene {
       const wide = H === 'bob' || H === 'long';
       const tilt = wide ? 1.32 : 0.62; // cuánto se inclina el casquete hacia atrás (rad): deja la frente y la cara
       const axis = up.clone().multiplyScalar(Math.cos(tilt)).addScaledVector(face, -Math.sin(tilt));
-      const k = H === 'buzz' ? 1.06 : H === 'short' ? 1.12 : wide ? 1.11 : 1.08;
+      const k = H === 'short' ? 1.12 : wide ? 1.11 : 1.08;
       this.oriented(P.hairCap, head.clone().addScaledVector(face, wide ? -0.6 : -0.2), axis, lat, 10 * k, 8.6 * k * (wide ? 1.04 : 1), 9.2 * k);
       if (P.hairBack) this.oriented(P.hairBack, head.clone().addScaledVector(up, -8).addScaledVector(face, -5.2), up, lat, 9.5, 8.6, 3.6);
       if (P.hairTie) {

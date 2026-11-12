@@ -2,7 +2,7 @@
 
 export type Glasses = 'none' | 'normal' | 'sun';
 export type Beard = 'none' | 'stubble' | 'full';
-export type Hair = 'none' | 'buzz' | 'short' | 'bob' | 'long' | 'ponytail' | 'bun';
+export type Hair = 'none' | 'short' | 'bob' | 'long' | 'ponytail' | 'bun';
 export type Top = 'tee' | 'tank' | 'long';
 export type Bottom = 'shorts' | 'leggings';
 export type Body = 'man' | 'woman';
@@ -48,6 +48,8 @@ export function getLook(): Look {
 
 export function setLook(l: Partial<Look> | undefined, isPremium: () => boolean): void {
   const next = { ...DEFAULT_LOOK, ...(l ?? {}) };
+  // el rapado se quitó: quien lo tuviera pasa a pelo corto
+  if ((next.hair as string) === 'buzz') next.hair = 'short';
   premium = isPremium;
   if (JSON.stringify(next) !== JSON.stringify(look)) version++;
   look = next;
