@@ -513,7 +513,7 @@ const ROWS: Row[] = [
   ['Motivación', 'Motivació', 'Motivation'],
   ['Ordenar:', 'Ordena:', 'Sort:'],
   ['Ordenar por', 'Ordena per', 'Sort by'],
-  ['Por zona', 'Per zona', 'By area'],
+  ['Zona del cuerpo', 'Zona del cos', 'Body area'],
   ['Por músculo (de cabeza a pies)', 'Per múscul (de cap a peus)', 'By muscle (head to toe)'],
   ['Por material', 'Per material', 'By equipment'],
   ['Alfabético (A-Z)', 'Alfabètic (A-Z)', 'Alphabetical (A-Z)'],

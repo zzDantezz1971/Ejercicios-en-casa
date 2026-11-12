@@ -132,7 +132,7 @@ export class RoutineScreen implements Screen {
         window.scrollTo(0, 0);
         this.render();
       } },
-        ...([['zona', 'Por zona'], ['musculo', 'Por músculo (de cabeza a pies)'], ['material', 'Por material'], ['az', 'Alfabético (A-Z)']] as Array<[ListSort, string]>)
+        ...([['zona', 'Zona del cuerpo'], ['musculo', 'Por músculo (de cabeza a pies)'], ['material', 'Por material'], ['az', 'Alfabético (A-Z)']] as Array<[ListSort, string]>)
           .map(([v, label]) => h('option', { value: v, selected: v === cur }, label)));
       this.toolbar.append(h('label', { class: 'sort-row' }, icon('tables'), h('span', { class: 'muted small' }, 'Ordenar:'), sel));
     }
