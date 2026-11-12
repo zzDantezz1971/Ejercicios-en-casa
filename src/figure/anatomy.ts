@@ -98,7 +98,8 @@ vec3 anatomy() {
   int part = int(floor(vPart + 0.5));
   vec3 p = vRest;
   gHi = vec3(0.0);
-  if (part == 7) return vec3(0.55, 0.47, 0.5);
+  // labios: en el mapa de los resúmenes, del color de la piel (rosados parecían de niño)
+  if (part == 7 && uMap < 0.5) return vec3(0.55, 0.47, 0.5);
   if (part == 5) return vec3(0.95);
   float m[${N}];
   for (int i = 0; i < ${N}; i++) m[i] = 0.0;
