@@ -86,32 +86,180 @@ export class DetailScreen implements Screen {
     return { prev: usable[i - 1], next: usable[i + 1], pos: i + 1, total: usable.length };
   }
 
-  /** Pasa al ejercicio anterior (-1) o al siguiente (1) de la lista. */
+  /** Pasa al ejercicio anterior (-1) o al siguiente (1) de la lista (con las flechas: la hoja se pasa sola). */
   private go(dir: -1 | 1): void {
     const n = this.neighbours();
     const to = dir < 0 ? n.prev : n.next;
-    if (!to) return;
-    this.app.haptics.tap();
-    window.scrollTo(0, 0);
-    this.app.replace(new DetailScreen(this.app, to, this.list), dir < 0 ? 'back' : 'forward');
+    if (!to || this.turning) return;
+    if (reducedMotion()) return this.open(to, dir, 'fade');
+    const peek = this.peek(to, dir);
+    this.turn(dir, to, peek, 0);
   }
 
-  /** Deslizar el dedo a los lados (fuera del muñeco, que se gira arrastrando): izquierda, siguiente; derecha, anterior. */
+  private turning = false;
+
+  /** Abre la ficha de al lado en lugar de esta. */
+  private open(to: ExerciseDef, dir: -1 | 1, motion: 'fade' | 'none'): void {
+    this.app.haptics.tap();
+    window.scrollTo(0, 0);
+    this.app.replace(new DetailScreen(this.app, to, this.list), motion === 'fade' ? (dir < 0 ? 'back' : 'forward') : 'none');
+  }
+
+  /** Coloca la hoja según lo arrastrado: se desplaza con el dedo, gira un poco en 3D y se oscurece en el borde. */
+  private place(dx: number, shade: HTMLElement | null): void {
+    const w = window.innerWidth || 400;
+    const p = Math.max(-1, Math.min(1, dx / w));
+    this.el.style.transform = `perspective(1400px) translateX(${dx}px) rotateY(${p * 28}deg) scale(${1 - Math.abs(p) * 0.06})`;
+    this.el.style.transformOrigin = dx < 0 ? 'right center' : 'left center';
+    if (shade) {
+      shade.style.opacity = String(Math.abs(p) * 0.9);
+      shade.style.background = `linear-gradient(${dx < 0 ? 'to left' : 'to right'}, rgba(0,0,0,0) 30%, rgba(0,0,0,.55))`;
+    }
+  }
+
+  /** El ejercicio de al lado, debajo de la hoja: una imagen fija (el muñeco animado sale al soltar). */
+  private peek(to: ExerciseDef, dir: -1 | 1): { el: HTMLElement; shade: HTMLElement; set: (p: number) => void } {
+    const img = h('img', { alt: '', class: 'thumb' });
+    void this.app.thumbs.get(to).then((url) => (img.src = url));
+    const el = h('div', { class: 'page-peek detail', 'aria-hidden': 'true' },
+      h('div', { class: 'peek-inner detail-body' },
+        h('div', { class: 'stage peek-stage' }, img),
+        h('h2', {}, to.name),
+        h('p', { class: 'muted' }, to.zone)));
+    el.style.setProperty('--sec', SECTION_STYLE[to.section].color);
+    document.body.append(el);
+    const shade = h('div', { class: 'page-shade' });
+    this.el.append(shade);
+    this.el.classList.add('page-lifted');
+    const set = (p: number) => {
+      el.style.opacity = String(0.35 + p * 0.65);
+      el.style.transform = `translateX(${(1 - p) * 40 * dir}px) scale(${0.92 + p * 0.08})`;
+    };
+    set(0);
+    return { el, shade, set };
+  }
+
+  /** Termina de pasar la hoja (hacia el lado de dir) y abre el ejercicio de al lado. */
+  private turn(dir: -1 | 1, to: ExerciseDef, peek: ReturnType<DetailScreen['peek']>, from: number): void {
+    this.turning = true;
+    const w = window.innerWidth || 400;
+    const ease = 'cubic-bezier(.3, .7, .3, 1)';
+    this.place(from, peek.shade);
+    void this.el.offsetWidth;
+    this.el.style.transition = `transform .32s ${ease}, opacity .32s ease-in`;
+    peek.el.style.transition = `transform .32s ${ease}, opacity .32s ease-out`;
+    peek.shade.style.transition = 'opacity .32s ease-in';
+    requestAnimationFrame(() => {
+      this.place(-dir * w * 1.05, peek.shade);
+      this.el.style.opacity = '0';
+      peek.set(1);
+    });
+    window.setTimeout(() => {
+      this.open(to, dir, 'none');
+      // la imagen fija se va cuando el muñeco animado ya está en su sitio
+      window.setTimeout(() => {
+        peek.el.style.transition = 'opacity .18s ease-out';
+        peek.el.style.opacity = '0';
+        window.setTimeout(() => peek.el.remove(), 200);
+      }, 60);
+    }, 330);
+  }
+
+  /** La hoja vuelve a su sitio (no se ha pasado). */
+  private settle(peek: ReturnType<DetailScreen['peek']> | null): void {
+    this.el.style.transition = 'transform .28s cubic-bezier(.2, .9, .3, 1.2)';
+    this.el.style.transform = '';
+    if (peek) {
+      peek.el.style.transition = 'opacity .28s ease, transform .28s ease';
+      peek.set(0);
+      peek.el.style.opacity = '0';
+      peek.shade.style.transition = 'opacity .28s ease';
+      peek.shade.style.opacity = '0';
+    }
+    window.setTimeout(() => {
+      this.el.style.transition = '';
+      this.el.style.transformOrigin = '';
+      this.el.classList.remove('page-lifted');
+      peek?.el.remove();
+      peek?.shade.remove();
+    }, 300);
+  }
+
+  /**
+   * Deslizar el dedo a los lados (fuera del muñeco, que se gira arrastrando): la hoja sigue al dedo y, debajo,
+   * asoma el ejercicio de al lado. Izquierda, el siguiente; derecha, el anterior. En el primero y el último
+   * la hoja se estira un poco y vuelve.
+   */
   private swipe(): void {
-    let x0 = 0, y0 = 0, t0 = 0, on = false;
+    let x0 = 0, y0 = 0, t0 = 0, on = false, horiz = false, dx = 0, lastX = 0, lastT = 0, vx = 0;
+    let peek: ReturnType<DetailScreen['peek']> | null = null, peekDir = 0;
+    const reset = () => { on = false; horiz = false; dx = 0; };
     this.el.addEventListener('touchstart', (ev) => {
       const t = ev.touches[0];
-      on = ev.touches.length === 1 && !(ev.target as Element).closest?.('.stage');
-      x0 = t.clientX; y0 = t.clientY; t0 = Date.now();
+      on = ev.touches.length === 1 && !this.turning && !(ev.target as Element).closest?.('.stage');
+      horiz = false; dx = 0; vx = 0;
+      x0 = lastX = t.clientX; y0 = t.clientY; t0 = lastT = Date.now();
     }, { passive: true });
-    this.el.addEventListener('touchend', (ev) => {
+    this.el.addEventListener('touchmove', (ev) => {
       if (!on) return;
-      on = false;
-      const t = ev.changedTouches[0];
-      const dx = t.clientX - x0, dy = t.clientY - y0;
-      if (Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy) * 1.6 || Date.now() - t0 > 800) return;
-      this.go(dx < 0 ? 1 : -1);
+      const t = ev.touches[0];
+      const mx = t.clientX - x0, my = t.clientY - y0;
+      if (!horiz) {
+        if (Math.abs(my) > 10 && Math.abs(my) > Math.abs(mx)) { reset(); return; }
+        if (Math.abs(mx) < 10) return;
+        horiz = true;
+        if (reducedMotion()) return;
+      }
+      const now = Date.now();
+      if (now > lastT) vx = (t.clientX - lastX) / (now - lastT);
+      lastX = t.clientX; lastT = now;
+      if (reducedMotion()) { dx = mx; return; }
+      const dir = mx < 0 ? 1 : -1;
+      const n = this.neighbours();
+      const to = dir > 0 ? n.next : n.prev;
+      if (!to) {
+        // no hay más: se estira un poco
+        dx = mx * 0.22;
+        if (peek) { peek.el.remove(); peek.shade.remove(); peek = null; }
+        this.place(dx, null);
+        return;
+      }
+      if (!peek || peekDir !== dir) {
+        if (peek) { peek.el.remove(); peek.shade.remove(); }
+        peek = this.peek(to, dir as -1 | 1);
+        peekDir = dir;
+      }
+      dx = mx;
+      this.el.style.transition = '';
+      this.place(dx, peek.shade);
+      peek.set(Math.min(1, Math.abs(dx) / (window.innerWidth || 400)));
     }, { passive: true });
+    const end = () => {
+      if (!on) return;
+      const wasHoriz = horiz;
+      on = false;
+      if (!wasHoriz) return;
+      const w = window.innerWidth || 400;
+      const dir: -1 | 1 = dx < 0 ? 1 : -1;
+      const n = this.neighbours();
+      const to = dir > 0 ? n.next : n.prev;
+      const fast = Math.abs(vx) > 0.45 && Math.sign(vx) === Math.sign(dx) && Math.abs(dx) > 30 && Date.now() - t0 < 900;
+      const pass = !!to && (Math.abs(dx) > w * 0.33 || fast);
+      if (reducedMotion()) {
+        if (pass && to) this.open(to, dir, 'fade');
+        return;
+      }
+      if (pass && to && peek) {
+        const p = peek; peek = null;
+        this.turn(dir, to, p, dx);
+      } else {
+        this.settle(peek);
+        peek = null;
+      }
+      dx = 0;
+    };
+    this.el.addEventListener('touchend', end, { passive: true });
+    this.el.addEventListener('touchcancel', end, { passive: true });
   }
 
   enter(): void {
@@ -186,6 +334,10 @@ export class DetailScreen implements Screen {
     this.app.back();
   }
 
+}
+
+function reducedMotion(): boolean {
+  return window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
 }
 
 /** Músculos que trabaja y que estira, con los mismos colores que el maniquí anatomía. */

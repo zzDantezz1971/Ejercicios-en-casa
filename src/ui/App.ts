@@ -125,7 +125,7 @@ export class App {
   }
 
   /** Sustituye la pantalla actual. */
-  replace(screen: Screen, motion: 'forward' | 'back' | 'fade' = 'fade'): void {
+  replace(screen: Screen, motion: 'forward' | 'back' | 'fade' | 'none' = 'fade'): void {
     const old = this.stack.pop();
     old?.leave?.();
     old?.dispose?.();
@@ -170,11 +170,11 @@ export class App {
     this.show(this.current!, 'back');
   }
 
-  private show(screen: Screen, motion: 'forward' | 'back' | 'fade'): void {
+  private show(screen: Screen, motion: 'forward' | 'back' | 'fade' | 'none'): void {
     clear(this.view);
     screen.el.classList.remove('anim-forward', 'anim-back', 'anim-fade');
     void screen.el.offsetWidth; // reinicia la animación
-    screen.el.classList.add(`anim-${motion}`);
+    if (motion !== 'none') screen.el.classList.add(`anim-${motion}`);
     this.view.append(screen.el);
     this.renderTabbar(screen.tab);
     window.scrollTo(0, this.scroll.get(screen) ?? 0);

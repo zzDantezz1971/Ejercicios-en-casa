@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-12T09:24:47Z",
+    "es": ["Pasar de un ejercicio a otro es más bonito: la ficha sigue al dedo y se inclina como una hoja que se pasa, y debajo ya asoma el ejercicio siguiente. Si sueltas antes de la mitad, vuelve a su sitio; en el primero y el último se estira un poco para avisar de que no hay más."],
+    "ca": ["Passar d'un exercici a un altre és més bonic: la fitxa segueix el dit i s'inclina com un full que es passa, i a sota ja treu el cap l'exercici següent. Si deixes anar abans de la meitat, torna al seu lloc; al primer i a l'últim s'estira una mica per avisar que no n'hi ha més."],
+    "en": ["Moving between exercises looks nicer: the page follows your finger and tilts like a page being turned, with the next exercise already peeking out underneath. If you let go before halfway it springs back; on the first and last ones it stretches slightly to show there are no more."]
+  },
+  {
     "fecha": "2026-11-12T09:16:14Z",
     "es": ["En la ficha de un ejercicio, desliza el dedo a la izquierda para ver el siguiente de la lista y a la derecha para volver al anterior (también con las flechas de debajo del muñeco). Funciona desde la lista de ejercicios, tu tabla y el historial."],
     "ca": ["A la fitxa d'un exercici, llisca el dit cap a l'esquerra per veure el següent de la llista i cap a la dreta per tornar a l'anterior (també amb les fletxes de sota el ninot). Funciona des de la llista d'exercicis, la teva taula i l'historial."],
