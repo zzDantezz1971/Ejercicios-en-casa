@@ -250,10 +250,13 @@ export const RAW_SECTIONS: RawSection[] = [
    [{tl:-42,tu:-38,hd:-24,ua:92,fa:92,thR:-6,snR:94,thL:112,snL:180,ftL:180},800,1300],
    [{tl:-28,tu:-24,hd:-12,ua:96,fa:84,sa:.94,thR:-14,snR:100,thL:140,snL:180,ftL:180},1600,1300]]},
  {g:'Aductores (ingles)'},
- // sentado, plantas de los pies juntas y quietas; las rodillas suben y bajan hacia los lados (aleteo suave)
- {n:'Mariposa (aductores)',z:'Ingles y cadera',v:'front',noGround:1,mat:'top',f:[
-   [{thL:235,snL:50,thR:-55,snR:130,sTh:.75,sSh:.9,zK:5,zA:5,ftL:0,ftR:180,lean:25,uaL:95,faL:40,uaR:85,faR:140,sa:.6,zE:16,zH:34},500,1300],
-   [{thL:170,snL:5,thR:10,snR:175,sTh:.75,sSh:.9,zK:10,zA:15,ftL:0,ftR:180,lean:25,uaL:95,faL:40,uaR:85,faR:140,sa:.6,zE:16,zH:34},700,1300]]},
+ // sentado, plantas de los pies juntas y quietas, sujetas con las manos (tronco algo inclinado); las rodillas suben y
+ // bajan hacia los lados. Posiciones calculadas para que el tobillo no se mueva nada: [th, sTh, zK, sn, sSh, zA]
+ {n:'Mariposa (aductores)',z:'Ingles y cadera',v:'front',noGround:1,mat:'top',per:3600,fn:t=>{
+   const P=[[235,.76,3.96,49.84,.884,4.5],[226.875,.749,3.93,45.84,.932,4.5],[218.75,.741,3.83,41.33,.955,4.5],[210.625,.737,3.66,36.25,.96,4.5],[202.5,.735,3.44,32.23,.97,4.5],[194.375,.733,3.28,28.46,.97,4.5]];
+   const u=(.5-.5*Math.cos(t*Math.PI*2))*(P.length-1),a=Math.min(P.length-2,Math.floor(u)),f=u-a,q=P[a].map((v,k)=>v+(P[a+1][k]-v)*f);
+   return {thL:q[0],thR:180-q[0],sTh:q[1],zK:q[2],snL:q[3],snR:180-q[3],sSh:q[4],zA:q[5],ftL:0,ftR:180,lean:25,uaL:95,faL:40,uaR:85,faR:140,sa:.6,zE:16,zH:34};
+ }},
  {n:'Zancada lateral',z:'Aductores',v:'front',plant:'anR',alternate:true,f:[
    [{thL:128,snL:128,thR:62,snR:100,tl:-84,uaL:140,faL:40,zHL:3,uaR:80,faR:100,zKR:12,lean:16},1400,1100],
    [{thL:122,snL:122,thR:55,snR:104,tl:-80,uaL:140,faL:40,zHL:3,uaR:80,faR:100,zKR:14,lean:18},1400,1100]]},
