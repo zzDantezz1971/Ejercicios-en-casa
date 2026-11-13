@@ -7,6 +7,29 @@ import { getLook, lookHair, type Look } from './look';
 import { toonify } from './toon';
 import { SkinnedFigure, type SkinData } from './SkinnedFigure';
 
+/** Plata brillante (cromo): metal con reflejos de estudio. */
+const SILVER = { rough: 0.08, metal: 1, env: true, envInt: 2.2 };
+
+/** Reflejo de «estudio» (franjas de luz) para que el metal de las pesas brille como plata. Se crea una vez. */
+let studioEnv: THREE.Texture | null = null;
+function studio(): THREE.Texture | null {
+  if (studioEnv) return studioEnv;
+  if (typeof document === 'undefined' && typeof OffscreenCanvas === 'undefined') return null;
+  const c = typeof document !== 'undefined' ? document.createElement('canvas') : new OffscreenCanvas(256, 128);
+  c.width = 256; c.height = 128;
+  const g = c.getContext('2d') as CanvasRenderingContext2D;
+  const gr = g.createLinearGradient(0, 0, 0, 128);
+  gr.addColorStop(0, '#FFFFFF'); gr.addColorStop(0.35, '#9AA3AE'); gr.addColorStop(0.55, '#3A414B'); gr.addColorStop(1, '#14171C');
+  g.fillStyle = gr; g.fillRect(0, 0, 256, 128);
+  // focos: franjas claras que dan los brillos del metal
+  g.fillStyle = 'rgba(255,255,255,.95)';
+  g.fillRect(0, 20, 256, 6); g.fillRect(40, 0, 18, 70); g.fillRect(170, 0, 12, 60);
+  const t = new THREE.CanvasTexture(c as HTMLCanvasElement);
+  t.mapping = THREE.EquirectangularReflectionMapping;
+  t.colorSpace = THREE.SRGBColorSpace;
+  return (studioEnv = t);
+}
+
 /* Maniquí 3D. Convierte las articulaciones del motor de posturas a 3D:
    X = adelante (vista lateral) o lateral (vista de frente), Y = arriba, Z = lado del cuerpo / profundidad. */
 
@@ -39,7 +62,7 @@ function ortho(v: THREE.Vector3, axis: THREE.Vector3): THREE.Vector3 {
 export const DEFAULT_PALETTE: Palette = {
   skin: '#E2A983', shirt: '#2F5BEA', shorts: '#1E2633', shoe: '#F2A516', sole: '#F4F1EA', brow: '#6B4A3A',
   stripe: '#F3F5F8', band: '#FF7A33',
-  iron: '#C9D0DA', bench: '#2B323D', benchLeg: '#8893A3', mat: '#26365C', wall: '#262E39',
+  iron: '#FFFFFF', bench: '#2B323D', benchLeg: '#8893A3', mat: '#26365C', wall: '#262E39',
 };
 
 /** Paleta con los colores elegidos en «Personaliza el muñeco». */
@@ -241,6 +264,14 @@ export class MannequinScene {
     this.placeCamera();
   }
 
+  /** Metal plateado y brillante (mancuernas, barra y pesa rusa). */
+  private silver(): THREE.MeshStandardMaterial {
+    const m = this.mat(this.pal.iron, SILVER.rough, SILVER.metal);
+    const env = SILVER.env ? studio() : null;
+    if (env) { m.envMap = env; m.envMapIntensity = SILVER.envInt; }
+    return m;
+  }
+
   private mat(color: string, rough = 0.6, metal = 0): THREE.MeshStandardMaterial {
     const m = new THREE.MeshStandardMaterial({ color: new THREE.Color(color), roughness: rough, metalness: metal });
     this.disposables.push(m);
@@ -290,7 +321,7 @@ export class MannequinScene {
     const M = {
       skin: this.mat(p.skin, 0.55), shirt: this.mat(p.shirt, 0.7), shorts: this.mat(p.shorts, 0.75),
       shoe: this.mat(p.shoe, 0.5), sole: this.mat(p.sole, 0.8), brow: this.mat(p.brow, 0.8),
-      eye: this.mat('#FFFFFF', 0.3), pupil: this.mat('#1C1C1C', 0.3), iron: this.mat(p.iron, 0.32, 0.3),
+      eye: this.mat('#FFFFFF', 0.3), pupil: this.mat('#1C1C1C', 0.3), iron: this.silver(),
       stripe: this.mat(p.stripe, 0.6), band: this.mat(p.band, 0.6), watch: this.mat('#15181D', 0.3, 0.3),
       watchFace: this.mat('#9FB4FF', 0.2, 0.2), mouth: this.mat('#7A3B32', 0.6),
     };
@@ -368,7 +399,7 @@ export class MannequinScene {
     this.buildGear();
   }
 
-  private buildDumbbells(iron: THREE.Material = this.mat(this.pal.iron, 0.32, 0.3)): void {
+  private buildDumbbells(iron: THREE.Material = this.silver()): void {
     const G = this.geo;
     const db = this.motion.spec.db;
     const hands: Array<'L' | 'R' | 'two'> = db === 'both' ? ['L', 'R'] : db ? [db] : [];
@@ -780,12 +811,13 @@ export class MannequinScene {
   private bandFrom?: V3;
   private buildGear(): void {
     const spec = this.motion.spec, G = this.geo;
-    const iron = this.mat('#2E3440', 0.45, 0.35), steel = this.mat(this.pal.iron, 0.3, 0.4);
+    const iron = this.mat('#2E3440', 0.45, 0.35), steel = this.silver();
     const many = (n: number, g: THREE.BufferGeometry, m: THREE.Material) => Array.from({ length: n }, () => this.add(g, m));
     // pesa rusa: gris, del mismo color que las mancuernas
-    const kbM = this.mat(this.pal.iron, 0.32, 0.3);
+    const kbM = this.silver();
     if (spec.kb) for (const h of spec.kb === 'both' ? ['L', 'R'] : spec.kb === 'up' ? ['L'] : [spec.kb]) this.gear['kb' + h] = [this.add(G.sph, kbM), this.add(G.ring, kbM)];
-    if (spec.bar) this.gear.bar = [this.add(G.cyl, steel), ...many(4, G.cyl, iron)];
+    // barra y discos, todo del mismo metal plateado que las mancuernas
+    if (spec.bar) this.gear.bar = [this.add(G.cyl, steel), ...many(4, G.cyl, steel)];
     if (spec.band) this.gear.band = many(2, G.cyl, this.mat(this.pal.band, 0.55));
     if (spec.ball) this.gear.ball = [this.add(G.sph, this.mat('#4F7DF0', 0.35))];
     if (spec.rope) {
