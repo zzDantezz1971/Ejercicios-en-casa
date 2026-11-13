@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-13T15:09:37Z",
+    "es": ["Guía de la app: todos los apartados empiezan cerrados, y en «Primeros pasos» se nombran los cuatro apartados de las tablas."],
+    "ca": ["Guia de l'app: tots els apartats comencen tancats, i a «Primers passos» s'anomenen els quatre apartats de les taules."],
+    "en": ["App guide: every section now starts closed, and «Getting started» names the four routine sections."]
+  },
+  {
     "fecha": "2026-11-13T12:09:03Z",
     "es": ["Nueva Guía de la app, al principio de Ajustes: todo lo que puede hacer Kasa Fit, organizado por apartados."],
     "ca": ["Nova Guia de l'app, al principi de Configuració: tot el que pot fer Kasa Fit, organitzat per apartats."],

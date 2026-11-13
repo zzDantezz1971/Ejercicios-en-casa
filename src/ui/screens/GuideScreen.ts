@@ -6,7 +6,7 @@ import { icon, type IconName } from '../icons';
 const GUIDE: Array<{ icon: IconName; title: string; sub: string; points: string[] }> = [
   { icon: 'play', title: 'Primeros pasos', sub: 'Empieza a entrenar en tres pasos.', points: [
       'En Mis datos, marca el material que tienes en casa: verás los ejercicios que puedes hacer.',
-      'En Tablas, crea una tabla y elige los ejercicios de cada apartado.',
+      'En Tablas, crea una tabla y elige los ejercicios de cada apartado: Calentamiento, Fuerza, Abdominales y Estiramientos.',
       'En Inicio, pulsa Empezar y sigue al muñeco.'] },
   { icon: 'home', title: 'Inicio', sub: 'Tu tabla y tu semana de un vistazo.', points: [
       'La tabla que vas a hacer, con su contenido y el botón para empezar. Puedes cambiar de tabla desde aquí.',
@@ -62,8 +62,8 @@ export class GuideScreen implements Screen {
         h('h1', { class: 'bar-title' }, 'Guía de la app')),
       h('div', { class: 'settings-body' },
         h('p', { class: 'muted small guide-intro' }, 'Todo lo que puedes hacer con Kasa Fit. Toca un apartado para verlo.'),
-        ...GUIDE.map((g, i) =>
-          h('details', { class: 'card guide-item', open: i === 0 },
+        ...GUIDE.map((g) =>
+          h('details', { class: 'card guide-item' },
             h('summary', {},
               h('span', { class: 'set-icon' }, icon(g.icon)),
               h('span', { class: 'set-text' }, h('strong', {}, g.title), h('span', { class: 'muted block small' }, g.sub)),

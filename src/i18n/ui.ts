@@ -522,7 +522,7 @@ const ROWS: Row[] = [
   ['Primeros pasos', 'Primers passos', 'Getting started'],
   ['Empieza a entrenar en tres pasos.', 'Comença a entrenar en tres passos.', 'Start working out in three steps.'],
   ['En Mis datos, marca el material que tienes en casa: verás los ejercicios que puedes hacer.', 'A Les meves dades, marca el material que tens a casa: veuràs els exercicis que pots fer.', "In My details, tick the equipment you have at home: you'll see the exercises you can do."],
-  ['En Tablas, crea una tabla y elige los ejercicios de cada apartado.', 'A Taules, crea una taula i tria els exercicis de cada apartat.', 'In Routines, create a routine and choose the exercises for each section.'],
+  ['En Tablas, crea una tabla y elige los ejercicios de cada apartado: Calentamiento, Fuerza, Abdominales y Estiramientos.', 'A Taules, crea una taula i tria els exercicis de cada apartat: Escalfament, Força, Abdominals i Estiraments.', 'In Routines, create a routine and choose the exercises for each section: Warm-up, Strength, Abs and Stretches.'],
   ['En Inicio, pulsa Empezar y sigue al muñeco.', 'A Inici, prem Comença i segueix el ninot.', 'On Home, press Start and follow the figure.'],
   ['Tu tabla y tu semana de un vistazo.', "La teva taula i la teva setmana d'un cop d'ull.", 'Your routine and your week at a glance.'],
   ['La tabla que vas a hacer, con su contenido y el botón para empezar. Puedes cambiar de tabla desde aquí.', "La taula que faràs, amb el seu contingut i el botó per començar. Pots canviar de taula des d'aquí.", "The routine you're going to do, with its content and the button to start. You can switch routines from here."],
