@@ -206,7 +206,7 @@ export class SettingsScreen implements Screen {
     const msg = h('div', { class: `backup-last${old ? ' old' : ''}`, 'aria-live': 'polite' },
       icon(old ? 'info' : 'check'),
       last
-        ? h('div', {}, h('strong', {}, `Última copia: ${new Date(last).toLocaleDateString(LOCALE, { day: 'numeric', month: 'long', year: 'numeric' })}`),
+        ? h('div', {}, h('strong', {}, `Última copia: ${new Date(last).toLocaleDateString(LOCALE, { day: 'numeric', month: 'long', year: 'numeric' })}, ${new Date(last).toLocaleTimeString(LOCALE, { hour: '2-digit', minute: '2-digit' })}`),
           h('span', { class: 'small' }, old ? `${ago}. Conviene hacer otra.` : ago))
         : h('strong', {}, 'Aún no has guardado ninguna copia.'));
     const save = async () => {

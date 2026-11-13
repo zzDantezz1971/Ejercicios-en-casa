@@ -31,7 +31,7 @@ export function backupDue(app: App): boolean {
 export function backupCard(app: App): HTMLElement {
   const d = app.store.daysSinceBackup();
   const last = app.store.lastBackup;
-  const when = last ? new Date(last).toLocaleDateString(LOCALE, { day: 'numeric', month: 'long' }) : null;
+  const when = last ? `${new Date(last).toLocaleDateString(LOCALE, { day: 'numeric', month: 'long' })}, ${new Date(last).toLocaleTimeString(LOCALE, { hour: '2-digit', minute: '2-digit' })}` : null;
   const card: HTMLElement = h('section', { class: 'card backup-prompt', role: 'region', 'aria-label': 'Copia de seguridad' },
     h('div', { class: 'bp-head' },
       h('span', { class: 'bp-icon' }, icon('copy')),

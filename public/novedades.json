@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-13T11:49:58Z",
+    "es": ["Copia de seguridad: junto a la fecha de la última copia sale también la hora."],
+    "ca": ["Còpia de seguretat: al costat de la data de l'última còpia surt també l'hora."],
+    "en": ["Backup: the time of the last backup is now shown next to its date."]
+  },
+  {
     "fecha": "2026-11-13T11:47:34Z",
     "es": ["En Ajustes, la tarjeta de Recordatorios se resalta cuando tienes alguno activo: campana encendida con el número de recordatorios.", "Precios de Prémium: 0,99 € al mes o 9,99 € al año."],
     "ca": ["A Configuració, la targeta de Recordatoris es ressalta quan en tens algun d'actiu: campana encesa amb el nombre de recordatoris.", "Preus de Prèmium: 0,99 € al mes o 9,99 € l'any."],
