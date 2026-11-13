@@ -74,6 +74,18 @@ const SUMO_CHEST = { uaL: 112, faL: -10, uaR: 68, faR: 190, zEL: 8, zER: 8, zHL:
 const RENEG = { tl: -22, ua: 90, fa: 90, th: 158, sn: 158, ft: 90 };
 const BEAR = { tl: 3, ua: 88, fa: 88, th: 92, sn: 176, ft: 60 }; // cuadrupedia con rodillas despegadas
 
+// manos junto a las sienes, codos abiertos (vista lateral)
+// (brazo acortado en 2D y codo hacia fuera en profundidad; L es el lado lejano, z negativa)
+const TEMPLES = { ua: -117, fa: -135, sa: 0.32, zEL: -20, zER: 20, zHL: -3, zHR: 3 };
+// saltitos adelante y atrás: rodillas dobladas al caer; en el aire, algo recogidas
+const HOP_LAND = { tl: -80, th: 62, sn: 112, ft: 0 };
+const HOP_AIR = { tl: -84, th: 70, sn: 118, ft: 30, ua: 88, fa: 70 };
+// paso abierto corto: una pierna delante y la otra detrás de puntillas
+const SPLIT_R = { thR: 60, snR: 98, thL: 118, snL: 128, ftL: 40 };
+const SPLIT_L = { thL: 60, snL: 98, thR: 118, snR: 128, ftR: 40 };
+// zancada larga con el tronco inclinado (el mejor estiramiento del mundo): la pierna de atrás casi estirada
+const WGS = { thR: 8, snR: 92, thL: 140, snL: 160, ftL: 40, tl: -28, tu: -20, hd: -20 };
+
 export const EXTRA_MOTIONS: Record<string, M> = {
   // ── Nuevos (noviembre de 2026) ──
   // abrazar una rodilla contra el pecho, una y otra, caminando en el sitio (sin ir hacia atrás)
@@ -89,6 +101,38 @@ export const EXTRA_MOTIONS: Record<string, M> = {
     [{ x: 0, jy: 14, uaL: 100, faL: 95, uaR: 80, faR: 85 }, 0, 330],
     [{ x: 26, thR: 82, snR: 96, thL: 68, snL: 52, zKL: -10, zAL: -22, uaR: 30, faR: 40, uaL: 60, faL: 80, sTh: 0.92 }, 120, 330],
     [{ x: 0, jy: 14, uaL: 100, faL: 95, uaR: 80, faR: 85 }, 0, 330]] },
+  // de frente, brazos abiertos: la pierna estirada va hacia fuera y vuelve cruzando por delante de la otra
+  'balanceo-de-pierna-lateral': { v: 'front', az: 18, plant: 'anL', f: [
+    [{ uaL: 178, faL: 178, uaR: 2, faR: 2, thR: 48, snR: 48 }, 60, 650],
+    [{ uaL: 178, faL: 178, uaR: 2, faR: 2, thR: 114, snR: 114, zKR: 8, zAR: 15, ftR: 20 }, 60, 650]] },
+  // manos junto a las sienes: sube una rodilla y el codo contrario baja girando el tronco hasta tocarla
+  'codo-a-la-rodilla-contraria': { az: 35, f: [
+    [{ ...TEMPLES }, 60, 320],
+    [{ ...TEMPLES, thR: -22, snR: 78, ftR: 40, tl: -78, tu: -36, hd: -28, tw: -65, ua: -63, fa: -81 }, 120, 320],
+    [{ ...TEMPLES }, 60, 320],
+    [{ ...TEMPLES, thL: -22, snL: 78, ftL: 40, tl: -78, tu: -36, hd: -28, tw: 65, ua: -63, fa: -81 }, 120, 320]] },
+  // pies juntos: saltito adelante, saltito atrás (rodillas dobladas al caer y los brazos acompañan)
+  'saltos-adelante-y-atras': { az: 25, f: [
+    [{ x: 14, ...HOP_LAND, ua: 60, fa: 30 }, 60, 220], [{ x: 0, jy: 11, ...HOP_AIR }, 0, 220],
+    [{ x: -14, ...HOP_LAND, ua: 115, fa: 100 }, 60, 220], [{ x: 0, jy: 11, ...HOP_AIR }, 0, 220]] },
+  // una pierna delante y otra detrás; salta y las cambia en el aire, con los brazos al revés que las piernas
+  'saltos-alternando-piernas': { az: 25, f: [
+    [{ ...SPLIT_R, uaL: 40, faL: 10, uaR: 140, faR: 150 }, 60, 260], [{ jy: 12, th: 84, sn: 110, ft: 40, ua: 90, fa: 80 }, 0, 220],
+    [{ ...SPLIT_L, uaR: 40, faR: 10, uaL: 140, faL: 150 }, 60, 260], [{ jy: 12, th: 84, sn: 110, ft: 40, ua: 90, fa: 80 }, 0, 220]] },
+  // de puntillas y luego sobre los talones con las puntas levantadas
+  'puntillas-y-talones': { az: 30, f: [
+    [{ ft: 54, ua: 80, fa: 70 }, 350, 800], [{}, 100, 600], [{ ft: -28, ua: 82, fa: 60, tl: -88 }, 350, 800], [{}, 100, 600]] },
+  // zancada larga, mano contraria al suelo junto al pie de delante y el otro brazo al techo (el tronco gira)
+  'zancada-con-mano-al-suelo-y-rotacion': { az: 40, alternate: true, f: [
+    [{}, 150, 900],
+    [{ ...WGS, ua: 100, fa: 100, zHL: 6, zHR: -6 }, 250, 800],
+    [{ ...WGS, uaL: 100, faL: 100, zHL: 6, uaR: -84, faR: -84, zER: 6, zHR: 10, tw: 14, hd: -95 }, 700, 900],
+    [{ ...WGS, ua: 100, fa: 100, zHL: 6, zHR: -6 }, 150, 800]] },
+  // banda agarrada con las manos bien abiertas: los brazos estirados pasan por encima de la cabeza hasta detrás
+  'rotaciones-de-hombros-con-banda': { az: 38, band: 'hands', per: 3800, fn: (t) => {
+    const k = 0.5 - 0.5 * Math.cos(t * Math.PI * 2), a = 78 - 282 * k;
+    return { ua: a, fa: a, zEL: 20, zER: -20, zHL: 30, zHR: -30, hd: -90 - 6 * k };
+  } },
   // ── Calentamiento ──
   'skipping-rodillas-arriba': { f: [
     [{ thR: -8, snR: 78, uaL: 35, faL: -45, uaR: 130, faR: 105 }, 0, 230], [{ th: 86, sn: 100, jy: 4 }, 0, 170],
