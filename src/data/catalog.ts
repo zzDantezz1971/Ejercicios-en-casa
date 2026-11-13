@@ -174,7 +174,11 @@ const RETIRED = new Set(['peso-muerto-rumano-con-mancuernas', 'curl-alterno-de-b
   'boxeo-con-desplazamiento', 'comba-con-saltos-laterales', 'encogimientos-de-hombros', 'flexiones-en-pica', 'hip-thrust-con-mancuerna',
   'oso-caminando', 'hip-thrust-con-barra', 'plancha-lateral-con-rotacion',
   'rotaciones-de-hombros', 'flexiones-con-manos-en-el-step', 'angeles-boca-abajo', 'y-t-w-boca-abajo', 'retraccion-escapular-colgado',
-  'sentadilla-goblet-con-mancuerna']);
+  'sentadilla-goblet-con-mancuerna',
+  // Fuerza: casi iguales a otro con el mismo material
+  'press-arnold', 'curl-concentrado-sentado', 'remo-con-pecho-apoyado-en-banco-inclinado', 'press-de-banca-a-una-mano',
+  'elevacion-en-y-inclinado', 'buenos-dias-con-barra', 'sentadilla-sumo-con-pesa-rusa', 'cargada-con-pesa-rusa',
+  'separacion-de-banda', 'puente-con-pies-en-fitball']);
 const ALL_SECTIONS: SectionInfo[] = buildSections();
 export const SECTIONS: SectionInfo[] = ALL_SECTIONS.map((s) => ({ ...s, exercises: s.exercises.filter((e) => !RETIRED.has(e.id)) }));
 export const CATALOG: Catalog = new Map(ALL_SECTIONS.flatMap((s) => s.exercises).map((e) => [e.id, e]));
