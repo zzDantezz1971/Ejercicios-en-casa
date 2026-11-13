@@ -1370,3 +1370,6 @@ body:has(.page-lifted) { overflow-x: hidden; }
 .tab-custom { width: 15px !important; height: 15px !important; opacity: .75; margin-left: -2px; }
 .sortable .sort-fixed { list-style: none; padding: 14px 4px 4px; }
 .sortable .sort-fixed .group-title { margin: 0; }
+/* barra de ordenar fija bajo los apartados mientras se ordena */
+.routine-toolbar.sticky-sort { position: sticky; z-index: 13; background: var(--bg); padding-bottom: 8px;
+  top: calc(var(--safe-area-inset-top, env(safe-area-inset-top, 0px)) + 64px + var(--tabs-h, 120px)); }

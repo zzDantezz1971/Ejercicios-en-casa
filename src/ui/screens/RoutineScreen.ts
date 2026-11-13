@@ -69,6 +69,8 @@ export class RoutineScreen implements Screen {
       this.list,
       this.footer,
     );
+    // alto de los apartados (fijos arriba), para dejar la barra de ordenar justo debajo
+    new ResizeObserver(() => this.el.style.setProperty('--tabs-h', `${this.tabs.offsetHeight}px`)).observe(this.tabs);
   }
 
   enter(): void {
@@ -104,6 +106,8 @@ export class RoutineScreen implements Screen {
   /** Selector Todos / Elegidos y botón para ordenar la lista. */
   private renderToolbar(): void {
     clear(this.toolbar);
+    // mientras se ordena, la barra (Restablecer / Listo) se queda fija bajo los apartados
+    this.toolbar.classList.toggle('sticky-sort', this.mode === 'sorting');
     const n = this.editor.value[this.section].length;
     const title = this.app.sections.find((s) => s.id === this.section)!.title;
     this.searchBox.hidden = this.mode !== 'all';

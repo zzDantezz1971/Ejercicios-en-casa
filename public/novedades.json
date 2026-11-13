@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-13T00:32:01Z",
+    "es": ["Al ordenar la lista, la barra con Restablecer y Listo se queda fija debajo de los apartados mientras te mueves por la lista."],
+    "ca": ["En ordenar la llista, la barra amb Restableix i Fet es queda fixa sota els apartats mentre et mous per la llista."],
+    "en": ["When sorting the list, the bar with Reset and Done stays fixed below the sections while you scroll."]
+  },
+  {
     "fecha": "2026-11-13T00:28:11Z",
     "es": ["Con orden personalizado los grupos siguen saliendo, y puedes mover un ejercicio a cualquier grupo: pasa por encima o por debajo de su título."],
     "ca": ["Amb ordre personalitzat els grups continuen sortint, i pots moure un exercici a qualsevol grup: passa per sobre o per sota del seu títol."],

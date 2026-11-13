@@ -44,8 +44,10 @@ function attachDrag(list: HTMLElement, li: HTMLElement, handle: HTMLElement, com
 
   const autoscroll = () => {
     const edge = 90, vh = window.innerHeight;
+    // lo que queda fijo arriba (cabecera, apartados, barra de ordenar) no cuenta como zona visible
+    const top = document.querySelector('.sticky-sort')?.getBoundingClientRect().bottom ?? 0;
     let dy = 0;
-    if (lastY < edge) dy = -Math.ceil((edge - lastY) / 6);
+    if (lastY < top + edge) dy = -Math.ceil((top + edge - lastY) / 6);
     else if (lastY > vh - edge - 80) dy = Math.ceil((lastY - (vh - edge - 80)) / 6);
     if (dy) {
       window.scrollBy(0, dy);
