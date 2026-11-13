@@ -318,8 +318,10 @@ export const EXTRA_MOTIONS: Record<string, M> = {
     [{ tl: -22, th: 78, sn: 100, uaR: 112, faR: 118, uaL: 100, faL: 60, hd: -36, zHR: -8 }, 80, 550], [{ uaR: -4, faR: -6, uaL: 110, faL: 40 }, 80, 550]] },
   'sentadilla-goblet-con-pesa-rusa': { kb: 'both', plant: 'anR', f: [
     [{ ...KB_CHEST }, 200, 1000], [{ ...KB_CHEST, tl: -62, th: 5, sn: 115, ua: 62, fa: -85, hd: -70 }, 250, 1000]] },
+  // piernas algo abiertas y brazos un poco por delante: la pesa cuelga delante y entre las piernas, sin meterse en ellas
   'peso-muerto-con-pesa-rusa': { kb: 'both', plant: 'anR', f: [
-    [{ tl: -32, th: 58, sn: 112, ua: 92, fa: 92, hd: -40, zHL: 13, zHR: -13 }, 200, 1000], [{ ua: 90, fa: 90, zHL: 13, zHR: -13 }, 300, 1000]] },
+    [{ tl: -32, th: 58, sn: 112, ua: 92, fa: 92, hd: -40, zHL: 13, zHR: -13, zKL: -7, zKR: 7, zAL: -9, zAR: 9 }, 200, 1000],
+    [{ ua: 80, fa: 80, zHL: 13, zHR: -13, zKL: -7, zKR: 7, zAL: -9, zAR: 9 }, 300, 1000]] },
   'sentadilla-sumo-con-pesa-rusa': { v: 'front', kb: 'both', f: [
     [{ ...SUMO, uaL: 70, faL: 72, uaR: 110, faR: 108, zEL: 4, zER: 4, zHL: 10, zHR: 10 }, 200, 1000],
     [{ ...SUMO_DOWN, uaL: 72, faL: 74, uaR: 108, faR: 106, zEL: 6, zER: 6, zHL: 13, zHR: 13 }, 300, 1000]] },
