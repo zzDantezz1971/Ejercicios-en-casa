@@ -168,7 +168,11 @@ function buildSections(): SectionInfo[] {
 const RETIRED = new Set(['peso-muerto-rumano-con-mancuernas', 'curl-alterno-de-biceps', 'dominadas-supinas', 'elevacion-de-brazos-en-y-boca-abajo',
   // muy parecidos a otros con el mismo material
   'zancada-atras-con-mancuernas', 'press-de-hombros-de-pie', 'aperturas-inclinadas-con-mancuernas', 'press-inclinado-con-mancuernas', 'swing-a-una-mano-con-pesa-rusa',
-  'subida-al-step-con-rodilla-arriba', 'dominadas-negativas', 'caminata-lateral-con-banda']);
+  'subida-al-step-con-rodilla-arriba', 'dominadas-negativas', 'caminata-lateral-con-banda',
+  // eliminados de la lista desde la app (copia de seguridad del 13-11-2026)
+  'figura-4-gluteo-y-piriforme', 'gemelos-contra-la-pared', 'giros-rusos', 'estiramiento-de-antebrazos', 'toques-de-puntera-alternos',
+  'boxeo-con-desplazamiento', 'comba-con-saltos-laterales', 'encogimientos-de-hombros', 'flexiones-en-pica', 'hip-thrust-con-mancuerna',
+  'oso-caminando', 'hip-thrust-con-barra', 'plancha-lateral-con-rotacion']);
 const ALL_SECTIONS: SectionInfo[] = buildSections();
 export const SECTIONS: SectionInfo[] = ALL_SECTIONS.map((s) => ({ ...s, exercises: s.exercises.filter((e) => !RETIRED.has(e.id)) }));
 export const CATALOG: Catalog = new Map(ALL_SECTIONS.flatMap((s) => s.exercises).map((e) => [e.id, e]));
