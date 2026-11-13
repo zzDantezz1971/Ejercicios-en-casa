@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-13T00:28:11Z",
+    "es": ["Con orden personalizado los grupos siguen saliendo, y puedes mover un ejercicio a cualquier grupo: pasa por encima o por debajo de su título."],
+    "ca": ["Amb ordre personalitzat els grups continuen sortint, i pots moure un exercici a qualsevol grup: passa per sobre o per sota del seu títol."],
+    "en": ["With a custom order, groups are still shown, and you can move an exercise into any group: drag it above or below the group's title."]
+  },
+  {
     "fecha": "2026-11-13T00:21:19Z",
     "es": ["El botón «Ordenar lista» sale siempre, también si tienes elegido otro orden (al pulsarlo vuelve a tu orden)."],
     "ca": ["El botó «Ordena la llista» surt sempre, també si tens triat un altre ordre (en prémer-lo torna al teu ordre)."],

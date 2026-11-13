@@ -7,7 +7,7 @@ import { append, clear, confirmDialog, h, humanDuration, kg, plural, promptDialo
 import { icon, SECTION_STYLE, zoneIcon } from '../icons';
 import { badgeList, equipMarks } from '../components/badges';
 import { canDo } from '../../domain/equipment';
-import { sortableList } from '../components/sortable';
+import { sortableList, type SortableRow } from '../components/sortable';
 import { applyOrder, moveItem } from '../../domain/ordering';
 import { DetailScreen } from './DetailScreen';
 import { MUSCLE_NAMES, parseMuscles, type Muscle } from '../../figure/anatomy';
@@ -26,6 +26,8 @@ function mainMuscle(e: ExerciseDef): Muscle | undefined {
   const t = parseMuscles(e.muscles);
   return (t.find((x) => x.kind === 'work') ?? t[0])?.muscle;
 }
+/** En tu orden guardado, marca dónde empieza cada grupo. */
+const GROUP_MARK = '§';
 const byName = (a: ExerciseDef, b: ExerciseDef) => tr(a.name).localeCompare(tr(b.name));
 
 /** Preparar rutina: elegir ejercicios por apartado (se numeran en el orden en que se marcan) y su duración. */
@@ -114,7 +116,7 @@ export class RoutineScreen implements Screen {
             : null,
           h('button', { class: 'btn primary small', onclick: () => { this.mode = 'all'; this.refresh(); } }, icon('check'), 'Listo')),
       );
-      this.hint.replaceChildren('Arrastra cada ejercicio por el asa ', icon('tables', 'ico inline'), ' o usa las flechas para colocarlo donde quieras. Este orden es el de la lista, igual para todas tus tablas.');
+      this.hint.replaceChildren('Arrastra cada ejercicio por el asa ', icon('tables', 'ico inline'), ' o usa las flechas para colocarlo donde quieras, también en otro grupo. Este orden es el de la lista, igual para todas tus tablas.');
       return;
     }
     const seg = (m: 'all' | 'fav' | 'chosen', label: string | Node) =>
@@ -189,11 +191,33 @@ export class RoutineScreen implements Screen {
     const sec = this.app.sections.find((s) => s.id === sectionId)!;
     const hidden = this.app.store.hidden;
     const custom = this.app.store.customOrder(sectionId);
-    if (custom) return applyOrder(sec.exercises, custom).filter((e) => !hidden.has(e.id));
-    // sin orden propio: por grupos (en su orden) y, dentro de cada grupo, alfabético
+    // los grupos salen siempre, en su orden; sin orden propio, alfabético dentro de cada grupo
     const at = new Map<string | undefined, number>();
     for (const e of sec.exercises) if (!at.has(e.group)) at.set(e.group, at.size);
-    return sec.exercises.filter((e) => !hidden.has(e.id)).sort((a, b) => at.get(a.group)! - at.get(b.group)! || byName(a, b));
+    const byGroup = (a: ExerciseDef, b: ExerciseDef) => at.get(a.group)! - at.get(b.group)!;
+    const visible = sec.exercises.filter((e) => !hidden.has(e.id)).sort((a, b) => byGroup(a, b) || byName(a, b));
+    if (!custom) return visible;
+    // orden guardado antiguo (sin títulos de grupo): cada uno en su grupo de siempre
+    if (!custom.some((t) => t.startsWith(GROUP_MARK))) return applyOrder(visible, custom).sort(byGroup);
+    // tu orden: cada ejercicio va en el grupo bajo el que lo dejaste (aunque no sea el suyo)
+    const segs = new Map<string | undefined, ExerciseDef[]>([...at.keys()].map((g) => [g, []]));
+    const left = new Map(visible.map((e) => [e.id, e]));
+    let g: string | undefined;
+    for (const t of custom) {
+      if (t.startsWith(GROUP_MARK)) {
+        g = t.slice(GROUP_MARK.length);
+        if (!segs.has(g)) g = undefined;
+        continue;
+      }
+      const e = left.get(t);
+      if (!e) continue;
+      left.delete(t);
+      const into = segs.has(g) ? g : e.group;
+      segs.get(into)!.push(into === e.group ? e : { ...e, group: into });
+    }
+    // los que no estaban en tu orden (nuevos o que vuelven a la lista) van al final de su grupo
+    for (const e of left.values()) segs.get(e.group)!.push(e);
+    return [...segs.values()].flat();
   }
 
   /** Aviso al final de la lista: cuántos ejercicios necesitan material que no tiene, y botón para verlos. */
@@ -253,16 +277,26 @@ export class RoutineScreen implements Screen {
 
   /** Lista del apartado para cambiar su orden (sin subgrupos). */
   private renderSorting(): void {
+    // una sola lista con los títulos de grupo fijos: puedes llevar un ejercicio a cualquier grupo
     const exs = this.ordered(this.section);
-    const rows = exs.map((ex) => ({
-      content: h('div', { class: 'row-ex' }, this.miniThumb(ex), h('div', { class: 'row-text' }, h('strong', {}, ex.name), h('span', { class: 'muted small' }, ex.zone), ex.oneSided ? h('span', { class: 'by-sides' }, icon('sides'), 'por lados') : null)),
-      label: ex.name,
-    }));
+    const sec = this.app.sections.find((x) => x.id === this.section)!;
+    const groupNames: Array<string | undefined> = [];
+    for (const e of sec.exercises) if (!groupNames.includes(e.group)) groupNames.push(e.group);
+    const rows: Array<SortableRow & { tok: string }> = [];
+    for (const g of groupNames) {
+      if (g) rows.push({ tok: GROUP_MARK + g, fixed: true, label: g, content: h('h2', { class: 'group-title zone-title' }, zoneIcon(g), g) });
+      for (const ex of exs.filter((e) => e.group === g)) {
+        rows.push({
+          tok: ex.id, label: ex.name,
+          content: h('div', { class: 'row-ex' }, this.miniThumb(ex), h('div', { class: 'row-text' }, h('strong', {}, ex.name), h('span', { class: 'muted small' }, ex.zone), ex.oneSided ? h('span', { class: 'by-sides' }, icon('sides'), 'por lados') : null)),
+        });
+      }
+    }
     this.list.append(sortableList(rows, (from, to) => {
-      // el orden guardado incluye también los eliminados, en su sitio relativo al final
-      const ids = moveItem(exs.map((e) => e.id), from, to);
-      const all = this.app.sections.find((s) => s.id === this.section)!.exercises.map((e) => e.id);
-      this.app.store.setOrder(this.section, [...ids, ...all.filter((id) => !ids.includes(id))]);
+      const toks = moveItem(rows.map((r) => r.tok), from, to);
+      // nada puede quedar por encima del primer título
+      if (rows[0]?.fixed && !toks[0].startsWith(GROUP_MARK)) toks.splice(1, 0, toks.shift()!);
+      this.app.store.setOrder(this.section, toks);
       this.refresh();
     }));
   }
@@ -333,9 +367,9 @@ export class RoutineScreen implements Screen {
     if (custom && this.sort === 'zona') {
       this.list.append(h('div', { class: 'custom-order-note' },
         icon('tables'),
-        h('span', {}, h('strong', {}, 'Orden personalizado'), h('span', { class: 'muted small' }, 'Lo has ordenado tú, por eso no salen los grupos.')),
+        h('span', {}, h('strong', {}, 'Orden personalizado'), h('span', { class: 'muted small' }, 'Los ejercicios van en el orden y el grupo que has elegido.')),
         h('button', { class: 'link-btn', onclick: async () => {
-          if (!(await confirmDialog('¿Volver al orden normal, con grupos?', 'Restablecer'))) return;
+          if (!(await confirmDialog('¿Volver al orden de siempre (cada ejercicio en su grupo, por orden alfabético)?', 'Restablecer'))) return;
           this.app.store.resetOrder(this.section);
           this.refresh();
         } }, 'Restablecer')));
@@ -355,7 +389,7 @@ export class RoutineScreen implements Screen {
     if (this.sort !== 'zona') {
       this.renderSorted(rest);
     } else for (const ex of rest) {
-      if (!custom && ex.group && ex.group !== group) {
+      if (ex.group && ex.group !== group) {
         group = ex.group;
         this.list.append(h('h2', { class: 'group-title zone-title' }, zoneIcon(group), group));
         restTitled = true;
@@ -377,7 +411,7 @@ export class RoutineScreen implements Screen {
     if (this.showAllEquip) {
       let g: string | undefined;
       for (const ex of all.filter((e) => !canDo(e.equip, owned))) {
-        if (!custom && ex.group && ex.group !== g) {
+        if (ex.group && ex.group !== g) {
           g = ex.group;
           this.list.append(h('h2', { class: 'group-title zone-title' }, zoneIcon(g), g));
         }

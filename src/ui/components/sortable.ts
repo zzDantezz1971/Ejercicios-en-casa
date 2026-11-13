@@ -6,6 +6,8 @@ export interface SortableRow {
   content: HTMLElement;
   /** Etiqueta para los botones de accesibilidad. */
   label: string;
+  /** Fila fija (un título de grupo): no se mueve, pero las demás pueden pasar por encima o por debajo. */
+  fixed?: boolean;
 }
 
 /**
@@ -16,11 +18,17 @@ export interface SortableRow {
 export function sortableList(rows: SortableRow[], onMove: (from: number, to: number) => void): HTMLElement {
   const list = h('ol', { class: 'sortable' });
   rows.forEach((r, i) => {
+    if (r.fixed) {
+      const li = h('li', { class: 'sort-fixed' }, r.content);
+      li.dataset.index = String(i);
+      list.append(li);
+      return;
+    }
     const handle = h('span', { class: 'drag-handle', 'aria-hidden': 'true' }, icon('tables'));
     const li = h('li', { class: 'sort-row' },
       h('div', { class: 'sort-content' }, r.content),
       h('div', { class: 'sort-arrows' },
-        h('button', { class: 'arrow-btn', 'aria-label': `Subir ${r.label}`, disabled: i === 0, onclick: () => onMove(i, i - 1) }, icon('back', 'ico up')),
+        h('button', { class: 'arrow-btn', 'aria-label': `Subir ${r.label}`, disabled: i === 0 || (i === 1 && !!rows[0].fixed), onclick: () => onMove(i, i - 1) }, icon('back', 'ico up')),
         h('button', { class: 'arrow-btn', 'aria-label': `Bajar ${r.label}`, disabled: i === rows.length - 1, onclick: () => onMove(i, i + 1) }, icon('back', 'ico down'))),
       handle);
     li.dataset.index = String(i);
