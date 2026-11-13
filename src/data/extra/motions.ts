@@ -453,10 +453,15 @@ export const EXTRA_MOTIONS: Record<string, M> = {
   'fondos-de-triceps-en-el-step': { plant: 'haR', anchor: { j: 'haR', y: -19 }, props: (J, P) => stepBox(P, J.haR[0] - 30, 33), f: [
     [{ ua: 105, fa: 100, th: 30, sn: 50 }, 150, 900], [{ ua: 165, fa: 92, th: 10, sn: 60 }, 150, 900]] },
   // cada salto: rodillas dobladas al despegar y al caer, piernas recogidas en el aire
-  'saltos-laterales-sobre-el-step': { v: 'front', az: 38, props: (J, P) => stepBox(P, J.pel[0] + 15, 30), f: [
-    [{ x: -30, ...SQUAT_F }, 40, 200], [{ x: -15, jy: 26, ...TUCK_F }, 0, 200], [{ x: 0, jy: 17, ...SQUAT_F }, 40, 200],
-    [{ x: 15, jy: 26, ...TUCK_F }, 0, 200], [{ x: 30, ...SQUAT_F }, 40, 200], [{ x: 15, jy: 26, ...TUCK_F }, 0, 200],
-    [{ x: 0, jy: 17, ...SQUAT_F }, 40, 200], [{ x: -15, jy: 26, ...TUCK_F }, 0, 200]] },
+  // brazos quietos (doblados delante, como en la sentadilla) mientras salta; step más largo
+  'saltos-laterales-sobre-el-step': (() => {
+    const ARMS = { uaL: 100, faL: 70, uaR: 80, faR: 110, zEL: 8, zER: 8, zHL: 20, zHR: 20 };
+    const DOWN = { ...SQUAT_F, ...ARMS }, AIR = { ...TUCK_F, ...ARMS };
+    return { v: 'front', az: 38, props: (J, P) => P.rect(J.pel[0] + 15, -17, 30, 17).map((o) => ({ ...o, dep: 120 })), f: [
+      [{ x: -30, ...DOWN }, 40, 200], [{ x: -15, jy: 26, ...AIR }, 0, 200], [{ x: 0, jy: 17, ...DOWN }, 40, 200],
+      [{ x: 15, jy: 26, ...AIR }, 0, 200], [{ x: 30, ...DOWN }, 40, 200], [{ x: 15, jy: 26, ...AIR }, 0, 200],
+      [{ x: 0, jy: 17, ...DOWN }, 40, 200], [{ x: -15, jy: 26, ...AIR }, 0, 200]] } as M;
+  })(),
   'gemelos-en-el-step': { props: (J, P) => [...stepBox(P, J.anR[0] - 20, 30), ...P.wall(J.haR[0] + 3, 20 - J.haR[1], 50)], f: [
     [{ jy: 17, uaR: 4, faR: -6, ftR: 0 }, 300, 900], [{ jy: 17, uaR: 4, faR: -6, ftR: -35, ftL: 10 }, 1600, 900]] },
 
