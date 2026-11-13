@@ -1413,3 +1413,4 @@ body:has(.page-lifted) { overflow-x: hidden; }
 .guide-points li { padding-top: 6px; line-height: 1.45; }
 .guide-points li::marker { color: var(--accent); }
 .guide-open { margin-bottom: 4px; }
+.guide-points li.guide-sub { list-style: none; margin: 8px 0 -2px -20px; padding-top: 10px; border-top: 1px dashed var(--line); font: 700 .78rem/1.2 var(--body); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }

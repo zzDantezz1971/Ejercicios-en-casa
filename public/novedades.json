@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-13T15:18:13Z",
+    "es": ["Guía de la app organizada por menús: Menú Inicio, Menú Tablas, Menú Medallas, Menú Historial, Menú Mis datos y Menú Ajustes, cada uno con su explicación."],
+    "ca": ["Guia de l'app organitzada per menús: Menú Inici, Menú Taules, Menú Medalles, Menú Historial, Menú Les meves dades i Menú Configuració, cadascun amb la seva explicació."],
+    "en": ["App guide organised by menu: Home, Routines, Medals, History, My details and Settings, each with its own explanation."]
+  },
+  {
     "fecha": "2026-11-13T15:09:37Z",
     "es": ["Guía de la app: todos los apartados empiezan cerrados, y en «Primeros pasos» se nombran los cuatro apartados de las tablas."],
     "ca": ["Guia de l'app: tots els apartats comencen tancats, i a «Primers passos» s'anomenen els quatre apartats de les taules."],
