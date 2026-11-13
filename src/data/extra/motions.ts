@@ -21,6 +21,9 @@ const LUNGE_BL = { ...LUNGE_L, x: -30 };
 const PUSH_DEEP_AT = (tl: number) => ({ tl, ua: 215, fa: 85, th: 180 + tl, sn: 180 + tl, ft: 90 });
 // flexiones: las puntas de los pies quedan fijas en el suelo (el cuerpo gira sobre ellas) y las manos, también fijas
 const DEEP = -1.8, DEEP_K = -8, DEEP_D = 16;
+// flexión arriba: brazos estirados del todo con las manos en el suelo (la inclinación del cuerpo, para que lleguen rectos)
+const PUSH_TOP_AT = (tl: number) => ({ tl, ua: 90, fa: 90, th: 180 + tl, sn: 180 + tl, ft: 90 });
+const TOP = -19, TOP_K = -33, TOP_D = 2.5, TOP_S = -43;
 const TOES = { plant: 'tiR', anchor: { j: 'tiR', y: -2.2 }, noSettle: true } as const;
 const KNEES_DOWN = { plant: 'knR', anchor: { j: 'knR', y: -5.8 }, noSettle: true } as const;
 const HIPS = { ua: 118, fa: 28 }; // manos en la cintura (vista lateral)
@@ -172,10 +175,10 @@ export const EXTRA_MOTIONS: Record<string, M> = {
     [PLS, 300, 900], [{ ...PLS, uaR: 104, faR: 118, zER: -4, zHR: -8, hd: -150 }, 400, 900]] },
 
   // ── Fuerza sin material ──
-  flexiones: { mat: 1, ...TOES, handsDown: true, f: [[PLH, 200, 750], [PUSH_DEEP_AT(DEEP), 150, 850]] },
+  flexiones: { mat: 1, ...TOES, handsDown: true, f: [[PUSH_TOP_AT(TOP), 200, 750], [PUSH_DEEP_AT(DEEP), 150, 850]] },
   'flexiones-con-rodillas-apoyadas': { mat: 1, ...KNEES_DOWN, handsDown: true, f: [
     // la espinilla sube un poco hacia atrás y el pie queda de punta, con los dedos en el suelo (como en las demás flexiones)
-    [{ tl: -30, ua: 90, fa: 90, th: 150, sn: 189, ft: 90 }, 200, 750], [{ ...PUSH_DEEP_AT(DEEP_K), sn: 189, ft: 90 }, 150, 850]] },
+    [{ ...PUSH_TOP_AT(TOP_K), sn: 189 }, 200, 750], [{ ...PUSH_DEEP_AT(DEEP_K), sn: 189, ft: 90 }, 150, 850]] },
   // silla grande (asiento ancho y con fondo para las dos manos; sin respaldo, que la cabeza pasa por encima): las palmas apoyadas en el asiento
   'flexiones-inclinadas-en-silla': { ...TOES, handsDown: 41, props: (J) => {
     const x1 = J.haR[0] - 5, x2 = J.haR[0] + 40, top = -35;
@@ -185,18 +188,18 @@ export const EXTRA_MOTIONS: Record<string, M> = {
       { t: 'line', a: [x2 - 4, top + 4], b: [x2 - 4, 0], w: 4, dep: 54 },
     ];
   }, f: [
-    [{ tl: -45, ua: 90, fa: 90, th: 135, sn: 135, ft: 60 }, 200, 750], [{ tl: -32, ua: 185, fa: 72, th: 148, sn: 148, ft: 70 }, 150, 850]] },
+    [{ ...PUSH_TOP_AT(TOP_S), ft: 60 }, 200, 750], [{ tl: -32, ua: 185, fa: 72, th: 148, sn: 148, ft: 70 }, 150, 850]] },
   'flexiones-declinadas': { mat: 1, plant: 'tiR', anchor: { j: 'tiR', y: -41 }, noSettle: true, handsDown: true, props: (J, P) => P.benchFlat(J.anR[0] - 16, J.anR[0] + 12, 40), f: [
-    [{ tl: 6, ua: 90, fa: 90, th: 186, sn: 186, ft: 90 }, 200, 750], [PUSH_DEEP_AT(DEEP_D), 150, 850]] },
+    [PUSH_TOP_AT(TOP_D), 200, 750], [PUSH_DEEP_AT(DEEP_D), 150, 850]] },
   // fijo por los pies: con la mano derecha fija, al levantarla se movía todo el cuerpo
   'flexiones-con-apertura-en-t': { mat: 1, ...TOES, handsDown: true, f: [
-    [PLH, 100, 650], [PUSH_DEEP_AT(DEEP), 100, 750], [PLH, 100, 500], [{ ...PLH, uaL: -88, faL: -88, saL: 0.95, hd: -40 }, 450, 600],
-    [PLH, 100, 650], [PUSH_DEEP_AT(DEEP), 100, 750], [PLH, 100, 500], [{ ...PLH, uaR: -88, faR: -88, saR: 0.95, hd: -40 }, 450, 600]] },
+    [PUSH_TOP_AT(TOP), 100, 650], [PUSH_DEEP_AT(DEEP), 100, 750], [PUSH_TOP_AT(TOP), 100, 500], [{ ...PUSH_TOP_AT(TOP), uaL: -88, faL: -88, saL: 0.95, hd: -40 }, 450, 600],
+    [PUSH_TOP_AT(TOP), 100, 650], [PUSH_DEEP_AT(DEEP), 100, 750], [PUSH_TOP_AT(TOP), 100, 500], [{ ...PUSH_TOP_AT(TOP), uaR: -88, faR: -88, saR: 0.95, hd: -40 }, 450, 600]] },
   'flexiones-en-pica': { mat: 1, plant: 'haR', f: [
     [{ tl: 42, tu: 45, hd: 72, ua: 45, fa: 45, th: 125, sn: 125, ft: 20 }, 200, 800],
     [{ tl: 58, tu: 64, hd: 92, ua: 118, fa: 62, th: 118, sn: 118, ft: 25 }, 150, 900]] },
   'flexiones-diamante': { mat: 1, ...TOES, handsDown: true, f: [
-    [{ ...PLH, zHL: 12, zHR: -12, zEL: 4, zER: -4 }, 200, 750], [{ ...PUSH_DEEP_AT(DEEP), zHL: 12, zHR: -12, zEL: 2, zER: -2 }, 150, 850]] },
+    [{ ...PUSH_TOP_AT(TOP), zHL: 12, zHR: -12, zEL: 4, zER: -4 }, 200, 750], [{ ...PUSH_DEEP_AT(DEEP), zHL: 12, zHR: -12, zEL: 2, zER: -2 }, 150, 850]] },
   'plancha-a-flexion-arriba-y-abajo': { mat: 1, ...TOES, f: [
     [PLF, 300, 450], [{ ...PLF, tl: -17, th: 163, sn: 163, uaR: 90, faR: 90 }, 80, 450], [PLH, 300, 450], [{ ...PLF, tl: -17, th: 163, sn: 163, uaL: 90, faL: 90 }, 80, 450]] },
   // vista desde arriba: los brazos barren el suelo (un poco despegados) de junto a la cadera a por encima de la cabeza

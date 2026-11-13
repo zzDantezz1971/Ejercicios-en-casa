@@ -98,8 +98,10 @@ function limbTo(J: Joints, [r, m, e]: [string, string, string], s: 'L' | 'R', T:
   if (d < 1e-6) return;
   const ux = dx / d, uy = dy / d;
   if (d >= a + b - 1e-6) {
-    J[m + s] = [S[0] + ux * a, S[1] + uy * a];
-    J[e + s] = [S[0] + ux * (a + b), S[1] + uy * (a + b)];
+    // casi al alcance (hasta un 4 % más lejos): el brazo o la pierna, recto, llega igualmente (la mano no se despega del suelo)
+    const k = d <= (a + b) * 1.04 ? d / (a + b) : 1;
+    J[m + s] = [S[0] + ux * a * k, S[1] + uy * a * k];
+    J[e + s] = [S[0] + ux * (a + b) * k, S[1] + uy * (a + b) * k];
     return;
   }
   const along = (a * a - b * b + d * d) / (2 * d);
