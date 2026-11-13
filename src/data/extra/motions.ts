@@ -41,9 +41,11 @@ const rope = (o: { back?: boolean; legs?: 'alt' | 'high'; side?: boolean }) => (
   const odd = Math.floor(a / 360) % 2 === 1;
   const p: Record<string, number> = { rp: rp + 90, jy: 5 * k, ft: 25 + 30 * k, th: 88, sn: 94, ...ROPE_ARMS };
   if (o.legs) {
-    const lift = o.legs === 'high' ? { th: -5, sn: 80 } : { th: 70, sn: 125 };
+    // rodillas altas: el muslo sube por encima de la horizontal y se mantiene arriba más rato
+    const lift = o.legs === 'high' ? { th: -28, sn: 70 } : { th: 70, sn: 125 };
+    const kk = o.legs === 'high' ? Math.sqrt(k) : k;
     const s2 = odd ? 'L' : 'R';
-    p['th' + s2] = 88 + (lift.th - 88) * k; p['sn' + s2] = 94 + (lift.sn - 94) * k;
+    p['th' + s2] = 88 + (lift.th - 88) * kk; p['sn' + s2] = 94 + (lift.sn - 94) * kk;
   }
   if (o.side) {
     // de lado a lado (de perfil, en profundidad): los pies caen cada vez un poco a un lado y al otro
