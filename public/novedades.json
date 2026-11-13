@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-13T17:44:59Z",
+    "es": ["Pestañas de los apartados más limpias: ya no se ve el total de ejercicios, solo cuántos has elegido (si hay alguno)."],
+    "ca": ["Pestanyes dels apartats més netes: ja no es veu el total d'exercicis, només quants n'has triat (si n'hi ha cap)."],
+    "en": ["Cleaner section tabs: the total number of exercises is gone; only how many you've chosen is shown (if any)."]
+  },
+  {
     "fecha": "2026-11-13T17:39:48Z",
     "es": ["Elegir ejercicios: «Vueltas» sale en todos los apartados, y las opciones van en este orden: Ordenar, Ordenar lista, Vueltas y el buscador."],
     "ca": ["Triar exercicis: «Voltes» surt a tots els apartats, i les opcions van en aquest ordre: Ordena, Ordena la llista, Voltes i el cercador."],

@@ -909,7 +909,6 @@ const ROWS: Row[] = [
   ['Toca un ejercicio para ver cómo se hace. Pulsa Seleccionar para añadirlo al final de la tabla.', 'Toca un exercici per veure com es fa. Prem Selecciona per afegir-lo al final de la taula.', 'Tap an exercise to see how it’s done. Tap Select to add it to the end of the routine.'],
   ['Tus ejercicios favoritos de este apartado. Pulsa Seleccionar para añadirlo a la tabla.', 'Els teus exercicis preferits d’aquest apartat. Prem Selecciona per afegir-lo a la taula.', 'Your favourite exercises in this section. Tap Select to add one to the routine.'],
   ['Aún no tienes favoritos en este apartado. Toca un ejercicio y pulsa la estrella', 'Encara no tens preferits en aquest apartat. Toca un exercici i prem l’estrella', 'You have no favourites in this section yet. Tap an exercise and tap the star'],
-  ['{s}: {n} ejercicios disponibles', '{s}: {n} exercicis disponibles', '{s}: {n} exercises available'],
   ['Ocultarlos', 'Amaga’ls', 'Hide them'],
   ['Material', 'Material', 'Equipment'],
   ['Mi material', 'El meu material', 'My equipment'],
