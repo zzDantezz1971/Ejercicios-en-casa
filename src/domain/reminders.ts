@@ -1,33 +1,37 @@
 /**
  * Recordatorios (notificaciones del móvil): qué avisos tocan y cuándo.
  * Aquí solo se calculan las fechas; quien los programa en Android es services/Reminders.ts.
+ * Los tres funcionan igual: los días de la semana elegidos, a la hora elegida.
  */
 
-export interface ReminderSettings {
-  /** Entrenar: días de la semana (0 = domingo … 6 = sábado) y hora «HH:MM». */
-  train: { on: boolean; days: number[]; time: string };
-  /** Pesarse: cada semana (día de la semana) o cada mes (día del mes, 1-28). */
-  weigh: { on: boolean; every: 'week' | 'month'; day: number; time: string };
-  /** Copia de seguridad (prémium): cuando haga una semana o más de la última. */
-  backup: { on: boolean; time: string };
+export type ReminderKind = 'train' | 'weigh' | 'backup';
+export const REMINDER_KINDS: ReminderKind[] = ['train', 'weigh', 'backup'];
+
+export interface ReminderRule {
+  on: boolean;
+  /** Días de la semana (0 = domingo … 6 = sábado). */
+  days: number[];
+  /** Hora «HH:MM». */
+  time: string;
 }
+export type ReminderSettings = Record<ReminderKind, ReminderRule>;
 
 export const DEFAULT_REMINDERS: ReminderSettings = {
   train: { on: false, days: [1, 3, 5], time: '19:00' },
-  weigh: { on: false, every: 'week', day: 1, time: '08:30' },
-  backup: { on: false, time: '20:00' },
+  weigh: { on: false, days: [1], time: '08:30' },
+  backup: { on: false, days: [0], time: '20:00' },
 };
 
-/** Ajustes guardados (pueden faltar campos de versiones antiguas) completados con los de por defecto. */
-export function remindersOf(r: Partial<ReminderSettings> | undefined): ReminderSettings {
-  return {
-    train: { ...DEFAULT_REMINDERS.train, ...(r?.train ?? {}) },
-    weigh: { ...DEFAULT_REMINDERS.weigh, ...(r?.weigh ?? {}) },
-    backup: { ...DEFAULT_REMINDERS.backup, ...(r?.backup ?? {}) },
+/** Ajustes guardados (pueden faltar campos o venir de una versión anterior) completados con los de por defecto. */
+export function remindersOf(r: Partial<Record<ReminderKind, Partial<ReminderRule>>> | undefined): ReminderSettings {
+  const one = (k: ReminderKind): ReminderRule => {
+    const v = r?.[k] ?? {};
+    const days = Array.isArray(v.days) ? v.days.filter((d) => Number.isInteger(d) && d >= 0 && d <= 6) : DEFAULT_REMINDERS[k].days;
+    return { on: !!v.on, days, time: typeof v.time === 'string' && /^\d\d:\d\d$/.test(v.time) ? v.time : DEFAULT_REMINDERS[k].time };
   };
+  return { train: one('train'), weigh: one('weigh'), backup: one('backup') };
 }
 
-export type ReminderKind = 'train' | 'weigh' | 'backup';
 export interface PlannedReminder { id: number; kind: ReminderKind; at: Date }
 
 export interface ReminderState {
@@ -41,10 +45,8 @@ export interface ReminderState {
 }
 
 /** Días hacia delante que se dejan programados (se recalculan cada vez que se abre la app o cambia algo). */
-const TRAIN_DAYS_AHEAD = 21;
-/** Días entre la última copia y el aviso, y entre un aviso y el siguiente si no se hace. */
-const BACKUP_AFTER_DAYS = 7;
-const BACKUP_REPEAT_DAYS = 3;
+const DAYS_AHEAD = 14;
+const BASE: Record<ReminderKind, number> = { train: 1000, weigh: 2000, backup: 3000 };
 
 function at(day: Date, time: string): Date {
   const [h, m] = time.split(':').map((x) => Number(x) || 0);
@@ -53,44 +55,26 @@ function at(day: Date, time: string): Date {
 const sameDay = (a: Date, b: Date) => a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
 const addDays = (d: Date, n: number) => new Date(d.getFullYear(), d.getMonth(), d.getDate() + n);
 
-/** Avisos que hay que dejar programados a partir de ahora (como mucho unos 30). */
+/**
+ * Avisos que hay que dejar programados a partir de ahora: cada recordatorio activo, en sus días y a su hora.
+ * Si hoy ya lo has hecho (entrenar, pesarte o guardar la copia), hoy no avisa. La copia, solo con prémium.
+ */
 export function planReminders(now: Date, settings: ReminderSettings, state: ReminderState): PlannedReminder[] {
+  const done: Record<ReminderKind, string[]> = {
+    train: state.trainings,
+    weigh: state.weighings,
+    backup: state.lastBackup ? [state.lastBackup] : [],
+  };
   const out: PlannedReminder[] = [];
-  const s = settings;
-  // Entrenar: los días elegidos a la hora elegida; si hoy ya has entrenado, hoy no avisa
-  if (s.train.on && s.train.days.length) {
-    const trainedToday = state.trainings.some((d) => sameDay(new Date(d), now));
-    for (let i = 0; i <= TRAIN_DAYS_AHEAD; i++) {
-      const when = at(addDays(now, i), s.train.time);
-      if (when <= now || !s.train.days.includes(when.getDay())) continue;
-      if (i === 0 && trainedToday) continue;
-      out.push({ id: 1000 + i, kind: 'train', at: when });
-    }
-  }
-  // Pesarse: cada semana o cada mes; si ya te has pesado en ese periodo, ese aviso no sale
-  if (s.weigh.on) {
-    const last = state.weighings.map((d) => new Date(d).getTime()).reduce((a, b) => Math.max(a, b), 0);
-    const gap = s.weigh.every === 'week' ? 6 : 27;
-    let n = 0;
-    for (let i = 0; i <= (s.weigh.every === 'week' ? 42 : 100) && n < (s.weigh.every === 'week' ? 6 : 3); i++) {
-      const day = addDays(now, i);
-      const hit = s.weigh.every === 'week' ? day.getDay() === s.weigh.day : day.getDate() === Math.min(28, Math.max(1, s.weigh.day));
-      if (!hit) continue;
-      const when = at(day, s.weigh.time);
-      if (when <= now) continue;
-      if (last && when.getTime() - last < gap * 864e5) continue;
-      out.push({ id: 2000 + n, kind: 'weigh', at: when });
-      n++;
-    }
-  }
-  // Copia de seguridad (prémium): a la semana de la última y, si no se hace, cada 3 días
-  if (s.backup.on && state.premium) {
-    const base = state.lastBackup ? new Date(state.lastBackup) : now;
-    let when = at(addDays(base, BACKUP_AFTER_DAYS), s.backup.time);
-    while (when <= now) when = at(addDays(when, 1), s.backup.time);
-    for (let n = 0; n < 4; n++) {
-      out.push({ id: 3000 + n, kind: 'backup', at: when });
-      when = at(addDays(when, BACKUP_REPEAT_DAYS), s.backup.time);
+  for (const kind of REMINDER_KINDS) {
+    const r = settings[kind];
+    if (!r.on || !r.days.length || (kind === 'backup' && !state.premium)) continue;
+    const doneToday = done[kind].some((d) => sameDay(new Date(d), now));
+    for (let i = 0; i <= DAYS_AHEAD; i++) {
+      const when = at(addDays(now, i), r.time);
+      if (when <= now || !r.days.includes(when.getDay())) continue;
+      if (i === 0 && doneToday) continue;
+      out.push({ id: BASE[kind] + i, kind, at: when });
     }
   }
   return out;

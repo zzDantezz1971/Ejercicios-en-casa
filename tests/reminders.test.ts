@@ -6,10 +6,10 @@ const NOW = new Date(2026, 10, 11, 10, 0);
 const base = { trainings: [], weighings: [], premium: true };
 
 describe('Recordatorios', () => {
-  it('entrenar: solo los días elegidos, a la hora elegida y siempre en el futuro', () => {
+  it('solo los días elegidos, a la hora elegida y siempre en el futuro', () => {
     const r = remindersOf({ train: { on: true, days: [1, 3], time: '19:30' } });
     const p = planReminders(NOW, r, base);
-    expect(p.length).toBeGreaterThan(4);
+    expect(p.length).toBeGreaterThan(3);
     for (const x of p) {
       expect([1, 3]).toContain(x.at.getDay());
       expect(x.at.getHours()).toBe(19);
@@ -18,30 +18,25 @@ describe('Recordatorios', () => {
     }
   });
 
-  it('entrenar: si hoy ya has entrenado, hoy no avisa', () => {
+  it('si hoy ya has entrenado o te has pesado, hoy no avisa', () => {
     const today = NOW.getDay();
-    const r = remindersOf({ train: { on: true, days: [today], time: '19:00' } });
-    expect(planReminders(NOW, r, base)[0].at.getDate()).toBe(NOW.getDate());
-    const p = planReminders(NOW, r, { ...base, trainings: [new Date(2026, 10, 11, 8).toISOString()] });
-    expect(p[0].at.getDate()).not.toBe(NOW.getDate());
+    const r = remindersOf({ train: { on: true, days: [today], time: '19:00' }, weigh: { on: true, days: [today], time: '20:00' } });
+    const first = (p: ReturnType<typeof planReminders>, k: string) => p.find((x) => x.kind === k)!.at.getDate();
+    expect(first(planReminders(NOW, r, base), 'train')).toBe(NOW.getDate());
+    const later = planReminders(NOW, r, { ...base, trainings: [new Date(2026, 10, 11, 8).toISOString()], weighings: [new Date(2026, 10, 11, 7).toISOString()] });
+    expect(first(later, 'train')).toBe(NOW.getDate() + 7);
+    expect(first(later, 'weigh')).toBe(NOW.getDate() + 7);
   });
 
-  it('pesarse: cada semana, y no si ya te has pesado esa semana', () => {
-    const r = remindersOf({ weigh: { on: true, every: 'week', day: NOW.getDay(), time: '20:00' } });
-    expect(planReminders(NOW, r, base)[0].at.getDate()).toBe(NOW.getDate());
-    const p = planReminders(NOW, r, { ...base, weighings: [new Date(2026, 10, 10).toISOString()] });
-    expect(p[0].at.getDate()).toBe(NOW.getDate() + 7);
+  it('copia de seguridad: solo con prémium', () => {
+    const r = remindersOf({ backup: { on: true, days: [0], time: '20:00' } });
+    expect(planReminders(NOW, r, { ...base, premium: false })).toEqual([]);
+    expect(planReminders(NOW, r, base)[0].at).toEqual(new Date(2026, 10, 15, 20, 0));
   });
 
-  it('copia de seguridad: solo con prémium, a la semana de la última', () => {
-    const r = remindersOf({ backup: { on: true, time: '20:00' } });
-    const last = new Date(2026, 10, 10, 12).toISOString();
-    expect(planReminders(NOW, r, { ...base, premium: false, lastBackup: last })).toEqual([]);
-    const p = planReminders(NOW, r, { ...base, lastBackup: last });
-    expect(p[0].at).toEqual(new Date(2026, 10, 17, 20, 0));
-  });
-
-  it('desactivados: no hay ningún aviso', () => {
+  it('ajustes de una versión anterior o desactivados: sin avisos', () => {
     expect(planReminders(NOW, remindersOf(undefined), base)).toEqual([]);
+    const old = remindersOf({ weigh: { on: true, every: 'week', day: 1, time: '08:30' } as never });
+    expect(old.weigh.days).toEqual([1]);
   });
 });

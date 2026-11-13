@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-13T11:38:47Z",
+    "es": ["Recordatorios en su propia pantalla (Ajustes › Recordatorios): activa Entrenamiento, Peso o Copia de seguridad y elige para cada uno los días de la semana y la hora."],
+    "ca": ["Recordatoris a la seva pròpia pantalla (Configuració › Recordatoris): activa Entrenament, Pes o Còpia de seguretat i tria per a cadascun els dies de la setmana i l'hora."],
+    "en": ["Reminders now have their own screen (Settings › Reminders): turn on Workout, Weight or Backup and choose the days of the week and the time for each."]
+  },
+  {
     "fecha": "2026-11-13T10:58:40Z",
     "es": ["Recordatorios en el móvil (app de Android), en Ajustes: entrenar (los días y a la hora que elijas) y pesarse (cada semana o cada mes), gratis; y copia de seguridad, con prémium. Llegan como notificación aunque la app esté cerrada."],
     "ca": ["Recordatoris al mòbil (app d'Android), a Configuració: entrenar (els dies i a l'hora que triïs) i pesar-se (cada setmana o cada mes), gratis; i còpia de seguretat, amb prèmium. Arriben com a notificació encara que l'app estigui tancada."],
