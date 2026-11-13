@@ -1401,3 +1401,15 @@ body:has(.page-lifted) { overflow-x: hidden; }
 .rem-count { position: absolute; top: -6px; right: -6px; min-width: 20px; height: 20px; padding: 0 5px; border-radius: 999px; display: flex; align-items: center; justify-content: center;
   background: #2FBF71; color: #fff; font: 700 .72rem/1 var(--body); box-shadow: 0 0 0 2px var(--surface); }
 .rem-lc { text-transform: lowercase; }
+/* Guía de la app */
+.guide-intro { margin: 4px 2px 14px; }
+.card.guide-item { margin-bottom: 10px; padding-top: 4px; padding-bottom: 4px; }
+.guide-item summary { list-style: none; display: flex; align-items: center; gap: 12px; padding: 10px 0; cursor: pointer; }
+.guide-item summary::-webkit-details-marker { display: none; }
+.guide-item .set-text { flex: 1; min-width: 0; }
+.guide-chev { width: 18px; height: 18px; color: var(--muted); transform: rotate(90deg); transition: transform .2s; flex: none; }
+.guide-item[open] .guide-chev { transform: rotate(-90deg); }
+.guide-points { margin: 0; padding: 4px 0 12px 20px; border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 8px; }
+.guide-points li { padding-top: 6px; line-height: 1.45; }
+.guide-points li::marker { color: var(--accent); }
+.guide-open { margin-bottom: 4px; }

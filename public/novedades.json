@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-13T12:09:03Z",
+    "es": ["Nueva Guía de la app, al principio de Ajustes: todo lo que puede hacer Kasa Fit, organizado por apartados."],
+    "ca": ["Nova Guia de l'app, al principi de Configuració: tot el que pot fer Kasa Fit, organitzat per apartats."],
+    "en": ["New App guide at the top of Settings: everything Kasa Fit can do, organised by section."]
+  },
+  {
     "fecha": "2026-11-13T11:55:49Z",
     "es": ["Recordatorios de Peso y Copia de seguridad: elige también la frecuencia, cada semana o cada 2, 3 o 4 semanas (se cuenta desde la última vez que lo hiciste)."],
     "ca": ["Recordatoris de Pes i Còpia de seguretat: tria també la freqüència, cada setmana o cada 2, 3 o 4 setmanes (es compta des de l'última vegada que ho vas fer)."],

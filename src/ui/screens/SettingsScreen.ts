@@ -12,6 +12,7 @@ import { pickBackupFile } from '../../services/Backup';
 import { BACKUP_EVERY_DAYS, saveBackupNow } from '../components/backupPrompt';
 import type { App, Screen } from '../App';
 import { LookScreen } from './LookScreen';
+import { GuideScreen } from './GuideScreen';
 import { append, clear, confirmDialog, h, plural } from '../dom';
 import { icon, SECTION_STYLE, type IconName } from '../icons';
 
@@ -291,6 +292,12 @@ export class SettingsScreen implements Screen {
     const s = this.app.store.settings;
     clear(this.body);
     this.body.append(
+      // guía de todo lo que hace la app, la primera
+      h('button', { class: 'card setting rest-card look-open guide-open', onclick: () => this.app.push(new GuideScreen(this.app)) },
+        h('div', { class: 'rest-head' },
+          h('span', { class: 'set-icon' }, icon('info')),
+          h('div', { class: 'set-text' }, h('strong', {}, 'Guía de la app'), h('p', { class: 'muted small' }, 'Todo lo que puede hacer Kasa Fit, explicado paso a paso.')),
+          icon('chevron'))),
       h('h3', { class: 'block-title' }, IS_NATIVE ? 'Suscripción' : 'Prémium'), this.accessCard(),
       h('h3', { class: 'block-title' }, 'Idioma'), this.langCard(),
       h('h3', { class: 'block-title' }, 'Pantalla'), this.themeCard(s),
