@@ -1406,3 +1406,7 @@ body:has(.page-lifted) { overflow-x: hidden; }
 .guide-points li::marker { color: var(--accent); }
 .guide-open { margin-bottom: 4px; }
 .guide-points li.guide-sub { list-style: none; margin: 8px 0 -2px -20px; padding-top: 10px; border-top: 1px dashed var(--line); font: 700 .78rem/1.2 var(--body); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+/* selector de orden (y hora de los recordatorios): sin recuadro al tocarlo, aunque se elija la misma opción */
+label.sort-row:focus-within, label.rem-hour:focus-within { outline: none; }
+.sort-select:focus, .rem-time:focus { outline: none; box-shadow: none; }
+.sort-select:focus-visible, .rem-time:focus-visible { border-color: var(--accent); }

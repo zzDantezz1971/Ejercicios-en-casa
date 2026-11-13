@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-13T17:55:58Z",
+    "es": ["El selector de orden ya no se queda con un recuadro blanco al tocarlo (por ejemplo, al elegir la opción que ya estaba)."],
+    "ca": ["El selector d'ordre ja no es queda amb un requadre blanc en tocar-lo (per exemple, en triar l'opció que ja hi era)."],
+    "en": ["The sort selector no longer keeps a white outline when tapped (for example, when picking the option that was already selected)."]
+  },
+  {
     "fecha": "2026-11-13T17:51:29Z",
     "es": ["Ordenar más sencillo: Zona del cuerpo, Por músculo, Por material y Alfabético se ordenan solos, y la quinta opción, «Personalizada», abre la lista entera para que la ordenes como quieras. «Ordenar lista» solo sale con «Personalizada», para volver a cambiar tu orden."],
     "ca": ["Ordenar més senzill: Zona del cos, Per múscul, Per material i Alfabètic s'ordenen sols, i la cinquena opció, «Personalitzada», obre la llista sencera perquè l'ordenis com vulguis. «Ordena la llista» només surt amb «Personalitzada», per tornar a canviar el teu ordre."],

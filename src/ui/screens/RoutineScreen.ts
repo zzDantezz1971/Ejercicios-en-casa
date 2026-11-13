@@ -138,6 +138,7 @@ export class RoutineScreen implements Screen {
       // ordenar la lista por zona, músculo, material o nombre (cada uno con su propio orden personalizado)
       const cur = this.sort;
       const sel = h('select', { class: 'sort-select', 'aria-label': 'Ordenar por', onchange: (e: Event) => {
+        (e.target as HTMLSelectElement).blur();
         const v = (e.target as HTMLSelectElement).value as ListSort;
         this.app.store.saveSettings({ ...this.app.store.settings, listSort: v });
         // al elegir «Personalizada» se abre la lista entera para ordenarla
