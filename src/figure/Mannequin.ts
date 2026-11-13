@@ -162,7 +162,8 @@ export function to3D(spec: MotionSpec, view: string, J: Joints, pose: Pose): Rec
   }
   }
   // Una mancuerna cogida con las dos manos (de lado): las manos se juntan en el centro
-  if ((spec.db === 'two' || spec.clasp) && view !== 'top') {
+  // (salvo si va cruzada: entonces cada mano la coge por un extremo)
+  if (((spec.db === 'two' && !spec.dbAcross) || spec.clasp) && view !== 'top') {
     const c = o.haL.clone().add(o.haR).multiplyScalar(0.5);
     for (const s of ['L', 'R']) {
       const k = s === 'L' ? -1 : 1;
@@ -951,10 +952,13 @@ export class MannequinScene {
   private updateDumbbells(J: Record<string, V3>, side: boolean): void {
     for (const d of this.dumbbells) {
       if (d.hand === 'two' && this.motion.spec.dbAcross) {
-        // una mancuerna cruzada, cogida por los dos extremos (p. ej. sobre el pecho en el crunch)
-        const ax = J.haR.clone().sub(J.haL).normalize();
-        const c = J.haL.clone().lerp(J.haR, 0.5);
-        const a = c.clone().addScaledVector(ax, -10), b = c.clone().addScaledVector(ax, 10);
+        // una mancuerna cruzada, cogida por los lados: cada palma contra la cara de fuera de un disco
+        // (p. ej. sobre el pecho en el crunch)
+        const gL = J.haL.clone().addScaledVector(J.haL.clone().sub(J.elL).normalize(), this.skinned ? 4.5 : 3);
+        const gR = J.haR.clone().addScaledVector(J.haR.clone().sub(J.elR).normalize(), this.skinned ? 4.5 : 3);
+        const ax = gR.clone().sub(gL).normalize();
+        const c = gL.clone().lerp(gR, 0.5), half = Math.max(6, gL.distanceTo(gR) / 2 - 3.2);
+        const a = c.clone().addScaledVector(ax, -half), b = c.clone().addScaledVector(ax, half);
         this.seg(d.bar, a, b, 1.3);
         this.seg(d.p1, a.clone().addScaledVector(ax, -1.6), a.clone().addScaledVector(ax, 1.6), 5);
         this.seg(d.p2, b.clone().addScaledVector(ax, -1.6), b.clone().addScaledVector(ax, 1.6), 5);

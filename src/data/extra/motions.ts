@@ -358,8 +358,9 @@ export const EXTRA_MOTIONS: Record<string, M> = {
   'lenador-con-mancuerna': { v: 'front', db: 'two', f: [
     [{ tl: -84, tu: -80, uaL: 48, faL: 48, uaR: 82, faR: 82, zHL: 8, zHR: 8, tw: 22, thL: 100, snL: 100, thR: 80, snR: 80 }, 150, 800],
     [{ tl: -94, tu: -98, uaL: -120, faL: -125, saL: 0.78, uaR: -135, faR: -140, zHL: 8, zHR: 8, tw: -22, thL: 100, snL: 100, thR: 80, snR: 80 }, 200, 800]] },
-  'crunch-con-mancuerna': mocapCrunch({ tl: 180, tu: 180, hd: 184, ...KNEES, ua: -100, fa: 30, zHL: 8, zHR: -8, zEL: 10, zER: -10 },
-    { tu: 203, hd: 214, ua: -77, fa: 53 }, { mat: 1, feetDown: true, db: 'two', dbAcross: true, anchor: { j: 'pel', y: -12.1 }, az: 20, el: 18 }),
+  // la mancuerna, cruzada sobre el pecho y cogida por los lados (cada mano por fuera de un disco)
+  'crunch-con-mancuerna': mocapCrunch({ tl: 180, tu: 180, hd: 184, ...KNEES, ua: -115, fa: 15, zHL: 2, zHR: -2, zEL: -4, zER: 4 },
+    { tu: 203, hd: 214, ua: -92, fa: 38 }, { mat: 1, feetDown: true, db: 'two', dbAcross: true, anchor: { j: 'pel', y: -12.1 }, az: 20, el: 18 }),
 
   // ── Pesa rusa ──
   'swing-con-pesa-rusa': { kb: 'both', plant: 'anR', f: [
