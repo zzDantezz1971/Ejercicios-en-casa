@@ -252,8 +252,8 @@ export const RAW_SECTIONS: RawSection[] = [
  {g:'Aductores (ingles)'},
  // sentado, plantas de los pies juntas y quietas; las rodillas suben y bajan hacia los lados (aleteo suave)
  {n:'Mariposa (aductores)',z:'Ingles y cadera',v:'front',noGround:1,mat:'top',f:[
-   [{thL:235,snL:50,thR:-55,snR:130,sTh:.75,sSh:.9,zK:5,zA:5,ftL:0,ftR:180,lean:30,uaL:70,faL:60,uaR:110,faR:120,sa:.6,zE:16,zH:32},500,1300],
-   [{thL:170,snL:5,thR:10,snR:175,sTh:.75,sSh:.9,zK:10,zA:15,ftL:0,ftR:180,lean:30,uaL:70,faL:60,uaR:110,faR:120,sa:.6,zE:16,zH:32},700,1300]]},
+   [{thL:235,snL:50,thR:-55,snR:130,sTh:.75,sSh:.9,zK:5,zA:5,ftL:0,ftR:180,lean:25,uaL:95,faL:40,uaR:85,faR:140,sa:.6,zE:16,zH:34},500,1300],
+   [{thL:170,snL:5,thR:10,snR:175,sTh:.75,sSh:.9,zK:10,zA:15,ftL:0,ftR:180,lean:25,uaL:95,faL:40,uaR:85,faR:140,sa:.6,zE:16,zH:34},700,1300]]},
  {n:'Zancada lateral',z:'Aductores',v:'front',plant:'anR',alternate:true,f:[
    [{thL:128,snL:128,thR:62,snR:100,tl:-84,uaL:140,faL:40,zHL:3,uaR:80,faR:100,zKR:12,lean:16},1400,1100],
    [{thL:122,snL:122,thR:55,snR:104,tl:-80,uaL:140,faL:40,zHL:3,uaR:80,faR:100,zKR:14,lean:18},1400,1100]]},

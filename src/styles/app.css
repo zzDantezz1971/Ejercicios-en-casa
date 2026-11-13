@@ -149,7 +149,7 @@ button:focus-visible, input:focus-visible, label:focus-within { outline: 2px sol
   background: radial-gradient(80% 60% at 100% 0%, rgb(255 255 255 / .18), transparent 60%);
 }
 .hero-art {
-  position: absolute; right: 14px; top: 14px; width: 30%; max-width: 130px; aspect-ratio: 1; object-fit: contain;
+  position: absolute; right: 12px; top: 12px; width: 27%; max-width: 120px; aspect-ratio: 1; object-fit: contain;
   opacity: .9; filter: drop-shadow(0 10px 20px rgb(0 0 0 / .35));
 }
 .hero-art:not([src]) { visibility: hidden; }
@@ -159,6 +159,9 @@ button:focus-visible, input:focus-visible, label:focus-within { outline: 2px sol
 .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 6px; }
 .chip { display: inline-flex; align-items: center; gap: 6px; background: rgb(255 255 255 / .16); border-radius: 999px; padding: 5px 11px; font-weight: 600; font-size: .9rem; }
 .chip .ico { width: 16px; height: 16px; }
+/* en la tarjeta de la tabla en uso, los recuadros (duración y ejercicios) más compactos para no tocar el icono redondo */
+.hero .chips { gap: 6px; }
+.hero .chip { padding: 6px 10px; gap: 5px; font-size: .85rem; }
 .hero-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 
 .week { display: flex; flex-direction: column; gap: 14px; }
