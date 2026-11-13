@@ -87,9 +87,9 @@ export class PaywallScreen implements Screen {
         h('img', { class: 'welcome-logo', src: `${import.meta.env.BASE_URL}icon-192.png`, alt: '' }),
         h('h1', {}, 'Desbloquea todos los ejercicios')),
       h('ul', { class: 'pw-perks' },
-        ...['Más de 200 ejercicios con muñeco animado', 'Arma tus tablas con los ejercicios que quieras, con o sin material', 'Voz, pitidos y cuenta atrás: entrena sin mirar el móvil', 'Conecta tu reloj y ve las pulsaciones', 'Historial, rachas y medallas para motivarte', 'Resumen de cada semana y de cada mes'].map((t) =>
+        ...['Más de 200 ejercicios con muñeco animado y personalizable', 'Arma tus tablas con los ejercicios que quieras, con o sin material', 'Voz, pitidos y cuenta atrás: entrena sin mirar el móvil', 'Conecta tu reloj y ve las pulsaciones', 'Historial, rachas y medallas para motivarte', 'Resumen de cada semana y de cada mes'].map((t) =>
           h('li', {}, icon('check'), t)),
-        h('li', {}, icon('check'), 'Y mucho más')),
+        h('li', {}, icon('check'), 'Y mucho más 😃')),
       h('p', { class: 'muted small pw-free' }, 'Ahora tienes la versión gratis: un ejercicio de cada apartado, con todo lo demás de la app.'),
       CAN_PAY ? null : h('p', { class: 'note pw-preview' }, icon('info'), 'Vista previa: en la versión web no se puede pagar. La suscripción solo funciona en la app de Google Play.'),
       h('section', { class: 'pw-plans' },
