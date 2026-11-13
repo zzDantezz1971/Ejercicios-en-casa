@@ -4,6 +4,8 @@ import { flushDurable } from '../../platform/durable';
 import { showUpdateDialog } from '../components/updateDialog';
 import { BUILD_TIME, checkForUpdate, updateReady } from '../../services/Updates';
 import { IS_NATIVE } from '../../platform/native';
+import { remindersOf, type ReminderSettings } from '../../domain/reminders';
+import { askNotificationPermission, REMINDERS_AVAILABLE } from '../../services/Reminders';
 import { Store } from '../../domain/Store';
 import { SECTION_IDS, SECTION_TITLES, type Settings } from '../../domain/types';
 import { pickBackupFile } from '../../services/Backup';
@@ -241,6 +243,67 @@ export class SettingsScreen implements Screen {
         h('button', { class: 'btn ghost', onclick: () => void restore() }, icon('back'), 'Restaurar copia')));
   }
 
+  /** Recordatorios en el móvil: entrenar y pesarse (gratis) y copia de seguridad (prémium). */
+  private remindersSection(): HTMLElement {
+    if (!REMINDERS_AVAILABLE) {
+      return h('section', { class: 'card setting rest-card' },
+        h('div', { class: 'rest-head' },
+          h('span', { class: 'set-icon' }, icon('bell')),
+          h('div', { class: 'set-text' }, h('strong', {}, 'Recordatorios'),
+            h('p', { class: 'muted small' }, 'Los recordatorios llegan como notificación en la app de Android, aunque esté cerrada.'))));
+    }
+    const r = remindersOf(this.app.store.settings.reminders);
+    const save = (next: ReminderSettings) => this.update({ reminders: next });
+    // al encender uno, se pide permiso para las notificaciones
+    const turnOn = async (key: keyof ReminderSettings, on: boolean) => {
+      if (on && !(await askNotificationPermission())) {
+        await confirmDialog('Para recibir recordatorios, permite las notificaciones de Kasa Fit en los ajustes del móvil.', 'Vale', '');
+        this.render();
+        return;
+      }
+      save({ ...r, [key]: { ...r[key], on } });
+    };
+    // días de la semana empezando por el lunes, con el nombre corto en el idioma de la app
+    const DAYS = [1, 2, 3, 4, 5, 6, 0];
+    const dayName = (d: number) => new Date(2024, 0, d === 0 ? 7 : d).toLocaleDateString(LOCALE, { weekday: 'short' }).replace('.', '');
+    const timeInput = (value: string, set: (v: string) => void) =>
+      h('input', { type: 'time', class: 'rem-time', value, 'aria-label': 'Hora', onchange: (e: Event) => { const v = (e.target as HTMLInputElement).value; if (v) set(v); } });
+    const row = (key: keyof ReminderSettings, ic: IconName, label: string, help: string, locked = false) =>
+      h('label', { class: 'switch-row', for: `rem-${key}` },
+        h('span', { class: 'set-icon' }, icon(ic)),
+        h('span', { class: 'set-text' }, h('strong', {}, label, locked ? icon('lock', 'ico rem-lock') : null), h('span', { class: 'muted block small' }, help)),
+        h('input', { type: 'checkbox', id: `rem-${key}`, class: 'switch', checked: !locked && r[key].on, onchange: (e: Event) => {
+          const el = e.target as HTMLInputElement;
+          if (locked) { el.checked = false; this.app.showPremium(); return; }
+          void turnOn(key, el.checked);
+        } }));
+    const premium = this.app.access.premium;
+    return h('section', { class: 'card reminders' },
+      row('train', 'bolt', 'Entrenar', 'Los días y a la hora que elijas. Si ese día ya has entrenado, no te avisa.'),
+      r.train.on ? h('div', { class: 'rem-opts' },
+        h('div', { class: 'rem-days', 'data-no-tr': '' }, ...DAYS.map((d) => {
+          const on = r.train.days.includes(d);
+          return h('button', { class: 'rem-day' + (on ? ' on' : ''), 'aria-pressed': String(on), onclick: () =>
+            save({ ...r, train: { ...r.train, days: on ? r.train.days.filter((x) => x !== d) : [...r.train.days, d] } }) }, dayName(d));
+        })),
+        timeInput(r.train.time, (time) => save({ ...r, train: { ...r.train, time } }))) : null,
+      row('weigh', 'scale', 'Pesarse', 'Para anotar tu peso. Si ya te has pesado en ese tiempo, no te avisa.'),
+      r.weigh.on ? h('div', { class: 'rem-opts' },
+        h('div', { class: 'segmented lang-segs' },
+          h('button', { class: 'seg' + (r.weigh.every === 'week' ? ' on' : ''), onclick: () => save({ ...r, weigh: { ...r.weigh, every: 'week', day: 1 } }) }, 'Cada semana'),
+          h('button', { class: 'seg' + (r.weigh.every === 'month' ? ' on' : ''), onclick: () => save({ ...r, weigh: { ...r.weigh, every: 'month', day: 1 } }) }, 'Cada mes')),
+        r.weigh.every === 'week'
+          ? h('div', { class: 'rem-days', 'data-no-tr': '' }, ...DAYS.map((d) =>
+            h('button', { class: 'rem-day' + (r.weigh.day === d ? ' on' : ''), 'aria-pressed': String(r.weigh.day === d), onclick: () => save({ ...r, weigh: { ...r.weigh, day: d } }) }, dayName(d))))
+          : h('label', { class: 'rem-month' }, h('span', { class: 'muted small' }, 'Día del mes'),
+            h('select', { onchange: (e: Event) => save({ ...r, weigh: { ...r.weigh, day: Number((e.target as HTMLSelectElement).value) } }) },
+              ...Array.from({ length: 28 }, (_, i) => h('option', { value: String(i + 1), selected: r.weigh.day === i + 1 }, String(i + 1))))),
+        timeInput(r.weigh.time, (time) => save({ ...r, weigh: { ...r.weigh, time } }))) : null,
+      row('backup', 'copy', 'Copia de seguridad', 'Cuando haga una semana de la última copia.', !premium),
+      premium && r.backup.on ? h('div', { class: 'rem-opts' },
+        timeInput(r.backup.time, (time) => save({ ...r, backup: { ...r.backup, time } }))) : null);
+  }
+
   /** Suscripción de la app de Google Play (o acceso con código); en la web, la vista previa de la versión gratis. */
   private accessCard(): HTMLElement {
     const a = this.app.access;
@@ -317,6 +380,8 @@ export class SettingsScreen implements Screen {
       }, icon('volume'), 'Probar sonido y voz'),
       h('h3', { class: 'block-title' }, 'Motivación'),
       toggle('phrases', 'bolt', 'Frases motivadoras', 'Una frase distinta cada día en Inicio.'),
+      h('h3', { class: 'block-title' }, 'Recordatorios'),
+      this.remindersSection(),
       h('h3', { class: 'block-title' }, 'Reloj'),
       this.watchSection(),
       h('h3', { class: 'block-title' }, 'Copia de seguridad'),

@@ -6,6 +6,8 @@ const STROKE: Record<string, string> = {
   home: 'M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z',
   tables: 'M8 6h12M8 12h12M8 18h12M3.5 6h.01M3.5 12h.01M3.5 18h.01',
   calendar: 'M4 6h16v14H4zM4 10h16M8 3v4M16 3v4',
+  bell: 'M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15zM10 20.5a2 2 0 0 0 4 0',
+  scale: 'M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zM8.5 10a3.5 3.5 0 0 1 7 0zM12 10l1.5-2',
   settings: 'M4 7h9M17 7h3M4 17h3M11 17h9M15 5v4M9 15v4',
   close: 'M6 6l12 12M18 6 6 18',
   plus: 'M12 5v14M5 12h14',

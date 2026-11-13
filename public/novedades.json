@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-13T10:58:40Z",
+    "es": ["Recordatorios en el móvil (app de Android), en Ajustes: entrenar (los días y a la hora que elijas) y pesarse (cada semana o cada mes), gratis; y copia de seguridad, con prémium. Llegan como notificación aunque la app esté cerrada."],
+    "ca": ["Recordatoris al mòbil (app d'Android), a Configuració: entrenar (els dies i a l'hora que triïs) i pesar-se (cada setmana o cada mes), gratis; i còpia de seguretat, amb prèmium. Arriben com a notificació encara que l'app estigui tancada."],
+    "en": ["Phone reminders (Android app), in Settings: work out (on the days and at the time you choose) and weigh yourself (every week or every month), free; and backup, with premium. They arrive as notifications even when the app is closed."]
+  },
+  {
     "fecha": "2026-11-13T10:43:46Z",
     "es": ["Al ordenar, la lista se desplaza más despacio cuando arrastras un ejercicio hacia el borde de la pantalla, y con las flechas ↑ ↓ la pantalla acompaña al ejercicio para que siga bajo tu dedo."],
     "ca": ["En ordenar, la llista es desplaça més a poc a poc quan arrossegues un exercici cap a la vora de la pantalla, i amb les fletxes ↑ ↓ la pantalla acompanya l'exercici perquè continuï sota el teu dit."],

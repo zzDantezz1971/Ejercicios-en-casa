@@ -1375,3 +1375,15 @@ body:has(.page-lifted) { overflow-x: hidden; }
   top: calc(var(--safe-area-inset-top, env(safe-area-inset-top, 0px)) + 64px + var(--tabs-h, 120px)); }
 .sorting-title > span { display: flex; flex-direction: column; line-height: 1.2; }
 .sorting-sort { font-weight: 500; font-size: .78rem; }
+/* Recordatorios (Ajustes) */
+.reminders .switch-row + .switch-row, .reminders .rem-opts + .switch-row { border-top: 1px solid var(--line); }
+.rem-opts { display: flex; flex-direction: column; gap: 10px; padding: 0 0 12px 46px; }
+.rem-days { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 5px; }
+.rem-day { min-width: 0; padding: 8px 0; border-radius: 10px; border: 1px solid var(--line); background: var(--surface-2); color: var(--muted); font-weight: 700; text-transform: capitalize; cursor: pointer; }
+.rem-day.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+.rem-time, .rem-month select { align-self: flex-start; padding: 8px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface-2); color: var(--fg); font: inherit; font-weight: 700; color-scheme: dark; }
+.rem-month { display: flex; align-items: center; gap: 10px; }
+.rem-lock { width: 14px !important; height: 14px !important; margin-left: 6px; vertical-align: -2px; opacity: .7; }
+.card.reminders { display: flex; flex-direction: column; padding-top: 4px; padding-bottom: 4px; }
+.card.reminders .switch-row { padding: 12px 0; }
+:root[data-theme="light"] .rem-time, :root[data-theme="light"] .rem-month select { color-scheme: light; }

@@ -1,3 +1,4 @@
+import { rescheduleReminders } from '../services/Reminders';
 import { setFigureStyle } from '../figure/skinAsset';
 import { setLook } from '../figure/look';
 import { HeartRate } from '../services/HeartRate';
@@ -67,6 +68,11 @@ export class App {
     // la primera vez se apuntan las medallas que ya se tenían, sin celebrarlas
     if (!Object.keys(this.store.medals).length) this.store.checkMedals();
     this.applySettings();
+    // recordatorios del móvil: se recalculan al abrir la app, al volver a ella y cada vez que cambia algo
+    const remind = () => rescheduleReminders(this.store, () => this.access.premium);
+    this.store.onSaved = remind;
+    document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') remind(); });
+    window.setTimeout(remind, 3000);
     root.append(this.view, this.tabbar);
     // Botón atrás de Android: cada pantalla nueva añade una entrada al historial del navegador.
     window.addEventListener('popstate', () => void this.handleBack());

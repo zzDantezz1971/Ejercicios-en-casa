@@ -586,12 +586,16 @@ export class Store {
     return { version: DATA_VERSION, routines, activeId, settings, history, hidden, order, orderVer: ORDER_VER, lastBackup, favorites, weights, summarySeen, weekSeen, medals, welcomed };
   }
 
+  /** Se llama cada vez que se guardan datos (p. ej., para volver a programar los recordatorios). */
+  onSaved: (() => void) | null = null;
+
   private persist(): void {
     try {
       this.kv?.setItem(STORAGE_KEY, JSON.stringify(this.data));
     } catch {
       // Sin almacenamiento disponible: la app sigue funcionando sin guardar.
     }
+    this.onSaved?.();
   }
 }
 

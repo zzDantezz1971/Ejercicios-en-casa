@@ -174,6 +174,8 @@ export interface Settings {
   figureStyle: FigureStyle;
   /** Material que tiene el usuario (los ejercicios sin material se ven siempre). */
   equipment: Equip[];
+  /** Recordatorios en el móvil (entrenar, pesarse y copia de seguridad). */
+  reminders?: Partial<import('./reminders').ReminderSettings>;
   /** Metas de la semana en Inicio: minutos y calorías (null = lo de la semana pasada). */
   weekGoals: { minutes: number; kcal: number | null };
 }
