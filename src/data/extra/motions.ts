@@ -21,8 +21,8 @@ const LUNGE_BL = { ...LUNGE_L, x: -30 };
 const PUSH_DEEP_AT = (tl: number) => ({ tl, ua: 215, fa: 85, th: 180 + tl, sn: 180 + tl, ft: 90 });
 // flexiones: las puntas de los pies quedan fijas en el suelo (el cuerpo gira sobre ellas) y las manos, también fijas
 const DEEP = -1.8, DEEP_K = -8, DEEP_D = 16;
-const TOES = { plant: 'tiR', anchor: { j: 'tiR', y: -1 } } as const;
-const KNEES_DOWN = { plant: 'knR', anchor: { j: 'knR', y: -4 } } as const;
+const TOES = { plant: 'tiR', anchor: { j: 'tiR', y: -2.2 }, noSettle: true } as const;
+const KNEES_DOWN = { plant: 'knR', anchor: { j: 'knR', y: -5.8 }, noSettle: true } as const;
 const HIPS = { ua: 118, fa: 28 }; // manos en la cintura (vista lateral)
 const SUMO = { thL: 118, snL: 118, thR: 62, snR: 62, ftL: 180, ftR: 0, uaL: 74, faL: 66, uaR: 106, faR: 114, zEL: 6, zER: 6, zHL: 14, zHR: 14 };
 const SUMO_DOWN = { thL: 152, snL: 96, thR: 28, snR: 84, ftL: 180, ftR: 0, uaL: 74, faL: 66, uaR: 106, faR: 114, zEL: 6, zER: 6, zHL: 14, zHR: 14, zKL: 9, zKR: 9, lean: 16 };
@@ -174,7 +174,8 @@ export const EXTRA_MOTIONS: Record<string, M> = {
   // ── Fuerza sin material ──
   flexiones: { mat: 1, ...TOES, handsDown: true, f: [[PLH, 200, 750], [PUSH_DEEP_AT(DEEP), 150, 850]] },
   'flexiones-con-rodillas-apoyadas': { mat: 1, ...KNEES_DOWN, handsDown: true, f: [
-    [{ tl: -30, ua: 90, fa: 90, th: 150, sn: 180, ft: 180 }, 200, 750], [{ ...PUSH_DEEP_AT(DEEP_K), sn: 180, ft: 180 }, 150, 850]] },
+    // la espinilla sube un poco hacia atrás y el pie queda de punta, con los dedos en el suelo (como en las demás flexiones)
+    [{ tl: -30, ua: 90, fa: 90, th: 150, sn: 189, ft: 90 }, 200, 750], [{ ...PUSH_DEEP_AT(DEEP_K), sn: 189, ft: 90 }, 150, 850]] },
   // silla grande (asiento ancho y con fondo para las dos manos; sin respaldo, que la cabeza pasa por encima): las palmas apoyadas en el asiento
   'flexiones-inclinadas-en-silla': { ...TOES, handsDown: 41, props: (J) => {
     const x1 = J.haR[0] - 5, x2 = J.haR[0] + 40, top = -35;
@@ -185,7 +186,7 @@ export const EXTRA_MOTIONS: Record<string, M> = {
     ];
   }, f: [
     [{ tl: -45, ua: 90, fa: 90, th: 135, sn: 135, ft: 60 }, 200, 750], [{ tl: -32, ua: 185, fa: 72, th: 148, sn: 148, ft: 70 }, 150, 850]] },
-  'flexiones-declinadas': { mat: 1, plant: 'tiR', anchor: { j: 'tiR', y: -41 }, handsDown: true, props: (J, P) => P.benchFlat(J.anR[0] - 16, J.anR[0] + 12, 40), f: [
+  'flexiones-declinadas': { mat: 1, plant: 'tiR', anchor: { j: 'tiR', y: -41 }, noSettle: true, handsDown: true, props: (J, P) => P.benchFlat(J.anR[0] - 16, J.anR[0] + 12, 40), f: [
     [{ tl: 6, ua: 90, fa: 90, th: 186, sn: 186, ft: 90 }, 200, 750], [PUSH_DEEP_AT(DEEP_D), 150, 850]] },
   // fijo por los pies: con la mano derecha fija, al levantarla se movía todo el cuerpo
   'flexiones-con-apertura-en-t': { mat: 1, ...TOES, handsDown: true, f: [
