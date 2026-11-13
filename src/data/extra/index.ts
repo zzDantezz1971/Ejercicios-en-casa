@@ -6,12 +6,14 @@ import { MANCUERNAS } from './mancuernas';
 import { PESA_BARRA } from './pesaBarra';
 import { BANDAS_STEP } from './bandasStep';
 import { OTROS } from './otros';
+import { NEW_GROUP, NUEVOS } from './nuevos';
 
 /* Ejercicios nuevos por material (todavía sin animación). */
-export const EXTRAS: ExtraEx[] = [...LIBRE_A, ...LIBRE_B, ...MANCUERNAS, ...PESA_BARRA, ...BANDAS_STEP, ...OTROS];
+export const EXTRAS: ExtraEx[] = [...LIBRE_A, ...LIBRE_B, ...MANCUERNAS, ...PESA_BARRA, ...BANDAS_STEP, ...OTROS, ...NUEVOS];
+export { NEW_GROUP };
 
 /** Grupos nuevos de los apartados (traducciones). */
-export const EXTRA_GROUPS: Record<string, { ca: string; en: string }> = { ...GROUPS_B };
+export const EXTRA_GROUPS: Record<string, { ca: string; en: string }> = { ...GROUPS_B, [NEW_GROUP]: { ca: 'Nous', en: 'New' } };
 
 export function extraId(name: string): string {
   return name.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');

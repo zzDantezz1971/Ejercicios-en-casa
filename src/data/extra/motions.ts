@@ -75,6 +75,34 @@ const RENEG = { tl: -22, ua: 90, fa: 90, th: 158, sn: 158, ft: 90 };
 const BEAR = { tl: 3, ua: 88, fa: 88, th: 92, sn: 176, ft: 60 }; // cuadrupedia con rodillas despegadas
 
 export const EXTRA_MOTIONS: Record<string, M> = {
+  // ── Nuevos (noviembre de 2026) ──
+  // rodilla arriba por delante y se abre hacia fuera como una puerta; después la otra pierna
+  'abrir-y-cerrar-la-puerta-de-la-cadera': { az: 40, alternate: true, plant: 'anL', f: [
+    [{ ...HIPS }, 100, 500], [{ ...HIPS, thR: 2, snR: 92 }, 80, 600], [{ ...HIPS, thR: 14, snR: 100, zKR: 26, zAR: 20 }, 150, 700], [{ ...HIPS }, 100, 600]] },
+  // abrazar una rodilla contra el pecho, alternando
+  'rodilla-al-pecho-caminando': { alternate: true, plant: 'anL', f: [
+    [{}, 100, 500], [{ thR: -48, snR: 70, ftR: 40, ua: 52, fa: 8, zHL: 8, zHR: -8 }, 350, 600], [{}, 100, 500]] },
+  // cadera atrás con la espalda recta, rodillas casi estiradas
+  'bisagra-de-cadera-sin-peso': { plant: 'anR', f: [
+    [{ ...HIPS }, 200, 900], [{ ua: 194, fa: 104, tl: -14, th: 80, sn: 94, hd: -22 }, 300, 900]] },
+  // de una pierna a la otra saltando de lado; la libre cruzada por detrás y los brazos acompañan
+  patinador: { v: 'front', az: 20, f: [
+    [{ x: -26, thL: 98, snL: 84, thR: 112, snR: 128, zKR: -10, zAR: -22, uaL: 150, faL: 140, uaR: 120, faR: 100, sTh: 0.92 }, 120, 330],
+    [{ x: 0, jy: 14, uaL: 100, faL: 95, uaR: 80, faR: 85 }, 0, 330],
+    [{ x: 26, thR: 82, snR: 96, thL: 68, snL: 52, zKL: -10, zAL: -22, uaR: 30, faR: 40, uaL: 60, faL: 80, sTh: 0.92 }, 120, 330],
+    [{ x: 0, jy: 14, uaL: 100, faL: 95, uaR: 80, faR: 85 }, 0, 330]] },
+  'plancha-de-oso': { mat: 1, plant: 'haR', handsDown: true, f: [
+    [BEAR, 900, 1200], [{ ...BEAR, tl: 4.5 }, 900, 1200]] },
+  'plancha-con-salto-de-pies': { mat: 1, az: 50, plant: 'haR', handsDown: true, f: [
+    [{ ...PLH }, 60, 260], [{ ...PLH, jy: 3, zKL: -6, zKR: 6, zAL: -15, zAR: 15 }, 60, 260]] },
+  // rodilla hacia el codo contrario, por debajo del cuerpo
+  'escaladores-cruzados': { mat: 1, handsDown: 3, anchor: { j: 'pel', y: -40 }, f: [
+    [{ ...PLH, tl: -7, thR: 42, snR: 195, ftR: 200, zKR: -14, zAR: -8, thL: 155, snL: 155 }, 150, 160],
+    [{ ...PLH, tl: -7, thL: 42, snL: 195, ftL: 200, zKL: 14, zAL: 8, thR: 155, snR: 155 }, 150, 160]] },
+  // caminar en el sitio con peso en una mano, sin inclinarse
+  'paseo-de-maleta': { db: 'R', f: [
+    [{ thR: 45, snR: 115, uaR: 90, faR: 90, uaL: 75, faL: 60 }, 0, 500], [{ uaR: 90, faR: 90, uaL: 90, faL: 80 }, 0, 500],
+    [{ thL: 45, snL: 115, uaR: 90, faR: 90, uaL: 105, faL: 95 }, 0, 500], [{ uaR: 90, faR: 90, uaL: 90, faL: 80 }, 0, 500]] },
   // ── Calentamiento ──
   'skipping-rodillas-arriba': { f: [
     [{ thR: -8, snR: 78, uaL: 35, faL: -45, uaR: 130, faR: 105 }, 0, 230], [{ th: 86, sn: 100, jy: 4 }, 0, 170],

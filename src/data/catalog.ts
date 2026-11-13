@@ -5,7 +5,7 @@ import { RAW_SECTIONS } from './rawExercises';
 import { MUSCLES_BY_EXERCISE } from './muscles';
 import { exerciseText, LANG } from '../i18n';
 import { parseNeed } from '../domain/equipment';
-import { EXTRAS, extraId } from './extra';
+import { EXTRAS, extraId, NEW_GROUP } from './extra';
 import { EXTRA_MOTIONS, MOTION_OVERRIDES } from './extra/motions';
 
 /** Material de los ejercicios de antes (los que usan mancuernas lo sacan del movimiento). */
@@ -150,8 +150,10 @@ function buildSections(): SectionInfo[] {
         pending: !EXTRA_MOTIONS[id],
       };
       let at = -1;
-      if (x.g) for (let i = exercises.length - 1; i >= 0; i--) if (exercises[i].group === x.g) { at = i; break; }
-      if (at >= 0) exercises.splice(at + 1, 0, ex);
+      // los recién añadidos van al principio del apartado, juntos, para revisarlos
+      if (x.g === NEW_GROUP) at = exercises.filter((e) => e.group === NEW_GROUP).length - 1;
+      else if (x.g) for (let i = exercises.length - 1; i >= 0; i--) if (exercises[i].group === x.g) { at = i; break; }
+      if (at >= 0 || x.g === NEW_GROUP) exercises.splice(at + 1, 0, ex);
       else exercises.push(ex);
     }
     // los subgrupos finos solo sirven para ordenar; en la lista se agrupan en pocos títulos
