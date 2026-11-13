@@ -164,7 +164,7 @@ export interface Settings {
   /** Aspecto del muñeco (Configuración › Personaliza el muñeco). */
   look?: Partial<import('../figure/look').Look>;
   /** Orden de la lista de ejercicios de cada apartado. */
-  listSort?: 'zona' | 'musculo' | 'material' | 'az';
+  listSort?: 'zona' | 'musculo' | 'material' | 'az' | 'personalizada';
   profile: Profile;
   /** Idioma de la app. */
   lang: 'ca' | 'es' | 'en';

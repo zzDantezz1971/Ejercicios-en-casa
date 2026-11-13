@@ -3,7 +3,7 @@ import { RoutineEditor, STEP_SECONDS } from '../../domain/RoutineEditor';
 import { clampRounds, MAX_ROUNDS } from '../../domain/WorkoutPlan';
 import { SECTION_IDS, SECTION_TITLES, usesWeight, type ExerciseDef, type SectionId } from '../../domain/types';
 import type { App, Screen } from '../App';
-import { append, clear, confirmDialog, h, humanDuration, kg, plural, promptDialog, weightDialog } from '../dom';
+import { append, clear, h, humanDuration, kg, plural, promptDialog, weightDialog } from '../dom';
 import { icon, SECTION_STYLE, zoneIcon } from '../icons';
 import { badgeList, equipMarks } from '../components/badges';
 import { canDo } from '../../domain/equipment';
@@ -14,8 +14,8 @@ import { MUSCLE_NAMES, parseMuscles, type Muscle } from '../../figure/anatomy';
 import { EQUIPMENT, EQUIP_INFO } from '../../domain/equipment';
 import type { IconName } from '../icons';
 
-export type ListSort = 'zona' | 'musculo' | 'material' | 'az';
-const SORT_LABELS: Record<ListSort, string> = { zona: 'Zona del cuerpo', musculo: 'Por músculo (de cabeza a pies)', material: 'Por material', az: 'Alfabético (A-Z)' };
+export type ListSort = 'zona' | 'musculo' | 'material' | 'az' | 'personalizada';
+const SORT_LABELS: Record<ListSort, string> = { zona: 'Zona del cuerpo', musculo: 'Por músculo (de cabeza a pies)', material: 'Por material', az: 'Alfabético (A-Z)', personalizada: 'Personalizada' };
 /** Músculos de la cabeza a los pies (orden «Por músculo»). */
 const HEAD_TO_TOE: Muscle[] = ['cuello', 'trapecio', 'deltoides', 'pecho', 'espalda', 'biceps', 'triceps', 'antebrazo',
   'abdominales', 'oblicuos', 'lumbar', 'gluteos', 'aductores', 'cuadriceps', 'isquios', 'gemelos'];
@@ -31,8 +31,6 @@ function mainMuscle(e: ExerciseDef): Muscle | undefined {
 type Listed = ExerciseDef & { listGroup: string };
 /** Cómo se agrupa la lista en un tipo de orden: grupo de cada ejercicio, grupos en orden, título e icono. */
 interface Grouping { keyOf: (e: ExerciseDef) => string; keys: string[]; title: (k: string) => string; icon: (k: string) => SVGSVGElement }
-/** En tu orden guardado, marca dónde empieza cada grupo. */
-const GROUP_MARK = '§';
 const byName = (a: ExerciseDef, b: ExerciseDef) => tr(a.name).localeCompare(tr(b.name));
 
 /** Preparar rutina: elegir ejercicios por apartado (se numeran en el orden en que se marcan) y su duración. */
@@ -119,13 +117,17 @@ export class RoutineScreen implements Screen {
     if (this.mode === 'sorting') {
       this.toolbar.append(
         h('div', { class: 'sorting-bar' },
-          h('span', { class: 'sorting-title' }, icon('tables'), h('span', {}, `Ordenando ${title}`, h('small', { class: 'muted sorting-sort' }, SORT_LABELS[this.sort]))),
-          this.app.store.customOrder(this.section, this.sort)
-            ? h('button', { class: 'btn ghost small', onclick: () => { this.app.store.resetOrder(this.section, this.sort); this.refresh(); } }, 'Restablecer')
+          h('span', { class: 'sorting-title' }, icon('tables'), h('span', {}, `Ordenando ${title}`)),
+          this.app.store.customOrder(this.section, 'personalizada') || this.app.store.customOrder(this.section)
+            ? h('button', { class: 'btn ghost small', onclick: () => {
+              this.app.store.resetOrder(this.section, 'personalizada');
+              this.app.store.resetOrder(this.section);
+              this.refresh();
+            } }, 'Restablecer')
             : null,
           h('button', { class: 'btn primary small', onclick: () => { this.mode = 'all'; this.refresh(); } }, icon('check'), 'Listo')),
       );
-      this.hint.replaceChildren('Arrastra cada ejercicio por el asa ', icon('tables', 'ico inline'), ' o usa las flechas para colocarlo donde quieras, también en otro grupo. Este orden es el de la lista, igual para todas tus tablas.');
+      this.hint.replaceChildren('Arrastra cada ejercicio por el asa ', icon('tables', 'ico inline'), ' o usa las flechas para colocarlo donde quieras. Este orden es el de la lista, igual para todas tus tablas.');
       return;
     }
     const seg = (m: 'all' | 'fav' | 'chosen', label: string | Node) =>
@@ -136,17 +138,21 @@ export class RoutineScreen implements Screen {
       // ordenar la lista por zona, músculo, material o nombre (cada uno con su propio orden personalizado)
       const cur = this.sort;
       const sel = h('select', { class: 'sort-select', 'aria-label': 'Ordenar por', onchange: (e: Event) => {
-        this.app.store.saveSettings({ ...this.app.store.settings, listSort: (e.target as HTMLSelectElement).value as ListSort });
+        const v = (e.target as HTMLSelectElement).value as ListSort;
+        this.app.store.saveSettings({ ...this.app.store.settings, listSort: v });
+        // al elegir «Personalizada» se abre la lista entera para ordenarla
+        if (v === 'personalizada') { this.mode = 'sorting'; this.clearSearch(); }
         window.scrollTo(0, 0);
         this.render();
       } },
         ...(Object.entries(SORT_LABELS) as Array<[ListSort, string]>)
           .map(([v, label]) => h('option', { value: v, selected: v === cur }, label)));
-      this.toolbar.append(
+      append(this.toolbar,
         h('label', { class: 'sort-row' }, icon('tables'), h('span', { class: 'muted small' }, 'Ordenar:'), sel),
-        h('button', { class: 'btn ghost small', onclick: () => {
+        // con «Personalizada», para volver a cambiar tu orden
+        cur === 'personalizada' ? h('button', { class: 'btn ghost small', onclick: () => {
           this.mode = 'sorting'; this.clearSearch(); window.scrollTo(0, 0); this.render();
-        } }, icon('tables'), 'Ordenar lista'));
+        } }, icon('tables'), 'Ordenar lista') : null);
     }
     // vueltas: en todos los apartados, aunque aún no tengan ejercicios elegidos
     this.toolbar.append(this.roundsControl());
@@ -220,6 +226,7 @@ export class RoutineScreen implements Screen {
       title = (k) => (k === '-' ? 'Sin material' : k.split('+').map((x) => tr(EQUIP_INFO[x as (typeof EQUIPMENT)[number]].name)).join(' + '));
       ico = (k) => icon((k === '-' ? 'check' : EQUIP_INFO[k.split('+')[0] as (typeof EQUIPMENT)[number]].icon) as IconName);
     } else {
+      // A-Z y personalizada: una sola lista, sin títulos
       keyOf = () => '';
     }
     const keys = [...new Set(sec.exercises.map(keyOf))].sort((x, y) => rank(x) - rank(y) || title(x).localeCompare(title(y)));
@@ -233,30 +240,28 @@ export class RoutineScreen implements Screen {
   private ordered(sectionId: SectionId, sort: ListSort = this.sort): Listed[] {
     const sec = this.app.sections.find((s) => s.id === sectionId)!;
     const hidden = this.app.store.hidden;
-    const gr = this.grouping(sectionId, sort);
-    const custom = this.app.store.customOrder(sectionId, sort);
-    const segs = new Map<string, Listed[]>(gr.keys.map((k) => [k, []]));
     const visible = sec.exercises.filter((e) => !hidden.has(e.id)).sort(byName);
-    const left = new Map(visible.map((e) => [e.id, e]));
-    if (custom) {
-      // orden guardado antiguo (sin títulos de grupo): cada uno en su grupo de siempre
-      const marked = custom.some((t) => t.startsWith(GROUP_MARK));
-      let g: string | undefined;
-      for (const t of custom) {
-        if (t.startsWith(GROUP_MARK)) {
-          g = t.slice(GROUP_MARK.length);
-          continue;
-        }
+    if (sort === 'personalizada') {
+      // tu orden, una sola lista sin grupos; de entrada (o los que falten), el orden por zona
+      const base = this.ordered(sectionId, 'zona');
+      const saved = this.app.store.customOrder(sectionId, 'personalizada')
+        // de una versión anterior: el orden propio que se hizo con «Zona del cuerpo»
+        ?? this.app.store.customOrder(sectionId, 'zona');
+      const left = new Map(base.map((e) => [e.id, e]));
+      const out: Listed[] = [];
+      for (const t of saved ?? []) {
         const e = left.get(t);
         if (!e) continue;
         left.delete(t);
-        const own = gr.keyOf(e);
-        const into = marked && g !== undefined && segs.has(g) ? g : own;
-        segs.get(into)!.push({ ...e, listGroup: into });
+        out.push({ ...e, listGroup: '' });
       }
+      for (const e of left.values()) out.push({ ...e, listGroup: '' });
+      return out;
     }
-    // los que no estaban en tu orden (nuevos o que vuelven a la lista) van al final de su grupo
-    for (const e of left.values()) segs.get(gr.keyOf(e))!.push({ ...e, listGroup: gr.keyOf(e) });
+    // los demás órdenes son automáticos: por grupos y, dentro de cada grupo, alfabético
+    const gr = this.grouping(sectionId, sort);
+    const segs = new Map<string, Listed[]>(gr.keys.map((k) => [k, []]));
+    for (const e of visible) segs.get(gr.keyOf(e))!.push({ ...e, listGroup: gr.keyOf(e) });
     return [...segs.values()].flat();
   }
 
@@ -318,24 +323,15 @@ export class RoutineScreen implements Screen {
   /** Lista del apartado para cambiar su orden (sin subgrupos). */
   private renderSorting(): void {
     // una sola lista con los títulos de grupo fijos: puedes llevar un ejercicio a cualquier grupo
-    const sort = this.sort;
-    const exs = this.ordered(this.section, sort);
-    const gr = this.grouping(this.section, sort);
-    const rows: Array<SortableRow & { tok: string }> = [];
-    for (const k of gr.keys) {
-      if (k) rows.push({ tok: GROUP_MARK + k, fixed: true, label: gr.title(k), content: h('h2', { class: 'group-title zone-title' }, gr.icon(k), gr.title(k)) });
-      for (const ex of exs.filter((e) => e.listGroup === k)) {
-        rows.push({
-          tok: ex.id, label: ex.name,
-          content: h('div', { class: 'row-ex' }, this.miniThumb(ex), h('div', { class: 'row-text' }, h('strong', {}, ex.name), h('span', { class: 'muted small' }, ex.zone), ex.oneSided ? h('span', { class: 'by-sides' }, icon('sides'), 'por lados') : null)),
-        });
-      }
-    }
+    // se ordena la lista «Personalizada»: entera, sin grupos
+    const exs = this.ordered(this.section, 'personalizada');
+    const rows: Array<SortableRow & { tok: string }> = exs.map((ex) => ({
+      tok: ex.id, label: ex.name,
+      content: h('div', { class: 'row-ex' }, this.miniThumb(ex), h('div', { class: 'row-text' }, h('strong', {}, ex.name), h('span', { class: 'muted small' }, ex.zone), ex.oneSided ? h('span', { class: 'by-sides' }, icon('sides'), 'por lados') : null)),
+    }));
     this.list.append(sortableList(rows, (from, to) => {
       const toks = moveItem(rows.map((r) => r.tok), from, to);
-      // nada puede quedar por encima del primer título
-      if (rows[0]?.fixed && !toks[0].startsWith(GROUP_MARK)) toks.splice(1, 0, toks.shift()!);
-      this.app.store.setOrder(this.section, toks, sort);
+      this.app.store.setOrder(this.section, toks, 'personalizada');
       this.refresh();
     }));
   }
@@ -350,7 +346,7 @@ export class RoutineScreen implements Screen {
           class: 'tab' + (s.id === this.section ? ' active' : ''), role: 'tab', 'aria-selected': String(s.id === this.section),
           style: { '--sec': SECTION_STYLE[s.id].color },
           onclick: () => { this.section = s.id; this.clearSearch(); window.scrollTo(0, 0); this.render(); },
-        }, icon(SECTION_STYLE[s.id].icon), s.title, this.app.store.customOrder(s.id, this.sort) ? icon('tables', 'ico tab-custom') : null, n ? h('span', { class: 'tab-count' }, n) : null),
+        }, icon(SECTION_STYLE[s.id].icon), s.title, n ? h('span', { class: 'tab-count' }, n) : null),
       );
     }
     this.el.style.setProperty('--sec', SECTION_STYLE[this.section].color);
@@ -398,18 +394,6 @@ export class RoutineScreen implements Screen {
       return;
     }
     const sort = this.sort;
-    const custom = !!this.app.store.customOrder(this.section, sort);
-    // aviso de que este apartado lleva tu propio orden en este tipo de orden (y cómo volver al de siempre)
-    if (custom) {
-      this.list.append(h('div', { class: 'custom-order-note' },
-        icon('tables'),
-        h('span', {}, h('strong', {}, 'Orden personalizado'), h('span', { class: 'muted small' }, 'Los ejercicios van en el orden y el grupo que has elegido.')),
-        h('button', { class: 'link-btn', onclick: async () => {
-          if (!(await confirmDialog('¿Volver al orden de siempre (cada ejercicio en su grupo, por orden alfabético)?', 'Restablecer'))) return;
-          this.app.store.resetOrder(this.section, sort);
-          this.refresh();
-        } }, 'Restablecer')));
-    }
     const owned = new Set<string>(this.app.store.settings.equipment);
     const gr = this.grouping(this.section, sort);
     const all = this.ordered(this.section, sort);

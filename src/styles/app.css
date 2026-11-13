@@ -1361,18 +1361,12 @@ body:has(.page-lifted) { overflow-x: hidden; }
 .sort-row .ico { width: 16px; height: 16px; color: var(--muted); }
 .sort-select { flex: 1; min-width: 0; background: var(--surface-2); color: var(--fg); border: 1px solid var(--line); border-radius: 12px; padding: 8px 10px; font: inherit; font-size: .9rem; }
 /* aviso de orden personalizado en la lista */
-.custom-order-note { grid-column: 1 / -1; display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 14px; border: 1px solid color-mix(in srgb, var(--sec, var(--accent)) 55%, transparent); background: color-mix(in srgb, var(--sec, var(--accent)) 12%, transparent); }
-.custom-order-note > .ico { width: 20px; height: 20px; flex: none; color: var(--sec, var(--accent)); }
-.custom-order-note > span { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-.custom-order-note .link-btn { margin-left: auto; flex: none; }
-.tab-custom { width: 15px !important; height: 15px !important; opacity: .75; margin-left: -2px; }
 .sortable .sort-fixed { list-style: none; padding: 14px 4px 4px; }
 .sortable .sort-fixed .group-title { margin: 0; }
 /* barra de ordenar fija bajo los apartados mientras se ordena */
 .routine-toolbar.sticky-sort { position: sticky; z-index: 13; background: var(--bg); padding-bottom: 8px;
   top: calc(var(--safe-area-inset-top, env(safe-area-inset-top, 0px)) + 64px + var(--tabs-h, 120px)); }
 .sorting-title > span { display: flex; flex-direction: column; line-height: 1.2; }
-.sorting-sort { font-weight: 500; font-size: .78rem; }
 /* Recordatorios (Ajustes) */
 .rem-opts { display: flex; flex-direction: column; gap: 10px; padding: 0 0 12px 46px; }
 .rem-days { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 5px; }

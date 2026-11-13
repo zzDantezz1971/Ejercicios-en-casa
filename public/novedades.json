@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-13T17:51:29Z",
+    "es": ["Ordenar más sencillo: Zona del cuerpo, Por músculo, Por material y Alfabético se ordenan solos, y la quinta opción, «Personalizada», abre la lista entera para que la ordenes como quieras. «Ordenar lista» solo sale con «Personalizada», para volver a cambiar tu orden."],
+    "ca": ["Ordenar més senzill: Zona del cos, Per múscul, Per material i Alfabètic s'ordenen sols, i la cinquena opció, «Personalitzada», obre la llista sencera perquè l'ordenis com vulguis. «Ordena la llista» només surt amb «Personalitzada», per tornar a canviar el teu ordre."],
+    "en": ["Simpler sorting: Body area, By muscle, By equipment and Alphabetical sort themselves, and the fifth option, «Custom», opens the whole list for you to order however you like. «Sort list» only shows with «Custom», to change your order again."]
+  },
+  {
     "fecha": "2026-11-13T17:44:59Z",
     "es": ["Pestañas de los apartados más limpias: ya no se ve el total de ejercicios, solo cuántos has elegido (si hay alguno)."],
     "ca": ["Pestanyes dels apartats més netes: ja no es veu el total d'exercicis, només quants n'has triat (si n'hi ha cap)."],

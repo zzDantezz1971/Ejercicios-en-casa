@@ -24,7 +24,7 @@ const GUIDE: Array<{ icon: IconName; title: string; sub: string; points: Array<s
       'Crea tantas tablas como quieras, cámbiales el nombre, duplícalas o bórralas.',
       'Cuatro apartados: Calentamiento, Fuerza, Abdominales y Estiramientos.',
       'Toca un ejercicio para ver al muñeco haciéndolo, cómo se hace paso a paso y los músculos que trabaja. Desliza para pasar al siguiente.',
-      'Busca por nombre o zona, marca favoritos con la estrella y ordena la lista por zona, músculo, material o nombre, o a tu manera con «Ordenar lista».',
+      'Busca por nombre o zona, marca favoritos con la estrella y ordena la lista por zona, músculo, material o nombre, o a tu manera con «Personalizada».',
       'En los ejercicios elegidos puedes cambiar los segundos, el orden y, si usan pesas, anotar el peso.',
       'Vueltas: repite todos los ejercicios de un apartado 2, 3 o más veces seguidas.'] },
   { icon: 'trophy', title: 'Menú Medallas', sub: 'Premios por tu constancia.', points: [
