@@ -172,7 +172,9 @@ const RETIRED = new Set(['peso-muerto-rumano-con-mancuernas', 'curl-alterno-de-b
   // eliminados de la lista desde la app (copia de seguridad del 13-11-2026)
   'figura-4-gluteo-y-piriforme', 'gemelos-contra-la-pared', 'giros-rusos', 'estiramiento-de-antebrazos', 'toques-de-puntera-alternos',
   'boxeo-con-desplazamiento', 'comba-con-saltos-laterales', 'encogimientos-de-hombros', 'flexiones-en-pica', 'hip-thrust-con-mancuerna',
-  'oso-caminando', 'hip-thrust-con-barra', 'plancha-lateral-con-rotacion']);
+  'oso-caminando', 'hip-thrust-con-barra', 'plancha-lateral-con-rotacion',
+  'rotaciones-de-hombros', 'flexiones-con-manos-en-el-step', 'angeles-boca-abajo', 'y-t-w-boca-abajo', 'retraccion-escapular-colgado',
+  'sentadilla-goblet-con-mancuerna']);
 const ALL_SECTIONS: SectionInfo[] = buildSections();
 export const SECTIONS: SectionInfo[] = ALL_SECTIONS.map((s) => ({ ...s, exercises: s.exercises.filter((e) => !RETIRED.has(e.id)) }));
 export const CATALOG: Catalog = new Map(ALL_SECTIONS.flatMap((s) => s.exercises).map((e) => [e.id, e]));
