@@ -254,8 +254,8 @@ export const RAW_SECTIONS: RawSection[] = [
    [{thL:170,snL:22,thR:10,snR:158,ftL:0,ftR:180,uaL:100,faL:80,uaR:80,faR:100,zEL:6,zER:6,zHL:16,zHR:16},700,1600],
    [{thL:170,snL:22,thR:10,snR:158,ftL:0,ftR:180,uaL:100,faL:80,uaR:80,faR:100,zEL:8,zER:8,zHL:20,zHR:20,lean:24},1400,1600]]},
  {n:'Zancada lateral',z:'Aductores',v:'front',plant:'anR',alternate:true,f:[
-   [{thL:128,snL:128,thR:62,snR:100,tl:-84,uaL:55,faL:75,uaR:80,faR:100,zKR:12,lean:16},1400,1100],
-   [{thL:122,snL:122,thR:55,snR:104,tl:-80,uaL:55,faL:75,uaR:80,faR:100,zKR:14,lean:18},1400,1100]]},
+   [{thL:128,snL:128,thR:62,snR:100,tl:-84,uaL:140,faL:40,zHL:3,uaR:80,faR:100,zKR:12,lean:16},1400,1100],
+   [{thL:122,snL:122,thR:55,snR:104,tl:-80,uaL:140,faL:40,zHL:3,uaR:80,faR:100,zKR:14,lean:18},1400,1100]]},
  {n:'Sentadilla sumo profunda',z:'Aductores y cadera',v:'front',f:[
    [{thL:165,snL:100,thR:15,snR:80,ftL:180,ftR:0,uaL:128,faL:-28,uaR:52,faR:-152,zEL:14,zER:14,zHL:14,zHR:14,zKL:12,zKR:12,lean:42},1400,1100],
    [{thL:170,snL:102,thR:10,snR:78,ftL:180,ftR:0,uaL:128,faL:-28,uaR:52,faR:-152,zEL:14,zER:14,zHL:14,zHR:14,zKL:13,zKR:13,lean:44},1400,1100]]},
