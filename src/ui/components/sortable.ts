@@ -15,6 +15,9 @@ export interface SortableRow {
  * Al soltar (o al pulsar una flecha) avisa con `onMove(desde, hasta)`; quien la usa guarda el
  * nuevo orden y vuelve a pintar la lista.
  */
+/** Ejercicio movido con una flecha: dónde estaba en pantalla, para seguirlo al volver a pintar la lista. */
+let follow: { label: string; top: number } | null = null;
+
 export function sortableList(rows: SortableRow[], onMove: (from: number, to: number) => void): HTMLElement {
   const list = h('ol', { class: 'sortable' });
   rows.forEach((r, i) => {
@@ -28,12 +31,18 @@ export function sortableList(rows: SortableRow[], onMove: (from: number, to: num
     const li = h('li', { class: 'sort-row' },
       h('div', { class: 'sort-content' }, r.content),
       h('div', { class: 'sort-arrows' },
-        h('button', { class: 'arrow-btn', 'aria-label': `Subir ${r.label}`, disabled: i === 0 || (i === 1 && !!rows[0].fixed), onclick: () => onMove(i, i - 1) }, icon('back', 'ico up')),
-        h('button', { class: 'arrow-btn', 'aria-label': `Bajar ${r.label}`, disabled: i === rows.length - 1, onclick: () => onMove(i, i + 1) }, icon('back', 'ico down'))),
+        h('button', { class: 'arrow-btn', 'aria-label': `Subir ${r.label}`, disabled: i === 0 || (i === 1 && !!rows[0].fixed), onclick: () => { follow = { label: r.label, top: li.getBoundingClientRect().top }; onMove(i, i - 1); } }, icon('back', 'ico up')),
+        h('button', { class: 'arrow-btn', 'aria-label': `Bajar ${r.label}`, disabled: i === rows.length - 1, onclick: () => { follow = { label: r.label, top: li.getBoundingClientRect().top }; onMove(i, i + 1); } }, icon('back', 'ico down'))),
       handle);
     li.dataset.index = String(i);
     attachDrag(list, li, handle, onMove);
     list.append(li);
+    // tras mover con una flecha, la pantalla acompaña al ejercicio para que siga bajo el dedo
+    if (follow && follow.label === r.label) {
+      const was = follow.top;
+      follow = null;
+      requestAnimationFrame(() => window.scrollBy({ top: li.getBoundingClientRect().top - was, behavior: 'instant' as ScrollBehavior }));
+    }
   });
   return list;
 }
@@ -43,12 +52,15 @@ function attachDrag(list: HTMLElement, li: HTMLElement, handle: HTMLElement, com
   let raf = 0, lastY = 0;
 
   const autoscroll = () => {
-    const edge = 90, vh = window.innerHeight;
+    // al acercar el dedo al borde, la lista se desplaza: despacio al principio y algo más al llegar al borde
+    const edge = 110, vh = window.innerHeight, max = 7;
     // lo que queda fijo arriba (cabecera, apartados, barra de ordenar) no cuenta como zona visible
-    const top = document.querySelector('.sticky-sort')?.getBoundingClientRect().bottom ?? 0;
+    let top = 0;
+    for (const el of document.querySelectorAll('.sticky-sort, .tabs')) top = Math.max(top, el.getBoundingClientRect().bottom);
+    const bottom = vh - 80;
     let dy = 0;
-    if (lastY < top + edge) dy = -Math.ceil((top + edge - lastY) / 6);
-    else if (lastY > vh - edge - 80) dy = Math.ceil((lastY - (vh - edge - 80)) / 6);
+    if (lastY < top + edge) dy = -Math.ceil(max * Math.min(1, (top + edge - lastY) / edge) ** 2);
+    else if (lastY > bottom - edge) dy = Math.ceil(max * Math.min(1, (lastY - (bottom - edge)) / edge) ** 2);
     if (dy) {
       window.scrollBy(0, dy);
       reposition(lastY);

@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-13T10:43:46Z",
+    "es": ["Al ordenar, la lista se desplaza más despacio cuando arrastras un ejercicio hacia el borde de la pantalla, y con las flechas ↑ ↓ la pantalla acompaña al ejercicio para que siga bajo tu dedo."],
+    "ca": ["En ordenar, la llista es desplaça més a poc a poc quan arrossegues un exercici cap a la vora de la pantalla, i amb les fletxes ↑ ↓ la pantalla acompanya l'exercici perquè continuï sota el teu dit."],
+    "en": ["When sorting, the list now scrolls more slowly as you drag an exercise towards the edge of the screen, and with the ↑ ↓ arrows the screen follows the exercise so it stays under your finger."]
+  },
+  {
     "fecha": "2026-11-13T10:40:38Z",
     "es": ["Retirados 6 ejercicios más de las listas: Rotaciones de hombros, Flexiones con manos en el step, Ángeles boca abajo, Y-T-W boca abajo, Retracción escapular colgado y Sentadilla goblet con mancuerna."],
     "ca": ["Retirats 6 exercicis més de les llistes: Rotacions d'espatlles, Flexions amb mans a l'step, Àngels de bocaterrosa, Y-T-W de bocaterrosa, Retracció escapular penjat i Esquat goblet amb manuella."],
