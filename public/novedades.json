@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-13T22:12:23Z",
+    "es": ["Rotación de tronco con brazos al frente: el tronco gira más hacia cada lado."],
+    "ca": ["Rotació de tronc amb els braços endavant: el tronc gira més cap a cada costat."],
+    "en": ["Torso rotation with arms forward: the torso twists further to each side."]
+  },
+  {
     "fecha": "2026-11-13T22:09:44Z",
     "es": ["Molino de viento: el tronco se inclina y gira hasta que la mano toca la punta del pie contrario, con el otro brazo arriba."],
     "ca": ["Molí de vent: el tronc s’inclina i gira fins que la mà toca la punta del peu contrari, amb l’altre braç amunt."],

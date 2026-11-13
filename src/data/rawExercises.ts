@@ -213,9 +213,9 @@ export const RAW_SECTIONS: RawSection[] = [
    [{thL:108,snL:108,thR:72,snR:72,tl:-78,tu:-48,hd:-40,uaR:80,faR:82,uaL:-62,faL:-56},1500,1000]]},
  {n:'Rotación de tronco con brazos al frente',z:'Columna y costados',v:'front',az:42,el:16,f:[
    [{thL:96,snL:96,thR:84,snR:84,uaL:4,faL:4,uaR:176,faR:176,sa:.22},200,1200],
-   [{thL:96,snL:96,thR:84,snR:84,uaL:4,faL:4,uaR:176,faR:176,sa:.22,tw:-65},500,1200],
+   [{thL:96,snL:96,thR:84,snR:84,uaL:4,faL:4,uaR:176,faR:176,sa:.22,tw:-90},500,1200],
    [{thL:96,snL:96,thR:84,snR:84,uaL:4,faL:4,uaR:176,faR:176,sa:.22},200,1200],
-   [{thL:96,snL:96,thR:84,snR:84,uaL:4,faL:4,uaR:176,faR:176,sa:.22,tw:65},500,1200]]},
+   [{thL:96,snL:96,thR:84,snR:84,uaL:4,faL:4,uaR:176,faR:176,sa:.22,tw:90},500,1200]]},
  // el tronco se inclina y gira hacia la pierna contraria hasta que la mano toca la punta de ese pie; el otro brazo, arriba
  {n:'Molino de viento',z:'Espalda, costados e isquios',armsOut:true,az:38,el:12,b:['caution'],f:[
    [{ua:92,fa:92,sa:.08,zKL:-7,zAL:-14,zKR:7,zAR:14},250,1000],
