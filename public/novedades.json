@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-13T00:10:02Z",
+    "es": ["Orden «Zona del cuerpo»: dentro de cada grupo, los ejercicios van por orden alfabético (si no has hecho tu propio orden)."],
+    "ca": ["Ordre «Zona del cos»: dins de cada grup, els exercicis van per ordre alfabètic (si no has fet el teu propi ordre)."],
+    "en": ["«Body area» order: within each group, exercises are now in alphabetical order (unless you've set your own order)."]
+  },
+  {
     "fecha": "2026-11-13T00:01:29Z",
     "es": ["Orden «Zona del cuerpo» más sencillo: Fuerza se agrupa en Tren superior, Core, Tren inferior y Cuerpo entero; Estiramientos en Tren superior, Espalda, Tren inferior y Fortalecer zona lumbar. Para más detalle, ordena por músculo."],
     "ca": ["Ordre «Zona del cos» més senzill: Força s'agrupa en Tren superior, Core, Tren inferior i Cos sencer; Estiraments en Tren superior, Esquena, Tren inferior i Enfortir la zona lumbar. Per a més detall, ordena per múscul."],

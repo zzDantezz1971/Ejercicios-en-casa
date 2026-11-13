@@ -184,7 +184,12 @@ export class RoutineScreen implements Screen {
   private ordered(sectionId: SectionId): ExerciseDef[] {
     const sec = this.app.sections.find((s) => s.id === sectionId)!;
     const hidden = this.app.store.hidden;
-    return applyOrder(sec.exercises, this.app.store.customOrder(sectionId)).filter((e) => !hidden.has(e.id));
+    const custom = this.app.store.customOrder(sectionId);
+    if (custom) return applyOrder(sec.exercises, custom).filter((e) => !hidden.has(e.id));
+    // sin orden propio: por grupos (en su orden) y, dentro de cada grupo, alfabético
+    const at = new Map<string | undefined, number>();
+    for (const e of sec.exercises) if (!at.has(e.group)) at.set(e.group, at.size);
+    return sec.exercises.filter((e) => !hidden.has(e.id)).sort((a, b) => at.get(a.group)! - at.get(b.group)! || byName(a, b));
   }
 
   /** Aviso al final de la lista: cuántos ejercicios necesitan material que no tiene, y botón para verlos. */
