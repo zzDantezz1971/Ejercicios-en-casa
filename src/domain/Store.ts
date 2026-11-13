@@ -1,3 +1,4 @@
+import { DEFAULT_ANGLES, DEFAULT_ANGLES_VER } from '../data/defaultAngles';
 import { EQUIPMENT, type Equip } from './equipment';
 import {
   DEFAULT_SETTINGS,
@@ -536,6 +537,20 @@ export class Store {
     settings.rest = Object.fromEntries(
       SECTION_IDS.map((s) => [s, Number.isFinite(known.rest?.[s]) ? known.rest![s] : (oldRest ?? DEFAULT_SETTINGS.rest[s])]),
     ) as Settings['rest'];
+    // ángulos: los guardados son giros respecto al predeterminado; al cambiar los predeterminados (DEFAULT_ANGLES),
+    // se recalculan una sola vez respecto a los nuevos para que se siga viendo igual (y sin sumarse dos veces)
+    if (known.anglesVer !== DEFAULT_ANGLES_VER) {
+      if (settings.angles) {
+        const angles = { ...settings.angles };
+        for (const [id, base] of Object.entries(DEFAULT_ANGLES)) {
+          if (!(id in angles)) continue;
+          const d = Math.round(((((angles[id] - base) % 360) + 540) % 360) - 180);
+          if (Math.abs(d) < 3) delete angles[id]; else angles[id] = d;
+        }
+        settings.angles = angles;
+      }
+      settings.anglesVer = DEFAULT_ANGLES_VER;
+    }
     const history = Array.isArray(input.history) ? (input.history as HistoryEntry[]) : [];
 
     let routines: SavedRoutine[] = [];

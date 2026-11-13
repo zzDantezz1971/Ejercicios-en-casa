@@ -1,3 +1,4 @@
+import { DEFAULT_ANGLES_VER } from '../data/defaultAngles';
 import type { Equip } from './equipment';
 /** Apartados de la rutina, en el orden en que se hacen. */
 export const SECTION_IDS = ['calentamiento', 'pesas', 'abdominales', 'estiramientos'] as const;
@@ -178,6 +179,8 @@ export interface Settings {
   equipment: Equip[];
   /** Ángulo elegido para ver cada ejercicio (grados de giro respecto al de siempre). */
   angles?: Record<string, number>;
+  /** Versión de los ángulos predeterminados con la que están calculados los de «angles». */
+  anglesVer?: number;
   /** Recordatorios en el móvil (entrenar, pesarse y copia de seguridad). */
   reminders?: Partial<import('./reminders').ReminderSettings>;
   /** Metas de la semana en Inicio: minutos y calorías (null = lo de la semana pasada). */
@@ -204,6 +207,7 @@ export interface Profile {
 }
 
 export const DEFAULT_SETTINGS: Settings = {
+  anglesVer: DEFAULT_ANGLES_VER,
   rest: { calentamiento: 5, pesas: 5, abdominales: 5, estiramientos: 5 },
   defaultSeconds: 30,
   sectionCountdown: 10,

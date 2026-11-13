@@ -7,6 +7,7 @@ import { exerciseText, LANG } from '../i18n';
 import { parseNeed } from '../domain/equipment';
 import { EXTRAS, extraId, NEW_GROUP } from './extra';
 import { EXTRA_MOTIONS, MOTION_OVERRIDES } from './extra/motions';
+import { DEFAULT_ANGLES } from './defaultAngles';
 
 /** Material de los ejercicios de antes (los que usan mancuernas lo sacan del movimiento). */
 const NEEDS_BENCH = new Set([
@@ -23,6 +24,14 @@ const NEEDS_BENCH = new Set([
 
 /** Movimiento provisional de los ejercicios nuevos (de pie, quieto); no se ve: sale "Animación en preparación". */
 const STILL = { f: [[{}, 0, 1000]] } as ExerciseDef['motion'];
+/** Ángulo de cámara de siempre según la vista (el mismo que usa el maniquí si el movimiento no trae «az»). */
+const BASE_AZ = { side: 32, front: 18, top: 12 } as const;
+/** El movimiento con el ángulo predeterminado elegido para ese ejercicio (DEFAULT_ANGLES), si lo tiene. */
+function withAngle(id: string, m: ExerciseDef['motion']): ExerciseDef['motion'] {
+  const d = DEFAULT_ANGLES[id];
+  if (!d) return m;
+  return { ...m, az: (m.az ?? BASE_AZ[(m.v ?? 'side') as keyof typeof BASE_AZ]) + d };
+}
 
 /** Ejercicios que se hacen primero con un lado y luego con el otro. */
 const ONE_SIDED = new Set([
@@ -110,7 +119,7 @@ function buildSections(): SectionInfo[] {
       }
       const { n, z, g: _g, b, top: _top, ...rawMotion } = raw;
       const id = slug(n!);
-      const motion = MOTION_OVERRIDES[id] ?? rawMotion;
+      const motion = withAngle(id, MOTION_OVERRIDES[id] ?? rawMotion);
       // textos en el idioma elegido (el identificador sigue saliendo del nombre en castellano)
       const t = exerciseText(id);
       const desc = DESCRIPTIONS[id];
@@ -144,7 +153,7 @@ function buildSections(): SectionInfo[] {
         description: t ? { start: t[2], move: t[3], tip: t[4], mistakes: t[5] || undefined, easier: t[6] || undefined }
           : { start: x.es[0], move: x.es[1], tip: x.es[2], mistakes: x.es[3] || undefined, easier: x.es[4] || undefined },
         muscles: x.m,
-        motion: EXTRA_MOTIONS[id] ?? STILL,
+        motion: withAngle(id, EXTRA_MOTIONS[id] ?? STILL),
         viewLabel: EXTRA_MOTIONS[id]?.v === 'front' ? 'De frente' : undefined,
         equip: parseNeed(x.eq),
         pending: !EXTRA_MOTIONS[id],
@@ -182,7 +191,9 @@ const RETIRED = new Set(['peso-muerto-rumano-con-mancuernas', 'curl-alterno-de-b
   'elevacion-en-y-inclinado', 'buenos-dias-con-barra', 'sentadilla-sumo-con-pesa-rusa', 'cargada-con-pesa-rusa',
   'separacion-de-banda', 'puente-con-pies-en-fitball',
   // eliminados desde la app (copia del 13-11-2026, noche)
-  'halo-con-pesa-rusa', 'press-de-pecho-con-banda', 'plancha-con-toques-de-hombro']);
+  'halo-con-pesa-rusa', 'press-de-pecho-con-banda', 'plancha-con-toques-de-hombro',
+  // eliminados desde la app (copia del 13-11-2026, 22:46)
+  'torsion-de-columna-con-piernas-cruzadas', 'retroversion-pelvica']);
 const ALL_SECTIONS: SectionInfo[] = buildSections();
 export const SECTIONS: SectionInfo[] = ALL_SECTIONS.map((s) => ({ ...s, exercises: s.exercises.filter((e) => !RETIRED.has(e.id)) }));
 export const CATALOG: Catalog = new Map(ALL_SECTIONS.flatMap((s) => s.exercises).map((e) => [e.id, e]));
