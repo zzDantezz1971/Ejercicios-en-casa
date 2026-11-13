@@ -44,6 +44,8 @@ export interface MotionSpec {
   handsSlide?: boolean;
   /** Con handsDown: solo esta mano (la otra se mueve libre, p. ej. hilo en la aguja). */
   handsDownSide?: 'L' | 'R';
+  /** Manos apoyadas detrás del cuerpo (fondos de tríceps): los dedos miran hacia los pies. */
+  fingersToFeet?: boolean;
   /** Mancuernas: en una mano, en las dos, o una sola cogida con las dos manos ('two'). */
   db?: 'L' | 'R' | 'both' | 'two';
   /** Con db 'two': la mancuerna va cruzada, cogida por los dos extremos (no a lo largo de los antebrazos). */

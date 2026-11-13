@@ -632,7 +632,11 @@ export class MannequinScene {
       let hu = u.clone();
       let across = side ? V(0, 0, 1) : V(0, 0, 1).cross(u).normalize();
       let thumbSign = sg;
-      const support = this.grips ? 0 : Math.min(1, Math.max(0, (13 - ha.y) / 5)) * Math.min(1, Math.max(0, (-u.y - 0.35) / 0.3));
+      // altura de la superficie donde se apoyan las manos (suelo, o asiento, step o banco)
+      const spec = this.motion.spec;
+      const rest = typeof spec.handsDown === 'number' ? spec.handsDown - 3.5 : spec.anchor && /^ha[LR]$/.test(spec.anchor.j) ? -spec.anchor.y - 3.5 : 0;
+      const hy = ha.y - rest;
+      const support = this.grips ? 0 : Math.min(1, Math.max(0, (13 - hy) / 5)) * Math.min(1, Math.max(0, (-u.y - 0.35) / 0.3));
       if (support > 0) {
         // dedos hacia la cabeza o hacia donde mira el cuerpo, en horizontal
         let ahead = bodyLat.clone().cross(V(0, 1, 0));
@@ -645,6 +649,8 @@ export class MannequinScene {
         const feet = J.anL.clone().add(J.anR).multiplyScalar(0.5);
         const away = ha.clone().sub(feet); away.y = 0;
         if (away.lengthSq() > 25 && ahead.dot(away) < 0) ahead.negate();
+        // fondos de tríceps: manos detrás del cuerpo con los dedos hacia los pies
+        if (spec.fingersToFeet && away.lengthSq() > 25) ahead.copy(away).multiplyScalar(-1).normalize();
         const target = ahead.multiplyScalar(0.95).add(V(0, -0.3, 0)).normalize();
         hu = u.clone().lerp(target, support).normalize();
         // palma hacia el suelo y pulgar hacia la otra mano
@@ -654,9 +660,9 @@ export class MannequinScene {
         const toOther = J['ha' + (s === 'L' ? 'R' : 'L')].clone().sub(ha);
         const acr = ortho(across, hu);
         if (toOther.lengthSq() > 4 && support > 0.5) thumbSign = Math.sign(acr.dot(toOther)) || sg;
-      } else if (!this.grips && ha.y < 13) {
+      } else if (!this.grips && hy < 13) {
         // antebrazo tumbado en el suelo (plancha de antebrazos): mano boca abajo
-        const lying = Math.min(1, Math.max(0, (13 - ha.y) / 5)) * Math.min(1, Math.max(0, (0.45 - Math.abs(u.y)) / 0.2));
+        const lying = Math.min(1, Math.max(0, (13 - hy) / 5)) * Math.min(1, Math.max(0, (0.45 - Math.abs(u.y)) / 0.2));
         if (lying > 0) {
           hu = u.clone().setY(u.y * (1 - lying)).normalize();
           const flatAcross = V(0, 1, 0).cross(hu).normalize();
