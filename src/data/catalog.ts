@@ -89,6 +89,16 @@ export interface SectionInfo {
   exercises: ExerciseDef[];
 }
 
+/** Grupos grandes de Fuerza y Estiramientos (el detalle está en el orden por músculo). */
+const BROAD_GROUP: Record<string, string> = {
+  'Cuello y trapecio': 'Tren superior', 'Hombros': 'Tren superior', 'Espalda': 'Tren superior', 'Brazos': 'Tren superior', 'Pecho': 'Tren superior',
+  'Core y zona lumbar': 'Core', 'Piernas y glúteos': 'Tren inferior',
+  'Cuello': 'Tren superior', 'Hombros y brazos': 'Tren superior',
+  'Espalda alta y costados': 'Espalda', 'Zona lumbar': 'Espalda',
+  'Cadera y glúteos': 'Tren inferior', 'Aductores (ingles)': 'Tren inferior', 'Piernas': 'Tren inferior',
+  'Fortalecer zona lumbar (espalda sana)': 'Fortalecer zona lumbar',
+};
+
 function buildSections(): SectionInfo[] {
   return RAW_SECTIONS.map((sec) => {
     let group: string | undefined;
@@ -144,6 +154,8 @@ function buildSections(): SectionInfo[] {
       if (at >= 0) exercises.splice(at + 1, 0, ex);
       else exercises.push(ex);
     }
+    // los subgrupos finos solo sirven para ordenar; en la lista se agrupan en pocos títulos
+    for (const e of exercises) if (e.group && BROAD_GROUP[e.group]) e.group = BROAD_GROUP[e.group];
     return { id: sec.id, title: sec.title, exercises };
   });
 }

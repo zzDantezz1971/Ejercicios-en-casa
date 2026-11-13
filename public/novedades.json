@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-13T00:01:29Z",
+    "es": ["Orden «Zona del cuerpo» más sencillo: Fuerza se agrupa en Tren superior, Core, Tren inferior y Cuerpo entero; Estiramientos en Tren superior, Espalda, Tren inferior y Fortalecer zona lumbar. Para más detalle, ordena por músculo."],
+    "ca": ["Ordre «Zona del cos» més senzill: Força s'agrupa en Tren superior, Core, Tren inferior i Cos sencer; Estiraments en Tren superior, Esquena, Tren inferior i Enfortir la zona lumbar. Per a més detall, ordena per múscul."],
+    "en": ["Simpler «Body area» order: Strength is grouped into Upper body, Core, Lower body and Full body; Stretches into Upper body, Back, Lower body and Strengthen the lower back. For more detail, sort by muscle."]
+  },
+  {
     "fecha": "2026-11-12T23:54:58Z",
     "es": ["Orden por músculo: «Mesa invertida» sale en Pecho, y «Cobra» y «Esfinge» en Zona lumbar.", "Estiramientos: el grupo «Fortalecer zona lumbar» va ahora al final."],
     "ca": ["Ordre per múscul: «Taula invertida» surt a Pit, i «Cobra» i «Esfinx» a Zona lumbar.", "Estiraments: el grup «Enfortir la zona lumbar» ara va al final."],

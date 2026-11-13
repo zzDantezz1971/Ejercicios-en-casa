@@ -119,10 +119,13 @@ export const SECTION_STYLE: Record<SectionId, { color: string; icon: IconName }>
 };
 
 /* Silueta del cuerpo con la zona trabajada resaltada (títulos de zona en las listas). */
-type Zone = 'cuello' | 'hombros' | 'pecho' | 'espalda' | 'brazos' | 'abdomen' | 'lumbar' | 'cadera' | 'piernas' | 'todo';
+type Zone = 'superior' | 'inferior' | 'cuello' | 'hombros' | 'pecho' | 'espalda' | 'brazos' | 'abdomen' | 'lumbar' | 'cadera' | 'piernas' | 'todo';
 
 export function zoneOf(title: string): Zone {
   const t = title.toLowerCase();
+  if (t === 'tren superior') return 'superior';
+  if (t === 'tren inferior') return 'inferior';
+  if (t === 'core') return 'abdomen';
   if (/cuello|trapecio/.test(t)) return 'cuello';
   if (/hombro/.test(t)) return 'hombros';
   if (/pecho/.test(t)) return 'pecho';
@@ -154,6 +157,7 @@ export function zoneIcon(title: string): SVGSVGElement {
   const hot: Record<Zone, string[]> = {
     cuello: ['neck'], hombros: ['shoulders'], pecho: ['chest'], espalda: ['shoulders', 'chest'], brazos: ['armL', 'armR'],
     abdomen: ['abdomen'], lumbar: ['abdomen'], cadera: ['hips'], piernas: ['legL', 'legR'], todo: [],
+    superior: ['neck', 'shoulders', 'chest', 'armL', 'armR'], inferior: ['hips', 'legL', 'legR'],
   };
   const svg = document.createElementNS(NS, 'svg');
   svg.setAttribute('viewBox', '0 0 24 25');
