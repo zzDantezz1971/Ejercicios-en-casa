@@ -92,9 +92,6 @@ export const EXTRA_MOTIONS: Record<string, M> = {
   'rodilla-al-pecho-caminando': { f: [
     [{}, 100, 500], [{ thR: -48, snR: 70, ftR: 40, ua: 52, fa: 8, zHL: 8, zHR: -8, tl: -88 }, 350, 600],
     [{}, 100, 500], [{ thL: -48, snL: 70, ftL: 40, ua: 52, fa: 8, zHL: 8, zHR: -8, tl: -88 }, 350, 600]] },
-  // cadera atrás con la espalda recta, rodillas casi estiradas
-  'bisagra-de-cadera-sin-peso': { plant: 'anR', f: [
-    [{ ...HIPS }, 200, 900], [{ ua: 194, fa: 104, tl: -14, th: 80, sn: 94, hd: -22 }, 300, 900]] },
   // de una pierna a la otra saltando de lado; la libre cruzada por detrás y los brazos acompañan
   patinador: { v: 'front', az: 20, f: [
     [{ x: -26, thL: 98, snL: 84, thR: 112, snR: 128, zKR: -10, zAR: -22, uaL: 150, faL: 140, uaR: 120, faR: 100, sTh: 0.92 }, 120, 330],
@@ -105,12 +102,12 @@ export const EXTRA_MOTIONS: Record<string, M> = {
   'balanceo-de-pierna-lateral': { v: 'front', az: 18, plant: 'anL', f: [
     [{ uaL: 178, faL: 178, uaR: 2, faR: 2, thR: 48, snR: 48 }, 60, 650],
     [{ uaL: 178, faL: 178, uaR: 2, faR: 2, thR: 114, snR: 114, zKR: 8, zAR: 15, ftR: 20 }, 60, 650]] },
-  // manos junto a las sienes: sube una rodilla y el codo contrario baja girando el tronco hasta tocarla
+  // manos junto a las sienes: sube una rodilla y el tronco se dobla y gira hasta que el codo contrario la toca
   'codo-a-la-rodilla-contraria': { az: 35, f: [
     [{ ...TEMPLES }, 60, 320],
-    [{ ...TEMPLES, thR: -22, snR: 78, ftR: 40, tl: -78, tu: -36, hd: -28, tw: -65, ua: -63, fa: -81 }, 120, 320],
+    [{ ...TEMPLES, thR: -35, snR: 78, ftR: 40, tl: -80, tu: 4, hd: 12, tw: -50, ua: -23, fa: -41, zEL: -3 }, 160, 360],
     [{ ...TEMPLES }, 60, 320],
-    [{ ...TEMPLES, thL: -22, snL: 78, ftL: 40, tl: -78, tu: -36, hd: -28, tw: 65, ua: -63, fa: -81 }, 120, 320]] },
+    [{ ...TEMPLES, thL: -35, snL: 78, ftL: 40, tl: -80, tu: 4, hd: 12, tw: 50, ua: -23, fa: -41, zER: 3 }, 160, 360]] },
   // pies juntos: saltito adelante, saltito atrás (rodillas dobladas al caer y los brazos acompañan)
   'saltos-adelante-y-atras': { az: 25, f: [
     [{ x: 14, ...HOP_LAND, ua: 60, fa: 30 }, 60, 220], [{ x: 0, jy: 11, ...HOP_AIR }, 0, 220],
@@ -128,11 +125,6 @@ export const EXTRA_MOTIONS: Record<string, M> = {
     [{ ...WGS, ua: 100, fa: 100, zHL: 6, zHR: -6 }, 250, 800],
     [{ ...WGS, uaL: 100, faL: 100, zHL: 6, uaR: -84, faR: -84, zER: 6, zHR: 10, tw: 14, hd: -95 }, 700, 900],
     [{ ...WGS, ua: 100, fa: 100, zHL: 6, zHR: -6 }, 150, 800]] },
-  // banda agarrada con las manos bien abiertas: los brazos estirados pasan por encima de la cabeza hasta detrás
-  'rotaciones-de-hombros-con-banda': { az: 38, band: 'hands', per: 3800, fn: (t) => {
-    const k = 0.5 - 0.5 * Math.cos(t * Math.PI * 2), a = 78 - 282 * k;
-    return { ua: a, fa: a, zEL: 20, zER: -20, zHL: 30, zHR: -30, hd: -90 - 6 * k };
-  } },
   // ── Calentamiento ──
   'skipping-rodillas-arriba': { f: [
     [{ thR: -8, snR: 78, uaL: 35, faL: -45, uaR: 130, faR: 105 }, 0, 230], [{ th: 86, sn: 100, jy: 4 }, 0, 170],
