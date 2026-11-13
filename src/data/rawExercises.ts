@@ -265,9 +265,9 @@ export const RAW_SECTIONS: RawSection[] = [
  {n:'Rana',z:'Aductores y cadera',v:'top',prone:true,mat:'top',top:'Vista desde arriba',f:[
    [{uaL:-115,faL:-85,uaR:-65,faR:-95,thL:180,snL:90,thR:0,snR:90,sTh:.95},1300,1300],
    [{uaL:-125,faL:-88,uaR:-55,faR:-92,thL:176,snL:92,thR:4,snR:88,sTh:.95},1300,1300]]},
- {n:'Mariposa tumbado',z:'Aductores',mat:1,az:72,el:24,b:['lumbar'],f:[
-   [{...SUP,thL:-56,snL:66,thR:-56,snR:66,zKL:-15,zKR:15,zAL:4,zAR:-4},900,1300],
-   [{...SUP,thL:-18,snL:132,thR:-18,snR:132,zKL:-30,zKR:30,zAL:5,zAR:-5},1500,1300]]},
+ {n:'Mariposa tumbado',z:'Aductores',mat:1,armsOut:true,az:72,el:24,b:['lumbar'],f:[
+   [{...SUP,ua:92,fa:92,sa:.1,thL:-56,snL:66,thR:-56,snR:66,zKL:-15,zKR:15,zAL:4,zAR:-4},900,1300],
+   [{...SUP,ua:92,fa:92,sa:.1,thL:-18,snL:132,thR:-18,snR:132,zKL:-30,zKR:30,zAL:5,zAR:-5},1500,1300]]},
  {g:'Piernas'},
  {n:'Isquiotibiales tumbado',z:'Parte trasera del muslo',mat:1,f:[
    [{tl:180,thL:0,snL:0,ftL:-90,thR:-40,snR:-40,ftR:-130,ua:-18,fa:-10},300,1200],
