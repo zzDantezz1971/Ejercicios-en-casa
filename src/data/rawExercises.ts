@@ -196,7 +196,7 @@ export const RAW_SECTIONS: RawSection[] = [
  {n:'Círculos de brazos hacia delante',z:'Hombros',armsOut:true,per:1150,fn:t=>{const a=90+360*t;return {thL:88,snL:95,thR:88,snR:95,ua:a,fa:a-10,sa:.95};}},
  {n:'Círculos de brazos hacia atrás',z:'Hombros y pecho',armsOut:true,per:1150,fn:t=>{const a=90-360*t;return {thL:88,snL:95,thR:88,snR:95,ua:a,fa:a+10,sa:.95};}},
  {g:'Pecho'},
- {n:'Apertura de pecho con manos atrás',z:'Pecho y hombros',clasp:true,f:[[{ua:140,fa:140,zHL:14,zHR:-14,zEL:5,zER:-5},300,900],[{ua:160,fa:162,tu:-96,hd:-104,zHL:14,zHR:-14,zEL:5,zER:-5},1400,900]]},
+ {n:'Apertura de pecho con manos atrás',z:'Pecho y hombros',clasp:true,f:[[{ua:140,fa:140,zEL:5,zER:-5},300,900],[{ua:160,fa:162,tu:-96,hd:-104,zEL:5,zER:-5},1400,900]]},
  {n:'Mesa invertida',z:'Pecho, hombros y glúteos',mat:1,f:[
    [{tl:-128,tu:-120,hd:-100,ua:118,fa:100,sa:.9,th:-25,sn:65},500,1200],
    [{tl:-165,tu:-168,hd:-210,ua:95,fa:88,sa:.9,th:0,sn:90},1500,1200]]},
