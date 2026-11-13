@@ -1,6 +1,7 @@
 import type { App, Screen } from '../App';
 import { h } from '../dom';
 import { icon, type IconName } from '../icons';
+import { HAS_BACKUP } from '../../services/Backup';
 
 /** Qué puede hacer la app, menú a menú (los textos se traducen con i18n/ui.ts); { h } es un subtítulo dentro del menú. */
 const GUIDE: Array<{ icon: IconName; title: string; sub: string; points: Array<string | { h: string }> }> = [
@@ -12,7 +13,8 @@ const GUIDE: Array<{ icon: IconName; title: string; sub: string; points: Array<s
       'La tabla que vas a hacer, con su contenido y el botón para empezar. Puedes cambiar de tabla desde aquí.',
       'Tu semana: minutos y calorías, con unas metas que puedes cambiar.',
       'Una frase motivadora distinta cada día (se puede quitar en Ajustes).',
-      'Si los tienes activados en Recordatorios, al acabar un entrenamiento te avisa cuando toca anotar el peso o hacer la copia de seguridad.',
+      HAS_BACKUP ? 'Si los tienes activados en Recordatorios, al acabar un entrenamiento te avisa cuando toca anotar el peso o hacer la copia de seguridad.'
+        : 'Si lo tienes activado en Recordatorios, al acabar un entrenamiento te avisa cuando toca anotar el peso.',
       { h: 'Entrenar' },
       'Cada ejercicio con el muñeco animado y una cuenta atrás.',
       'Pitidos, vibración y voz te avisan del siguiente ejercicio, del cambio de lado y de los últimos segundos.',
@@ -35,20 +37,21 @@ const GUIDE: Array<{ icon: IconName; title: string; sub: string; points: Array<s
       'Nombre, edad, altura y sexo: se usan para calcular las calorías y el IMC.',
       'Anota tu peso cuando quieras y mira su evolución en el gráfico, con tu objetivo de peso.',
       'Mi material: marca lo que tienes; los ejercicios sin material se ven siempre.'] },
-  { icon: 'settings', title: 'Menú Ajustes', sub: 'Personaliza la app, recordatorios, reloj, copia de seguridad y prémium.', points: [
+  { icon: 'settings', title: 'Menú Ajustes', sub: HAS_BACKUP ? 'Personaliza la app, recordatorios, reloj, copia de seguridad y prémium.' : 'Personaliza la app, recordatorios, reloj y prémium.', points: [
       'Idioma (català, castellano o English) y modo oscuro, claro o el del móvil.',
       'Personaliza el muñeco: color de piel, pelo y ropa; con prémium, también peinado, ropa, gafas, barba y cuerpo de mujer.',
       'Tiempos, pitidos, voz y frases motivadoras.',
       { h: 'Recordatorios' },
-      'Para entrenar, pesarte y hacer la copia de seguridad, los días y a la hora que elijas. Llegan como notificación en la app de Android, aunque esté cerrada.',
+      HAS_BACKUP ? 'Para entrenar, pesarte y hacer la copia de seguridad, los días y a la hora que elijas. Llegan como notificación en la app de Android, aunque esté cerrada.'
+        : 'Para entrenar y pesarte, los días y a la hora que elijas. Llegan como notificación, aunque la app esté cerrada.',
       { h: 'Pulsaciones del reloj' },
       'Conecta un reloj o una pulsera que difunda la frecuencia cardíaca por Bluetooth: verás tus pulsaciones durante el entrenamiento y las calorías se calcularán con tu pulso.',
       'En Ajustes › Reloj tienes los pasos para conectarlo.',
-      { h: 'Copia de seguridad' },
-      'Guarda tus tablas, historial y ajustes en un archivo (por ejemplo, en Drive) y restáuralo si cambias de móvil.',
+      ...(HAS_BACKUP ? [{ h: 'Copia de seguridad' }, 'Guarda tus tablas, historial y ajustes en un archivo (por ejemplo, en Drive) y restáuralo si cambias de móvil.'] : []),
       { h: 'Gratis y prémium' },
       'Gratis: un ejercicio de cada apartado y todas las funciones de la app.',
-      'Prémium: todos los ejercicios, la personalización completa del muñeco y el recordatorio de copia de seguridad. Se paga y se cancela en Google Play.'] },
+      HAS_BACKUP ? 'Prémium: todos los ejercicios, la personalización completa del muñeco y el recordatorio de copia de seguridad. Se paga y se cancela en Google Play.'
+        : 'Prémium: todos los ejercicios y la personalización completa del muñeco. Se paga y se cancela en Google Play.'] },
 ];
 
 /** Guía de la app: todo lo que se puede hacer, organizado en apartados que se abren y cierran. */

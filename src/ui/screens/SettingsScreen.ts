@@ -8,7 +8,7 @@ import { REMINDER_KINDS, remindersOf, type ReminderKind } from '../../domain/rem
 import { dayName, EVERY, RemindersScreen, WEEK } from './RemindersScreen';
 import { Store } from '../../domain/Store';
 import { SECTION_IDS, SECTION_TITLES, type Settings } from '../../domain/types';
-import { pickBackupFile } from '../../services/Backup';
+import { HAS_BACKUP, pickBackupFile } from '../../services/Backup';
 import { BACKUP_EVERY_DAYS, saveBackupNow } from '../components/backupPrompt';
 import type { App, Screen } from '../App';
 import { LookScreen } from './LookScreen';
@@ -248,7 +248,7 @@ export class SettingsScreen implements Screen {
   private remindersCard(): HTMLElement {
     const r = remindersOf(this.app.store.settings.reminders);
     const names: Record<ReminderKind, string> = { train: 'Entrenamiento', weigh: 'Peso', backup: 'Copia de seguridad' };
-    const active = REMINDER_KINDS.filter((k) => r[k].on && r[k].days.length && (k !== 'backup' || this.app.access.premium));
+    const active = REMINDER_KINDS.filter((k) => r[k].on && r[k].days.length && (k !== 'backup' || (HAS_BACKUP && this.app.access.premium)));
     // con alguno activo: campana encendida con el número de recordatorios y la tarjeta resaltada
     return h('button', { class: 'card setting rest-card look-open rem-open' + (active.length ? ' on' : ''), onclick: () => this.app.push(new RemindersScreen(this.app)) },
       h('div', { class: 'rest-head' },
@@ -256,7 +256,7 @@ export class SettingsScreen implements Screen {
         h('div', { class: 'set-text' }, h('strong', {}, 'Recordatorios'),
           active.length
             ? h('p', { class: 'muted small rem-summary' }, ...active.map((k) => h('span', { class: 'block' }, h('span', {}, names[k]), ': ', h('span', { 'data-no-tr': '' }, `${WEEK.filter((d) => r[k].days.includes(d)).map(dayName).join(', ')} · ${r[k].time}`), (r[k].every ?? 1) > 1 ? h('span', { 'data-no-tr': '' }, ' · ') : null, (r[k].every ?? 1) > 1 ? h('span', { class: 'rem-lc' }, EVERY[(r[k].every ?? 1) - 1][1]) : null)))
-            : h('p', { class: 'muted small' }, 'Entrenamiento, peso y copia de seguridad, los días y a la hora que elijas.')),
+            : h('p', { class: 'muted small' }, HAS_BACKUP ? 'Entrenamiento, peso y copia de seguridad, los días y a la hora que elijas.' : 'Entrenamiento y peso, los días y a la hora que elijas.')),
         icon('chevron')));
   }
 
@@ -346,8 +346,9 @@ export class SettingsScreen implements Screen {
       this.remindersCard(),
       h('h3', { class: 'block-title' }, 'Reloj'),
       this.watchSection(),
-      h('h3', { class: 'block-title' }, 'Copia de seguridad'),
-      this.backupSection(),
+      // copia a mano solo en la web (en la app de Android los datos van en la copia automática de Google)
+      HAS_BACKUP ? h('h3', { class: 'block-title' }, 'Copia de seguridad') : null,
+      HAS_BACKUP ? this.backupSection() : null,
       this.versionSection(),
       !this.app.voice.available ? h('p', { class: 'muted' }, 'Este navegador no tiene voz disponible.') : null,
     );

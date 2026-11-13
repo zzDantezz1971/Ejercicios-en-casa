@@ -15,6 +15,12 @@ function fileName(now = new Date()): string {
  * Ofrece el archivo para guardarlo. En Android abre el menú de compartir (Drive, correo…);
  * si no se puede, lo descarga. Devuelve 'shared', 'downloaded' o 'cancelled'.
  */
+/**
+ * Copia de seguridad a mano: solo en la web (allí los datos pueden borrarse con el navegador).
+ * En la app de Android no hace falta: los datos entran en la copia automática de Google.
+ */
+export const HAS_BACKUP = !IS_NATIVE;
+
 export async function saveBackupFile(text: string): Promise<'shared' | 'downloaded' | 'cancelled'> {
   const name = fileName();
   if (IS_NATIVE) {

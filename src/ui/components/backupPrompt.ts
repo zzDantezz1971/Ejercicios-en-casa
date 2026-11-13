@@ -1,5 +1,5 @@
 import { LOCALE } from '../../i18n';
-import { saveBackupFile } from '../../services/Backup';
+import { HAS_BACKUP, saveBackupFile } from '../../services/Backup';
 import type { App } from '../App';
 import { confirmDialog, h } from '../dom';
 import { icon } from '../icons';
@@ -29,7 +29,7 @@ export async function saveBackupNow(app: App): Promise<boolean> {
  */
 export function backupDue(app: App): boolean {
   const r = remindersOf(app.store.settings.reminders).backup;
-  if (!r.on || !app.access.premium) return false;
+  if (!HAS_BACKUP || !r.on || !app.access.premium) return false;
   return app.store.history.length > 0 && app.store.daysSinceBackup() >= (r.every ?? 1) * BACKUP_EVERY_DAYS;
 }
 

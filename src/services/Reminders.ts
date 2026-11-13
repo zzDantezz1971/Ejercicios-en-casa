@@ -2,6 +2,7 @@ import { LocalNotifications } from '@capacitor/local-notifications';
 import { tr } from '../i18n';
 import { IS_NATIVE } from '../platform/native';
 import { planReminders, remindersOf, type ReminderKind } from '../domain/reminders';
+import { HAS_BACKUP } from './Backup';
 import type { Store } from '../domain/Store';
 
 /** Recordatorios: solo en la app Android (en la web no se pueden programar con la app cerrada). */
@@ -40,7 +41,10 @@ export function rescheduleReminders(store: Store, premium: () => boolean): void 
 async function reschedule(store: Store, premium: boolean): Promise<void> {
   const pending = await LocalNotifications.getPending();
   if (pending.notifications.length) await LocalNotifications.cancel({ notifications: pending.notifications.map((n) => ({ id: n.id })) });
-  const plan = planReminders(new Date(), remindersOf(store.settings.reminders), {
+  const settings = remindersOf(store.settings.reminders);
+  // en la app de Android no hay copia a mano: tampoco su recordatorio
+  if (!HAS_BACKUP) settings.backup.on = false;
+  const plan = planReminders(new Date(), settings, {
     trainings: store.history.map((e) => e.date),
     weighings: store.weights.map((w) => w.date),
     lastBackup: store.lastBackup,

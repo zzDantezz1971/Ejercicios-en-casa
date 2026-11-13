@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-13T15:36:08Z",
+    "es": ["En la app de Android ya no hay copia de seguridad a mano (ni su recordatorio): tus datos se guardan en la copia automática de Google y se recuperan al reinstalar o cambiar de móvil. En la web se mantiene."],
+    "ca": ["A l'app d'Android ja no hi ha còpia de seguretat a mà (ni el seu recordatori): les teves dades es desen a la còpia automàtica de Google i es recuperen en reinstal·lar o canviar de mòbil. A la web es manté."],
+    "en": ["The Android app no longer has a manual backup (or its reminder): your data is saved in Google's automatic backup and comes back when you reinstall or change phones. It stays on the web."]
+  },
+  {
     "fecha": "2026-11-13T15:22:33Z",
     "es": ["Los avisos de anotar el peso y de hacer la copia de seguridad (al acabar un entrenamiento y en Historial) solo salen si tienes activado ese recordatorio en Ajustes › Recordatorios, y con la frecuencia que hayas elegido."],
     "ca": ["Els avisos d'anotar el pes i de fer la còpia de seguretat (en acabar un entrenament i a Historial) només surten si tens activat aquell recordatori a Configuració › Recordatoris, i amb la freqüència que hagis triat."],

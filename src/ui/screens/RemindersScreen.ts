@@ -1,6 +1,7 @@
 import { LOCALE } from '../../i18n';
 import { remindersOf, type ReminderKind, type ReminderSettings } from '../../domain/reminders';
 import { askNotificationPermission, REMINDERS_AVAILABLE } from '../../services/Reminders';
+import { HAS_BACKUP } from '../../services/Backup';
 import type { App, Screen } from '../App';
 import { clear, confirmDialog, h } from '../dom';
 import { icon, type IconName } from '../icons';
@@ -65,7 +66,8 @@ export class RemindersScreen implements Screen {
     this.body.append(h('p', { class: 'muted small rem-intro' }, REMINDERS_AVAILABLE
       ? 'Elige qué quieres que te recuerde y, para cada uno, los días y la hora. Llegan como notificación aunque la app esté cerrada.'
       : 'Los recordatorios llegan como notificación en la app de Android, aunque esté cerrada. Aquí puedes ver cómo se configuran.'));
-    for (const o of OPTIONS) {
+    // la copia de seguridad solo existe en la web
+    for (const o of OPTIONS.filter((x) => x.kind !== 'backup' || HAS_BACKUP)) {
       const locked = !!o.premium && !premium;
       const rule = r[o.kind];
       const on = rule.on && !locked;

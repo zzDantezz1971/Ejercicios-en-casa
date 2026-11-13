@@ -9,6 +9,7 @@ import { append, clear, confirmDialog, h, humanDuration, plural } from '../dom';
 import { icon, SECTION_STYLE, type IconName } from '../icons';
 import { HistoryDetailScreen } from './HistoryDetailScreen';
 import { backupCard, backupDue } from '../components/backupPrompt';
+import { HAS_BACKUP } from '../../services/Backup';
 
 /** Historial: récords, calendario y botones de los resúmenes semanal y mensual. */
 export class HistoryScreen implements Screen {
@@ -53,7 +54,7 @@ export class HistoryScreen implements Screen {
         onclick: async () => {
           // doble confirmación: es irreversible (salvo con una copia de seguridad)
           const n = this.app.store.history.length;
-          if (!(await confirmDialog('¿Borrar todo el historial? No se puede deshacer. Solo podrás recuperarlo si tienes una copia de seguridad (Configuración → Copia de seguridad).', 'Continuar'))) return;
+          if (!(await confirmDialog(HAS_BACKUP ? '¿Borrar todo el historial? No se puede deshacer. Solo podrás recuperarlo si tienes una copia de seguridad (Configuración → Copia de seguridad).' : '¿Borrar todo el historial? No se puede deshacer.', 'Continuar'))) return;
           if (await confirmDialog(`¿Seguro? Se borrarán ${plural(n, 'entrenamiento', 'entrenamientos')}, con tus récords, rachas y resúmenes. Esta es la última confirmación.`, 'Sí, borrar todo', 'Cancelar', true)) {
             this.app.store.clearHistory();
             this.render();
