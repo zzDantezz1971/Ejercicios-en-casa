@@ -270,10 +270,12 @@ export const RAW_SECTIONS: RawSection[] = [
    [{uaL:-115,faL:-85,uaR:-65,faR:-95,thL:180,snL:90,thR:0,snR:90,sTh:.95},1300,1300],
    [{uaL:-125,faL:-88,uaR:-55,faR:-92,thL:176,snL:92,thR:4,snR:88,sTh:.95},1300,1300]]},
  // plantas de los pies juntas y quietas; las rodillas bajan hacia los lados y vuelven a subir (muslo y espinilla
- // acortados en 2D = abiertos hacia el lado en 3D, con su longitud de verdad)
- {n:'Mariposa tumbado',z:'Aductores',mat:1,armsOut:true,az:72,el:24,b:['lumbar'],f:[
-   [{...SUP,ua:92,fa:92,sa:.1,th:-37,sn:83,sTh:.97,sSh:.92},900,1600],
-   [{...SUP,ua:92,fa:92,sa:.1,th:-15,sn:71,sTh:.74,sSh:.53},1500,1600]]},
+ // acortados en 2D = abiertos hacia el lado en 3D). Posiciones calculadas para que el tobillo no se mueva: [th, sTh, sn, sSh, zA]
+ {n:'Mariposa tumbado',z:'Aductores',mat:1,armsOut:true,az:72,el:24,b:['lumbar'],per:4200,fn:t=>{
+   const P=[[-37,.969,82.97,.914,0],[-32.6,.914,81.88,.821,0],[-28.2,.869,80.68,.739,-.43],[-23.8,.843,80.12,.666,-1.32],[-19.4,.772,74.47,.592,0],[-15,.738,70.87,.532,0]];
+   const u=(.5-.5*Math.cos(t*Math.PI*2))*(P.length-1),a=Math.min(P.length-2,Math.floor(u)),f=u-a,q=P[a].map((v,k)=>v+(P[a+1][k]-v)*f);
+   return {...SUP,ua:92,fa:92,sa:.1,th:q[0],sTh:q[1],sn:q[2],sSh:q[3],zAL:q[4],zAR:-q[4]};
+ }},
  {g:'Piernas'},
  {n:'Isquiotibiales tumbado',z:'Parte trasera del muslo',mat:1,f:[
    [{tl:180,thL:0,snL:0,ftL:-90,thR:-40,snR:-40,ftR:-130,ua:-18,fa:-10},300,1200],
