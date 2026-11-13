@@ -816,9 +816,9 @@ export class MannequinScene {
     // pesa rusa: gris, del mismo color que las mancuernas
     const kbM = this.silver();
     if (spec.kb) for (const h of spec.kb === 'both' ? ['L', 'R'] : spec.kb === 'up' ? ['L'] : [spec.kb]) this.gear['kb' + h] = [this.add(G.sph, kbM), this.add(G.ring, kbM)];
-    // barra con discos: gris oscuro (las mancuernas y la pesa rusa, en plata)
+    // la barra, gris oscuro; los discos, plata brillante como las mancuernas
     const barM = this.mat('#4A5059', 0.4, 0.35);
-    if (spec.bar) this.gear.bar = [this.add(G.cyl, barM), ...many(4, G.cyl, barM)];
+    if (spec.bar) this.gear.bar = [this.add(G.cyl, barM), ...many(4, G.cyl, steel)];
     if (spec.band) this.gear.band = many(2, G.cyl, this.mat(this.pal.band, 0.55));
     if (spec.ball) this.gear.ball = [this.add(G.sph, this.mat('#4F7DF0', 0.35))];
     if (spec.rope) {
