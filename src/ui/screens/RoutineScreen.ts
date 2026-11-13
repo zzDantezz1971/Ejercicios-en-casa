@@ -3,7 +3,7 @@ import { RoutineEditor, STEP_SECONDS } from '../../domain/RoutineEditor';
 import { clampRounds, MAX_ROUNDS } from '../../domain/WorkoutPlan';
 import { SECTION_IDS, SECTION_TITLES, usesWeight, type ExerciseDef, type SectionId } from '../../domain/types';
 import type { App, Screen } from '../App';
-import { append, clear, h, humanDuration, kg, plural, promptDialog, weightDialog } from '../dom';
+import { append, clear, confirmDialog, h, humanDuration, kg, plural, promptDialog, weightDialog } from '../dom';
 import { icon, SECTION_STYLE, zoneIcon } from '../icons';
 import { badgeList, equipMarks } from '../components/badges';
 import { canDo } from '../../domain/equipment';
@@ -135,7 +135,7 @@ export class RoutineScreen implements Screen {
         window.scrollTo(0, 0);
         this.render();
       } },
-        ...([['zona', 'Zona del cuerpo'], ['musculo', 'Por músculo (de cabeza a pies)'], ['material', 'Por material'], ['az', 'Alfabético (A-Z)']] as Array<[ListSort, string]>)
+        ...([['zona', this.app.store.customOrder(this.section) ? 'Orden personalizado' : 'Zona del cuerpo'], ['musculo', 'Por músculo (de cabeza a pies)'], ['material', 'Por material'], ['az', 'Alfabético (A-Z)']] as Array<[ListSort, string]>)
           .map(([v, label]) => h('option', { value: v, selected: v === cur }, label)));
       this.toolbar.append(h('label', { class: 'sort-row' }, icon('tables'), h('span', { class: 'muted small' }, 'Ordenar:'), sel));
     }
@@ -276,7 +276,7 @@ export class RoutineScreen implements Screen {
           style: { '--sec': SECTION_STYLE[s.id].color },
           onclick: () => { this.section = s.id; this.clearSearch(); window.scrollTo(0, 0); this.render(); },
           'aria-label': `${s.title}: ${avail} ejercicios disponibles`,
-        }, h('span', { class: 'tab-avail', 'aria-hidden': 'true' }, avail), icon(SECTION_STYLE[s.id].icon), s.title, n ? h('span', { class: 'tab-count' }, n) : null),
+        }, h('span', { class: 'tab-avail', 'aria-hidden': 'true' }, avail), icon(SECTION_STYLE[s.id].icon), s.title, this.app.store.customOrder(s.id) ? icon('tables', 'ico tab-custom') : null, n ? h('span', { class: 'tab-count' }, n) : null),
       );
     }
     this.el.style.setProperty('--sec', SECTION_STYLE[this.section].color);
@@ -325,6 +325,17 @@ export class RoutineScreen implements Screen {
     }
     // con orden personalizado no hay subgrupos: la lista es libre
     const custom = !!this.app.store.customOrder(this.section);
+    // aviso de que este apartado lleva tu propio orden (y cómo volver al de siempre)
+    if (custom && this.sort === 'zona') {
+      this.list.append(h('div', { class: 'custom-order-note' },
+        icon('tables'),
+        h('span', {}, h('strong', {}, 'Orden personalizado'), h('span', { class: 'muted small' }, 'Lo has ordenado tú, por eso no salen los grupos.')),
+        h('button', { class: 'link-btn', onclick: async () => {
+          if (!(await confirmDialog('¿Volver al orden normal, con grupos?', 'Restablecer'))) return;
+          this.app.store.resetOrder(this.section);
+          this.refresh();
+        } }, 'Restablecer')));
+    }
     let group: string | undefined;
     const owned = new Set<string>(this.app.store.settings.equipment);
     const all = this.ordered(this.section);

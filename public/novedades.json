@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-13T00:16:56Z",
+    "es": ["Si ordenas un apartado a tu manera, ahora se ve: un icono junto a su nombre, «Orden personalizado» en el selector y un aviso encima de la lista con el botón Restablecer."],
+    "ca": ["Si ordenes un apartat a la teva manera, ara es veu: una icona al costat del seu nom, «Ordre personalitzat» al selector i un avís damunt de la llista amb el botó Restableix."],
+    "en": ["If you order a section your own way, it now shows: an icon next to its name, «Custom order» in the selector and a notice above the list with a Reset button."]
+  },
+  {
     "fecha": "2026-11-13T00:10:02Z",
     "es": ["Orden «Zona del cuerpo»: dentro de cada grupo, los ejercicios van por orden alfabético (si no has hecho tu propio orden)."],
     "ca": ["Ordre «Zona del cos»: dins de cada grup, els exercicis van per ordre alfabètic (si no has fet el teu propi ordre)."],
