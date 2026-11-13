@@ -840,7 +840,7 @@ export class MannequinScene {
     // la barra, gris oscuro; los discos, plata brillante como las mancuernas
     const barM = this.mat('#4A5059', 0.4, 0.35);
     if (spec.bar) this.gear.bar = [this.add(G.cyl, barM), ...many(4, G.cyl, steel)];
-    if (spec.band) this.gear.band = many(2, G.cyl, this.mat(this.pal.band, 0.55));
+    if (spec.band) this.gear.band = many(spec.band === 'back' ? 3 : 2, G.cyl, this.mat(this.pal.band, 0.55));
     if (spec.ball) this.gear.ball = [this.add(G.sph, this.mat('#4F7DF0', 0.35))];
     if (spec.rope) {
       // comba de color vivo y algo brillante para que se vea sobre el fondo oscuro y sobre el cuerpo
@@ -899,6 +899,14 @@ export class MannequinScene {
         : spec.band === 'ankles' ? [[J.anL, J.anR]]
         : spec.band === 'bar' ? [[grip('L'), J.knR.clone().add(V(0, -3, 0))], [grip('R'), J.knR.clone().add(V(0, -3, 0))]]
         : spec.band === 'feet' ? [[grip('L'), J.anL.clone().add(V(0, -2, 0))], [grip('R'), J.anR.clone().add(V(0, -2, 0))]]
+        // rodeando la espalda: de una mano, por detrás de los omóplatos (por fuera de los hombros), a la otra
+        : spec.band === 'back' ? (() => {
+          const back = side ? V(-1, 0, 0) : V(0, 0, -1);
+          const lat = J.shoR.clone().sub(J.shoL).setY(0).normalize();
+          const pL = J.shoL.clone().addScaledVector(back, 9).addScaledVector(lat, -8).add(V(0, -4, 0));
+          const pR = J.shoR.clone().addScaledVector(back, 9).addScaledVector(lat, 8).add(V(0, -4, 0));
+          return [[grip('L'), pL], [pL, pR], [pR, grip('R')]] as Array<[V3, V3]>;
+        })()
         : this.bandFrom ? [[this.bandFrom, grip('L')], [this.bandFrom, grip('R')]] : [];
       g.band.forEach((m, i) => {
         m.visible = !!pairs[i];

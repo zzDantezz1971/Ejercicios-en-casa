@@ -81,7 +81,7 @@ export interface MotionSpec {
   bar?: boolean;
   /** Banda elástica: de las manos a los pies, entre las manos, entre rodillas o tobillos, o a un punto fijo (2D, en la postura inicial). */
   /** 'bar': banda atada a la barra de dominadas (entre las manos) que baja hasta la rodilla. */
-  band?: 'feet' | 'hands' | 'knees' | 'ankles' | 'bar' | ((j: Record<string, [number, number]>) => [number, number]);
+  band?: 'feet' | 'hands' | 'knees' | 'ankles' | 'bar' | 'back' | ((j: Record<string, [number, number]>) => [number, number]);
   /** Fitball: centro (2D) según las articulaciones de cada instante. */
   ball?: (j: Record<string, [number, number]>, pose: Record<string, number>) => [number, number];
   /** Radio de la fitball (27 por defecto). */

@@ -410,7 +410,8 @@ export const EXTRA_MOTIONS: Record<string, M> = {
     [{ th: 0, sn: 0, ft: -80, ua: 8, fa: 8, tl: -86 }, 150, 800], [{ th: 0, sn: 0, ft: -80, ua: 125, fa: 8, tl: -94, hd: -94 }, 250, 800]] },
   'press-de-pecho-con-banda': { band: (J) => [J.neck[0] - 14, J.neck[1] + 12], f: [
     [{ ua: 122, fa: -8 }, 150, 800], [{ ua: 2, fa: 0 }, 200, 800]] },
-  'aperturas-con-banda': { v: 'front', band: (J) => [J.neck[0], J.neck[1] + 10], f: [
+  // la banda rodea la espalda (de una mano a la otra por detrás de los omóplatos)
+  'aperturas-con-banda': { v: 'front', band: 'back', f: [
     [{ uaL: 180, faL: 172, uaR: 0, faR: 8 }, 150, 750], [{ uaL: 180, faL: 172, uaR: 0, faR: 8, saL: -0.35, saR: -0.35 }, 200, 750]] },
   'separacion-de-banda': { v: 'front', band: 'hands', f: [
     // brazos al frente con las manos juntas y, al abrir, las manos un poco por delante: la banda pasa por delante del pecho
