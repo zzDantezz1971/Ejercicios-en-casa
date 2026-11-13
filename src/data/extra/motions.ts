@@ -467,8 +467,8 @@ export const EXTRA_MOTIONS: Record<string, M> = {
     [{ jy: 17, ft: -30, uaR: 4, faR: -6 }, 300, 900], [{ jy: 22, ft: 45, uaR: 4, faR: -6 }, 500, 900]] },
   'flexiones-con-manos-en-el-step': { plant: 'haR', anchor: { j: 'haR', y: -19 }, props: (J, P) => stepBox(P, J.haR[0] - 16, 30), f: [
     [{ tl: -30, ua: 90, fa: 90, th: 150, sn: 150, ft: 70 }, 200, 750], [{ tl: -19, ua: 150, fa: 30, th: 161, sn: 161, ft: 80 }, 150, 850]] },
-  'fondos-de-triceps-en-el-step': { plant: 'haR', anchor: { j: 'haR', y: -19 }, feetDown: true, fingersToFeet: true, props: (J, P) => stepBox(P, J.haR[0] - 30, 33), f: [
-    [{ ua: 105, fa: 100, th: 4, sn: 88, ft: 2 }, 150, 900], [{ ua: 165, fa: 92, th: 4, sn: 88, ft: 2 }, 150, 900]] },
+  'fondos-de-triceps-en-el-step': { plant: 'anR', noSettle: true, handsDown: 19, fingersToFeet: true, props: (J, P) => stepBox(P, J.haR[0] - 30, 33), f: [
+    [{ ua: 105, fa: 100, th: 15, sn: 15, ft: -66 }, 150, 900], [{ ua: 150, fa: 80, th: 10, sn: 10, ft: -78 }, 150, 900]] },
   // cada salto: rodillas dobladas al despegar y al caer, piernas recogidas en el aire
   // brazos quietos (doblados delante, como en la sentadilla) mientras salta; step más largo
   'saltos-laterales-sobre-el-step': (() => {
@@ -555,8 +555,8 @@ export const EXTRA_MOTIONS: Record<string, M> = {
 
 /** Ejercicios de antes (rawExercises.ts) con movimiento nuevo: sustituyen al de allí. */
 export const MOTION_OVERRIDES: Record<string, M> = {
-  // banco de lado (a lo ancho, detrás): las dos manos encima, dedos hacia los pies; rodillas dobladas y pies fijos en el suelo
-  'fondos-de-triceps-en-banco': { anchor: { j: 'haR', y: -37 }, plant: 'haR', feetDown: true, fingersToFeet: true, props: (J) => {
+  // banco de lado (a lo ancho, detrás): las dos manos encima, dedos hacia los pies; piernas estiradas con los talones fijos en el suelo
+  'fondos-de-triceps-en-banco': { plant: 'anR', noSettle: true, handsDown: 37, fingersToFeet: true, props: (J) => {
     const x1 = J.haR[0] - 26, x2 = J.haR[0] + 4, top = -33.5;
     return [
       { t: 'rect', x: x1, y: top, w: x2 - x1, h: 5, dep: 110 },
@@ -564,7 +564,7 @@ export const MOTION_OVERRIDES: Record<string, M> = {
       { t: 'line', a: [x2 - 5, top + 4], b: [x2 - 5, 0], w: 4, dep: 92 },
     ];
   }, f: [
-    [{ ua: 105, fa: 100, th: 4, sn: 88, ft: 2 }, 150, 900], [{ ua: 180, fa: 90, th: 4, sn: 88, ft: 2 }, 150, 900]] },
+    [{ ua: 105, fa: 100, th: 32, sn: 32, ft: -60 }, 150, 900], [{ ua: 180, fa: 90, th: 12, sn: 12, ft: -78 }, 150, 900]] },
   // el tronco gira de verdad (la cadera mira al frente) y los brazos, sueltos, lo siguen: uno por delante y otro por detrás
   'giros-de-tronco': { v: 'front', el: 22, f: [
     [{ thL: 96, snL: 96, thR: 84, snR: 84, tw: 55, hd: -90, ...TWIST_ARMS }, 80, 650],
