@@ -1,4 +1,4 @@
-package cat.ejercicisacasa.app;
+package cat.exercicisacasa.app;
 
 import android.os.Bundle;
 import android.view.View;

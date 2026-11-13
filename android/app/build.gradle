@@ -1,10 +1,10 @@
 apply plugin: 'com.android.application'
 
 android {
-    namespace = "cat.ejercicisacasa.app"
+    namespace = "cat.exercicisacasa.app"
     compileSdk = rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "cat.ejercicisacasa.app"
+        applicationId "cat.exercicisacasa.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         // número de versión: lo pone la compilación de GitHub (ANDROID_VERSION_CODE / ANDROID_VERSION_NAME)

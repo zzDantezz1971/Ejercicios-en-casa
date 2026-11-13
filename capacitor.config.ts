@@ -3,7 +3,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 // App Android (Google Play). El nombre que se ve bajo el icono está traducido en
 // android/app/src/main/res/values*/strings.xml.
 const config: CapacitorConfig = {
-  appId: 'cat.ejercicisacasa.app',
+  appId: 'cat.exercicisacasa.app',
   appName: 'Kasa Fit',
   webDir: 'dist-android',
   backgroundColor: '#0A0D12',
