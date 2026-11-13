@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-13T17:39:48Z",
+    "es": ["Elegir ejercicios: «Vueltas» sale en todos los apartados, y las opciones van en este orden: Ordenar, Ordenar lista, Vueltas y el buscador."],
+    "ca": ["Triar exercicis: «Voltes» surt a tots els apartats, i les opcions van en aquest ordre: Ordena, Ordena la llista, Voltes i el cercador."],
+    "en": ["Choosing exercises: «Rounds» now shows in every section, and the options go in this order: Sort, Sort list, Rounds and the search box."]
+  },
+  {
     "fecha": "2026-11-13T17:32:00Z",
     "es": ["Personaliza el muñeco y Recordatorios: al elegir una opción, la pantalla se queda donde estaba en vez de volver arriba."],
     "ca": ["Personalitza el ninot i Recordatoris: en triar una opció, la pantalla es queda on era en lloc de tornar a dalt."],

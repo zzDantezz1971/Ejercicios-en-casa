@@ -130,19 +130,10 @@ export class RoutineScreen implements Screen {
     }
     const seg = (m: 'all' | 'fav' | 'chosen', label: string | Node) =>
       h('button', { class: 'seg' + (this.mode === m ? ' on' : ''), 'aria-pressed': String(this.mode === m), onclick: () => { this.mode = m; this.clearSearch(); window.scrollTo(0, 0); this.render(); } }, label);
-    append(this.toolbar,
-      h('div', { class: 'segmented' }, seg('all', 'Todos'), seg('fav', h('span', { class: 'seg-fav' }, icon('starFill'), 'Favoritos')), seg('chosen', `Elegidos (${n})`)),
-      // tu propio orden (arrastrando) se ve con «Por zona»
-      // cada tipo de orden (zona, músculo, material, A-Z) tiene su propio orden personalizado
-      this.mode === 'all'
-        ? h('button', { class: 'btn ghost small', onclick: () => {
-          this.mode = 'sorting'; this.clearSearch(); window.scrollTo(0, 0); this.render();
-        } }, icon('tables'), 'Ordenar lista')
-        : null,
-      n ? this.roundsControl() : null,
-    );
-    // ordenar la lista por zona (la de siempre o la personalizada), músculo, material o nombre
+    // orden: Todos/Favoritos/Elegidos; después el tipo de orden, Ordenar lista y Vueltas (el buscador va debajo)
+    this.toolbar.append(h('div', { class: 'segmented' }, seg('all', 'Todos'), seg('fav', h('span', { class: 'seg-fav' }, icon('starFill'), 'Favoritos')), seg('chosen', `Elegidos (${n})`)));
     if (this.mode === 'all') {
+      // ordenar la lista por zona, músculo, material o nombre (cada uno con su propio orden personalizado)
       const cur = this.sort;
       const sel = h('select', { class: 'sort-select', 'aria-label': 'Ordenar por', onchange: (e: Event) => {
         this.app.store.saveSettings({ ...this.app.store.settings, listSort: (e.target as HTMLSelectElement).value as ListSort });
@@ -151,8 +142,14 @@ export class RoutineScreen implements Screen {
       } },
         ...(Object.entries(SORT_LABELS) as Array<[ListSort, string]>)
           .map(([v, label]) => h('option', { value: v, selected: v === cur }, label)));
-      this.toolbar.append(h('label', { class: 'sort-row' }, icon('tables'), h('span', { class: 'muted small' }, 'Ordenar:'), sel));
+      this.toolbar.append(
+        h('label', { class: 'sort-row' }, icon('tables'), h('span', { class: 'muted small' }, 'Ordenar:'), sel),
+        h('button', { class: 'btn ghost small', onclick: () => {
+          this.mode = 'sorting'; this.clearSearch(); window.scrollTo(0, 0); this.render();
+        } }, icon('tables'), 'Ordenar lista'));
     }
+    // vueltas: en todos los apartados, aunque aún no tengan ejercicios elegidos
+    this.toolbar.append(this.roundsControl());
     if (this.mode === 'fav') {
       this.hint.replaceChildren(this.favs().length
         ? 'Tus ejercicios favoritos de este apartado. Pulsa Seleccionar para añadirlo a la tabla.'
