@@ -564,7 +564,7 @@ export const MOTION_OVERRIDES: Record<string, M> = {
       { t: 'line', a: [x2 - 5, top + 4], b: [x2 - 5, 0], w: 4, dep: 92 },
     ];
   }, f: [
-    [{ ua: 105, fa: 100, th: 32, sn: 32, ft: -60 }, 150, 900], [{ ua: 180, fa: 90, th: 12, sn: 12, ft: -78 }, 150, 900]] },
+    [{ ua: 128, fa: 120, th: 27, sn: 27, ft: -60 }, 150, 900], [{ ua: 180, fa: 90, th: 12, sn: 12, ft: -78 }, 150, 900]] },
   // el tronco gira de verdad (la cadera mira al frente) y los brazos, sueltos, lo siguen: uno por delante y otro por detrás
   'giros-de-tronco': { v: 'front', el: 22, f: [
     [{ thL: 96, snL: 96, thR: 84, snR: 84, tw: 55, hd: -90, ...TWIST_ARMS }, 80, 650],
