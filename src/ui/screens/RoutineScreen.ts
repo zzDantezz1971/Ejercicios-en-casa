@@ -8,13 +8,14 @@ import { icon, SECTION_STYLE, zoneIcon } from '../icons';
 import { badgeList, equipMarks } from '../components/badges';
 import { canDo } from '../../domain/equipment';
 import { sortableList, type SortableRow } from '../components/sortable';
-import { applyOrder, moveItem } from '../../domain/ordering';
+import { moveItem } from '../../domain/ordering';
 import { DetailScreen } from './DetailScreen';
 import { MUSCLE_NAMES, parseMuscles, type Muscle } from '../../figure/anatomy';
 import { EQUIPMENT, EQUIP_INFO } from '../../domain/equipment';
 import type { IconName } from '../icons';
 
 export type ListSort = 'zona' | 'musculo' | 'material' | 'az';
+const SORT_LABELS: Record<ListSort, string> = { zona: 'Zona del cuerpo', musculo: 'Por músculo (de cabeza a pies)', material: 'Por material', az: 'Alfabético (A-Z)' };
 /** Músculos de la cabeza a los pies (orden «Por músculo»). */
 const HEAD_TO_TOE: Muscle[] = ['cuello', 'trapecio', 'deltoides', 'pecho', 'espalda', 'biceps', 'triceps', 'antebrazo',
   'abdominales', 'oblicuos', 'lumbar', 'gluteos', 'aductores', 'cuadriceps', 'isquios', 'gemelos'];
@@ -26,6 +27,10 @@ function mainMuscle(e: ExerciseDef): Muscle | undefined {
   const t = parseMuscles(e.muscles);
   return (t.find((x) => x.kind === 'work') ?? t[0])?.muscle;
 }
+/** Ejercicio tal como sale en la lista: con el grupo bajo el que se ve (según el orden elegido). */
+type Listed = ExerciseDef & { listGroup: string };
+/** Cómo se agrupa la lista en un tipo de orden: grupo de cada ejercicio, grupos en orden, título e icono. */
+interface Grouping { keyOf: (e: ExerciseDef) => string; keys: string[]; title: (k: string) => string; icon: (k: string) => SVGSVGElement }
 /** En tu orden guardado, marca dónde empieza cada grupo. */
 const GROUP_MARK = '§';
 const byName = (a: ExerciseDef, b: ExerciseDef) => tr(a.name).localeCompare(tr(b.name));
@@ -114,9 +119,9 @@ export class RoutineScreen implements Screen {
     if (this.mode === 'sorting') {
       this.toolbar.append(
         h('div', { class: 'sorting-bar' },
-          h('span', { class: 'sorting-title' }, icon('tables'), `Ordenando ${title}`),
-          this.app.store.customOrder(this.section)
-            ? h('button', { class: 'btn ghost small', onclick: () => { this.app.store.resetOrder(this.section); this.refresh(); } }, 'Restablecer')
+          h('span', { class: 'sorting-title' }, icon('tables'), h('span', {}, `Ordenando ${title}`, h('small', { class: 'muted sorting-sort' }, SORT_LABELS[this.sort]))),
+          this.app.store.customOrder(this.section, this.sort)
+            ? h('button', { class: 'btn ghost small', onclick: () => { this.app.store.resetOrder(this.section, this.sort); this.refresh(); } }, 'Restablecer')
             : null,
           h('button', { class: 'btn primary small', onclick: () => { this.mode = 'all'; this.refresh(); } }, icon('check'), 'Listo')),
       );
@@ -128,10 +133,9 @@ export class RoutineScreen implements Screen {
     append(this.toolbar,
       h('div', { class: 'segmented' }, seg('all', 'Todos'), seg('fav', h('span', { class: 'seg-fav' }, icon('starFill'), 'Favoritos')), seg('chosen', `Elegidos (${n})`)),
       // tu propio orden (arrastrando) se ve con «Por zona»
-      // siempre a mano: si estaba ordenado por otra cosa, vuelve al orden por zona (que es donde se guarda el tuyo)
+      // cada tipo de orden (zona, músculo, material, A-Z) tiene su propio orden personalizado
       this.mode === 'all'
         ? h('button', { class: 'btn ghost small', onclick: () => {
-          if (this.sort !== 'zona') this.app.store.saveSettings({ ...this.app.store.settings, listSort: 'zona' });
           this.mode = 'sorting'; this.clearSearch(); window.scrollTo(0, 0); this.render();
         } }, icon('tables'), 'Ordenar lista')
         : null,
@@ -145,7 +149,7 @@ export class RoutineScreen implements Screen {
         window.scrollTo(0, 0);
         this.render();
       } },
-        ...([['zona', 'Zona del cuerpo'], ['musculo', 'Por músculo (de cabeza a pies)'], ['material', 'Por material'], ['az', 'Alfabético (A-Z)']] as Array<[ListSort, string]>)
+        ...(Object.entries(SORT_LABELS) as Array<[ListSort, string]>)
           .map(([v, label]) => h('option', { value: v, selected: v === cur }, label)));
       this.toolbar.append(h('label', { class: 'sort-row' }, icon('tables'), h('span', { class: 'muted small' }, 'Ordenar:'), sel));
     }
@@ -191,36 +195,71 @@ export class RoutineScreen implements Screen {
     return this.app.store.settings.listSort ?? 'zona';
   }
 
-  private ordered(sectionId: SectionId): ExerciseDef[] {
+  /** Grupos de la lista en un tipo de orden (en A-Z no hay: un único grupo sin título). */
+  private grouping(sectionId: SectionId, sort: ListSort = this.sort): Grouping {
+    const sec = this.app.sections.find((s) => s.id === sectionId)!;
+    let keyOf: (e: ExerciseDef) => string;
+    let rank: (k: string) => number = () => 0;
+    let title: (k: string) => string = (k) => k;
+    let ico: (k: string) => SVGSVGElement = (k) => zoneIcon(k);
+    if (sort === 'zona') {
+      const first: string[] = [];
+      for (const e of sec.exercises) if (!first.includes(e.group ?? '')) first.push(e.group ?? '');
+      keyOf = (e) => e.group ?? '';
+      rank = (k) => first.indexOf(k);
+    } else if (sort === 'musculo') {
+      keyOf = (e) => mainMuscle(e) ?? '-';
+      rank = (k) => (k === '-' ? 99 : HEAD_TO_TOE.indexOf(k as Muscle));
+      title = (k) => (k === '-' ? 'Otros' : MUSCLE_NAMES[k as Muscle]);
+      ico = (k) => zoneIcon(k === '-' ? '' : k);
+    } else if (sort === 'material') {
+      const eqOf = (e: ExerciseDef) => (e.equip ?? []).map((g) => g[0] as (typeof EQUIPMENT)[number]);
+      keyOf = (e) => eqOf(e).join('+') || '-';
+      rank = (k) => {
+        if (k === '-') return -1;
+        const eq = k.split('+') as Array<(typeof EQUIPMENT)[number]>;
+        return Math.min(...eq.map((x) => EQUIPMENT.indexOf(x))) * 10 + eq.length;
+      };
+      title = (k) => (k === '-' ? 'Sin material' : k.split('+').map((x) => tr(EQUIP_INFO[x as (typeof EQUIPMENT)[number]].name)).join(' + '));
+      ico = (k) => icon((k === '-' ? 'check' : EQUIP_INFO[k.split('+')[0] as (typeof EQUIPMENT)[number]].icon) as IconName);
+    } else {
+      keyOf = () => '';
+    }
+    const keys = [...new Set(sec.exercises.map(keyOf))].sort((x, y) => rank(x) - rank(y) || title(x).localeCompare(title(y)));
+    return { keyOf, keys, title, icon: ico };
+  }
+
+  /**
+   * Ejercicios visibles de un apartado en el tipo de orden elegido: por grupos y, dentro de cada grupo,
+   * alfabético; o, si lo has ordenado tú, en tu orden y en el grupo donde dejaste cada uno.
+   */
+  private ordered(sectionId: SectionId, sort: ListSort = this.sort): Listed[] {
     const sec = this.app.sections.find((s) => s.id === sectionId)!;
     const hidden = this.app.store.hidden;
-    const custom = this.app.store.customOrder(sectionId);
-    // los grupos salen siempre, en su orden; sin orden propio, alfabético dentro de cada grupo
-    const at = new Map<string | undefined, number>();
-    for (const e of sec.exercises) if (!at.has(e.group)) at.set(e.group, at.size);
-    const byGroup = (a: ExerciseDef, b: ExerciseDef) => at.get(a.group)! - at.get(b.group)!;
-    const visible = sec.exercises.filter((e) => !hidden.has(e.id)).sort((a, b) => byGroup(a, b) || byName(a, b));
-    if (!custom) return visible;
-    // orden guardado antiguo (sin títulos de grupo): cada uno en su grupo de siempre
-    if (!custom.some((t) => t.startsWith(GROUP_MARK))) return applyOrder(visible, custom).sort(byGroup);
-    // tu orden: cada ejercicio va en el grupo bajo el que lo dejaste (aunque no sea el suyo)
-    const segs = new Map<string | undefined, ExerciseDef[]>([...at.keys()].map((g) => [g, []]));
+    const gr = this.grouping(sectionId, sort);
+    const custom = this.app.store.customOrder(sectionId, sort);
+    const segs = new Map<string, Listed[]>(gr.keys.map((k) => [k, []]));
+    const visible = sec.exercises.filter((e) => !hidden.has(e.id)).sort(byName);
     const left = new Map(visible.map((e) => [e.id, e]));
-    let g: string | undefined;
-    for (const t of custom) {
-      if (t.startsWith(GROUP_MARK)) {
-        g = t.slice(GROUP_MARK.length);
-        if (!segs.has(g)) g = undefined;
-        continue;
+    if (custom) {
+      // orden guardado antiguo (sin títulos de grupo): cada uno en su grupo de siempre
+      const marked = custom.some((t) => t.startsWith(GROUP_MARK));
+      let g: string | undefined;
+      for (const t of custom) {
+        if (t.startsWith(GROUP_MARK)) {
+          g = t.slice(GROUP_MARK.length);
+          continue;
+        }
+        const e = left.get(t);
+        if (!e) continue;
+        left.delete(t);
+        const own = gr.keyOf(e);
+        const into = marked && g !== undefined && segs.has(g) ? g : own;
+        segs.get(into)!.push({ ...e, listGroup: into });
       }
-      const e = left.get(t);
-      if (!e) continue;
-      left.delete(t);
-      const into = segs.has(g) ? g : e.group;
-      segs.get(into)!.push(into === e.group ? e : { ...e, group: into });
     }
     // los que no estaban en tu orden (nuevos o que vuelven a la lista) van al final de su grupo
-    for (const e of left.values()) segs.get(e.group)!.push(e);
+    for (const e of left.values()) segs.get(gr.keyOf(e))!.push({ ...e, listGroup: gr.keyOf(e) });
     return [...segs.values()].flat();
   }
 
@@ -282,14 +321,13 @@ export class RoutineScreen implements Screen {
   /** Lista del apartado para cambiar su orden (sin subgrupos). */
   private renderSorting(): void {
     // una sola lista con los títulos de grupo fijos: puedes llevar un ejercicio a cualquier grupo
-    const exs = this.ordered(this.section);
-    const sec = this.app.sections.find((x) => x.id === this.section)!;
-    const groupNames: Array<string | undefined> = [];
-    for (const e of sec.exercises) if (!groupNames.includes(e.group)) groupNames.push(e.group);
+    const sort = this.sort;
+    const exs = this.ordered(this.section, sort);
+    const gr = this.grouping(this.section, sort);
     const rows: Array<SortableRow & { tok: string }> = [];
-    for (const g of groupNames) {
-      if (g) rows.push({ tok: GROUP_MARK + g, fixed: true, label: g, content: h('h2', { class: 'group-title zone-title' }, zoneIcon(g), g) });
-      for (const ex of exs.filter((e) => e.group === g)) {
+    for (const k of gr.keys) {
+      if (k) rows.push({ tok: GROUP_MARK + k, fixed: true, label: gr.title(k), content: h('h2', { class: 'group-title zone-title' }, gr.icon(k), gr.title(k)) });
+      for (const ex of exs.filter((e) => e.listGroup === k)) {
         rows.push({
           tok: ex.id, label: ex.name,
           content: h('div', { class: 'row-ex' }, this.miniThumb(ex), h('div', { class: 'row-text' }, h('strong', {}, ex.name), h('span', { class: 'muted small' }, ex.zone), ex.oneSided ? h('span', { class: 'by-sides' }, icon('sides'), 'por lados') : null)),
@@ -300,7 +338,7 @@ export class RoutineScreen implements Screen {
       const toks = moveItem(rows.map((r) => r.tok), from, to);
       // nada puede quedar por encima del primer título
       if (rows[0]?.fixed && !toks[0].startsWith(GROUP_MARK)) toks.splice(1, 0, toks.shift()!);
-      this.app.store.setOrder(this.section, toks);
+      this.app.store.setOrder(this.section, toks, sort);
       this.refresh();
     }));
   }
@@ -318,7 +356,7 @@ export class RoutineScreen implements Screen {
           style: { '--sec': SECTION_STYLE[s.id].color },
           onclick: () => { this.section = s.id; this.clearSearch(); window.scrollTo(0, 0); this.render(); },
           'aria-label': `${s.title}: ${avail} ejercicios disponibles`,
-        }, h('span', { class: 'tab-avail', 'aria-hidden': 'true' }, avail), icon(SECTION_STYLE[s.id].icon), s.title, this.app.store.customOrder(s.id) ? icon('tables', 'ico tab-custom') : null, n ? h('span', { class: 'tab-count' }, n) : null),
+        }, h('span', { class: 'tab-avail', 'aria-hidden': 'true' }, avail), icon(SECTION_STYLE[s.id].icon), s.title, this.app.store.customOrder(s.id, this.sort) ? icon('tables', 'ico tab-custom') : null, n ? h('span', { class: 'tab-count' }, n) : null),
       );
     }
     this.el.style.setProperty('--sec', SECTION_STYLE[this.section].color);
@@ -365,63 +403,49 @@ export class RoutineScreen implements Screen {
       }
       return;
     }
-    // con orden personalizado no hay subgrupos: la lista es libre
-    const custom = !!this.app.store.customOrder(this.section);
-    // aviso de que este apartado lleva tu propio orden (y cómo volver al de siempre)
-    if (custom && this.sort === 'zona') {
+    const sort = this.sort;
+    const custom = !!this.app.store.customOrder(this.section, sort);
+    // aviso de que este apartado lleva tu propio orden en este tipo de orden (y cómo volver al de siempre)
+    if (custom) {
       this.list.append(h('div', { class: 'custom-order-note' },
         icon('tables'),
         h('span', {}, h('strong', {}, 'Orden personalizado'), h('span', { class: 'muted small' }, 'Los ejercicios van en el orden y el grupo que has elegido.')),
         h('button', { class: 'link-btn', onclick: async () => {
           if (!(await confirmDialog('¿Volver al orden de siempre (cada ejercicio en su grupo, por orden alfabético)?', 'Restablecer'))) return;
-          this.app.store.resetOrder(this.section);
+          this.app.store.resetOrder(this.section, sort);
           this.refresh();
         } }, 'Restablecer')));
     }
-    let group: string | undefined;
     const owned = new Set<string>(this.app.store.settings.equipment);
-    const all = this.ordered(this.section);
+    const gr = this.grouping(this.section, sort);
+    const all = this.ordered(this.section, sort);
     // versión gratis: el ejercicio gratis del apartado va el primero, aparte
     const free = this.app.access.premium ? [] : all.filter((e) => this.app.access.canUse(e.id));
     if (free.length) {
       this.list.append(h('h2', { class: 'group-title zone-title' }, icon('check'), 'Gratis'));
       free.forEach((ex) => this.list.append(this.card(ex)));
     }
-    // tras el gratis, el resto va bajo su propio título (si el apartado no tiene subgrupos, uno de «Prémium»)
-    let restTitled = !free.length;
-    const rest = all.filter((e) => canDo(e.equip, owned) && !free.includes(e));
-    if (this.sort !== 'zona') {
-      this.renderSorted(rest);
-    } else for (const ex of rest) {
-      if (ex.group && ex.group !== group) {
-        group = ex.group;
-        this.list.append(h('h2', { class: 'group-title zone-title' }, zoneIcon(group), group));
-        restTitled = true;
-      }
-      if (!restTitled) {
-        this.list.append(h('h2', { class: 'group-title zone-title' }, icon('lock'), 'Prémium'));
-        restTitled = true;
-      }
-      this.list.append(this.card(ex));
-    }
-    const note = this.equipNote(this.section);
-    if (note) this.list.append(note);
-    if (this.sort !== 'zona' && this.showAllEquip) {
-      this.renderSorted(all.filter((e) => !canDo(e.equip, owned)));
-      return;
-    }
-    // los que necesitan material que no se tiene van aparte, al final (y no se mezclan con los demás)
-    // (también agrupados por zona, si el apartado tiene subgrupos)
-    if (this.showAllEquip) {
+    // cada grupo con su título (en A-Z no hay); tras el gratis, si no hay grupos, uno de «Prémium»
+    const put = (list: Listed[], titled: boolean) => {
       let g: string | undefined;
-      for (const ex of all.filter((e) => !canDo(e.equip, owned))) {
-        if (ex.group && ex.group !== g) {
-          g = ex.group;
-          this.list.append(h('h2', { class: 'group-title zone-title' }, zoneIcon(g), g));
+      for (const ex of list) {
+        if (ex.listGroup && ex.listGroup !== g) {
+          g = ex.listGroup;
+          this.list.append(h('h2', { class: 'group-title zone-title' }, gr.icon(g), gr.title(g)));
+          titled = true;
+        }
+        if (!titled) {
+          this.list.append(h('h2', { class: 'group-title zone-title' }, icon('lock'), 'Prémium'));
+          titled = true;
         }
         this.list.append(this.card(ex));
       }
-    }
+    };
+    put(all.filter((e) => canDo(e.equip, owned) && !free.some((f) => f.id === e.id)), !free.length);
+    const note = this.equipNote(this.section);
+    if (note) this.list.append(note);
+    // los que necesitan material que no se tiene van aparte, al final (también con sus grupos)
+    if (this.showAllEquip) put(all.filter((e) => !canDo(e.equip, owned)), true);
   }
 
   /** Abre la ficha del ejercicio; en la versión gratis, los de pago llevan a hacerse prémium. */
@@ -432,38 +456,6 @@ export class RoutineScreen implements Screen {
 
   /** Ejercicios de la lista que se ve, en su orden (para pasar de uno a otro en la ficha). */
   private shown: ExerciseDef[] = [];
-
-  /** Lista ordenada por músculo, material o nombre, con un título por grupo (salvo en A-Z). */
-  private renderSorted(list: ExerciseDef[]): void {
-    const sort = this.sort;
-    if (sort === 'az') {
-      [...list].sort(byName).forEach((ex) => this.list.append(this.card(ex)));
-      return;
-    }
-    const groups = new Map<string, { title: string; icon: SVGSVGElement; rank: number; items: ExerciseDef[] }>();
-    for (const ex of list) {
-      let key: string, title: string, ic: SVGSVGElement, rank: number;
-      if (sort === 'musculo') {
-        const m = mainMuscle(ex);
-        key = m ?? '-'; rank = m ? HEAD_TO_TOE.indexOf(m) : 99;
-        title = m ? MUSCLE_NAMES[m] : 'Otros';
-        ic = zoneIcon(m ?? '');
-      } else {
-        const eq = (ex.equip ?? []).map((g) => g[0]);
-        key = eq.join('+') || '-';
-        rank = eq.length ? Math.min(...eq.map((x) => EQUIPMENT.indexOf(x as (typeof EQUIPMENT)[number]))) * 10 + eq.length : -1;
-        title = eq.length ? eq.map((x) => tr(EQUIP_INFO[x as (typeof EQUIPMENT)[number]].name)).join(' + ') : 'Sin material';
-        ic = icon((eq.length ? EQUIP_INFO[eq[0] as (typeof EQUIPMENT)[number]].icon : 'check') as IconName);
-      }
-      const g = groups.get(key) ?? { title, icon: ic, rank, items: [] };
-      g.items.push(ex);
-      groups.set(key, g);
-    }
-    for (const g of [...groups.values()].sort((a, b) => a.rank - b.rank || a.title.localeCompare(b.title))) {
-      this.list.append(h('h2', { class: 'group-title zone-title' }, g.icon, g.title));
-      g.items.sort(byName).forEach((ex) => this.list.append(this.card(ex)));
-    }
-  }
 
   private card(ex: ExerciseDef): HTMLElement {
     this.shown.push(ex);

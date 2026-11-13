@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-13T00:40:10Z",
+    "es": ["Cada tipo de orden (zona, músculo, material y alfabético) puede tener ahora su propio orden personalizado, con sus grupos. Al ordenar, la barra indica qué tipo de orden estás cambiando."],
+    "ca": ["Cada tipus d'ordre (zona, múscul, material i alfabètic) ara pot tenir el seu propi ordre personalitzat, amb els seus grups. En ordenar, la barra indica quin tipus d'ordre estàs canviant."],
+    "en": ["Each order type (body area, muscle, equipment and alphabetical) can now have its own custom order, with its groups. While sorting, the bar shows which order type you're changing."]
+  },
+  {
     "fecha": "2026-11-13T00:32:21Z",
     "es": ["El selector de orden muestra siempre «Zona del cuerpo», también con tu orden personalizado (el aviso de la lista ya indica que es tuyo)."],
     "ca": ["El selector d'ordre mostra sempre «Zona del cos», també amb el teu ordre personalitzat (l'avís de la llista ja indica que és teu)."],

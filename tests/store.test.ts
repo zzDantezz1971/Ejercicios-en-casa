@@ -178,6 +178,20 @@ describe('Orden de ejercicios', () => {
     expect(new Store(kv).customOrder('estiramientos')).toBeUndefined();
   });
 
+  it('guarda un orden propio para cada tipo de orden', () => {
+    const kv = memory();
+    const store = new Store(kv);
+    store.setOrder('pesas', ['a', 'b']);
+    store.setOrder('pesas', ['b', 'a'], 'material');
+    const again = new Store(kv);
+    expect(again.customOrder('pesas')).toEqual(['a', 'b']);
+    expect(again.customOrder('pesas', 'material')).toEqual(['b', 'a']);
+    expect(again.customOrder('pesas', 'musculo')).toBeUndefined();
+    again.resetOrder('pesas', 'material');
+    expect(new Store(kv).customOrder('pesas', 'material')).toBeUndefined();
+    expect(new Store(kv).customOrder('pesas')).toEqual(['a', 'b']);
+  });
+
   it('aplica el orden y deja al final los ejercicios nuevos', () => {
     const ex = (id: string) => ({ id, name: id, section: 'pesas' as const, zone: '', motion: {} });
     const list = [ex('a'), ex('b'), ex('c'), ex('d')];

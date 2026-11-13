@@ -1373,3 +1373,5 @@ body:has(.page-lifted) { overflow-x: hidden; }
 /* barra de ordenar fija bajo los apartados mientras se ordena */
 .routine-toolbar.sticky-sort { position: sticky; z-index: 13; background: var(--bg); padding-bottom: 8px;
   top: calc(var(--safe-area-inset-top, env(safe-area-inset-top, 0px)) + 64px + var(--tabs-h, 120px)); }
+.sorting-title > span { display: flex; flex-direction: column; line-height: 1.2; }
+.sorting-sort { font-weight: 500; font-size: .78rem; }

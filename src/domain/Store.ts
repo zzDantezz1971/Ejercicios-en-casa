@@ -24,7 +24,8 @@ export interface SavedData {
   /** Ejercicios que el usuario ha eliminado para siempre. */
   hidden: string[];
   /** Orden personalizado de la lista de ejercicios de cada apartado (si no hay, el original). */
-  order: Partial<Record<SectionId, string[]>>;
+  /** Orden propio por apartado y tipo de orden (clave «apartado» = por zona; «apartado:tipo» = los demás). */
+  order: Partial<Record<string, string[]>>;
   orderVer?: number;
   /** Fecha de la última copia de seguridad guardada (ISO). */
   lastBackup?: string;
@@ -101,6 +102,11 @@ function sanitizeRoutine(input: unknown): Routine {
  *  - v1: una sola rutina (`routine`).
  *  - v2: varias tablas con nombre (`routines`) y la activa (`activeId`).
  */
+/** Clave del orden propio: el de zona usa solo el apartado (como siempre); los demás, «apartado:tipo». */
+function orderKey(section: SectionId, sort: string): string {
+  return sort === 'zona' ? section : `${section}:${sort}`;
+}
+
 export class Store {
   private data: SavedData;
 
@@ -264,17 +270,17 @@ export class Store {
   /* ── Orden de la lista de ejercicios ── */
 
   /** Orden personalizado de un apartado, o undefined si se usa el original. */
-  customOrder(section: SectionId): readonly string[] | undefined {
-    return this.data.order[section];
+  customOrder(section: SectionId, sort = 'zona'): readonly string[] | undefined {
+    return this.data.order[orderKey(section, sort)];
   }
 
-  setOrder(section: SectionId, ids: string[]): void {
-    this.data.order[section] = [...ids];
+  setOrder(section: SectionId, ids: string[], sort = 'zona'): void {
+    this.data.order[orderKey(section, sort)] = [...ids];
     this.persist();
   }
 
-  resetOrder(section: SectionId): void {
-    delete this.data.order[section];
+  resetOrder(section: SectionId, sort = 'zona'): void {
+    delete this.data.order[orderKey(section, sort)];
     this.persist();
   }
 
@@ -555,9 +561,9 @@ export class Store {
     const hidden = Array.isArray(input.hidden) ? (input.hidden as unknown[]).filter((x): x is string => typeof x === 'string') : [];
     const order: SavedData['order'] = {};
     const rawOrder = (input.order ?? {}) as Record<string, unknown>;
-    for (const s of SECTION_IDS) {
-      const o = rawOrder[s];
-      if (Array.isArray(o)) order[s] = o.filter((x): x is string => typeof x === 'string');
+    for (const [k, o] of Object.entries(rawOrder)) {
+      if (!SECTION_IDS.includes(k.split(':')[0] as SectionId) || !Array.isArray(o)) continue;
+      order[k] = o.filter((x): x is string => typeof x === 'string');
     }
     const lastBackup = typeof input.lastBackup === 'string' ? input.lastBackup : undefined;
     const favorites = Array.isArray(input.favorites) ? (input.favorites as unknown[]).filter((x): x is string => typeof x === 'string') : [];
@@ -571,7 +577,7 @@ export class Store {
     delete settings.profile.weight;
     weights.sort((a, b) => Date.parse(a.date) - Date.parse(b.date));
     // nueva ordenación por zonas: se descarta una sola vez el orden personalizado anterior
-    if (input.orderVer !== ORDER_VER) for (const k of Object.keys(order)) delete order[k as SectionId];
+    if (input.orderVer !== ORDER_VER) for (const k of Object.keys(order)) delete order[k];
     const summarySeen = typeof input.summarySeen === 'string' ? input.summarySeen : undefined;
     const weekSeen = typeof input.weekSeen === 'string' ? input.weekSeen : undefined;
     const medals = input.medals && typeof input.medals === 'object' ? (input.medals as Record<string, string>) : undefined;
