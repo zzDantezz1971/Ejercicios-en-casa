@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-13T18:00:13Z",
+    "es": ["El selector de orden tampoco se queda con el borde azul al tocarlo."],
+    "ca": ["El selector d'ordre tampoc es queda amb la vora blava en tocar-lo."],
+    "en": ["The sort selector no longer keeps a blue border when tapped either."]
+  },
+  {
     "fecha": "2026-11-13T17:55:58Z",
     "es": ["El selector de orden ya no se queda con un recuadro blanco al tocarlo (por ejemplo, al elegir la opción que ya estaba)."],
     "ca": ["El selector d'ordre ja no es queda amb un requadre blanc en tocar-lo (per exemple, en triar l'opció que ja hi era)."],
