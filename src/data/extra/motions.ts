@@ -599,7 +599,7 @@ export const EXTRA_MOTIONS: Record<string, M> = {
     [{ tl: -30, ua: 85, fa: 85, th: 90, sn: 180, ft: 180 }, 150, 1000], [{ tl: -12, hd: -14, ua: 14, fa: 14, th: 146, sn: 180, ft: 180, zHL: 14, zHR: 14, zEL: 7, zER: 7 }, 250, 1000],
     [{ tl: -30, ua: 85, fa: 85, th: 90, sn: 180, ft: 180 }, 150, 1000], [{ tl: -12, hd: -14, ua: 14, fa: 14, th: 146, sn: 180, ft: 180, zHL: -14, zHR: -14, zEL: -7, zER: -7 }, 250, 1000]] },
   'plancha-con-rueda': { mat: 1, wheel: true, plant: 'knR', f: [
-    [{ tl: -30, ua: 85, fa: 85, th: 90, sn: 180, ft: 180 }, 200, 1000], [{ tl: -16, hd: -18, ua: 40, fa: 40, th: 128, sn: 180, ft: 180 }, 1500, 1000]] },
+    [{ tl: -30, ua: 85, fa: 85, th: 90, sn: 180, ft: 180 }, 200, 1000], [{ tl: -11, hd: -14, ua: 20, fa: 20, th: 143, sn: 180, ft: 180 }, 1500, 1000]] },
 
   // ── Estiramientos ──
   'postura-de-la-paloma': { mat: 1, handsDown: true, handsSlide: true, f: [
