@@ -10,7 +10,7 @@ castellano (el texto ya está preparado abajo, en «Castellano», pero **no se s
 
 - Política de privacidad: https://zzdantezz1971.github.io/Ejercicios-en-casa/privacidad.html
 - Correo de contacto: exercicisacasa.app@gmail.com
-- Categoría: Salud y forma física · Sin anuncios · Gratis con compras dentro de la app (suscripción Prémium: 1 €/mes o 10 €/año)
+- Categoría: Salud y forma física · Sin anuncios · Gratis con compras dentro de la app (suscripción Prémium: 0,99 €/mes o 9,99 €/año)
 - En Play Console › Contenido de la app: marcar «Contiene compras dentro de la aplicación».
 
 ---
@@ -47,7 +47,7 @@ LES TEVES DADES SÓN TEVES
 • Pots fer i recuperar còpies de seguretat quan vulguis.
 
 GRATIS I PRÈMIUM
-Prova-la gratis amb un exercici de cada apartat i totes les funcions. Amb Prèmium (1 € al mes o 10 € l’any) desbloqueges tots els exercicis. Es paga i es cancel·la a Google Play.
+Prova-la gratis amb un exercici de cada apartat i totes les funcions. Amb Prèmium (0,99 € al mes o 9,99 € l’any) desbloqueges tots els exercicis. Es paga i es cancel·la a Google Play.
 
 En català, castellà i anglès.
 
@@ -85,7 +85,7 @@ TUS DATOS SON TUYOS
 • Puedes hacer y recuperar copias de seguridad cuando quieras.
 
 GRATIS Y PRÉMIUM
-Pruébala gratis con un ejercicio de cada apartado y todas las funciones. Con Prémium (1 € al mes o 10 € al año) desbloqueas todos los ejercicios. Se paga y se cancela en Google Play.
+Pruébala gratis con un ejercicio de cada apartado y todas las funciones. Con Prémium (0,99 € al mes o 9,99 € al año) desbloqueas todos los ejercicios. Se paga y se cancela en Google Play.
 
 En catalán, castellano e inglés.
 
@@ -123,6 +123,6 @@ YOUR DATA IS YOURS
 • Make and restore backups whenever you like.
 
 FREE AND PREMIUM
-Try it free with one exercise per section and every feature. With Premium (€1 a month or €10 a year) you unlock every exercise. Payment and cancellation are handled in Google Play.
+Try it free with one exercise per section and every feature. With Premium (€0.99 a month or €9.99 a year) you unlock every exercise. Payment and cancellation are handled in Google Play.
 
 In Catalan, Spanish and English.

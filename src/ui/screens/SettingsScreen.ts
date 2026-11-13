@@ -248,9 +248,10 @@ export class SettingsScreen implements Screen {
     const r = remindersOf(this.app.store.settings.reminders);
     const names: Record<ReminderKind, string> = { train: 'Entrenamiento', weigh: 'Peso', backup: 'Copia de seguridad' };
     const active = REMINDER_KINDS.filter((k) => r[k].on && r[k].days.length && (k !== 'backup' || this.app.access.premium));
-    return h('button', { class: 'card setting rest-card look-open', onclick: () => this.app.push(new RemindersScreen(this.app)) },
+    // con alguno activo: campana encendida con el número de recordatorios y la tarjeta resaltada
+    return h('button', { class: 'card setting rest-card look-open rem-open' + (active.length ? ' on' : ''), onclick: () => this.app.push(new RemindersScreen(this.app)) },
       h('div', { class: 'rest-head' },
-        h('span', { class: 'set-icon' }, icon('bell')),
+        h('span', { class: 'set-icon rem-bell' }, icon('bell'), active.length ? h('span', { class: 'rem-count', 'aria-label': `${active.length}` }, String(active.length)) : null),
         h('div', { class: 'set-text' }, h('strong', {}, 'Recordatorios'),
           active.length
             ? h('p', { class: 'muted small rem-summary' }, ...active.map((k) => h('span', { class: 'block' }, h('span', {}, names[k]), ': ', h('span', { 'data-no-tr': '' }, `${WEEK.filter((d) => r[k].days.includes(d)).map(dayName).join(', ')} · ${r[k].time}`))))

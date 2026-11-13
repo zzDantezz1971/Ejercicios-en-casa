@@ -3,7 +3,7 @@ import { NativePurchases, PURCHASE_TYPE, type Product } from '@capgo/native-purc
 import { IS_NATIVE } from '../platform/native';
 import { checkCode } from './accessCodes';
 
-/* Acceso a la app de Google Play: suscripción (1 €/mes o 10 €/año, con prueba gratis de Google)
+/* Acceso a la app de Google Play: suscripción (0,99 €/mes o 9,99 €/año, con prueba gratis de Google)
    o un código de acceso gratis. Sin suscripción ni código se usa la versión gratis (opción B): todo funciona,
    pero solo con un ejercicio de cada apartado. La versión web no se cobra; ahí se puede activar una vista previa
    de la versión gratis (solo en ese navegador) para ver cómo queda. */
@@ -122,7 +122,7 @@ export class Access {
 
   /** Precios y prueba gratis de los dos planes, tal como los da Google Play (en la web, de muestra). */
   async offers(): Promise<PlanOffer[]> {
-    if (!IS_NATIVE) return [{ plan: 'anual', price: '10,00 €', trialDays: 0 }, { plan: 'mensual', price: '1,00 €', trialDays: 0 }];
+    if (!IS_NATIVE) return [{ plan: 'anual', price: '9,99 €', trialDays: 0 }, { plan: 'mensual', price: '0,99 €', trialDays: 0 }];
     const { products } = await NativePurchases.getProducts({ productIdentifiers: [SUB_ID], productType: PURCHASE_TYPE.SUBS });
     const out: PlanOffer[] = [];
     for (const plan of Object.keys(PLANS) as PlanId[]) {

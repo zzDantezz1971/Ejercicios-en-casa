@@ -1393,3 +1393,10 @@ body:has(.page-lifted) { overflow-x: hidden; }
 .rem-warn { display: flex; align-items: center; gap: 6px; color: #E5A13A; }
 .rem-warn .ico { width: 16px; height: 16px; }
 .rem-summary .block { display: block; }
+/* tarjeta de Recordatorios con alguno activo */
+.rem-open.on { border-color: color-mix(in srgb, var(--accent) 60%, var(--line)); }
+.rem-bell { position: relative; }
+.rem-open.on .rem-bell { background: var(--accent); color: #fff; }
+.rem-open.on .rem-bell .ico { color: #fff; }
+.rem-count { position: absolute; top: -6px; right: -6px; min-width: 20px; height: 20px; padding: 0 5px; border-radius: 999px; display: flex; align-items: center; justify-content: center;
+  background: #2FBF71; color: #fff; font: 700 .72rem/1 var(--body); box-shadow: 0 0 0 2px var(--surface); }

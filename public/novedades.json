@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-13T11:47:34Z",
+    "es": ["En Ajustes, la tarjeta de Recordatorios se resalta cuando tienes alguno activo: campana encendida con el número de recordatorios.", "Precios de Prémium: 0,99 € al mes o 9,99 € al año."],
+    "ca": ["A Configuració, la targeta de Recordatoris es ressalta quan en tens algun d'actiu: campana encesa amb el nombre de recordatoris.", "Preus de Prèmium: 0,99 € al mes o 9,99 € l'any."],
+    "en": ["In Settings, the Reminders card is highlighted when you have one on: the bell lights up and shows how many.", "Premium prices: €0.99 a month or €9.99 a year."]
+  },
+  {
     "fecha": "2026-11-13T11:43:33Z",
     "es": ["Pantalla de Prémium: «Más de 200 ejercicios con muñeco animado y personalizable» y «Y mucho más 😃»."],
     "ca": ["Pantalla de Prèmium: «Més de 200 exercicis amb ninot animat i personalitzable» i «I molt més 😃»."],
