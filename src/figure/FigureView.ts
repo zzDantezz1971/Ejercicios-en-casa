@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { saveAngle, savedAngle } from './angles';
 import { findFit, markZones } from './thumbFit';
 import type { ExerciseDef } from '../domain/types';
 import { MannequinScene, type Mood, type Palette } from './Mannequin';
@@ -30,7 +31,9 @@ export class FigureView {
   private raf = 0;
   private t0 = performance.now();
   private resizeObs: ResizeObserver;
-  private drag: { x: number; az: number } | null = null;
+  private drag: { x: number; az: number; moved: boolean } | null = null;
+  /** Ejercicio que se ve (para recordar el ángulo elegido). */
+  private exId: string;
   private frozenAt: number | null = null;
   private mood: Mood = 'relaxed';
 
@@ -39,6 +42,8 @@ export class FigureView {
     this.renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
     this.scene = new MannequinScene(exercise.motion, palette, undefined, skin, skin ? anatomyFor(exercise, undefined) : undefined);
     this.scene.mood = this.mood;
+    this.exId = exercise.id;
+    this.scene.angleOffset = savedAngle(exercise.id);
     this.resizeObs = new ResizeObserver(() => this.resize());
     this.resizeObs.observe(canvas);
     canvas.addEventListener('pointerdown', this.onDown);
@@ -82,12 +87,12 @@ export class FigureView {
 
   /** Cambia de ejercicio reutilizando el mismo lienzo 3D. */
   setExercise(exercise: ExerciseDef, side: Side = undefined, palette?: Palette): void {
-    const az = this.scene.azimuth;
-    const keepAngle = this.scene.motion.spec === exercise.motion;
     this.scene.dispose();
     this.scene = new MannequinScene(exercise.motion, palette, side, this.skin, this.skin ? anatomyFor(exercise, side) : undefined);
     this.scene.mood = this.mood;
-    if (keepAngle) this.scene.azimuth = az;
+    // el ángulo que elegiste para este ejercicio (o el de siempre)
+    this.exId = exercise.id;
+    this.scene.angleOffset = savedAngle(exercise.id);
     const w = this.canvas.clientWidth, h = this.canvas.clientHeight;
     if (w && h) this.scene.setAspect(w / h);
     this.restart();
@@ -126,16 +131,19 @@ export class FigureView {
   }
 
   private onDown = (e: PointerEvent) => {
-    this.drag = { x: e.clientX, az: this.scene.azimuth };
+    this.drag = { x: e.clientX, az: this.scene.azimuth, moved: false };
     this.canvas.setPointerCapture(e.pointerId);
   };
   private onMove = (e: PointerEvent) => {
     if (!this.drag) return;
     this.scene.azimuth = this.drag.az - (e.clientX - this.drag.x) * 0.5;
+    this.drag.moved = true;
     this.scene.placeCamera();
     if (!this.raf) this.renderAt(this.scene.motion.total * 0.4);
   };
   private onUp = () => {
+    // al soltar, se recuerda el ángulo para la próxima vez (ficha, entrenamiento y miniatura)
+    if (this.drag?.moved) saveAngle(this.exId, this.scene.angleOffset);
     this.drag = null;
   };
 }
@@ -156,7 +164,7 @@ export class Thumbnails {
   get(ex: ExerciseDef): Promise<string> {
     if (ex.pending) return Promise.resolve(pendingThumb(ex));
     const skin = getFigureSkin();
-    return this.enqueue(`${skin ? 'a' : 'p'}:${getFigureStyle()}:${lookKey()}:${ex.id}`, () => this.draw(ex, skin));
+    return this.enqueue(`${skin ? 'a' : 'p'}:${getFigureStyle()}:${lookKey()}:${ex.id}:${savedAngle(ex.id)}`, () => this.draw(ex, skin));
   }
 
   private enqueue(key: string, render: () => string): Promise<string> {
@@ -198,6 +206,7 @@ export class Thumbnails {
     const r = this.ensureRenderer();
     const sc = new MannequinScene(ex.motion, this.palette, undefined, skin, skin ? anatomyFor(ex, undefined) : undefined);
     sc.mood = 'relaxed';
+    sc.angleOffset = savedAngle(ex.id);
     sc.setAspect(this.w / this.h);
     sc.update(sc.motion.total * 0.45);
     r.render(sc.scene, sc.camera);

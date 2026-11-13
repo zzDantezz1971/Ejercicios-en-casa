@@ -219,6 +219,19 @@ export class MannequinScene {
   readonly camera = new THREE.PerspectiveCamera(28, 1.5, 1, 3000);
   readonly motion: Motion;
   azimuth: number;
+  /** Ángulo de siempre y sentido del giro (en el lado 2 de perfil, la cámara está en el otro costado). */
+  private baseAzimuth = 0;
+  private azSign = 1;
+
+  /** Giro respecto al ángulo de siempre (el mismo para los dos lados de un ejercicio por lados). */
+  get angleOffset(): number {
+    return (this.azimuth - this.baseAzimuth) * this.azSign;
+  }
+
+  set angleOffset(deg: number) {
+    this.azimuth = this.baseAzimuth + deg * this.azSign;
+    this.placeCamera();
+  }
   elevation: number;
   private center = V();
   private size = V();
@@ -241,6 +254,8 @@ export class MannequinScene {
     this.azimuth = spec.az ?? (view === 'side' ? 32 : view === 'top' ? 12 : 18);
     // De lado, el lado 2 se ve mejor desde el otro costado (si no, el brazo o pierna que trabaja queda oculto).
     if (view === 'side' && this.motion.mirrored) this.azimuth = 180 - this.azimuth;
+    this.baseAzimuth = this.azimuth;
+    this.azSign = view === 'side' && this.motion.mirrored ? -1 : 1;
     this.elevation = spec.el ?? (view === 'top' ? 58 : 14);
     this.buildLights();
     if (this.skinData) {

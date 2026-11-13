@@ -515,6 +515,7 @@ const ROWS: Row[] = [
   ['Ordenar por', 'Ordena per', 'Sort by'],
   ['Zona del cuerpo', 'Zona del cos', 'Body area'],
   ['Personalizada', 'Personalitzada', 'Custom'],
+  ['Gira el muñeco con el dedo para verlo desde otro ángulo: se queda así para ese ejercicio, también al entrenar y en la lista.', "Gira el ninot amb el dit per veure'l des d'un altre angle: es queda així per a aquell exercici, també en entrenar i a la llista.", "Turn the figure with your finger to see it from another angle: it stays that way for that exercise, also when working out and in the list."],
   ['Entrenamiento y peso, los días y a la hora que elijas.', "Entrenament i pes, els dies i a l'hora que triïs.", 'Workout and weight, on the days and at the time you choose.'],
   ['Si lo tienes activado en Recordatorios, al acabar un entrenamiento te avisa cuando toca anotar el peso.', "Si el tens activat a Recordatoris, en acabar un entrenament t'avisa quan toca anotar el pes.", "If you've turned it on in Reminders, after a workout it tells you when it's time to log your weight."],
   ['Personaliza la app, recordatorios, reloj y prémium.', "Personalitza l'app, recordatoris, rellotge i prèmium.", 'Customise the app, reminders, watch and premium.'],

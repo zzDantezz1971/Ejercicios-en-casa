@@ -1,3 +1,4 @@
+import { setAngleStore } from '../figure/angles';
 import { rescheduleReminders } from '../services/Reminders';
 import { setFigureStyle } from '../figure/skinAsset';
 import { setLook } from '../figure/look';
@@ -68,6 +69,16 @@ export class App {
     // la primera vez se apuntan las medallas que ya se tenían, sin celebrarlas
     if (!Object.keys(this.store.medals).length) this.store.checkMedals();
     this.applySettings();
+    // el ángulo en que dejas cada muñeco se guarda en los ajustes
+    setAngleStore({
+      get: (id) => this.store.settings.angles?.[id],
+      set: (id, deg) => {
+        const angles = { ...(this.store.settings.angles ?? {}) };
+        if (deg === undefined) delete angles[id];
+        else angles[id] = deg;
+        this.store.saveSettings({ ...this.store.settings, angles });
+      },
+    });
     // recordatorios del móvil: se recalculan al abrir la app, al volver a ella y cada vez que cambia algo
     const remind = () => rescheduleReminders(this.store, () => this.access.premium);
     this.store.onSaved = remind;
