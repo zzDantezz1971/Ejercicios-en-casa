@@ -171,8 +171,16 @@ export const EXTRA_MOTIONS: Record<string, M> = {
   flexiones: { mat: 1, plant: 'haR', handsDown: true, f: [[PLH, 200, 750], [PUSH_DEEP, 150, 850]] },
   'flexiones-con-rodillas-apoyadas': { mat: 1, plant: 'knR', handsDown: true, f: [
     [{ tl: -30, ua: 90, fa: 90, th: 149, sn: 180, ft: 180 }, 200, 750], [{ tl: -8, ua: 150, fa: 30, th: 155, sn: 180, ft: 180 }, 150, 850]] },
-  'flexiones-inclinadas-en-silla': { plant: 'haR', anchor: { j: 'haR', y: -42 }, props: (J, P) => P.benchFlat(J.haR[0] - 16, J.haR[0] + 12, 42), f: [
-    [{ tl: -45, ua: 90, fa: 90, th: 135, sn: 135, ft: 60 }, 200, 750], [{ tl: -32, ua: 150, fa: 30, th: 148, sn: 148, ft: 70 }, 150, 850]] },
+  // silla grande (asiento ancho y con fondo para las dos manos; sin respaldo, que la cabeza pasa por encima): las palmas apoyadas en el asiento
+  'flexiones-inclinadas-en-silla': { plant: 'haR', anchor: { j: 'haR', y: -42 }, props: (J) => {
+    const x1 = J.haR[0] - 5, x2 = J.haR[0] + 40, top = -35;
+    return [
+      { t: 'rect', x: x1, y: top, w: x2 - x1, h: 5, dep: 62 },
+      { t: 'line', a: [x1 + 4, top + 4], b: [x1 + 4, 0], w: 4, dep: 54 },
+      { t: 'line', a: [x2 - 4, top + 4], b: [x2 - 4, 0], w: 4, dep: 54 },
+    ];
+  }, f: [
+    [{ tl: -45, ua: 90, fa: 90, th: 135, sn: 135, ft: 60 }, 200, 750], [{ tl: -32, ua: 185, fa: 72, th: 148, sn: 148, ft: 70 }, 150, 850]] },
   'flexiones-declinadas': { mat: 1, plant: 'haR', props: (J, P) => P.benchFlat(J.anR[0] - 16, J.anR[0] + 12, 40), f: [
     [{ tl: -2, ua: 90, fa: 90, th: 179, sn: 179, ft: 90 }, 200, 750], [{ tl: 10, ua: 150, fa: 30, th: 190, sn: 190, ft: 90 }, 150, 850]] },
   // fijo por los pies: con la mano derecha fija, al levantarla se movía todo el cuerpo
