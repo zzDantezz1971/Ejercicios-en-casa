@@ -92,8 +92,8 @@ export const EXTRA_MOTIONS: Record<string, M> = {
   'sentadilla-con-brazos-arriba': { plant: 'anR', f: [
     [{ ua: -95, fa: -95, hd: -94 }, 200, 950], [{ tl: -55, th: 5, sn: 115, ua: 0, fa: 0, hd: -62 }, 200, 950]] },
   'zancada-con-giro-de-tronco': { f: [
-    [{ ...CHEST_ARMS }, 150, 800], [{ ...LUNGE_R, ...CHEST_ARMS, tw: 38 }, 300, 800],
-    [{ ...CHEST_ARMS }, 150, 800], [{ ...LUNGE_L, ...CHEST_ARMS, tw: -38 }, 300, 800]] },
+    [{ ...CHEST_ARMS }, 150, 800], [{ ...LUNGE_R, ...CHEST_ARMS, tw: 65 }, 300, 800],
+    [{ ...CHEST_ARMS }, 150, 800], [{ ...LUNGE_L, ...CHEST_ARMS, tw: -65 }, 300, 800]] },
   // gusano: de pie, se dobla hasta apoyar las manos y las va avanzando a pasos (una y otra) hasta la plancha;
   // luego vuelve igual, a pasos, hasta doblarse y subir
   'gusano-inchworm': (() => {

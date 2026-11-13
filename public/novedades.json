@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-13T18:32:41Z",
+    "es": ["Zancada con giro de tronco: el tronco gira bastante más hacia cada lado."],
+    "ca": ["Gambada amb gir de tronc: el tronc gira força més cap a cada costat."],
+    "en": ["Lunge with torso twist: the torso now twists much further to each side."]
+  },
+  {
     "fecha": "2026-11-13T18:31:01Z",
     "es": ["Balanceo de pierna adelante y atrás: la mano se apoya en la pared sin atravesarla."],
     "ca": ["Balanceig de cama endavant i enrere: la mà es recolza a la paret sense travessar-la."],
