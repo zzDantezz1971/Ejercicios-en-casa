@@ -141,6 +141,9 @@ function mirrorPose(view: string, p: Pose): Pose {
   for (const k in p) o[swapSide(k)] = p[k];
   if (view !== 'side') {
     for (const k of ANGLES) if (k in o) o[k] = 180 - o[k];
+    // tronco y cabeza: al reflejar, -130 pasa a 310; se deja en -50 (el mismo ángulo cerca de -90, de pie), porque si no
+    // al pasar de un fotograma sin inclinar (-90) a ese, el cuerpo daría la vuelta entera
+    for (const k of ['tl', 'tu', 'hd']) if (k in o) o[k] = ((((o[k] + 270) % 360) + 360) % 360) - 270;
     o.x = -o.x;
     if ('tw' in o) o.tw = -o.tw;
   }
