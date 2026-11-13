@@ -3,6 +3,7 @@ import { saveBackupFile } from '../../services/Backup';
 import type { App } from '../App';
 import { confirmDialog, h } from '../dom';
 import { icon } from '../icons';
+import { remindersOf } from '../../domain/reminders';
 
 export const BACKUP_EVERY_DAYS = 7;
 
@@ -22,9 +23,14 @@ export async function saveBackupNow(app: App): Promise<boolean> {
   return true;
 }
 
-/** ¿Toca recordar la copia? (hay entrenamientos y han pasado 7 días o más desde la última). */
+/**
+ * ¿Toca recordar la copia dentro de la app? Solo si el recordatorio de copia está activado (prémium),
+ * hay entrenamientos y han pasado las semanas elegidas desde la última.
+ */
 export function backupDue(app: App): boolean {
-  return app.store.history.length > 0 && app.store.daysSinceBackup() >= BACKUP_EVERY_DAYS;
+  const r = remindersOf(app.store.settings.reminders).backup;
+  if (!r.on || !app.access.premium) return false;
+  return app.store.history.length > 0 && app.store.daysSinceBackup() >= (r.every ?? 1) * BACKUP_EVERY_DAYS;
 }
 
 /** Recordatorio de la copia: cuánto hace de la última, por qué conviene y botones Cancelar / Hacer copia ahora. */

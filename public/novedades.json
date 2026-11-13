@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-13T15:22:33Z",
+    "es": ["Los avisos de anotar el peso y de hacer la copia de seguridad (al acabar un entrenamiento y en Historial) solo salen si tienes activado ese recordatorio en Ajustes › Recordatorios, y con la frecuencia que hayas elegido."],
+    "ca": ["Els avisos d'anotar el pes i de fer la còpia de seguretat (en acabar un entrenament i a Historial) només surten si tens activat aquell recordatori a Configuració › Recordatoris, i amb la freqüència que hagis triat."],
+    "en": ["The notices to log your weight and to make a backup (after a workout and in History) now only appear if that reminder is on in Settings › Reminders, and as often as you chose."]
+  },
+  {
     "fecha": "2026-11-13T15:18:13Z",
     "es": ["Guía de la app organizada por menús: Menú Inicio, Menú Tablas, Menú Medallas, Menú Historial, Menú Mis datos y Menú Ajustes, cada uno con su explicación."],
     "ca": ["Guia de l'app organitzada per menús: Menú Inici, Menú Taules, Menú Medalles, Menú Historial, Menú Les meves dades i Menú Configuració, cadascun amb la seva explicació."],

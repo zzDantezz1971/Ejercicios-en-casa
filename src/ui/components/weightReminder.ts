@@ -4,15 +4,19 @@ import { h } from '../dom';
 import { icon } from '../icons';
 import { backupDue, saveBackupNow } from './backupPrompt';
 import { fmtKg } from './weightCard';
+import { remindersOf } from '../../domain/reminders';
 
-/** Cada cuántos días se recuerda anotar el peso al acabar un entrenamiento. */
-export const WEIGHT_EVERY_DAYS = 15;
+/** ¿Toca recordar el peso? Solo si el recordatorio de peso está activado y han pasado las semanas elegidas. */
+function weightDue(app: App): boolean {
+  const r = remindersOf(app.store.settings.reminders).weigh;
+  return r.on && app.store.daysSinceWeight() >= (r.every ?? 1) * 7;
+}
 
 const fmtDay = (iso: string) => new Date(iso).toLocaleDateString(LOCALE, { day: 'numeric', month: 'long' });
 
-/** ¿Hay algún recordatorio pendiente (peso cada 15 días, copia cada 7)? */
+/** ¿Hay algún recordatorio pendiente (los que estén activados en Ajustes › Recordatorios)? */
 export function remindersDue(app: App): boolean {
-  return app.store.daysSinceWeight() >= WEIGHT_EVERY_DAYS || backupDue(app);
+  return weightDue(app) || backupDue(app);
 }
 
 /**
@@ -25,7 +29,7 @@ export function showReminders(app: App): void {
   const close = () => wrap.remove();
 
   const wDays = st.daysSinceWeight();
-  if (wDays >= WEIGHT_EVERY_DAYS) {
+  if (weightDue(app)) {
     const last = st.weights.at(-1);
     rows.push(h('div', { class: 'rm-row' },
       h('span', { class: 'bp-icon' }, icon('trophy')),

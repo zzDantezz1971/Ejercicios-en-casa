@@ -12,7 +12,7 @@ const GUIDE: Array<{ icon: IconName; title: string; sub: string; points: Array<s
       'La tabla que vas a hacer, con su contenido y el botón para empezar. Puedes cambiar de tabla desde aquí.',
       'Tu semana: minutos y calorías, con unas metas que puedes cambiar.',
       'Una frase motivadora distinta cada día (se puede quitar en Ajustes).',
-      'Avisos cuando toca anotar el peso o hacer una copia de seguridad.',
+      'Si los tienes activados en Recordatorios, al acabar un entrenamiento te avisa cuando toca anotar el peso o hacer la copia de seguridad.',
       { h: 'Entrenar' },
       'Cada ejercicio con el muñeco animado y una cuenta atrás.',
       'Pitidos, vibración y voz te avisan del siguiente ejercicio, del cambio de lado y de los últimos segundos.',
