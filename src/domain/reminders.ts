@@ -13,6 +13,10 @@ export interface ReminderRule {
   days: number[];
   /** Hora «HH:MM». */
   time: string;
+  /** Cada cuántas semanas (1-4; solo peso y copia). */
+  every?: number;
+  /** Desde cuándo cuentan las semanas (ISO), si aún no se ha hecho nunca. */
+  since?: string;
 }
 export type ReminderSettings = Record<ReminderKind, ReminderRule>;
 
@@ -27,7 +31,11 @@ export function remindersOf(r: Partial<Record<ReminderKind, Partial<ReminderRule
   const one = (k: ReminderKind): ReminderRule => {
     const v = r?.[k] ?? {};
     const days = Array.isArray(v.days) ? v.days.filter((d) => Number.isInteger(d) && d >= 0 && d <= 6) : DEFAULT_REMINDERS[k].days;
-    return { on: !!v.on, days, time: typeof v.time === 'string' && /^\d\d:\d\d$/.test(v.time) ? v.time : DEFAULT_REMINDERS[k].time };
+    const every = k === 'train' ? 1 : Math.min(4, Math.max(1, Math.round(Number(v.every) || 1)));
+    return {
+      on: !!v.on, days, time: typeof v.time === 'string' && /^\d\d:\d\d$/.test(v.time) ? v.time : DEFAULT_REMINDERS[k].time,
+      every, ...(typeof v.since === 'string' ? { since: v.since } : {}),
+    };
   };
   return { train: one('train'), weigh: one('weigh'), backup: one('backup') };
 }
@@ -46,6 +54,8 @@ export interface ReminderState {
 
 /** Días hacia delante que se dejan programados (se recalculan cada vez que se abre la app o cambia algo). */
 const DAYS_AHEAD = 14;
+/** Con «cada 2, 3 o 4 semanas» hace falta mirar más lejos. */
+const DAYS_AHEAD_LONG = 35;
 const BASE: Record<ReminderKind, number> = { train: 1000, weigh: 2000, backup: 3000 };
 
 function at(day: Date, time: string): Date {
@@ -54,6 +64,9 @@ function at(day: Date, time: string): Date {
 }
 const sameDay = (a: Date, b: Date) => a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
 const addDays = (d: Date, n: number) => new Date(d.getFullYear(), d.getMonth(), d.getDate() + n);
+/** Lunes de la semana de una fecha. */
+const monday = (d: Date) => addDays(d, -((d.getDay() + 6) % 7));
+const weeksBetween = (a: Date, b: Date) => Math.round((monday(b).getTime() - monday(a).getTime()) / (7 * 864e5));
 
 /**
  * Avisos que hay que dejar programados a partir de ahora: cada recordatorio activo, en sus días y a su hora.
@@ -70,10 +83,18 @@ export function planReminders(now: Date, settings: ReminderSettings, state: Remi
     const r = settings[kind];
     if (!r.on || !r.days.length || (kind === 'backup' && !state.premium)) continue;
     const doneToday = done[kind].some((d) => sameDay(new Date(d), now));
-    for (let i = 0; i <= DAYS_AHEAD; i++) {
+    // cada N semanas: se cuentan desde la última vez que lo hiciste (o, si nunca, desde que lo activaste)
+    const every = r.every ?? 1;
+    const lastDone = done[kind].reduce((m, d) => Math.max(m, new Date(d).getTime()), 0);
+    const anchor = lastDone ? new Date(lastDone) : r.since ? new Date(r.since) : now;
+    for (let i = 0; i <= (every > 1 ? DAYS_AHEAD_LONG : DAYS_AHEAD); i++) {
       const when = at(addDays(now, i), r.time);
       if (when <= now || !r.days.includes(when.getDay())) continue;
       if (i === 0 && doneToday) continue;
+      if (every > 1) {
+        const k = weeksBetween(anchor, when);
+        if (k % every !== 0 || (lastDone && k < every)) continue;
+      }
       out.push({ id: BASE[kind] + i, kind, at: when });
     }
   }

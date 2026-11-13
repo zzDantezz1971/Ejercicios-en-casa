@@ -5,7 +5,7 @@ import { showUpdateDialog } from '../components/updateDialog';
 import { BUILD_TIME, checkForUpdate, updateReady } from '../../services/Updates';
 import { IS_NATIVE } from '../../platform/native';
 import { REMINDER_KINDS, remindersOf, type ReminderKind } from '../../domain/reminders';
-import { dayName, RemindersScreen, WEEK } from './RemindersScreen';
+import { dayName, EVERY, RemindersScreen, WEEK } from './RemindersScreen';
 import { Store } from '../../domain/Store';
 import { SECTION_IDS, SECTION_TITLES, type Settings } from '../../domain/types';
 import { pickBackupFile } from '../../services/Backup';
@@ -254,7 +254,7 @@ export class SettingsScreen implements Screen {
         h('span', { class: 'set-icon rem-bell' }, icon('bell'), active.length ? h('span', { class: 'rem-count', 'aria-label': `${active.length}` }, String(active.length)) : null),
         h('div', { class: 'set-text' }, h('strong', {}, 'Recordatorios'),
           active.length
-            ? h('p', { class: 'muted small rem-summary' }, ...active.map((k) => h('span', { class: 'block' }, h('span', {}, names[k]), ': ', h('span', { 'data-no-tr': '' }, `${WEEK.filter((d) => r[k].days.includes(d)).map(dayName).join(', ')} · ${r[k].time}`))))
+            ? h('p', { class: 'muted small rem-summary' }, ...active.map((k) => h('span', { class: 'block' }, h('span', {}, names[k]), ': ', h('span', { 'data-no-tr': '' }, `${WEEK.filter((d) => r[k].days.includes(d)).map(dayName).join(', ')} · ${r[k].time}`), (r[k].every ?? 1) > 1 ? h('span', { 'data-no-tr': '' }, ' · ') : null, (r[k].every ?? 1) > 1 ? h('span', { class: 'rem-lc' }, EVERY[(r[k].every ?? 1) - 1][1]) : null)))
             : h('p', { class: 'muted small' }, 'Entrenamiento, peso y copia de seguridad, los días y a la hora que elijas.')),
         icon('chevron')));
   }

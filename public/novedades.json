@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-13T11:55:49Z",
+    "es": ["Recordatorios de Peso y Copia de seguridad: elige también la frecuencia, cada semana o cada 2, 3 o 4 semanas (se cuenta desde la última vez que lo hiciste)."],
+    "ca": ["Recordatoris de Pes i Còpia de seguretat: tria també la freqüència, cada setmana o cada 2, 3 o 4 setmanes (es compta des de l'última vegada que ho vas fer)."],
+    "en": ["Weight and Backup reminders: you can also choose how often, every week or every 2, 3 or 4 weeks (counted from the last time you did it)."]
+  },
+  {
     "fecha": "2026-11-13T11:49:58Z",
     "es": ["Copia de seguridad: junto a la fecha de la última copia sale también la hora."],
     "ca": ["Còpia de seguretat: al costat de la data de l'última còpia surt també l'hora."],

@@ -1400,3 +1400,4 @@ body:has(.page-lifted) { overflow-x: hidden; }
 .rem-open.on .rem-bell .ico { color: #fff; }
 .rem-count { position: absolute; top: -6px; right: -6px; min-width: 20px; height: 20px; padding: 0 5px; border-radius: 999px; display: flex; align-items: center; justify-content: center;
   background: #2FBF71; color: #fff; font: 700 .72rem/1 var(--body); box-shadow: 0 0 0 2px var(--surface); }
+.rem-lc { text-transform: lowercase; }

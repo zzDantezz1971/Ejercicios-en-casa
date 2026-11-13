@@ -10,6 +10,9 @@ export const WEEK = [1, 2, 3, 4, 5, 6, 0];
 /** Nombre corto del día en el idioma de la app («dl.», «lun», «Mon»…). */
 export const dayName = (d: number) => new Date(2024, 0, d === 0 ? 7 : d).toLocaleDateString(LOCALE, { weekday: 'short' }).replace('.', '');
 
+/** Cada cuántas semanas (peso y copia de seguridad). */
+export const EVERY: Array<[number, string]> = [[1, 'Cada semana'], [2, 'Cada 2 semanas'], [3, 'Cada 3 semanas'], [4, 'Cada 4 semanas']];
+
 const OPTIONS: Array<{ kind: ReminderKind; icon: IconName; title: string; help: string; premium?: boolean }> = [
   { kind: 'train', icon: 'bolt', title: 'Entrenamiento', help: 'Si ese día ya has entrenado, no te avisa.' },
   { kind: 'weigh', icon: 'scale', title: 'Peso', help: 'Para anotar tu peso. Si ese día ya te has pesado, no te avisa.' },
@@ -52,7 +55,7 @@ export class RemindersScreen implements Screen {
       this.render();
       return;
     }
-    this.save({ ...r, [kind]: { ...r[kind], on } });
+    this.save({ ...r, [kind]: { ...r[kind], on, since: new Date().toISOString() } });
   }
 
   private render(): void {
@@ -85,6 +88,11 @@ export class RemindersScreen implements Screen {
               this.save({ ...r, [o.kind]: { ...rule, days: sel ? rule.days.filter((x) => x !== d) : [...rule.days, d] } }) }, dayName(d));
           })),
           !rule.days.length ? h('span', { class: 'rem-warn small' }, icon('info'), 'Marca al menos un día.') : null,
+          // peso y copia: cada cuántas semanas
+          o.kind !== 'train' ? h('label', { class: 'rem-hour' }, h('span', { class: 'muted small' }, 'Frecuencia'),
+            h('select', { class: 'rem-time rem-every', onchange: (e: Event) =>
+              this.save({ ...r, [o.kind]: { ...rule, every: Number((e.target as HTMLSelectElement).value), since: new Date().toISOString() } }) },
+              ...EVERY.map(([n, label]) => h('option', { value: String(n), selected: (rule.every ?? 1) === n }, label)))) : null,
           h('label', { class: 'rem-hour' }, h('span', { class: 'muted small' }, 'Hora'),
             h('input', { type: 'time', class: 'rem-time', value: rule.time, onchange: (e: Event) => {
               const v = (e.target as HTMLInputElement).value;
