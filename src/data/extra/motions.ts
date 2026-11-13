@@ -535,8 +535,8 @@ export const MOTION_OVERRIDES: Record<string, M> = {
   'giros-de-tronco': { v: 'front', el: 22, f: [
     [{ thL: 96, snL: 96, thR: 84, snR: 84, tw: 55, hd: -90, ...TWIST_ARMS }, 80, 650],
     [{ thL: 96, snL: 96, thR: 84, snR: 84, tw: -55, hd: -90, ...TWIST_ARMS }, 80, 650]] },
-  // de lado a una pared (detrás, paralela a la vista), apoyado con la mano de ese lado; la otra en la cintura
-  'balanceo-de-pierna-adelante-y-atras': { props: (J) => [{ t: 'rect', x: J.pel[0] - 30, y: -135, w: 60, h: 135, z: -34, dep: 4 }], f: [
+  // de lado a una pared (detrás, paralela a la vista), apoyado con la mano de ese lado (la pared justo donde llega la mano); la otra en la cintura
+  'balanceo-de-pierna-adelante-y-atras': { props: (J) => [{ t: 'rect', x: J.pel[0] - 30, y: -135, w: 60, h: 135, z: -55, dep: 4 }], f: [
     [{ uaL: 92, faL: 80, zEL: -14, zHL: -26, uaR: 118, faR: 28, thR: -25, snR: -15 }, 60, 700],
     [{ uaL: 92, faL: 80, zEL: -14, zHL: -26, uaR: 118, faR: 28, thR: 150, snR: 160 }, 60, 700]] },
   // crunch con el tramo de subida del abdominal completo de Mixamo
