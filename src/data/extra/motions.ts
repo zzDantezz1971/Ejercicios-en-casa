@@ -18,6 +18,7 @@ const LUNGE_L = { thL: 15, snL: 95, thR: 115, snR: 175, ftR: 40 };
 const LUNGE_BR = { ...LUNGE_R, x: -30 };
 const LUNGE_BL = { ...LUNGE_L, x: -30 };
 const PUSH_DOWN = { tl: -10, ua: 150, fa: 30, th: 170, sn: 170, ft: 90 }; // flexión abajo: manos bajo los hombros, codos atrás
+const PUSH_DEEP = { tl: 0, ua: 215, fa: 85, th: 180, sn: 180, ft: 90 }; // flexión abajo del todo: la nariz casi toca el suelo (codos atrás y arriba, antebrazos verticales)
 const HIPS = { ua: 118, fa: 28 }; // manos en la cintura (vista lateral)
 const SUMO = { thL: 118, snL: 118, thR: 62, snR: 62, ftL: 180, ftR: 0, uaL: 74, faL: 66, uaR: 106, faR: 114, zEL: 6, zER: 6, zHL: 14, zHR: 14 };
 const SUMO_DOWN = { thL: 152, snL: 96, thR: 28, snR: 84, ftL: 180, ftR: 0, uaL: 74, faL: 66, uaR: 106, faR: 114, zEL: 6, zER: 6, zHL: 14, zHR: 14, zKL: 9, zKR: 9, lean: 16 };
@@ -167,7 +168,7 @@ export const EXTRA_MOTIONS: Record<string, M> = {
     [PLS, 300, 900], [{ ...PLS, uaR: 104, faR: 118, zER: -4, zHR: -8, hd: -150 }, 400, 900]] },
 
   // ── Fuerza sin material ──
-  flexiones: { mat: 1, plant: 'haR', handsDown: true, f: [[PLH, 200, 750], [PUSH_DOWN, 150, 850]] },
+  flexiones: { mat: 1, plant: 'haR', handsDown: true, f: [[PLH, 200, 750], [PUSH_DEEP, 150, 850]] },
   'flexiones-con-rodillas-apoyadas': { mat: 1, plant: 'knR', handsDown: true, f: [
     [{ tl: -30, ua: 90, fa: 90, th: 149, sn: 180, ft: 180 }, 200, 750], [{ tl: -8, ua: 150, fa: 30, th: 155, sn: 180, ft: 180 }, 150, 850]] },
   'flexiones-inclinadas-en-silla': { plant: 'haR', anchor: { j: 'haR', y: -42 }, props: (J, P) => P.benchFlat(J.haR[0] - 16, J.haR[0] + 12, 42), f: [
