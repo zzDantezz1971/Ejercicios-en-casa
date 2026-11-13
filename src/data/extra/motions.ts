@@ -356,8 +356,9 @@ export const EXTRA_MOTIONS: Record<string, M> = {
     [{ lean: -22, tw: -55, sa: 0.8, uaL: 96, faL: 34, uaR: 84, faR: 146, zEL: 12, zER: 12, zHL: 30, zHR: 30, thL: -125, snL: 95, thR: -55, snR: 85, sTh: 0.6 }, 150, 700],
     [{ lean: -22, tw: 55, sa: 0.8, uaL: 96, faL: 34, uaR: 84, faR: 146, zEL: 12, zER: 12, zHL: 30, zHR: 30, thL: -125, snL: 95, thR: -55, snR: 85, sTh: 0.6 }, 150, 700]] },
   'lenador-con-mancuerna': { v: 'front', db: 'two', f: [
-    [{ tl: -84, tu: -80, uaL: 48, faL: 48, uaR: 82, faR: 82, zHL: 8, zHR: 8, tw: 22, thL: 100, snL: 100, thR: 80, snR: 80 }, 150, 800],
-    [{ tl: -94, tu: -98, uaL: -120, faL: -125, saL: 0.78, uaR: -135, faR: -140, zHL: 8, zHR: 8, tw: -22, thL: 100, snL: 100, thR: 80, snR: 80 }, 200, 800]] },
+    // brazos estirados por delante del cuerpo (acortados de frente = hacia la cámara), para que al cruzar no lo atraviesen
+    [{ tl: -84, tu: -80, uaL: 48, faL: 48, uaR: 82, faR: 82, sa: 0.8, zHL: 2, zHR: 2, tw: 22, thL: 100, snL: 100, thR: 80, snR: 80 }, 150, 800],
+    [{ tl: -94, tu: -98, uaL: -120, faL: -125, uaR: -135, faR: -140, sa: 0.8, zHL: 2, zHR: 2, tw: -22, thL: 100, snL: 100, thR: 80, snR: 80 }, 200, 800]] },
   // la mancuerna, cruzada sobre el pecho y cogida por los lados (cada mano por fuera de un disco)
   'crunch-con-mancuerna': mocapCrunch({ tl: 180, tu: 180, hd: 184, ...KNEES, ua: -115, fa: 15, zHL: 2, zHR: -2, zEL: -4, zER: 4 },
     { tu: 203, hd: 214, ua: -92, fa: 38 }, { mat: 1, feetDown: true, db: 'two', dbAcross: true, anchor: { j: 'pel', y: -12.1 }, az: 20, el: 18 }),
