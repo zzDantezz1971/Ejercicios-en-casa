@@ -216,11 +216,12 @@ export const RAW_SECTIONS: RawSection[] = [
    [{thL:96,snL:96,thR:84,snR:84,uaL:4,faL:4,uaR:176,faR:176,sa:.22,tw:-65},500,1200],
    [{thL:96,snL:96,thR:84,snR:84,uaL:4,faL:4,uaR:176,faR:176,sa:.22},200,1200],
    [{thL:96,snL:96,thR:84,snR:84,uaL:4,faL:4,uaR:176,faR:176,sa:.22,tw:65},500,1200]]},
+ // el tronco se inclina y gira hacia la pierna contraria hasta que la mano toca la punta de ese pie; el otro brazo, arriba
  {n:'Molino de viento',z:'Espalda, costados e isquios',armsOut:true,az:38,el:12,b:['caution'],f:[
-   [{ua:92,fa:92,sa:.08,zKL:-7,zAL:-13,zKR:7,zAR:13},250,1000],
-   [{tl:-14,tu:-6,hd:20,uaR:96,faR:100,uaL:-88,faL:-88,saL:.95,zKL:-7,zAL:-13,zKR:7,zAR:13},650,1000],
-   [{ua:92,fa:92,sa:.08,zKL:-7,zAL:-13,zKR:7,zAR:13},250,1000],
-   [{tl:-14,tu:-6,hd:20,uaL:96,faL:100,uaR:-88,faR:-88,saR:.95,zKL:-7,zAL:-13,zKR:7,zAR:13},650,1000]]},
+   [{ua:92,fa:92,sa:.08,zKL:-7,zAL:-14,zKR:7,zAR:14},250,1000],
+   [{tl:25,tu:35,hd:55,tw:85,uaR:105,faR:105,zHR:-10,zER:-5,uaL:-88,faL:-88,saL:.95,zKL:-7,zAL:-14,zKR:7,zAR:14},650,1100],
+   [{ua:92,fa:92,sa:.08,zKL:-7,zAL:-14,zKR:7,zAR:14},250,1000],
+   [{tl:25,tu:35,hd:55,tw:-85,uaL:105,faL:105,zHL:10,zEL:5,uaR:-88,faR:-88,saR:.95,zKL:-7,zAL:-14,zKR:7,zAR:14},650,1100]]},
  {g:'Zona lumbar'},
  {n:'Gato-camello',z:'Columna',mat:1,handsDown:true,f:[[{...QUAD,tl:-31,tu:15,hd:70},400,1300],[{...QUAD,tl:2,tu:-34,hd:-45},400,1300]]},
  {n:'Postura del niño',z:'Espalda y lumbar',mat:1,f:[
