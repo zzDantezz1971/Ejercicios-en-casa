@@ -8,7 +8,7 @@ quien tenga el móvil en castellano (o en otro idioma sin ficha) verá la ficha 
 en catalán, castellano e inglés. Si funciona con quien busca en catalán, más adelante se añade la traducción al
 castellano (el texto ya está preparado abajo, en «Castellano», pero **no se sube todavía**).
 
-- Política de privacidad: https://zzdantezz1971.github.io/Ejercicios-en-casa/privacidad.html
+- Política de privacidad: https://zzdantezz1971.github.io/kasa-fit-privacidad/privacidad.html (repositorio aparte, público, para que siga funcionando cuando el de la app pase a privado)
 - Correo de contacto: exercicisacasa.app@gmail.com
 - Categoría: Salud y forma física · Sin anuncios · Gratis con compras dentro de la app (suscripción Prémium: 0,99 €/mes o 9,99 €/año)
 - En Play Console › Contenido de la app: marcar «Contiene compras dentro de la aplicación».
