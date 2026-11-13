@@ -122,8 +122,12 @@ export class RoutineScreen implements Screen {
     append(this.toolbar,
       h('div', { class: 'segmented' }, seg('all', 'Todos'), seg('fav', h('span', { class: 'seg-fav' }, icon('starFill'), 'Favoritos')), seg('chosen', `Elegidos (${n})`)),
       // tu propio orden (arrastrando) se ve con «Por zona»
-      this.mode === 'all' && this.sort === 'zona'
-        ? h('button', { class: 'btn ghost small', onclick: () => { this.mode = 'sorting'; this.clearSearch(); window.scrollTo(0, 0); this.render(); } }, icon('tables'), 'Ordenar lista')
+      // siempre a mano: si estaba ordenado por otra cosa, vuelve al orden por zona (que es donde se guarda el tuyo)
+      this.mode === 'all'
+        ? h('button', { class: 'btn ghost small', onclick: () => {
+          if (this.sort !== 'zona') this.app.store.saveSettings({ ...this.app.store.settings, listSort: 'zona' });
+          this.mode = 'sorting'; this.clearSearch(); window.scrollTo(0, 0); this.render();
+        } }, icon('tables'), 'Ordenar lista')
         : null,
       n ? this.roundsControl() : null,
     );

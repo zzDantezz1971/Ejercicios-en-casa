@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-13T00:21:19Z",
+    "es": ["El botón «Ordenar lista» sale siempre, también si tienes elegido otro orden (al pulsarlo vuelve a tu orden)."],
+    "ca": ["El botó «Ordena la llista» surt sempre, també si tens triat un altre ordre (en prémer-lo torna al teu ordre)."],
+    "en": ["The «Sort list» button is always shown, even if you've picked another order (pressing it goes back to your order)."]
+  },
+  {
     "fecha": "2026-11-13T00:16:56Z",
     "es": ["Si ordenas un apartado a tu manera, ahora se ve: un icono junto a su nombre, «Orden personalizado» en el selector y un aviso encima de la lista con el botón Restablecer."],
     "ca": ["Si ordenes un apartat a la teva manera, ara es veu: una icona al costat del seu nom, «Ordre personalitzat» al selector i un avís damunt de la llista amb el botó Restableix."],
