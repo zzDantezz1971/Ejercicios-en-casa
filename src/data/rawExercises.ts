@@ -292,7 +292,7 @@ export const RAW_SECTIONS: RawSection[] = [
  {n:'Puente de glúteos',feetDown:true,z:'Glúteos y lumbar',mat:1,b:['lumbar'],f:[
    [{...SUP,...KNEES},300,1000],[{...SUP,tl:140,tu:165,th:-18,sn:76.5},900,1000]]},
  {n:'Puente a una pierna',feetDown:true,z:'Glúteos y lumbar',mat:1,b:['lumbar'],f:[
-   [{...SUP,thL:-60,snL:60,thR:-22,snR:-22},300,1000],[{...SUP,tl:140,tu:165,thL:-18,snL:76.5,thR:-27,snR:-27},900,1000]]},
+   [{...SUP,thL:-60,snL:60,thR:-22,snR:-22},300,1000],[{...SUP,tl:150,tu:158,hd:180,thL:-18,snL:76.5,thR:-27,snR:-27},900,1000]]},
  {n:'Nadador suave (superman alterno)',anchor:{j:'pel',y:-13.1},z:'Lumbar y espalda',mat:1,b:['lumbar','gentle'],f:[
    [{...PRONE,ua:0,fa:0},200,900],[{...PRONE,ua:0,fa:0,tu:-6,hd:-10,uaL:-12,faL:-12,thR:190,snR:192},900,900],
    [{...PRONE,ua:0,fa:0},200,900],[{...PRONE,ua:0,fa:0,tu:-6,hd:-10,uaR:-12,faR:-12,thL:190,snL:192},900,900]]},
