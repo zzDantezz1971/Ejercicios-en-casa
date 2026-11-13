@@ -491,8 +491,9 @@ export const EXTRA_MOTIONS: Record<string, M> = {
     { tl: 180, tu: 205, hd: 214, ua: 260, fa: 143 }, { anchor: { j: 'pel', y: -58 }, ball: (J) => [J.pel[0] - 16, -27] }),
   'puente-con-pies-en-fitball': { mat: 1, anchor: { j: 'anR', y: -52 }, ball: (J) => [J.anR[0] + 3, -27], f: [
     [{ ...SUP, th: -41, sn: -41, ft: -60 }, 200, 900], [{ ...SUP, tl: 158, th: -22, sn: -22, ft: -60 }, 600, 900]] },
-  'curl-femoral-con-fitball': { mat: 1, anchor: { j: 'anR', y: -52 }, ball: (J) => [J.anR[0] + 4, -27], f: [
-    [{ ...SUP, tl: 141, th: -10, sn: -10, ft: -60, hd: 185 }, 200, 900], [{ ...SUP, tl: 131, th: -60, sn: 45, ft: -20, hd: 185 }, 300, 900]] },
+  // los hombros y la parte alta de la espalda se quedan en el suelo; solo suben la cadera y la parte baja de la espalda
+  'curl-femoral-con-fitball': { mat: 1, anchor: { j: 'shoR', y: -10.6 }, ball: (J) => [J.anR[0] + 4, -27], f: [
+    [{ ...SUP, tl: 152, tu: 180, hd: 180, th: -28, sn: -28, ft: -60 }, 200, 900], [{ ...SUP, tl: 118, tu: 180, hd: 180, th: -70, sn: 20, ft: -20 }, 300, 900]] },
   'plancha-con-antebrazos-en-fitball': { anchor: { j: 'elR', y: -56 }, ball: (J) => [J.elR[0] + 8, -27], f: [
     [{ tl: -40, ua: 90, fa: 0, th: 140, sn: 140, ft: 50 }, 1300, 1000], [{ tl: -41, ua: 92, fa: 2, th: 139, sn: 139, ft: 50 }, 1300, 1000]] },
   'pase-de-fitball-manos-a-pies': { mat: 1, ball: (J, p) => {
