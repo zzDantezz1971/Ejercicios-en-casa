@@ -909,12 +909,21 @@ export class MannequinScene {
       const a = grip('L'), b = grip('R'), mid = a.clone().lerp(b, 0.5);
       const ang = ((pose.rp ?? 0) * Math.PI) / 180;
       const fwd = side ? V(1, 0, 0) : V(0, 0, 1);
-      const top = J.head.y + 14, bottom = 0.6;
+      // comba larga: pasa bien por encima de la cabeza y separada del cuerpo por delante y por detrás
+      const top = J.head.y + 30, bottom = 0.6;
       const cy = (top + bottom) / 2, ry = (top - bottom) / 2;
-      const P = V(mid.x, cy, mid.z).addScaledVector(fwd, 30 * Math.cos(ang));
+      const P = V(mid.x, cy, mid.z).addScaledVector(fwd, 40 * Math.cos(ang));
       P.y = cy - ry * Math.sin(ang);
-      const C = P.clone().multiplyScalar(2).sub(a.clone().add(b).multiplyScalar(0.5));
-      const pt = (t: number) => a.clone().multiplyScalar((1 - t) ** 2).add(C.clone().multiplyScalar(2 * t * (1 - t))).add(b.clone().multiplyScalar(t * t));
+      // forma de comba de verdad: arco ancho y redondeado (no un lazo estrecho), para que al pasar por
+      // arriba los dos lados queden a los lados de la cabeza y no la atraviesen
+      const L = b.clone().sub(a).setY(0);
+      if (L.lengthSq() < 1e-6) L.set(side ? 0 : 1, 0, side ? 1 : 0);
+      L.normalize();
+      const out = P.clone().sub(mid);
+      const pt = (t: number) => {
+        const s = Math.sin(Math.PI * t);
+        return a.clone().lerp(b, t).addScaledVector(out, Math.sqrt(s)).addScaledVector(L, (2 * t - 1) * 22 * s);
+      };
       g.rope.forEach((m, i) => this.seg(m, pt(i / g.rope.length), pt((i + 1) / g.rope.length), 0.9));
     }
     if (g.wheel) {
