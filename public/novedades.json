@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-13T00:32:21Z",
+    "es": ["El selector de orden muestra siempre «Zona del cuerpo», también con tu orden personalizado (el aviso de la lista ya indica que es tuyo)."],
+    "ca": ["El selector d'ordre mostra sempre «Zona del cos», també amb el teu ordre personalitzat (l'avís de la llista ja indica que és teu)."],
+    "en": ["The order selector always shows «Body area», even with your custom order (the notice above the list already says it's yours)."]
+  },
+  {
     "fecha": "2026-11-13T00:32:01Z",
     "es": ["Al ordenar la lista, la barra con Restablecer y Listo se queda fija debajo de los apartados mientras te mueves por la lista."],
     "ca": ["En ordenar la llista, la barra amb Restableix i Fet es queda fixa sota els apartats mentre et mous per la llista."],
