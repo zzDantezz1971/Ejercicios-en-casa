@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-13T17:32:00Z",
+    "es": ["Personaliza el muñeco y Recordatorios: al elegir una opción, la pantalla se queda donde estaba en vez de volver arriba."],
+    "ca": ["Personalitza el ninot i Recordatoris: en triar una opció, la pantalla es queda on era en lloc de tornar a dalt."],
+    "en": ["Customise the figure and Reminders: choosing an option keeps the screen where it was instead of jumping back to the top."]
+  },
+  {
     "fecha": "2026-11-13T15:36:08Z",
     "es": ["En la app de Android ya no hay copia de seguridad a mano (ni su recordatorio): tus datos se guardan en la copia automática de Google y se recuperan al reinstalar o cambiar de móvil. En la web se mantiene."],
     "ca": ["A l'app d'Android ja no hi ha còpia de seguretat a mà (ni el seu recordatori): les teves dades es desen a la còpia automàtica de Google i es recuperen en reinstal·lar o canviar de mòbil. A la web es manté."],

@@ -3,7 +3,7 @@ import { remindersOf, type ReminderKind, type ReminderSettings } from '../../dom
 import { askNotificationPermission, REMINDERS_AVAILABLE } from '../../services/Reminders';
 import { HAS_BACKUP } from '../../services/Backup';
 import type { App, Screen } from '../App';
-import { clear, confirmDialog, h } from '../dom';
+import { clear, confirmDialog, h, keepScroll } from '../dom';
 import { icon, type IconName } from '../icons';
 
 /** Días de la semana empezando por el lunes (0 = domingo). */
@@ -59,7 +59,12 @@ export class RemindersScreen implements Screen {
     this.save({ ...r, [kind]: { ...r[kind], on, since: new Date().toISOString() } });
   }
 
+  /** Vuelve a pintar sin mover la pantalla (si no, al vaciarla por un momento salta arriba). */
   private render(): void {
+    keepScroll(this.body, () => this.paint());
+  }
+
+  private paint(): void {
     clear(this.body);
     const r = this.value;
     const premium = this.app.access.premium;

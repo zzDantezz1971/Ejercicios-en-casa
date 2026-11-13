@@ -2,7 +2,7 @@ import { FigureView } from '../../figure/FigureView';
 import { DEFAULT_LOOK, HAIR_COLORS, lookHair, setLook, SHIRT_COLORS, SHOE_COLORS, SHORTS_COLORS, SKIN_TONES, type Beard, type Body, type Bottom, type Glasses, type Hair, type Look, type Top } from '../../figure/look';
 import type { ExerciseDef } from '../../domain/types';
 import type { App, Screen } from '../App';
-import { clear, h } from '../dom';
+import { clear, h, keepScroll } from '../dom';
 import { icon } from '../icons';
 
 /** El muñeco de pie, de frente, para ver cómo queda. */
@@ -67,7 +67,12 @@ export class LookScreen implements Screen {
     this.view = null;
   }
 
+  /** Vuelve a pintar las opciones sin mover la pantalla (si no, al vaciarla por un momento salta arriba). */
   private render(): void {
+    keepScroll(this.body, () => this.paint());
+  }
+
+  private paint(): void {
     const l = this.look, premium = this.app.access.premium;
     const swatches = (title: string, colors: string[], key: 'skin' | 'shirt' | 'shorts' | 'shoe' | 'hairColor', cur: string) =>
       h('div', { class: 'look-row' },

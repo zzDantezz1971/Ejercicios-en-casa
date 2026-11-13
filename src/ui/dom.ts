@@ -200,3 +200,27 @@ export function bodyWeightDialog(title: string, initial: number): Promise<number
     paint();
   });
 }
+
+/**
+ * Vuelve a pintar una parte de la pantalla sin que se mueva: guarda la posición, reserva el alto mientras
+ * se pinta y la recupera, también un momento después (en algunos móviles el salto llega tarde),
+ * salvo que mientras tanto la persona toque o mueva la pantalla.
+ */
+export function keepScroll(body: HTMLElement, paint: () => void): void {
+  const y = window.scrollY;
+  body.style.minHeight = `${body.offsetHeight}px`;
+  paint();
+  window.scrollTo(0, y);
+  let touched = false;
+  const stop = () => { touched = true; };
+  window.addEventListener('touchstart', stop, { once: true, passive: true });
+  window.addEventListener('wheel', stop, { once: true, passive: true });
+  const fix = () => { if (!touched && Math.abs(window.scrollY - y) > 2) window.scrollTo(0, y); };
+  requestAnimationFrame(fix);
+  for (const ms of [120, 300, 600]) window.setTimeout(fix, ms);
+  window.setTimeout(() => {
+    body.style.minHeight = '';
+    window.removeEventListener('touchstart', stop);
+    window.removeEventListener('wheel', stop);
+  }, 650);
+}
