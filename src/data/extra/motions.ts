@@ -415,13 +415,19 @@ export const EXTRA_MOTIONS: Record<string, M> = {
     const [uaL, faL] = arm(-15, shuL), [uaR, faR] = arm(15, shuR);
     return { uaL, faL, uaR, faR, shuL, shuR, tw, hd: -90 + 5 * Math.sin(a), zEL: tz * 0.45, zER: tz * 0.45, zHL: tz, zHR: tz };
   } },
-  // de frente y alternando: la pesa arriba en una mano, inclinación hacia el otro lado (la otra mano baja por la pierna);
-  // al subir, la pesa pasa a la otra mano por encima de la cabeza y se repite hacia el otro lado
-  'molino-con-pesa-rusa': { v: 'front', kb: 'up', alternate: true, f: [
-    [{ thL: 110, snL: 110, thR: 70, snR: 70, uaR: -90, faR: -90, uaL: 100, faL: 97, hd: -102 }, 250, 1100],
-    [{ thL: 110, snL: 110, thR: 70, snR: 70, tl: -112, tu: -146, hd: -120, uaR: -90, faR: -90, uaL: 108, faL: 110 }, 600, 1100],
-    [{ thL: 110, snL: 110, thR: 70, snR: 70, uaR: -90, faR: -90, uaL: 100, faL: 97, hd: -102 }, 100, 700],
-    [{ thL: 110, snL: 110, thR: 70, snR: 70, uaR: -97, faR: -97, uaL: -83, faL: -83, hd: -96 }, 250, 700]] },
+  // de frente y alternando: la pesa arriba con el brazo siempre vertical; el tronco baja de lado y hacia delante
+  // (lean) hasta que la otra mano llega al pie, con la cabeza alineada con el tronco. Al subir, las dos manos
+  // se juntan encima de la cabeza, la pesa pasa a la otra mano y se repite hacia el otro lado.
+  'molino-con-pesa-rusa': (() => {
+    const LEGS = { thL: 112, snL: 112, thR: 68, snR: 68 };
+    return { v: 'front', az: 30, kb: 'up', alternate: true, f: [
+      [{ ...LEGS, uaR: -90, faR: -90, uaL: 100, faL: 97, hd: -92 }, 250, 1100],
+      // el tronco, inclinado hacia delante: la mano de la pesa se adelanta con él, así que se corrige hacia atrás
+      [{ ...LEGS, tl: -130, tu: -160, hd: -160, lean: 28, uaR: -90, faR: -90, zER: -10, zHR: -19, uaL: 98, faL: 98, zHL: 6 }, 600, 1200],
+      [{ ...LEGS, uaR: -90, faR: -90, uaL: 100, faL: 97, hd: -92 }, 100, 900],
+      // manos juntas encima de la cabeza: la pesa cambia de mano (el brazo libre sube por fuera: 282 = -78 dando la vuelta)
+      [{ ...LEGS, uaR: -102, faR: -112, uaL: 282, faL: 292, hd: -92 }, 250, 700]] };
+  })(),
   'ocho-con-pesa-rusa': { kb: 'both', plant: 'anR', per: 2600, fn: (t) => {
     const a = t * Math.PI * 2, z = 18 * Math.sin(a);
     return { tl: -36, th: 72, sn: 108, hd: -46, ua: 96 + 10 * Math.sin(2 * a), fa: 98 + 10 * Math.sin(2 * a), zHL: 15.5 + z, zHR: -15.5 + z, zEL: 6 + z * 0.4, zER: -6 + z * 0.4 };
