@@ -75,6 +75,24 @@ function missingEquip(app: App, r: GenResult): Equip[] {
 interface PreviewEdit {
   set(r: GenResult): void;
   swap?(s: SectionId, i: number): GenResult;
+  /** Preguntar antes de quitar un ejercicio (se puede desactivar para esta lista con la casilla del aviso). */
+  ask: { remove: boolean };
+}
+
+/** «¿Quitar X de la tabla?» con la casilla «No volver a preguntar en esta lista». */
+function confirmRemove(name: string): Promise<{ ok: boolean; stop: boolean }> {
+  return new Promise((resolve) => {
+    const box = h('input', { type: 'checkbox', id: 'rm-stop' });
+    const close = (ok: boolean) => { wrap.remove(); resolve({ ok, stop: ok && box.checked }); };
+    const wrap = h('div', { class: 'dialog-wrap', onclick: (e: Event) => e.target === wrap && close(false) },
+      h('div', { class: 'dialog', role: 'dialog', 'aria-modal': 'true' },
+        h('p', { class: 'dialog-title' }, `¿Quitar ${name} de la tabla?`),
+        h('label', { class: 'rm-stop', for: 'rm-stop' }, box, h('span', {}, 'No volver a preguntar en esta lista')),
+        h('div', { class: 'dialog-actions' },
+          h('button', { class: 'btn ghost', onclick: () => close(false) }, 'Cancelar'),
+          h('button', { class: 'btn danger', onclick: () => close(true) }, 'Quitar'))));
+    document.body.append(wrap);
+  });
 }
 
 /** Copia de la tabla con un apartado cambiado (si se queda vacío, sin vueltas). */
@@ -85,7 +103,7 @@ function withSection(r: GenResult, s: SectionId, items: GenResult['routine'][Sec
 }
 
 /** Vista previa de una tabla: resumen y ejercicios por apartado. Al tocar un ejercicio se ve cómo se hace;
- *  con `edit`, se ordenan como cualquier lista (flechas y asa) y cada uno se puede cambiar o quitar. */
+ *  con `edit`, se ordenan arrastrándolos con el asa y cada uno se puede cambiar o quitar (con aviso). */
 function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement {
   const plan = WorkoutPlan.build(r.routine, app.catalog, app.store.settings, r.rounds);
   const locked = SECTION_IDS.some((s) => r.routine[s].some((i) => !app.access.canUse(i.exerciseId)));
@@ -114,15 +132,26 @@ function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement {
           img,
           h('span', { class: 'maker-name' }, h('span', {}, ex.name), h('span', { class: 'maker-secs muted small' }, `${it.seconds} s`, lock ? icon('lock', 'ico lock') : ''))),
         edit?.swap ? h('button', { class: 'icon-btn small', 'aria-label': `Cambiar ${ex.name} por otro parecido`, onclick: () => edit.set(edit.swap!(s, i)) }, icon('swap')) : '',
-        edit ? h('button', { class: 'icon-btn small danger', 'aria-label': `Quitar ${ex.name} de la tabla`, onclick: () => { const next = items.slice(); next.splice(i, 1); edit.set(withSection(r, s, next)); } }, icon('trash')) : '');
+        // quitar: apartado de los demás botones y con aviso (que se puede desactivar para esta lista)
+        edit ? h('button', { class: 'icon-btn small danger maker-remove', 'aria-label': `Quitar ${ex.name} de la tabla`, onclick: async () => {
+          if (edit.ask.remove) {
+            const { ok, stop } = await confirmRemove(ex.name);
+            if (!ok) return;
+            if (stop) edit.ask.remove = false;
+          }
+          const next = items.slice();
+          next.splice(i, 1);
+          edit.set(withSection(r, s, next));
+        } }, icon('trash')) : '');
       rows.push({ content, label: ex.name });
     });
+    // se ordena arrastrando con el asa (sin flechas)
     if (edit) box.append(sortableList(rows, (from, to) => {
       const next = items.slice();
       const [moved] = next.splice(from, 1);
       next.splice(to, 0, moved);
       edit.set(withSection(r, s, next));
-    }));
+    }, { arrows: false }));
     else for (const row of rows) box.append(row.content);
   }
   if (locked) box.append(h('p', { class: 'muted small maker-free' }, icon('lock'), 'Los ejercicios con candado son de Prémium: en la versión gratis se saltan.'));
@@ -140,6 +169,8 @@ export class GeneratorScreen implements Screen {
   private step = 0;
   private o: Partial<GenOptions> = {};
   private result: GenResult | null = null;
+  /** Preguntar antes de quitar (para esta propuesta). */
+  private ask = { remove: true };
 
   constructor(private readonly app: App, private readonly fillActive = false) {
     this.render();
@@ -164,7 +195,10 @@ export class GeneratorScreen implements Screen {
 
   private next(): void {
     this.step = this.step === 0 && !this.askZone ? 2 : this.step + 1;
-    if (this.step === 4) this.result = generate(this.o as GenOptions, this.ctx());
+    if (this.step === 4) {
+      this.result = generate(this.o as GenOptions, this.ctx());
+      this.ask = { remove: true };
+    }
     this.render();
     window.scrollTo({ top: 0 });
   }
@@ -213,10 +247,11 @@ export class GeneratorScreen implements Screen {
         h('p', { class: 'muted maker-summary' }, [GOAL_INFO[o.goal].name, this.askZone ? ZONE_INFO[o.zone].name : '', `${o.minutes} min`, LEVEL_INFO[o.level].name].filter(Boolean).map((t) => tr(t)).join(' · ')),
         preview(this.app, this.result, {
           set: (r) => { this.result = r; this.keepRender(); },
+          ask: this.ask,
           swap: (sec, i) => swapExercise(this.result!, sec, i, o, this.ctx()),
         }),
         h('div', { class: 'maker-actions' },
-          h('button', { class: 'btn ghost block', onclick: () => { this.result = generate(o, this.ctx()); this.render(); window.scrollTo({ top: 0 }); } }, icon('swap'), 'Otra propuesta'),
+          h('button', { class: 'btn ghost block', onclick: () => { this.result = generate(o, this.ctx()); this.ask = { remove: true }; this.render(); window.scrollTo({ top: 0 }); } }, icon('swap'), 'Otra propuesta'),
           h('button', { class: 'btn primary block big', disabled: isEmptyResult(this.result), onclick: () => void saveTable(this.app, `${tr(name.label)} · ${name.minutes} min`, this.result!, this.fillActive) }, icon('check'), 'Guardar la tabla')));
     }
   }
@@ -262,6 +297,7 @@ export class TemplatesScreen implements Screen {
 class TemplateScreen implements Screen {
   readonly el = h('main', { class: 'screen maker-screen' });
   private r: GenResult;
+  private readonly ask = { remove: true };
 
   constructor(private readonly app: App, private readonly t: TableTemplate, private readonly fillActive: boolean) {
     this.r = fromTemplate(t);
@@ -277,6 +313,7 @@ class TemplateScreen implements Screen {
         h('p', { class: 'muted maker-intro' }, t.desc),
         preview(app, this.r, {
           set: (r) => { this.r = r; this.render(); },
+          ask: this.ask,
           // otro parecido (mismo músculo y grupo), con el material del usuario
           swap: (sec, i) => swapExercise(this.r, sec, i, { goal: 'forma', zone: 'entero', level: 'normal', minutes: 20 },
             { sections: app.sections, catalog: app.catalog, owned: new Set(app.store.settings.equipment), settings: app.store.settings }),

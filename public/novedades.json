@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-14T22:01:16Z",
+    "es": ["Tablas nuevas: los ejercicios se ordenan arrastrándolos (sin flechas). El botón de quitar está más separado y pregunta antes de quitar; puedes marcar que no te lo vuelva a preguntar en esa lista."],
+    "ca": ["Taules noves: els exercicis s’ordenen arrossegant-los (sense fletxes). El botó de treure està més separat i pregunta abans de treure; pots marcar que no t’ho torni a preguntar en aquella llista."],
+    "en": ["New routines: exercises are reordered by dragging (no arrows). The remove button is further apart and asks before removing; you can tick it not to ask again for that list."]
+  },
+  {
     "fecha": "2026-11-14T21:54:37Z",
     "es": ["Tablas nuevas («Créala por mí» y «Tablas hechas»): cada ejercicio tiene un botón para cambiarlo por otro parecido y otro para quitarlo, y se ordenan como cualquier lista, con las flechas o arrastrándolos."],
     "ca": ["Taules noves («Crea-la per mi» i «Taules fetes»): cada exercici té un botó per canviar-lo per un altre de semblant i un altre per treure’l, i s’ordenen com qualsevol llista, amb les fletxes o arrossegant-los."],
