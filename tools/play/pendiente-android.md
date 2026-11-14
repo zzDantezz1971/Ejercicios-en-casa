@@ -34,3 +34,6 @@ una vista previa de la versión gratis). Falta configurarlo en Google:
 - La clave va como secreto de GitHub **`ACCESS_CODE_SECRET`** (Settings › Secrets and variables › Actions) antes de
   compilar la app con el workflow «App Android». Sin ese secreto, los códigos no funcionan.
 - Para anular un código: añadir el nombre a `REVOKED` en `src/services/Access.ts` y publicar una versión nueva.
+- Más adelante (decidido dejarlo para cuando haga falta): **servidor de activaciones** (p. ej. Cloudflare, plan gratis)
+  para limitar cada código a 2 móviles, ver qué códigos se han canjeado y liberar plazas. Ahora la app comprueba los códigos
+  sin internet y nadie sabe si se usan ni en cuántos móviles. Los códigos ya repartidos seguirían valiendo.
