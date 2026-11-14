@@ -22,6 +22,8 @@ async function start(): Promise<void> {
   const app = new App(document.getElementById('app')!);
   // app de Google Play: suscripción o código (con un límite de tiempo por si Google Play no responde)
   await Promise.race([app.access.init(), new Promise((r) => setTimeout(r, 8000))]);
+  // ya se sabe si tiene Prémium: tema de color y aspecto del muñeco
+  app.applySettings();
   app.setPaywall(() => new PaywallScreen(app));
   app.setTabs({
     inicio: () => new HomeScreen(app),

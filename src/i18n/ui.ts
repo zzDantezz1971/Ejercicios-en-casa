@@ -520,7 +520,7 @@ const ROWS: Row[] = [
   ['Si lo tienes activado en Recordatorios, al acabar un entrenamiento te avisa cuando toca anotar el peso.', "Si el tens activat a Recordatoris, en acabar un entrenament t'avisa quan toca anotar el pes.", "If you've turned it on in Reminders, after a workout it tells you when it's time to log your weight."],
   ['Personaliza la app, recordatorios, reloj y prémium.', "Personalitza l'app, recordatoris, rellotge i prèmium.", 'Customise the app, reminders, watch and premium.'],
   ['Para entrenar y pesarte, los días y a la hora que elijas. Llegan como notificación, aunque la app esté cerrada.', "Per entrenar i pesar-te, els dies i a l'hora que triïs. Arriben com a notificació, encara que l'app estigui tancada.", 'To work out and weigh yourself, on the days and at the time you choose. They arrive as notifications, even when the app is closed.'],
-  ['Prémium: todos los ejercicios y la personalización completa del muñeco. Se paga y se cancela en Google Play.', 'Prèmium: tots els exercicis i la personalització completa del ninot. Es paga i es cancel·la a Google Play.', "Premium: every exercise and full figure customisation. It's paid for and cancelled in Google Play."],
+  ['Prémium: todos los ejercicios, la personalización completa del muñeco y todos los temas de color. Se paga y se cancela en Google Play.', 'Prèmium: tots els exercicis, la personalització completa del ninot i tots els temes de color. Es paga i es cancel·la a Google Play.', 'Premium: all the exercises, full figure customisation and every colour theme. Paid and cancelled in Google Play.'],
   ['Si los tienes activados en Recordatorios, al acabar un entrenamiento te avisa cuando toca anotar el peso o hacer la copia de seguridad.', "Si els tens activats a Recordatoris, en acabar un entrenament t'avisa quan toca anotar el pes o fer la còpia de seguretat.", "If you've turned them on in Reminders, after a workout it tells you when it's time to log your weight or make a backup."],
   ['Menú Inicio', 'Menú Inici', 'Home menu'],
   ['Tu tabla, tu semana y el entrenamiento.', "La teva taula, la teva setmana i l'entrenament.", 'Your routine, your week and your workout.'],
@@ -573,7 +573,7 @@ const ROWS: Row[] = [
   ['Guarda tus tablas, historial y ajustes en un archivo (por ejemplo, en Drive) y restáuralo si cambias de móvil.', "Desa les teves taules, historial i configuració en un fitxer (per exemple, a Drive) i restaura'l si canvies de mòbil.", 'Save your routines, history and settings to a file (for example, on Drive) and restore it if you change phones.'],
   ['Gratis y prémium', 'Gratis i prèmium', 'Free and premium'],
   ['Gratis: dos ejercicios de cada apartado y todas las funciones de la app.', "Gratis: dos exercicis de cada apartat i totes les funcions de l'app.", 'Free: two exercises per section and every feature of the app.'],
-  ['Prémium: todos los ejercicios, la personalización completa del muñeco y el recordatorio de copia de seguridad. Se paga y se cancela en Google Play.', 'Prèmium: tots els exercicis, la personalització completa del ninot i el recordatori de còpia de seguretat. Es paga i es cancel·la a Google Play.', "Premium: every exercise, full figure customisation and the backup reminder. It's paid for and cancelled in Google Play."],
+  ['Prémium: todos los ejercicios, la personalización completa del muñeco, todos los temas de color y el recordatorio de copia de seguridad. Se paga y se cancela en Google Play.', 'Prèmium: tots els exercicis, la personalització completa del ninot, tots els temes de color i el recordatori de còpia de seguretat. Es paga i es cancel·la a Google Play.', 'Premium: all the exercises, full figure customisation, every colour theme and the backup reminder. Paid and cancelled in Google Play.'],
   ['Frecuencia', 'Freqüència', 'Frequency'],
   ['Cada semana', 'Cada setmana', 'Every week'],
   ['Cada 2 semanas', 'Cada 2 setmanes', 'Every 2 weeks'],
@@ -1029,7 +1029,8 @@ const ROWS: Row[] = [
   ['Lila noche', 'Lila nit', 'Night lilac'],
   ['Rosa', 'Rosa', 'Pink'],
   ['Grafito', 'Grafit', 'Graphite'],
-  ['Idioma (català, castellano o English), modo oscuro, claro o el del móvil, y tema de color: azul, verde, naranja, lila, rosa o grafito.', 'Idioma (català, castellano o English), mode fosc, clar o el del mòbil, i tema de color: blau, verd, taronja, lila, rosa o grafit.', 'Language (català, castellano or English), dark, light or phone mode, and colour theme: blue, green, orange, lilac, pink or graphite.'],
+  ['Idioma (català, castellano o English), modo oscuro, claro o el del móvil, y tema de color: azul y verde gratis; naranja, lila, rosa y grafito con Prémium.', 'Idioma (català, castellano o English), mode fosc, clar o el del mòbil, i tema de color: blau i verd gratis; taronja, lila, rosa i grafit amb Prèmium.', 'Language (català, castellano or English), dark, light or phone mode, and colour theme: blue and green free; orange, lilac, pink and graphite with Premium.'],
+  ['Seis temas de color para la app', 'Sis temes de color per a l’app', 'Six colour themes for the app'],
 ];
 
 export const UI_CA: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[1]]));

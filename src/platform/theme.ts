@@ -17,16 +17,27 @@ export const COLOR_INFO: Record<ColorTheme, { name: string; swatch: [string, str
   grafit: { name: 'Grafito', swatch: ['#4A5260', '#171B21'] },
 };
 
+/** Temas gratis; los demás, con Prémium (sin él se ve el azul). */
+export const FREE_COLORS: ReadonlySet<ColorTheme> = new Set<ColorTheme>(['blau', 'verd']);
+
 let pref: ThemePref = 'dark';
 let color: ColorTheme = 'blau';
+/** ¿Tiene Prémium? (lo conecta la app; al arrancar, antes de saberlo, se deja ver el tema guardado). */
+let premium: () => boolean = () => true;
+
+/** Conecta la comprobación de Prémium para los temas de pago. */
+export function setColorGate(isPremium: () => boolean): void {
+  premium = isPremium;
+}
 const mq = typeof matchMedia === 'function' ? matchMedia('(prefers-color-scheme: light)') : null;
 
 function paint(): void {
   const light = pref === 'light' || (pref === 'auto' && !!mq?.matches);
   const root = document.documentElement;
   root.dataset.theme = light ? 'light' : 'dark';
-  if (color === 'blau') delete root.dataset.color;
-  else root.dataset.color = color;
+  const shown = FREE_COLORS.has(color) || premium() ? color : 'blau';
+  if (shown === 'blau') delete root.dataset.color;
+  else root.dataset.color = shown;
   // el fondo del tema (con su tinte) para la barra del navegador y las barras de Android
   const bg = getComputedStyle(root).getPropertyValue('--bg').trim() || (light ? '#F3F5F9' : '#0A0D12');
   document.querySelector('meta[name="theme-color"]')?.setAttribute('content', bg);

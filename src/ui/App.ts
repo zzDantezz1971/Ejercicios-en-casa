@@ -1,5 +1,6 @@
 import { setAngleStore } from '../figure/angles';
 import { setMusicDuck } from '../services/MusicDuck';
+import { applyColor, setColorGate } from '../platform/theme';
 import { rescheduleReminders } from '../services/Reminders';
 import { setFigureStyle } from '../figure/skinAsset';
 import { setLook } from '../figure/look';
@@ -130,6 +131,9 @@ export class App {
     this.sounds.enabled = this.store.settings.sound;
     this.voice.enabled = this.store.settings.voice;
     setMusicDuck(this.store.settings.duckMusic);
+    // tema de color (los de pago, solo con Prémium)
+    setColorGate(() => this.access.premium);
+    applyColor(this.store.settings.colorTheme);
     this.haptics.enabled = this.store.settings.sound;
   }
 

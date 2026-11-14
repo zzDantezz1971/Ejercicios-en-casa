@@ -1,5 +1,5 @@
 import { LANG, LANGS, LOCALE } from '../../i18n';
-import { applyColor, applyTheme, COLOR_INFO, COLOR_THEMES, type ColorTheme } from '../../platform/theme';
+import { applyColor, applyTheme, COLOR_INFO, COLOR_THEMES, FREE_COLORS, type ColorTheme } from '../../platform/theme';
 import { flushDurable } from '../../platform/durable';
 import { showUpdateDialog } from '../components/updateDialog';
 import { BUILD_TIME, checkForUpdate, updateReady } from '../../services/Updates';
@@ -115,8 +115,11 @@ export class SettingsScreen implements Screen {
 
   /** Tema de color de la app: un círculo por tema (el elegido, con ✓). */
   private colorCard(s: Settings): HTMLElement {
-    const cur = ((COLOR_THEMES as readonly string[]).includes(s.colorTheme ?? '') ? s.colorTheme : 'blau') as ColorTheme;
+    const saved = ((COLOR_THEMES as readonly string[]).includes(s.colorTheme ?? '') ? s.colorTheme : 'blau') as ColorTheme;
+    const cur = this.app.access.premium || FREE_COLORS.has(saved) ? saved : 'blau';
+    const premium = this.app.access.premium;
     const pick = (c: ColorTheme) => {
+      if (!premium && !FREE_COLORS.has(c)) return this.app.showPremium();
       this.update({ colorTheme: c });
       applyColor(c);
       this.render();
@@ -127,7 +130,9 @@ export class SettingsScreen implements Screen {
         h('div', { class: 'set-text' }, h('strong', {}, 'Tema de color'), h('p', { class: 'muted small' }, h('span', {}, COLOR_INFO[cur].name)))),
       h('div', { class: 'color-themes', role: 'group', 'aria-label': 'Tema de color' },
         ...COLOR_THEMES.map((c) => {
-          const b = h('button', { class: 'color-dot' + (c === cur ? ' on' : ''), 'aria-label': COLOR_INFO[c].name, 'aria-pressed': String(c === cur), onclick: () => pick(c) }, c === cur ? icon('check') : '');
+          const locked = !premium && !FREE_COLORS.has(c);
+          const b = h('button', { class: 'color-dot' + (c === cur ? ' on' : '') + (locked ? ' locked' : ''), 'aria-label': COLOR_INFO[c].name, 'aria-pressed': String(c === cur), onclick: () => pick(c) },
+            c === cur ? icon('check') : locked ? icon('lock') : '');
           b.style.background = `linear-gradient(140deg, ${COLOR_INFO[c].swatch[0]}, ${COLOR_INFO[c].swatch[1]})`;
           return b;
         })));
@@ -291,8 +296,8 @@ export class SettingsScreen implements Screen {
           h('div', { class: 'set-text' }, h('strong', {}, 'Vista previa de la versión gratis'),
             h('p', { class: 'muted small' }, 'Solo en este navegador: verás la app como alguien sin suscripción, con un ejercicio gratis de cada apartado. En la web no se paga nada.'))),
         h('div', { class: 'segmented lang-segs' },
-          h('button', { class: 'seg' + (on ? '' : ' on'), 'aria-pressed': String(!on), onclick: () => { a.setPreview(false); this.render(); } }, 'Todo desbloqueado'),
-          h('button', { class: 'seg' + (on ? ' on' : ''), 'aria-pressed': String(on), onclick: () => { a.setPreview(true); this.render(); } }, 'Versión gratis')),
+          h('button', { class: 'seg' + (on ? '' : ' on'), 'aria-pressed': String(!on), onclick: () => { a.setPreview(false); this.app.applySettings(); this.render(); } }, 'Todo desbloqueado'),
+          h('button', { class: 'seg' + (on ? ' on' : ''), 'aria-pressed': String(on), onclick: () => { a.setPreview(true); this.app.applySettings(); this.render(); } }, 'Versión gratis')),
         on ? h('button', { class: 'btn ghost block', onclick: () => this.app.showPremium() }, icon('star'), 'Ver la pantalla de Prémium') : null);
     }
     const sub = a.kind === 'sub';
