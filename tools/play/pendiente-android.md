@@ -35,3 +35,15 @@ una vista previa de la versión gratis). Falta configurarlo en Google:
 - Más adelante (decidido dejarlo para cuando haga falta): **servidor de activaciones** (p. ej. Cloudflare, plan gratis)
   para limitar cada código a 2 móviles, ver qué códigos se han canjeado y liberar plazas. Ahora la app comprueba los códigos
   sin internet y nadie sabe si se usan ni en cuántos móviles. Los códigos ya repartidos seguirían valiendo.
+
+## Versión 1.1 (después del lanzamiento)
+
+- **Health Connect** (decidido hacerlo tras publicar, para no retrasar la revisión):
+  - Configuració › tarjeta «Health Connect» con interruptor «Guarda els entrenaments a Health Connect» (Android 8+; si no, no sale).
+  - Solo **escribir** (nunca leer): al acabar cada entrenamiento, la sesión (inicio, fin, nombre de la tabla, tipo fuerza),
+    las calorías y las pulsaciones del reloj si las hay; opcionalmente, el peso al anotarlo en Mis dades.
+  - Con una librería de Capacitor para Health Connect; permisos de escritura en el AndroidManifest.
+  - Play Console: declarar cada permiso de salud (revisión aparte) y actualizar la política de privacidad
+    (también en el repositorio kasa-fit-privacidad).
+  - Sirve para Samsung Health, Google Fit, Fitbit, Mi Fitness...; no para Garmin Connect ni Polar Flow.
+- Más adelante, si hace falta: servidor de activaciones de los códigos (ver arriba), app para iPhone, ficha de Play en castellano.
