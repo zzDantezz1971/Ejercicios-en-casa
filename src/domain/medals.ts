@@ -2,6 +2,7 @@ import { LOCALE } from '../i18n';
 import { SECTION_IDS, type HistoryEntry, type WeightEntry } from './types';
 import { bestStreak } from './stats';
 import { weekKey } from './monthSummary';
+import { fullPlanWeek } from './weekPlan';
 
 export type Tier = 'bronce' | 'plata' | 'oro';
 export type MedalIcon = 'trophy' | 'flame' | 'clock' | 'bolt' | 'calendar' | 'target' | 'dumbbell' | 'heart' | 'check';
@@ -11,6 +12,8 @@ export interface MedalContext {
   weights: readonly WeightEntry[];
   goalKg?: number | null;
   kcal: number;
+  /** Días de entrenamiento del plan de la semana (si hay plan). */
+  planDays?: readonly number[];
 }
 
 export type MedalGroup = 'entrenos' | 'constancia' | 'tiempo' | 'calorias' | 'peso' | 'fuerza' | 'apartados' | 'especiales';
@@ -125,6 +128,7 @@ export const MEDALS: Medal[] = [
   { group: 'constancia', id: 'semana-3', title: 'Buena semana', desc: '3 días entrenados en una misma semana.', icon: 'calendar', tier: 'bronce', earned: (c) => maxDaysInWeek(c) >= 3 },
   { group: 'constancia', id: 'semana-5', title: 'Semana de hierro', desc: '5 días entrenados en una misma semana.', icon: 'calendar', tier: 'plata', earned: (c) => maxDaysInWeek(c) >= 5 },
   { group: 'constancia', id: 'semana-7', title: 'Semana completa', desc: 'Los 7 días de una misma semana entrenados.', icon: 'calendar', tier: 'oro', earned: (c) => maxDaysInWeek(c) >= 7 },
+  { group: 'constancia', id: 'plan-cumplido', title: 'Plan cumplido', desc: 'Todos los días de tu plan de la semana entrenados en una misma semana.', icon: 'calendar', tier: 'plata', earned: (c) => !!c.planDays && fullPlanWeek(c.history, c.planDays) },
   { group: 'constancia', id: 'habito-4', title: 'Hábito', desc: '4 semanas seguidas entrenando al menos 3 días.', icon: 'calendar', tier: 'oro', earned: (c) => habitWeeks(c) >= 4 },
   // Tiempo entrenado
   { group: 'tiempo', id: 'sesion-45', title: 'Sesión larga', desc: 'Un entrenamiento de 45 minutos o más.', icon: 'clock', tier: 'bronce', earned: (c) => c.history.some((e) => e.durationSec >= 45 * 60) },

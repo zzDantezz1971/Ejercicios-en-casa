@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-14T23:28:46Z",
+    "es": ["Nuevo Plan de la semana (Prémium): eliges objetivo, días, minutos y nivel, y la app crea una tabla para cada día, repartiendo las zonas.", "En Inicio ves lo que toca hoy; en «Mi plan de la semana», la semana entera con lo ya hecho. Los ejercicios se pueden renovar cada lunes.", "Nueva medalla «Plan cumplido»."],
+    "ca": ["Nou Pla setmanal (Prèmium): tries objectiu, dies, minuts i nivell, i l’app crea una taula per a cada dia, repartint les zones.", "A Inici veus el que toca avui; a «El meu pla setmanal», tota la setmana amb el que ja has fet. Els exercicis es poden renovar cada dilluns.", "Nova medalla «Pla complert»."],
+    "en": ["New Weekly plan (Premium): choose goal, days, minutes and level, and the app creates a routine for each day, spreading the body areas.", "Home shows what’s on today; “My weekly plan” shows the whole week with what’s done. Exercises can be refreshed every Monday.", "New “Plan completed” medal."]
+  },
+  {
     "fecha": "2026-11-14T23:12:25Z",
     "es": ["Reloj: el enlace «Haz clic aquí» va en cursiva."],
     "ca": ["Rellotge: l’enllaç «Fes clic aquí» va en cursiva."],

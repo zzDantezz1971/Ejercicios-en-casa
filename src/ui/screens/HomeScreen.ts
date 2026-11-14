@@ -14,6 +14,7 @@ import { addMonths, addWeeks, monthKey, monthStart, weekKey, weekStart, weekStat
 import { randomPhrase } from '../../domain/phrases';
 import { weekGoalsDialog } from '../components/weekGoals';
 import { openDay } from './HistoryScreen';
+import { refreshPlan, todayCard } from './PlanScreens';
 
 export class HomeScreen implements Screen {
   readonly el = h('main', { class: 'screen home' });
@@ -27,6 +28,8 @@ export class HomeScreen implements Screen {
 
   private render(): void {
     const { app } = this;
+    // plan de la semana: ejercicios nuevos si empieza otra semana
+    refreshPlan(app);
     const table = app.store.active;
     // en la versión gratis, solo los ejercicios gratis de la tabla
     const plan = WorkoutPlan.build(app.playable(table.routine), app.catalog, app.store.settings, table.rounds);
@@ -68,6 +71,10 @@ export class HomeScreen implements Screen {
         this.el.append(card);
       }
     }
+
+    // Plan de la semana: lo que toca hoy
+    const planCard = todayCard(app, now);
+    if (planCard) this.el.append(planCard);
 
     // Tarjeta principal con la tabla en uso
     // Imagen de la tabla según los apartados que tienen ejercicios (15 combinaciones posibles)

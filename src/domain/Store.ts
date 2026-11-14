@@ -14,6 +14,7 @@ import {
 } from './types';
 import { caloriesOf, type Calories } from './calories';
 import { earnedMedals } from './medals';
+import { sanitizePlan, type WeekPlan } from './weekPlan';
 
 /** Todo lo que la app guarda en el móvil. */
 export interface SavedData {
@@ -42,6 +43,8 @@ export interface SavedData {
   welcomed: boolean;
   /** Medallas conseguidas: id → fecha (ISO). */
   medals?: Record<string, string>;
+  /** Plan de la semana (Prémium). */
+  plan?: WeekPlan;
 }
 
 export const STORAGE_KEY = 'ejercicios-en-casa';
@@ -178,6 +181,53 @@ export class Store {
     a.routine = structuredCloneRoutine(routine);
     if (Object.keys(rounds).length) a.rounds = { ...rounds };
     else delete a.rounds;
+    this.persist();
+  }
+
+  /** Crea una tabla con ejercicios sin cambiar la activa (las del plan de la semana). */
+  addRoutine(name: string, routine: Routine, rounds: Partial<Record<SectionId, number>> = {}): SavedRoutine {
+    const r = newRoutine(name, structuredCloneRoutine(routine));
+    if (Object.keys(rounds).length) r.rounds = { ...rounds };
+    this.data.routines.push(r);
+    this.persist();
+    return r;
+  }
+
+  /** Cambia los ejercicios (y las vueltas) de una tabla cualquiera. */
+  setRoutineContent(id: string, routine: Routine, rounds: Partial<Record<SectionId, number>> = {}): void {
+    const r = this.data.routines.find((x) => x.id === id);
+    if (!r) return;
+    r.routine = structuredCloneRoutine(routine);
+    if (Object.keys(rounds).length) r.rounds = { ...rounds };
+    else delete r.rounds;
+    this.persist();
+  }
+
+  routineById(id: string): SavedRoutine | undefined {
+    return this.data.routines.find((x) => x.id === id);
+  }
+
+  /* ── Plan de la semana ── */
+
+  get plan(): WeekPlan | undefined {
+    return this.data.plan;
+  }
+
+  setPlan(plan: WeekPlan | undefined): void {
+    if (plan) this.data.plan = plan;
+    else delete this.data.plan;
+    this.persist();
+  }
+
+  /** Borra el plan y, si se pide, sus tablas. */
+  deletePlan(withTables: boolean): void {
+    const ids = new Set(this.data.plan?.days.map((d) => d.routineId) ?? []);
+    delete this.data.plan;
+    if (withTables && ids.size) {
+      this.data.routines = this.data.routines.filter((r) => !ids.has(r.id));
+      if (this.data.routines.length === 0) this.data.routines.push(newRoutine(DEFAULT_ROUTINE_NAME));
+      if (!this.data.routines.some((r) => r.id === this.data.activeId)) this.data.activeId = this.data.routines[0].id;
+    }
     this.persist();
   }
 
@@ -403,7 +453,7 @@ export class Store {
     const first = !this.data.medals;
     const have = { ...(this.data.medals ?? {}) };
     const kcal = this.data.history.reduce((n, e) => n + (this.caloriesFor(e)?.kcal ?? 0), 0);
-    const got = earnedMedals({ history: this.data.history, weights: this.data.weights, goalKg: this.data.settings.profile.goalKg, kcal });
+    const got = earnedMedals({ history: this.data.history, weights: this.data.weights, goalKg: this.data.settings.profile.goalKg, kcal, planDays: this.data.plan?.days.map((d) => d.day) });
     const fresh = got.filter((id) => !have[id]);
     if (!fresh.length && !first) return [];
     for (const id of fresh) have[id] = now.toISOString();
@@ -618,7 +668,8 @@ export class Store {
     const medals = input.medals && typeof input.medals === 'object' ? (input.medals as Record<string, string>) : undefined;
     // bienvenida: si no consta, solo la ve quien empieza de cero (con datos de antes, ya se da por vista)
     const welcomed = typeof input.welcomed === 'boolean' ? input.welcomed : Object.keys(input).length > 0;
-    return { version: DATA_VERSION, routines, activeId, settings, history, hidden, order, orderVer: ORDER_VER, lastBackup, favorites, weights, summarySeen, weekSeen, medals, welcomed };
+    const plan = sanitizePlan(input.plan);
+    return { version: DATA_VERSION, routines, activeId, settings, history, hidden, order, orderVer: ORDER_VER, lastBackup, favorites, weights, summarySeen, weekSeen, medals, welcomed, ...(plan ? { plan } : {}) };
   }
 
   /** Se llama cada vez que se guardan datos (p. ej., para volver a programar los recordatorios). */

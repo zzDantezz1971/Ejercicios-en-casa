@@ -1535,3 +1535,44 @@ label.sort-row:focus-within, label.rem-hour:focus-within { outline: none; }
 .watch-link { color: var(--accent); font-weight: 700; font-size: .95rem; padding: 0; background: none; border: 0; cursor: pointer; text-decoration: none; font-style: italic; }
 .watch-steps p, .watch-steps ol { margin: 8px 0 0; }
 .watch-steps ol { padding-left: 1.2em; display: flex; flex-direction: column; gap: 4px; }
+
+/* Plan de la semana */
+.plan-today {
+  display: flex; align-items: center; gap: 12px; padding: 12px 14px; cursor: pointer; text-align: left; width: 100%; color: var(--fg);
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 14%, var(--surface)), var(--surface));
+}
+.plan-link { margin-bottom: 12px; font: inherit; }
+.plan-icon {
+  flex: none; width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center;
+  background: color-mix(in srgb, var(--accent) 18%, transparent); color: var(--accent);
+}
+.plan-icon .ico { width: 22px; height: 22px; }
+.plan-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.plan-text strong { font-size: 1.05rem; }
+.plan-eyebrow { font-size: .72rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); }
+.plan-done {
+  flex: none; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: var(--accent); color: var(--accent-ink, #fff);
+}
+.plan-done .ico { width: 18px; height: 18px; }
+.plan-days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin: 10px 0 18px; }
+.plan-day-chip {
+  padding: 14px 0; border-radius: 12px; border: 1.5px solid var(--line); background: var(--surface); color: var(--fg);
+  font: 700 .9rem/1 inherit; cursor: pointer; text-transform: capitalize;
+}
+.plan-day-chip.on { border-color: var(--accent); background: var(--accent); color: var(--accent-ink, #fff); }
+.plan-week { display: flex; flex-direction: column; gap: 6px; margin: 8px 0 14px; }
+.plan-row {
+  display: flex; align-items: center; gap: 10px; padding: 12px 12px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line);
+  color: var(--fg); font: inherit; text-align: left; width: 100%;
+}
+button.plan-row { cursor: pointer; }
+.plan-row.rest { background: transparent; border-style: dashed; padding: 9px 12px; }
+.plan-row.today { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) inset; }
+.plan-dname { flex: none; width: 96px; font-weight: 700; display: flex; flex-direction: column; gap: 2px; }
+.plan-tag { align-self: flex-start; font-size: .68rem; font-weight: 800; text-transform: uppercase; color: var(--accent); }
+.plan-dtext { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.plan-progress { display: flex; align-items: center; gap: 8px; font-weight: 700; margin: 2px 0 0; }
+.plan-progress .ico { color: var(--accent); width: 18px; height: 18px; }
+.plan-renew { padding: 12px 14px; }
+.btn.danger-text { color: var(--danger); }

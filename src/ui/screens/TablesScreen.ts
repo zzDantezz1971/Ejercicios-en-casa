@@ -6,6 +6,7 @@ import { icon, SECTION_STYLE } from '../icons';
 import { formatDate } from './HomeScreen';
 import { RoutineScreen } from './RoutineScreen';
 import { openNewTable } from './MakerScreens';
+import { openPlan } from './PlanScreens';
 
 /** Mis tablas: lista de tablas guardadas con nombre. */
 export class TablesScreen implements Screen {
@@ -29,6 +30,11 @@ export class TablesScreen implements Screen {
   private render(): void {
     const { store } = this.app;
     clear(this.body);
+    // acceso al plan de la semana (si hay)
+    if (store.plan && this.app.access.premium) this.body.append(h('button', { class: 'card plan-today plan-link', onclick: () => openPlan(this.app) },
+      h('span', { class: 'plan-icon' }, icon('calendar')),
+      h('span', { class: 'plan-text' }, h('strong', {}, 'Mi plan de la semana'), h('span', { class: 'muted small' }, plural(store.plan.days.length, 'día', 'días'))),
+      icon('chevron', 'ico chev')));
     for (const t of store.routines) this.body.append(this.card(t, t.id === store.active.id));
   }
 

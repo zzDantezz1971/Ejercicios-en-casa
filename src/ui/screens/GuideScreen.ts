@@ -12,6 +12,7 @@ const GUIDE: Array<{ icon: IconName; title: string; sub: string; points: Array<s
   { icon: 'home', title: 'Menú Inicio', sub: 'Tu tabla, tu semana y el entrenamiento.', points: [
       'La tabla que vas a hacer, con su contenido y el botón para empezar. Puedes cambiar de tabla desde aquí.',
       'Si la tabla está vacía, «Créala por mí» te prepara una al momento según tu objetivo, la zona, el tiempo y el nivel.',
+      'Con un plan de la semana, arriba ves lo que toca hoy y lo empiezas con un toque; los días de descanso, lo que toca el siguiente día. Si ayer te lo saltaste, te propone hacerlo hoy.',
       'Tu semana: minutos y calorías, con unas metas que puedes cambiar.',
       'Una frase motivadora distinta cada día (se puede quitar en Ajustes).',
       HAS_BACKUP ? 'Si los tienes activados en Recordatorios, al acabar un entrenamiento te avisa cuando toca anotar el peso o hacer la copia de seguridad.'
@@ -28,6 +29,10 @@ const GUIDE: Array<{ icon: IconName; title: string; sub: string; points: Array<s
       'Crea tantas tablas como quieras, cámbiales el nombre, duplícalas o bórralas.',
       'Con Nueva puedes crearla de tres maneras: «Créala por mí» (eliges objetivo, zona, tiempo y nivel, y la app la arma con tu material), una de las «Tablas hechas» o vacía, eligiendo tú los ejercicios.',
       'Antes de guardarla, toca un ejercicio para ver cómo se hace, cambia su tiempo con − y +, cámbialo por otro parecido o quítalo con sus botones (te pregunta antes de quitarlo), ordénalos arrastrándolos por el asa y añade otros con «Añadir un ejercicio». En «Créala por mí» también puedes pedir otra propuesta.',
+      { h: 'Plan de la semana (Prémium)' },
+      'En Nueva › Plan de la semana eliges objetivo, días (de 2 a 6), minutos y nivel, y la app crea una tabla para cada día, repartiendo las zonas para que descansen entre sesiones. Al final te pregunta si quieres que te avise esos días.',
+      'En «Mi plan de la semana» (arriba de tus tablas) ves la semana de lunes a domingo con lo ya hecho. Toca un día para ver su tabla, cambiarla, pedir otra propuesta o empezar.',
+      'Con «Renovar los ejercicios cada semana», cada lunes cambian los ejercicios de cada día (las zonas no). Al cumplir todos los días de una semana, ganas la medalla «Plan cumplido».',
       'Cuatro apartados: Calentamiento, Fuerza, Abdominales y Estiramientos.',
       'Toca un ejercicio para ver al muñeco haciéndolo, cómo se hace paso a paso y los músculos que trabaja. Desliza para pasar al siguiente.',
       'Gira el muñeco con el dedo para verlo desde otro ángulo: se queda así para ese ejercicio, también al entrenar y en la lista.',
@@ -58,8 +63,8 @@ const GUIDE: Array<{ icon: IconName; title: string; sub: string; points: Array<s
       ...(HAS_BACKUP ? [{ h: 'Copia de seguridad' }, 'Guarda tus tablas, historial y ajustes en un archivo (por ejemplo, en Drive) y restáuralo si cambias de móvil.'] : []),
       { h: 'Gratis y prémium' },
       'Gratis: dos ejercicios de cada apartado y todas las funciones de la app.',
-      HAS_BACKUP ? 'Prémium: todos los ejercicios, la personalización completa del muñeco, todos los temas de color y el recordatorio de copia de seguridad. Se paga y se cancela en Google Play.'
-        : 'Prémium: todos los ejercicios, la personalización completa del muñeco y todos los temas de color. Se paga y se cancela en Google Play.'] },
+      HAS_BACKUP ? 'Prémium: todos los ejercicios, el plan de la semana, la personalización completa del muñeco, todos los temas de color y el recordatorio de copia de seguridad. Se paga y se cancela en Google Play.'
+        : 'Prémium: todos los ejercicios, el plan de la semana, la personalización completa del muñeco y todos los temas de color. Se paga y se cancela en Google Play.'] },
 ];
 
 /** Guía de la app: todo lo que se puede hacer, organizado en apartados que se abren y cierran. */

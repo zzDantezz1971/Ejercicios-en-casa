@@ -14,6 +14,7 @@ import { sortableList, type SortableRow } from '../components/sortable';
 import { icon, SECTION_STYLE, type IconName } from '../icons';
 import { DetailScreen } from './DetailScreen';
 import { RoutineScreen } from './RoutineScreen';
+import { openPlan } from './PlanScreens';
 
 /*
  * Crear tablas: menú «Nueva tabla» (asistente, tablas hechas o vacía), el asistente «Crea-la per mi»
@@ -35,6 +36,11 @@ export function openNewTable(app: App): void {
       opt('bolt', 'Créala por mí', 'Elige objetivo, zona y tiempo', () => app.push(new GeneratorScreen(app))),
       opt('tables', 'Tablas hechas', 'Listas para usar', () => app.push(new TemplatesScreen(app))),
       opt('edit', 'Tabla vacía', 'Elige tú los ejercicios', () => void emptyTable(app)),
+      // plan de la semana (Prémium): una tabla para cada día de entrenamiento
+      h('button', { class: 'maker-opt', onclick: () => { close(); openPlan(app); } },
+        h('span', { class: 'maker-opt-icon' }, icon('calendar')),
+        h('span', { class: 'maker-opt-text' }, h('strong', {}, 'Plan de la semana'), h('span', { class: 'muted small' }, 'Una tabla para cada día que entrenas')),
+        app.access.premium ? icon('chevron', 'ico chev') : icon('lock', 'ico lock')),
       h('button', { class: 'sheet-btn cancel', onclick: close }, 'Cancelar')));
   document.body.append(wrap);
 }
@@ -73,7 +79,7 @@ function missingEquip(app: App, r: GenResult): Equip[] {
 }
 
 /** Lo que se puede hacer con la tabla en la vista previa: cambiarla (mover, quitar) y, en el asistente, cambiar un ejercicio. */
-interface PreviewEdit {
+export interface PreviewEdit {
   set(r: GenResult): void;
   swap?(s: SectionId, i: number): GenResult;
   /** Preguntar antes de quitar un ejercicio (se puede desactivar para esta lista con la casilla del aviso). */
@@ -117,7 +123,7 @@ function withSection(r: GenResult, s: SectionId, items: GenResult['routine'][Sec
 
 /** Vista previa de una tabla: resumen y ejercicios por apartado. Al tocar un ejercicio se ve cómo se hace;
  *  con `edit`, se ordenan arrastrándolos con el asa y cada uno se puede cambiar o quitar (con aviso). */
-function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement {
+export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement {
   const plan = WorkoutPlan.build(r.routine, app.catalog, app.store.settings, r.rounds);
   const locked = SECTION_IDS.some((s) => r.routine[s].some((i) => !app.access.canUse(i.exerciseId)));
   const miss = missingEquip(app, r);
@@ -190,7 +196,7 @@ function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement {
   return box;
 }
 
-const header = (app: App, title: string, sub?: string) =>
+export const header = (app: App, title: string, sub?: string) =>
   h('header', { class: 'bar sticky' },
     h('button', { class: 'icon-btn', 'aria-label': 'Volver', onclick: () => app.back() }, icon('back')),
     h('div', { class: 'titles' }, sub ? h('span', { class: 'subtitle' }, sub) : '', h('h1', { class: 'bar-title' }, title)));
@@ -357,7 +363,7 @@ class TemplateScreen implements Screen {
 }
 
 /** ¿Se han quitado todos los ejercicios? (entonces no se puede guardar). */
-function isEmptyResult(r: GenResult | null): boolean {
+export function isEmptyResult(r: GenResult | null): boolean {
   return !r || SECTION_IDS.every((s) => !r.routine[s].length);
 }
 
