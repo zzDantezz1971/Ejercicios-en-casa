@@ -1020,6 +1020,7 @@ const ROWS: Row[] = [
   ['Buscar', 'Cerca', 'Search'],
   ['Arrastra para mover', 'Arrossega per moure', 'Drag to move'],
   ['Si la tabla está vacía, «Créala por mí» te prepara una al momento según tu objetivo, la zona, el tiempo y el nivel.', 'Si la taula és buida, «Crea-la per mi» te’n prepara una al moment segons el teu objectiu, la zona, el temps i el nivell.', 'If the routine is empty, “Make it for me” prepares one for you right away based on your goal, area, time and level.'],
+  ['Tablas hechas a tu medida según tu objetivo, zona y tiempo, o listas para usar', 'Taules fetes a la teva mida segons el teu objectiu, zona i temps, o llestes per fer servir', 'Routines made to measure for your goal, area and time, or ready to use'],
 ];
 
 export const UI_CA: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[1]]));
