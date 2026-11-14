@@ -1517,9 +1517,9 @@ label.sort-row:focus-within, label.rem-hour:focus-within { outline: none; }
 :root[data-color="grafit"]:not([data-theme="light"]) { --bg: #0B0C0E; --bg-2: #0F1013; --surface: #16181C; --surface-2: #1D2026; --line: #2A2E35; --glass: color-mix(in srgb, #0B0C0E 93%, transparent); --stage: radial-gradient(120% 90% at 50% 15%, #1D2026 0%, #16181C 55%, #0B0C0E 100%); }
 :root[data-theme="light"][data-color="grafit"] { --accent: #2C323C; --accent-2: #3A414D; --accent-ink: #FFFFFF; --accent-deep: #171B21; --accent-soft: rgb(44 50 60 / .10); --bg: #F4F5F6; --surface-2: #ECEEF0; --line: #DADDE1; }
 /* selector del tema de color */
-.color-themes { display: flex; flex-wrap: wrap; gap: 12px; padding: 4px 2px 2px; }
+.color-themes { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; padding: 6px 4px 2px; justify-items: center; }
 .color-dot {
-  width: 44px; height: 44px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; color: #FFFFFF;
+  width: 100%; max-width: 44px; aspect-ratio: 1; height: auto; border-radius: 50%; border: 2px solid transparent; cursor: pointer; color: #FFFFFF;
   display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgb(0 0 0 / .25); padding: 0;
 }
 .color-dot.on { border-color: var(--fg); box-shadow: 0 0 0 3px var(--bg), 0 0 0 5px var(--fg); }
