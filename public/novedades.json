@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-14T22:17:41Z",
+    "es": ["Tablas nuevas: la leyenda de los botones ahora ocupa una sola línea pequeña."],
+    "ca": ["Taules noves: la llegenda dels botons ara ocupa una sola línia petita."],
+    "en": ["New routines: the button legend now takes a single small line."]
+  },
+  {
     "fecha": "2026-11-14T22:10:47Z",
     "es": ["Tablas nuevas: cada apartado tiene el botón «Añadir un ejercicio», con buscador, para poner los ejercicios que quieras (con tu material)."],
     "ca": ["Taules noves: cada apartat té el botó «Afegeix un exercici», amb cercador, per posar els exercicis que vulguis (amb el teu material)."],

@@ -1015,12 +1015,10 @@ const ROWS: Row[] = [
   ['¿Quitar {x} de la tabla?', 'Vols treure {x} de la taula?', 'Remove {x} from the routine?'],
   ['No volver a preguntar en esta lista', 'No m’ho tornis a preguntar en aquesta llista', 'Don’t ask again for this list'],
   // leyenda de la vista previa de una tabla nueva
-  ['Toca un ejercicio para ver cómo se hace', 'Toca un exercici per veure com es fa', 'Tap an exercise to see how it’s done'],
-  ['Cambiar por otro parecido', 'Canvia’l per un altre de semblant', 'Swap for a similar one'],
-  ['Arrastrar para moverlo', 'Arrossega’l per moure’l', 'Drag to move it'],
   ['Añadir un ejercicio', 'Afegeix un exercici', 'Add an exercise'],
   ['No hay más ejercicios para añadir.', 'No hi ha més exercicis per afegir.', 'There are no more exercises to add.'],
   ['Buscar', 'Cerca', 'Search'],
+  ['Arrastra para mover', 'Arrossega per moure', 'Drag to move'],
 ];
 
 export const UI_CA: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[1]]));
