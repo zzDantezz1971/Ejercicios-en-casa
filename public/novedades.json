@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-14T23:12:25Z",
+    "es": ["Reloj: el enlace «Haz clic aquí» va en cursiva."],
+    "ca": ["Rellotge: l’enllaç «Fes clic aquí» va en cursiva."],
+    "en": ["Watch: the “Click here” link is now in italics."]
+  },
+  {
     "fecha": "2026-11-14T23:12:04Z",
     "es": ["Reloj: el enlace «Haz clic aquí» ya no va subrayado."],
     "ca": ["Rellotge: l’enllaç «Fes clic aquí» ja no va subratllat."],
