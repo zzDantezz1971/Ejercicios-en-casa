@@ -1478,3 +1478,11 @@ label.sort-row:focus-within, label.rem-hour:focus-within { outline: none; }
 .maker-legend span { display: flex; align-items: center; gap: 7px; min-width: 0; }
 .maker-legend .ico { width: 16px; height: 16px; flex: none; color: var(--fg); }
 .maker-legend .ico.danger { color: var(--danger); }
+/* añadir un ejercicio a la tabla nueva */
+.maker-add {
+  display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 12px; margin-top: 2px;
+  border-radius: 14px; border: 1.5px dashed var(--line); background: transparent; color: var(--accent); font: 700 .95rem var(--body, inherit); cursor: pointer;
+}
+.maker-add .ico { width: 18px; height: 18px; }
+.maker-pick { width: 100%; text-align: left; cursor: pointer; color: var(--fg); font: inherit; }
+.maker-pick > .ico { width: 20px; height: 20px; color: var(--accent); flex: none; margin-right: 4px; }

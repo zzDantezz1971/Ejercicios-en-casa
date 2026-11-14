@@ -79,6 +79,18 @@ interface PreviewEdit {
   ask: { remove: boolean };
 }
 
+/** Añadir un ejercicio a un apartado: abre la lista para elegirlo y lo pone al final. */
+function addTo(app: App, r: GenResult, s: SectionId, edit: PreviewEdit): void {
+  const have = new Set(SECTION_IDS.flatMap((x) => r.routine[x].map((i) => i.exerciseId)));
+  const items = r.routine[s];
+  // los segundos, como los demás ejercicios del apartado (o los de siempre)
+  const secs = items.length ? items[items.length - 1].seconds : app.store.settings.defaultSeconds;
+  app.push(new PickExerciseScreen(app, s, have, (id) => {
+    edit.set(withSection(r, s, [...items, { exerciseId: id, seconds: secs }]));
+    app.back();
+  }));
+}
+
 /** «¿Quitar X de la tabla?» con la casilla «No volver a preguntar en esta lista». */
 function confirmRemove(name: string): Promise<{ ok: boolean; stop: boolean }> {
   return new Promise((resolve) => {
@@ -120,7 +132,8 @@ function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement {
     h('span', {}, icon('tables'), 'Arrastrar para moverlo')));
   for (const s of SECTION_IDS) {
     const items = r.routine[s];
-    if (!items.length) continue;
+    // sin ejercicios: solo se ve si se puede añadir alguno
+    if (!items.length && !edit) continue;
     const st = SECTION_STYLE[s];
     const head = h('h2', { class: 'maker-sec' }, icon(st.icon), SECTION_TITLES[s], (r.rounds[s] ?? 1) > 1 ? h('span', { class: 'maker-rounds' }, plural(r.rounds[s]!, 'vuelta', 'vueltas')) : '');
     head.style.setProperty('--sec', st.color);
@@ -159,6 +172,7 @@ function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement {
       edit.set(withSection(r, s, next));
     }, { arrows: false }));
     else for (const row of rows) box.append(row.content);
+    if (edit) box.append(h('button', { class: 'maker-add', onclick: () => addTo(app, r, s, edit) }, icon('plus'), 'Añadir un ejercicio'));
   }
   if (locked) box.append(h('p', { class: 'muted small maker-free' }, icon('lock'), 'Los ejercicios con candado son de Prémium: en la versión gratis se saltan.'));
   return box;
@@ -333,4 +347,44 @@ class TemplateScreen implements Screen {
 /** ¿Se han quitado todos los ejercicios? (entonces no se puede guardar). */
 function isEmptyResult(r: GenResult | null): boolean {
   return !r || SECTION_IDS.every((s) => !r.routine[s].length);
+}
+
+const fold = (t: string) => t.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+
+/** Elegir un ejercicio para añadirlo a un apartado de la tabla nueva (con tu material; con buscador). */
+class PickExerciseScreen implements Screen {
+  readonly el = h('main', { class: 'screen maker-screen' });
+  private readonly list = h('div', { class: 'maker-preview' });
+  private q = '';
+
+  constructor(private readonly app: App, private readonly s: SectionId, private readonly have: ReadonlySet<string>, private readonly pick: (id: string) => void) {
+    const search = h('input', { class: 'text-input', type: 'search', placeholder: 'Buscar', 'aria-label': 'Buscar', oninput: () => { this.q = search.value; this.paint(); } });
+    this.el.append(header(app, SECTION_TITLES[s], 'Añadir un ejercicio'), h('div', { class: 'maker-body' }, search, this.list));
+    this.paint();
+  }
+
+  private paint(): void {
+    const { app } = this;
+    const owned = new Set<string>(app.store.settings.equipment);
+    const q = fold(this.q.trim());
+    const exs = (app.sections.find((x) => x.id === this.s)?.exercises ?? [])
+      .filter((e) => !this.have.has(e.id) && !e.pending && canDo(e.equip, owned))
+      .filter((e) => !q || fold(`${e.name} ${tr(e.name)} ${e.zone} ${e.group ? tr(e.group) : ''}`).includes(q));
+    clear(this.list);
+    let group: string | undefined;
+    for (const ex of exs) {
+      if (ex.group !== group) {
+        group = ex.group;
+        if (group) this.list.append(h('h2', { class: 'maker-sec' }, group));
+      }
+      const img = h('img', { class: 'maker-thumb', alt: '' });
+      void app.thumbs.get(ex).then((url) => (img.src = url));
+      const lock = !app.access.canUse(ex.id);
+      this.list.append(h('button', { class: 'maker-row maker-pick' + (lock ? ' locked' : ''), onclick: () => this.pick(ex.id) },
+        img,
+        h('span', { class: 'maker-name' }, h('span', {}, ex.name), h('span', { class: 'maker-secs muted small' }, ex.zone, lock ? icon('lock', 'ico lock') : '')),
+        icon('plus')));
+    }
+    if (!exs.length) this.list.append(h('p', { class: 'muted' }, 'No hay más ejercicios para añadir.'));
+  }
 }

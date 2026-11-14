@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-14T22:10:47Z",
+    "es": ["Tablas nuevas: cada apartado tiene el botón «Añadir un ejercicio», con buscador, para poner los ejercicios que quieras (con tu material)."],
+    "ca": ["Taules noves: cada apartat té el botó «Afegeix un exercici», amb cercador, per posar els exercicis que vulguis (amb el teu material)."],
+    "en": ["New routines: each section has an “Add an exercise” button, with search, to add any exercise you like (with your equipment)."]
+  },
+  {
     "fecha": "2026-11-14T22:05:06Z",
     "es": ["Tablas nuevas: arriba de la lista, una pequeña leyenda explica qué hace cada botón (ver cómo se hace, cambiar, quitar y arrastrar para mover)."],
     "ca": ["Taules noves: a dalt de la llista, una petita llegenda explica què fa cada botó (veure com es fa, canviar, treure i arrossegar per moure)."],
