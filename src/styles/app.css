@@ -1452,9 +1452,9 @@ label.sort-row:focus-within, label.rem-hour:focus-within { outline: none; }
 .maker-row.locked { opacity: .7; }
 .maker-open { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; background: none; border: 0; padding: 0; color: inherit; font: inherit; text-align: left; cursor: pointer; }
 .maker-thumb { width: 52px; height: 52px; border-radius: 10px; object-fit: cover; background: var(--surface-2); flex: none; }
-.maker-name { flex: 1; min-width: 0; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+.maker-name { flex: 1; min-width: 0; font-weight: 600; display: flex; flex-direction: column; align-items: flex-start; gap: 2px; }
+.maker-secs { display: inline-flex; align-items: center; gap: 6px; font-weight: 500; }
 .maker-name .lock { width: 15px; height: 15px; color: var(--muted); flex: none; }
-.maker-secs { flex: none; }
 .maker-free { display: flex; align-items: center; gap: 6px; margin-top: 6px; }
 .maker-free .ico { width: 15px; height: 15px; flex: none; }
 .maker-actions { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
@@ -1464,3 +1464,7 @@ label.sort-row:focus-within, label.rem-hour:focus-within { outline: none; }
 .maker-miss { display: flex; align-items: center; gap: 6px; color: var(--warn, #B7791F); }
 .maker-miss .ico { width: 15px; height: 15px; }
 .hero-empty { display: flex; flex-direction: column; gap: 8px; }
+/* en la lista ordenable, la fila del ejercicio va dentro de la tarjeta de la lista */
+.sortable .maker-row { border: 0; background: none; padding: 0; gap: 6px; }
+.icon-btn.danger { color: var(--danger); }
+.sortable .icon-btn.danger .ico { color: var(--danger); }

@@ -8,7 +8,8 @@ import { WorkoutPlan } from '../../domain/WorkoutPlan';
 import { emptyRoutine, SECTION_IDS, SECTION_TITLES, type SectionId } from '../../domain/types';
 import { tr } from '../../i18n';
 import type { App, Screen } from '../App';
-import { actionSheet, clear, h, humanDuration, plural, promptDialog } from '../dom';
+import { clear, h, humanDuration, plural, promptDialog } from '../dom';
+import { sortableList, type SortableRow } from '../components/sortable';
 import { icon, SECTION_STYLE, type IconName } from '../icons';
 import { DetailScreen } from './DetailScreen';
 import { RoutineScreen } from './RoutineScreen';
@@ -83,29 +84,8 @@ function withSection(r: GenResult, s: SectionId, items: GenResult['routine'][Sec
   return { routine: { ...r.routine, [s]: items }, rounds };
 }
 
-/** Opciones de un ejercicio de la vista previa: subir, bajar, cambiar por otro parecido o quitarlo. */
-async function rowMenu(r: GenResult, s: SectionId, i: number, name: string, edit: PreviewEdit): Promise<void> {
-  const items = r.routine[s];
-  type Opt = 'up' | 'down' | 'swap' | 'remove';
-  const opts: Array<{ id: Opt; label: string; danger?: boolean }> = [];
-  if (i > 0) opts.push({ id: 'up', label: 'Subir' });
-  if (i < items.length - 1) opts.push({ id: 'down', label: 'Bajar' });
-  if (edit.swap) opts.push({ id: 'swap', label: 'Cambiar por otro parecido' });
-  opts.push({ id: 'remove', label: 'Quitar de la tabla', danger: true });
-  const c = await actionSheet(name, opts);
-  if (!c) return;
-  if (c === 'swap') return edit.set(edit.swap!(s, i));
-  const next = items.slice();
-  if (c === 'remove') next.splice(i, 1);
-  else {
-    const j = c === 'up' ? i - 1 : i + 1;
-    [next[i], next[j]] = [next[j], next[i]];
-  }
-  edit.set(withSection(r, s, next));
-}
-
 /** Vista previa de una tabla: resumen y ejercicios por apartado. Al tocar un ejercicio se ve cómo se hace;
- *  con `edit`, cada uno tiene un menú para moverlo, quitarlo o cambiarlo. */
+ *  con `edit`, se ordenan como cualquier lista (flechas y asa) y cada uno se puede cambiar o quitar. */
 function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement {
   const plan = WorkoutPlan.build(r.routine, app.catalog, app.store.settings, r.rounds);
   const locked = SECTION_IDS.some((s) => r.routine[s].some((i) => !app.access.canUse(i.exerciseId)));
@@ -121,19 +101,29 @@ function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement {
     const head = h('h2', { class: 'maker-sec' }, icon(st.icon), SECTION_TITLES[s], (r.rounds[s] ?? 1) > 1 ? h('span', { class: 'maker-rounds' }, plural(r.rounds[s]!, 'vuelta', 'vueltas')) : '');
     head.style.setProperty('--sec', st.color);
     box.append(head);
+    const rows: SortableRow[] = [];
     items.forEach((it, i) => {
       const ex = app.catalog.get(it.exerciseId);
       if (!ex) return;
       const img = h('img', { class: 'maker-thumb', alt: '' });
       void app.thumbs.get(ex).then((url) => (img.src = url));
       const lock = !app.access.canUse(ex.id);
-      box.append(h('div', { class: 'maker-row' + (lock ? ' locked' : '') },
+      const content = h('div', { class: 'maker-row' + (lock ? ' locked' : '') },
+        // tocar la miniatura o el nombre abre la ficha (cómo se hace)
         h('button', { class: 'maker-open', 'aria-label': `Cómo se hace: ${ex.name}`, onclick: () => (lock ? app.showPremium() : app.push(new DetailScreen(app, ex, shown))) },
           img,
-          h('span', { class: 'maker-name' }, ex.name, lock ? icon('lock', 'ico lock') : ''),
-          h('span', { class: 'maker-secs muted small' }, `${it.seconds} s`)),
-        edit ? h('button', { class: 'more-btn', 'aria-label': `Más opciones de ${ex.name}`, onclick: () => void rowMenu(r, s, i, ex.name, edit) }, icon('more')) : ''));
+          h('span', { class: 'maker-name' }, h('span', {}, ex.name), h('span', { class: 'maker-secs muted small' }, `${it.seconds} s`, lock ? icon('lock', 'ico lock') : ''))),
+        edit?.swap ? h('button', { class: 'icon-btn small', 'aria-label': `Cambiar ${ex.name} por otro parecido`, onclick: () => edit.set(edit.swap!(s, i)) }, icon('swap')) : '',
+        edit ? h('button', { class: 'icon-btn small danger', 'aria-label': `Quitar ${ex.name} de la tabla`, onclick: () => { const next = items.slice(); next.splice(i, 1); edit.set(withSection(r, s, next)); } }, icon('trash')) : '');
+      rows.push({ content, label: ex.name });
     });
+    if (edit) box.append(sortableList(rows, (from, to) => {
+      const next = items.slice();
+      const [moved] = next.splice(from, 1);
+      next.splice(to, 0, moved);
+      edit.set(withSection(r, s, next));
+    }));
+    else for (const row of rows) box.append(row.content);
   }
   if (locked) box.append(h('p', { class: 'muted small maker-free' }, icon('lock'), 'Los ejercicios con candado son de Prémium: en la versión gratis se saltan.'));
   return box;
@@ -285,7 +275,12 @@ class TemplateScreen implements Screen {
     this.el.append(header(app, t.name),
       h('div', { class: 'maker-body' },
         h('p', { class: 'muted maker-intro' }, t.desc),
-        preview(app, this.r, { set: (r) => { this.r = r; this.render(); } }),
+        preview(app, this.r, {
+          set: (r) => { this.r = r; this.render(); },
+          // otro parecido (mismo músculo y grupo), con el material del usuario
+          swap: (sec, i) => swapExercise(this.r, sec, i, { goal: 'forma', zone: 'entero', level: 'normal', minutes: 20 },
+            { sections: app.sections, catalog: app.catalog, owned: new Set(app.store.settings.equipment), settings: app.store.settings }),
+        }),
         h('div', { class: 'maker-actions' },
           h('button', { class: 'btn primary block big', disabled: isEmptyResult(this.r), onclick: () => void saveTable(app, tr(t.name), this.r, this.fillActive) }, icon('check'), 'Usar esta tabla'))));
     if (y >= 0) window.scrollTo({ top: y });

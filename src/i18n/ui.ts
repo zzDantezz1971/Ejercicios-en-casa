@@ -1008,12 +1008,10 @@ const ROWS: Row[] = [
   ['Estiramientos de piernas y cadera para después de correr o caminar.', 'Estiraments de cames i maluc per després de córrer o caminar.', 'Leg and hip stretches for after running or walking.'],
   // guía: crear tablas
   ['Con Nueva puedes crearla de tres maneras: «Créala por mí» (eliges objetivo, zona, tiempo y nivel, y la app la arma con tu material), una de las «Tablas hechas» o vacía, eligiendo tú los ejercicios.', 'Amb Nova la pots crear de tres maneres: «Crea-la per mi» (tries objectiu, zona, temps i nivell, i l’app la munta amb el teu material), una de les «Taules fetes» o buida, triant tu els exercicis.', 'With New you can create it in three ways: “Make it for me” (choose goal, area, time and level, and the app builds it with your equipment), one of the “Ready-made routines” or empty, choosing the exercises yourself.'],
-  ['Antes de guardarla, toca un ejercicio para ver cómo se hace; con el botón ⋮ lo subes, lo bajas, lo cambias por otro parecido o lo quitas. En «Créala por mí» también puedes pedir otra propuesta.', 'Abans de desar-la, toca un exercici per veure com es fa; amb el botó ⋮ el puges, el baixes, el canvies per un altre de semblant o el treus. A «Crea-la per mi» també pots demanar una altra proposta.', 'Before saving it, tap an exercise to see how it’s done; with the ⋮ button you move it up or down, swap it for a similar one or remove it. In “Make it for me” you can also ask for another suggestion.'],
+  ['Antes de guardarla, toca un ejercicio para ver cómo se hace, cámbialo por otro parecido o quítalo con sus botones, y ordénalos con las flechas o arrastrándolos. En «Créala por mí» también puedes pedir otra propuesta.', 'Abans de desar-la, toca un exercici per veure com es fa, canvia’l per un altre de semblant o treu-lo amb els seus botons, i ordena’ls amb les fletxes o arrossegant-los. A «Crea-la per mi» també pots demanar una altra proposta.', 'Before saving it, tap an exercise to see how it’s done, swap it for a similar one or remove it with its buttons, and reorder them with the arrows or by dragging. In “Make it for me” you can also ask for another suggestion.'],
   // vista previa de una tabla nueva: menú de cada ejercicio
-  ['Subir', 'Puja', 'Move up'],
-  ['Bajar', 'Baixa', 'Move down'],
-  ['Cambiar por otro parecido', 'Canvia’l per un altre de semblant', 'Swap for a similar one'],
   ['Quitar de la tabla', 'Treu-lo de la taula', 'Remove from the routine'],
+  ['Cambiar {x} por otro parecido', 'Canvia {x} per un altre de semblant', 'Swap {x} for a similar one'],
 ];
 
 export const UI_CA: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[1]]));
