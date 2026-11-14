@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-14T22:39:41Z",
+    "es": ["Tablas nuevas: el tiempo de cada ejercicio se cambia con − y + antes de guardarla.", "Inicio: el aviso de la versión gratis tiene un borde más limpio."],
+    "ca": ["Taules noves: el temps de cada exercici es canvia amb − i + abans de desar-la.", "Inici: l’avís de la versió gratuïta té una vora més neta."],
+    "en": ["New routines: each exercise’s time can be changed with − and + before saving.", "Home: the free-version notice has a cleaner border."]
+  },
+  {
     "fecha": "2026-11-14T22:29:40Z",
     "es": ["Pantalla Prémium: ahora también menciona las tablas hechas a tu medida y las tablas listas para usar."],
     "ca": ["Pantalla Prèmium: ara també esmenta les taules fetes a la teva mida i les taules llestes per fer servir."],

@@ -5,6 +5,7 @@ import {
   type GenContext, type GenOptions, type GenResult, type Goal,
 } from '../../domain/generator';
 import { WorkoutPlan } from '../../domain/WorkoutPlan';
+import { MAX_SECONDS, MIN_SECONDS, STEP_SECONDS } from '../../domain/RoutineEditor';
 import { emptyRoutine, SECTION_IDS, SECTION_TITLES, type SectionId } from '../../domain/types';
 import { tr } from '../../i18n';
 import type { App, Screen } from '../App';
@@ -144,11 +145,23 @@ function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement {
       const img = h('img', { class: 'maker-thumb', alt: '' });
       void app.thumbs.get(ex).then((url) => (img.src = url));
       const lock = !app.access.canUse(ex.id);
+      const open = () => (lock ? app.showPremium() : app.push(new DetailScreen(app, ex, shown)));
+      const setSecs = (d: number) => {
+        const next = items.slice();
+        next[i] = { ...it, seconds: Math.min(MAX_SECONDS, Math.max(MIN_SECONDS, it.seconds + d)) };
+        edit!.set(withSection(r, s, next));
+      };
       const content = h('div', { class: 'maker-row' + (lock ? ' locked' : '') },
         // tocar la miniatura o el nombre abre la ficha (cómo se hace)
-        h('button', { class: 'maker-open', 'aria-label': `Cómo se hace: ${ex.name}`, onclick: () => (lock ? app.showPremium() : app.push(new DetailScreen(app, ex, shown))) },
-          img,
-          h('span', { class: 'maker-name' }, h('span', {}, ex.name), h('span', { class: 'maker-secs muted small' }, `${it.seconds} s`, lock ? icon('lock', 'ico lock') : ''))),
+        h('button', { class: 'maker-open', 'aria-label': `Cómo se hace: ${ex.name}`, onclick: open }, img),
+        h('div', { class: 'maker-name' },
+          h('button', { class: 'maker-open maker-title', onclick: open }, ex.name, lock ? icon('lock', 'ico lock') : ''),
+          // tiempo del ejercicio: con − y + en las tablas que se pueden cambiar
+          edit ? h('div', { class: 'stepper inline maker-time' },
+            h('button', { 'aria-label': 'Menos tiempo', disabled: it.seconds <= MIN_SECONDS, onclick: () => setSecs(-STEP_SECONDS) }, '−'),
+            h('span', { class: 'secs' }, `${it.seconds} s`),
+            h('button', { 'aria-label': 'Más tiempo', disabled: it.seconds >= MAX_SECONDS, onclick: () => setSecs(STEP_SECONDS) }, '+'))
+            : h('span', { class: 'maker-secs muted small' }, `${it.seconds} s`)),
         edit?.swap ? h('button', { class: 'icon-btn small', 'aria-label': `Cambiar ${ex.name} por otro parecido`, onclick: () => edit.set(edit.swap!(s, i)) }, icon('swap')) : '',
         // quitar: apartado de los demás botones y con aviso (que se puede desactivar para esta lista)
         edit ? h('button', { class: 'icon-btn small danger maker-remove', 'aria-label': `Quitar ${ex.name} de la tabla`, onclick: async () => {

@@ -1331,7 +1331,7 @@ button.wd:active .wd-dot { transform: scale(.92); }
 .pw-top { padding-top: 8px; }
 .pw-free { margin: 0; text-align: center; }
 .pw-preview { margin: 0; }
-.pw-home { width: 100%; text-align: left; color: var(--fg); cursor: pointer; }
+.pw-home { width: 100%; text-align: left; color: var(--fg); cursor: pointer; font: inherit; border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent); }
 .pw-home strong { color: var(--accent); }
 .rounds-label { display: inline-flex; align-items: center; gap: 6px; }
 .rounds-info { width: 15px; height: 15px; color: var(--muted); }
@@ -1486,3 +1486,9 @@ label.sort-row:focus-within, label.rem-hour:focus-within { outline: none; }
 .maker-add .ico { width: 18px; height: 18px; }
 .maker-pick { width: 100%; text-align: left; cursor: pointer; color: var(--fg); font: inherit; }
 .maker-pick > .ico { width: 20px; height: 20px; color: var(--accent); flex: none; margin-right: 4px; }
+/* tabla nueva: nombre del ejercicio y su tiempo (− 30 s +) */
+.maker-title { font-weight: 600; display: inline-flex; align-items: center; gap: 6px; flex: none; }
+.maker-time { margin-top: 2px; }
+.maker-time button { width: 28px; height: 28px; font-size: 1rem; }
+.maker-time .secs { font-size: .95rem; min-width: 40px; }
+.maker-row > .maker-open { flex: none; }
