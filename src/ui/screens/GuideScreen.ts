@@ -19,6 +19,9 @@ const GUIDE: Array<{ icon: IconName; title: string; sub: string; points: Array<s
       'Cada ejercicio con el muñeco animado y una cuenta atrás.',
       'Pitidos, vibración y voz te avisan del siguiente ejercicio, del cambio de lado y de los últimos segundos.',
       'Puedes pausar, saltar un ejercicio, volver al anterior o terminar antes: lo que hayas hecho se guarda en el historial.',
+      { h: 'Música' },
+      'El botón verde de arriba pausa el entrenamiento y abre Spotify o la app de música del móvil. Al volver, pulsa Reanudar.',
+      'En la app de Android, la música baja de volumen mientras la app habla o pita y luego vuelve a subir (se puede apagar en Ajustes).',
       'La pausa entre ejercicios y la cuenta atrás de cada apartado se cambian en Ajustes.'] },
   { icon: 'tables', title: 'Menú Tablas', sub: 'Más de 200 ejercicios para armar tus tablas.', points: [
       'Crea tantas tablas como quieras, cámbiales el nombre, duplícalas o bórralas.',

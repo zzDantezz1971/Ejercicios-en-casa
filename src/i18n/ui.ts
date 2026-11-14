@@ -942,6 +942,10 @@ const ROWS: Row[] = [
   ['Abrir la música', 'Obre la música', 'Open music'],
   ['Bajar la música mientras habla la app', 'Baixa la música quan parla l’app', 'Lower music while the app speaks'],
   ['Si escuchas música (Spotify, la radio...), baja el volumen durante la voz y los pitidos y luego vuelve a subir.', 'Si escoltes música (Spotify, la ràdio...), abaixa el volum durant la veu i els xiulets i després torna a pujar.', 'If you’re listening to music (Spotify, the radio...), it turns the volume down during voice and beeps, then back up.'],
+  // guía: música
+  ['Música', 'Música', 'Music'],
+  ['El botón verde de arriba pausa el entrenamiento y abre Spotify o la app de música del móvil. Al volver, pulsa Reanudar.', 'El botó verd de dalt posa en pausa l’entrenament i obre Spotify o l’app de música del mòbil. En tornar, prem Reprèn.', 'The green button at the top pauses the workout and opens Spotify or your phone’s music app. When you come back, tap Resume.'],
+  ['En la app de Android, la música baja de volumen mientras la app habla o pita y luego vuelve a subir (se puede apagar en Ajustes).', 'A l’app d’Android, la música baixa de volum mentre l’app parla o xiula i després torna a pujar (es pot apagar a Configuració).', 'In the Android app, music is turned down while the app speaks or beeps and then back up (you can turn this off in Settings).'],
 ];
 
 export const UI_CA: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[1]]));
