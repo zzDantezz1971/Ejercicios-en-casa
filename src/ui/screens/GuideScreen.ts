@@ -54,6 +54,7 @@ const GUIDE: Array<{ icon: IconName; title: string; sub: string; points: Array<s
       { h: 'Pulsaciones del reloj' },
       'Conecta un reloj o una pulsera que difunda la frecuencia cardíaca por Bluetooth: verás tus pulsaciones durante el entrenamiento y las calorías se calcularán con tu pulso.',
       'En Ajustes › Reloj tienes los pasos para conectarlo.',
+      'Samsung Galaxy Watch, Pixel Watch y otros Wear OS: instala en el reloj una app que emita el pulso por Bluetooth (en Ajustes › Reloj te explicamos cómo).',
       ...(HAS_BACKUP ? [{ h: 'Copia de seguridad' }, 'Guarda tus tablas, historial y ajustes en un archivo (por ejemplo, en Drive) y restáuralo si cambias de móvil.'] : []),
       { h: 'Gratis y prémium' },
       'Gratis: dos ejercicios de cada apartado y todas las funciones de la app.',

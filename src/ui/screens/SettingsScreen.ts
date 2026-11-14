@@ -214,6 +214,15 @@ export class SettingsScreen implements Screen {
           h('p', { class: 'muted small' }, 'En el reloj, activa "Difundir frecuencia cardíaca" (suele estar en Ajustes › Ajustes de entrenamiento). Después, al empezar un entrenamiento, toca "Conectar reloj" encima del maniquí y elige tu reloj. Si no aparece, inicia un entrenamiento en el reloj y vuelve a intentarlo.'))),
       live,
       btn,
+      // relojes Wear OS (Samsung, Pixel...): no emiten el pulso solos; con una app del reloj, sí
+      h('details', { class: 'watch-help' },
+        h('summary', {}, '¿Tienes un Samsung Galaxy Watch o un Pixel Watch?'),
+        h('p', { class: 'small' }, 'Estos relojes (y otros con Wear OS) no envían el pulso a otras apps por sí solos. Para usarlos con Kasa Fit:'),
+        h('ol', { class: 'small' },
+          h('li', {}, 'En el reloj, abre Play Store e instala una app gratuita que emita el pulso por Bluetooth. Búscala como «Heart Rate Broadcast» o «HR broadcast».'),
+          h('li', {}, 'Antes de entrenar, ábrela en el reloj y activa la emisión del pulso.'),
+          h('li', {}, 'En Kasa Fit, toca «Conectar reloj» y elige el reloj en la lista.')),
+        h('p', { class: 'muted small' }, 'Funciona con Galaxy Watch 4 o posterior, Pixel Watch y otros Wear OS. No sirve para Apple Watch, Fitbit ni los Samsung antiguos (Galaxy Watch 3, Active 2 o anteriores).')),
       h('label', { class: 'switch-row', for: 'set-askWatch' },
         h('span', { class: 'set-text' }, h('strong', {}, 'Preguntar al empezar'), h('span', { class: 'muted block small' }, 'Antes de cada entrenamiento, pantalla para conectar el reloj.')),
         h('input', { type: 'checkbox', id: 'set-askWatch', class: 'switch', checked: this.app.store.settings.askWatch, onchange: (e: Event) => this.update({ askWatch: (e.target as HTMLInputElement).checked }) })));
