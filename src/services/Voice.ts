@@ -1,6 +1,7 @@
 import { TextToSpeech } from '@capacitor-community/text-to-speech';
 import { LANG, type Lang } from '../i18n';
 import { IS_NATIVE } from '../platform/native';
+import { duckWhile, stopSpeechDuck } from './MusicDuck';
 
 const CODE: Record<Lang, string> = { ca: 'ca', es: 'es', en: 'en' };
 
@@ -59,7 +60,8 @@ export class Voice {
   say(text: string, queue = false): void {
     if (!this.enabled) return;
     if (IS_NATIVE) {
-      void TextToSpeech.speak({ text, lang: this.nativeLang || 'es-ES', rate: queue ? 1.15 : 1.02, queueStrategy: queue ? 1 : 0 }).catch(() => undefined);
+      // la música de otras apps baja mientras habla (la promesa se cumple al acabar la frase)
+      void duckWhile(TextToSpeech.speak({ text, lang: this.nativeLang || 'es-ES', rate: queue ? 1.15 : 1.02, queueStrategy: queue ? 1 : 0 })).catch(() => undefined);
       return;
     }
     if (!this.synth) return;
@@ -82,6 +84,7 @@ export class Voice {
   stop(): void {
     if (IS_NATIVE) {
       void TextToSpeech.stop().catch(() => undefined);
+      stopSpeechDuck();
       return;
     }
     this.synth?.cancel();

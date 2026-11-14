@@ -316,7 +316,7 @@ export class SettingsScreen implements Screen {
             h('button', { 'aria-label': 'Más', disabled: v >= f.max, onclick: () => this.update({ [f.key]: Math.min(f.max, v + f.step) }) }, '+')),
           h('p', { class: 'muted small sc-help' }, f.help));
       })));
-    const toggle = (key: 'sound' | 'voice' | 'voiceCount' | 'phrases', ic: IconName, label: string, help: string) =>
+    const toggle = (key: 'sound' | 'voice' | 'voiceCount' | 'phrases' | 'duckMusic', ic: IconName, label: string, help: string) =>
       h('section', { class: 'card setting' },
         h('label', { class: 'switch-row', for: `set-${key}` },
           h('span', { class: 'set-icon' }, icon(ic)),
@@ -327,6 +327,7 @@ export class SettingsScreen implements Screen {
       toggle('sound', 'volume', 'Pitidos y vibración', 'Al empezar y acabar cada ejercicio, y en los últimos 3 segundos.'),
       toggle('voice', 'voice', 'Avisos por voz', 'Dice el nombre del ejercicio, el siguiente y cuándo cambiar de lado.'),
       s.voice ? toggle('voiceCount', 'hourglass', 'Cuenta atrás por voz', 'Dice "tres, dos, uno" al final de cada ejercicio, descanso y cuenta atrás.') : null,
+      IS_NATIVE ? toggle('duckMusic', 'music', 'Bajar la música mientras habla la app', 'Si escuchas música (Spotify, la radio...), baja el volumen durante la voz y los pitidos y luego vuelve a subir.') : null,
       h('button', {
         class: 'btn ghost block',
         onclick: () => {

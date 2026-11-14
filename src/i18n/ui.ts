@@ -938,6 +938,10 @@ const ROWS: Row[] = [
   ['Puedes añadirlos ahora o más tarde en Mis datos.', 'Els pots afegir ara o més tard a Les meves dades.', 'You can add them now or later in My details.'],
   ['Continuar sin ellos', 'Continua sense', 'Continue without them'],
   ['Añadirlos ahora', 'Afegeix-los ara', 'Add them now'],
+  // música (app Android)
+  ['Abrir la música', 'Obre la música', 'Open music'],
+  ['Bajar la música mientras habla la app', 'Baixa la música quan parla l’app', 'Lower music while the app speaks'],
+  ['Si escuchas música (Spotify, la radio...), baja el volumen durante la voz y los pitidos y luego vuelve a subir.', 'Si escoltes música (Spotify, la ràdio...), abaixa el volum durant la veu i els xiulets i després torna a pujar.', 'If you’re listening to music (Spotify, the radio...), it turns the volume down during voice and beeps, then back up.'],
 ];
 
 export const UI_CA: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[1]]));

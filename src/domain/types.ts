@@ -161,6 +161,8 @@ export interface Settings {
   phrases: boolean;
   /** Decir "3, 2, 1" por voz al final de cada ejercicio, pausa y cuenta atrás. */
   voiceCount: boolean;
+  /** App Android: bajar la música de otras apps (Spotify, radio...) mientras la app habla o pita. */
+  duckMusic: boolean;
   /** Al empezar, preguntar por el reloj (pulsaciones) si no está conectado. */
   askWatch: boolean;
   /** Datos personales para calcular las calorías. */
@@ -215,6 +217,7 @@ export const DEFAULT_SETTINGS: Settings = {
   voice: true,
   phrases: true,
   voiceCount: true,
+  duckMusic: true,
   askWatch: true,
   profile: { age: null, height: null, sex: 'h' },
   lang: 'ca',

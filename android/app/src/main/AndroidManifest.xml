@@ -47,5 +47,11 @@
         <intent>
             <action android:name="android.intent.action.TTS_SERVICE" />
         </intent>
+        <!-- botón «Música» del entrenamiento: saber si está Spotify y abrir la app de música del móvil -->
+        <package android:name="com.spotify.music" />
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.APP_MUSIC" />
+        </intent>
     </queries>
 </manifest>

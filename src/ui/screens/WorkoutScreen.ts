@@ -1,4 +1,6 @@
 import type { Step, WorkoutPlan } from '../../domain/WorkoutPlan';
+import { IS_NATIVE } from '../../platform/native';
+import { KasaNative } from '../../platform/kasaNative';
 import { WorkoutSession, type SessionSummary } from '../../domain/WorkoutSession';
 import { SECTION_TITLES, summarizeHeart, type ExerciseDef, type HistoryEntry, type SavedRoutine, type SectionId } from '../../domain/types';
 import { caloriesOf } from '../../domain/calories';
@@ -48,6 +50,18 @@ export class WorkoutScreen implements Screen {
   private hrLast = 0;
   private hrOff: (() => void) | null = null;
 
+  /** Abre Spotify (o la app de música del móvil). El entrenamiento se pausa para que no avance mientras se elige
+   *  la música; al volver, se reanuda con el botón de siempre. En la web, abre Spotify en otra pestaña. */
+  private async openMusic(): Promise<void> {
+    this.app.haptics.tap();
+    if (this.session.status === 'running') this.session.pause();
+    if (IS_NATIVE) {
+      const { opened } = await KasaNative.openMusic().catch(() => ({ opened: false }));
+      if (opened) return;
+    }
+    window.open('https://open.spotify.com/', '_blank', 'noopener');
+  }
+
   constructor(private readonly app: App, plan: WorkoutPlan, private readonly table: SavedRoutine) {
     this.session = new WorkoutSession(plan);
     this.coach = new Coach(this.session, app.sounds, app.voice, app.haptics, { countdown: app.store.settings.voiceCount, name: app.store.settings.profile.name });
@@ -60,7 +74,8 @@ export class WorkoutScreen implements Screen {
       h('header', { class: 'w-top' },
         h('button', { class: 'icon-btn', 'aria-label': 'Terminar', onclick: () => void this.askStop() }, icon('close')),
         h('div', { class: 'w-where' }, u.secChip, u.position),
-        h('span', { class: 'w-table muted small' }, table.name)),
+        h('span', { class: 'w-table muted small' }, table.name),
+        h('button', { class: 'icon-btn', 'aria-label': 'Abrir la música', onclick: () => void this.openMusic() }, icon('music'))),
       u.dots,
       h('div', { class: 'stage' }, u.canvas, u.phase, app.heart.available ? u.hr : null),
       h('section', { class: 'w-info' },

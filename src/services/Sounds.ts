@@ -1,3 +1,5 @@
+import { duckFor } from './MusicDuck';
+
 /** Pitidos generados con Web Audio (no hacen falta archivos de sonido). */
 export class Sounds {
   private ctx: AudioContext | null = null;
@@ -38,6 +40,8 @@ export class Sounds {
 
   private tone(freq: number, dur: number, delay = 0, type: OscillatorType = 'sine', peak = 0.5): void {
     if (!this.enabled || !this.ctx) return;
+    // la música de otras apps baja mientras suena el pitido
+    duckFor((delay + dur) * 1000);
     const t = this.ctx.currentTime + delay;
     const osc = this.ctx.createOscillator();
     const gain = this.ctx.createGain();

@@ -1,11 +1,9 @@
 # Pendiente para la versión Android (antes de subirla a Play Store)
 
-- **Bajar la música cuando habla la app** (audio focus de Android, `AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK`):
-  pedir el foco justo antes de la voz y de los pitidos y soltarlo al acabar, para que Spotify,
-  YouTube Music, la radio, etc. bajen el volumen solos. Sin integrar Spotify (pediría Premium,
-  registro de la app y cuenta de cada usuario). Interruptor en Configuració → Avisos:
-  «Baixa la música quan parla l'app» (activado por defecto), con su fila en `src/i18n/ui.ts`.
-- Barras del sistema (estado y navegación) que sigan el tema claro.
+- ✅ Hecho (falta probarlo en el móvil): **bajar la música cuando habla la app** (foco de audio «transitorio, se puede
+  bajar»; `src/services/MusicDuck.ts` + `KasaNativePlugin.java`), con interruptor en Configuració › Avisos; **barras del
+  sistema** del color del tema (iconos oscuros en el claro); botón **Música** en el entrenamiento (pausa y abre Spotify
+  o la app de música del móvil). Sin controlar Spotify desde la app: Spotify solo lo permite a 25 usuarios en apps de particulares.
 - Gráfico de la ficha de Play sin maniquís (o con el maniquí nuevo).
 - Compilar con el workflow manual de Android y probar el APK.
 - Crear la app en Play Console cuando acabe la verificación; prueba cerrada.

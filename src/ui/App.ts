@@ -1,4 +1,5 @@
 import { setAngleStore } from '../figure/angles';
+import { setMusicDuck } from '../services/MusicDuck';
 import { rescheduleReminders } from '../services/Reminders';
 import { setFigureStyle } from '../figure/skinAsset';
 import { setLook } from '../figure/look';
@@ -128,6 +129,7 @@ export class App {
     setLook(this.store.settings.look, () => this.access.premium);
     this.sounds.enabled = this.store.settings.sound;
     this.voice.enabled = this.store.settings.voice;
+    setMusicDuck(this.store.settings.duckMusic);
     this.haptics.enabled = this.store.settings.sound;
   }
 
