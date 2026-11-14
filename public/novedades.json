@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-14T22:26:33Z",
+    "es": ["Guía de la app: explica cómo crear tablas con «Créala por mí» y «Tablas hechas», también desde Inicio, y cómo cambiarlas antes de guardarlas."],
+    "ca": ["Guia de l’app: explica com crear taules amb «Crea-la per mi» i «Taules fetes», també des d’Inici, i com canviar-les abans de desar-les."],
+    "en": ["App guide: explains how to create routines with “Make it for me” and “Ready-made routines”, also from Home, and how to change them before saving."]
+  },
+  {
     "fecha": "2026-11-14T22:17:41Z",
     "es": ["Tablas nuevas: la leyenda de los botones ahora ocupa una sola línea pequeña."],
     "ca": ["Taules noves: la llegenda dels botons ara ocupa una sola línia petita."],

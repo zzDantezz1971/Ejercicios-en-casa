@@ -11,6 +11,7 @@ const GUIDE: Array<{ icon: IconName; title: string; sub: string; points: Array<s
       'En Inicio, pulsa Empezar y sigue al muñeco.'] },
   { icon: 'home', title: 'Menú Inicio', sub: 'Tu tabla, tu semana y el entrenamiento.', points: [
       'La tabla que vas a hacer, con su contenido y el botón para empezar. Puedes cambiar de tabla desde aquí.',
+      'Si la tabla está vacía, «Créala por mí» te prepara una al momento según tu objetivo, la zona, el tiempo y el nivel.',
       'Tu semana: minutos y calorías, con unas metas que puedes cambiar.',
       'Una frase motivadora distinta cada día (se puede quitar en Ajustes).',
       HAS_BACKUP ? 'Si los tienes activados en Recordatorios, al acabar un entrenamiento te avisa cuando toca anotar el peso o hacer la copia de seguridad.'
@@ -26,7 +27,7 @@ const GUIDE: Array<{ icon: IconName; title: string; sub: string; points: Array<s
   { icon: 'tables', title: 'Menú Tablas', sub: 'Más de 200 ejercicios para armar tus tablas.', points: [
       'Crea tantas tablas como quieras, cámbiales el nombre, duplícalas o bórralas.',
       'Con Nueva puedes crearla de tres maneras: «Créala por mí» (eliges objetivo, zona, tiempo y nivel, y la app la arma con tu material), una de las «Tablas hechas» o vacía, eligiendo tú los ejercicios.',
-      'Antes de guardarla, toca un ejercicio para ver cómo se hace, cámbialo por otro parecido o quítalo con sus botones, ordénalos arrastrándolos por el asa y añade otros con «Añadir un ejercicio». En «Créala por mí» también puedes pedir otra propuesta.',
+      'Antes de guardarla, toca un ejercicio para ver cómo se hace, cámbialo por otro parecido o quítalo con sus botones (te pregunta antes de quitarlo), ordénalos arrastrándolos por el asa y añade otros con «Añadir un ejercicio». En «Créala por mí» también puedes pedir otra propuesta.',
       'Cuatro apartados: Calentamiento, Fuerza, Abdominales y Estiramientos.',
       'Toca un ejercicio para ver al muñeco haciéndolo, cómo se hace paso a paso y los músculos que trabaja. Desliza para pasar al siguiente.',
       'Gira el muñeco con el dedo para verlo desde otro ángulo: se queda así para ese ejercicio, también al entrenar y en la lista.',
