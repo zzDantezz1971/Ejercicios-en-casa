@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-14T22:05:06Z",
+    "es": ["Tablas nuevas: arriba de la lista, una pequeña leyenda explica qué hace cada botón (ver cómo se hace, cambiar, quitar y arrastrar para mover)."],
+    "ca": ["Taules noves: a dalt de la llista, una petita llegenda explica què fa cada botó (veure com es fa, canviar, treure i arrossegar per moure)."],
+    "en": ["New routines: above the list, a small legend explains what each button does (see how it’s done, swap, remove and drag to move)."]
+  },
+  {
     "fecha": "2026-11-14T22:01:16Z",
     "es": ["Tablas nuevas: los ejercicios se ordenan arrastrándolos (sin flechas). El botón de quitar está más separado y pregunta antes de quitar; puedes marcar que no te lo vuelva a preguntar en esa lista."],
     "ca": ["Taules noves: els exercicis s’ordenen arrossegant-los (sense fletxes). El botó de treure està més separat i pregunta abans de treure; pots marcar que no t’ho torni a preguntar en aquella llista."],

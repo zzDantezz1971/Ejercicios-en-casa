@@ -112,6 +112,12 @@ function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement {
   const box = h('div', { class: 'maker-preview' },
     h('p', { class: 'maker-total' }, icon('clock'), plan.isEmpty ? 'Sin ejercicios' : `${humanDuration(plan.estimatedSeconds)} · ${plural(plan.exerciseCount, 'ejercicio', 'ejercicios')}`));
   if (miss.length) box.append(h('p', { class: 'note small' }, icon('dumbbell'), h('span', {}, h('span', {}, 'Necesitas:'), ` ${miss.map((e) => tr(EQUIP_INFO[e].name)).join(', ')}`)));
+  // leyenda de los botones de cada ejercicio
+  if (edit) box.append(h('div', { class: 'maker-legend small' },
+    h('span', {}, icon('play'), 'Toca un ejercicio para ver cómo se hace'),
+    edit.swap ? h('span', {}, icon('swap'), 'Cambiar por otro parecido') : '',
+    h('span', {}, icon('trash', 'ico danger'), 'Quitar de la tabla'),
+    h('span', {}, icon('tables'), 'Arrastrar para moverlo')));
   for (const s of SECTION_IDS) {
     const items = r.routine[s];
     if (!items.length) continue;
