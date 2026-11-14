@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-14T23:12:04Z",
+    "es": ["Reloj: el enlace «Haz clic aquí» ya no va subrayado."],
+    "ca": ["Rellotge: l’enllaç «Fes clic aquí» ja no va subratllat."],
+    "en": ["Watch: the “Click here” link is no longer underlined."]
+  },
+  {
     "fecha": "2026-11-14T23:10:00Z",
     "es": ["Reloj: la ayuda para Samsung Galaxy Watch y Pixel Watch se abre con «Haz clic aquí»."],
     "ca": ["Rellotge: l’ajuda per a Samsung Galaxy Watch i Pixel Watch s’obre amb «Fes clic aquí»."],
