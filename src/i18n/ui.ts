@@ -1039,6 +1039,7 @@ const ROWS: Row[] = [
   ['En Kasa Fit, toca «Conectar reloj» y elige el reloj en la lista.', 'A Kasa Fit, toca «Connecta el rellotge» i tria el rellotge de la llista.', 'In Kasa Fit, tap “Connect watch” and pick the watch from the list.'],
   ['Funciona con Galaxy Watch 4 o posterior, Pixel Watch y otros Wear OS. No sirve para Apple Watch, Fitbit ni los Samsung antiguos (Galaxy Watch 3, Active 2 o anteriores).', 'Funciona amb Galaxy Watch 4 o posterior, Pixel Watch i altres Wear OS. No serveix per a Apple Watch, Fitbit ni els Samsung antics (Galaxy Watch 3, Active 2 o anteriors).', 'Works with Galaxy Watch 4 or later, Pixel Watch and other Wear OS watches. Not for Apple Watch, Fitbit or older Samsung watches (Galaxy Watch 3, Active 2 or earlier).'],
   ['Samsung Galaxy Watch, Pixel Watch y otros Wear OS: instala en el reloj una app que emita el pulso por Bluetooth (en Ajustes › Reloj te explicamos cómo).', 'Samsung Galaxy Watch, Pixel Watch i altres Wear OS: instal·la al rellotge una app que emeti el pols per Bluetooth (a Configuració › Rellotge t’expliquem com).', 'Samsung Galaxy Watch, Pixel Watch and other Wear OS watches: install an app on the watch that broadcasts your heart rate over Bluetooth (Settings › Watch explains how).'],
+  ['Haz clic aquí', 'Fes clic aquí', 'Click here'],
 ];
 
 export const UI_CA: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[1]]));

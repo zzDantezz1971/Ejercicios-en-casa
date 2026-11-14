@@ -215,14 +215,21 @@ export class SettingsScreen implements Screen {
       live,
       btn,
       // relojes Wear OS (Samsung, Pixel...): no emiten el pulso solos; con una app del reloj, sí
-      h('details', { class: 'watch-help' },
-        h('summary', {}, '¿Tienes un Samsung Galaxy Watch o un Pixel Watch?'),
+      ((): HTMLElement => {
+        // la pregunta en blanco y, al lado, «Haz clic aquí» (en azul) para ver las instrucciones
+        const steps = h('div', { class: 'watch-steps', hidden: true },
         h('p', { class: 'small' }, 'Estos relojes (y otros con Wear OS) no envían el pulso a otras apps por sí solos. Para usarlos con Kasa Fit:'),
         h('ol', { class: 'small' },
           h('li', {}, 'En el reloj, abre Play Store e instala una app gratuita que emita el pulso por Bluetooth. Búscala como «Heart Rate Broadcast» o «HR broadcast».'),
           h('li', {}, 'Antes de entrenar, ábrela en el reloj y activa la emisión del pulso.'),
           h('li', {}, 'En Kasa Fit, toca «Conectar reloj» y elige el reloj en la lista.')),
-        h('p', { class: 'muted small' }, 'Funciona con Galaxy Watch 4 o posterior, Pixel Watch y otros Wear OS. No sirve para Apple Watch, Fitbit ni los Samsung antiguos (Galaxy Watch 3, Active 2 o anteriores).')),
+        h('p', { class: 'muted small' }, 'Funciona con Galaxy Watch 4 o posterior, Pixel Watch y otros Wear OS. No sirve para Apple Watch, Fitbit ni los Samsung antiguos (Galaxy Watch 3, Active 2 o anteriores).'));
+        const link = h('button', { class: 'link-btn watch-link', 'aria-expanded': 'false', onclick: () => {
+          steps.hidden = !steps.hidden;
+          link.setAttribute('aria-expanded', String(!steps.hidden));
+        } }, 'Haz clic aquí');
+        return h('div', { class: 'watch-help' }, h('p', { class: 'watch-q' }, h('span', {}, '¿Tienes un Samsung Galaxy Watch o un Pixel Watch?'), ' ', link), steps);
+      })(),
       h('label', { class: 'switch-row', for: 'set-askWatch' },
         h('span', { class: 'set-text' }, h('strong', {}, 'Preguntar al empezar'), h('span', { class: 'muted block small' }, 'Antes de cada entrenamiento, pantalla para conectar el reloj.')),
         h('input', { type: 'checkbox', id: 'set-askWatch', class: 'switch', checked: this.app.store.settings.askWatch, onchange: (e: Event) => this.update({ askWatch: (e.target as HTMLInputElement).checked }) })));

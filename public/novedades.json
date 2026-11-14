@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-14T23:10:00Z",
+    "es": ["Reloj: la ayuda para Samsung Galaxy Watch y Pixel Watch se abre con «Haz clic aquí»."],
+    "ca": ["Rellotge: l’ajuda per a Samsung Galaxy Watch i Pixel Watch s’obre amb «Fes clic aquí»."],
+    "en": ["Watch: the Samsung Galaxy Watch and Pixel Watch help opens with “Click here”."]
+  },
+  {
     "fecha": "2026-11-14T23:05:56Z",
     "es": ["Reloj: en Configuración › Reloj se explica cómo usar un Samsung Galaxy Watch, un Pixel Watch u otro Wear OS con una app que emite el pulso por Bluetooth."],
     "ca": ["Rellotge: a Configuració › Rellotge s’explica com fer servir un Samsung Galaxy Watch, un Pixel Watch o un altre Wear OS amb una app que emet el pols per Bluetooth."],
