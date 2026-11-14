@@ -283,7 +283,7 @@ export class SettingsScreen implements Screen {
           h('strong', {}, sub ? 'Suscripción activa' : a.kind === 'code' ? 'Acceso con código' : 'Versión gratis'),
           h('p', { class: 'muted small' }, sub
             ? 'Puedes cambiar de plan o cancelarla en Google Play.'
-            : a.kind === 'code' ? `Código: ${a.codeName ?? ''}. No se te cobra nada.` : 'Un ejercicio de cada apartado. Hazte prémium para tenerlos todos.'))),
+            : a.kind === 'code' ? `Código: ${a.codeName ?? ''}. No se te cobra nada.` : 'Dos ejercicios de cada apartado. Hazte prémium para tenerlos todos.'))),
       sub ? h('button', { class: 'btn ghost block', onclick: () => void a.manage() }, 'Gestionar en Google Play')
         : a.kind === 'none' ? h('button', { class: 'btn primary block', onclick: () => this.app.showPremium() }, icon('star'), 'Hazte prémium') : null);
   }

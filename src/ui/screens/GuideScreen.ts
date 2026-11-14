@@ -53,7 +53,7 @@ const GUIDE: Array<{ icon: IconName; title: string; sub: string; points: Array<s
       'En Ajustes › Reloj tienes los pasos para conectarlo.',
       ...(HAS_BACKUP ? [{ h: 'Copia de seguridad' }, 'Guarda tus tablas, historial y ajustes en un archivo (por ejemplo, en Drive) y restáuralo si cambias de móvil.'] : []),
       { h: 'Gratis y prémium' },
-      'Gratis: un ejercicio de cada apartado y todas las funciones de la app.',
+      'Gratis: dos ejercicios de cada apartado y todas las funciones de la app.',
       HAS_BACKUP ? 'Prémium: todos los ejercicios, la personalización completa del muñeco y el recordatorio de copia de seguridad. Se paga y se cancela en Google Play.'
         : 'Prémium: todos los ejercicios y la personalización completa del muñeco. Se paga y se cancela en Google Play.'] },
 ];

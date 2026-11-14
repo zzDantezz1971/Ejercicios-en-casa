@@ -47,7 +47,7 @@ LES TEVES DADES SÓN TEVES
 • Pots fer i recuperar còpies de seguretat quan vulguis.
 
 GRATIS I PRÈMIUM
-Prova-la gratis amb un exercici de cada apartat i totes les funcions. Amb Prèmium (0,99 € al mes o 9,99 € l’any) desbloqueges tots els exercicis. Es paga i es cancel·la a Google Play.
+Prova-la gratis amb dos exercicis de cada apartat i totes les funcions. Amb Prèmium (0,99 € al mes o 9,99 € l’any) desbloqueges tots els exercicis. Es paga i es cancel·la a Google Play.
 
 En català, castellà i anglès.
 
@@ -85,7 +85,7 @@ TUS DATOS SON TUYOS
 • Puedes hacer y recuperar copias de seguridad cuando quieras.
 
 GRATIS Y PRÉMIUM
-Pruébala gratis con un ejercicio de cada apartado y todas las funciones. Con Prémium (0,99 € al mes o 9,99 € al año) desbloqueas todos los ejercicios. Se paga y se cancela en Google Play.
+Pruébala gratis con dos ejercicios de cada apartado y todas las funciones. Con Prémium (0,99 € al mes o 9,99 € al año) desbloqueas todos los ejercicios. Se paga y se cancela en Google Play.
 
 En catalán, castellano e inglés.
 
@@ -123,6 +123,6 @@ YOUR DATA IS YOURS
 • Make and restore backups whenever you like.
 
 FREE AND PREMIUM
-Try it free with one exercise per section and every feature. With Premium (€0.99 a month or €9.99 a year) you unlock every exercise. Payment and cancellation are handled in Google Play.
+Try it free with two exercises per section and every feature. With Premium (€0.99 a month or €9.99 a year) you unlock every exercise. Payment and cancellation are handled in Google Play.
 
 In Catalan, Spanish and English.

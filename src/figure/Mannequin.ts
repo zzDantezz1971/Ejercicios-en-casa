@@ -735,6 +735,11 @@ export class MannequinScene {
     // Cabeza con pequeños movimientos naturales
     const up0 = J.head.clone().sub(J.neck).normalize();
     let face0 = side ? V(up0.y, -up0.x, 0) : T ? V(0, motion.spec.prone ? -1 : 1, 0) : V(0, 0, 1);
+    // giro del tronco (tw): la cara mira hacia donde giran los hombros (mismo giro que en to3D)
+    if (pose.tw) {
+      const a = (pose.tw * Math.PI) / 180, c = Math.cos(a), sn = Math.sin(a);
+      face0 = V(face0.x * c + face0.z * sn, face0.y, -face0.x * sn + face0.z * c);
+    }
     face0 = ortho(face0, up0);
     const lat0 = up0.clone().cross(face0).normalize();
     const up = up0.clone()
