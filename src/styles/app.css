@@ -339,6 +339,9 @@ button:focus-visible, input:focus-visible, label:focus-within { outline: 2px sol
 .w-where { display: flex; flex-direction: column; gap: 3px; flex: 1; min-width: 0; align-items: flex-start; }
 .w-position { color: var(--muted); font-size: .86rem; font-weight: 600; padding-left: 4px; }
 .w-table { max-width: 34%; text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* botón de música del entrenamiento: verde (como Spotify), para que se vea */
+.icon-btn.music-btn { background: #1DB954; border-color: #1DB954; color: #FFFFFF; box-shadow: 0 4px 14px rgb(29 185 84 / .35); }
+.icon-btn.music-btn:active { filter: brightness(.92); }
 .w-dots { display: flex; gap: 5px; }
 .w-dots .dot { flex: 1; height: 5px; border-radius: 999px; background: var(--surface-2); transition: background .3s; }
 .w-dots .dot.done { background: color-mix(in srgb, var(--sec) 60%, transparent); }

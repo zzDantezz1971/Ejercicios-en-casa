@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-14T08:56:17Z",
+    "es": ["Entrenamiento: el botón de música ahora es verde, para que se vea mejor."],
+    "ca": ["Entrenament: el botó de música ara és verd, perquè es vegi millor."],
+    "en": ["Workout: the music button is now green, so it stands out."]
+  },
+  {
     "fecha": "2026-11-14T08:49:09Z",
     "es": ["Entrenamiento: botón de música arriba a la derecha. Pausa el entrenamiento y abre Spotify (o la app de música del móvil); al volver, pulsa Reanudar.", "App de Android: la música de otras apps baja de volumen mientras la app habla o pita, y vuelve a subir (se puede apagar en Configuración › Avisos). Las barras del sistema siguen el tema claro u oscuro."],
     "ca": ["Entrenament: botó de música a dalt a la dreta. Posa en pausa l’entrenament i obre Spotify (o l’app de música del mòbil); en tornar, prem Reprèn.", "App d’Android: la música d’altres apps baixa de volum mentre l’app parla o xiula, i torna a pujar (es pot apagar a Configuració › Avisos). Les barres del sistema segueixen el tema clar o fosc."],
