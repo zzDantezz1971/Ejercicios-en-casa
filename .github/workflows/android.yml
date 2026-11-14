@@ -37,7 +37,10 @@ jobs:
       - run: npm ci
       - run: npm test
       - name: Versión
-        run: echo "ANDROID_VERSION_NAME=$(date -u +%Y.%m.%d)-${{ github.run_number }}" >> "$GITHUB_ENV"
+        # número de versión para Google Play: tiene que crecer en cada versión subida (el número de compilación)
+        run: |
+          echo "ANDROID_VERSION_NAME=$(date -u +%Y.%m.%d)-${{ github.run_number }}" >> "$GITHUB_ENV"
+          echo "ANDROID_VERSION_CODE=${{ github.run_number }}" >> "$GITHUB_ENV"
       # clave de los códigos de acceso gratis (secreto ACCESS_CODE_SECRET); sin él, los códigos no funcionan
       - run: npm run build:android
         env:
