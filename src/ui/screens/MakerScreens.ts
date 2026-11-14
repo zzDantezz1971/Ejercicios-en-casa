@@ -8,8 +8,9 @@ import { WorkoutPlan } from '../../domain/WorkoutPlan';
 import { emptyRoutine, SECTION_IDS, SECTION_TITLES, type SectionId } from '../../domain/types';
 import { tr } from '../../i18n';
 import type { App, Screen } from '../App';
-import { clear, h, humanDuration, plural, promptDialog } from '../dom';
+import { actionSheet, clear, h, humanDuration, plural, promptDialog } from '../dom';
 import { icon, SECTION_STYLE, type IconName } from '../icons';
+import { DetailScreen } from './DetailScreen';
 import { RoutineScreen } from './RoutineScreen';
 
 /*
@@ -69,13 +70,49 @@ function missingEquip(app: App, r: GenResult): Equip[] {
   return [...miss];
 }
 
-/** Vista previa de una tabla: resumen y ejercicios por apartado (con botón para cambiar uno, si se da `onSwap`). */
-function preview(app: App, r: GenResult, onSwap?: (s: SectionId, i: number) => void): HTMLElement {
+/** Lo que se puede hacer con la tabla en la vista previa: cambiarla (mover, quitar) y, en el asistente, cambiar un ejercicio. */
+interface PreviewEdit {
+  set(r: GenResult): void;
+  swap?(s: SectionId, i: number): GenResult;
+}
+
+/** Copia de la tabla con un apartado cambiado (si se queda vacío, sin vueltas). */
+function withSection(r: GenResult, s: SectionId, items: GenResult['routine'][SectionId]): GenResult {
+  const rounds = { ...r.rounds };
+  if (!items.length) delete rounds[s];
+  return { routine: { ...r.routine, [s]: items }, rounds };
+}
+
+/** Opciones de un ejercicio de la vista previa: subir, bajar, cambiar por otro parecido o quitarlo. */
+async function rowMenu(r: GenResult, s: SectionId, i: number, name: string, edit: PreviewEdit): Promise<void> {
+  const items = r.routine[s];
+  type Opt = 'up' | 'down' | 'swap' | 'remove';
+  const opts: Array<{ id: Opt; label: string; danger?: boolean }> = [];
+  if (i > 0) opts.push({ id: 'up', label: 'Subir' });
+  if (i < items.length - 1) opts.push({ id: 'down', label: 'Bajar' });
+  if (edit.swap) opts.push({ id: 'swap', label: 'Cambiar por otro parecido' });
+  opts.push({ id: 'remove', label: 'Quitar de la tabla', danger: true });
+  const c = await actionSheet(name, opts);
+  if (!c) return;
+  if (c === 'swap') return edit.set(edit.swap!(s, i));
+  const next = items.slice();
+  if (c === 'remove') next.splice(i, 1);
+  else {
+    const j = c === 'up' ? i - 1 : i + 1;
+    [next[i], next[j]] = [next[j], next[i]];
+  }
+  edit.set(withSection(r, s, next));
+}
+
+/** Vista previa de una tabla: resumen y ejercicios por apartado. Al tocar un ejercicio se ve cómo se hace;
+ *  con `edit`, cada uno tiene un menú para moverlo, quitarlo o cambiarlo. */
+function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement {
   const plan = WorkoutPlan.build(r.routine, app.catalog, app.store.settings, r.rounds);
   const locked = SECTION_IDS.some((s) => r.routine[s].some((i) => !app.access.canUse(i.exerciseId)));
   const miss = missingEquip(app, r);
+  const shown = SECTION_IDS.flatMap((s) => r.routine[s].map((i) => app.catalog.get(i.exerciseId)).filter((e): e is NonNullable<typeof e> => !!e));
   const box = h('div', { class: 'maker-preview' },
-    h('p', { class: 'maker-total' }, icon('clock'), `${humanDuration(plan.estimatedSeconds)} · ${plural(plan.exerciseCount, 'ejercicio', 'ejercicios')}`));
+    h('p', { class: 'maker-total' }, icon('clock'), plan.isEmpty ? 'Sin ejercicios' : `${humanDuration(plan.estimatedSeconds)} · ${plural(plan.exerciseCount, 'ejercicio', 'ejercicios')}`));
   if (miss.length) box.append(h('p', { class: 'note small' }, icon('dumbbell'), h('span', {}, h('span', {}, 'Necesitas:'), ` ${miss.map((e) => tr(EQUIP_INFO[e].name)).join(', ')}`)));
   for (const s of SECTION_IDS) {
     const items = r.routine[s];
@@ -91,10 +128,11 @@ function preview(app: App, r: GenResult, onSwap?: (s: SectionId, i: number) => v
       void app.thumbs.get(ex).then((url) => (img.src = url));
       const lock = !app.access.canUse(ex.id);
       box.append(h('div', { class: 'maker-row' + (lock ? ' locked' : '') },
-        img,
-        h('span', { class: 'maker-name' }, ex.name, lock ? icon('lock', 'ico lock') : ''),
-        h('span', { class: 'maker-secs muted small' }, `${it.seconds} s`),
-        onSwap ? h('button', { class: 'icon-btn small', 'aria-label': 'Cambiar este ejercicio', onclick: () => onSwap(s, i) }, icon('swap')) : ''));
+        h('button', { class: 'maker-open', 'aria-label': `Cómo se hace: ${ex.name}`, onclick: () => (lock ? app.showPremium() : app.push(new DetailScreen(app, ex, shown))) },
+          img,
+          h('span', { class: 'maker-name' }, ex.name, lock ? icon('lock', 'ico lock') : ''),
+          h('span', { class: 'maker-secs muted small' }, `${it.seconds} s`)),
+        edit ? h('button', { class: 'more-btn', 'aria-label': `Más opciones de ${ex.name}`, onclick: () => void rowMenu(r, s, i, ex.name, edit) }, icon('more')) : ''));
     });
   }
   if (locked) box.append(h('p', { class: 'muted small maker-free' }, icon('lock'), 'Los ejercicios con candado son de Prémium: en la versión gratis se saltan.'));
@@ -141,6 +179,13 @@ export class GeneratorScreen implements Screen {
     window.scrollTo({ top: 0 });
   }
 
+  /** Vuelve a pintar sin mover la pantalla (al cambiar la tabla propuesta). */
+  private keepRender(): void {
+    const y = window.scrollY;
+    this.render();
+    window.scrollTo({ top: y });
+  }
+
   private render(): void {
     clear(this.el);
     const total = this.askZone ? 4 : 3;
@@ -176,15 +221,13 @@ export class GeneratorScreen implements Screen {
       body.append(
         h('h2', { class: 'maker-q' }, 'Tu tabla'),
         h('p', { class: 'muted maker-summary' }, [GOAL_INFO[o.goal].name, this.askZone ? ZONE_INFO[o.zone].name : '', `${o.minutes} min`, LEVEL_INFO[o.level].name].filter(Boolean).map((t) => tr(t)).join(' · ')),
-        preview(this.app, this.result, (s, i) => {
-          this.result = swapExercise(this.result!, s, i, o, this.ctx());
-          const y = window.scrollY;
-          this.render();
-          window.scrollTo({ top: y });
+        preview(this.app, this.result, {
+          set: (r) => { this.result = r; this.keepRender(); },
+          swap: (sec, i) => swapExercise(this.result!, sec, i, o, this.ctx()),
         }),
         h('div', { class: 'maker-actions' },
           h('button', { class: 'btn ghost block', onclick: () => { this.result = generate(o, this.ctx()); this.render(); window.scrollTo({ top: 0 }); } }, icon('swap'), 'Otra propuesta'),
-          h('button', { class: 'btn primary block big', onclick: () => void saveTable(this.app, `${tr(name.label)} · ${name.minutes} min`, this.result!, this.fillActive) }, icon('check'), 'Guardar la tabla')));
+          h('button', { class: 'btn primary block big', disabled: isEmptyResult(this.result), onclick: () => void saveTable(this.app, `${tr(name.label)} · ${name.minutes} min`, this.result!, this.fillActive) }, icon('check'), 'Guardar la tabla')));
     }
   }
 }
@@ -225,17 +268,31 @@ export class TemplatesScreen implements Screen {
   }
 }
 
-/** Una tabla hecha: vista previa y «Usar esta tabla». */
+/** Una tabla hecha: vista previa (se puede cambiar antes de usarla) y «Usar esta tabla». */
 class TemplateScreen implements Screen {
   readonly el = h('main', { class: 'screen maker-screen' });
+  private r: GenResult;
 
-  constructor(app: App, t: TableTemplate, fillActive: boolean) {
-    const r = fromTemplate(t);
+  constructor(private readonly app: App, private readonly t: TableTemplate, private readonly fillActive: boolean) {
+    this.r = fromTemplate(t);
+    this.render();
+  }
+
+  private render(): void {
+    const { app, t } = this;
+    const y = this.el.isConnected ? window.scrollY : -1;
+    clear(this.el);
     this.el.append(header(app, t.name),
       h('div', { class: 'maker-body' },
         h('p', { class: 'muted maker-intro' }, t.desc),
-        preview(app, r),
+        preview(app, this.r, { set: (r) => { this.r = r; this.render(); } }),
         h('div', { class: 'maker-actions' },
-          h('button', { class: 'btn primary block big', onclick: () => void saveTable(app, tr(t.name), r, fillActive) }, icon('check'), 'Usar esta tabla'))));
+          h('button', { class: 'btn primary block big', disabled: isEmptyResult(this.r), onclick: () => void saveTable(app, tr(t.name), this.r, this.fillActive) }, icon('check'), 'Usar esta tabla'))));
+    if (y >= 0) window.scrollTo({ top: y });
   }
+}
+
+/** ¿Se han quitado todos los ejercicios? (entonces no se puede guardar). */
+function isEmptyResult(r: GenResult | null): boolean {
+  return !r || SECTION_IDS.every((s) => !r.routine[s].length);
 }

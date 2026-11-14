@@ -26,7 +26,7 @@ const GUIDE: Array<{ icon: IconName; title: string; sub: string; points: Array<s
   { icon: 'tables', title: 'Menú Tablas', sub: 'Más de 200 ejercicios para armar tus tablas.', points: [
       'Crea tantas tablas como quieras, cámbiales el nombre, duplícalas o bórralas.',
       'Con Nueva puedes crearla de tres maneras: «Créala por mí» (eliges objetivo, zona, tiempo y nivel, y la app la arma con tu material), una de las «Tablas hechas» o vacía, eligiendo tú los ejercicios.',
-      'En la tabla que te propone la app puedes cambiar cualquier ejercicio por otro parecido o pedir otra propuesta antes de guardarla.',
+      'Antes de guardarla, toca un ejercicio para ver cómo se hace; con el botón ⋮ lo subes, lo bajas, lo cambias por otro parecido o lo quitas. En «Créala por mí» también puedes pedir otra propuesta.',
       'Cuatro apartados: Calentamiento, Fuerza, Abdominales y Estiramientos.',
       'Toca un ejercicio para ver al muñeco haciéndolo, cómo se hace paso a paso y los músculos que trabaja. Desliza para pasar al siguiente.',
       'Gira el muñeco con el dedo para verlo desde otro ángulo: se queda así para ese ejercicio, también al entrenar y en la lista.',

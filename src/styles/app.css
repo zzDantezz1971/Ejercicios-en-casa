@@ -1450,6 +1450,7 @@ label.sort-row:focus-within, label.rem-hour:focus-within { outline: none; }
   display: flex; align-items: center; gap: 10px; padding: 6px 8px 6px 6px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line);
 }
 .maker-row.locked { opacity: .7; }
+.maker-open { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; background: none; border: 0; padding: 0; color: inherit; font: inherit; text-align: left; cursor: pointer; }
 .maker-thumb { width: 52px; height: 52px; border-radius: 10px; object-fit: cover; background: var(--surface-2); flex: none; }
 .maker-name { flex: 1; min-width: 0; font-weight: 600; display: flex; align-items: center; gap: 6px; }
 .maker-name .lock { width: 15px; height: 15px; color: var(--muted); flex: none; }
