@@ -161,6 +161,26 @@ export class Store {
     return r;
   }
 
+  /** Crea una tabla con ejercicios (del asistente o de una tabla hecha) y la deja activa. */
+  createRoutineFrom(name: string, routine: Routine, rounds: Partial<Record<SectionId, number>> = {}): SavedRoutine {
+    const r = newRoutine(name, structuredCloneRoutine(routine));
+    if (Object.keys(rounds).length) r.rounds = { ...rounds };
+    this.data.routines.push(r);
+    this.data.activeId = r.id;
+    this.persist();
+    return r;
+  }
+
+  /** Llena la tabla activa (vacía) con estos ejercicios y le pone este nombre. */
+  fillActive(name: string, routine: Routine, rounds: Partial<Record<SectionId, number>> = {}): void {
+    const a = this.active;
+    a.name = cleanName(name);
+    a.routine = structuredCloneRoutine(routine);
+    if (Object.keys(rounds).length) a.rounds = { ...rounds };
+    else delete a.rounds;
+    this.persist();
+  }
+
   renameRoutine(id: string, name: string): void {
     const r = this.data.routines.find((x) => x.id === id);
     if (!r) return;

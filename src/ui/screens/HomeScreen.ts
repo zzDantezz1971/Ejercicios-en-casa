@@ -6,6 +6,7 @@ import { addDays, dayKey, greeting, startOfWeek, streak, trainedDays, WEEKDAY_LE
 import { clear, h, humanDuration, plural } from '../dom';
 import { icon, SECTION_STYLE } from '../icons';
 import { RoutineScreen } from './RoutineScreen';
+import { activeIsEmpty, GeneratorScreen } from './MakerScreens';
 import { TableViewScreen } from './TableViewScreen';
 import { startWorkout } from '../components/startWorkout';
 import { MonthScreen } from './MonthScreen';
@@ -84,7 +85,9 @@ export class HomeScreen implements Screen {
             h('span', { class: 'chip' }, icon('clock'), plan.isEmpty ? '—' : humanDuration(plan.estimatedSeconds)),
             h('span', { class: 'chip' }, icon('bolt'), plural(plan.exerciseCount, 'ejercicio', 'ejercicios'))),
           plan.isEmpty
-            ? h('button', { class: 'btn light block big', onclick: () => app.push(new RoutineScreen(app)) }, icon('plus'), 'Elegir ejercicios')
+            ? h('div', { class: 'hero-empty' },
+              h('button', { class: 'btn light block big', onclick: () => app.push(new GeneratorScreen(app, activeIsEmpty(app))) }, icon('bolt'), 'Créala por mí'),
+              h('button', { class: 'btn glass block', onclick: () => app.push(new RoutineScreen(app)) }, icon('plus'), 'Elegir ejercicios'))
             : h('button', { class: 'btn light block big', onclick: () => this.start(plan) }, icon('play'), 'Empezar'),
           h('div', { class: 'hero-actions' },
             h('button', { class: 'btn glass small', onclick: () => app.push(new RoutineScreen(app)) }, icon('edit'), 'Editar'),

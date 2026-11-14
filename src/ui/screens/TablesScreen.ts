@@ -5,6 +5,7 @@ import { actionSheet, clear, confirmDialog, h, humanDuration, plural, promptDial
 import { icon, SECTION_STYLE } from '../icons';
 import { formatDate } from './HomeScreen';
 import { RoutineScreen } from './RoutineScreen';
+import { openNewTable } from './MakerScreens';
 
 /** Mis tablas: lista de tablas guardadas con nombre. */
 export class TablesScreen implements Screen {
@@ -16,7 +17,7 @@ export class TablesScreen implements Screen {
     this.el.append(
       h('header', { class: 'page-head' },
         h('h1', {}, 'Mis tablas'),
-        h('button', { class: 'btn primary small', onclick: () => void this.create() }, icon('plus'), 'Nueva')),
+        h('button', { class: 'btn primary small', onclick: () => this.create() }, icon('plus'), 'Nueva')),
       this.body,
     );
   }
@@ -71,11 +72,9 @@ export class TablesScreen implements Screen {
     this.app.push(new RoutineScreen(this.app));
   }
 
-  private async create(): Promise<void> {
-    const name = await promptDialog('Nombre de la nueva tabla', '', 'Crear');
-    if (!name) return;
-    this.app.store.createRoutine(name);
-    this.app.push(new RoutineScreen(this.app));
+  /** Nueva tabla: con el asistente, una tabla hecha o vacía. */
+  private create(): void {
+    openNewTable(this.app);
   }
 
   private async more(t: SavedRoutine): Promise<void> {
