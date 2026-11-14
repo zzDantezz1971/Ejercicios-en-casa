@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-14T22:51:59Z",
+    "es": ["Nuevo: temas de color. En Configuración › Pantalla elige entre Azul, Verde energía, Naranja fuego, Lila noche, Rosa y Grafito; cambia toda la app, en modo oscuro y claro."],
+    "ca": ["Nou: temes de color. A Configuració › Pantalla tria entre Blau, Verd energia, Taronja foc, Lila nit, Rosa i Grafit; canvia tota l’app, en mode fosc i clar."],
+    "en": ["New: colour themes. In Settings › Screen choose Blue, Energy green, Fire orange, Night lilac, Pink or Graphite; it changes the whole app, in dark and light mode."]
+  },
+  {
     "fecha": "2026-11-14T22:39:41Z",
     "es": ["Tablas nuevas: el tiempo de cada ejercicio se cambia con − y + antes de guardarla.", "Inicio: el aviso de la versión gratis tiene un borde más limpio."],
     "ca": ["Taules noves: el temps de cada exercici es canvia amb − i + abans de desar-la.", "Inici: l’avís de la versió gratuïta té una vora més neta."],

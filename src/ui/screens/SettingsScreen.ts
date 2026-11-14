@@ -1,5 +1,5 @@
 import { LANG, LANGS, LOCALE } from '../../i18n';
-import { applyTheme } from '../../platform/theme';
+import { applyColor, applyTheme, COLOR_INFO, COLOR_THEMES, type ColorTheme } from '../../platform/theme';
 import { flushDurable } from '../../platform/durable';
 import { showUpdateDialog } from '../components/updateDialog';
 import { BUILD_TIME, checkForUpdate, updateReady } from '../../services/Updates';
@@ -111,6 +111,26 @@ export class SettingsScreen implements Screen {
         h('span', { class: 'set-icon' }, icon('sun')),
         h('div', { class: 'set-text' }, h('strong', {}, 'Modo de la pantalla'), h('p', { class: 'muted small' }, 'Automático usa el mismo modo que tu móvil.'))),
       h('div', { class: 'segmented lang-segs' }, opt('dark', 'Oscuro'), opt('light', 'Claro'), opt('auto', 'Automático')));
+  }
+
+  /** Tema de color de la app: un círculo por tema (el elegido, con ✓). */
+  private colorCard(s: Settings): HTMLElement {
+    const cur = ((COLOR_THEMES as readonly string[]).includes(s.colorTheme ?? '') ? s.colorTheme : 'blau') as ColorTheme;
+    const pick = (c: ColorTheme) => {
+      this.update({ colorTheme: c });
+      applyColor(c);
+      this.render();
+    };
+    return h('section', { class: 'card setting rest-card' },
+      h('div', { class: 'rest-head' },
+        h('span', { class: 'set-icon' }, icon('star')),
+        h('div', { class: 'set-text' }, h('strong', {}, 'Tema de color'), h('p', { class: 'muted small' }, h('span', {}, COLOR_INFO[cur].name)))),
+      h('div', { class: 'color-themes', role: 'group', 'aria-label': 'Tema de color' },
+        ...COLOR_THEMES.map((c) => {
+          const b = h('button', { class: 'color-dot' + (c === cur ? ' on' : ''), 'aria-label': COLOR_INFO[c].name, 'aria-pressed': String(c === cur), onclick: () => pick(c) }, c === cur ? icon('check') : '');
+          b.style.background = `linear-gradient(140deg, ${COLOR_INFO[c].swatch[0]}, ${COLOR_INFO[c].swatch[1]})`;
+          return b;
+        })));
   }
 
   private langCard(): HTMLElement {
@@ -300,7 +320,7 @@ export class SettingsScreen implements Screen {
           icon('chevron'))),
       h('h3', { class: 'block-title' }, IS_NATIVE ? 'Suscripción' : 'Prémium'), this.accessCard(),
       h('h3', { class: 'block-title' }, 'Idioma'), this.langCard(),
-      h('h3', { class: 'block-title' }, 'Pantalla'), this.themeCard(s),
+      h('h3', { class: 'block-title' }, 'Pantalla'), this.themeCard(s), this.colorCard(s),
       h('h3', { class: 'block-title' }, 'Muñeco'), this.lookCard(),
       h('h3', { class: 'block-title' }, 'Tiempos'), this.restCard(s));
     // cuenta atrás y duración inicial: en una sola tarjeta, con el título y el contador en la misma fila

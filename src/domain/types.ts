@@ -175,6 +175,8 @@ export interface Settings {
   lang: 'ca' | 'es' | 'en';
   /** Tema de la interfaz. */
   theme: 'dark' | 'light' | 'auto';
+  /** Tema de color (Configuración › Pantalla): «blau» es el de siempre. */
+  colorTheme?: string;
   /** Estilo del maniquí: realista, dibujo (tonos planos y contorno) o de piezas simples. */
   figureStyle: FigureStyle;
   /** Material que tiene el usuario (los ejercicios sin material se ven siempre). */

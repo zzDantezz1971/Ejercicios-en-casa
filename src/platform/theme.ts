@@ -1,33 +1,61 @@
 import { IS_NATIVE } from './native';
 import { KasaNative } from './kasaNative';
 
-/* Tema de la interfaz: oscuro (por defecto), claro o automático (el del sistema). */
+/* Tema de la interfaz: modo oscuro (por defecto), claro o automático (el del sistema), y color (tema). */
 export type ThemePref = 'dark' | 'light' | 'auto';
 
+/** Temas de color: «blau» es el de siempre. Los colores están en app.css (:root[data-color="…"]). */
+export const COLOR_THEMES = ['blau', 'verd', 'taronja', 'lila', 'rosa', 'grafit'] as const;
+export type ColorTheme = (typeof COLOR_THEMES)[number];
+/** Nombre (en castellano; se traduce en pantalla) y color de muestra de cada tema. */
+export const COLOR_INFO: Record<ColorTheme, { name: string; swatch: [string, string] }> = {
+  blau: { name: 'Azul', swatch: ['#3D6BFF', '#18267A'] },
+  verd: { name: 'Verde energía', swatch: ['#22C77A', '#0A5A3A'] },
+  taronja: { name: 'Naranja fuego', swatch: ['#FF8A2A', '#8E2A0E'] },
+  lila: { name: 'Lila noche', swatch: ['#9B6BFF', '#3A1F86'] },
+  rosa: { name: 'Rosa', swatch: ['#F25CA6', '#6E1446'] },
+  grafit: { name: 'Grafito', swatch: ['#4A5260', '#171B21'] },
+};
+
 let pref: ThemePref = 'dark';
+let color: ColorTheme = 'blau';
 const mq = typeof matchMedia === 'function' ? matchMedia('(prefers-color-scheme: light)') : null;
 
 function paint(): void {
   const light = pref === 'light' || (pref === 'auto' && !!mq?.matches);
-  document.documentElement.dataset.theme = light ? 'light' : 'dark';
-  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', light ? '#F3F5F9' : '#0A0D12');
-  // app Android: barras del sistema del color del fondo, con iconos oscuros en el tema claro
-  if (IS_NATIVE) void KasaNative.setBars({ light, color: light ? '#F3F5F9' : '#0A0D12' }).catch(() => undefined);
+  const root = document.documentElement;
+  root.dataset.theme = light ? 'light' : 'dark';
+  if (color === 'blau') delete root.dataset.color;
+  else root.dataset.color = color;
+  // el fondo del tema (con su tinte) para la barra del navegador y las barras de Android
+  const bg = getComputedStyle(root).getPropertyValue('--bg').trim() || (light ? '#F3F5F9' : '#0A0D12');
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', bg);
+  // app Android: barras del sistema del color del fondo, con iconos oscuros en el modo claro
+  if (IS_NATIVE) void KasaNative.setBars({ light, color: bg }).catch(() => undefined);
 }
 
-/** Aplica el tema elegido (y sigue los cambios del sistema en automático). */
+/** Aplica el modo elegido (y sigue los cambios del sistema en automático). */
 export function applyTheme(p: ThemePref): void {
   pref = p;
   paint();
 }
+
+/** Aplica el tema de color. */
+export function applyColor(c: string | undefined): void {
+  color = (COLOR_THEMES as readonly string[]).includes(c ?? '') ? (c as ColorTheme) : 'blau';
+  paint();
+}
 mq?.addEventListener?.('change', () => pref === 'auto' && paint());
 
-/** Al arrancar, antes de pintar nada: el tema guardado (para que no parpadee). */
+/** Al arrancar, antes de pintar nada: el modo y el tema guardados (para que no parpadee). */
 export function applySavedTheme(): void {
   try {
-    const t = JSON.parse(localStorage.getItem('ejercicios-en-casa') ?? '{}')?.settings?.theme;
-    applyTheme(t === 'light' || t === 'auto' ? t : 'dark');
+    const s = JSON.parse(localStorage.getItem('ejercicios-en-casa') ?? '{}')?.settings;
+    const t = s?.theme;
+    pref = t === 'light' || t === 'auto' ? t : 'dark';
+    applyColor(s?.colorTheme);
   } catch {
-    applyTheme('dark');
+    pref = 'dark';
+    applyColor('blau');
   }
 }

@@ -1021,6 +1021,15 @@ const ROWS: Row[] = [
   ['Arrastra para mover', 'Arrossega per moure', 'Drag to move'],
   ['Si la tabla está vacía, «Créala por mí» te prepara una al momento según tu objetivo, la zona, el tiempo y el nivel.', 'Si la taula és buida, «Crea-la per mi» te’n prepara una al moment segons el teu objectiu, la zona, el temps i el nivell.', 'If the routine is empty, “Make it for me” prepares one for you right away based on your goal, area, time and level.'],
   ['Tablas hechas a tu medida según tu objetivo, zona y tiempo, o listas para usar', 'Taules fetes a la teva mida segons el teu objectiu, zona i temps, o llestes per fer servir', 'Routines made to measure for your goal, area and time, or ready to use'],
+  // temas de color
+  ['Tema de color', 'Tema de color', 'Color theme'],
+  ['Azul', 'Blau', 'Blue'],
+  ['Verde energía', 'Verd energia', 'Energy green'],
+  ['Naranja fuego', 'Taronja foc', 'Fire orange'],
+  ['Lila noche', 'Lila nit', 'Night lilac'],
+  ['Rosa', 'Rosa', 'Pink'],
+  ['Grafito', 'Grafit', 'Graphite'],
+  ['Idioma (català, castellano o English), modo oscuro, claro o el del móvil, y tema de color: azul, verde, naranja, lila, rosa o grafito.', 'Idioma (català, castellano o English), mode fosc, clar o el del mòbil, i tema de color: blau, verd, taronja, lila, rosa o grafit.', 'Language (català, castellano or English), dark, light or phone mode, and colour theme: blue, green, orange, lilac, pink or graphite.'],
 ];
 
 export const UI_CA: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[1]]));
