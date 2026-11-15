@@ -478,7 +478,13 @@ export class SettingsScreen implements Screen {
         ...voices.map((v, i) => ({ id: v.id, label: `Voz ${i + 1}`, sub: readable(v.name) ? v.name : undefined })),
       ];
       clear(list);
-      if (!voices.length) list.append(h('p', { class: 'muted small' }, 'Este móvil solo tiene una voz para este idioma. Puedes instalar otras en los ajustes de voz del móvil (Texto a voz).'));
+      // con una sola voz (o ninguna) no hay nada que elegir: «Automática» sería la misma
+      if (voices.length < 2) {
+        list.append(h('p', { class: 'muted small voice-one' }, IS_NATIVE
+          ? 'Este móvil solo tiene una voz para este idioma. Puedes instalar otras en los ajustes del móvil (Texto a voz › Motor de voz de Google › Instalar datos de voz).'
+          : 'El navegador solo ofrece una voz para este idioma. En la app de Android podrás elegir entre las voces que tenga instaladas el móvil.'));
+        return;
+      }
       for (const o of opts) {
         const on = o.id === cur;
         list.append(h('div', { class: 'voice-row' + (on ? ' on' : '') },

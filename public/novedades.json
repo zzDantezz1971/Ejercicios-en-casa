@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-15T21:54:17Z",
+    "es": ["Voz: si solo hay una voz para el idioma, ya no salen opciones que suenan igual; te explica cómo tener más."],
+    "ca": ["Veu: si només hi ha una veu per a l’idioma, ja no surten opcions que sonen igual; t’explica com tenir-ne més."],
+    "en": ["Voice: if there’s only one voice for the language, options that sound the same no longer appear; it explains how to get more."]
+  },
+  {
     "fecha": "2026-11-15T21:51:06Z",
     "es": ["Ajustes › Avisos › Voz: elige la voz de los avisos entre las de tu móvil (de hombre o de mujer) y escúchalas con ▶."],
     "ca": ["Configuració › Avisos › Veu: tria la veu dels avisos entre les del teu mòbil (d’home o de dona) i escolta-les amb ▶."],
