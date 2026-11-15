@@ -9,11 +9,11 @@ export const COLOR_THEMES = ['blau', 'verd', 'taronja', 'lila', 'rosa', 'grafit'
 export type ColorTheme = (typeof COLOR_THEMES)[number];
 /** Nombre (en castellano; se traduce en pantalla) y color de muestra de cada tema. */
 export const COLOR_INFO: Record<ColorTheme, { name: string; swatch: [string, string] }> = {
-  blau: { name: 'Azul', swatch: ['#3D6BFF', '#18267A'] },
+  blau: { name: 'Azul', swatch: ['#4F619A', '#232950'] },
   verd: { name: 'Verde salvia', swatch: ['#4F9A78', '#23503D'] },
-  taronja: { name: 'Naranja fuego', swatch: ['#FF8A2A', '#8E2A0E'] },
-  lila: { name: 'Lila noche', swatch: ['#9B6BFF', '#3A1F86'] },
-  rosa: { name: 'Rosa', swatch: ['#F25CA6', '#6E1446'] },
+  taronja: { name: 'Terracota', swatch: ['#9A714F', '#502D23'] },
+  lila: { name: 'Lila noche', swatch: ['#674F9A', '#2F2350'] },
+  rosa: { name: 'Rosa', swatch: ['#9A4F74', '#50233C'] },
   grafit: { name: 'Grafito', swatch: ['#4A5260', '#171B21'] },
 };
 

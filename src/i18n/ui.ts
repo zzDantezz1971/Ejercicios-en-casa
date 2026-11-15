@@ -1026,11 +1026,12 @@ const ROWS: Row[] = [
   ['Azul', 'Blau', 'Blue'],
   ['Verde energía', 'Verd energia', 'Energy green'],
   ['Verde salvia', 'Verd sàlvia', 'Sage green'],
+  ['Terracota', 'Terracota', 'Terracotta'],
   ['Naranja fuego', 'Taronja foc', 'Fire orange'],
   ['Lila noche', 'Lila nit', 'Night lilac'],
   ['Rosa', 'Rosa', 'Pink'],
   ['Grafito', 'Grafit', 'Graphite'],
-  ['Idioma (català, castellano o English), modo oscuro, claro o el del móvil, y tema de color: azul y verde gratis; naranja, lila, rosa y grafito con Prémium.', 'Idioma (català, castellano o English), mode fosc, clar o el del mòbil, i tema de color: blau i verd gratis; taronja, lila, rosa i grafit amb Prèmium.', 'Language (català, castellano or English), dark, light or phone mode, and colour theme: blue and green free; orange, lilac, pink and graphite with Premium.'],
+  ['Idioma (català, castellano o English), modo oscuro, claro o el del móvil, y tema de color: azul y verde gratis; terracota, lila, rosa y grafito con Prémium.', 'Idioma (català, castellano o English), mode fosc, clar o el del mòbil, i tema de color: blau i verd gratis; terracota, lila, rosa i grafit amb Prèmium.', 'Language (català, castellano or English), dark, light or phone mode, and colour theme: blue and green free; terracotta, lilac, pink and graphite with Premium.'],
   ['Seis temas de color para la app', 'Sis temes de color per a l’app', 'Six colour themes for the app'],
   // reloj: Wear OS
   ['¿Tienes un Samsung Galaxy Watch o un Pixel Watch?', 'Tens un Samsung Galaxy Watch o un Pixel Watch?', 'Do you have a Samsung Galaxy Watch or a Pixel Watch?'],

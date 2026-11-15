@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-15T08:55:50Z",
+    "es": ["Todos los temas de color tienen ahora tonos más suaves, a juego con el Verde salvia. El naranja pasa a llamarse Terracota."],
+    "ca": ["Tots els temes de color tenen ara tons més suaus, a joc amb el Verd sàlvia. El taronja passa a dir-se Terracota."],
+    "en": ["All colour themes now use softer shades, matching Sage green. Orange is now called Terracotta."]
+  },
+  {
     "fecha": "2026-11-15T08:49:37Z",
     "es": ["El tema verde ahora es Verde salvia: un tono más suave y menos llamativo."],
     "ca": ["El tema verd ara és Verd sàlvia: un to més suau i menys cridaner."],
