@@ -29,7 +29,8 @@ Marca cada punto al probarlo. Si algo falla, haz una captura y cuéntamelo.
 ## 4. Recordatorios (notificaciones)
 - [ ] Al activar un recordatorio, pide permiso de notificaciones.
 - [ ] Llega el aviso de entrenar a la hora puesta, aunque la app esté cerrada.
-- [ ] Plan setmanal: al crearlo y aceptar «Vols que t’avisi…», el recordatorio queda activado justo esos días.
+- [ ] Pla setmanal: al crearlo y aceptar «Vols que t’avisi…», en Recordatoris › Pla setmanal sale su aviso activado; llega la notificación «Pla setmanal: …» esos días.
+- [ ] Al borrar el plan, ya no llegan sus avisos.
 - [ ] Recordatorio de pesarse.
 
 ## 5. Prémium y códigos
@@ -48,6 +49,7 @@ Marca cada punto al probarlo. Si algo falla, haz una captura y cuéntamelo.
 - [ ] La pantalla no se apaga.
 - [ ] Vibra en los avisos.
 - [ ] La voz habla en el idioma de la app (catalán, castellano o inglés) con la voz del móvil.
+- [ ] Configuració › Avisos › Veu: salen las voces del móvil; ▶ las hace sonar; la elegida es la que habla al entrenar.
 - [ ] Con la pantalla bloqueada o la app en segundo plano y al volver, el entrenamiento sigue bien.
 
 ## 8. Generales
