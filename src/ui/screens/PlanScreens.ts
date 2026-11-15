@@ -134,7 +134,8 @@ function startDay(app: App, planId: string, d: PlanDay): void {
 /** Tarjeta de Inicio: «Hoy toca…», «Hoy descanso» o «Ayer te saltaste…». */
 export function todayCard(app: App, now = new Date()): HTMLElement | null {
   const plan = app.store.plan;
-  if (!plan || !app.access.premium) return null;
+  // si la tabla en uso no es de un plan (has elegido una tuya), el plan no se muestra en Inicio
+  if (!plan || !app.access.premium || !app.store.isPlanRoutine(app.store.active.id)) return null;
   const done = trainedDates(app.store.history);
   const today = planDayOn(plan, now);
   const yest = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);

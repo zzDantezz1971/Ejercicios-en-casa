@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-15T18:05:56Z",
+    "es": ["Si cambias la tabla del plan de la semana por una tuya, el plan deja de salir en Inicio. Vuelve al pulsar «Usar el plan»."],
+    "ca": ["Si canvies la taula del pla setmanal per una de teva, el pla deixa de sortir a Inici. Torna quan prems «Fes servir el pla»."],
+    "en": ["If you swap the week plan’s table for one of your own, the plan no longer shows on Home. It comes back when you tap “Use the plan”."]
+  },
+  {
     "fecha": "2026-11-15T17:30:49Z",
     "es": ["El aviso de «Hace X días que no te pesas» (y el de la copia) ya sigue los días y la hora de Ajustes › Avisos, en vez de salir a los 7 días."],
     "ca": ["L’avís de «Fa X dies que no et peses» (i el de la còpia) ja segueix els dies i l’hora de Configuració › Avisos, en lloc de sortir als 7 dies."],
