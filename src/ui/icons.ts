@@ -35,6 +35,7 @@ const STROKE: Record<string, string> = {
   edit: 'M4 20h4L19 9l-4-4L4 16zM13.5 6.5l4 4',
   trash: 'M4 7h16M9.5 7V4h5v3M6 7l1 13h10l1-13',
   copy: 'M9 9h11v11H9zM5 15H4V4h11v1',
+  download: 'M12 4v11M7 10l5 5 5-5M5 20h14',
   bolt: 'M13 3 5 13.5h6L10 21l8-10.5h-6z',
   volume: 'M4 9.5h3.5L13 5v14l-5.5-4.5H4zM16.5 9a4 4 0 0 1 0 6M19 6.5a7.5 7.5 0 0 1 0 11',
   music: 'M9 18V5.5l11-2.2v12.4M9 18a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM20 15.7a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM9 9.3l11-2.2',

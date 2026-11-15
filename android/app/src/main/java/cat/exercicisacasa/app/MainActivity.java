@@ -21,6 +21,8 @@ public class MainActivity extends BridgeActivity {
     protected void onCreate(Bundle savedInstanceState) {
         // funciones propias de Android (música, barras del sistema, abrir Spotify): ver KasaNativePlugin
         registerPlugin(KasaNativePlugin.class);
+        // Health Connect: guardar los entrenamientos y el peso (si el usuario lo activa): ver KasaHealthPlugin
+        registerPlugin(KasaHealthPlugin.class);
         super.onCreate(savedInstanceState);
 
         WindowInsetsControllerCompat bars = WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());

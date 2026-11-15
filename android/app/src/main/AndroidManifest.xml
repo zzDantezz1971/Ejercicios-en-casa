@@ -21,6 +21,26 @@
             </intent-filter>
         </activity>
 
+        <!-- Health Connect: «¿Por qué pide estos permisos?» abre la política de privacidad -->
+        <activity
+            android:name=".HealthPrivacyActivity"
+            android:exported="true"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <intent-filter>
+                <action android:name="androidx.health.ACTION_SHOW_PERMISSIONS_RATIONALE" />
+            </intent-filter>
+        </activity>
+        <activity-alias
+            android:name="ViewPermissionUsageActivity"
+            android:exported="true"
+            android:targetActivity=".HealthPrivacyActivity"
+            android:permission="android.permission.START_VIEW_PERMISSION_USAGE">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW_PERMISSION_USAGE" />
+                <category android:name="android.intent.category.HEALTH_PERMISSIONS" />
+            </intent-filter>
+        </activity-alias>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"
@@ -39,6 +59,13 @@
     <uses-permission android:name="android.permission.BLUETOOTH_SCAN" android:usesPermissionFlags="neverForLocation" tools:targetApi="s" tools:node="replace" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" android:maxSdkVersion="30" tools:node="replace" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" android:maxSdkVersion="30" tools:node="replace" />
+    <!-- Health Connect: SOLO ESCRIBIR entrenamientos (sesión, calorías, pulsaciones) y peso, si el usuario lo activa -->
+    <uses-permission android:name="android.permission.health.WRITE_EXERCISE" />
+    <uses-permission android:name="android.permission.health.WRITE_ACTIVE_CALORIES_BURNED" />
+    <uses-permission android:name="android.permission.health.WRITE_HEART_RATE" />
+    <uses-permission android:name="android.permission.health.WRITE_WEIGHT" />
+    <!-- la librería de Health Connect pide Android 8+; en móviles más antiguos la opción no se ofrece -->
+    <uses-sdk tools:overrideLibrary="androidx.health.connect.client" />
     <!-- sin anuncios ni seguimiento: se quita el ID de publicidad aunque alguna librería lo pida (declaración de Play Console: «No») -->
     <uses-permission android:name="com.google.android.gms.permission.AD_ID" tools:node="remove" />
 
@@ -49,6 +76,8 @@
         </intent>
         <!-- botón «Música» del entrenamiento: saber si está Spotify y abrir la app de música del móvil -->
         <package android:name="com.spotify.music" />
+        <!-- saber si está instalado Health Connect -->
+        <package android:name="com.google.android.apps.healthdata" />
         <intent>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.APP_MUSIC" />

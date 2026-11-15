@@ -381,6 +381,7 @@ export class Store {
     this.data.weights.push({ date: when.toISOString(), kg: roundKg(kg) });
     this.data.weights.sort((a, b) => Date.parse(a.date) - Date.parse(b.date));
     this.persist();
+    this.onWeightAdded?.(roundKg(kg), when.toISOString());
   }
 
   updateWeightAt(index: number, kg: number): void {
@@ -526,6 +527,7 @@ export class Store {
   addHistory(entry: HistoryEntry): void {
     this.data.history = [entry, ...this.data.history].slice(0, HISTORY_LIMIT);
     this.persist();
+    this.onHistoryAdded?.(entry);
   }
 
   /** Copia un entrenamiento del historial a otra fecha y hora (p. ej. uno que se perdió). */
@@ -674,6 +676,9 @@ export class Store {
 
   /** Se llama cada vez que se guardan datos (p. ej., para volver a programar los recordatorios). */
   onSaved: (() => void) | null = null;
+  /** Al guardar un entrenamiento nuevo o anotar el peso (p. ej., para Health Connect). */
+  onHistoryAdded: ((e: HistoryEntry) => void) | null = null;
+  onWeightAdded: ((kg: number, date: string) => void) | null = null;
 
   private persist(): void {
     try {

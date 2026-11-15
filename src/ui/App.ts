@@ -15,6 +15,7 @@ import { Haptics } from '../services/Haptics';
 import { ScreenAwake } from '../services/ScreenAwake';
 import { Sounds } from '../services/Sounds';
 import { Voice } from '../services/Voice';
+import { exportWeight, exportWorkout } from '../services/Health';
 import { clear, h } from './dom';
 import { icon, type IconName } from './icons';
 
@@ -84,6 +85,9 @@ export class App {
     // recordatorios del móvil: se recalculan al abrir la app, al volver a ella y cada vez que cambia algo
     const remind = () => rescheduleReminders(this.store, () => this.access.premium);
     this.store.onSaved = remind;
+    // Health Connect: si está activado, cada entrenamiento y cada peso nuevos se guardan también allí
+    this.store.onHistoryAdded = (e) => { if (this.store.settings.healthConnect) exportWorkout(e); };
+    this.store.onWeightAdded = (kg, date) => { if (this.store.settings.healthConnect) exportWeight(kg, date); };
     document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') remind(); });
     window.setTimeout(remind, 3000);
     root.append(this.view, this.tabbar);

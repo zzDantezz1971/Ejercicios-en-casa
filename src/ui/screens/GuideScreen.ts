@@ -1,3 +1,4 @@
+import { IS_NATIVE } from '../../platform/native';
 import type { App, Screen } from '../App';
 import { h } from '../dom';
 import { icon, type IconName } from '../icons';
@@ -60,6 +61,8 @@ const GUIDE: Array<{ icon: IconName; title: string; sub: string; points: Array<s
       'Conecta un reloj o una pulsera que difunda la frecuencia cardíaca por Bluetooth: verás tus pulsaciones durante el entrenamiento y las calorías se calcularán con tu pulso.',
       'En Ajustes › Reloj tienes los pasos para conectarlo.',
       'Samsung Galaxy Watch, Pixel Watch y otros Wear OS: instala en el reloj una app que emita el pulso por Bluetooth (en Ajustes › Reloj te explicamos cómo).',
+      ...(IS_NATIVE ? [{ h: 'Apps de salud' },
+        'En Ajustes › Apps de salud puedes guardar tus entrenamientos (tiempo, calorías y pulsaciones) y tu peso en Health Connect, para verlos en Samsung Health, Google Fit, Fitbit y otras apps de salud. Kasa Fit solo escribe: nunca lee tus datos de salud.'] : []),
       ...(HAS_BACKUP ? [{ h: 'Copia de seguridad' }, 'Guarda tus tablas, historial y ajustes en un archivo (por ejemplo, en Drive) y restáuralo si cambias de móvil.'] : []),
       { h: 'Gratis y prémium' },
       'Gratis: dos ejercicios de cada apartado y todas las funciones de la app.',

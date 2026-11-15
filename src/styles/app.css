@@ -1579,3 +1579,5 @@ button.plan-row { cursor: pointer; }
 .plan-progress .ico { color: var(--accent); width: 18px; height: 18px; }
 .plan-renew { padding: 12px 14px; }
 .btn.danger-text { color: var(--danger); }
+.health-card { display: flex; flex-direction: column; gap: 12px; }
+.health-icon { color: #E5484D; background: rgb(229 72 77 / .14); }

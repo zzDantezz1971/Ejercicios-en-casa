@@ -38,12 +38,10 @@ una vista previa de la versión gratis). Falta configurarlo en Google:
 
 ## Versión 1.1 (después del lanzamiento)
 
-- **Health Connect** (decidido hacerlo tras publicar, para no retrasar la revisión):
-  - Configuració › tarjeta «Health Connect» con interruptor «Guarda els entrenaments a Health Connect» (Android 8+; si no, no sale).
-  - Solo **escribir** (nunca leer): al acabar cada entrenamiento, la sesión (inicio, fin, nombre de la tabla, tipo fuerza),
-    las calorías y las pulsaciones del reloj si las hay; opcionalmente, el peso al anotarlo en Mis dades.
-  - Con una librería de Capacitor para Health Connect; permisos de escritura en el AndroidManifest.
-  - Play Console: declarar cada permiso de salud (revisión aparte) y actualizar la política de privacidad
-    (también en el repositorio kasa-fit-privacidad).
-  - Sirve para Samsung Health, Google Fit, Fitbit, Mi Fitness...; no para Garmin Connect ni Polar Flow.
+- **Health Connect: HECHO (adelantado a la 1.0).** Configuració › Apps de salut: interruptor «Desa els entrenaments a
+  Health Connect» (solo app Android, Android 9+; en 9-13 con botón para instalarlo). Solo ESCRIBE: sesión de fuerza,
+  calorías activas, pulsaciones del reloj y peso. Código: android/.../KasaHealthPlugin.kt y HealthPrivacyActivity.kt,
+  src/services/Health.ts. Política de privacidad actualizada (también en kasa-fit-privacidad, sección #health-connect).
+  - Pendiente en Play Console: Contenido de la app › Permisos de salud (Health Connect): declarar los 4 permisos de
+    escritura (ejercicio, calorías activas, frecuencia cardíaca, peso), explicar el uso y enlazar la política.
 - Más adelante, si hace falta: servidor de activaciones de los códigos (ver arriba), app para iPhone, ficha de Play en castellano.

@@ -4,6 +4,7 @@ import { flushDurable } from '../../platform/durable';
 import { showUpdateDialog } from '../components/updateDialog';
 import { BUILD_TIME, checkForUpdate, updateReady } from '../../services/Updates';
 import { IS_NATIVE } from '../../platform/native';
+import { healthStatus, installHealth, requestHealth } from '../../services/Health';
 import { REMINDER_KINDS, remindersOf, type ReminderKind } from '../../domain/reminders';
 import { dayName, EVERY, RemindersScreen, WEEK } from './RemindersScreen';
 import { Store } from '../../domain/Store';
@@ -176,6 +177,63 @@ export class SettingsScreen implements Screen {
   }
 
   /** Conexión con el reloj para ver las pulsaciones. */
+  /**
+   * Health Connect (app de Android): guardar los entrenamientos y el peso. Se pinta cuando se sabe si el móvil lo tiene;
+   * si no es compatible, no sale nada. Se vuelve a comprobar al volver a la app (p. ej., después de instalarlo).
+   */
+  private healthSection(): HTMLElement {
+    const wrap = h('div', { class: 'health-wrap' });
+    const paint = async () => {
+      const st = await healthStatus();
+      let on = !!this.app.store.settings.healthConnect;
+      // si se ha quitado el permiso (o ya no está Health Connect), se apaga
+      if (on && !(st.status === 'available' && st.granted)) {
+        on = false;
+        this.app.store.saveSettings({ ...this.app.store.settings, healthConnect: false });
+      }
+      clear(wrap);
+      if (st.status === 'unsupported') return;
+      const head = h('div', { class: 'backup-head' },
+        h('span', { class: 'set-icon health-icon' }, icon('heart')),
+        h('div', { class: 'set-text' },
+          h('strong', {}, 'Health Connect'),
+          h('p', { class: 'muted small' }, 'Tus entrenamientos (tiempo, calorías y pulsaciones del reloj) y tu peso aparecen en Samsung Health, Google Fit, Fitbit y otras apps de salud. Kasa Fit solo escribe: nunca lee tus datos de salud.')));
+      if (st.status === 'install') {
+        wrap.append(h('h3', { class: 'block-title' }, 'Apps de salud'), h('section', { class: 'card health-card' }, head,
+          h('p', { class: 'muted small' }, 'Para usarlo, instala la app gratuita Health Connect de Google.'),
+          h('button', { class: 'btn primary block', onclick: () => installHealth() }, icon('download'), 'Instalar Health Connect')));
+        return;
+      }
+      const box = h('input', { type: 'checkbox', id: 'set-health', class: 'switch', checked: on, onchange: async () => {
+        if (!box.checked) {
+          this.app.store.saveSettings({ ...this.app.store.settings, healthConnect: false });
+          return;
+        }
+        const r = st.granted ? st : await requestHealth();
+        if (r.status === 'available' && r.granted) {
+          this.app.store.saveSettings({ ...this.app.store.settings, healthConnect: true });
+          this.app.haptics.tap();
+        } else {
+          box.checked = false;
+          await confirmDialog('Sin el permiso de Health Connect no se pueden guardar los entrenamientos. Puedes darlo cuando quieras volviendo a activar esta opción.', 'Vale', '');
+        }
+        void paint();
+      } });
+      wrap.append(h('h3', { class: 'block-title' }, 'Apps de salud'), h('section', { class: 'card health-card' }, head,
+        h('label', { class: 'switch-row', for: 'set-health' },
+          h('span', { class: 'set-text' }, h('strong', {}, 'Guardar los entrenamientos en Health Connect'),
+            h('span', { class: 'muted block small' }, 'Desde ahora, al acabar cada entrenamiento y al anotar el peso.')),
+          box)));
+    };
+    void paint();
+    const onVisible = () => {
+      if (!wrap.isConnected) { document.removeEventListener('visibilitychange', onVisible); return; }
+      if (document.visibilityState === 'visible') void paint();
+    };
+    document.addEventListener('visibilitychange', onVisible);
+    return wrap;
+  }
+
   private watchSection(): HTMLElement {
     const hr = this.app.heart;
     const live = h('p', { class: 'hr-live', 'aria-live': 'polite' });
@@ -388,6 +446,7 @@ export class SettingsScreen implements Screen {
       this.remindersCard(),
       h('h3', { class: 'block-title' }, 'Reloj'),
       this.watchSection(),
+      this.healthSection(),
       // copia a mano solo en la web (en la app de Android los datos van en la copia automática de Google)
       HAS_BACKUP ? h('h3', { class: 'block-title' }, 'Copia de seguridad') : null,
       HAS_BACKUP ? this.backupSection() : null,

@@ -177,6 +177,8 @@ export interface Settings {
   theme: 'dark' | 'light' | 'auto';
   /** Tema de color (Configuración › Pantalla): «blau» es el de siempre. */
   colorTheme?: string;
+  /** Guardar los entrenamientos y el peso en Health Connect (app de Android). */
+  healthConnect?: boolean;
   /** Estilo del maniquí: realista, dibujo (tonos planos y contorno) o de piezas simples. */
   figureStyle: FigureStyle;
   /** Material que tiene el usuario (los ejercicios sin material se ven siempre). */

@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-15T09:36:30Z",
+    "es": ["App de Android: nueva opción para guardar los entrenamientos y el peso en Health Connect y verlos en Samsung Health, Google Fit, Fitbit… (Ajustes › Apps de salud). Kasa Fit solo escribe: nunca lee tus datos de salud."],
+    "ca": ["App d’Android: nova opció per desar els entrenaments i el pes a Health Connect i veure’ls a Samsung Health, Google Fit, Fitbit… (Configuració › Apps de salut). Kasa Fit només hi escriu: mai no llegeix les teves dades de salut."],
+    "en": ["Android app: new option to save workouts and weight to Health Connect and see them in Samsung Health, Google Fit, Fitbit… (Settings › Health apps). Kasa Fit only writes: it never reads your health data."]
+  },
+  {
     "fecha": "2026-11-15T09:21:39Z",
     "es": ["El tema Oro es ahora un poco más dorado y brillante."],
     "ca": ["El tema Or ara és una mica més daurat i brillant."],
