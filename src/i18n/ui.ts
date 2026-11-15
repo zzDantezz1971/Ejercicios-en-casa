@@ -1031,8 +1031,8 @@ const ROWS: Row[] = [
   ['Lila noche', 'Lila nit', 'Night lilac'],
   ['Rosa', 'Rosa', 'Pink'],
   ['Grafito', 'Grafit', 'Graphite'],
-  ['Idioma (català, castellano o English), modo oscuro, claro o el del móvil, y tema de color: azul y verde gratis; terracota, lila, rosa y grafito con Prémium.', 'Idioma (català, castellano o English), mode fosc, clar o el del mòbil, i tema de color: blau i verd gratis; terracota, lila, rosa i grafit amb Prèmium.', 'Language (català, castellano or English), dark, light or phone mode, and colour theme: blue and green free; terracotta, lilac, pink and graphite with Premium.'],
-  ['Seis temas de color para la app', 'Sis temes de color per a l’app', 'Six colour themes for the app'],
+  ['Idioma (català, castellano o English), modo oscuro, claro o el del móvil, y tema de color: azul y verde gratis; terracota, oro, lila, rosa y grafito con Prémium.', 'Idioma (català, castellano o English), mode fosc, clar o el del mòbil, i tema de color: blau i verd gratis; terracota, or, lila, rosa i grafit amb Prèmium.', 'Language (català, castellano or English), dark, light or phone mode, and colour theme: blue and green free; terracotta, gold, lilac, pink and graphite with Premium.'],
+  ['Siete temas de color para la app', 'Set temes de color per a l’app', 'Seven colour themes for the app'],
   // reloj: Wear OS
   ['¿Tienes un Samsung Galaxy Watch o un Pixel Watch?', 'Tens un Samsung Galaxy Watch o un Pixel Watch?', 'Do you have a Samsung Galaxy Watch or a Pixel Watch?'],
   ['Estos relojes (y otros con Wear OS) no envían el pulso a otras apps por sí solos. Para usarlos con Kasa Fit:', 'Aquests rellotges (i altres amb Wear OS) no envien el pols a altres apps per si sols. Per fer-los servir amb Kasa Fit:', 'These watches (and other Wear OS watches) don’t send your heart rate to other apps on their own. To use them with Kasa Fit:'],
