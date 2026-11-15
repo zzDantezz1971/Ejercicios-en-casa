@@ -3,6 +3,13 @@
 Recordatorio: **cuando instales la app de prueba** (el APK de GitHub o la prueba interna de Play), repasa esta lista.
 Marca cada punto al probarlo. Si algo falla, haz una captura y cuéntamelo.
 
+## 0. Para probar en el build 16 (cambios hechos durante la prueba del build 15)
+- [ ] Botón atrás de Android: vuelve a la pantalla anterior; en Inici cierra la app (antes cerraba la app desde cualquier pantalla).
+- [ ] Versión gratis, «Afegeix un exercici»: primero el grupo «Gratis»; los de Prèmium con candado y al tocarlos se abre Prèmium (antes se podían marcar).
+- [ ] Configuració › Avisos › Veu: como mucho 3 voces por idioma, sin repetidas (en inglés, británicas), y que suenen distintas.
+- [ ] Configuració: al entrar, todos los grupos cerrados; con atrás se cierran los abiertos.
+- [ ] Al cambiar el idioma, la app vuelve a Configuració (no a Inici).
+
 ## 1. Health Connect (Configuració › Apps de salut)
 - [ ] Sale la tarjeta «Health Connect». Si pide instalarla, el botón abre Play Store; al volver a la app, la tarjeta cambia sola.
 - [ ] Al activar «Desa els entrenaments a Health Connect» sale la pantalla de permisos del sistema. Acepta todo.
@@ -50,9 +57,6 @@ Marca cada punto al probarlo. Si algo falla, haz una captura y cuéntamelo.
 - [ ] Vibra en los avisos.
 - [ ] La voz habla en el idioma de la app (catalán, castellano o inglés) con la voz del móvil.
 - [x] Configuració › Avisos › Veu: la elegida es la que habla al entrenar (build 15).
-- [ ] Build 16: como mucho 3 voces por idioma y que suenen distintas.
-- [ ] Build 16: botón atrás de Android vuelve a la pantalla anterior; en Inici cierra la app.
-- [ ] Build 16: versión gratis, en «Afegeix un exercici» salen primero los gratis; con candado abre Prèmium.
 - [ ] Con la pantalla bloqueada o la app en segundo plano y al volver, el entrenamiento sigue bien.
 
 ## 8. Generales
