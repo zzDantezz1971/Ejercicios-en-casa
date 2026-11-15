@@ -32,7 +32,8 @@ export class LookScreen implements Screen {
   /** Escenario del muñeco: arrastrar lo gira; un toque (sin arrastrar) lo abre en grande. */
   private stage(): HTMLElement {
     const el = h('div', { class: 'stage look-stage' }, this.canvas,
-      h('span', { class: 'stage-hint' }, icon('sides'), 'Arrastra para girar · toca para verlo en grande'));
+      h('span', { class: 'stage-hint left' }, icon('search'), 'Toca para verlo en grande'),
+      h('span', { class: 'stage-hint' }, icon('sides'), 'Arrastra para girar'));
     let down: { x: number; y: number; t: number } | null = null;
     el.addEventListener('pointerdown', (e) => { down = { x: e.clientX, y: e.clientY, t: Date.now() }; });
     el.addEventListener('pointerup', (e) => {

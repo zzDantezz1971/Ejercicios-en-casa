@@ -1116,7 +1116,7 @@ const ROWS: Row[] = [
   ['Añadir {x}', 'Afegeix {x}', 'Add {x}'],
   ['Elige los que quieras', 'Tria els que vulguis', 'Pick as many as you like'],
   ['(no está en tu material)', '(no és al teu material)', '(not in your equipment)'],
-  ['Arrastra para girar · toca para verlo en grande', 'Arrossega per girar · toca per veure’l en gran', 'Drag to rotate · tap to see it bigger'],
+  ['Toca para verlo en grande', 'Toca per veure’l en gran', 'Tap to see it bigger'],
   ['El muñeco en grande', 'El ninot en gran', 'The figure, bigger'],
 ];
 
