@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-15T17:30:49Z",
+    "es": ["El aviso de «Hace X días que no te pesas» (y el de la copia) ya sigue los días y la hora de Ajustes › Avisos, en vez de salir a los 7 días."],
+    "ca": ["L’avís de «Fa X dies que no et peses» (i el de la còpia) ja segueix els dies i l’hora de Configuració › Avisos, en lloc de sortir als 7 dies."],
+    "en": ["The “You haven’t weighed yourself in X days” reminder (and the backup one) now follows the days and time in Settings › Reminders instead of appearing after 7 days."]
+  },
+  {
     "fecha": "2026-11-15T11:52:21Z",
     "es": ["Tablas: una sola entrada «Plan de la semana» (o «Planes de la semana» si tienes varios) con los botones «Ver» y «Nuevo plan»; dentro está la lista para elegir el que usas.", "Inicio: si la tabla en uso es de un plan, se ve «Plan de la semana · Lunes» y la zona del día; los nombres largos ocupan como mucho dos líneas."],
     "ca": ["Taules: una sola entrada «Pla setmanal» (o «Plans setmanals» si en tens diversos) amb els botons «Mostra» i «Nou pla»; a dins hi ha la llista per triar el que fas servir.", "Inici: si la taula en ús és d’un pla, es veu «Pla setmanal · Dilluns» i la zona del dia; els noms llargs ocupen com a màxim dues línies."],

@@ -100,3 +100,29 @@ export function planReminders(now: Date, settings: ReminderSettings, state: Remi
   }
   return out;
 }
+
+/**
+ * ¿Toca ya dentro de la app (aviso al volver al inicio)? Sí si desde la última vez que lo hiciste ha llegado
+ * algún día y hora del recordatorio (con «cada N semanas», solo las semanas que tocan). Si nunca se ha hecho,
+ * cuenta desde que se activó.
+ */
+export function reminderDue(now: Date, r: ReminderRule, done: readonly string[]): boolean {
+  if (!r.on || !r.days.length) return false;
+  const lastDone = done.reduce((m, d) => Math.max(m, new Date(d).getTime() || 0), 0);
+  const since = r.since ? new Date(r.since).getTime() || 0 : 0;
+  const from = Math.max(lastDone, since);
+  const every = r.every ?? 1;
+  const anchor = lastDone ? new Date(lastDone) : r.since ? new Date(r.since) : now;
+  for (let i = 0; i <= DAYS_AHEAD_LONG; i++) {
+    const when = at(addDays(now, -i), r.time);
+    if (when > now || !r.days.includes(when.getDay())) continue;
+    if (when.getTime() <= from) return false;
+    if (every > 1) {
+      const k = weeksBetween(anchor, when);
+      if (k % every !== 0 || (lastDone && k < every)) continue;
+    }
+    // si no se ha hecho nunca y no se sabe desde cuándo está activado, solo cuenta si ya hay algún día pasado
+    return true;
+  }
+  return false;
+}

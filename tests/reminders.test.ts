@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { planReminders, remindersOf } from '../src/domain/reminders';
+import { planReminders, reminderDue, remindersOf } from '../src/domain/reminders';
 
 // miércoles 11-11-2026 a las 10:00
 const NOW = new Date(2026, 10, 11, 10, 0);
@@ -48,5 +48,30 @@ describe('Recordatorios', () => {
     expect(planReminders(NOW, remindersOf(undefined), base)).toEqual([]);
     const old = remindersOf({ weigh: { on: true, every: 'week', day: 1, time: '08:30' } as never });
     expect(old.weigh.days).toEqual([1]);
+  });
+});
+
+describe('reminderDue (aviso dentro de la app)', () => {
+  // jueves 12-11-2026 a las 08:30; hoy domingo 15-11-2026
+  const rule = { on: true, days: [4], time: '08:30', every: 1 };
+  const sun = new Date(2026, 10, 15, 10, 0);
+  it('toca si desde la última vez ha pasado un jueves a la hora', () => {
+    expect(reminderDue(sun, rule, [new Date(2026, 10, 10, 9).toISOString()])).toBe(true);
+  });
+  it('no toca si te pesaste después del último jueves, aunque hagan más de 7 días después', () => {
+    expect(reminderDue(sun, rule, [new Date(2026, 10, 12, 20).toISOString()])).toBe(false);
+    expect(reminderDue(new Date(2026, 10, 19, 8, 0), rule, [new Date(2026, 10, 12, 20).toISOString()])).toBe(false);
+    expect(reminderDue(new Date(2026, 10, 19, 9, 0), rule, [new Date(2026, 10, 12, 20).toISOString()])).toBe(true);
+  });
+  it('apagado o desde que se activó', () => {
+    expect(reminderDue(sun, { ...rule, on: false }, [])).toBe(false);
+    expect(reminderDue(sun, { ...rule, since: new Date(2026, 10, 13).toISOString() }, [])).toBe(false);
+    expect(reminderDue(sun, { ...rule, since: new Date(2026, 10, 1).toISOString() }, [])).toBe(true);
+  });
+  it('cada 2 semanas: solo la semana que toca', () => {
+    const r2 = { ...rule, every: 2 };
+    const last = [new Date(2026, 10, 5, 9).toISOString()]; // jueves 5
+    expect(reminderDue(new Date(2026, 10, 15, 10), r2, last)).toBe(false); // el 12 no toca
+    expect(reminderDue(new Date(2026, 10, 19, 10), r2, last)).toBe(true);
   });
 });

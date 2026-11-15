@@ -4,12 +4,11 @@ import { h } from '../dom';
 import { icon } from '../icons';
 import { backupDue, saveBackupNow } from './backupPrompt';
 import { fmtKg } from './weightCard';
-import { remindersOf } from '../../domain/reminders';
+import { reminderDue, remindersOf } from '../../domain/reminders';
 
-/** ¿Toca recordar el peso? Solo si el recordatorio de peso está activado y han pasado las semanas elegidas. */
+/** ¿Toca recordar el peso? Solo si el recordatorio de peso está activado y desde que te pesaste ha llegado su día y hora. */
 function weightDue(app: App): boolean {
-  const r = remindersOf(app.store.settings.reminders).weigh;
-  return r.on && app.store.daysSinceWeight() >= (r.every ?? 1) * 7;
+  return reminderDue(new Date(), remindersOf(app.store.settings.reminders).weigh, app.store.weights.map((w) => w.date));
 }
 
 const fmtDay = (iso: string) => new Date(iso).toLocaleDateString(LOCALE, { day: 'numeric', month: 'long' });
