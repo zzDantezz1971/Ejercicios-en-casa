@@ -1581,3 +1581,4 @@ button.plan-row { cursor: pointer; }
 .btn.danger-text { color: var(--danger); }
 .health-card { display: flex; flex-direction: column; gap: 12px; }
 .health-icon { color: #E5484D; background: rgb(229 72 77 / .14); }
+.plan-tip { display: flex; gap: 8px; align-items: flex-start; }

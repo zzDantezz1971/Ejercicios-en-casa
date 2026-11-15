@@ -1,4 +1,4 @@
-import { generate, GOAL_INFO, GOALS, LEVEL_INFO, LEVELS, swapExercise, type GenContext, type GenResult, type Goal, type Level } from '../../domain/generator';
+import { generate, GOAL_INFO, GOALS, LEVEL_INFO, LEVELS, swapExercise, type GenContext, type GenOptions, type GenResult, type Goal, type Level } from '../../domain/generator';
 import { remindersOf } from '../../domain/reminders';
 import { WorkoutPlan } from '../../domain/WorkoutPlan';
 import {
@@ -63,6 +63,20 @@ export function refreshPlan(app: App, now = new Date()): void {
     return { ...d, routineId: app.store.addRoutine(tableName(plan, d.day, d.kind), g.routine, g.rounds).id };
   });
   if (changed) app.store.setPlan({ ...plan, days, week });
+  useTodaysTable(app, false);
+}
+
+/**
+ * La tabla en uso sigue al plan: la de hoy (o, si hoy se descansa, la del próximo día de entrenamiento).
+ * Si el usuario ha elegido otra tabla que no es del plan, se respeta (salvo `force`, al crear el plan).
+ */
+export function useTodaysTable(app: App, force: boolean, now = new Date()): void {
+  const plan = app.store.plan;
+  if (!plan) return;
+  const ids = new Set(plan.days.map((d) => d.routineId));
+  if (!force && !ids.has(app.store.active.id)) return;
+  const pd = planDayOn(plan, now) ?? nextPlanDay(plan, now)?.day;
+  if (pd && app.store.routineById(pd.routineId) && app.store.active.id !== pd.routineId) app.store.setActive(pd.routineId);
 }
 
 /** Duración de una tabla guardada. */
@@ -154,6 +168,10 @@ export class PlanWizardScreen implements Screen {
     this.render();
   }
 
+  enter(): void {
+    if (this.step === 4) this.render();
+  }
+
   onBack(): boolean {
     if (this.step === 0) return false;
     this.step--;
@@ -213,14 +231,16 @@ export class PlanWizardScreen implements Screen {
         const x = this.result.find((y) => y.day === d);
         if (!x) { list.append(h('div', { class: 'plan-row rest' }, h('span', { class: 'plan-dname' }, dayName(d)), h('span', { class: 'muted' }, 'Descanso'))); continue; }
         const p = WorkoutPlan.build(x.r.routine, app.catalog, app.store.settings, x.r.rounds);
-        list.append(h('div', { class: 'plan-row' },
+        // al tocar un día se ven sus ejercicios y se pueden cambiar antes de crear el plan
+        list.append(h('button', { class: 'plan-row', onclick: () => app.push(new DraftDayScreen(app, x, dayOptions(o, x.kind), tr(kindLabel(o, x.kind)))) },
           h('span', { class: 'plan-dname' }, dayName(d)),
-          h('span', { class: 'plan-dtext' }, h('strong', {}, tr(kindLabel(o, x.kind))), h('span', { class: 'muted small' }, `${humanDuration(p.estimatedSeconds)} · ${tr(plural(p.exerciseCount, 'ejercicio', 'ejercicios'))}`))));
+          h('span', { class: 'plan-dtext' }, h('strong', {}, tr(kindLabel(o, x.kind))), h('span', { class: 'muted small' }, `${humanDuration(p.estimatedSeconds)} · ${tr(plural(p.exerciseCount, 'ejercicio', 'ejercicios'))}`)),
+          icon('chevron', 'ico chev')));
       }
       body.append(h('h2', { class: 'maker-q' }, 'Tu semana'),
         h('p', { class: 'muted maker-summary' }, summary({ ...o, n: this.days.length })),
         list,
-        h('p', { class: 'muted small' }, 'Después podrás ver y cambiar la tabla de cada día.'),
+        h('p', { class: 'note small plan-tip' }, icon('info'), h('span', {}, 'Toca un día para ver sus ejercicios y el tiempo de cada uno, y cambiar lo que quieras.')),
         h('div', { class: 'maker-actions' },
           h('button', { class: 'btn ghost block', onclick: () => { this.propose(); this.render(); } }, icon('swap'), 'Otra propuesta'),
           h('button', { class: 'btn primary block big', onclick: () => void this.create() }, icon('check'), 'Crear el plan')));
@@ -236,8 +256,9 @@ export class PlanWizardScreen implements Screen {
     app.store.setPlan({ ...o, days, renew: true, week: mondayOf(new Date()), createdAt: new Date().toISOString() });
     app.haptics.tap();
     await askReminders(app, days.map((d) => d.day));
+    // la tabla de hoy (o la del próximo día de entrenamiento) pasa a ser la tabla en uso
+    useTodaysTable(app, true);
     app.openTab('inicio');
-    app.push(new PlanScreen(app));
   }
 }
 
@@ -331,6 +352,30 @@ export class PlanDayScreen implements Screen {
         h('div', { class: 'maker-actions' },
           h('button', { class: 'btn ghost block', onclick: () => { const g = generate(o, genCtx(app)); this.ask.remove = true; set(g); window.scrollTo({ top: 0 }); } }, icon('swap'), 'Otra propuesta'),
           h('button', { class: 'btn primary block big', disabled: isEmptyResult(r), onclick: () => startDay(app, pd) }, icon('play'), 'Empezar'))));
+    if (y >= 0) window.scrollTo({ top: y });
+  }
+}
+
+/** Un día del plan antes de crearlo: sus ejercicios con el tiempo de cada uno; se pueden cambiar. */
+class DraftDayScreen implements Screen {
+  readonly el = h('main', { class: 'screen maker-screen' });
+  private readonly ask = { remove: true };
+
+  constructor(private readonly app: App, private readonly x: { day: number; r: GenResult }, private readonly o: GenOptions, private readonly title: string) {
+    this.render();
+  }
+
+  private render(): void {
+    const { app, x, o } = this;
+    const y = this.el.isConnected ? window.scrollY : -1;
+    clear(this.el);
+    const set = (next: GenResult) => { x.r = next; this.render(); };
+    this.el.append(header(app, this.title, dayName(x.day)),
+      h('div', { class: 'maker-body' },
+        preview(app, x.r, { set, ask: this.ask, swap: (s, i) => swapExercise(x.r, s, i, o, genCtx(app)) }),
+        h('div', { class: 'maker-actions' },
+          h('button', { class: 'btn ghost block', onclick: () => { this.ask.remove = true; set(generate(o, genCtx(app))); window.scrollTo({ top: 0 }); } }, icon('swap'), 'Otra propuesta'),
+          h('button', { class: 'btn primary block big', disabled: isEmptyResult(x.r), onclick: () => app.back() }, icon('check'), 'Listo'))));
     if (y >= 0) window.scrollTo({ top: y });
   }
 }

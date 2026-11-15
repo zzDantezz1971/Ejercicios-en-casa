@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-15T10:34:06Z",
+    "es": ["Plan de la semana: antes de crearlo, toca un día para ver sus ejercicios y el tiempo de cada uno, y cambiar lo que quieras.", "Al crear el plan, la tabla del día pasa a ser la tabla en uso de Inicio, y cada día se pone la que toca."],
+    "ca": ["Pla setmanal: abans de crear-lo, toca un dia per veure’n els exercicis i el temps de cadascun, i canviar el que vulguis.", "En crear el pla, la taula del dia passa a ser la taula en ús d’Inici, i cada dia s’hi posa la que toca."],
+    "en": ["Weekly plan: before creating it, tap a day to see its exercises and the time for each one, and change anything you like.", "When you create the plan, the day’s routine becomes the routine in use on Home, and each day the right one is set."]
+  },
+  {
     "fecha": "2026-11-15T09:36:30Z",
     "es": ["App de Android: nueva opción para guardar los entrenamientos y el peso en Health Connect y verlos en Samsung Health, Google Fit, Fitbit… (Ajustes › Apps de salud). Kasa Fit solo escribe: nunca lee tus datos de salud."],
     "ca": ["App d’Android: nova opció per desar els entrenaments i el pes a Health Connect i veure’ls a Samsung Health, Google Fit, Fitbit… (Configuració › Apps de salut). Kasa Fit només hi escriu: mai no llegeix les teves dades de salut."],
