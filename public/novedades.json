@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-15T19:10:25Z",
+    "es": ["Títulos de los apartados (Calentamiento, Fuerza…) más grandes al ver y editar una tabla."],
+    "ca": ["Títols dels apartats (Escalfament, Força…) més grans en veure i editar una taula."],
+    "en": ["Bigger section titles (Warm-up, Strength…) when viewing and editing a table."]
+  },
+  {
     "fecha": "2026-11-15T19:07:48Z",
     "es": ["El material que hace falta ahora sale debajo de cada apartado (Calentamiento, Fuerza…), solo en los que piden alguno."],
     "ca": ["El material que cal ara surt sota cada apartat (Escalfament, Força…), només als que en demanen."],
