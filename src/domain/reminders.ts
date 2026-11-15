@@ -126,3 +126,25 @@ export function reminderDue(now: Date, r: ReminderRule, done: readonly string[])
   }
   return false;
 }
+
+/** Aviso de un plan de la semana: sus días de entrenamiento, a su hora. */
+export interface PlanReminderInput { days: readonly number[]; time: string }
+export interface PlannedPlanReminder { id: number; plan: number; day: number; at: Date }
+
+/**
+ * Avisos de los planes de la semana (cada plan con los suyos), a partir de ahora. Si hoy ya has entrenado, hoy no
+ * avisa. `plan` es la posición del plan en la lista que se pasa.
+ */
+export function planDayReminders(now: Date, plans: readonly PlanReminderInput[], trainings: readonly string[]): PlannedPlanReminder[] {
+  const doneToday = trainings.some((d) => sameDay(new Date(d), now));
+  const out: PlannedPlanReminder[] = [];
+  plans.forEach((p, k) => {
+    for (let i = 0; i <= DAYS_AHEAD; i++) {
+      const when = at(addDays(now, i), p.time);
+      if (when <= now || !p.days.includes(when.getDay())) continue;
+      if (i === 0 && doneToday) continue;
+      out.push({ id: 5000 + k * 20 + i, plan: k, day: when.getDay(), at: when });
+    }
+  });
+  return out;
+}

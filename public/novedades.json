@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-15T21:16:45Z",
+    "es": ["Recordatorios › Plan de la semana: cada plan tiene su propio aviso (sus días, con la hora que elijas). Al borrar un plan, se borra también su aviso. «Entrenamiento» queda para tus tablas."],
+    "ca": ["Recordatoris › Pla setmanal: cada pla té el seu propi avís (els seus dies, amb l’hora que triïs). En esborrar un pla, se n’esborra també l’avís. «Entrenament» queda per a les teves taules."],
+    "en": ["Reminders › Weekly plan: each plan has its own reminder (its days, at the time you choose). Deleting a plan deletes its reminder too. “Workout” is now for your own tables."]
+  },
+  {
     "fecha": "2026-11-15T21:05:03Z",
     "es": ["Muñeco: la sonrisa ya se ve entera (antes solo asomaban las puntas) y el hombre ya no tiene bultos en el pecho.", "Recordatorios: el aviso de entrenar dice de qué plan son los días. Al borrar el plan en uso, pasa a los días del plan que queda o, si no queda ninguno, te pregunta si lo quitas."],
     "ca": ["Ninot: el somriure ja es veu sencer (abans només en sortien les puntes) i l’home ja no té bonys al pit.", "Recordatoris: l’avís d’entrenar diu de quin pla són els dies. En esborrar el pla en ús, passa als dies del pla que queda o, si no en queda cap, et pregunta si el treus."],

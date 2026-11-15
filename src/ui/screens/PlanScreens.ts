@@ -67,16 +67,14 @@ export function planTitle(p: WeekPlan): string {
 }
 
 /**
- * Pone un plan en uso: su tabla de hoy (o la del próximo día) pasa a ser la tabla en uso y, si el recordatorio de
- * entrenar está activado, pasa a avisar los días de este plan.
+ * Pone un plan en uso: su tabla de hoy (o la del próximo día) pasa a ser la tabla en uso. (Cada plan tiene su propio
+ * aviso, en Recordatorios › Plan de la semana.)
  */
 export function usePlan(app: App, id: string): void {
   const p = app.store.planById(id);
   if (!p) return;
   app.store.setActivePlan(id);
   useTodaysTable(app, true);
-  const r = remindersOf(app.store.settings.reminders);
-  if (r.train.on) app.store.saveSettings({ ...app.store.settings, reminders: { ...r, train: { ...r.train, days: p.days.map((d) => d.day) } } });
 }
 
 /**
@@ -141,44 +139,24 @@ function summary(p: Pick<WeekPlan, 'goal' | 'minutes' | 'level'> & { n: number }
   return [tr(GOAL_INFO[p.goal].name), tr(plural(p.n, 'día', 'días')), `${p.minutes} min`, tr(LEVEL_INFO[p.level].name)].join(' · ');
 }
 
-/** ¿Los días del aviso de entrenar son los de este plan? */
-export function remindsPlan(days: readonly number[], p: WeekPlan): boolean {
-  const a = sortDays(days), b = sortDays(p.days.map((d) => d.day));
-  return a.length === b.length && a.every((d, i) => d === b[i]);
-}
-
-/**
- * Borra un plan (con sus tablas), después de preguntar. Si el aviso de entrenar seguía ese plan: pasa a los días
- * del plan que queda en uso o, si ya no queda ninguno, pregunta si se quita el aviso.
- */
+/** Borra un plan (con sus tablas y su aviso), después de preguntar. */
 export async function removePlan(app: App, id: string): Promise<boolean> {
-  const plan = app.store.planById(id);
-  if (!plan) return false;
+  if (!app.store.planById(id)) return false;
   if (!(await confirmDialog(tr('¿Borrar el plan de la semana y sus tablas?'), tr('Borrar'), tr('Cancelar'), true))) return false;
-  const wasActive = app.store.plan?.id === id;
-  const r = remindersOf(app.store.settings.reminders);
-  const followed = r.train.on && wasActive && remindsPlan(r.train.days, plan);
   app.store.deletePlan(id, true);
-  if (followed) {
-    const next = app.store.plan;
-    if (next) app.store.saveSettings({ ...app.store.settings, reminders: { ...r, train: { ...r.train, days: next.days.map((d) => d.day) } } });
-    else if (await confirmDialog(tr('¿Quitar también el aviso de entrenar de los días de este plan?'), tr('Quitar el aviso'), tr('Dejarlo'))) {
-      app.store.saveSettings({ ...app.store.settings, reminders: { ...r, train: { ...r.train, on: false } } });
-    }
-  }
   return true;
 }
 
-/** Pregunta si se quieren recordatorios los días de entrenamiento (y los activa con esos días). */
-async function askReminders(app: App, days: number[]): Promise<void> {
+/** Pregunta si se quiere el aviso de este plan los días de entrenamiento (y lo activa, a la hora de siempre). */
+async function askReminders(app: App, planId: string): Promise<void> {
   const ok = await confirmDialog(tr('¿Quieres que te avise los días de entrenamiento?'), tr('Sí, avísame'), tr('Ahora no'));
   if (!ok) return;
   if (REMINDERS_AVAILABLE && !(await askNotificationPermission())) {
     await confirmDialog(tr('Para recibir recordatorios, permite las notificaciones de Kasa Fit en los ajustes del móvil.'), tr('Vale'), '');
     return;
   }
-  const r = remindersOf(app.store.settings.reminders);
-  app.store.saveSettings({ ...app.store.settings, reminders: { ...r, train: { ...r.train, on: true, days: [...days], since: new Date().toISOString() } } });
+  const p = app.store.planById(planId);
+  if (p) app.store.setPlan({ ...p, remind: { on: true, time: p.remind?.time ?? remindersOf(app.store.settings.reminders).train.time } });
 }
 
 /** Asistente del plan: objetivo, días, minutos, nivel y vista previa de la semana. */
@@ -286,9 +264,10 @@ export class PlanWizardScreen implements Screen {
     if (old) app.store.deletePlan(old.id, true);
     const days: PlanDay[] = this.result.map((x) => ({ day: x.day, kind: x.kind, routineId: app.store.addRoutine(tableName(o, x.day, x.kind), x.r.routine, x.r.rounds).id }));
     const id = old?.id ?? `plan-${Date.now()}`;
-    app.store.setPlan({ id, ...(old?.name ? { name: old.name } : {}), ...o, days, renew: old?.renew ?? true, week: mondayOf(new Date()), createdAt: new Date().toISOString() });
+    app.store.setPlan({ id, ...(old?.name ? { name: old.name } : {}), ...o, days, renew: old?.renew ?? true, week: mondayOf(new Date()), createdAt: new Date().toISOString(), ...(old?.remind ? { remind: old.remind } : {}) });
     app.haptics.tap();
-    await askReminders(app, days.map((d) => d.day));
+    // «Cambiar el plan» mantiene su aviso; un plan nuevo pregunta
+    if (!old?.remind) await askReminders(app, id);
     // el plan nuevo queda en uso: la tabla de hoy (o la del próximo día de entrenamiento) pasa a ser la tabla en uso
     usePlan(app, id);
     app.openTab('inicio');

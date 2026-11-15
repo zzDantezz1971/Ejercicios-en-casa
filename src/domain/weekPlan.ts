@@ -31,7 +31,11 @@ export interface WeekPlan {
   /** Lunes (AAAA-MM-DD) de la semana con la que se generaron los ejercicios. */
   week: string;
   createdAt: string;
+  /** Aviso del plan (sus días, a esta hora). Cada plan tiene el suyo; al borrar el plan, desaparece. */
+  remind?: PlanRemind;
 }
+
+export interface PlanRemind { on: boolean; time: string }
 
 /** Nombre de cada tipo de sesión (en castellano; se traduce en pantalla). */
 export const KIND_NAME: Record<DayKind, string> = {
@@ -164,5 +168,6 @@ export function sanitizePlan(input: unknown): WeekPlan | undefined {
     renew: p.renew !== false,
     week: typeof p.week === 'string' ? p.week : mondayOf(new Date()),
     createdAt: typeof p.createdAt === 'string' ? p.createdAt : new Date().toISOString(),
+    ...(p.remind && typeof p.remind === 'object' ? { remind: { on: !!p.remind.on, time: typeof p.remind.time === 'string' && /^\d\d:\d\d$/.test(p.remind.time) ? p.remind.time : '19:00' } } : {}),
   };
 }

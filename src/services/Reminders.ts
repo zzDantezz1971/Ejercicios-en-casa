@@ -1,7 +1,9 @@
 import { LocalNotifications } from '@capacitor/local-notifications';
 import { tr } from '../i18n';
 import { IS_NATIVE } from '../platform/native';
-import { planReminders, remindersOf, type ReminderKind } from '../domain/reminders';
+import { planDayReminders, planReminders, remindersOf, type ReminderKind } from '../domain/reminders';
+import { GOAL_INFO } from '../domain/generator';
+import { kindLabel } from '../domain/weekPlan';
 import { HAS_BACKUP } from './Backup';
 import type { Store } from '../domain/Store';
 
@@ -50,16 +52,20 @@ async function reschedule(store: Store, premium: boolean): Promise<void> {
     lastBackup: store.lastBackup,
     premium,
   });
-  if (!plan.length) return;
+  // planes de la semana (prémium): cada uno con su aviso, sus días y su hora
+  const plans = premium ? store.plans.filter((p) => p.remind?.on) : [];
+  const byPlan = planDayReminders(new Date(), plans.map((p) => ({ days: p.days.map((d) => d.day), time: p.remind!.time })), store.history.map((e) => e.date));
+  if (!plan.length && !byPlan.length) return;
   if ((await LocalNotifications.checkPermissions()).display !== 'granted') return;
+  const look = { smallIcon: 'ic_stat_kasa', iconColor: '#3D6BFF' };
   await LocalNotifications.schedule({
-    notifications: plan.map((p) => ({
-      id: p.id,
-      title: tr(TEXT[p.kind][0]),
-      body: tr(TEXT[p.kind][1]),
-      schedule: { at: p.at, allowWhileIdle: true },
-      smallIcon: 'ic_stat_kasa',
-      iconColor: '#3D6BFF',
-    })),
+    notifications: [
+      ...plan.map((p) => ({ id: p.id, title: tr(TEXT[p.kind][0]), body: tr(TEXT[p.kind][1]), schedule: { at: p.at, allowWhileIdle: true }, ...look })),
+      ...byPlan.map((x) => {
+        const p = plans[x.plan], d = p.days.find((y) => y.day === x.day)!;
+        const name = p.name ?? tr(GOAL_INFO[p.goal].name);
+        return { id: x.id, title: `${tr('Plan de la semana')}: ${name}`, body: `${tr('Hoy toca')}: ${tr(kindLabel(p, d.kind))}`, schedule: { at: x.at, allowWhileIdle: true }, ...look };
+      }),
+    ],
   });
 }
