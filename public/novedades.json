@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-15T19:07:48Z",
+    "es": ["El material que hace falta ahora sale debajo de cada apartado (Calentamiento, Fuerza…), solo en los que piden alguno."],
+    "ca": ["El material que cal ara surt sota cada apartat (Escalfament, Força…), només als que en demanen."],
+    "en": ["The equipment needed now shows under each section (Warm-up, Strength…), only in those that use some."]
+  },
+  {
     "fecha": "2026-11-15T19:04:44Z",
     "es": ["Al ver o editar una tabla, «Necesitas:» muestra siempre el material que pide (con su icono) y marca el que no está en tu material."],
     "ca": ["En veure o editar una taula, «Necessites:» mostra sempre el material que demana (amb la seva icona) i marca el que no és al teu material."],

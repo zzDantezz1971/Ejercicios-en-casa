@@ -78,11 +78,11 @@ function missingEquip(app: App, r: GenResult): Equip[] {
   return [...miss];
 }
 
-/** Todo el material que pide la tabla (de cada requisito, el que se tiene o, si no, el primero) y si falta. */
-function neededEquip(app: App, r: GenResult): Array<{ e: Equip; missing: boolean }> {
+/** Todo el material que pide la tabla (o unos apartados) (de cada requisito, el que se tiene o, si no, el primero) y si falta. */
+function neededEquip(app: App, r: GenResult, sections: readonly SectionId[] = SECTION_IDS): Array<{ e: Equip; missing: boolean }> {
   const owned = new Set<string>(app.store.settings.equipment);
   const out = new Map<Equip, boolean>();
-  for (const s of SECTION_IDS) for (const it of r.routine[s]) {
+  for (const s of sections) for (const it of r.routine[s]) {
     for (const alts of app.catalog.get(it.exerciseId)?.equip ?? []) {
       const have = alts.find((e) => owned.has(e));
       if (have) out.set(have, out.get(have) ?? false);
@@ -146,13 +146,9 @@ function missLine(miss: readonly Equip[]): HTMLElement[] {
 export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement {
   const plan = WorkoutPlan.build(r.routine, app.catalog, app.store.settings, r.rounds);
   const locked = SECTION_IDS.some((s) => r.routine[s].some((i) => !app.access.canUse(i.exerciseId)));
-  const need = neededEquip(app, r);
   const shown = SECTION_IDS.flatMap((s) => r.routine[s].map((i) => app.catalog.get(i.exerciseId)).filter((e): e is NonNullable<typeof e> => !!e));
   const box = h('div', { class: 'maker-preview' },
     h('p', { class: 'maker-total' }, icon('clock'), plan.isEmpty ? 'Sin ejercicios' : `${humanDuration(plan.estimatedSeconds)} · ${plural(plan.exerciseCount, 'ejercicio', 'ejercicios')}`));
-  // el material que hace falta (el que no tienes, marcado)
-  if (need.length) box.append(h('p', { class: 'note small miss-note' }, h('span', {}, 'Necesitas:'),
-    ...need.map(({ e, missing }) => h('span', { class: 'miss-item' + (missing ? ' missing' : '') }, icon(EQUIP_INFO[e].icon as IconName), tr(EQUIP_INFO[e].name), missing ? h('span', { class: 'miss-flag' }, '(no está en tu material)') : '')))); 
   // leyenda de los botones de cada ejercicio
   if (edit) box.append(h('div', { class: 'maker-legend' },
     h('span', {}, icon('swap'), 'Cambiar'),
@@ -174,6 +170,10 @@ export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement
         : nr > 1 ? h('span', { class: 'maker-rounds' }, plural(nr, 'vuelta', 'vueltas')) : '');
     head.style.setProperty('--sec', st.color);
     box.append(head);
+    // el material que pide este apartado (el que no está en tu material, marcado)
+    const need = neededEquip(app, r, [s]);
+    if (need.length) box.append(h('p', { class: 'sec-need small', style: `--sec: ${st.color}` }, h('span', {}, 'Necesitas:'),
+      ...need.map(({ e, missing }) => h('span', { class: 'miss-item' + (missing ? ' missing' : '') }, icon(EQUIP_INFO[e].icon as IconName), tr(EQUIP_INFO[e].name), missing ? h('span', { class: 'miss-flag' }, '(no está en tu material)') : ''))));
     const rows: SortableRow[] = [];
     items.forEach((it, i) => {
       const ex = app.catalog.get(it.exerciseId);
