@@ -730,7 +730,8 @@ export class MannequinScene {
     for (const s of ['L', 'R']) {
       const sg = s === 'L' ? -1 : 1;
       if (fem) this.oriented(P['pec' + s], chestC.clone().addScaledVector(tUp, -2.2).addScaledVector(fwd, 6.3 * breath).addScaledVector(bodyLat, 4.3 * sg), tUp, bodyLat, 3.9, 4.4, 3.5);
-      else this.oriented(P['pec' + s], chestC.clone().addScaledVector(fwd, 5.7 * breath).addScaledVector(bodyLat, 4.9 * sg), tUp, bodyLat, 3.3, 6.2, 2.6);
+      // hombre: pectoral ancho y plano, más abajo y casi unido en el centro (no como dos pechos redondos)
+      else this.oriented(P['pec' + s], chestC.clone().addScaledVector(tUp, -2.8).addScaledVector(fwd, 7.0 * breath).addScaledVector(bodyLat, 4.0 * sg), tUp, bodyLat, 2.5, 6.6, 1.5);
     }
     this.oriented(P.traps, J.neck.clone().addScaledVector(tUp, -3).addScaledVector(fwd, -1.5), bodyLat, tUp, fem ? 8 : 9.5, fem ? 2.8 : 3.6, fem ? 3.8 : 4.6);
     this.oriented(P.glutes, J.pel.clone().addScaledVector(fwd, fem ? -5 : -4.6).addScaledVector(tUp, -1.5), bodyLat, tUp, fem ? 11.2 : 10.5, fem ? 6.4 : 6, fem ? 5.6 : 5);
@@ -776,7 +777,8 @@ export class MannequinScene {
     }
     this.oriented(P.nose, head.clone().addScaledVector(face, 9.3).addScaledVector(up, -1.2), up, lat, 2.0, 1.3, 1.6);
     // con barba, la boca un poco más adelante para que se vea por encima
-    const mouthAt = head.clone().addScaledVector(face, P.beard ? 9.1 : 8.3).addScaledVector(up, -4.9);
+    // con barba: por delante de la barba y por debajo del bigote, para que se vea la sonrisa entera
+    const mouthAt = head.clone().addScaledVector(face, P.beard ? 9.6 : 8.3).addScaledVector(up, P.beard ? -5.6 : -4.9);
     P.mouthFlat.visible = mood === 'effort';
     P.mouthSmile.visible = mood !== 'effort';
     if (mood === 'effort') {
@@ -829,7 +831,7 @@ export class MannequinScene {
       const full = this.look.beard === 'full';
       // por la mandíbula y la barbilla, por debajo de la boca; el bigote encima de la boca
       this.oriented(P.beard, head.clone().addScaledVector(up, full ? -6.0 : -5.6).addScaledVector(face, full ? 3.6 : 3.4), up, lat, full ? 4.8 : 4.3, full ? 6.5 : 6.0, full ? 6.3 : 6.0);
-      this.oriented(P.moustache, head.clone().addScaledVector(face, 9.45).addScaledVector(up, -3.4), lat, up, full ? 3.6 : 3.2, full ? 0.9 : 0.6, 0.7);
+      this.oriented(P.moustache, head.clone().addScaledVector(face, 9.45).addScaledVector(up, -3.2), lat, up, full ? 3.4 : 3.0, full ? 0.75 : 0.55, 0.7);
     }
 
     this.updateDumbbells(J, side);
