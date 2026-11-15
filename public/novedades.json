@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-15T19:17:34Z",
+    "es": ["Al editar una tabla, los botones de cada ejercicio (cambiar, quitar y arrastrar) pasan a la izquierda, para poder desplazar la pantalla por la derecha sin tocarlos."],
+    "ca": ["En editar una taula, els botons de cada exercici (canviar, treure i arrossegar) passen a l’esquerra, per poder desplaçar la pantalla per la dreta sense tocar-los."],
+    "en": ["When editing a table, each exercise’s buttons (swap, remove and drag) move to the left, so you can scroll on the right without touching them."]
+  },
+  {
     "fecha": "2026-11-15T19:14:05Z",
     "es": ["«Necesitas:» en su propia línea y el material debajo."],
     "ca": ["«Necessites:» a la seva pròpia línia i el material a sota."],

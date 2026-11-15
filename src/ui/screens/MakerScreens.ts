@@ -187,16 +187,39 @@ export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement
         next[i] = { ...it, seconds: Math.min(MAX_SECONDS, Math.max(MIN_SECONDS, it.seconds + d)) };
         edit!.set(withSection(r, s, next));
       };
+      const swapBtn = edit ? h('button', { class: 'icon-btn small', 'aria-label': `Cambiar ${ex.name} por otro`, onclick: () => {
+          // la lista para elegir el que lo sustituye (sin los que ya están en la tabla); conserva el tiempo
+          const have = new Set(SECTION_IDS.flatMap((x) => r.routine[x].map((y) => y.exerciseId)));
+          app.push(new PickExerciseScreen(app, s, have, ([id]) => {
+            const next = items.slice();
+            next[i] = { exerciseId: id, seconds: it.seconds };
+            edit.set(withSection(r, s, next));
+            app.back();
+          }, `Cambiar ${ex.name}`));
+        } }, icon('swap')) : '';
+      // quitar: apartado de los demás botones y con aviso (que se puede desactivar para esta lista)
+      const removeBtn = edit ? h('button', { class: 'icon-btn small danger maker-remove', 'aria-label': `Quitar ${ex.name} de la tabla`, onclick: async () => {
+          if (edit.ask.remove) {
+            const { ok, stop } = await confirmRemove(ex.name);
+            if (!ok) return;
+            if (stop) edit.ask.remove = false;
+          }
+          const next = items.slice();
+          next.splice(i, 1);
+          edit.set(withSection(r, s, next));
+        } }, icon('trash')) : '';
       const content = h('div', { class: 'maker-row' + (lock ? ' locked' : '') },
         // tocar la miniatura o el nombre abre la ficha (cómo se hace)
         h('button', { class: 'maker-open', 'aria-label': `Cómo se hace: ${ex.name}`, onclick: open }, img),
         h('div', { class: 'maker-name' },
           h('button', { class: 'maker-open maker-title', onclick: open }, ex.name, lock ? icon('lock', 'ico lock') : ''),
-          // tiempo del ejercicio: con − y + en las tablas que se pueden cambiar
-          edit ? h('div', { class: 'stepper inline maker-time' },
-            h('button', { 'aria-label': 'Menos tiempo', disabled: it.seconds <= MIN_SECONDS, onclick: () => setSecs(-STEP_SECONDS) }, '−'),
-            h('span', { class: 'secs' }, `${it.seconds} s`),
-            h('button', { 'aria-label': 'Más tiempo', disabled: it.seconds >= MAX_SECONDS, onclick: () => setSecs(STEP_SECONDS) }, '+'))
+          // tiempo (− +) y, al lado, cambiar y quitar: todo a la izquierda (la derecha queda libre para desplazar)
+          edit ? h('div', { class: 'maker-ctrls' },
+            h('div', { class: 'stepper inline maker-time' },
+              h('button', { 'aria-label': 'Menos tiempo', disabled: it.seconds <= MIN_SECONDS, onclick: () => setSecs(-STEP_SECONDS) }, '−'),
+              h('span', { class: 'secs' }, `${it.seconds} s`),
+              h('button', { 'aria-label': 'Más tiempo', disabled: it.seconds >= MAX_SECONDS, onclick: () => setSecs(STEP_SECONDS) }, '+')),
+            swapBtn, removeBtn)
             : h('span', { class: 'maker-secs muted small' }, `${it.seconds} s`),
           // peso de la mancuerna (al editar una tabla guardada)
           edit?.full && usesWeight(ex) ? h('button', { class: 'weight-btn small' + (it.weight ? '' : ' none'), 'aria-label': `Peso de ${ex.name}: ${it.weight ? kg(it.weight) + ' por mancuerna' : 'sin peso'}. Cambiar`, onclick: async () => {
@@ -206,28 +229,7 @@ export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement
             const { weight: _old, ...rest } = it;
             next[i] = w ? { ...rest, weight: w } : rest;
             edit.set(withSection(r, s, next));
-          } }, icon('dumbbell'), it.weight ? kg(it.weight) : 'Sin peso') : ''),
-        edit ? h('button', { class: 'icon-btn small', 'aria-label': `Cambiar ${ex.name} por otro`, onclick: () => {
-          // la lista para elegir el que lo sustituye (sin los que ya están en la tabla); conserva el tiempo
-          const have = new Set(SECTION_IDS.flatMap((x) => r.routine[x].map((y) => y.exerciseId)));
-          app.push(new PickExerciseScreen(app, s, have, ([id]) => {
-            const next = items.slice();
-            next[i] = { exerciseId: id, seconds: it.seconds };
-            edit.set(withSection(r, s, next));
-            app.back();
-          }, `Cambiar ${ex.name}`));
-        } }, icon('swap')) : '',
-        // quitar: apartado de los demás botones y con aviso (que se puede desactivar para esta lista)
-        edit ? h('button', { class: 'icon-btn small danger maker-remove', 'aria-label': `Quitar ${ex.name} de la tabla`, onclick: async () => {
-          if (edit.ask.remove) {
-            const { ok, stop } = await confirmRemove(ex.name);
-            if (!ok) return;
-            if (stop) edit.ask.remove = false;
-          }
-          const next = items.slice();
-          next.splice(i, 1);
-          edit.set(withSection(r, s, next));
-        } }, icon('trash')) : '');
+          } }, icon('dumbbell'), it.weight ? kg(it.weight) : 'Sin peso') : ''));
       rows.push({ content, label: ex.name });
     });
     // se ordena arrastrando con el asa (sin flechas)
@@ -236,7 +238,7 @@ export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement
       const [moved] = next.splice(from, 1);
       next.splice(to, 0, moved);
       edit.set(withSection(r, s, next));
-    }, { arrows: false }));
+    }, { arrows: false, handleFirst: true }));
     else for (const row of rows) box.append(row.content);
     if (edit) box.append(h('button', { class: 'maker-add', onclick: () => addTo(app, r, s, edit) }, icon('plus'), 'Añadir un ejercicio'));
   }

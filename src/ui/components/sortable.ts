@@ -18,8 +18,8 @@ export interface SortableRow {
 /** Ejercicio movido con una flecha: dónde estaba en pantalla, para seguirlo al volver a pintar la lista. */
 let follow: { label: string; top: number } | null = null;
 
-/** `arrows: false`: sin flechas ↑ ↓, solo el asa para arrastrar. */
-export function sortableList(rows: SortableRow[], onMove: (from: number, to: number) => void, opts: { arrows?: boolean } = {}): HTMLElement {
+/** `arrows: false`: sin flechas ↑ ↓, solo el asa para arrastrar. `handleFirst`: el asa a la izquierda (la derecha queda libre para desplazar la pantalla). */
+export function sortableList(rows: SortableRow[], onMove: (from: number, to: number) => void, opts: { arrows?: boolean; handleFirst?: boolean } = {}): HTMLElement {
   const list = h('ol', { class: 'sortable' });
   rows.forEach((r, i) => {
     if (r.fixed) {
@@ -29,12 +29,13 @@ export function sortableList(rows: SortableRow[], onMove: (from: number, to: num
       return;
     }
     const handle = h('span', { class: 'drag-handle', 'aria-hidden': 'true' }, icon('tables'));
-    const li = h('li', { class: 'sort-row' },
+    const li = h('li', { class: 'sort-row' + (opts.handleFirst ? ' handle-first' : '') },
+      opts.handleFirst ? handle : '',
       h('div', { class: 'sort-content' }, r.content),
       opts.arrows === false ? '' : h('div', { class: 'sort-arrows' },
         h('button', { class: 'arrow-btn', 'aria-label': `Subir ${r.label}`, disabled: i === 0 || (i === 1 && !!rows[0].fixed), onclick: () => { follow = { label: r.label, top: li.getBoundingClientRect().top }; onMove(i, i - 1); } }, icon('back', 'ico up')),
         h('button', { class: 'arrow-btn', 'aria-label': `Bajar ${r.label}`, disabled: i === rows.length - 1, onclick: () => { follow = { label: r.label, top: li.getBoundingClientRect().top }; onMove(i, i + 1); } }, icon('back', 'ico down'))),
-      handle);
+      opts.handleFirst ? '' : handle);
     li.dataset.index = String(i);
     attachDrag(list, li, handle, onMove);
     list.append(li);
