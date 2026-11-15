@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-15T19:19:26Z",
+    "es": ["El botón de quitar un ejercicio, justo al lado del de cambiar."],
+    "ca": ["El botó de treure un exercici, just al costat del de canviar."],
+    "en": ["The remove button now sits right next to the swap button."]
+  },
+  {
     "fecha": "2026-11-15T19:17:34Z",
     "es": ["Al editar una tabla, los botones de cada ejercicio (cambiar, quitar y arrastrar) pasan a la izquierda, para poder desplazar la pantalla por la derecha sin tocarlos."],
     "ca": ["En editar una taula, els botons de cada exercici (canviar, treure i arrossegar) passen a l’esquerra, per poder desplaçar la pantalla per la dreta sense tocar-los."],
