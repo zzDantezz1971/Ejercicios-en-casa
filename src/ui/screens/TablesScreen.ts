@@ -6,7 +6,7 @@ import { icon, SECTION_STYLE } from '../icons';
 import { formatDate } from './HomeScreen';
 import { RoutineScreen } from './RoutineScreen';
 import { openNewTable } from './MakerScreens';
-import { openPlan } from './PlanScreens';
+import { openPlan, planSummary, useTodaysTable } from './PlanScreens';
 
 /** Mis tablas: lista de tablas guardadas con nombre. */
 export class TablesScreen implements Screen {
@@ -30,12 +30,23 @@ export class TablesScreen implements Screen {
   private render(): void {
     const { store } = this.app;
     clear(this.body);
-    // acceso al plan de la semana (si hay)
-    if (store.plan && this.app.access.premium) this.body.append(h('button', { class: 'card plan-today plan-link', onclick: () => openPlan(this.app) },
-      h('span', { class: 'plan-icon' }, icon('calendar')),
-      h('span', { class: 'plan-text' }, h('strong', {}, 'Mi plan de la semana'), h('span', { class: 'muted small' }, plural(store.plan.days.length, 'día', 'días'))),
-      icon('chevron', 'ico chev')));
-    for (const t of store.routines) this.body.append(this.card(t, t.id === store.active.id));
+    // plan de la semana: una sola tarjeta arriba (sus tablas de cada día no salen sueltas en la lista)
+    const plan = store.plan && this.app.access.premium ? store.plan : undefined;
+    const planIds = new Set(plan?.days.map((d) => d.routineId) ?? []);
+    if (plan) {
+      const inUse = planIds.has(store.active.id);
+      this.body.append(h('article', { class: 'card table-card plan-card' + (inUse ? ' active' : ''), role: 'button', tabindex: 0, onclick: () => openPlan(this.app) },
+        h('div', { class: 'table-head' },
+          h('div', { class: 'plan-card-title' }, h('span', { class: 'plan-icon' }, icon('calendar')), h('h2', {}, 'Plan de la semana')),
+          inUse ? h('span', { class: 'active-pill' }, 'En uso') : null),
+        h('div', { class: 'table-meta' },
+          h('span', { class: 'meta-line' }, icon('bolt'), planSummary(plan))),
+        h('div', { class: 'table-actions' },
+          h('button', { class: 'btn small ' + (inUse ? 'ghost' : 'primary'), disabled: inUse, onclick: (e: Event) => { e.stopPropagation(); useTodaysTable(this.app, true); this.app.haptics.tap(); this.app.openTab('inicio'); } },
+            inUse ? icon('check') : icon('play'), inUse ? 'En uso' : 'Usar el plan'),
+          h('button', { class: 'btn small ghost', onclick: (e: Event) => { e.stopPropagation(); openPlan(this.app); } }, icon('calendar'), 'Ver el plan'))));
+    }
+    for (const t of store.routines) if (!planIds.has(t.id)) this.body.append(this.card(t, t.id === store.active.id));
   }
 
   private card(t: SavedRoutine, active: boolean): HTMLElement {

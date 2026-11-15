@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-15T10:38:52Z",
+    "es": ["Tablas: el plan de la semana sale como una sola tarjeta arriba (sin una tabla suelta para cada día), con «Usar el plan» y «Ver el plan»."],
+    "ca": ["Taules: el pla setmanal surt com una sola targeta a dalt (sense una taula solta per a cada dia), amb «Fes servir el pla» i «Mostra el pla»."],
+    "en": ["Routines: the weekly plan now shows as a single card at the top (no separate routine for each day), with “Use the plan” and “View the plan”."]
+  },
+  {
     "fecha": "2026-11-15T10:34:06Z",
     "es": ["Plan de la semana: antes de crearlo, toca un día para ver sus ejercicios y el tiempo de cada uno, y cambiar lo que quieras.", "Al crear el plan, la tabla del día pasa a ser la tabla en uso de Inicio, y cada día se pone la que toca."],
     "ca": ["Pla setmanal: abans de crear-lo, toca un dia per veure’n els exercicis i el temps de cadascun, i canviar el que vulguis.", "En crear el pla, la taula del dia passa a ser la taula en ús d’Inici, i cada dia s’hi posa la que toca."],

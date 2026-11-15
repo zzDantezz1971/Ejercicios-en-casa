@@ -1093,6 +1093,8 @@ const ROWS: Row[] = [
   ['Sin el permiso de Health Connect no se pueden guardar los entrenamientos. Puedes darlo cuando quieras volviendo a activar esta opción.', 'Sense el permís de Health Connect no es poden desar els entrenaments. El pots donar quan vulguis tornant a activar aquesta opció.', 'Without Health Connect permission, workouts can’t be saved. You can grant it any time by turning this option on again.'],
   ['En Ajustes › Apps de salud puedes guardar tus entrenamientos (tiempo, calorías y pulsaciones) y tu peso en Health Connect, para verlos en Samsung Health, Google Fit, Fitbit y otras apps de salud. Kasa Fit solo escribe: nunca lee tus datos de salud.', 'A Configuració › Apps de salut pots desar els teus entrenaments (temps, calories i pulsacions) i el teu pes a Health Connect, per veure’ls a Samsung Health, Google Fit, Fitbit i altres apps de salut. Kasa Fit només hi escriu: mai no llegeix les teves dades de salut.', 'In Settings › Health apps you can save your workouts (time, calories and heart rate) and your weight to Health Connect, to see them in Samsung Health, Google Fit, Fitbit and other health apps. Kasa Fit only writes: it never reads your health data.'],
   ['Toca un día para ver sus ejercicios y el tiempo de cada uno, y cambiar lo que quieras.', 'Toca un dia per veure’n els exercicis i el temps de cadascun, i canviar el que vulguis.', 'Tap a day to see its exercises and the time for each one, and change anything you like.'],
+  ['Usar el plan', 'Fes servir el pla', 'Use the plan'],
+  ['Ver el plan', 'Mostra el pla', 'View the plan'],
 ];
 
 export const UI_CA: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[1]]));

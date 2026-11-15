@@ -1582,3 +1582,6 @@ button.plan-row { cursor: pointer; }
 .health-card { display: flex; flex-direction: column; gap: 12px; }
 .health-icon { color: #E5484D; background: rgb(229 72 77 / .14); }
 .plan-tip { display: flex; gap: 8px; align-items: flex-start; }
+.plan-card { cursor: pointer; }
+.plan-card-title { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.plan-card-title .plan-icon { width: 36px; height: 36px; border-radius: 10px; }

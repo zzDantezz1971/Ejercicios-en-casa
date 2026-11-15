@@ -134,6 +134,11 @@ function planCard(body: HTMLElement[], open: () => void, action?: HTMLElement): 
     action ?? icon('chevron', 'ico chev'));
 }
 
+/** Resumen de un plan guardado. */
+export function planSummary(p: WeekPlan): string {
+  return summary({ ...p, n: p.days.length });
+}
+
 /** Resumen del plan: «Ganar fuerza · 4 días · 30 min · Normal». */
 function summary(p: Pick<WeekPlan, 'goal' | 'minutes' | 'level'> & { n: number }): string {
   return [tr(GOAL_INFO[p.goal].name), tr(plural(p.n, 'día', 'días')), `${p.minutes} min`, tr(LEVEL_INFO[p.level].name)].join(' · ');
