@@ -49,7 +49,10 @@ Marca cada punto al probarlo. Si algo falla, haz una captura y cuéntamelo.
 - [ ] La pantalla no se apaga.
 - [ ] Vibra en los avisos.
 - [ ] La voz habla en el idioma de la app (catalán, castellano o inglés) con la voz del móvil.
-- [ ] Configuració › Avisos › Veu: salen las voces del móvil; ▶ las hace sonar; la elegida es la que habla al entrenar.
+- [x] Configuració › Avisos › Veu: la elegida es la que habla al entrenar (build 15).
+- [ ] Build 16: como mucho 3 voces por idioma y que suenen distintas.
+- [ ] Build 16: botón atrás de Android vuelve a la pantalla anterior; en Inici cierra la app.
+- [ ] Build 16: versión gratis, en «Afegeix un exercici» salen primero los gratis; con candado abre Prèmium.
 - [ ] Con la pantalla bloqueada o la app en segundo plano y al volver, el entrenamiento sigue bien.
 
 ## 8. Generales

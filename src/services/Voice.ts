@@ -5,6 +5,26 @@ import { duckWhile, stopSpeechDuck } from './MusicDuck';
 
 const CODE: Record<Lang, string> = { ca: 'ca', es: 'es', en: 'en' };
 
+/** Como mucho, tantas voces por idioma en la lista para elegir. */
+const MAX_VOICES = 3;
+
+/**
+ * Pocas voces y distintas: Android repite cada voz «-local» (sin conexión) y «-network» (por internet), y en inglés
+ * hay decenas de países. Se queda con una de cada (la «-local», que funciona sin conexión), en inglés las británicas
+ * si las hay, y como mucho MAX_VOICES.
+ */
+export function pickFew(voices: Array<{ id: string; name: string; lang: string }>): Array<{ id: string; name: string }> {
+  const gb = voices.filter((v) => /^en[-_]gb$/i.test(v.lang));
+  const pool = gb.length ? gb : voices;
+  const base = (n: string) => n.toLowerCase().replace(/[-_](local|network)$/, '');
+  const seen = new Map<string, { id: string; name: string }>();
+  for (const v of pool) {
+    const k = base(v.name);
+    if (!seen.has(k) || /local$/i.test(v.name)) seen.set(k, { id: v.id, name: v.name });
+  }
+  return [...seen.values()].slice(0, MAX_VOICES);
+}
+
 /** ¿Esta voz sirve para el idioma? En castellano, solo la de España (no las de Latinoamérica). */
 function forLang(voiceLang: string, l: Lang): boolean {
   const v = voiceLang.replace('_', '-').toLowerCase();
@@ -71,12 +91,12 @@ export class Voice {
     if (IS_NATIVE) {
       try {
         const { voices } = await TextToSpeech.getSupportedVoices();
-        return voices.filter((v) => forLang(v.lang, this.lang)).map((v) => ({ id: v.voiceURI || v.name, name: v.name }));
+        return pickFew(voices.filter((v) => forLang(v.lang, this.lang)).map((v) => ({ id: v.voiceURI || v.name, name: v.name, lang: v.lang })));
       } catch {
         return [];
       }
     }
-    return this.webVoices.map((v) => ({ id: v.voiceURI, name: v.name }));
+    return pickFew(this.webVoices.map((v) => ({ id: v.voiceURI, name: v.name, lang: v.lang })));
   }
 
   /** Usa esta voz para los avisos (vacío = la de siempre del sistema). */
