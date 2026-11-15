@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-15T08:49:37Z",
+    "es": ["El tema verde ahora es Verde salvia: un tono más suave y menos llamativo."],
+    "ca": ["El tema verd ara és Verd sàlvia: un to més suau i menys cridaner."],
+    "en": ["The green theme is now Sage green: a softer, less striking shade."]
+  },
+  {
     "fecha": "2026-11-14T23:28:46Z",
     "es": ["Nuevo Plan de la semana (Prémium): eliges objetivo, días, minutos y nivel, y la app crea una tabla para cada día, repartiendo las zonas.", "En Inicio ves lo que toca hoy; en «Mi plan de la semana», la semana entera con lo ya hecho. Los ejercicios se pueden renovar cada lunes.", "Nueva medalla «Plan cumplido»."],
     "ca": ["Nou Pla setmanal (Prèmium): tries objectiu, dies, minuts i nivell, i l’app crea una taula per a cada dia, repartint les zones.", "A Inici veus el que toca avui; a «El meu pla setmanal», tota la setmana amb el que ja has fet. Els exercicis es poden renovar cada dilluns.", "Nova medalla «Pla complert»."],

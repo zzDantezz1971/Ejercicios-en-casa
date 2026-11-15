@@ -1025,6 +1025,7 @@ const ROWS: Row[] = [
   ['Tema de color', 'Tema de color', 'Color theme'],
   ['Azul', 'Blau', 'Blue'],
   ['Verde energía', 'Verd energia', 'Energy green'],
+  ['Verde salvia', 'Verd sàlvia', 'Sage green'],
   ['Naranja fuego', 'Taronja foc', 'Fire orange'],
   ['Lila noche', 'Lila nit', 'Night lilac'],
   ['Rosa', 'Rosa', 'Pink'],
