@@ -507,11 +507,14 @@ export class MannequinScene {
     this.placeCamera();
   }
 
+  /** Ancho mínimo del encuadre (más pequeño = el muñeco más grande; p. ej., en vertical a pantalla completa). */
+  minSpan = 150;
+
   placeCamera(): void {
     const s = this.size, c = this.center, cam = this.camera;
     const span = this.motion.view === 'top'
-      ? Math.max(s.x * 1.12, s.z * cam.aspect * 0.95, 150)
-      : Math.max(s.x * 1.08, s.y * cam.aspect * 1.08, s.z * 0.8, 150);
+      ? Math.max(s.x * 1.12, s.z * cam.aspect * 0.95, this.minSpan)
+      : Math.max(s.x * 1.08, s.y * cam.aspect * 1.08, s.z * 0.8, this.minSpan);
     const dist = (span / cam.aspect / 2 / Math.tan((cam.fov * Math.PI) / 360)) * 1.04;
     const a = (this.azimuth * Math.PI) / 180, e = (this.elevation * Math.PI) / 180;
     cam.position.set(c.x + dist * Math.sin(a) * Math.cos(e), c.y + dist * Math.sin(e), c.z + dist * Math.cos(a) * Math.cos(e));

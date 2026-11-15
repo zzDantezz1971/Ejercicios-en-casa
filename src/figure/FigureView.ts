@@ -122,6 +122,13 @@ export class FigureView {
     this.renderer.render(this.scene.scene, this.scene.camera);
   }
 
+  /** Encuadre más cerrado (el muñeco ocupa más): para verlo en grande. */
+  closeUp(minSpan: number): void {
+    this.scene.minSpan = minSpan;
+    this.scene.placeCamera();
+    if (!this.raf) this.renderAt(this.scene.motion.total * 0.4);
+  }
+
   private resize(): void {
     const w = this.canvas.clientWidth, h = this.canvas.clientHeight;
     if (!w || !h) return;

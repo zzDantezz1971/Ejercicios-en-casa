@@ -1116,6 +1116,8 @@ const ROWS: Row[] = [
   ['Añadir {x}', 'Afegeix {x}', 'Add {x}'],
   ['Elige los que quieras', 'Tria els que vulguis', 'Pick as many as you like'],
   ['(no está en tu material)', '(no és al teu material)', '(not in your equipment)'],
+  ['Arrastra para girar · toca para verlo en grande', 'Arrossega per girar · toca per veure’l en gran', 'Drag to rotate · tap to see it bigger'],
+  ['El muñeco en grande', 'El ninot en gran', 'The figure, bigger'],
 ];
 
 export const UI_CA: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[1]]));

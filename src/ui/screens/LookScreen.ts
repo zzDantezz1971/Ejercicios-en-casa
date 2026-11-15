@@ -17,14 +17,59 @@ export class LookScreen implements Screen {
   private canvas = h('canvas', { class: 'stage-canvas' });
   private view: FigureView | null = null;
   private body = h('div', { class: 'settings-body' });
+  /** El muñeco en grande (al tocarlo), si está abierto. */
+  private zoom: { wrap: HTMLElement; view: FigureView } | null = null;
 
   constructor(private readonly app: App) {
     this.el.append(
       h('header', { class: 'bar sticky' },
         h('button', { class: 'icon-btn', 'aria-label': 'Volver', onclick: () => app.back() }, icon('back')),
         h('h1', { class: 'bar-title' }, 'Personaliza el muñeco')),
-      h('div', { class: 'stage look-stage' }, this.canvas, h('span', { class: 'stage-hint' }, icon('sides'), 'Arrastra para girar')),
+      this.stage(),
       this.body);
+  }
+
+  /** Escenario del muñeco: arrastrar lo gira; un toque (sin arrastrar) lo abre en grande. */
+  private stage(): HTMLElement {
+    const el = h('div', { class: 'stage look-stage' }, this.canvas,
+      h('span', { class: 'stage-hint' }, icon('sides'), 'Arrastra para girar · toca para verlo en grande'));
+    let down: { x: number; y: number; t: number } | null = null;
+    el.addEventListener('pointerdown', (e) => { down = { x: e.clientX, y: e.clientY, t: Date.now() }; });
+    el.addEventListener('pointerup', (e) => {
+      if (down && Math.hypot(e.clientX - down.x, e.clientY - down.y) < 8 && Date.now() - down.t < 500) this.openZoom();
+      down = null;
+    });
+    return el;
+  }
+
+  private openZoom(): void {
+    if (this.zoom) return;
+    const c = h('canvas', { class: 'stage-canvas' }) as HTMLCanvasElement;
+    const wrap = h('div', { class: 'look-zoom', role: 'dialog', 'aria-modal': 'true', 'aria-label': 'El muñeco en grande' },
+      c,
+      h('button', { class: 'icon-btn look-zoom-close', 'aria-label': 'Cerrar', onclick: () => this.closeZoom() }, icon('close')),
+      h('span', { class: 'stage-hint' }, icon('sides'), 'Arrastra para girar'));
+    document.body.append(wrap);
+    this.view?.stop();
+    const view = new FigureView(c, PREVIEW);
+    view.closeUp(40);
+    view.start();
+    this.zoom = { wrap, view };
+  }
+
+  private closeZoom(): void {
+    if (!this.zoom) return;
+    this.zoom.view.dispose();
+    this.zoom.wrap.remove();
+    this.zoom = null;
+    this.view?.start();
+  }
+
+  /** Atrás con el muñeco en grande: se cierra (sin salir de la pantalla). */
+  onBack(): boolean {
+    if (!this.zoom) return false;
+    this.closeZoom();
+    return true;
   }
 
   private get look(): Look {
@@ -59,10 +104,12 @@ export class LookScreen implements Screen {
   }
 
   leave(): void {
+    this.closeZoom();
     this.view?.stop();
   }
 
   dispose(): void {
+    this.closeZoom();
     this.view?.dispose();
     this.view = null;
   }

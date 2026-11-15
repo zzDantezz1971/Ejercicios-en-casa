@@ -1353,6 +1353,15 @@ body:has(.page-lifted) { overflow-x: hidden; }
 
 /* Personaliza el muñeco */
 .look-stage { margin-bottom: 14px; }
+.look-stage .stage-canvas { cursor: zoom-in; }
+/* el muñeco en grande: toda la pantalla */
+.look-zoom {
+  position: fixed; inset: 0; z-index: 60; background: var(--stage);
+  padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
+}
+.look-zoom .stage-canvas { width: 100%; height: 100%; cursor: grab; }
+.look-zoom-close { position: absolute; top: calc(env(safe-area-inset-top, 0px) + 14px); right: 14px; }
+.look-zoom .stage-hint { bottom: calc(env(safe-area-inset-bottom, 0px) + 16px); right: 50%; transform: translateX(50%); font-size: .85rem; }
 .look-card { display: flex; flex-direction: column; gap: 14px; }
 .look-row { display: flex; flex-direction: column; gap: 8px; }
 .look-row strong { font-size: .92rem; }

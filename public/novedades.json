@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-15T20:44:20Z",
+    "es": ["En «Personaliza el muñeco», toca el muñeco para verlo en grande, a pantalla completa (y gíralo arrastrando)."],
+    "ca": ["A «Personalitza el ninot», toca el ninot per veure’l en gran, a pantalla completa (i gira’l arrossegant)."],
+    "en": ["In “Customise the figure”, tap the figure to see it full screen (and drag to rotate it)."]
+  },
+  {
     "fecha": "2026-11-15T19:25:06Z",
     "es": ["Menú de abajo: los iconos quedan a la misma distancia entre ellos, y en móviles pequeños los nombres ya no se montan."],
     "ca": ["Menú de sota: les icones queden a la mateixa distància entre elles, i als mòbils petits els noms ja no es munten."],
