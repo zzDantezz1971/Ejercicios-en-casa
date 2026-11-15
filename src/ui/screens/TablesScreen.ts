@@ -7,7 +7,7 @@ import { icon, SECTION_STYLE } from '../icons';
 import { formatDate } from './HomeScreen';
 import { RoutineScreen } from './RoutineScreen';
 import { openNewTable } from './MakerScreens';
-import { openPlan, planSummary, planTitle, usePlan } from './PlanScreens';
+import { openPlan, planTableCard } from './PlanScreens';
 
 /** Mis tablas: lista de tablas guardadas con nombre. */
 export class TablesScreen implements Screen {
@@ -37,19 +37,9 @@ export class TablesScreen implements Screen {
     const planIds = new Set(plan ? store.plans.flatMap((p) => p.days.map((d) => d.routineId)) : []);
     if (plan) {
       const n = store.plans.length;
-      const inUse = planIds.has(store.active.id);
-      this.body.append(h('article', { class: 'card table-card plan-card' + (inUse ? ' active' : ''), role: 'button', tabindex: 0, onclick: () => openPlan(this.app) },
-        h('div', { class: 'table-head' },
-          h('div', { class: 'plan-card-title' }, h('span', { class: 'plan-icon' }, icon('calendar')), h('h2', {}, n > 1 ? 'Mis planes de la semana' : 'Plan de la semana')),
-          inUse ? h('span', { class: 'active-pill' }, 'En uso') : null),
-        h('div', { class: 'table-meta' },
-          n > 1 ? h('span', { class: 'meta-line' }, icon('check'), `${tr('En uso')}: ${planTitle(plan)}`) : null,
-          h('span', { class: 'meta-line' }, icon('bolt'), planSummary(plan)),
-          n > 1 ? h('span', { class: 'meta-line' }, icon('calendar'), plural(n, 'plan', 'planes')) : null),
-        h('div', { class: 'table-actions' },
-          h('button', { class: 'btn small ' + (inUse ? 'ghost' : 'primary'), disabled: inUse, onclick: (e: Event) => { e.stopPropagation(); usePlan(this.app, plan.id); this.app.haptics.tap(); this.app.openTab('inicio'); } },
-            inUse ? icon('check') : icon('play'), inUse ? 'En uso' : 'Usar el plan'),
-          h('button', { class: 'btn small ghost', onclick: (e: Event) => { e.stopPropagation(); openPlan(this.app); } }, icon('calendar'), n > 1 ? 'Ver los planes' : 'Ver el plan'))));
+      // con más de un plan: enlace a la lista para elegir otro
+      const extra = n > 1 ? h('button', { class: 'meta-line link-btn plan-more', onclick: () => openPlan(this.app) }, icon('tables'), `${plural(n, 'plan', 'planes')} · ${tr('Ver los planes')}`) : null;
+      this.body.append(planTableCard(this.app, plan, { eyebrow: tr('Plan de la semana'), extra, after: () => this.render() }));
     }
     for (const t of store.routines) if (!planIds.has(t.id)) this.body.append(this.card(t, t.id === store.active.id));
   }

@@ -8,8 +8,10 @@ import {
 import { LOCALE, tr } from '../../i18n';
 import { askNotificationPermission, REMINDERS_AVAILABLE } from '../../services/Reminders';
 import type { App, Screen } from '../App';
-import { clear, confirmDialog, h, humanDuration, plural, promptDialog } from '../dom';
-import { icon, type IconName } from '../icons';
+import { actionSheet, clear, confirmDialog, h, humanDuration, plural, promptDialog } from '../dom';
+import { formatDate } from './HomeScreen';
+import { SECTION_IDS, SECTION_TITLES, type SectionId } from '../../domain/types';
+import { icon, SECTION_STYLE, type IconName } from '../icons';
 import { startWorkout } from '../components/startWorkout';
 import { header, isEmptyResult, preview } from './MakerScreens';
 
@@ -447,19 +449,66 @@ export class PlansScreen implements Screen {
     this.el.append(header(app, 'Mis planes de la semana'));
     const body = h('div', { class: 'maker-body' });
     this.el.append(body);
-    const activeId = app.store.plan?.id;
-    for (const p of app.store.plans) {
-      const inUse = p.id === activeId;
-      body.append(h('article', { class: 'card table-card plan-card' + (inUse ? ' active' : ''), role: 'button', tabindex: 0, onclick: () => app.push(new PlanScreen(app, p.id)) },
-        h('div', { class: 'table-head' },
-          h('div', { class: 'plan-card-title' }, h('span', { class: 'plan-icon' }, icon('calendar')), h('h2', {}, planTitle(p))),
-          inUse ? h('span', { class: 'active-pill' }, 'En uso') : null),
-        h('div', { class: 'table-meta' }, h('span', { class: 'meta-line' }, icon('bolt'), planSummary(p))),
-        h('div', { class: 'table-actions' },
-          h('button', { class: 'btn small ' + (inUse ? 'ghost' : 'primary'), disabled: inUse, onclick: (e: Event) => { e.stopPropagation(); usePlan(app, p.id); app.haptics.tap(); this.render(); } },
-            inUse ? icon('check') : icon('play'), inUse ? 'En uso' : 'Usar el plan'),
-          h('button', { class: 'btn small ghost', onclick: (e: Event) => { e.stopPropagation(); app.push(new PlanScreen(app, p.id)); } }, icon('calendar'), 'Ver el plan'))));
-    }
+    for (const p of app.store.plans) body.append(planTableCard(app, p, { after: () => this.render() }));
     body.append(h('button', { class: 'maker-add', onclick: () => newPlan(app) }, icon('plus'), 'Nuevo plan de la semana'));
   }
+}
+
+/**
+ * Tarjeta de un plan con la misma estructura que las de las tablas: nombre, tiempo y ejercicios, pastillas por
+ * apartado, última vez, barra de colores y botones Usar / Editar / ⋮. `extra`: línea de más (p. ej., «2 planes»).
+ */
+export function planTableCard(app: App, plan: WeekPlan, opts: { eyebrow?: string; extra?: HTMLElement | null; after: () => void }): HTMLElement {
+  const inUse = app.store.plan?.id === plan.id && app.store.isPlanRoutine(app.store.active.id);
+  const routines = plan.days.map((d) => app.store.routineById(d.routineId)).filter((r): r is NonNullable<typeof r> => !!r);
+  const counts = Object.fromEntries(SECTION_IDS.map((sec) => [sec, routines.reduce((n, r) => n + r.routine[sec].length, 0)])) as Record<SectionId, number>;
+  const total = Math.max(1, SECTION_IDS.reduce((n, sec) => n + counts[sec], 0));
+  const secs = routines.map((r) => WorkoutPlan.build(app.playable(r.routine), app.catalog, app.store.settings, r.rounds).estimatedSeconds);
+  const perDay = secs.length ? secs.reduce((a, b) => a + b, 0) / secs.length : 0;
+  const last = routines.map((r) => r.lastUsed).filter((x): x is string => !!x).sort().pop();
+  const withEx = SECTION_IDS.filter((sec) => counts[sec]);
+  const pills = withEx.map((sec) => {
+    const el = h('span', { class: 'sec-pill' }, icon(SECTION_STYLE[sec].icon), String(counts[sec]));
+    el.style.setProperty('--sec', SECTION_STYLE[sec].color);
+    el.title = SECTION_TITLES[sec];
+    return el;
+  });
+  const mix = h('div', { class: 'mix' }, ...withEx.map((sec) => {
+    const seg = h('span', { title: `${SECTION_TITLES[sec]}: ${counts[sec]}` });
+    seg.style.flex = String(counts[sec] / total);
+    seg.style.background = SECTION_STYLE[sec].color;
+    return seg;
+  }));
+  const more = async () => {
+    const choice = await actionSheet(planTitle(plan), [
+      { id: 'rename', label: 'Cambiar el nombre' },
+      { id: 'change', label: 'Cambiar el plan' },
+      { id: 'delete', label: 'Borrar', danger: true },
+    ]);
+    if (choice === 'rename') {
+      const name = await promptDialog(tr('Nombre del plan'), planTitle(plan), tr('Guardar'));
+      if (name !== null) app.store.renamePlan(plan.id, name);
+    } else if (choice === 'change') {
+      app.push(new PlanWizardScreen(app, plan.id));
+      return;
+    } else if (choice === 'delete') {
+      if (!(await confirmDialog(tr('¿Borrar el plan de la semana y sus tablas?'), tr('Borrar'), tr('Cancelar'), true))) return;
+      app.store.deletePlan(plan.id, true);
+    }
+    opts.after();
+  };
+  return h('article', { class: 'card table-card plan-card' + (inUse ? ' active' : '') },
+    opts.eyebrow ? h('span', { class: 'plan-eyebrow' }, icon('calendar'), opts.eyebrow) : null,
+    h('div', { class: 'table-head' }, h('h2', {}, planTitle(plan)), inUse ? h('span', { class: 'active-pill' }, 'En uso') : null),
+    h('div', { class: 'table-meta' },
+      h('span', { class: 'meta-line' }, icon('clock'), [tr(plural(plan.days.length, 'día', 'días')), humanDuration(perDay), plan.name ? tr(GOAL_INFO[plan.goal].name) : ''].filter(Boolean).join(' · ')),
+      pills.length ? h('span', { class: 'pills' }, ...pills) : null,
+      h('span', { class: 'meta-line' }, icon('calendar'), last ? `Última vez: ${formatDate(last)}` : 'Aún no lo has usado'),
+      opts.extra ?? null),
+    pills.length ? mix : null,
+    h('div', { class: 'table-actions' },
+      h('button', { class: 'btn small ' + (inUse ? 'ghost' : 'primary'), disabled: inUse, onclick: () => { usePlan(app, plan.id); app.haptics.tap(); app.openTab('inicio'); } },
+        inUse ? icon('check') : icon('play'), inUse ? 'En uso' : 'Usarlo'),
+      h('button', { class: 'btn small ghost', onclick: () => app.push(new PlanScreen(app, plan.id)) }, icon('edit'), 'Editar'),
+      h('button', { class: 'more-btn', 'aria-label': `Más opciones de ${planTitle(plan)}`, onclick: () => void more() }, icon('more'))));
 }

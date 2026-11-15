@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-15T10:50:40Z",
+    "es": ["Los planes de la semana se ven como las demás tablas: tiempo, ejercicios de cada apartado, última vez y los botones Usarlo, Editar y ⋮ (cambiar el nombre, cambiar el plan o borrarlo)."],
+    "ca": ["Els plans setmanals es veuen com les altres taules: temps, exercicis de cada apartat, última vegada i els botons Fes-lo servir, Edita i ⋮ (canviar el nom, canviar el pla o esborrar-lo)."],
+    "en": ["Weekly plans now look like your other routines: time, exercises per section, last used and the Use, Edit and ⋮ buttons (rename, change the plan or delete it)."]
+  },
+  {
     "fecha": "2026-11-15T10:44:07Z",
     "es": ["Ahora puedes tener varios planes de la semana: arriba en Tablas, toca el plan para ver la lista y elegir el que quieres usar. También se les puede cambiar el nombre."],
     "ca": ["Ara pots tenir diversos plans setmanals: a dalt de Taules, toca el pla per veure’n la llista i triar el que vols fer servir. També se’ls pot canviar el nom."],

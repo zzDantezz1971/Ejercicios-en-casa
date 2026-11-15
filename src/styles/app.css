@@ -1585,3 +1585,6 @@ button.plan-row { cursor: pointer; }
 .plan-card { cursor: pointer; }
 .plan-card-title { display: flex; align-items: center; gap: 10px; min-width: 0; }
 .plan-card-title .plan-icon { width: 36px; height: 36px; border-radius: 10px; }
+.plan-card .plan-eyebrow { display: flex; align-items: center; gap: 6px; margin-bottom: 2px; }
+.plan-card .plan-eyebrow .ico { width: 14px; height: 14px; }
+.plan-more { background: none; border: 0; padding: 0; color: var(--accent); font: inherit; font-weight: 700; cursor: pointer; text-align: left; }
