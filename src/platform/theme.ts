@@ -12,7 +12,7 @@ export const COLOR_INFO: Record<ColorTheme, { name: string; swatch: [string, str
   blau: { name: 'Azul', swatch: ['#3658C2', '#15206E'] },
   verd: { name: 'Verde salvia', swatch: ['#4F9A78', '#23503D'] },
   taronja: { name: 'Terracota', swatch: ['#9A714F', '#502D23'] },
-  or: { name: 'Oro', swatch: ['#A88838', '#45360F'] },
+  or: { name: 'Oro', swatch: ['#C29A32', '#55400C'] },
   lila: { name: 'Lila noche', swatch: ['#6541B2', '#2E1B62'] },
   rosa: { name: 'Rosa', swatch: ['#C2367B', '#6E1546'] },
   grafit: { name: 'Grafito', swatch: ['#555E6E', '#212730'] },
