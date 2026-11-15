@@ -13,7 +13,7 @@ const GUIDE: Array<{ icon: IconName; title: string; sub: string; points: Array<s
   { icon: 'home', title: 'Menú Inicio', sub: 'Tu tabla, tu semana y el entrenamiento.', points: [
       'La tabla que vas a hacer, con su contenido y el botón para empezar. Puedes cambiar de tabla desde aquí.',
       'Si la tabla está vacía, «Créala por mí» te prepara una al momento según tu objetivo, la zona, el tiempo y el nivel.',
-      'Con un plan de la semana, arriba ves lo que toca hoy y lo empiezas con un toque; los días de descanso, lo que toca el siguiente día. Si ayer te lo saltaste, te propone hacerlo hoy.',
+      'Con un plan de la semana en uso, la tabla es la del día (o la del próximo día de entrenamiento): arriba pone «Plan de la semana» y el día.',
       'Tu semana: minutos y calorías, con unas metas que puedes cambiar.',
       'Una frase motivadora distinta cada día (se puede quitar en Ajustes).',
       HAS_BACKUP ? 'Si los tienes activados en Recordatorios, al acabar un entrenamiento te avisa cuando toca anotar el peso o hacer la copia de seguridad.'

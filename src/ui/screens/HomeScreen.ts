@@ -14,7 +14,7 @@ import { addMonths, addWeeks, monthKey, monthStart, weekKey, weekStart, weekStat
 import { randomPhrase } from '../../domain/phrases';
 import { weekGoalsDialog } from '../components/weekGoals';
 import { openDay } from './HistoryScreen';
-import { dayName, planDayOf, refreshPlan, todayCard } from './PlanScreens';
+import { dayName, planDayOf, refreshPlan } from './PlanScreens';
 import { kindLabel } from '../../domain/weekPlan';
 
 export class HomeScreen implements Screen {
@@ -72,10 +72,6 @@ export class HomeScreen implements Screen {
         this.el.append(card);
       }
     }
-
-    // Plan de la semana: lo que toca hoy
-    const planCard = todayCard(app, now);
-    if (planCard) this.el.append(planCard);
 
     // Tarjeta principal con la tabla en uso (si es de un plan: «Plan de la semana · Lunes» y la zona del día)
     const pinfo = planDayOf(app, table.id);

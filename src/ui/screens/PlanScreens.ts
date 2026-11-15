@@ -17,7 +17,7 @@ import { header, isEmptyResult, preview } from './MakerScreens';
 
 /*
  * Plan de la semana (Prémium): asistente (objetivo, días, minutos y nivel), pantalla «Mi plan» con la semana de
- * lunes a domingo, la tabla de cada día (se puede cambiar o pedir otra) y la tarjeta «Hoy toca» de Inicio.
+ * lunes a domingo, la tabla de cada día (se puede cambiar o pedir otra) y, en Inicio, la tabla del día.
  * Cada día de entrenamiento tiene su propia tabla (se ve también en Tablas). Si «Renovar los ejercicios cada
  * semana» está activado, al empezar una semana nueva se cambian los ejercicios de cada día (las zonas no).
  */
@@ -129,47 +129,6 @@ function startDay(app: App, planId: string, d: PlanDay): void {
   const plan = WorkoutPlan.build(app.playable(r.routine), app.catalog, app.store.settings, r.rounds);
   if (plan.isEmpty) { app.push(new PlanDayScreen(app, planId, d.day)); return; }
   void startWorkout(app, plan, r);
-}
-
-/** Tarjeta de Inicio: «Hoy toca…», «Hoy descanso» o «Ayer te saltaste…». */
-export function todayCard(app: App, now = new Date()): HTMLElement | null {
-  const plan = app.store.plan;
-  // si la tabla en uso no es de un plan (has elegido una tuya), el plan no se muestra en Inicio
-  if (!plan || !app.access.premium || !app.store.isPlanRoutine(app.store.active.id)) return null;
-  const done = trainedDates(app.store.history);
-  const today = planDayOn(plan, now);
-  const yest = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
-  const missed = planDayOn(plan, yest);
-  const open = () => app.push(new PlanScreen(app, plan.id));
-  const line = (d: PlanDay) => `${tr(kindLabel(plan, d.kind))} · ${humanDuration(routineSeconds(app, d.routineId))}`;
-  let body: HTMLElement[];
-  if (today && done.has(ymd(now))) {
-    body = [h('span', { class: 'plan-eyebrow' }, 'Plan de la semana'), h('strong', {}, '¡Hecho por hoy!'), h('span', { class: 'muted small' }, line(today))];
-  } else if (today) {
-    body = [h('span', { class: 'plan-eyebrow' }, 'Hoy toca'), h('strong', {}, tr(kindLabel(plan, today.kind))), h('span', { class: 'muted small' }, `${dayName(today.day)} · ${humanDuration(routineSeconds(app, today.routineId))}`)];
-  } else {
-    const next = nextPlanDay(plan, now);
-    // ayer tocaba y no se entrenó (y hoy no se ha entrenado): se ofrece hacerlo hoy
-    if (missed && !done.has(ymd(yest)) && !done.has(ymd(now)) && mondayOf(yest) === mondayOf(now) && ymd(yest) >= ymd(new Date(plan.createdAt))) {
-      body = [h('span', { class: 'plan-eyebrow' }, 'Hoy descanso 😌'), h('strong', {}, `Ayer te saltaste ${tr(kindLabel(plan, missed.kind))}`), h('span', { class: 'muted small' }, '¿La haces hoy?')];
-      return planCard(body, open, h('button', { class: 'btn primary small', onclick: (e: Event) => { e.stopPropagation(); startDay(app, plan.id, missed); } }, icon('play'), 'Empezar'));
-    }
-    body = [h('span', { class: 'plan-eyebrow' }, 'Hoy descanso 😌'),
-      h('strong', {}, next ? (next.inDays === 1 ? `Mañana: ${tr(kindLabel(plan, next.day.kind))}` : `${dayName(next.day.day)}: ${tr(kindLabel(plan, next.day.kind))}`) : 'Plan de la semana'),
-      h('span', { class: 'muted small' }, 'Descansar también es entrenar.')];
-    return planCard(body, open);
-  }
-  const action = today && !done.has(ymd(now))
-    ? h('button', { class: 'btn primary small', onclick: (e: Event) => { e.stopPropagation(); startDay(app, plan.id, today); } }, icon('play'), 'Empezar')
-    : h('span', { class: 'plan-done' }, icon('check'));
-  return planCard(body, open, action);
-}
-
-function planCard(body: HTMLElement[], open: () => void, action?: HTMLElement): HTMLElement {
-  return h('section', { class: 'card plan-today', role: 'button', tabindex: 0, 'aria-label': 'Ver mi plan de la semana', onclick: open },
-    h('span', { class: 'plan-icon' }, icon('calendar')),
-    h('div', { class: 'plan-text' }, ...body),
-    action ?? icon('chevron', 'ico chev'));
 }
 
 /** Resumen de un plan guardado. */

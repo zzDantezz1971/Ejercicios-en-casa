@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-15T18:10:53Z",
+    "es": ["Con un plan de la semana en uso, Inicio ya no muestra la tarjeta «Hoy toca / Hoy descanso»: la tabla en uso ya dice el día del plan."],
+    "ca": ["Amb un pla setmanal en ús, Inici ja no mostra la targeta «Avui toca / Avui descans»: la taula en ús ja diu el dia del pla."],
+    "en": ["With a week plan in use, Home no longer shows the “Today / Rest day” card: the table in use already shows the plan day."]
+  },
+  {
     "fecha": "2026-11-15T18:05:56Z",
     "es": ["Si cambias la tabla del plan de la semana por una tuya, el plan deja de salir en Inicio. Vuelve al pulsar «Usar el plan»."],
     "ca": ["Si canvies la taula del pla setmanal per una de teva, el pla deixa de sortir a Inici. Torna quan prems «Fes servir el pla»."],

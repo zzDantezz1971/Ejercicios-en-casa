@@ -1108,6 +1108,7 @@ const ROWS: Row[] = [
   ['Nuevo plan', 'Nou pla', 'New plan'],
   ['1 plan', '1 pla', '1 plan'],
   ['Último usado', 'L’últim fet servir', 'Last used'],
+  ['Con un plan de la semana en uso, la tabla es la del día (o la del próximo día de entrenamiento): arriba pone «Plan de la semana» y el día.', 'Amb un pla setmanal en ús, la taula és la del dia (o la del pròxim dia d’entrenament): a dalt hi posa «Pla setmanal» i el dia.', 'With a weekly plan in use, the table is the day’s (or the next training day’s): at the top it says “Weekly plan” and the day.'],
 ];
 
 export const UI_CA: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[1]]));

@@ -1540,19 +1540,12 @@ label.sort-row:focus-within, label.rem-hour:focus-within { outline: none; }
 .watch-steps ol { padding-left: 1.2em; display: flex; flex-direction: column; gap: 4px; }
 
 /* Plan de la semana */
-.plan-today {
-  display: flex; align-items: center; gap: 12px; padding: 12px 14px; cursor: pointer; text-align: left; width: 100%; color: var(--fg);
-  border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
-  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 14%, var(--surface)), var(--surface));
-}
 .plan-link { margin-bottom: 12px; font: inherit; }
 .plan-icon {
   flex: none; width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center;
   background: color-mix(in srgb, var(--accent) 18%, transparent); color: var(--accent);
 }
 .plan-icon .ico { width: 22px; height: 22px; }
-.plan-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
-.plan-text strong { font-size: 1.05rem; }
 .plan-eyebrow { font-size: .72rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); }
 .plan-done {
   flex: none; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: var(--accent); color: var(--accent-ink, #fff);
