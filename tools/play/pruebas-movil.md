@@ -37,7 +37,7 @@ Marca cada punto al probarlo. Si algo falla, haz una captura y cuéntamelo.
 - [ ] El código de acceso (creado con el generador) desbloquea Prémium.
 - [ ] Compra de la suscripción con la cuenta de pruebas de licencias (cuando esté creada en Play Console):
       mensual y anual, sin cobrar de verdad.
-- [ ] «Ja estic subscrit» recupera Prémium después de reinstalar la app.
+- [ ] «Ja hi estic subscrit» recupera Prémium después de reinstalar la app.
 
 ## 6. Reloj (pulsaciones por Bluetooth)
 - [ ] Pide el permiso de Bluetooth (y en Android 11 o anterior, el de ubicación).
