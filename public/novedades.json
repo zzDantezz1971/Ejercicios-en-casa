@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-15T21:05:03Z",
+    "es": ["Muñeco: la sonrisa ya se ve entera (antes solo asomaban las puntas) y el hombre ya no tiene bultos en el pecho.", "Recordatorios: el aviso de entrenar dice de qué plan son los días. Al borrar el plan en uso, pasa a los días del plan que queda o, si no queda ninguno, te pregunta si lo quitas."],
+    "ca": ["Ninot: el somriure ja es veu sencer (abans només en sortien les puntes) i l’home ja no té bonys al pit.", "Recordatoris: l’avís d’entrenar diu de quin pla són els dies. En esborrar el pla en ús, passa als dies del pla que queda o, si no en queda cap, et pregunta si el treus."],
+    "en": ["Figure: the whole smile now shows (only its tips used to peek out) and the man no longer has bumps on his chest.", "Reminders: the workout reminder says which plan its days come from. Deleting the plan in use switches it to the remaining plan’s days or, if none is left, asks whether to remove it."]
+  },
+  {
     "fecha": "2026-11-15T20:52:48Z",
     "es": ["Muñeco: con barba ya se ve la sonrisa entera, y el pecho del hombre es más plano y está más abajo."],
     "ca": ["Ninot: amb barba ja es veu el somriure sencer, i el pit de l’home és més pla i és més avall."],

@@ -1404,6 +1404,8 @@ body:has(.page-lifted) { overflow-x: hidden; }
 .rem-card .switch-row { padding: 12px 0; }
 .rem-card .rem-opts { border-top: 1px solid var(--line); padding: 12px 0 14px; }
 .rem-hour { display: flex; align-items: center; gap: 12px; }
+.rem-plan { display: flex; align-items: flex-start; gap: 8px; color: var(--muted); line-height: 1.35; }
+.rem-plan .ico { width: 16px; height: 16px; flex: none; margin-top: 2px; color: var(--accent); }
 .rem-warn { display: flex; align-items: center; gap: 6px; color: #E5A13A; }
 .rem-warn .ico { width: 16px; height: 16px; }
 .rem-summary .block { display: block; }

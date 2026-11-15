@@ -1118,6 +1118,12 @@ const ROWS: Row[] = [
   ['(no está en tu material)', '(no és al teu material)', '(not in your equipment)'],
   ['Toca para verlo en grande', 'Toca per veure’l en gran', 'Tap to see it bigger'],
   ['El muñeco en grande', 'El ninot en gran', 'The figure, bigger'],
+  ['Son los días del plan «{x}», el que está en uso.', 'Són els dies del pla «{x}», el que és en ús.', 'These are the days of the “{x}” plan, the one in use.'],
+  ['Si pones otro plan en uso, los días cambian con él.', 'Si poses un altre pla en ús, els dies canvien amb ell.', 'If you put another plan in use, the days change with it.'],
+  ['Si lo borras, te preguntará si quitas el aviso.', 'Si l’esborres, et preguntarà si treus l’avís.', 'If you delete it, you’ll be asked whether to remove the reminder.'],
+  ['¿Quitar también el aviso de entrenar de los días de este plan?', 'Vols treure també l’avís d’entrenar dels dies d’aquest pla?', 'Also remove the workout reminder for this plan’s days?'],
+  ['Quitar el aviso', 'Treu l’avís', 'Remove the reminder'],
+  ['Dejarlo', 'Deixa’l', 'Keep it'],
 ];
 
 export const UI_CA: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[1]]));

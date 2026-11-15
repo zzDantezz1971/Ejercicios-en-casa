@@ -141,6 +141,34 @@ function summary(p: Pick<WeekPlan, 'goal' | 'minutes' | 'level'> & { n: number }
   return [tr(GOAL_INFO[p.goal].name), tr(plural(p.n, 'día', 'días')), `${p.minutes} min`, tr(LEVEL_INFO[p.level].name)].join(' · ');
 }
 
+/** ¿Los días del aviso de entrenar son los de este plan? */
+export function remindsPlan(days: readonly number[], p: WeekPlan): boolean {
+  const a = sortDays(days), b = sortDays(p.days.map((d) => d.day));
+  return a.length === b.length && a.every((d, i) => d === b[i]);
+}
+
+/**
+ * Borra un plan (con sus tablas), después de preguntar. Si el aviso de entrenar seguía ese plan: pasa a los días
+ * del plan que queda en uso o, si ya no queda ninguno, pregunta si se quita el aviso.
+ */
+export async function removePlan(app: App, id: string): Promise<boolean> {
+  const plan = app.store.planById(id);
+  if (!plan) return false;
+  if (!(await confirmDialog(tr('¿Borrar el plan de la semana y sus tablas?'), tr('Borrar'), tr('Cancelar'), true))) return false;
+  const wasActive = app.store.plan?.id === id;
+  const r = remindersOf(app.store.settings.reminders);
+  const followed = r.train.on && wasActive && remindsPlan(r.train.days, plan);
+  app.store.deletePlan(id, true);
+  if (followed) {
+    const next = app.store.plan;
+    if (next) app.store.saveSettings({ ...app.store.settings, reminders: { ...r, train: { ...r.train, days: next.days.map((d) => d.day) } } });
+    else if (await confirmDialog(tr('¿Quitar también el aviso de entrenar de los días de este plan?'), tr('Quitar el aviso'), tr('Dejarlo'))) {
+      app.store.saveSettings({ ...app.store.settings, reminders: { ...r, train: { ...r.train, on: false } } });
+    }
+  }
+  return true;
+}
+
 /** Pregunta si se quieren recordatorios los días de entrenamiento (y los activa con esos días). */
 async function askReminders(app: App, days: number[]): Promise<void> {
   const ok = await confirmDialog(tr('¿Quieres que te avise los días de entrenamiento?'), tr('Sí, avísame'), tr('Ahora no'));
@@ -324,10 +352,7 @@ export class PlanScreen implements Screen {
   }
 
   private async remove(): Promise<void> {
-    const ok = await confirmDialog(tr('¿Borrar el plan de la semana y sus tablas?'), tr('Borrar'), tr('Cancelar'), true);
-    if (!ok) return;
-    this.app.store.deletePlan(this.planId, true);
-    this.app.back();
+    if (await removePlan(this.app, this.planId)) this.app.back();
   }
 
   private async rename(): Promise<void> {
@@ -459,8 +484,7 @@ export function planTableCard(app: App, plan: WeekPlan, opts: { eyebrow?: string
       app.push(new PlanWizardScreen(app, plan.id));
       return;
     } else if (choice === 'delete') {
-      if (!(await confirmDialog(tr('¿Borrar el plan de la semana y sus tablas?'), tr('Borrar'), tr('Cancelar'), true))) return;
-      app.store.deletePlan(plan.id, true);
+      if (!(await removePlan(app, plan.id))) return;
     }
     opts.after();
   };

@@ -5,6 +5,7 @@ import { HAS_BACKUP } from '../../services/Backup';
 import type { App, Screen } from '../App';
 import { clear, confirmDialog, h, keepScroll } from '../dom';
 import { icon, type IconName } from '../icons';
+import { planTitle, remindsPlan } from './PlanScreens';
 
 /** Días de la semana empezando por el lunes (0 = domingo). */
 export const WEEK = [1, 2, 3, 4, 5, 6, 0];
@@ -68,6 +69,7 @@ export class RemindersScreen implements Screen {
     clear(this.body);
     const r = this.value;
     const premium = this.app.access.premium;
+    const plan = premium ? this.app.store.plan : undefined;
     this.body.append(h('p', { class: 'muted small rem-intro' }, REMINDERS_AVAILABLE
       ? 'Elige qué quieres que te recuerde y, para cada uno, los días y la hora. Llegan como notificación aunque la app esté cerrada.'
       : 'Los recordatorios llegan como notificación en la app de Android, aunque esté cerrada. Aquí puedes ver cómo se configuran.'));
@@ -95,6 +97,10 @@ export class RemindersScreen implements Screen {
               this.save({ ...r, [o.kind]: { ...rule, days: sel ? rule.days.filter((x) => x !== d) : [...rule.days, d] } }) }, dayName(d));
           })),
           !rule.days.length ? h('span', { class: 'rem-warn small' }, icon('info'), 'Marca al menos un día.') : null,
+          // entrenar: si son los días del plan en uso, se dice de qué plan son (cambian solos al poner otro en uso)
+          o.kind === 'train' && plan && remindsPlan(rule.days, plan)
+            ? h('span', { class: 'rem-plan small' }, icon('calendar'), h('span', {}, h('span', {}, `Son los días del plan «${planTitle(plan)}», el que está en uso.`), ' ',
+              h('span', {}, this.app.store.plans.length > 1 ? 'Si pones otro plan en uso, los días cambian con él.' : 'Si lo borras, te preguntará si quitas el aviso.'))) : null,
           // peso y copia: cada cuántas semanas
           o.kind !== 'train' ? h('label', { class: 'rem-hour' }, h('span', { class: 'muted small' }, 'Frecuencia'),
             h('select', { class: 'rem-time rem-every', onchange: (e: Event) =>

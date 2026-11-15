@@ -729,9 +729,9 @@ export class MannequinScene {
     const chestC = J.mid.clone().lerp(J.neck, 0.68);
     for (const s of ['L', 'R']) {
       const sg = s === 'L' ? -1 : 1;
+      // hombre: sin pectorales marcados (parecían dos pechos); la camiseta queda lisa
+      P['pec' + s].visible = fem;
       if (fem) this.oriented(P['pec' + s], chestC.clone().addScaledVector(tUp, -2.2).addScaledVector(fwd, 6.3 * breath).addScaledVector(bodyLat, 4.3 * sg), tUp, bodyLat, 3.9, 4.4, 3.5);
-      // hombre: pectoral ancho y plano, más abajo y casi unido en el centro (no como dos pechos redondos)
-      else this.oriented(P['pec' + s], chestC.clone().addScaledVector(tUp, -2.8).addScaledVector(fwd, 7.0 * breath).addScaledVector(bodyLat, 4.0 * sg), tUp, bodyLat, 2.5, 6.6, 1.5);
     }
     this.oriented(P.traps, J.neck.clone().addScaledVector(tUp, -3).addScaledVector(fwd, -1.5), bodyLat, tUp, fem ? 8 : 9.5, fem ? 2.8 : 3.6, fem ? 3.8 : 4.6);
     this.oriented(P.glutes, J.pel.clone().addScaledVector(fwd, fem ? -5 : -4.6).addScaledVector(tUp, -1.5), bodyLat, tUp, fem ? 11.2 : 10.5, fem ? 6.4 : 6, fem ? 5.6 : 5);
@@ -778,7 +778,8 @@ export class MannequinScene {
     this.oriented(P.nose, head.clone().addScaledVector(face, 9.3).addScaledVector(up, -1.2), up, lat, 2.0, 1.3, 1.6);
     // con barba, la boca un poco más adelante para que se vea por encima
     // con barba: por delante de la barba y por debajo del bigote, para que se vea la sonrisa entera
-    const mouthAt = head.clone().addScaledVector(face, P.beard ? 9.6 : 8.3).addScaledVector(up, P.beard ? -5.6 : -4.9);
+    // (sin barba, por delante de la mandíbula: si no, la mandíbula tapaba el centro y solo asomaban las puntas)
+    const mouthAt = head.clone().addScaledVector(face, P.beard ? 9.6 : 9.2).addScaledVector(up, P.beard ? -5.6 : -5.1);
     P.mouthFlat.visible = mood === 'effort';
     P.mouthSmile.visible = mood !== 'effort';
     if (mood === 'effort') {
