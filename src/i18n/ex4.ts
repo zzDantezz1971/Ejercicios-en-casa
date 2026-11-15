@@ -83,8 +83,8 @@ export const EX4: Record<string, { ca: ExT; en: ExT }> = {
     en: ['Standing quad stretch', 'Front of the thigh', 'Stand, holding on to a wall or chair if needed.', 'Bend one knee and hold your foot, bringing your heel towards your glutes. Hold. Halfway through, switch.', 'Knees together and hips slightly forward.', 'Arching your lower back.', 'Do it lying on your side.'],
   },
   'gemelos-contra-la-pared': {
-    ca: ['Bessons contra la paret', 'Bessons', 'De cara a la paret, mans recolzades. Una cama avançada i doblegada, l’altra estirada enrere.', 'Porta el pes cap a la paret sense desenganxar el taló de darrere. Aguanta. A la meitat del temps canvia.', 'La punta del peu de darrere mira endavant.', 'Aixecar el taló.', 'Peu de darrere més a prop.'],
-    en: ['Wall calf stretch', 'Calves', 'Face the wall with your hands on it. One leg forward and bent, the other straight behind.', 'Lean your weight towards the wall without lifting your back heel. Hold. Halfway through, switch.', 'The toes of your back foot point forward.', 'Lifting your heel.', 'Bring your back foot closer.'],
+    ca: ['Bessons contra la paret', 'Bessons', 'De cara a la paret, mans recolzades. Un peu davant amb el taló a terra i la punta aixecada, recolzada a la paret; l’altra cama enrere.', 'Amb el genoll de davant estirat, acosta el maluc i el pit a la paret fins a notar l’estirament al bessó. Aguanta. A la meitat del temps canvia de cama.', 'Com més alta la punta del peu, més estira.', 'Doblegar el genoll de davant.', 'Punta del peu més baixa.'],
+    en: ['Wall calf stretch', 'Calves', 'Face the wall with your hands on it. One foot forward with the heel on the floor and the toes raised against the wall; the other leg behind.', 'Keeping your front knee straight, bring your hips and chest towards the wall until you feel the stretch in your calf. Hold. Halfway through, switch legs.', 'The higher your toes, the bigger the stretch.', 'Bending your front knee.', 'Lower your toes.'],
   },
 };
 
