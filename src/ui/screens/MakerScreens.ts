@@ -1,7 +1,7 @@
 import { TEMPLATES, type TableTemplate } from '../../data/templates';
 import { canDo, EQUIP_INFO, type Equip } from '../../domain/equipment';
 import {
-  generate, GOAL_INFO, GOALS, LEVEL_INFO, LEVELS, MINUTES, suggestedName, swapExercise, tableSeconds, ZONE_INFO, ZONES,
+  generate, GOAL_INFO, GOALS, LEVEL_INFO, LEVELS, MINUTES, suggestedName, tableSeconds, ZONE_INFO, ZONES,
   type GenContext, type GenOptions, type GenResult, type Goal,
 } from '../../domain/generator';
 import { clampRounds, MAX_ROUNDS, WorkoutPlan } from '../../domain/WorkoutPlan';
@@ -81,7 +81,6 @@ function missingEquip(app: App, r: GenResult): Equip[] {
 /** Lo que se puede hacer con la tabla en la vista previa: cambiarla (mover, quitar) y, en el asistente, cambiar un ejercicio. */
 export interface PreviewEdit {
   set(r: GenResult): void;
-  swap?(s: SectionId, i: number): GenResult;
   /** Preguntar antes de quitar un ejercicio (se puede desactivar para esta lista con la casilla del aviso). */
   ask: { remove: boolean };
   /** Editar también las vueltas de cada apartado y el peso de las mancuernas (al editar una tabla guardada). */
@@ -140,7 +139,7 @@ export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement
   if (miss.length) box.append(h('p', { class: 'note small miss-note' }, ...missLine(miss)));
   // leyenda de los botones de cada ejercicio
   if (edit) box.append(h('div', { class: 'maker-legend' },
-    edit.swap ? h('span', {}, icon('swap'), 'Cambiar') : '',
+    h('span', {}, icon('swap'), 'Cambiar'),
     h('span', {}, icon('trash', 'ico danger'), 'Quitar'),
     h('span', {}, icon('tables'), 'Arrastra para mover')));
   for (const s of SECTION_IDS) {
@@ -192,7 +191,16 @@ export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement
             next[i] = w ? { ...rest, weight: w } : rest;
             edit.set(withSection(r, s, next));
           } }, icon('dumbbell'), it.weight ? kg(it.weight) : 'Sin peso') : ''),
-        edit?.swap ? h('button', { class: 'icon-btn small', 'aria-label': `Cambiar ${ex.name} por otro parecido`, onclick: () => edit.set(edit.swap!(s, i)) }, icon('swap')) : '',
+        edit ? h('button', { class: 'icon-btn small', 'aria-label': `Cambiar ${ex.name} por otro`, onclick: () => {
+          // la lista para elegir el que lo sustituye (sin los que ya están en la tabla); conserva el tiempo
+          const have = new Set(SECTION_IDS.flatMap((x) => r.routine[x].map((y) => y.exerciseId)));
+          app.push(new PickExerciseScreen(app, s, have, (id) => {
+            const next = items.slice();
+            next[i] = { exerciseId: id, seconds: it.seconds };
+            edit.set(withSection(r, s, next));
+            app.back();
+          }, `Cambiar ${ex.name}`));
+        } }, icon('swap')) : '',
         // quitar: apartado de los demás botones y con aviso (que se puede desactivar para esta lista)
         edit ? h('button', { class: 'icon-btn small danger maker-remove', 'aria-label': `Quitar ${ex.name} de la tabla`, onclick: async () => {
           if (edit.ask.remove) {
@@ -310,7 +318,6 @@ export class GeneratorScreen implements Screen {
         preview(this.app, this.result, {
           set: (r) => { this.result = r; this.keepRender(); },
           ask: this.ask,
-          swap: (sec, i) => swapExercise(this.result!, sec, i, o, this.ctx()),
         }),
         h('div', { class: 'maker-actions' },
           h('button', { class: 'btn ghost block', onclick: () => { this.result = generate(o, this.ctx()); this.ask = { remove: true }; this.render(); window.scrollTo({ top: 0 }); } }, icon('swap'), 'Otra propuesta'),
@@ -376,9 +383,6 @@ class TemplateScreen implements Screen {
         preview(app, this.r, {
           set: (r) => { this.r = r; this.render(); },
           ask: this.ask,
-          // otro parecido (mismo músculo y grupo), con el material del usuario
-          swap: (sec, i) => swapExercise(this.r, sec, i, { goal: 'forma', zone: 'entero', level: 'normal', minutes: 20 },
-            { sections: app.sections, catalog: app.catalog, owned: new Set(app.store.settings.equipment), settings: app.store.settings }),
         }),
         h('div', { class: 'maker-actions' },
           h('button', { class: 'btn primary block big', disabled: isEmptyResult(this.r), onclick: () => void saveTable(app, tr(t.name), this.r, this.fillActive) }, icon('check'), 'Usar esta tabla'))));
@@ -399,9 +403,9 @@ class PickExerciseScreen implements Screen {
   private readonly list = h('div', { class: 'maker-preview' });
   private q = '';
 
-  constructor(private readonly app: App, private readonly s: SectionId, private readonly have: ReadonlySet<string>, private readonly pick: (id: string) => void) {
+  constructor(private readonly app: App, private readonly s: SectionId, private readonly have: ReadonlySet<string>, private readonly pick: (id: string) => void, sub = 'Añadir un ejercicio') {
     const search = h('input', { class: 'text-input', type: 'search', placeholder: 'Buscar', 'aria-label': 'Buscar', oninput: () => { this.q = search.value; this.paint(); } });
-    this.el.append(header(app, SECTION_TITLES[s], 'Añadir un ejercicio'), h('div', { class: 'maker-body' }, search, this.list));
+    this.el.append(header(app, SECTION_TITLES[s], sub), h('div', { class: 'maker-body' }, search, this.list));
     this.paint();
   }
 

@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-15T18:50:44Z",
+    "es": ["«Cambiar» un ejercicio ahora abre la lista para que elijas tú por cuál cambiarlo (mantiene el tiempo)."],
+    "ca": ["«Canvia» un exercici ara obre la llista perquè triïs tu per quin canviar-lo (manté el temps)."],
+    "en": ["“Swap” on an exercise now opens the list so you choose its replacement (the time is kept)."]
+  },
+  {
     "fecha": "2026-11-15T18:47:37Z",
     "es": ["«Gemelos contra la pared» pasa a ser «Gemelos con la punta levantada»: sin pared, solo el talón en el suelo y la punta del pie hacia arriba."],
     "ca": ["«Bessons contra la paret» passa a ser «Bessons amb la punta aixecada»: sense paret, només el taló a terra i la punta del peu amunt."],

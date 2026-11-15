@@ -28,7 +28,7 @@ const GUIDE: Array<{ icon: IconName; title: string; sub: string; points: Array<s
       'La pausa entre ejercicios y la cuenta atrás de cada apartado se cambian en Ajustes.'] },
   { icon: 'tables', title: 'Menú Tablas', sub: 'Más de 200 ejercicios para armar tus tablas.', points: [
       'Crea tantas tablas como quieras, cámbiales el nombre, duplícalas o bórralas.',
-      'Con Editar ves la tabla por apartados: cambia el tiempo de cada ejercicio (− +), cámbialo por otro parecido, quítalo, arrástralo para moverlo o añade otros; también las vueltas de cada apartado y el peso de las mancuernas.',
+      'Con Editar ves la tabla por apartados: cambia el tiempo de cada ejercicio (− +), cámbialo por otro de la lista, quítalo, arrástralo para moverlo o añade otros; también las vueltas de cada apartado y el peso de las mancuernas.',
       'Con Nueva puedes crearla de tres maneras: «Créala por mí» (eliges objetivo, zona, tiempo y nivel, y la app la arma con tu material), una de las «Tablas hechas» o vacía, eligiendo tú los ejercicios.',
       'Antes de guardarla, toca un ejercicio para ver cómo se hace, cambia su tiempo con − y +, cámbialo por otro parecido o quítalo con sus botones (te pregunta antes de quitarlo), ordénalos arrastrándolos por el asa y añade otros con «Añadir un ejercicio». En «Créala por mí» también puedes pedir otra propuesta.',
       { h: 'Plan de la semana (Prémium)' },

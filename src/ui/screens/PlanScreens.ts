@@ -1,4 +1,4 @@
-import { generate, GOAL_INFO, GOALS, LEVEL_INFO, LEVELS, swapExercise, type GenContext, type GenOptions, type GenResult, type Goal, type Level } from '../../domain/generator';
+import { generate, GOAL_INFO, GOALS, LEVEL_INFO, LEVELS, type GenContext, type GenOptions, type GenResult, type Goal, type Level } from '../../domain/generator';
 import { remindersOf } from '../../domain/reminders';
 import { WorkoutPlan } from '../../domain/WorkoutPlan';
 import {
@@ -368,7 +368,7 @@ export class PlanDayScreen implements Screen {
     const set = (next: GenResult) => { app.store.setRoutineContent(t.id, next.routine, next.rounds); this.render(); };
     this.el.append(header(app, tr(kindLabel(plan, pd.kind)), dayName(pd.day)),
       h('div', { class: 'maker-body' },
-        preview(app, r, { set, ask: this.ask, full: true, swap: (s, i) => swapExercise(r, s, i, o, genCtx(app)) }),
+        preview(app, r, { set, ask: this.ask, full: true }),
         h('div', { class: 'maker-actions' },
           h('button', { class: 'btn ghost block', onclick: () => { const g = generate(o, genCtx(app)); this.ask.remove = true; set(g); window.scrollTo({ top: 0 }); } }, icon('swap'), 'Otra propuesta'),
           h('button', { class: 'btn primary block big', disabled: isEmptyResult(r), onclick: () => startDay(app, plan.id, pd) }, icon('play'), 'Empezar'))));
@@ -392,7 +392,7 @@ class DraftDayScreen implements Screen {
     const set = (next: GenResult) => { x.r = next; this.render(); };
     this.el.append(header(app, this.title, dayName(x.day)),
       h('div', { class: 'maker-body' },
-        preview(app, x.r, { set, ask: this.ask, swap: (s, i) => swapExercise(x.r, s, i, o, genCtx(app)) }),
+        preview(app, x.r, { set, ask: this.ask }),
         h('div', { class: 'maker-actions' },
           h('button', { class: 'btn ghost block', onclick: () => { this.ask.remove = true; set(generate(o, genCtx(app))); window.scrollTo({ top: 0 }); } }, icon('swap'), 'Otra propuesta'),
           h('button', { class: 'btn primary block big', disabled: isEmptyResult(x.r), onclick: () => app.back() }, icon('check'), 'Listo'))));

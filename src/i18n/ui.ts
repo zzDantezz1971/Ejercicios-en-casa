@@ -1109,7 +1109,9 @@ const ROWS: Row[] = [
   ['1 plan', '1 pla', '1 plan'],
   ['Último usado', 'L’últim fet servir', 'Last used'],
   ['Con un plan de la semana en uso, la tabla es la del día (o la del próximo día de entrenamiento): arriba pone «Plan de la semana» y el día.', 'Amb un pla setmanal en ús, la taula és la del dia (o la del pròxim dia d’entrenament): a dalt hi posa «Pla setmanal» i el dia.', 'With a weekly plan in use, the table is the day’s (or the next training day’s): at the top it says “Weekly plan” and the day.'],
-  ['Con Editar ves la tabla por apartados: cambia el tiempo de cada ejercicio (− +), cámbialo por otro parecido, quítalo, arrástralo para moverlo o añade otros; también las vueltas de cada apartado y el peso de las mancuernas.', 'Amb Edita veus la taula per apartats: canvia el temps de cada exercici (− +), canvia’l per un altre de semblant, treu-lo, arrossega’l per moure’l o afegeix-ne d’altres; també les voltes de cada apartat i el pes de les manuelles.', 'With Edit you see the table by section: change each exercise’s time (− +), swap it for a similar one, remove it, drag it to move it or add others; also each section’s rounds and the dumbbell weight.'],
+  ['Con Editar ves la tabla por apartados: cambia el tiempo de cada ejercicio (− +), cámbialo por otro de la lista, quítalo, arrástralo para moverlo o añade otros; también las vueltas de cada apartado y el peso de las mancuernas.', 'Amb Edita veus la taula per apartats: canvia el temps de cada exercici (− +), canvia’l per un altre de la llista, treu-lo, arrossega’l per moure’l o afegeix-ne d’altres; també les voltes de cada apartat i el pes de les manuelles.', 'With Edit you see the table by section: change each exercise’s time (− +), swap it for another from the list, remove it, drag it to move it or add others; also each section’s rounds and the dumbbell weight.'],
+  ['Cambiar {x} por otro', 'Canvia {x} per un altre', 'Swap {x} for another'],
+  ['Cambiar {x}', 'Canvia {x}', 'Swap {x}'],
 ];
 
 export const UI_CA: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[1]]));
