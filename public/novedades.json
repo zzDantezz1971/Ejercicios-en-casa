@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-15T22:00:55Z",
+    "es": ["Voz: quitada la opción «Voz automática» (sonaba igual que una de las otras). Si no has elegido ninguna, se marca la primera."],
+    "ca": ["Veu: treta l’opció «Veu automàtica» (sonava igual que una de les altres). Si no n’has triat cap, es marca la primera."],
+    "en": ["Voice: removed the “Automatic voice” option (it sounded the same as one of the others). If you haven’t chosen one, the first is selected."]
+  },
+  {
     "fecha": "2026-11-15T21:54:17Z",
     "es": ["Voz: si solo hay una voz para el idioma, ya no salen opciones que suenan igual; te explica cómo tener más."],
     "ca": ["Veu: si només hi ha una veu per a l’idioma, ja no surten opcions que sonen igual; t’explica com tenir-ne més."],

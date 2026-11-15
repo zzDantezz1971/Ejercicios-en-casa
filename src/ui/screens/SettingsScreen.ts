@@ -470,11 +470,10 @@ export class SettingsScreen implements Screen {
       list);
     const sample = { es: 'Hola, así sonarán los avisos.', ca: 'Hola, així sonaran els avisos.', en: 'Hi, this is how the alerts will sound.' }[this.app.voice.lang];
     void this.app.voice.voices().then((voices) => {
-      const cur = this.app.store.settings.voiceId ?? '';
+      let cur = this.app.store.settings.voiceId ?? '';
       // los nombres técnicos de Android (es-es-x-eed-local…) no dicen nada: «Voz 1, 2, 3…»; los del navegador sí
       const readable = (n: string) => !/^[a-z]{2,3}[-_][a-z]{2,3}[-_]x[-_]/i.test(n) && !/#/.test(n);
       const opts: Array<{ id: string; label: string; sub?: string }> = [
-        { id: '', label: 'Voz automática', sub: 'La voz de siempre del móvil.' },
         ...voices.map((v, i) => ({ id: v.id, label: `Voz ${i + 1}`, sub: readable(v.name) ? v.name : undefined })),
       ];
       clear(list);
@@ -484,6 +483,12 @@ export class SettingsScreen implements Screen {
           ? 'Este móvil solo tiene una voz para este idioma. Puedes instalar otras en los ajustes del móvil (Texto a voz › Motor de voz de Google › Instalar datos de voz).'
           : 'El navegador solo ofrece una voz para este idioma. En la app de Android podrás elegir entre las voces que tenga instaladas el móvil.'));
         return;
+      }
+      // sin ninguna elegida (o la elegida ya no está), la primera: así lo marcado es lo que suena
+      if (!voices.some((v) => v.id === cur)) {
+        cur = voices[0].id;
+        this.app.store.saveSettings({ ...this.app.store.settings, voiceId: cur });
+        void this.app.voice.useVoice(cur);
       }
       for (const o of opts) {
         const on = o.id === cur;
