@@ -6,7 +6,7 @@ import {
 } from '../../domain/generator';
 import { clampRounds, MAX_ROUNDS, WorkoutPlan } from '../../domain/WorkoutPlan';
 import { MAX_SECONDS, MIN_SECONDS, STEP_SECONDS } from '../../domain/RoutineEditor';
-import { emptyRoutine, SECTION_IDS, SECTION_TITLES, usesWeight, type SectionId } from '../../domain/types';
+import { emptyRoutine, SECTION_IDS, SECTION_TITLES, usesWeight, type ExerciseDef, type SectionId } from '../../domain/types';
 import { tr } from '../../i18n';
 import type { App, Screen } from '../App';
 import { clear, h, humanDuration, kg, plural, promptDialog, weightDialog } from '../dom';
@@ -463,17 +463,33 @@ class PickExerciseScreen implements Screen {
       .filter((e) => !this.have.has(e.id) && !e.pending && canDo(e.equip, owned))
       .filter((e) => !q || fold(`${e.name} ${tr(e.name)} ${e.zone} ${e.group ? tr(e.group) : ''}`).includes(q));
     clear(this.list);
+    // versión gratis: primero los gratis (aparte) y después los de Prémium, con candado
+    const free = app.access.premium ? [] : exs.filter((e) => app.access.canUse(e.id));
+    const rest = exs.filter((e) => !free.includes(e));
+    if (free.length) this.list.append(h('h2', { class: 'maker-sec' }, icon('check'), 'Gratis'));
+    free.forEach((ex) => this.row(ex));
     let group: string | undefined;
-    for (const ex of exs) {
+    for (const ex of rest) {
       if (ex.group !== group) {
         group = ex.group;
         if (group) this.list.append(h('h2', { class: 'maker-sec' }, group));
       }
+      this.row(ex);
+    }
+    if (!exs.length) this.list.append(h('p', { class: 'muted' }, 'No hay más ejercicios para añadir.'));
+    if (this.multi) this.paintFoot();
+  }
+
+  private row(ex: ExerciseDef): void {
+    const { app } = this;
+    {
       const img = h('img', { class: 'maker-thumb', alt: '' });
       void app.thumbs.get(ex).then((url) => (img.src = url));
       const lock = !app.access.canUse(ex.id);
       const on = this.chosen.includes(ex.id);
       const row: HTMLElement = h('button', { class: 'maker-row maker-pick' + (lock ? ' locked' : '') + (on ? ' on' : ''), 'aria-pressed': this.multi ? String(on) : null, onclick: () => {
+        // con candado: no se puede elegir; se enseña qué ofrece Prémium
+        if (lock) { app.showPremium(); return; }
         if (!this.multi) { this.pick([ex.id]); return; }
         app.haptics.tap();
         this.chosen = this.chosen.includes(ex.id) ? this.chosen.filter((x) => x !== ex.id) : [...this.chosen, ex.id];
@@ -485,10 +501,8 @@ class PickExerciseScreen implements Screen {
       } },
         img,
         h('span', { class: 'maker-name' }, h('span', {}, ex.name), h('span', { class: 'maker-secs muted small' }, ex.zone, lock ? icon('lock', 'ico lock') : '')),
-        icon(on ? 'check' : 'plus'));
+        icon(on ? 'check' : lock ? 'lock' : 'plus'));
       this.list.append(row);
     }
-    if (!exs.length) this.list.append(h('p', { class: 'muted' }, 'No hay más ejercicios para añadir.'));
-    if (this.multi) this.paintFoot();
   }
 }

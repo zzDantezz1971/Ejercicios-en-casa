@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-15T23:04:22Z",
+    "es": ["App Android: el botón atrás del móvil vuelve a la pantalla anterior (antes cerraba la app).", "Versión gratis: en «Añadir un ejercicio» salen primero los gratis; los de Prémium llevan candado y, al tocarlos, se explica Prémium."],
+    "ca": ["App d’Android: el botó enrere del mòbil torna a la pantalla anterior (abans tancava l’app).", "Versió gratuïta: a «Afegeix un exercici» surten primer els gratuïts; els de Prèmium porten cadenat i, en tocar-los, s’explica Prèmium."],
+    "en": ["Android app: the phone’s back button goes to the previous screen (it used to close the app).", "Free version: in “Add an exercise” the free ones come first; Premium ones show a lock and tapping them explains Premium."]
+  },
+  {
     "fecha": "2026-11-15T22:07:10Z",
     "es": ["Voz: en castellano solo salen las voces de España (no las de Latinoamérica)."],
     "ca": ["Veu: en castellà només surten les veus d’Espanya (no les de Llatinoamèrica)."],

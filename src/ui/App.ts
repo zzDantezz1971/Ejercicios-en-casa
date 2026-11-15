@@ -1,3 +1,5 @@
+import { App as NativeApp } from '@capacitor/app';
+import { IS_NATIVE } from '../platform/native';
 import { setAngleStore } from '../figure/angles';
 import { setMusicDuck } from '../services/MusicDuck';
 import { applyColor, setColorGate } from '../platform/theme';
@@ -93,6 +95,8 @@ export class App {
     root.append(this.view, this.tabbar);
     // Botón atrás de Android: cada pantalla nueva añade una entrada al historial del navegador.
     window.addEventListener('popstate', () => void this.handleBack());
+    // App Android: el botón atrás del móvil (sin esto, cerraba la app desde cualquier pantalla)
+    if (IS_NATIVE) void NativeApp.addListener('backButton', () => void this.nativeBack());
   }
 
   /** Registra cómo crear cada pantalla principal (evita dependencias circulares). */
@@ -179,6 +183,15 @@ export class App {
   /** Vuelve a la pantalla anterior (como el botón atrás). */
   back(): void {
     if (this.stack.length > 1) history.back();
+  }
+
+  /** Botón atrás de Android: como el del navegador; en Inicio, sin nada más que cerrar, sale de la app. */
+  private async nativeBack(): Promise<void> {
+    if (this.stack.length > 1) { history.back(); return; }
+    const cur = this.current;
+    if (cur?.onBack && (await cur.onBack())) return;
+    if (cur?.tab && cur.tab !== 'inicio' && this.tabFactory) { this.home(this.tabFactory.inicio()); return; }
+    void NativeApp.exitApp();
   }
 
   private async handleBack(): Promise<void> {
