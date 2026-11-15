@@ -68,6 +68,8 @@ const PLAIN_NAMES: Record<string, { es: string; ca: string; en?: string }> = {
   'gusano-inchworm': { es: 'Gusano', ca: 'Cuc' },
   'barquita-hollow-hold': { es: 'Barquita', ca: 'Barqueta' },
   'mariposa-aductores': { es: 'Mariposa', ca: 'Papallona' },
+  // antes, contra la pared; ahora sin pared (el identificador se mantiene para las tablas guardadas)
+  'gemelos-contra-la-pared': { es: 'Gemelos con la punta levantada', ca: 'Bessons amb la punta aixecada', en: 'Toes-up calf stretch' },
   // antes «Flexores de cadera (rodilla en el suelo)»: ahora es la postura de la lagartija (mismo identificador)
   'flexores-de-cadera-rodilla-en-el-suelo': { es: 'Postura de la lagartija', ca: 'Postura del llangardaix' },
   // sin paréntesis en el nombre

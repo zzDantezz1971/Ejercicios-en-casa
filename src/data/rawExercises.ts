@@ -291,8 +291,8 @@ export const RAW_SECTIONS: RawSection[] = [
  {n:'Cuádriceps de pie',split:true,z:'Parte delantera del muslo',f:[
    [{},200,900],[{thR:95,snR:250,uaR:110,faR:100,uaL:-10,faL:-10},1500,900],
    [{},200,900],[{thL:95,snL:250,uaL:110,faL:100,uaR:-10,faR:-10},1500,900]]},
- {n:'Gemelos contra la pared',z:'Gemelos',az:-14,plant:'anL',props:(J,P)=>P.wall(J.tiR[0]+1),f:[
-   [{tl:-86,ua:54,fa:-24,thR:66,snR:66,ftR:-42,thL:112,snL:112,ftL:0},1300,1000],[{tl:-76,ua:68,fa:-38,thR:66,snR:66,ftR:-42,thL:112,snL:112,ftL:0},1300,1000]]},
+ {n:'Gemelos contra la pared',z:'Gemelos',az:-20,plant:'anL',f:[
+   [{tl:-82,ua:126,fa:64,zE:22,thR:66,snR:66,ftR:-42,thL:112,snL:112,ftL:0},1300,1000],[{tl:-62,ua:150,fa:86,zE:22,thR:66,snR:66,ftR:-42,thL:112,snL:112,ftL:0},1300,1000]]},
  {g:'Fortalecer zona lumbar (espalda sana)'},
  {n:'Bird-dog (perro de caza)',z:'Lumbar y core',mat:1,b:['lumbar'],handsDown:true,f:[
    [QUAD,200,900],[{...QUAD,uaL:-5,faL:-5,thR:182,snR:182},1200,900],

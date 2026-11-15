@@ -521,11 +521,11 @@ export const DESCRIPTIONS: Record<string, ExerciseDescription> = {
     easier: 'Tumbado de lado.',
   },
   'gemelos-contra-la-pared': {
-    start: 'De frente a la pared, manos apoyadas. Un pie delante con el talón en el suelo y la punta levantada, apoyada en la pared; la otra pierna atrás.',
-    move: 'Con la rodilla de delante estirada, acerca la cadera y el pecho a la pared hasta notar el estiramiento en el gemelo. Mantén. A mitad del tiempo cambia de pierna.',
-    tip: 'Cuanto más alta la punta del pie, más estira.',
-    mistakes: 'Doblar la rodilla de delante.',
-    easier: 'Punta del pie más baja.',
+    start: 'De pie, manos en la cintura. Da un paso adelante y apoya solo el talón de ese pie, con la punta levantada; la otra pierna atrás, un poco doblada.',
+    move: 'Con la rodilla de delante estirada, inclina el tronco hacia delante con la espalda recta hasta notar el estiramiento en el gemelo. Mantén. A mitad del tiempo cambia de pierna.',
+    tip: 'Cuanto más levantes la punta del pie, más estira.',
+    mistakes: 'Doblar la rodilla de delante o encorvar la espalda.',
+    easier: 'Inclínate menos.',
   },
   'flexores-de-cadera-rodilla-en-el-suelo': {
     start: 'En zancada baja: rodilla de atrás en el suelo (sobre un cojín), pie de delante adelantado y las dos manos en el suelo por dentro de ese pie.',
