@@ -426,6 +426,7 @@ export class SettingsScreen implements Screen {
       toggle('sound', 'volume', 'Pitidos y vibración', 'Al empezar y acabar cada ejercicio, y en los últimos 3 segundos.'),
       toggle('voice', 'voice', 'Avisos por voz', 'Dice el nombre del ejercicio, el siguiente y cuándo cambiar de lado.'),
       s.voice ? toggle('voiceCount', 'hourglass', 'Cuenta atrás por voz', 'Dice "tres, dos, uno" al final de cada ejercicio, descanso y cuenta atrás.') : null,
+      s.voice && this.app.voice.available ? this.voiceCard() : null,
       IS_NATIVE ? toggle('duckMusic', 'music', 'Bajar la música mientras habla la app', 'Si escuchas música (Spotify, la radio...), baja el volumen durante la voz y los pitidos y luego vuelve a subir.') : null,
       h('button', {
         class: 'btn ghost block',
@@ -454,6 +455,44 @@ export class SettingsScreen implements Screen {
       !this.app.voice.available ? h('p', { class: 'muted' }, 'Este navegador no tiene voz disponible.') : null,
     );
     this.groupify();
+  }
+
+  /**
+   * Elegir la voz de los avisos entre las del móvil para el idioma de la app (Android no dice si son de hombre o de
+   * mujer: cada una tiene ▶ para escucharla). «Automática» es la de siempre del sistema.
+   */
+  private voiceCard(): HTMLElement {
+    const list = h('div', { class: 'voice-list' }, h('p', { class: 'muted small' }, 'Buscando las voces del móvil…'));
+    const card = h('section', { class: 'card setting voice-card' },
+      h('div', { class: 'set-head-row' },
+        h('span', { class: 'set-icon' }, icon('voice')),
+        h('span', { class: 'set-text' }, h('strong', {}, 'Voz'), h('span', { class: 'muted block small' }, 'Escucha las voces de tu móvil con ▶ y elige la que más te guste (de hombre o de mujer).'))),
+      list);
+    const sample = { es: 'Hola, así sonarán los avisos.', ca: 'Hola, així sonaran els avisos.', en: 'Hi, this is how the alerts will sound.' }[this.app.voice.lang];
+    void this.app.voice.voices().then((voices) => {
+      const cur = this.app.store.settings.voiceId ?? '';
+      // los nombres técnicos de Android (es-es-x-eed-local…) no dicen nada: «Voz 1, 2, 3…»; los del navegador sí
+      const readable = (n: string) => !/^[a-z]{2,3}[-_][a-z]{2,3}[-_]x[-_]/i.test(n) && !/#/.test(n);
+      const opts: Array<{ id: string; label: string; sub?: string }> = [
+        { id: '', label: 'Voz automática', sub: 'La voz de siempre del móvil.' },
+        ...voices.map((v, i) => ({ id: v.id, label: `Voz ${i + 1}`, sub: readable(v.name) ? v.name : undefined })),
+      ];
+      clear(list);
+      if (!voices.length) list.append(h('p', { class: 'muted small' }, 'Este móvil solo tiene una voz para este idioma. Puedes instalar otras en los ajustes de voz del móvil (Texto a voz).'));
+      for (const o of opts) {
+        const on = o.id === cur;
+        list.append(h('div', { class: 'voice-row' + (on ? ' on' : '') },
+          h('button', { class: 'icon-btn small voice-play', 'aria-label': `Escuchar: ${o.label}`, onclick: () => { this.app.voice.unlock(); void this.app.voice.preview(o.id || undefined, sample); } }, icon('play')),
+          h('button', { class: 'voice-pick', 'aria-pressed': String(on), onclick: () => {
+            this.update({ voiceId: o.id || undefined });
+            void this.app.voice.useVoice(o.id || undefined);
+            void this.app.voice.preview(o.id || undefined, sample);
+          } },
+            h('span', { class: 'voice-radio' }, on ? icon('check') : null),
+            h('span', { class: 'set-text' }, h('strong', {}, o.label), o.sub ? h('span', { class: 'muted block small', 'data-no-tr': o.id ? '' : null }, o.sub) : null))));
+      }
+    });
+    return card;
   }
 
   /** Grupos abiertos (los demás, cerrados); se recuerda entre visitas. */

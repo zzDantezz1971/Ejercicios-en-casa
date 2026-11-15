@@ -161,6 +161,8 @@ export interface Settings {
   phrases: boolean;
   /** Decir "3, 2, 1" por voz al final de cada ejercicio, pausa y cuenta atrás. */
   voiceCount: boolean;
+  /** Voz elegida para los avisos (identificador de la voz del móvil); sin ella, la del sistema para el idioma. */
+  voiceId?: string;
   /** App Android: bajar la música de otras apps (Spotify, radio...) mientras la app habla o pita. */
   duckMusic: boolean;
   /** Al empezar, preguntar por el reloj (pulsaciones) si no está conectado. */

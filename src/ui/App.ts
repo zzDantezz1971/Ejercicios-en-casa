@@ -134,6 +134,7 @@ export class App {
     setLook(this.store.settings.look, () => this.access.premium);
     this.sounds.enabled = this.store.settings.sound;
     this.voice.enabled = this.store.settings.voice;
+    void this.voice.useVoice(this.store.settings.voiceId);
     setMusicDuck(this.store.settings.duckMusic);
     // tema de color (los de pago, solo con Prémium)
     setColorGate(() => this.access.premium);

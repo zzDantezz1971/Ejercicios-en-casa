@@ -1131,6 +1131,15 @@ const ROWS: Row[] = [
   ['El aviso de «Hace X días que no te pesas» (al acabar un entrenamiento) sigue los días y la hora del recordatorio de peso.', 'L’avís de «Fa X dies que no et peses» (en acabar un entrenament) segueix els dies i l’hora del recordatori de pes.', 'The “You haven’t weighed yourself in X days” message (after a workout) follows the days and time of the weight reminder.'],
   ['Tiempos de los ejercicios', 'Temps d’exercicis', 'Exercise times'],
   ['Smartwatch', 'Smartwatch', 'Smartwatch'],
+  ['Buscando las voces del móvil…', 'Buscant les veus del mòbil…', 'Looking for the phone’s voices…'],
+  ['Escucha las voces de tu móvil con ▶ y elige la que más te guste (de hombre o de mujer).', 'Escolta les veus del teu mòbil amb ▶ i tria la que més t’agradi (d’home o de dona).', 'Listen to your phone’s voices with ▶ and choose the one you like best (male or female).'],
+  ['La voz de siempre del móvil.', 'La veu de sempre del mòbil.', 'The phone’s usual voice.'],
+  ['Voz {x}', 'Veu {x}', 'Voice {x}'],
+  ['Este móvil solo tiene una voz para este idioma. Puedes instalar otras en los ajustes de voz del móvil (Texto a voz).', 'Aquest mòbil només té una veu per a aquest idioma. En pots instal·lar d’altres als ajustos de veu del mòbil (Text a veu).', 'This phone only has one voice for this language. You can install others in the phone’s voice settings (Text-to-speech).'],
+  ['Escuchar: {x}', 'Escolta: {x}', 'Listen: {x}'],
+  ['Voz', 'Veu', 'Voice'],
+  ['Voz automática', 'Veu automàtica', 'Automatic voice'],
+  ['En Avisos › Voz eliges la voz de los avisos entre las de tu móvil (de hombre o de mujer): escúchalas con ▶ antes de elegir.', 'A Avisos › Veu tries la veu dels avisos entre les del teu mòbil (d’home o de dona): escolta-les amb ▶ abans de triar.', 'In Alerts › Voice you choose the alerts’ voice from your phone’s voices (male or female): listen with ▶ before choosing.'],
 ];
 
 export const UI_CA: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[1]]));

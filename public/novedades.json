@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-15T21:51:06Z",
+    "es": ["Ajustes › Avisos › Voz: elige la voz de los avisos entre las de tu móvil (de hombre o de mujer) y escúchalas con ▶."],
+    "ca": ["Configuració › Avisos › Veu: tria la veu dels avisos entre les del teu mòbil (d’home o de dona) i escolta-les amb ▶."],
+    "en": ["Settings › Alerts › Voice: choose the alerts’ voice from your phone’s voices (male or female) and listen with ▶."]
+  },
+  {
     "fecha": "2026-11-15T21:47:32Z",
     "es": ["Ajustes: «Tiempos» pasa a llamarse «Tiempos de los ejercicios» y «Reloj», «Smartwatch».", "Guía de la app actualizada con las novedades de hoy."],
     "ca": ["Configuració: «Temps» passa a dir-se «Temps d’exercicis» i «Rellotge», «Smartwatch».", "Guia de l’app actualitzada amb les novetats d’avui."],

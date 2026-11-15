@@ -309,6 +309,16 @@ button:focus-visible, input:focus-visible, label:focus-within { outline: 2px sol
 
 /* Ajustes */
 .settings-body { display: flex; flex-direction: column; gap: 10px; }
+/* elegir la voz de los avisos */
+.voice-card { display: flex; flex-direction: column; align-items: stretch; }
+.voice-card .set-head-row { display: flex; align-items: flex-start; gap: 12px; }
+.voice-list { display: flex; flex-direction: column; gap: 6px; margin-top: 12px; width: 100%; align-self: stretch; }
+.voice-row { display: flex; align-items: center; gap: 8px; border: 1px solid var(--line); border-radius: 14px; padding: 4px 6px 4px 4px; }
+.voice-row.on { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, transparent); }
+.voice-pick { flex: 1; min-width: 0; display: flex; align-items: center; gap: 10px; background: none; border: 0; color: var(--fg); font: inherit; text-align: left; padding: 8px; cursor: pointer; }
+.voice-radio { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--line); display: grid; place-items: center; flex: none; }
+.voice-row.on .voice-radio { border-color: var(--accent); background: var(--accent); color: #fff; }
+.voice-radio .ico { width: 14px; height: 14px; }
 /* Ajustes por grupos que se abren y cierran */
 .set-group { padding: 0; overflow: hidden; }
 .set-group-head { display: flex; align-items: center; gap: 12px; width: 100%; padding: 14px 16px; background: none; border: 0; color: var(--fg); font: inherit; text-align: left; cursor: pointer; }

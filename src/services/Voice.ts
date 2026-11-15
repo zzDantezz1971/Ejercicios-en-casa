@@ -15,6 +15,12 @@ export class Voice {
 
   /** Idioma de la voz del motor de Android (app nativa). */
   private nativeLang = '';
+  /** Voz elegida en Ajustes (identificador); vacía = la de siempre del sistema. */
+  private chosenId = '';
+  /** App Android: posición de la voz elegida en la lista del motor de voz. */
+  private nativeIndex: number | undefined;
+  /** Web: todas las voces del navegador para el idioma. */
+  private webVoices: SpeechSynthesisVoice[] = [];
 
   constructor() {
     if (IS_NATIVE) {
@@ -27,8 +33,9 @@ export class Voice {
       const find = (l: Lang) => voices.find((v) => v.lang.replace('_', '-').toLowerCase().startsWith(CODE[l] + '-') || v.lang.toLowerCase() === CODE[l]);
       const own = find(LANG);
       const es = voices.find((v) => v.lang === 'es-ES') ?? find('es');
-      this.voice = own ?? es ?? null;
       this.lang = own || !voices.length ? LANG : 'es';
+      this.webVoices = voices.filter((v) => v.lang.replace('_', '-').toLowerCase().startsWith(CODE[this.lang] + '-') || v.lang.toLowerCase() === CODE[this.lang]);
+      this.voice = this.webVoices.find((v) => v.voiceURI === this.chosenId) ?? own ?? es ?? null;
     };
     pick();
     this.synth.addEventListener?.('voiceschanged', pick);
@@ -52,6 +59,47 @@ export class Voice {
     }
   }
 
+  /** Voces del móvil (o del navegador) para el idioma en que habla la app: identificador y nombre. */
+  async voices(): Promise<Array<{ id: string; name: string }>> {
+    if (IS_NATIVE) {
+      try {
+        const { voices } = await TextToSpeech.getSupportedVoices();
+        const code = (this.nativeLang || 'es-ES').slice(0, 2).toLowerCase();
+        return voices.filter((v) => v.lang.replace('_', '-').toLowerCase().startsWith(code)).map((v) => ({ id: v.voiceURI || v.name, name: v.name }));
+      } catch {
+        return [];
+      }
+    }
+    return this.webVoices.map((v) => ({ id: v.voiceURI, name: v.name }));
+  }
+
+  /** Usa esta voz para los avisos (vacío = la de siempre del sistema). */
+  async useVoice(id: string | undefined): Promise<void> {
+    this.chosenId = id ?? '';
+    if (IS_NATIVE) {
+      this.nativeIndex = undefined;
+      if (!this.chosenId) return;
+      try {
+        const { voices } = await TextToSpeech.getSupportedVoices();
+        const i = voices.findIndex((v) => (v.voiceURI || v.name) === this.chosenId);
+        this.nativeIndex = i >= 0 ? i : undefined;
+      } catch { /* sin lista de voces: la de siempre */ }
+      return;
+    }
+    this.voice = this.webVoices.find((v) => v.voiceURI === this.chosenId) ?? this.webVoices[0] ?? this.voice;
+  }
+
+  /** Dice una frase de prueba con una voz concreta (sin cambiar la elegida). */
+  async preview(id: string | undefined, text: string): Promise<void> {
+    const keep = this.chosenId;
+    await this.useVoice(id);
+    const was = this.enabled;
+    this.enabled = true;
+    this.say(text);
+    this.enabled = was;
+    await this.useVoice(keep || undefined);
+  }
+
   get available(): boolean {
     return IS_NATIVE || !!this.synth;
   }
@@ -61,7 +109,7 @@ export class Voice {
     if (!this.enabled) return;
     if (IS_NATIVE) {
       // la música de otras apps baja mientras habla (la promesa se cumple al acabar la frase)
-      void duckWhile(TextToSpeech.speak({ text, lang: this.nativeLang || 'es-ES', rate: queue ? 1.15 : 1.02, queueStrategy: queue ? 1 : 0 })).catch(() => undefined);
+      void duckWhile(TextToSpeech.speak({ text, lang: this.nativeLang || 'es-ES', rate: queue ? 1.15 : 1.02, queueStrategy: queue ? 1 : 0, ...(this.nativeIndex !== undefined ? { voice: this.nativeIndex } : {}) })).catch(() => undefined);
       return;
     }
     if (!this.synth) return;

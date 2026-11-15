@@ -59,6 +59,7 @@ const GUIDE: Array<{ icon: IconName; title: string; sub: string; points: Array<s
       'Los ajustes están por grupos: toca uno para abrirlo o cerrarlo. La app recuerda cuáles dejaste abiertos.',
       'Personaliza el muñeco: color de piel, pelo y ropa; con prémium, también peinado, ropa, gafas, barba y cuerpo de mujer. Toca el muñeco para verlo en grande.',
       'Tiempos de los ejercicios, pitidos, voz y frases motivadoras.',
+      'En Avisos › Voz eliges la voz de los avisos entre las de tu móvil (de hombre o de mujer): escúchalas con ▶ antes de elegir.',
       { h: 'Recordatorios' },
       HAS_BACKUP ? 'Para entrenar con tus tablas, pesarte y hacer la copia de seguridad, los días y a la hora que elijas. Llegan como notificación en la app de Android, aunque esté cerrada.'
         : 'Para entrenar con tus tablas y pesarte, los días y a la hora que elijas. Llegan como notificación, aunque la app esté cerrada.',
