@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-15T18:23:22Z",
+    "es": ["Nueva pantalla para editar una tabla: los ejercicios por apartados con su tiempo (− +), cambiar, quitar, arrastrar para mover y añadir, además de las vueltas y el peso. La lista completa de ejercicios queda para crear tablas vacías."],
+    "ca": ["Nova pantalla per editar una taula: els exercicis per apartats amb el seu temps (− +), canviar, treure, arrossegar per moure i afegir, a més de les voltes i el pes. La llista completa d’exercicis queda per crear taules buides."],
+    "en": ["New screen to edit a table: the exercises by section with their time (− +), swap, remove, drag to move and add, plus rounds and weight. The full exercise list is now for creating empty tables."]
+  },
+  {
     "fecha": "2026-11-15T18:10:53Z",
     "es": ["Con un plan de la semana en uso, Inicio ya no muestra la tarjeta «Hoy toca / Hoy descanso»: la tabla en uso ya dice el día del plan."],
     "ca": ["Amb un pla setmanal en ús, Inici ja no mostra la targeta «Avui toca / Avui descans»: la taula en ús ja diu el dia del pla."],

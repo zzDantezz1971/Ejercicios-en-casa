@@ -4,12 +4,12 @@ import {
   generate, GOAL_INFO, GOALS, LEVEL_INFO, LEVELS, MINUTES, suggestedName, swapExercise, tableSeconds, ZONE_INFO, ZONES,
   type GenContext, type GenOptions, type GenResult, type Goal,
 } from '../../domain/generator';
-import { WorkoutPlan } from '../../domain/WorkoutPlan';
+import { clampRounds, MAX_ROUNDS, WorkoutPlan } from '../../domain/WorkoutPlan';
 import { MAX_SECONDS, MIN_SECONDS, STEP_SECONDS } from '../../domain/RoutineEditor';
-import { emptyRoutine, SECTION_IDS, SECTION_TITLES, type SectionId } from '../../domain/types';
+import { emptyRoutine, SECTION_IDS, SECTION_TITLES, usesWeight, type SectionId } from '../../domain/types';
 import { tr } from '../../i18n';
 import type { App, Screen } from '../App';
-import { clear, h, humanDuration, plural, promptDialog } from '../dom';
+import { clear, h, humanDuration, kg, plural, promptDialog, weightDialog } from '../dom';
 import { sortableList, type SortableRow } from '../components/sortable';
 import { icon, SECTION_STYLE, type IconName } from '../icons';
 import { DetailScreen } from './DetailScreen';
@@ -84,6 +84,8 @@ export interface PreviewEdit {
   swap?(s: SectionId, i: number): GenResult;
   /** Preguntar antes de quitar un ejercicio (se puede desactivar para esta lista con la casilla del aviso). */
   ask: { remove: boolean };
+  /** Editar también las vueltas de cada apartado y el peso de las mancuernas (al editar una tabla guardada). */
+  full?: boolean;
 }
 
 /** Añadir un ejercicio a un apartado: abre la lista para elegirlo y lo pone al final. */
@@ -141,7 +143,15 @@ export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement
     // sin ejercicios: solo se ve si se puede añadir alguno
     if (!items.length && !edit) continue;
     const st = SECTION_STYLE[s];
-    const head = h('h2', { class: 'maker-sec' }, icon(st.icon), SECTION_TITLES[s], (r.rounds[s] ?? 1) > 1 ? h('span', { class: 'maker-rounds' }, plural(r.rounds[s]!, 'vuelta', 'vueltas')) : '');
+    const nr = clampRounds(r.rounds[s]);
+    const setRounds = (v: number) => edit!.set({ routine: r.routine, rounds: { ...r.rounds, [s]: clampRounds(v) } });
+    const head = h('h2', { class: 'maker-sec' }, icon(st.icon), SECTION_TITLES[s],
+      edit?.full && items.length ? h('span', { class: 'maker-rounds-ctl' }, h('span', {}, 'Vueltas'),
+        h('span', { class: 'stepper inline maker-time' },
+          h('button', { 'aria-label': 'Menos vueltas', disabled: nr <= 1, onclick: () => setRounds(nr - 1) }, '−'),
+          h('span', { class: 'secs' }, `x${nr}`),
+          h('button', { 'aria-label': 'Más vueltas', disabled: nr >= MAX_ROUNDS, onclick: () => setRounds(nr + 1) }, '+')))
+        : nr > 1 ? h('span', { class: 'maker-rounds' }, plural(nr, 'vuelta', 'vueltas')) : '');
     head.style.setProperty('--sec', st.color);
     box.append(head);
     const rows: SortableRow[] = [];
@@ -167,7 +177,16 @@ export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement
             h('button', { 'aria-label': 'Menos tiempo', disabled: it.seconds <= MIN_SECONDS, onclick: () => setSecs(-STEP_SECONDS) }, '−'),
             h('span', { class: 'secs' }, `${it.seconds} s`),
             h('button', { 'aria-label': 'Más tiempo', disabled: it.seconds >= MAX_SECONDS, onclick: () => setSecs(STEP_SECONDS) }, '+'))
-            : h('span', { class: 'maker-secs muted small' }, `${it.seconds} s`)),
+            : h('span', { class: 'maker-secs muted small' }, `${it.seconds} s`),
+          // peso de la mancuerna (al editar una tabla guardada)
+          edit?.full && usesWeight(ex) ? h('button', { class: 'weight-btn small' + (it.weight ? '' : ' none'), 'aria-label': `Peso de ${ex.name}: ${it.weight ? kg(it.weight) + ' por mancuerna' : 'sin peso'}. Cambiar`, onclick: async () => {
+            const w = await weightDialog(ex.name, it.weight ?? app.store.lastWeight(ex.id) ?? 5);
+            if (w === null) return;
+            const next = items.slice();
+            const { weight: _old, ...rest } = it;
+            next[i] = w ? { ...rest, weight: w } : rest;
+            edit.set(withSection(r, s, next));
+          } }, icon('dumbbell'), it.weight ? kg(it.weight) : 'Sin peso') : ''),
         edit?.swap ? h('button', { class: 'icon-btn small', 'aria-label': `Cambiar ${ex.name} por otro parecido`, onclick: () => edit.set(edit.swap!(s, i)) }, icon('swap')) : '',
         // quitar: apartado de los demás botones y con aviso (que se puede desactivar para esta lista)
         edit ? h('button', { class: 'icon-btn small danger maker-remove', 'aria-label': `Quitar ${ex.name} de la tabla`, onclick: async () => {

@@ -14,6 +14,7 @@ import { addMonths, addWeeks, monthKey, monthStart, weekKey, weekStart, weekStat
 import { randomPhrase } from '../../domain/phrases';
 import { weekGoalsDialog } from '../components/weekGoals';
 import { openDay } from './HistoryScreen';
+import { editTable } from './TableEditScreen';
 import { dayName, planDayOf, refreshPlan } from './PlanScreens';
 import { kindLabel } from '../../domain/weekPlan';
 
@@ -97,7 +98,7 @@ export class HomeScreen implements Screen {
               h('button', { class: 'btn glass block', onclick: () => app.push(new RoutineScreen(app)) }, icon('plus'), 'Elegir ejercicios'))
             : h('button', { class: 'btn light block big', onclick: () => this.start(plan) }, icon('play'), 'Empezar'),
           h('div', { class: 'hero-actions' },
-            h('button', { class: 'btn glass small', onclick: () => app.push(new RoutineScreen(app)) }, icon('edit'), 'Editar'),
+            h('button', { class: 'btn glass small', onclick: () => editTable(app, table.id) }, icon('edit'), 'Editar'),
             h('button', { class: 'btn glass small', onclick: () => app.openTab('tablas') }, icon('swap'), 'Cambiar tabla')))),
     );
 

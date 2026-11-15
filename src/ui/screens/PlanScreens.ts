@@ -368,7 +368,7 @@ export class PlanDayScreen implements Screen {
     const set = (next: GenResult) => { app.store.setRoutineContent(t.id, next.routine, next.rounds); this.render(); };
     this.el.append(header(app, tr(kindLabel(plan, pd.kind)), dayName(pd.day)),
       h('div', { class: 'maker-body' },
-        preview(app, r, { set, ask: this.ask, swap: (s, i) => swapExercise(r, s, i, o, genCtx(app)) }),
+        preview(app, r, { set, ask: this.ask, full: true, swap: (s, i) => swapExercise(r, s, i, o, genCtx(app)) }),
         h('div', { class: 'maker-actions' },
           h('button', { class: 'btn ghost block', onclick: () => { const g = generate(o, genCtx(app)); this.ask.remove = true; set(g); window.scrollTo({ top: 0 }); } }, icon('swap'), 'Otra propuesta'),
           h('button', { class: 'btn primary block big', disabled: isEmptyResult(r), onclick: () => startDay(app, plan.id, pd) }, icon('play'), 'Empezar'))));

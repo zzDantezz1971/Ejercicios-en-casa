@@ -5,7 +5,7 @@ import type { App, Screen } from '../App';
 import { actionSheet, clear, confirmDialog, h, humanDuration, plural, promptDialog } from '../dom';
 import { icon, SECTION_STYLE } from '../icons';
 import { formatDate } from './HomeScreen';
-import { RoutineScreen } from './RoutineScreen';
+import { editTable } from './TableEditScreen';
 import { openNewTable } from './MakerScreens';
 import { newPlan, openPlan, planTitle } from './PlanScreens';
 
@@ -91,7 +91,7 @@ export class TablesScreen implements Screen {
 
   private edit(t: SavedRoutine): void {
     this.app.store.setActive(t.id);
-    this.app.push(new RoutineScreen(this.app));
+    editTable(this.app, t.id);
   }
 
   /** Nueva tabla: con el asistente, una tabla hecha o vacía. */
