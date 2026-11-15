@@ -87,16 +87,16 @@ export interface PreviewEdit {
   full?: boolean;
 }
 
-/** Añadir un ejercicio a un apartado: abre la lista para elegirlo y lo pone al final. */
+/** Añadir ejercicios a un apartado: abre la lista, se eligen los que se quieran y se ponen al final. */
 function addTo(app: App, r: GenResult, s: SectionId, edit: PreviewEdit): void {
   const have = new Set(SECTION_IDS.flatMap((x) => r.routine[x].map((i) => i.exerciseId)));
   const items = r.routine[s];
   // los segundos, como los demás ejercicios del apartado (o los de siempre)
   const secs = items.length ? items[items.length - 1].seconds : app.store.settings.defaultSeconds;
-  app.push(new PickExerciseScreen(app, s, have, (id) => {
-    edit.set(withSection(r, s, [...items, { exerciseId: id, seconds: secs }]));
+  app.push(new PickExerciseScreen(app, s, have, (ids) => {
+    edit.set(withSection(r, s, [...items, ...ids.map((id) => ({ exerciseId: id, seconds: secs }))]));
     app.back();
-  }));
+  }, 'Añadir ejercicios', true));
 }
 
 /** «¿Quitar X de la tabla?» con la casilla «No volver a preguntar en esta lista». */
@@ -194,7 +194,7 @@ export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement
         edit ? h('button', { class: 'icon-btn small', 'aria-label': `Cambiar ${ex.name} por otro`, onclick: () => {
           // la lista para elegir el que lo sustituye (sin los que ya están en la tabla); conserva el tiempo
           const have = new Set(SECTION_IDS.flatMap((x) => r.routine[x].map((y) => y.exerciseId)));
-          app.push(new PickExerciseScreen(app, s, have, (id) => {
+          app.push(new PickExerciseScreen(app, s, have, ([id]) => {
             const next = items.slice();
             next[i] = { exerciseId: id, seconds: it.seconds };
             edit.set(withSection(r, s, next));
@@ -401,12 +401,40 @@ const fold = (t: string) => t.normalize('NFD').replace(/[\u0300-\u036f]/g, '').t
 class PickExerciseScreen implements Screen {
   readonly el = h('main', { class: 'screen maker-screen' });
   private readonly list = h('div', { class: 'maker-preview' });
+  private readonly foot = h('div', { class: 'pick-foot' });
   private q = '';
+  /** Elegidos (en el orden en que se han tocado), si se pueden elegir varios. */
+  private chosen: string[] = [];
 
-  constructor(private readonly app: App, private readonly s: SectionId, private readonly have: ReadonlySet<string>, private readonly pick: (id: string) => void, sub = 'Añadir un ejercicio') {
+  /**
+   * Lista de ejercicios de un apartado. Con `multi`, se tocan los que se quieran (se marcan) y se añaden todos
+   * con el botón de abajo (o al volver atrás); sin `multi` (cambiar uno), al tocarlo ya está.
+   */
+  constructor(private readonly app: App, private readonly s: SectionId, private readonly have: ReadonlySet<string>,
+    private readonly pick: (ids: string[]) => void, sub = 'Añadir un ejercicio', private readonly multi = false) {
     const search = h('input', { class: 'text-input', type: 'search', placeholder: 'Buscar', 'aria-label': 'Buscar', oninput: () => { this.q = search.value; this.paint(); } });
-    this.el.append(header(app, SECTION_TITLES[s], sub), h('div', { class: 'maker-body' }, search, this.list));
+    this.el.append(header(app, SECTION_TITLES[s], sub), h('div', { class: 'maker-body' }, search, this.list, multi ? this.foot : ''));
     this.paint();
+  }
+
+  /** Atrás con ejercicios marcados: se añaden igualmente (no se pierde lo elegido). */
+  onBack(): boolean {
+    if (!this.multi || !this.chosen.length) return false;
+    this.done();
+    return true;
+  }
+
+  /** Añade los marcados (se vacía antes: al volver atrás se vuelve a pasar por onBack). */
+  private done(): void {
+    const ids = this.chosen;
+    this.chosen = [];
+    this.pick(ids);
+  }
+
+  private paintFoot(): void {
+    const n = this.chosen.length;
+    this.foot.replaceChildren(h('button', { class: 'btn primary block big', disabled: !n, onclick: () => this.done() },
+      icon('plus'), n ? `Añadir ${plural(n, 'ejercicio', 'ejercicios')}` : 'Elige los que quieras'));
   }
 
   private paint(): void {
@@ -426,11 +454,23 @@ class PickExerciseScreen implements Screen {
       const img = h('img', { class: 'maker-thumb', alt: '' });
       void app.thumbs.get(ex).then((url) => (img.src = url));
       const lock = !app.access.canUse(ex.id);
-      this.list.append(h('button', { class: 'maker-row maker-pick' + (lock ? ' locked' : ''), onclick: () => this.pick(ex.id) },
+      const on = this.chosen.includes(ex.id);
+      const row: HTMLElement = h('button', { class: 'maker-row maker-pick' + (lock ? ' locked' : '') + (on ? ' on' : ''), 'aria-pressed': this.multi ? String(on) : null, onclick: () => {
+        if (!this.multi) { this.pick([ex.id]); return; }
+        app.haptics.tap();
+        this.chosen = this.chosen.includes(ex.id) ? this.chosen.filter((x) => x !== ex.id) : [...this.chosen, ex.id];
+        const now = this.chosen.includes(ex.id);
+        row.classList.toggle('on', now);
+        row.setAttribute('aria-pressed', String(now));
+        row.lastElementChild!.replaceWith(icon(now ? 'check' : 'plus'));
+        this.paintFoot();
+      } },
         img,
         h('span', { class: 'maker-name' }, h('span', {}, ex.name), h('span', { class: 'maker-secs muted small' }, ex.zone, lock ? icon('lock', 'ico lock') : '')),
-        icon('plus')));
+        icon(on ? 'check' : 'plus'));
+      this.list.append(row);
     }
     if (!exs.length) this.list.append(h('p', { class: 'muted' }, 'No hay más ejercicios para añadir.'));
+    if (this.multi) this.paintFoot();
   }
 }

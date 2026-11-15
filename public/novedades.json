@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-15T18:58:23Z",
+    "es": ["«Añadir un ejercicio» ahora deja marcar varios de una vez: toca los que quieras y pulsa «Añadir» abajo."],
+    "ca": ["«Afegeix un exercici» ara deixa marcar-ne uns quants de cop: toca els que vulguis i prem «Afegeix» a baix."],
+    "en": ["“Add an exercise” now lets you pick several at once: tap the ones you want and press “Add” at the bottom."]
+  },
+  {
     "fecha": "2026-11-15T18:50:44Z",
     "es": ["«Cambiar» un ejercicio ahora abre la lista para que elijas tú por cuál cambiarlo (mantiene el tiempo)."],
     "ca": ["«Canvia» un exercici ara obre la llista perquè triïs tu per quin canviar-lo (manté el temps)."],

@@ -1112,6 +1112,9 @@ const ROWS: Row[] = [
   ['Con Editar ves la tabla por apartados: cambia el tiempo de cada ejercicio (− +), cámbialo por otro de la lista, quítalo, arrástralo para moverlo o añade otros; también las vueltas de cada apartado y el peso de las mancuernas.', 'Amb Edita veus la taula per apartats: canvia el temps de cada exercici (− +), canvia’l per un altre de la llista, treu-lo, arrossega’l per moure’l o afegeix-ne d’altres; també les voltes de cada apartat i el pes de les manuelles.', 'With Edit you see the table by section: change each exercise’s time (− +), swap it for another from the list, remove it, drag it to move it or add others; also each section’s rounds and the dumbbell weight.'],
   ['Cambiar {x} por otro', 'Canvia {x} per un altre', 'Swap {x} for another'],
   ['Cambiar {x}', 'Canvia {x}', 'Swap {x}'],
+  ['Añadir ejercicios', 'Afegeix exercicis', 'Add exercises'],
+  ['Añadir {x}', 'Afegeix {x}', 'Add {x}'],
+  ['Elige los que quieras', 'Tria els que vulguis', 'Pick as many as you like'],
 ];
 
 export const UI_CA: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[1]]));
