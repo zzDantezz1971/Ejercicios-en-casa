@@ -1,4 +1,4 @@
-import { LOCALE } from '../../i18n';
+import { LOCALE, tr } from '../../i18n';
 import { WorkoutPlan, clampRounds } from '../../domain/WorkoutPlan';
 import { SECTION_IDS, SECTION_TITLES, type SectionId } from '../../domain/types';
 import type { App, Screen } from '../App';
@@ -14,7 +14,8 @@ import { addMonths, addWeeks, monthKey, monthStart, weekKey, weekStart, weekStat
 import { randomPhrase } from '../../domain/phrases';
 import { weekGoalsDialog } from '../components/weekGoals';
 import { openDay } from './HistoryScreen';
-import { refreshPlan, todayCard } from './PlanScreens';
+import { dayName, planDayOf, refreshPlan, todayCard } from './PlanScreens';
+import { kindLabel } from '../../domain/weekPlan';
 
 export class HomeScreen implements Screen {
   readonly el = h('main', { class: 'screen home' });
@@ -76,7 +77,10 @@ export class HomeScreen implements Screen {
     const planCard = todayCard(app, now);
     if (planCard) this.el.append(planCard);
 
-    // Tarjeta principal con la tabla en uso
+    // Tarjeta principal con la tabla en uso (si es de un plan: «Plan de la semana · Lunes» y la zona del día)
+    const pinfo = planDayOf(app, table.id);
+    const heroLabel = pinfo ? `${tr('Plan de la semana')} · ${dayName(pinfo.day.day)}` : 'Tabla en uso';
+    const heroTitle = pinfo ? tr(kindLabel(pinfo.plan, pinfo.day.kind)) : table.name;
     // Imagen de la tabla según los apartados que tienen ejercicios (15 combinaciones posibles)
     const art = h('img', { class: 'hero-art', alt: '' });
     const LETTER = { calentamiento: 'c', pesas: 'p', abdominales: 'a', estiramientos: 'e' } as const;
@@ -86,8 +90,8 @@ export class HomeScreen implements Screen {
       h('section', { class: 'hero' },
         art,
         h('div', { class: 'hero-body' },
-          h('span', { class: 'hero-label' }, 'Tabla en uso'),
-          h('h2', { class: 'hero-title' }, table.name),
+          h('span', { class: 'hero-label' }, heroLabel),
+          h('h2', { class: 'hero-title' + (heroTitle.length > 22 ? ' longer' : heroTitle.length > 14 ? ' long' : '') }, heroTitle),
           h('div', { class: 'chips' },
             h('span', { class: 'chip' }, icon('clock'), plan.isEmpty ? '—' : humanDuration(plan.estimatedSeconds)),
             h('span', { class: 'chip' }, icon('bolt'), plural(plan.exerciseCount, 'ejercicio', 'ejercicios'))),

@@ -1588,3 +1588,7 @@ button.plan-row { cursor: pointer; }
 .plan-card .plan-eyebrow { display: flex; align-items: center; gap: 6px; margin-bottom: 2px; }
 .plan-card .plan-eyebrow .ico { width: 14px; height: 14px; }
 .plan-more { background: none; border: 0; padding: 0; color: var(--accent); font: inherit; font-weight: 700; cursor: pointer; text-align: left; }
+/* nombre de la tabla en uso: como mucho dos líneas */
+.hero-title { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.hero-title.long { font-size: 1.9rem; }
+.hero-title.longer { font-size: 1.6rem; }

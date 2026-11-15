@@ -1104,6 +1104,10 @@ const ROWS: Row[] = [
   ['Puedes tener varios planes (por ejemplo, uno de fuerza y otro de estiramientos). Arriba en Tablas, toca el plan para ver la lista, elegir el que quieres usar, cambiarle el nombre o crear otro.', 'Pots tenir diversos plans (per exemple, un de força i un altre d’estiraments). A dalt de Taules, toca el pla per veure’n la llista, triar el que vols fer servir, canviar-li el nom o crear-ne un altre.', 'You can have several plans (for example, one for strength and another for stretching). At the top of Routines, tap the plan to see the list, choose the one to use, rename it or create another.'],
   ['Usarlo', 'Fes-lo servir', 'Use'],
   ['Aún no lo has usado', 'Encara no l’has fet servir', 'Not used yet'],
+  ['Planes de la semana', 'Plans setmanals', 'Weekly plans'],
+  ['Nuevo plan', 'Nou pla', 'New plan'],
+  ['1 plan', '1 pla', '1 plan'],
+  ['Último usado', 'L’últim fet servir', 'Last used'],
 ];
 
 export const UI_CA: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[1]]));

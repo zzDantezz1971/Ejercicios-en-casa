@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-15T11:52:21Z",
+    "es": ["Tablas: una sola entrada «Plan de la semana» (o «Planes de la semana» si tienes varios) con los botones «Ver» y «Nuevo plan»; dentro está la lista para elegir el que usas.", "Inicio: si la tabla en uso es de un plan, se ve «Plan de la semana · Lunes» y la zona del día; los nombres largos ocupan como mucho dos líneas."],
+    "ca": ["Taules: una sola entrada «Pla setmanal» (o «Plans setmanals» si en tens diversos) amb els botons «Mostra» i «Nou pla»; a dins hi ha la llista per triar el que fas servir.", "Inici: si la taula en ús és d’un pla, es veu «Pla setmanal · Dilluns» i la zona del dia; els noms llargs ocupen com a màxim dues línies."],
+    "en": ["Routines: a single “Weekly plan” entry (or “Weekly plans” if you have several) with “View” and “New plan” buttons; inside is the list to choose the one you use.", "Home: if the routine in use belongs to a plan, it shows “Weekly plan · Monday” and the day’s area; long names take at most two lines."]
+  },
+  {
     "fecha": "2026-11-15T10:50:40Z",
     "es": ["Los planes de la semana se ven como las demás tablas: tiempo, ejercicios de cada apartado, última vez y los botones Usarlo, Editar y ⋮ (cambiar el nombre, cambiar el plan o borrarlo)."],
     "ca": ["Els plans setmanals es veuen com les altres taules: temps, exercicis de cada apartat, última vegada i els botons Fes-lo servir, Edita i ⋮ (canviar el nom, canviar el pla o esborrar-lo)."],

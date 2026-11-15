@@ -39,13 +39,20 @@ function tableName(plan: Pick<WeekPlan, 'goal'>, day: number, kind: DayKind): st
   return `${tr('Plan')} · ${dayName(day)} · ${tr(kindLabel(plan, kind))}`;
 }
 
-/** Abre los planes: si hay más de uno, la lista para elegir; si hay uno, ese; si no hay, el asistente. */
+/** Abre la lista de planes (para elegir el que se usa o crear otro); si no hay ninguno, el asistente. */
 export function openPlan(app: App): void {
   if (!app.access.premium) { app.showPremium(); return; }
-  const ps = app.store.plans;
-  if (ps.length > 1) app.push(new PlansScreen(app));
-  else if (ps.length === 1) app.push(new PlanScreen(app, ps[0].id));
+  if (app.store.plans.length) app.push(new PlansScreen(app));
   else app.push(new PlanWizardScreen(app));
+}
+
+/** El plan y el día al que pertenece una tabla (si es de un plan). */
+export function planDayOf(app: App, routineId: string): { plan: WeekPlan; day: PlanDay } | undefined {
+  for (const plan of app.store.plans) {
+    const day = plan.days.find((d) => d.routineId === routineId);
+    if (day) return { plan, day };
+  }
+  return undefined;
 }
 
 /** Crear un plan nuevo (Nueva › Plan de la semana). */
@@ -446,7 +453,7 @@ export class PlansScreen implements Screen {
   private render(): void {
     const { app } = this;
     clear(this.el);
-    this.el.append(header(app, 'Mis planes de la semana'));
+    this.el.append(header(app, app.store.plans.length > 1 ? 'Planes de la semana' : 'Plan de la semana'));
     const body = h('div', { class: 'maker-body' });
     this.el.append(body);
     for (const p of app.store.plans) body.append(planTableCard(app, p, { after: () => this.render() }));
