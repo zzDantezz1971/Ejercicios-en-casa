@@ -401,7 +401,7 @@ export class SettingsScreen implements Screen {
       h('h3', { class: 'block-title' }, 'Idioma'), this.langCard(),
       h('h3', { class: 'block-title' }, 'Pantalla'), this.themeCard(s), this.colorCard(s),
       h('h3', { class: 'block-title' }, 'Muñeco'), this.lookCard(),
-      h('h3', { class: 'block-title' }, 'Tiempos'), this.restCard(s));
+      h('h3', { class: 'block-title' }, 'Tiempos de los ejercicios'), this.restCard(s));
     // cuenta atrás y duración inicial: en una sola tarjeta, con el título y el contador en la misma fila
     this.body.append(h('section', { class: 'card setting-list' },
       ...FIELDS.map((f) => {
@@ -444,7 +444,7 @@ export class SettingsScreen implements Screen {
       toggle('phrases', 'bolt', 'Frases motivadoras', 'Una frase distinta cada día en Inicio.'),
       h('h3', { class: 'block-title' }, 'Recordatorios'),
       this.remindersCard(),
-      h('h3', { class: 'block-title' }, 'Reloj'),
+      h('h3', { class: 'block-title' }, 'Smartwatch'),
       this.watchSection(),
       this.healthSection(),
       // copia a mano solo en la web (en la app de Android los datos van en la copia automática de Google)
@@ -498,6 +498,6 @@ export class SettingsScreen implements Screen {
 const OPEN_KEY = 'ajustes-abiertos';
 /** Icono de cada grupo de Ajustes (por su título). */
 const GROUP_ICON: Record<string, IconName> = {
-  'Suscripción': 'star', 'Prémium': 'star', 'Idioma': 'globe', 'Pantalla': 'sun', 'Muñeco': 'user', 'Tiempos': 'clock',
-  'Avisos': 'volume', 'Motivación': 'bolt', 'Recordatorios': 'bell', 'Reloj': 'heart', 'Copia de seguridad': 'copy',
+  'Suscripción': 'star', 'Prémium': 'star', 'Idioma': 'globe', 'Pantalla': 'sun', 'Muñeco': 'user', 'Tiempos de los ejercicios': 'clock',
+  'Avisos': 'volume', 'Motivación': 'bolt', 'Recordatorios': 'bell', 'Smartwatch': 'heart', 'Copia de seguridad': 'copy',
 };

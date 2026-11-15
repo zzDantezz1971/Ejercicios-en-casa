@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-15T21:47:32Z",
+    "es": ["Ajustes: «Tiempos» pasa a llamarse «Tiempos de los ejercicios» y «Reloj», «Smartwatch».", "Guía de la app actualizada con las novedades de hoy."],
+    "ca": ["Configuració: «Temps» passa a dir-se «Temps d’exercicis» i «Rellotge», «Smartwatch».", "Guia de l’app actualitzada amb les novetats d’avui."],
+    "en": ["Settings: “Times” is now “Exercise times” and “Watch” is now “Smartwatch”.", "App guide updated with today’s changes."]
+  },
+  {
     "fecha": "2026-11-15T21:39:36Z",
     "es": ["Ajustes por grupos (Prémium, Idioma, Pantalla, Muñeco, Tiempos, Avisos…): están cerrados y se abren al tocarlos. La app recuerda cuáles dejaste abiertos."],
     "ca": ["Configuració per grups (Prèmium, Idioma, Pantalla, Ninot, Temps, Avisos…): estan tancats i s’obren en tocar-los. L’app recorda quins vas deixar oberts."],
