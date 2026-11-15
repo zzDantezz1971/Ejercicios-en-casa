@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-15T19:04:44Z",
+    "es": ["Al ver o editar una tabla, «Necesitas:» muestra siempre el material que pide (con su icono) y marca el que no está en tu material."],
+    "ca": ["En veure o editar una taula, «Necessites:» mostra sempre el material que demana (amb la seva icona) i marca el que no és al teu material."],
+    "en": ["When viewing or editing a table, “You need:” always shows the equipment it uses (with its icon) and marks what isn’t in your equipment."]
+  },
+  {
     "fecha": "2026-11-15T18:58:23Z",
     "es": ["«Añadir un ejercicio» ahora deja marcar varios de una vez: toca los que quieras y pulsa «Añadir» abajo."],
     "ca": ["«Afegeix un exercici» ara deixa marcar-ne uns quants de cop: toca els que vulguis i prem «Afegeix» a baix."],

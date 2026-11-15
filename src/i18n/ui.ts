@@ -1115,6 +1115,7 @@ const ROWS: Row[] = [
   ['Añadir ejercicios', 'Afegeix exercicis', 'Add exercises'],
   ['Añadir {x}', 'Afegeix {x}', 'Add {x}'],
   ['Elige los que quieras', 'Tria els que vulguis', 'Pick as many as you like'],
+  ['(no está en tu material)', '(no és al teu material)', '(not in your equipment)'],
 ];
 
 export const UI_CA: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[1]]));
