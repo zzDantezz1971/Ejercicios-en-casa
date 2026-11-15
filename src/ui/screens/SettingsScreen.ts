@@ -453,5 +453,51 @@ export class SettingsScreen implements Screen {
       this.versionSection(),
       !this.app.voice.available ? h('p', { class: 'muted' }, 'Este navegador no tiene voz disponible.') : null,
     );
+    this.groupify();
+  }
+
+  /** Grupos abiertos (los demás, cerrados); se recuerda entre visitas. */
+  private open: Set<string> = (() => {
+    try { return new Set<string>(JSON.parse(localStorage.getItem(OPEN_KEY) ?? '[]')); } catch { return new Set<string>(); }
+  })();
+
+  /**
+   * Cada título de apartado pasa a ser un botón que abre y cierra su grupo (cerrados de entrada): así Ajustes se ve
+   * corto y ordenado. Lo que va después del último grupo (la versión) queda fuera.
+   */
+  private groupify(): void {
+    const kids = [...this.body.children] as HTMLElement[];
+    let content: HTMLElement | null = null;
+    for (const el of kids) {
+      if (el.matches('h3.block-title')) {
+        const key = el.textContent ?? '';
+        const isOpen = this.open.has(key);
+        const box = h('div', { class: 'set-group-body', hidden: !isOpen });
+        const btn: HTMLElement = h('button', { class: 'set-group-head' + (isOpen ? ' open' : ''), 'aria-expanded': String(isOpen), onclick: () => {
+          const now = box.hidden;
+          box.hidden = !now;
+          btn.classList.toggle('open', now);
+          btn.setAttribute('aria-expanded', String(now));
+          if (now) this.open.add(key); else this.open.delete(key);
+          try { localStorage.setItem(OPEN_KEY, JSON.stringify([...this.open])); } catch { /* sin almacenamiento */ }
+        } },
+          h('span', { class: 'set-icon' }, icon(GROUP_ICON[key] ?? 'settings')),
+          h('span', { class: 'set-group-title' }, key),
+          icon('chevron', 'ico set-group-chev'));
+        el.replaceWith(h('section', { class: 'card set-group' }, btn, box));
+        content = box;
+      } else if (content && !el.matches('.version-card') && !el.matches('.guide-open')) {
+        content.append(el);
+      } else if (el.matches('.version-card')) {
+        content = null;
+      }
+    }
   }
 }
+
+const OPEN_KEY = 'ajustes-abiertos';
+/** Icono de cada grupo de Ajustes (por su título). */
+const GROUP_ICON: Record<string, IconName> = {
+  'Suscripción': 'star', 'Prémium': 'star', 'Idioma': 'globe', 'Pantalla': 'sun', 'Muñeco': 'user', 'Tiempos': 'clock',
+  'Avisos': 'volume', 'Motivación': 'bolt', 'Recordatorios': 'bell', 'Reloj': 'heart', 'Copia de seguridad': 'copy',
+};

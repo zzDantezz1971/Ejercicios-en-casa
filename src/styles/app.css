@@ -309,6 +309,15 @@ button:focus-visible, input:focus-visible, label:focus-within { outline: 2px sol
 
 /* Ajustes */
 .settings-body { display: flex; flex-direction: column; gap: 10px; }
+/* Ajustes por grupos que se abren y cierran */
+.set-group { padding: 0; overflow: hidden; }
+.set-group-head { display: flex; align-items: center; gap: 12px; width: 100%; padding: 14px 16px; background: none; border: 0; color: var(--fg); font: inherit; text-align: left; cursor: pointer; }
+.set-group-title { flex: 1; font-weight: 700; font-size: 1.05rem; }
+.set-group-chev { width: 20px; height: 20px; color: var(--muted); transform: rotate(90deg); transition: transform .2s; flex: none; }
+.set-group-head.open .set-group-chev { transform: rotate(-90deg); }
+.set-group-body { display: flex; flex-direction: column; gap: 10px; padding: 0 12px 12px; }
+.set-group-body[hidden] { display: none; }
+.set-group-body > .card { background: var(--surface-2, var(--surface)); }
 .setting { display: flex; align-items: center; gap: 12px; }
 .set-icon { width: 40px; height: 40px; border-radius: 12px; flex: none; display: flex; align-items: center; justify-content: center; background: var(--accent-soft); color: var(--accent-2); }
 .set-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }

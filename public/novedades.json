@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-15T21:39:36Z",
+    "es": ["Ajustes por grupos (Prémium, Idioma, Pantalla, Muñeco, Tiempos, Avisos…): están cerrados y se abren al tocarlos. La app recuerda cuáles dejaste abiertos."],
+    "ca": ["Configuració per grups (Prèmium, Idioma, Pantalla, Ninot, Temps, Avisos…): estan tancats i s’obren en tocar-los. L’app recorda quins vas deixar oberts."],
+    "en": ["Settings in groups (Premium, Language, Display, Figure, Times, Alerts…): they start closed and open when you tap them. The app remembers which ones you left open."]
+  },
+  {
     "fecha": "2026-11-15T21:16:45Z",
     "es": ["Recordatorios › Plan de la semana: cada plan tiene su propio aviso (sus días, con la hora que elijas). Al borrar un plan, se borra también su aviso. «Entrenamiento» queda para tus tablas."],
     "ca": ["Recordatoris › Pla setmanal: cada pla té el seu propi avís (els seus dies, amb l’hora que triïs). En esborrar un pla, se n’esborra també l’avís. «Entrenament» queda per a les teves taules."],
