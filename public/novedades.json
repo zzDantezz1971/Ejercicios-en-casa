@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-15T19:25:06Z",
+    "es": ["Menú de abajo: los iconos quedan a la misma distancia entre ellos, y en móviles pequeños los nombres ya no se montan."],
+    "ca": ["Menú de sota: les icones queden a la mateixa distància entre elles, i als mòbils petits els noms ja no es munten."],
+    "en": ["Bottom menu: the icons are evenly spaced, and on small phones the labels no longer overlap."]
+  },
+  {
     "fecha": "2026-11-15T19:19:26Z",
     "es": ["El botón de quitar un ejercicio, justo al lado del de cambiar."],
     "ca": ["El botó de treure un exercici, just al costat del de canviar."],
