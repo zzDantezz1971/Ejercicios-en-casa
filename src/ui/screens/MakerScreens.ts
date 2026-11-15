@@ -14,7 +14,7 @@ import { sortableList, type SortableRow } from '../components/sortable';
 import { icon, SECTION_STYLE, type IconName } from '../icons';
 import { DetailScreen } from './DetailScreen';
 import { RoutineScreen } from './RoutineScreen';
-import { openPlan } from './PlanScreens';
+import { newPlan } from './PlanScreens';
 
 /*
  * Crear tablas: menú «Nueva tabla» (asistente, tablas hechas o vacía), el asistente «Crea-la per mi»
@@ -37,7 +37,7 @@ export function openNewTable(app: App): void {
       opt('tables', 'Tablas hechas', 'Listas para usar', () => app.push(new TemplatesScreen(app))),
       opt('edit', 'Tabla vacía', 'Elige tú los ejercicios', () => void emptyTable(app)),
       // plan de la semana (Prémium): una tabla para cada día de entrenamiento
-      h('button', { class: 'maker-opt', onclick: () => { close(); openPlan(app); } },
+      h('button', { class: 'maker-opt', onclick: () => { close(); newPlan(app); } },
         h('span', { class: 'maker-opt-icon' }, icon('calendar')),
         h('span', { class: 'maker-opt-text' }, h('strong', {}, 'Plan de la semana'), h('span', { class: 'muted small' }, 'Una tabla para cada día que entrenas')),
         app.access.premium ? icon('chevron', 'ico chev') : icon('lock', 'ico lock')),

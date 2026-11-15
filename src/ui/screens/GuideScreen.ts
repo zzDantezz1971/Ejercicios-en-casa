@@ -33,6 +33,7 @@ const GUIDE: Array<{ icon: IconName; title: string; sub: string; points: Array<s
       { h: 'Plan de la semana (Prémium)' },
       'En Nueva › Plan de la semana eliges objetivo, días (de 2 a 6), minutos y nivel, y la app crea una tabla para cada día, repartiendo las zonas para que descansen entre sesiones. Antes de crearlo, toca un día para ver sus ejercicios y el tiempo de cada uno y cambiar lo que quieras. Al final te pregunta si quieres que te avise esos días.',
       'Con un plan, la tabla en uso de Inicio es la del día (o, si hoy descansas, la del próximo día de entrenamiento). Si eliges otra tabla tuya, se respeta.',
+      'Puedes tener varios planes (por ejemplo, uno de fuerza y otro de estiramientos). Arriba en Tablas, toca el plan para ver la lista, elegir el que quieres usar, cambiarle el nombre o crear otro.',
       'En «Mi plan de la semana» (arriba de tus tablas) ves la semana de lunes a domingo con lo ya hecho. Toca un día para ver su tabla, cambiarla, pedir otra propuesta o empezar.',
       'Con «Renovar los ejercicios cada semana», cada lunes cambian los ejercicios de cada día (las zonas no). Al cumplir todos los días de una semana, ganas la medalla «Plan cumplido».',
       'Cuatro apartados: Calentamiento, Fuerza, Abdominales y Estiramientos.',

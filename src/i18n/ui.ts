@@ -1095,6 +1095,13 @@ const ROWS: Row[] = [
   ['Toca un día para ver sus ejercicios y el tiempo de cada uno, y cambiar lo que quieras.', 'Toca un dia per veure’n els exercicis i el temps de cadascun, i canviar el que vulguis.', 'Tap a day to see its exercises and the time for each one, and change anything you like.'],
   ['Usar el plan', 'Fes servir el pla', 'Use the plan'],
   ['Ver el plan', 'Mostra el pla', 'View the plan'],
+  ['Mis planes de la semana', 'Els meus plans setmanals', 'My weekly plans'],
+  ['Ver los planes', 'Mostra els plans', 'View the plans'],
+  ['Nuevo plan de la semana', 'Nou pla setmanal', 'New weekly plan'],
+  ['Nombre del plan', 'Nom del pla', 'Plan name'],
+  ['{n} planes', '{n} plans', '{n} plans'],
+  ['Cambiar el nombre', 'Canvia el nom', 'Rename'],
+  ['Puedes tener varios planes (por ejemplo, uno de fuerza y otro de estiramientos). Arriba en Tablas, toca el plan para ver la lista, elegir el que quieres usar, cambiarle el nombre o crear otro.', 'Pots tenir diversos plans (per exemple, un de força i un altre d’estiraments). A dalt de Taules, toca el pla per veure’n la llista, triar el que vols fer servir, canviar-li el nom o crear-ne un altre.', 'You can have several plans (for example, one for strength and another for stretching). At the top of Routines, tap the plan to see the list, choose the one to use, rename it or create another.'],
 ];
 
 export const UI_CA: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[1]]));

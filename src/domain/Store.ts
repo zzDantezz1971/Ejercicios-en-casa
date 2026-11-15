@@ -43,8 +43,9 @@ export interface SavedData {
   welcomed: boolean;
   /** Medallas conseguidas: id → fecha (ISO). */
   medals?: Record<string, string>;
-  /** Plan de la semana (Prémium). */
-  plan?: WeekPlan;
+  /** Planes de la semana (Prémium); uno de ellos está en uso. */
+  plans?: WeekPlan[];
+  activePlanId?: string;
 }
 
 export const STORAGE_KEY = 'ejercicios-en-casa';
@@ -209,20 +210,59 @@ export class Store {
 
   /* ── Plan de la semana ── */
 
+  /** El plan en uso (si hay alguno). */
   get plan(): WeekPlan | undefined {
-    return this.data.plan;
+    const ps = this.data.plans ?? [];
+    return ps.find((p) => p.id === this.data.activePlanId) ?? ps[0];
   }
 
-  setPlan(plan: WeekPlan | undefined): void {
-    if (plan) this.data.plan = plan;
-    else delete this.data.plan;
+  get plans(): readonly WeekPlan[] {
+    return this.data.plans ?? [];
+  }
+
+  planById(id: string): WeekPlan | undefined {
+    return this.data.plans?.find((p) => p.id === id);
+  }
+
+  /** Guarda un plan (nuevo o cambiado). Uno nuevo pasa a estar en uso. */
+  setPlan(plan: WeekPlan): void {
+    const ps = [...(this.data.plans ?? [])];
+    const i = ps.findIndex((p) => p.id === plan.id);
+    if (i >= 0) ps[i] = plan;
+    else { ps.push(plan); this.data.activePlanId = plan.id; }
+    this.data.plans = ps;
     this.persist();
   }
 
-  /** Borra el plan y, si se pide, sus tablas. */
-  deletePlan(withTables: boolean): void {
-    const ids = new Set(this.data.plan?.days.map((d) => d.routineId) ?? []);
-    delete this.data.plan;
+  setActivePlan(id: string): void {
+    if (!this.data.plans?.some((p) => p.id === id)) return;
+    this.data.activePlanId = id;
+    this.persist();
+  }
+
+  renamePlan(id: string, name: string): void {
+    const p = this.planById(id);
+    if (!p) return;
+    const n = name.trim().slice(0, NAME_MAX);
+    this.setPlan(n ? { ...p, name: n } : (({ name: _n, ...rest }) => rest)(p));
+  }
+
+  /** ¿Es la tabla de algún día de algún plan? */
+  isPlanRoutine(id: string): boolean {
+    return (this.data.plans ?? []).some((p) => p.days.some((d) => d.routineId === id));
+  }
+
+  /** Borra un plan y, si se pide, sus tablas. */
+  deletePlan(id: string, withTables: boolean): void {
+    const plan = this.planById(id);
+    if (!plan) return;
+    const ids = new Set(plan.days.map((d) => d.routineId));
+    this.data.plans = (this.data.plans ?? []).filter((p) => p.id !== id);
+    if (!this.data.plans.length) delete this.data.plans;
+    if (this.data.activePlanId === id) {
+      if (this.data.plans?.length) this.data.activePlanId = this.data.plans[0].id;
+      else delete this.data.activePlanId;
+    }
     if (withTables && ids.size) {
       this.data.routines = this.data.routines.filter((r) => !ids.has(r.id));
       if (this.data.routines.length === 0) this.data.routines.push(newRoutine(DEFAULT_ROUTINE_NAME));
@@ -454,7 +494,7 @@ export class Store {
     const first = !this.data.medals;
     const have = { ...(this.data.medals ?? {}) };
     const kcal = this.data.history.reduce((n, e) => n + (this.caloriesFor(e)?.kcal ?? 0), 0);
-    const got = earnedMedals({ history: this.data.history, weights: this.data.weights, goalKg: this.data.settings.profile.goalKg, kcal, planDays: this.data.plan?.days.map((d) => d.day) });
+    const got = earnedMedals({ history: this.data.history, weights: this.data.weights, goalKg: this.data.settings.profile.goalKg, kcal, planDays: this.plan?.days.map((d) => d.day) });
     const fresh = got.filter((id) => !have[id]);
     if (!fresh.length && !first) return [];
     for (const id of fresh) have[id] = now.toISOString();
@@ -670,8 +710,15 @@ export class Store {
     const medals = input.medals && typeof input.medals === 'object' ? (input.medals as Record<string, string>) : undefined;
     // bienvenida: si no consta, solo la ve quien empieza de cero (con datos de antes, ya se da por vista)
     const welcomed = typeof input.welcomed === 'boolean' ? input.welcomed : Object.keys(input).length > 0;
-    const plan = sanitizePlan(input.plan);
-    return { version: DATA_VERSION, routines, activeId, settings, history, hidden, order, orderVer: ORDER_VER, lastBackup, favorites, weights, summarySeen, weekSeen, medals, welcomed, ...(plan ? { plan } : {}) };
+    // planes de la semana (antes solo había uno: `plan`)
+    const rawPlans = Array.isArray(input.plans) ? input.plans : input.plan ? [input.plan] : [];
+    const seenIds = new Set<string>();
+    const plans = rawPlans.map(sanitizePlan).filter((p): p is WeekPlan => !!p && !seenIds.has(p.id) && !!seenIds.add(p.id));
+    const activePlanId = plans.some((p) => p.id === input.activePlanId) ? (input.activePlanId as string) : plans[0]?.id;
+    return {
+      version: DATA_VERSION, routines, activeId, settings, history, hidden, order, orderVer: ORDER_VER, lastBackup, favorites, weights,
+      summarySeen, weekSeen, medals, welcomed, ...(plans.length ? { plans, activePlanId } : {}),
+    };
   }
 
   /** Se llama cada vez que se guardan datos (p. ej., para volver a programar los recordatorios). */

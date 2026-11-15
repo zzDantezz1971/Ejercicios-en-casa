@@ -18,6 +18,10 @@ export interface PlanDay {
 }
 
 export interface WeekPlan {
+  /** Identificador (se puede tener más de un plan; uno está en uso). */
+  id: string;
+  /** Nombre que le pone el usuario (si no, se muestra el resumen). */
+  name?: string;
   goal: Goal;
   minutes: number;
   level: Level;
@@ -153,6 +157,8 @@ export function sanitizePlan(input: unknown): WeekPlan | undefined {
   const days = p.days.filter((d): d is PlanDay => !!d && Number.isInteger(d.day) && d.day >= 0 && d.day <= 6 && KINDS.includes(d.kind) && typeof d.routineId === 'string' && !seen.has(d.day) && !!seen.add(d.day));
   if (days.length < 1) return undefined;
   return {
+    id: typeof p.id === 'string' && p.id ? p.id : `plan-${Date.parse(String(p.createdAt)) || Date.now()}`,
+    ...(typeof p.name === 'string' && p.name.trim() ? { name: p.name.trim().slice(0, 40) } : {}),
     goal: p.goal!, level: p.level!, minutes: Math.round(p.minutes!),
     days: sortDays(days.map((d) => d.day)).map((x) => days.find((d) => d.day === x)!),
     renew: p.renew !== false,

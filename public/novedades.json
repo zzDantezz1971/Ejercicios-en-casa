@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-15T10:44:07Z",
+    "es": ["Ahora puedes tener varios planes de la semana: arriba en Tablas, toca el plan para ver la lista y elegir el que quieres usar. También se les puede cambiar el nombre."],
+    "ca": ["Ara pots tenir diversos plans setmanals: a dalt de Taules, toca el pla per veure’n la llista i triar el que vols fer servir. També se’ls pot canviar el nom."],
+    "en": ["You can now have several weekly plans: at the top of Routines, tap the plan to see the list and choose the one to use. You can also rename them."]
+  },
+  {
     "fecha": "2026-11-15T10:38:52Z",
     "es": ["Tablas: el plan de la semana sale como una sola tarjeta arriba (sin una tabla suelta para cada día), con «Usar el plan» y «Ver el plan»."],
     "ca": ["Taules: el pla setmanal surt com una sola targeta a dalt (sense una taula solta per a cada dia), amb «Fes servir el pla» i «Mostra el pla»."],

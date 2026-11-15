@@ -8,7 +8,7 @@ import {
 import { LOCALE, tr } from '../../i18n';
 import { askNotificationPermission, REMINDERS_AVAILABLE } from '../../services/Reminders';
 import type { App, Screen } from '../App';
-import { clear, confirmDialog, h, humanDuration, plural } from '../dom';
+import { clear, confirmDialog, h, humanDuration, plural, promptDialog } from '../dom';
 import { icon, type IconName } from '../icons';
 import { startWorkout } from '../components/startWorkout';
 import { header, isEmptyResult, preview } from './MakerScreens';
@@ -37,11 +37,37 @@ function tableName(plan: Pick<WeekPlan, 'goal'>, day: number, kind: DayKind): st
   return `${tr('Plan')} · ${dayName(day)} · ${tr(kindLabel(plan, kind))}`;
 }
 
-/** Abre el plan (o la pantalla Prémium si no lo es). */
+/** Abre los planes: si hay más de uno, la lista para elegir; si hay uno, ese; si no hay, el asistente. */
 export function openPlan(app: App): void {
   if (!app.access.premium) { app.showPremium(); return; }
-  if (app.store.plan) app.push(new PlanScreen(app));
+  const ps = app.store.plans;
+  if (ps.length > 1) app.push(new PlansScreen(app));
+  else if (ps.length === 1) app.push(new PlanScreen(app, ps[0].id));
   else app.push(new PlanWizardScreen(app));
+}
+
+/** Crear un plan nuevo (Nueva › Plan de la semana). */
+export function newPlan(app: App): void {
+  if (!app.access.premium) { app.showPremium(); return; }
+  app.push(new PlanWizardScreen(app));
+}
+
+/** Nombre de un plan: el que le ha puesto el usuario o, si no, su objetivo. */
+export function planTitle(p: WeekPlan): string {
+  return p.name ?? tr(GOAL_INFO[p.goal].name);
+}
+
+/**
+ * Pone un plan en uso: su tabla de hoy (o la del próximo día) pasa a ser la tabla en uso y, si el recordatorio de
+ * entrenar está activado, pasa a avisar los días de este plan.
+ */
+export function usePlan(app: App, id: string): void {
+  const p = app.store.planById(id);
+  if (!p) return;
+  app.store.setActivePlan(id);
+  useTodaysTable(app, true);
+  const r = remindersOf(app.store.settings.reminders);
+  if (r.train.on) app.store.saveSettings({ ...app.store.settings, reminders: { ...r, train: { ...r.train, days: p.days.map((d) => d.day) } } });
 }
 
 /**
@@ -49,8 +75,12 @@ export function openPlan(app: App): void {
  * si se ha borrado la tabla de algún día, la vuelve a crear.
  */
 export function refreshPlan(app: App, now = new Date()): void {
-  const plan = app.store.plan;
-  if (!plan || !app.access.premium) return;
+  if (!app.access.premium) return;
+  for (const plan of app.store.plans) refreshOne(app, plan, now);
+  useTodaysTable(app, false);
+}
+
+function refreshOne(app: App, plan: WeekPlan, now: Date): void {
   const week = mondayOf(now);
   const renew = plan.renew && plan.week !== week;
   let changed = plan.week !== week;
@@ -63,7 +93,6 @@ export function refreshPlan(app: App, now = new Date()): void {
     return { ...d, routineId: app.store.addRoutine(tableName(plan, d.day, d.kind), g.routine, g.rounds).id };
   });
   if (changed) app.store.setPlan({ ...plan, days, week });
-  useTodaysTable(app, false);
 }
 
 /**
@@ -73,8 +102,7 @@ export function refreshPlan(app: App, now = new Date()): void {
 export function useTodaysTable(app: App, force: boolean, now = new Date()): void {
   const plan = app.store.plan;
   if (!plan) return;
-  const ids = new Set(plan.days.map((d) => d.routineId));
-  if (!force && !ids.has(app.store.active.id)) return;
+  if (!force && !app.store.isPlanRoutine(app.store.active.id)) return;
   const pd = planDayOn(plan, now) ?? nextPlanDay(plan, now)?.day;
   if (pd && app.store.routineById(pd.routineId) && app.store.active.id !== pd.routineId) app.store.setActive(pd.routineId);
 }
@@ -86,11 +114,11 @@ function routineSeconds(app: App, id: string): number {
 }
 
 /** Empieza el entrenamiento de un día del plan. */
-function startDay(app: App, d: PlanDay): void {
+function startDay(app: App, planId: string, d: PlanDay): void {
   const r = app.store.routineById(d.routineId);
   if (!r) return;
   const plan = WorkoutPlan.build(app.playable(r.routine), app.catalog, app.store.settings, r.rounds);
-  if (plan.isEmpty) { app.push(new PlanDayScreen(app, d.day)); return; }
+  if (plan.isEmpty) { app.push(new PlanDayScreen(app, planId, d.day)); return; }
   void startWorkout(app, plan, r);
 }
 
@@ -102,7 +130,7 @@ export function todayCard(app: App, now = new Date()): HTMLElement | null {
   const today = planDayOn(plan, now);
   const yest = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
   const missed = planDayOn(plan, yest);
-  const open = () => app.push(new PlanScreen(app));
+  const open = () => app.push(new PlanScreen(app, plan.id));
   const line = (d: PlanDay) => `${tr(kindLabel(plan, d.kind))} · ${humanDuration(routineSeconds(app, d.routineId))}`;
   let body: HTMLElement[];
   if (today && done.has(ymd(now))) {
@@ -114,7 +142,7 @@ export function todayCard(app: App, now = new Date()): HTMLElement | null {
     // ayer tocaba y no se entrenó (y hoy no se ha entrenado): se ofrece hacerlo hoy
     if (missed && !done.has(ymd(yest)) && !done.has(ymd(now)) && mondayOf(yest) === mondayOf(now) && ymd(yest) >= ymd(new Date(plan.createdAt))) {
       body = [h('span', { class: 'plan-eyebrow' }, 'Hoy descanso 😌'), h('strong', {}, `Ayer te saltaste ${tr(kindLabel(plan, missed.kind))}`), h('span', { class: 'muted small' }, '¿La haces hoy?')];
-      return planCard(body, open, h('button', { class: 'btn primary small', onclick: (e: Event) => { e.stopPropagation(); startDay(app, missed); } }, icon('play'), 'Empezar'));
+      return planCard(body, open, h('button', { class: 'btn primary small', onclick: (e: Event) => { e.stopPropagation(); startDay(app, plan.id, missed); } }, icon('play'), 'Empezar'));
     }
     body = [h('span', { class: 'plan-eyebrow' }, 'Hoy descanso 😌'),
       h('strong', {}, next ? (next.inDays === 1 ? `Mañana: ${tr(kindLabel(plan, next.day.kind))}` : `${dayName(next.day.day)}: ${tr(kindLabel(plan, next.day.kind))}`) : 'Plan de la semana'),
@@ -122,7 +150,7 @@ export function todayCard(app: App, now = new Date()): HTMLElement | null {
     return planCard(body, open);
   }
   const action = today && !done.has(ymd(now))
-    ? h('button', { class: 'btn primary small', onclick: (e: Event) => { e.stopPropagation(); startDay(app, today); } }, icon('play'), 'Empezar')
+    ? h('button', { class: 'btn primary small', onclick: (e: Event) => { e.stopPropagation(); startDay(app, plan.id, today); } }, icon('play'), 'Empezar')
     : h('span', { class: 'plan-done' }, icon('check'));
   return planCard(body, open, action);
 }
@@ -166,7 +194,8 @@ export class PlanWizardScreen implements Screen {
   private level?: Level;
   private result: Array<{ day: number; kind: DayKind; r: GenResult }> = [];
 
-  constructor(private readonly app: App) {
+  /** Con `replaceId`, el plan nuevo sustituye a ese («Cambiar el plan»). */
+  constructor(private readonly app: App, private readonly replaceId?: string) {
     // los días de los recordatorios, si tiene (si no, lunes, miércoles y viernes)
     const rem = remindersOf(app.store.settings.reminders).train.days;
     this.days = rem.length >= MIN_DAYS && rem.length <= MAX_DAYS ? sortDays(rem) : [1, 3, 5];
@@ -255,14 +284,16 @@ export class PlanWizardScreen implements Screen {
   private async create(): Promise<void> {
     const { app } = this;
     const o = { goal: this.goal!, minutes: this.minutes!, level: this.level! };
-    // un plan nuevo sustituye al anterior (y a sus tablas)
-    if (app.store.plan) app.store.deletePlan(true);
+    // «Cambiar el plan»: sustituye a ese plan (y a sus tablas), con el mismo nombre
+    const old = this.replaceId ? app.store.planById(this.replaceId) : undefined;
+    if (old) app.store.deletePlan(old.id, true);
     const days: PlanDay[] = this.result.map((x) => ({ day: x.day, kind: x.kind, routineId: app.store.addRoutine(tableName(o, x.day, x.kind), x.r.routine, x.r.rounds).id }));
-    app.store.setPlan({ ...o, days, renew: true, week: mondayOf(new Date()), createdAt: new Date().toISOString() });
+    const id = old?.id ?? `plan-${Date.now()}`;
+    app.store.setPlan({ id, ...(old?.name ? { name: old.name } : {}), ...o, days, renew: old?.renew ?? true, week: mondayOf(new Date()), createdAt: new Date().toISOString() });
     app.haptics.tap();
     await askReminders(app, days.map((d) => d.day));
-    // la tabla de hoy (o la del próximo día de entrenamiento) pasa a ser la tabla en uso
-    useTodaysTable(app, true);
+    // el plan nuevo queda en uso: la tabla de hoy (o la del próximo día de entrenamiento) pasa a ser la tabla en uso
+    usePlan(app, id);
     app.openTab('inicio');
   }
 }
@@ -271,7 +302,7 @@ export class PlanWizardScreen implements Screen {
 export class PlanScreen implements Screen {
   readonly el = h('main', { class: 'screen maker-screen' });
 
-  constructor(private readonly app: App) {}
+  constructor(private readonly app: App, private readonly planId: string) {}
 
   enter(): void {
     refreshPlan(this.app);
@@ -280,12 +311,17 @@ export class PlanScreen implements Screen {
 
   private render(): void {
     const { app } = this;
-    const plan = app.store.plan;
+    const plan = app.store.planById(this.planId);
     clear(this.el);
-    this.el.append(header(app, 'Mi plan de la semana'));
+    if (!plan) { this.el.append(header(app, 'Plan de la semana')); app.back(); return; }
+    const inUse = app.store.plan?.id === plan.id;
+    this.el.append(header(app, planTitle(plan), tr('Plan de la semana')));
     const body = h('div', { class: 'maker-body' });
     this.el.append(body);
-    if (!plan) { app.back(); return; }
+    // en uso, o botón para ponerlo en uso
+    body.append(inUse
+      ? h('p', { class: 'plan-inuse' }, h('span', { class: 'active-pill' }, 'En uso'))
+      : h('button', { class: 'btn primary block', onclick: () => { usePlan(app, plan.id); app.haptics.tap(); this.render(); } }, icon('play'), 'Usar el plan'));
     const now = new Date();
     const done = trainedDates(app.store.history);
     const monday = mondayOf(now);
@@ -303,7 +339,7 @@ export class PlanScreen implements Screen {
         continue;
       }
       const hit = done.has(ymd(date));
-      list.append(h('button', { class: 'plan-row' + (isToday ? ' today' : '') + (hit ? ' hit' : ''), onclick: () => app.push(new PlanDayScreen(app, d)) },
+      list.append(h('button', { class: 'plan-row' + (isToday ? ' today' : '') + (hit ? ' hit' : ''), onclick: () => app.push(new PlanDayScreen(app, plan.id, d)) },
         h('span', { class: 'plan-dname' }, dayName(d), tag),
         h('span', { class: 'plan-dtext' }, h('strong', {}, tr(kindLabel(plan, pd.kind))), h('span', { class: 'muted small' }, humanDuration(routineSeconds(app, pd.routineId)))),
         hit ? h('span', { class: 'plan-done', 'aria-label': tr('Hecho') }, icon('check')) : icon('chevron', 'ico chev')));
@@ -313,15 +349,25 @@ export class PlanScreen implements Screen {
         h('span', { class: 'set-text' }, h('strong', {}, 'Renovar los ejercicios cada semana'), h('span', { class: 'muted block small' }, 'Cada lunes, ejercicios nuevos para cada día (las zonas se mantienen). Si lo desactivas, se quedan como están.')),
         h('input', { type: 'checkbox', id: 'plan-renew', class: 'switch', checked: plan.renew, onchange: (e: Event) => app.store.setPlan({ ...plan, renew: (e.target as HTMLInputElement).checked }) })),
       h('div', { class: 'maker-actions' },
-        h('button', { class: 'btn ghost block', onclick: () => app.replace(new PlanWizardScreen(app), 'forward') }, icon('edit'), 'Cambiar el plan'),
+        h('button', { class: 'btn ghost block', onclick: () => void this.rename() }, icon('edit'), 'Cambiar el nombre'),
+        h('button', { class: 'btn ghost block', onclick: () => app.replace(new PlanWizardScreen(app, plan.id), 'forward') }, icon('swap'), 'Cambiar el plan'),
         h('button', { class: 'btn ghost block danger-text', onclick: () => void this.remove() }, icon('trash'), 'Borrar el plan')));
   }
 
   private async remove(): Promise<void> {
     const ok = await confirmDialog(tr('¿Borrar el plan de la semana y sus tablas?'), tr('Borrar'), tr('Cancelar'), true);
     if (!ok) return;
-    this.app.store.deletePlan(true);
+    this.app.store.deletePlan(this.planId, true);
     this.app.back();
+  }
+
+  private async rename(): Promise<void> {
+    const p = this.app.store.planById(this.planId);
+    if (!p) return;
+    const name = await promptDialog(tr('Nombre del plan'), planTitle(p), tr('Guardar'));
+    if (name === null) return;
+    this.app.store.renamePlan(p.id, name);
+    this.render();
   }
 }
 
@@ -330,19 +376,19 @@ export class PlanDayScreen implements Screen {
   readonly el = h('main', { class: 'screen maker-screen' });
   private readonly ask = { remove: true };
 
-  constructor(private readonly app: App, private readonly day: number) {}
+  constructor(private readonly app: App, private readonly planId: string, private readonly day: number) {}
 
   enter(): void {
     this.render();
   }
 
   private get pd(): PlanDay | undefined {
-    return this.app.store.plan?.days.find((d) => d.day === this.day);
+    return this.app.store.planById(this.planId)?.days.find((d) => d.day === this.day);
   }
 
   private render(): void {
     const { app } = this;
-    const plan = app.store.plan;
+    const plan = app.store.planById(this.planId);
     const pd = this.pd;
     const t = pd && app.store.routineById(pd.routineId);
     const y = this.el.isConnected ? window.scrollY : -1;
@@ -356,7 +402,7 @@ export class PlanDayScreen implements Screen {
         preview(app, r, { set, ask: this.ask, swap: (s, i) => swapExercise(r, s, i, o, genCtx(app)) }),
         h('div', { class: 'maker-actions' },
           h('button', { class: 'btn ghost block', onclick: () => { const g = generate(o, genCtx(app)); this.ask.remove = true; set(g); window.scrollTo({ top: 0 }); } }, icon('swap'), 'Otra propuesta'),
-          h('button', { class: 'btn primary block big', disabled: isEmptyResult(r), onclick: () => startDay(app, pd) }, icon('play'), 'Empezar'))));
+          h('button', { class: 'btn primary block big', disabled: isEmptyResult(r), onclick: () => startDay(app, plan.id, pd) }, icon('play'), 'Empezar'))));
     if (y >= 0) window.scrollTo({ top: y });
   }
 }
@@ -382,5 +428,38 @@ class DraftDayScreen implements Screen {
           h('button', { class: 'btn ghost block', onclick: () => { this.ask.remove = true; set(generate(o, genCtx(app))); window.scrollTo({ top: 0 }); } }, icon('swap'), 'Otra propuesta'),
           h('button', { class: 'btn primary block big', disabled: isEmptyResult(x.r), onclick: () => app.back() }, icon('check'), 'Listo'))));
     if (y >= 0) window.scrollTo({ top: y });
+  }
+}
+
+/** Mis planes de la semana: lista para elegir cuál ver o poner en uso, y crear otro. */
+export class PlansScreen implements Screen {
+  readonly el = h('main', { class: 'screen maker-screen' });
+
+  constructor(private readonly app: App) {}
+
+  enter(): void {
+    this.render();
+  }
+
+  private render(): void {
+    const { app } = this;
+    clear(this.el);
+    this.el.append(header(app, 'Mis planes de la semana'));
+    const body = h('div', { class: 'maker-body' });
+    this.el.append(body);
+    const activeId = app.store.plan?.id;
+    for (const p of app.store.plans) {
+      const inUse = p.id === activeId;
+      body.append(h('article', { class: 'card table-card plan-card' + (inUse ? ' active' : ''), role: 'button', tabindex: 0, onclick: () => app.push(new PlanScreen(app, p.id)) },
+        h('div', { class: 'table-head' },
+          h('div', { class: 'plan-card-title' }, h('span', { class: 'plan-icon' }, icon('calendar')), h('h2', {}, planTitle(p))),
+          inUse ? h('span', { class: 'active-pill' }, 'En uso') : null),
+        h('div', { class: 'table-meta' }, h('span', { class: 'meta-line' }, icon('bolt'), planSummary(p))),
+        h('div', { class: 'table-actions' },
+          h('button', { class: 'btn small ' + (inUse ? 'ghost' : 'primary'), disabled: inUse, onclick: (e: Event) => { e.stopPropagation(); usePlan(app, p.id); app.haptics.tap(); this.render(); } },
+            inUse ? icon('check') : icon('play'), inUse ? 'En uso' : 'Usar el plan'),
+          h('button', { class: 'btn small ghost', onclick: (e: Event) => { e.stopPropagation(); app.push(new PlanScreen(app, p.id)); } }, icon('calendar'), 'Ver el plan'))));
+    }
+    body.append(h('button', { class: 'maker-add', onclick: () => newPlan(app) }, icon('plus'), 'Nuevo plan de la semana'));
   }
 }

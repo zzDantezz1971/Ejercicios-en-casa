@@ -70,12 +70,35 @@ describe('Plan de la semana', () => {
     const activeId = s.active.id;
     const a = s.addRoutine('Plan · Lunes', emptyRoutine());
     expect(s.active.id).toBe(activeId); // no cambia la tabla en uso
-    s.setPlan({ goal: 'fuerza', minutes: 30, level: 'normal', days: [{ day: 1, kind: 'superior', routineId: a.id }], renew: true, week: '2026-11-09', createdAt: '2026-11-14T00:00:00Z' });
+    s.setPlan({ id: 'p1', goal: 'fuerza', minutes: 30, level: 'normal', days: [{ day: 1, kind: 'superior', routineId: a.id }], renew: true, week: '2026-11-09', createdAt: '2026-11-14T00:00:00Z' });
     const again = new Store(kv);
     expect(again.plan?.days[0].routineId).toBe(a.id);
-    again.deletePlan(true);
+    expect(again.isPlanRoutine(a.id)).toBe(true);
+    again.deletePlan('p1', true);
     expect(again.plan).toBeUndefined();
     expect(again.routineById(a.id)).toBeUndefined();
+  });
+
+  it('varios planes: el nuevo queda en uso y, al borrar el que está en uso, pasa otro', () => {
+    const s = new Store(memory());
+    const base = { goal: 'forma' as const, minutes: 20, level: 'normal' as const, renew: true, week: '2026-11-09', createdAt: '2026-11-14T00:00:00Z' };
+    s.setPlan({ ...base, id: 'a', days: [{ day: 1, kind: 'superior', routineId: 'x' }] });
+    s.setPlan({ ...base, id: 'b', days: [{ day: 2, kind: 'inferior', routineId: 'y' }] });
+    expect(s.plans.map((p) => p.id)).toEqual(['a', 'b']);
+    expect(s.plan?.id).toBe('b');
+    s.setActivePlan('a');
+    expect(s.plan?.id).toBe('a');
+    s.renamePlan('a', 'Verano');
+    expect(s.planById('a')?.name).toBe('Verano');
+    s.deletePlan('a', false);
+    expect(s.plan?.id).toBe('b');
+  });
+
+  it('los datos con un solo plan (versión anterior) pasan a la lista de planes', () => {
+    const old = { plan: { goal: 'forma', level: 'normal', minutes: 20, days: [{ day: 1, kind: 'superior', routineId: 'x' }, { day: 3, kind: 'inferior', routineId: 'y' }], createdAt: '2026-11-14T10:00:00Z' } };
+    const d = Store.migrate(old);
+    expect(d.plans?.length).toBe(1);
+    expect(d.activePlanId).toBe(d.plans![0].id);
   });
 
   it('descarta un plan roto', () => {
