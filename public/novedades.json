@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-15T19:14:05Z",
+    "es": ["«Necesitas:» en su propia línea y el material debajo."],
+    "ca": ["«Necessites:» a la seva pròpia línia i el material a sota."],
+    "en": ["“You need:” on its own line with the equipment below."]
+  },
+  {
     "fecha": "2026-11-15T19:10:25Z",
     "es": ["Títulos de los apartados (Calentamiento, Fuerza…) más grandes al ver y editar una tabla."],
     "ca": ["Títols dels apartats (Escalfament, Força…) més grans en veure i editar una taula."],

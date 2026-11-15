@@ -172,8 +172,8 @@ export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement
     box.append(head);
     // el material que pide este apartado (el que no está en tu material, marcado)
     const need = neededEquip(app, r, [s]);
-    if (need.length) box.append(h('p', { class: 'sec-need small', style: `--sec: ${st.color}` }, h('span', {}, 'Necesitas:'),
-      ...need.map(({ e, missing }) => h('span', { class: 'miss-item' + (missing ? ' missing' : '') }, icon(EQUIP_INFO[e].icon as IconName), tr(EQUIP_INFO[e].name), missing ? h('span', { class: 'miss-flag' }, '(no está en tu material)') : ''))));
+    if (need.length) box.append(h('div', { class: 'sec-need small', style: `--sec: ${st.color}` }, h('span', {}, 'Necesitas:'),
+      h('div', { class: 'sec-need-items' }, ...need.map(({ e, missing }) => h('span', { class: 'miss-item' + (missing ? ' missing' : '') }, icon(EQUIP_INFO[e].icon as IconName), tr(EQUIP_INFO[e].name), missing ? h('span', { class: 'miss-flag' }, '(no está en tu material)') : '')))));
     const rows: SortableRow[] = [];
     items.forEach((it, i) => {
       const ex = app.catalog.get(it.exerciseId);
