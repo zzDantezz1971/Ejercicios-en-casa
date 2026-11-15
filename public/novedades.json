@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-15T23:53:51Z",
+    "es": ["Entrenamiento: quitado el nombre pequeño de la tabla de arriba."],
+    "ca": ["Entrenament: tret el nom petit de la taula de dalt."],
+    "en": ["Workout: removed the small table name at the top."]
+  },
+  {
     "fecha": "2026-11-15T23:15:14Z",
     "es": ["Ajustes: al entrar, todos los grupos están cerrados; con el botón atrás se cierran los que estén abiertos.", "Al cambiar el idioma, la app vuelve a Ajustes (antes iba a Inicio)."],
     "ca": ["Configuració: en entrar, tots els grups estan tancats; amb el botó enrere es tanquen els que estiguin oberts.", "En canviar l’idioma, l’app torna a Configuració (abans anava a Inici)."],

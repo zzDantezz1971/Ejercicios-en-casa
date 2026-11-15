@@ -9,6 +9,7 @@ Marca cada punto al probarlo. Si algo falla, haz una captura y cuéntamelo.
 - [ ] Configuració › Avisos › Veu: como mucho 3 voces por idioma, sin repetidas (en inglés, británicas), y que suenen distintas.
 - [ ] Configuració: al entrar, todos los grupos cerrados; con atrás se cierran los abiertos.
 - [ ] Al cambiar el idioma, la app vuelve a Configuració (no a Inici).
+- [ ] Entrenamiento: arriba ya no sale el nombre pequeño de la tabla.
 
 ## 1. Health Connect (Configuració › Apps de salut)
 - [ ] Sale la tarjeta «Health Connect». Si pide instalarla, el botón abre Play Store; al volver a la app, la tarjeta cambia sola.

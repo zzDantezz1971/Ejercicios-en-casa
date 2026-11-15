@@ -74,7 +74,6 @@ export class WorkoutScreen implements Screen {
       h('header', { class: 'w-top' },
         h('button', { class: 'icon-btn', 'aria-label': 'Terminar', onclick: () => void this.askStop() }, icon('close')),
         h('div', { class: 'w-where' }, u.secChip, u.position),
-        h('span', { class: 'w-table muted small' }, table.name),
         h('button', { class: 'icon-btn music-btn', 'aria-label': 'Abrir la música', onclick: () => void this.openMusic() }, icon('music'))),
       u.dots,
       h('div', { class: 'stage' }, u.canvas, u.phase, app.heart.available ? u.hr : null),
