@@ -125,6 +125,11 @@ function withSection(r: GenResult, s: SectionId, items: GenResult['routine'][Sec
 
 /** Vista previa de una tabla: resumen y ejercicios por apartado. Al tocar un ejercicio se ve cómo se hace;
  *  con `edit`, se ordenan arrastrándolos con el asa y cada uno se puede cambiar o quitar (con aviso). */
+/** «Necesitas: [icono] Step, [icono] Mancuernas»: cada material con su icono. */
+function missLine(miss: readonly Equip[]): HTMLElement[] {
+  return [h('span', {}, 'Necesitas:'), ...miss.map((e) => h('span', { class: 'miss-item' }, icon(EQUIP_INFO[e].icon as IconName), tr(EQUIP_INFO[e].name)))];
+}
+
 export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement {
   const plan = WorkoutPlan.build(r.routine, app.catalog, app.store.settings, r.rounds);
   const locked = SECTION_IDS.some((s) => r.routine[s].some((i) => !app.access.canUse(i.exerciseId)));
@@ -132,7 +137,7 @@ export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement
   const shown = SECTION_IDS.flatMap((s) => r.routine[s].map((i) => app.catalog.get(i.exerciseId)).filter((e): e is NonNullable<typeof e> => !!e));
   const box = h('div', { class: 'maker-preview' },
     h('p', { class: 'maker-total' }, icon('clock'), plan.isEmpty ? 'Sin ejercicios' : `${humanDuration(plan.estimatedSeconds)} · ${plural(plan.exerciseCount, 'ejercicio', 'ejercicios')}`));
-  if (miss.length) box.append(h('p', { class: 'note small' }, icon('dumbbell'), h('span', {}, h('span', {}, 'Necesitas:'), ` ${miss.map((e) => tr(EQUIP_INFO[e].name)).join(', ')}`)));
+  if (miss.length) box.append(h('p', { class: 'note small miss-note' }, ...missLine(miss)));
   // leyenda de los botones de cada ejercicio
   if (edit) box.append(h('div', { class: 'maker-legend' },
     edit.swap ? h('span', {}, icon('swap'), 'Cambiar') : '',
@@ -344,7 +349,7 @@ export class TemplatesScreen implements Screen {
           h('strong', {}, t.name),
           h('span', { class: 'muted small' }, t.desc),
           h('span', { class: 'maker-meta small' }, icon('clock'), humanDuration(tableSeconds(r, { catalog: app.catalog, settings: app.store.settings })), h('span', { class: 'pills' }, ...secs)),
-          miss.length ? h('span', { class: 'maker-miss small' }, icon('dumbbell'), h('span', {}, 'Necesitas:'), ` ${miss.map((e) => tr(EQUIP_INFO[e].name)).join(', ')}`) : ''),
+          miss.length ? h('span', { class: 'maker-miss small' }, ...missLine(miss)) : ''),
         icon('chevron', 'ico chev')));
     }
   }
