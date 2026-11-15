@@ -5,7 +5,8 @@
   sistema** del color del tema (iconos oscuros en el claro); botón **Música** en el entrenamiento (pausa y abre Spotify
   o la app de música del móvil). Sin controlar Spotify desde la app: Spotify solo lo permite a 25 usuarios en apps de particulares.
 - Gráfico de la ficha de Play sin maniquís (o con el maniquí nuevo).
-- Compilar con el workflow manual de Android y probar el APK.
+- Compilar con el workflow manual de Android y probar el APK: **lista de pruebas en `tools/play/pruebas-movil.md`**
+  (recordársela a David cuando instale la app de prueba).
 - Crear la app en Play Console cuando acabe la verificación; prueba cerrada.
 
 ## Suscripción (0,99 €/mes o 9,99 €/año, sin prueba gratis)
