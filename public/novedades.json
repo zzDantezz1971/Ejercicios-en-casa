@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-15T22:07:10Z",
+    "es": ["Voz: en castellano solo salen las voces de España (no las de Latinoamérica)."],
+    "ca": ["Veu: en castellà només surten les veus d’Espanya (no les de Llatinoamèrica)."],
+    "en": ["Voice: in Spanish only voices from Spain are listed (not Latin American ones)."]
+  },
+  {
     "fecha": "2026-11-15T22:00:55Z",
     "es": ["Voz: quitada la opción «Voz automática» (sonaba igual que una de las otras). Si no has elegido ninguna, se marca la primera."],
     "ca": ["Veu: treta l’opció «Veu automàtica» (sonava igual que una de les altres). Si no n’has triat cap, es marca la primera."],

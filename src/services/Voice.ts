@@ -5,6 +5,13 @@ import { duckWhile, stopSpeechDuck } from './MusicDuck';
 
 const CODE: Record<Lang, string> = { ca: 'ca', es: 'es', en: 'en' };
 
+/** ¿Esta voz sirve para el idioma? En castellano, solo la de España (no las de Latinoamérica). */
+function forLang(voiceLang: string, l: Lang): boolean {
+  const v = voiceLang.replace('_', '-').toLowerCase();
+  if (l === 'es') return v === 'es-es' || v === 'es';
+  return v === CODE[l] || v.startsWith(CODE[l] + '-');
+}
+
 /** Avisos por voz con la síntesis de voz del móvil, en el idioma de la app si el móvil tiene esa voz (si no, en castellano). */
 export class Voice {
   enabled = true;
@@ -34,7 +41,7 @@ export class Voice {
       const own = find(LANG);
       const es = voices.find((v) => v.lang === 'es-ES') ?? find('es');
       this.lang = own || !voices.length ? LANG : 'es';
-      this.webVoices = voices.filter((v) => v.lang.replace('_', '-').toLowerCase().startsWith(CODE[this.lang] + '-') || v.lang.toLowerCase() === CODE[this.lang]);
+      this.webVoices = voices.filter((v) => forLang(v.lang, this.lang));
       this.voice = this.webVoices.find((v) => v.voiceURI === this.chosenId) ?? own ?? es ?? null;
     };
     pick();
@@ -64,8 +71,7 @@ export class Voice {
     if (IS_NATIVE) {
       try {
         const { voices } = await TextToSpeech.getSupportedVoices();
-        const code = (this.nativeLang || 'es-ES').slice(0, 2).toLowerCase();
-        return voices.filter((v) => v.lang.replace('_', '-').toLowerCase().startsWith(code)).map((v) => ({ id: v.voiceURI || v.name, name: v.name }));
+        return voices.filter((v) => forLang(v.lang, this.lang)).map((v) => ({ id: v.voiceURI || v.name, name: v.name }));
       } catch {
         return [];
       }
