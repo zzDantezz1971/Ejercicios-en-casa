@@ -7,16 +7,16 @@
   --line: #242E3B;
   --fg: #F1F4F8;
   --muted: #8D99AA;
-  --accent: #7F8FC0;
-  --accent-2: #ABB4D5;
+  --accent: #738DDB;
+  --accent-2: #A7B5E8;
   --accent-ink: #FFFFFF;
-  --accent-soft: rgb(127 143 192 / .16);
-  --accent-deep: #3A487D;
-  --accent-glow: rgb(127 143 192 / .30);
-  --hero-1: #4F619A;
-  --hero-2: #3A477D;
-  --hero-3: #232950;
-  --hero-glow: rgb(58 71 125 / .30);
+  --accent-soft: rgb(115 141 219 / .16);
+  --accent-deep: #243EA3;
+  --accent-glow: rgb(115 141 219 / .30);
+  --hero-1: #3658C2;
+  --hero-2: #243CA3;
+  --hero-3: #15206E;
+  --hero-glow: rgb(36 60 163 / .30);
   --good: #2BD46F;
   --good-soft: rgb(43 212 111 / .14);
   --warn: #F5A524;
@@ -1139,9 +1139,9 @@ button.wd:active .wd-dot { transform: scale(.92); }
   --line: #DCE2EA;
   --fg: #121722;
   --muted: #5B6778;
-  --accent: #3E4E84;
-  --accent-2: #4A5B94;
-  --accent-soft: rgb(62 78 132 / .12);
+  --accent: #2745AB;
+  --accent-2: #3151BC;
+  --accent-soft: rgb(39 69 171 / .12);
   --sec-stretch: #0FA394;
   --glass: rgb(255 255 255 / .92);
   --phrase: #B7791F;
@@ -1510,9 +1510,9 @@ label.sort-row:focus-within, label.rem-hour:focus-within { outline: none; }
 :root[data-color="lila"] { --accent: #9986C4; --accent-2: #BBAFD7; --accent-ink: #FFFFFF; --accent-deep: #4D3A7D; --accent-soft: color-mix(in srgb, #9986C4 16%, transparent); --accent-glow: rgb(153 134 196 / .30); --hero-1: #674F9A; --hero-2: #4D3A7D; --hero-3: #2F2350; --hero-glow: rgb(77 58 125 / .30); }
 :root[data-color="lila"]:not([data-theme="light"]) { --bg: #0C0A12; --bg-2: #110E19; --surface: #16121F; --surface-2: #1E1829; --line: #2B2339; --glass: color-mix(in srgb, #0C0A12 93%, transparent); --stage: radial-gradient(120% 90% at 50% 15%, #1E1829 0%, #16121F 55%, #0C0A12 100%); }
 :root[data-theme="light"][data-color="lila"] { --accent: #533E84; --accent-2: #604A94; --accent-ink: #FFFFFF; --accent-deep: #402F6A; --accent-soft: rgb(83 62 132 / .12); --bg: #F5F3FA; --surface-2: #EEEAF6; --line: #DED8EC; }
-:root[data-color="rosa"] { --accent: #BF7C9D; --accent-2: #D4A9BE; --accent-ink: #FFFFFF; --accent-deep: #7D3A5D; --accent-soft: color-mix(in srgb, #BF7C9D 16%, transparent); --accent-glow: rgb(191 124 157 / .30); --hero-1: #9A4F74; --hero-2: #7D3A5D; --hero-3: #50233C; --hero-glow: rgb(125 58 93 / .30); }
+:root[data-color="rosa"] { --accent: #DB6FA4; --accent-2: #E7A5C5; --accent-ink: #FFFFFF; --accent-deep: #A32466; --accent-soft: color-mix(in srgb, #DB6FA4 16%, transparent); --accent-glow: rgb(219 111 164 / .30); --hero-1: #C2367B; --hero-2: #A32466; --hero-3: #6E1546; --hero-glow: rgb(163 36 102 / .30); }
 :root[data-color="rosa"]:not([data-theme="light"]) { --bg: #110A0E; --bg-2: #170E13; --surface: #1D1218; --surface-2: #271820; --line: #38222D; --glass: color-mix(in srgb, #110A0E 93%, transparent); --stage: radial-gradient(120% 90% at 50% 15%, #271820 0%, #1D1218 55%, #110A0E 100%); }
-:root[data-theme="light"][data-color="rosa"] { --accent: #843E5F; --accent-2: #944A6D; --accent-ink: #FFFFFF; --accent-deep: #6A2F4D; --accent-soft: rgb(132 62 95 / .12); --bg: #FAF3F6; --surface-2: #F4EAEF; --line: #EAD7E0; }
+:root[data-theme="light"][data-color="rosa"] { --accent: #AB2765; --accent-2: #BC3173; --accent-ink: #FFFFFF; --accent-deep: #8D1B55; --accent-soft: rgb(171 39 101 / .12); --bg: #FAF3F6; --surface-2: #F4EAEF; --line: #EAD7E0; }
 :root[data-color="grafit"] { --accent: #C9CED6; --accent-2: #E6E9EE; --accent-ink: #0A0D12; --accent-deep: #9AA3AF; --accent-soft: color-mix(in srgb, #C9CED6 16%, transparent); --accent-glow: rgb(201 206 214 / .22); --hero-1: #4A5260; --hero-2: #2C323C; --hero-3: #171B21; --hero-glow: rgb(0 0 0 / .45); }
 :root[data-color="grafit"]:not([data-theme="light"]) { --bg: #0B0C0E; --bg-2: #0F1013; --surface: #16181C; --surface-2: #1D2026; --line: #2A2E35; --glass: color-mix(in srgb, #0B0C0E 93%, transparent); --stage: radial-gradient(120% 90% at 50% 15%, #1D2026 0%, #16181C 55%, #0B0C0E 100%); }
 :root[data-theme="light"][data-color="grafit"] { --accent: #2C323C; --accent-2: #3A414D; --accent-ink: #FFFFFF; --accent-deep: #171B21; --accent-soft: rgb(44 50 60 / .10); --bg: #F4F5F6; --surface-2: #ECEEF0; --line: #DADDE1; }
