@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-15T23:15:14Z",
+    "es": ["Ajustes: al entrar, todos los grupos están cerrados; con el botón atrás se cierran los que estén abiertos.", "Al cambiar el idioma, la app vuelve a Ajustes (antes iba a Inicio)."],
+    "ca": ["Configuració: en entrar, tots els grups estan tancats; amb el botó enrere es tanquen els que estiguin oberts.", "En canviar l’idioma, l’app torna a Configuració (abans anava a Inici)."],
+    "en": ["Settings: all groups are closed when you open it; the back button closes any open ones.", "After changing the language, the app returns to Settings (it used to go to Home)."]
+  },
+  {
     "fecha": "2026-11-15T23:11:06Z",
     "es": ["Voz: como mucho 3 voces por idioma, sin repetidas (en inglés, las británicas)."],
     "ca": ["Veu: com a màxim 3 veus per idioma, sense repetides (en anglès, les britàniques)."],

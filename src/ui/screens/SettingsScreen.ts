@@ -145,6 +145,8 @@ export class SettingsScreen implements Screen {
       this.app.store.saveSettings({ ...this.app.store.settings, lang: id });
       // en la app Android, que el idioma quede guardado antes de recargar
       await flushDurable();
+      // al volver a abrir, en Ajustes (no en Inicio)
+      try { sessionStorage.setItem('abrir-ajustes', '1'); } catch { /* sin almacenamiento */ }
       location.reload();
     };
     return h('section', { class: 'card setting rest-card lang-card' },
@@ -329,6 +331,8 @@ export class SettingsScreen implements Screen {
       if (!ok) return;
       this.app.store.importBackup(text);
       await flushDurable();
+      // al volver a abrir, en Ajustes (no en Inicio)
+      try { sessionStorage.setItem('abrir-ajustes', '1'); } catch { /* sin almacenamiento */ }
       location.reload();
     };
     return h('section', { class: 'card backup' },
@@ -506,10 +510,19 @@ export class SettingsScreen implements Screen {
     return card;
   }
 
-  /** Grupos abiertos (los demás, cerrados); se recuerda entre visitas. */
-  private open: Set<string> = (() => {
-    try { return new Set<string>(JSON.parse(localStorage.getItem(OPEN_KEY) ?? '[]')); } catch { return new Set<string>(); }
-  })();
+  /**
+   * Grupos abiertos. Al entrar en Ajustes, todos cerrados (al volver de una pantalla de dentro, como Recordatorios,
+   * siguen como estaban); con atrás, se cierran.
+   */
+  private open = new Set<string>();
+
+  onBack(): boolean {
+    if (!this.open.size) return false;
+    this.open.clear();
+    this.render();
+    window.scrollTo({ top: 0 });
+    return true;
+  }
 
   /**
    * Cada título de apartado pasa a ser un botón que abre y cierra su grupo (cerrados de entrada): así Ajustes se ve
@@ -529,7 +542,6 @@ export class SettingsScreen implements Screen {
           btn.classList.toggle('open', now);
           btn.setAttribute('aria-expanded', String(now));
           if (now) this.open.add(key); else this.open.delete(key);
-          try { localStorage.setItem(OPEN_KEY, JSON.stringify([...this.open])); } catch { /* sin almacenamiento */ }
         } },
           h('span', { class: 'set-icon' }, icon(GROUP_ICON[key] ?? 'settings')),
           h('span', { class: 'set-group-title' }, key),
@@ -545,7 +557,6 @@ export class SettingsScreen implements Screen {
   }
 }
 
-const OPEN_KEY = 'ajustes-abiertos';
 /** Icono de cada grupo de Ajustes (por su título). */
 const GROUP_ICON: Record<string, IconName> = {
   'Suscripción': 'star', 'Prémium': 'star', 'Idioma': 'globe', 'Pantalla': 'sun', 'Muñeco': 'user', 'Tiempos de los ejercicios': 'clock',

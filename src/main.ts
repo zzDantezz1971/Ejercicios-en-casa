@@ -35,7 +35,12 @@ async function start(): Promise<void> {
   });
   // primera vez: idioma y datos personales
   if (!app.store.welcomed) app.home(new WelcomeScreen(app));
-  else app.openTab('inicio');
+  else {
+    // después de cambiar el idioma (la app se recarga), se vuelve a Ajustes
+    let toSettings = false;
+    try { toSettings = sessionStorage.getItem('abrir-ajustes') === '1'; sessionStorage.removeItem('abrir-ajustes'); } catch { /* sin almacenamiento */ }
+    app.openTab(toSettings ? 'ajustes' : 'inicio');
+  }
   // App Android actualizada desde Google Play: se enseña qué ha cambiado
   if (firstRunOfNewVersion()) void showUpdateDialog();
 }
