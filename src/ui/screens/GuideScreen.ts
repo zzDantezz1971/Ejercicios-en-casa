@@ -75,7 +75,7 @@ const GUIDE: Array<{ icon: IconName; title: string; sub: string; points: Array<s
       { h: 'Copia de seguridad' }, 'Guarda tus tablas, historial y ajustes en un archivo (por ejemplo, en Drive) y restáuralo si cambias de móvil.',
       { h: 'Gratis y prémium' },
       'Gratis: todos los ejercicios, con el muñeco y cómo se hacen; una tabla (con «Tabla vacía») y el historial durante la primera semana.',
-      'Prémium: tablas sin límite, «Créala por mí», tablas hechas, el plan de la semana, todo el historial, los resúmenes, la personalización completa del muñeco, todos los temas de color y la copia de seguridad. Se paga y se cancela en Google Play.'] },
+      'Prémium: tablas sin límite, «Créala por mí», tablas hechas, el plan de la semana, todo el historial, los resúmenes, el objetivo de peso, la personalización completa del muñeco, todos los temas de color y la copia de seguridad. Se paga y se cancela en Google Play.'] },
 ];
 
 /** Guía de la app: todo lo que se puede hacer, organizado en apartados que se abren y cierran. */

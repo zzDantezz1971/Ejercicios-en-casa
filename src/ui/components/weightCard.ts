@@ -109,7 +109,9 @@ export function weightChart(points: ReadonlyArray<{ date: string; kg: number }>,
 export function weightCards(app: App, onChange: () => void, onOpen: () => void, onChart: () => void = onOpen): HTMLElement[] {
   const ws = app.store.weights;
   const profile = app.store.settings.profile;
-  const goal = profile.goalKg ?? null;
+  // el objetivo de peso es de Prémium
+  const premium = app.access.premium;
+  const goal = premium ? profile.goalKg ?? null : null;
   const add = h('button', { class: 'btn primary small', onclick: async () => { if (await askWeight(app)) onChange(); } }, icon('plus'), 'Anotar peso');
   const setGoal = (goalKg: number | null) => {
     app.store.saveSettings({ ...app.store.settings, profile: { ...app.store.settings.profile, goalKg } });
@@ -157,7 +159,9 @@ export function weightCards(app: App, onChange: () => void, onOpen: () => void, 
         g ? h('span', { class: 'goal-bar' }, fill) : null,
         h('button', { class: 'btn ghost small block', onclick: () => void goalMenu() }, icon('target'), 'Cambiar objetivo'))
       : h('div', { class: 'wb-row' }, h('p', { class: 'muted small' }, 'Fija un peso al que quieras llegar y verás cuánto te falta.'),
-        h('button', { class: 'btn primary small', onclick: () => void askGoal() }, 'Fijar')));
+        premium
+          ? h('button', { class: 'btn primary small', onclick: () => void askGoal() }, 'Fijar')
+          : h('button', { class: 'btn ghost small', onclick: () => app.showPremium() }, icon('lock'), 'Prémium')));
 
   // 3. IMC (solo con peso anotado)
   if (!last) return [peso, objetivo];

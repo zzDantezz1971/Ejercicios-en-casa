@@ -13,7 +13,7 @@
 
 La app ya lo tiene programado (`src/services/Access.ts`, pantalla `PaywallScreen`). Modelo (nov 2026): versión gratis con
 todos los ejercicios, una sola tabla (con «Tabla vacía») y el historial solo la primera semana de uso; «Créala por mí»,
-tablas hechas, plan de la semana, resúmenes, personalizar el muñeco, temas de color, copia de seguridad y algunos avisos
+tablas hechas, plan de la semana, resúmenes, objetivo de peso, personalizar el muñeco, temas de color, copia de seguridad y algunos avisos
 son de Prémium. La suscripción o un código lo desbloquean todo. Solo afecta a la app de Google Play; la web no se cobra (en Configuración hay
 una vista previa de la versión gratis). Falta configurarlo en Google:
 

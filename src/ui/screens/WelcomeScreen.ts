@@ -44,6 +44,11 @@ export class WelcomeScreen implements Screen {
   private sex: Profile['sex'] = 'h';
   private values: Record<Field['key'], string> = { age: '', height: '', weight: '', goal: '' };
 
+  /** Campos de datos; el objetivo de peso, solo con Prémium. */
+  private get fields(): Field[] {
+    return FIELDS.filter((f) => f.key !== 'goal' || this.app.access.premium);
+  }
+
   constructor(private readonly app: App) {
     const p = app.store.settings.profile;
     this.name = p.name ?? '';
@@ -121,7 +126,7 @@ export class WelcomeScreen implements Screen {
       // comprobar los números
       const nums = {} as Record<Field['key'], number | null>;
       let firstBad: HTMLInputElement | null = null;
-      for (const f of FIELDS) {
+      for (const f of this.fields) {
         const v = parseNum(this.values[f.key]);
         const ok = v === null || (Number.isFinite(v) && v >= f.min && v <= f.max);
         if (!ok) {
@@ -143,7 +148,7 @@ export class WelcomeScreen implements Screen {
       const p: Partial<Profile> = { name: this.name.replace(/\s+/g, ' ').trim() || undefined, sex: this.sex };
       if (nums.age !== null) p.age = Math.round(nums.age);
       if (nums.height !== null) p.height = Math.round(nums.height);
-      if (nums.goal !== null) p.goalKg = Math.round(nums.goal * 10) / 10;
+      if (nums.goal != null) p.goalKg = Math.round(nums.goal * 10) / 10;
       this.data = { profile: p, weight: nums.weight === null ? null : Math.round(nums.weight * 10) / 10 };
       this.step = 3;
       this.render();
@@ -157,7 +162,7 @@ export class WelcomeScreen implements Screen {
       h('section', { class: 'card welcome-card' },
         h('div', { class: 'welcome-field' }, h('label', { for: 'wl-name' }, 'Nombre o alias'), nameInput),
         h('div', { class: 'sex-wrap' }, h('div', { class: 'segmented sex-segs', role: 'group', 'aria-label': 'Sexo' }, ...SEXES.map(sexBtn)), h('p', { class: 'sex-note' }, 'Solo se usa para calcular mejor las calorías cuando entrenas con el reloj conectado.')),
-        h('div', { class: 'welcome-grid' }, ...FIELDS.map(fieldRow))),
+        h('div', { class: 'welcome-grid' }, ...this.fields.map(fieldRow))),
       h('div', { class: 'welcome-actions' },
         h('button', { class: 'btn primary block big', onclick: () => void finish() }, 'Continuar')),
     );

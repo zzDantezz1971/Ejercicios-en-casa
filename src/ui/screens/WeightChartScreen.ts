@@ -102,7 +102,7 @@ export class WeightChartScreen implements Screen {
     const H = Math.max(200, bh > 100 ? bh : (portrait ? window.innerWidth : window.innerHeight) - 70);
     this.plotW = W - 60;
     this.box.replaceChildren(line.length
-      ? bigChart(line, this.app.store.settings.profile.goalKg ?? null, W, H, this.range ? [since, until] : undefined)
+      ? bigChart(line, this.app.access.premium ? this.app.store.settings.profile.goalKg ?? null : null, W, H, this.range ? [since, until] : undefined)
       : h('p', { class: 'muted wf-empty' }, 'No hay pesos anotados en este periodo.'));
   }
 }

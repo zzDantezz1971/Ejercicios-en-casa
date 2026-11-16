@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-16T21:13:23Z",
+    "es": ["El objetivo de peso pasa a ser de Prémium."],
+    "ca": ["L’objectiu de pes passa a ser de Prèmium."],
+    "en": ["The weight goal is now a Premium feature."]
+  },
+  {
     "fecha": "2026-11-16T21:05:54Z",
     "es": ["Nueva versión gratis, más sencilla: todos los ejercicios sin candados, una tabla y el historial de la primera semana.", "Con Prémium: tablas sin límite, «Créala por mí», tablas hechas, plan de la semana, todo el historial y los resúmenes, personalizar el muñeco y la copia de seguridad."],
     "ca": ["Nova versió gratuïta, més senzilla: tots els exercicis sense cadenats, una taula i l’historial de la primera setmana.", "Amb Prèmium: taules sense límit, «Crea-la per mi», taules fetes, pla setmanal, tot l’historial i els resums, personalitzar el ninot i la còpia de seguretat."],
