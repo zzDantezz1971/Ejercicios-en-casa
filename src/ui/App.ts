@@ -28,8 +28,8 @@ export type TabId = 'inicio' | 'tablas' | 'medallas' | 'historial' | 'datos' | '
 const TABS: Array<{ id: TabId; label: string; icon: IconName }> = [
   { id: 'inicio', label: 'Inicio', icon: 'home' },
   { id: 'tablas', label: 'Tablas', icon: 'tables' },
-  { id: 'medallas', label: 'Medallas', icon: 'trophy' },
   { id: 'historial', label: 'Historial', icon: 'calendar' },
+  { id: 'medallas', label: 'Medallas', icon: 'trophy' },
   { id: 'datos', label: 'Mis datos', icon: 'user' },
   { id: 'ajustes', label: 'Ajustes', icon: 'settings' },
 ];

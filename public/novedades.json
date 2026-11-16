@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-16T23:58:58Z",
+    "es": ["Menú de abajo: Historial va ahora antes que Medallas."],
+    "ca": ["Menú de baix: Historial va ara abans que Medalles."],
+    "en": ["Bottom menu: History now comes before Medals."]
+  },
+  {
     "fecha": "2026-11-16T23:43:42Z",
     "es": ["Editar tabla: los bloques plegados muestran solo cuántos ejercicios tienen, sin el tiempo."],
     "ca": ["Edita la taula: els blocs plegats mostren només quants exercicis tenen, sense el temps."],
