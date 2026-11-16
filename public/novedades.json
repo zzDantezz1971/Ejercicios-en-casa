@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-16T09:41:15Z",
+    "es": ["Añadir ejercicios: buscador y «Ordenar» (zona, músculo, material o A-Z) fijos arriba mientras bajas por la lista."],
+    "ca": ["Afegeix exercicis: cercador i «Ordena» (zona, múscul, material o A-Z) fixos a dalt mentre baixes per la llista."],
+    "en": ["Add exercises: search and “Sort” (area, muscle, equipment or A-Z) stay at the top while you scroll."]
+  },
+  {
     "fecha": "2026-11-16T09:35:44Z",
     "es": ["Editar tabla: «Añadir un ejercicio» en un apartado vacío abre la pantalla completa de ejercicios; en uno que ya tiene, la lista para añadir.", "La lista para añadir ejercicios: el botón de abajo ya no se mezcla con los títulos al desplazarse."],
     "ca": ["Edita la taula: «Afegeix un exercici» en un apartat buit obre la pantalla completa d’exercicis; en un que ja en té, la llista per afegir.", "La llista per afegir exercicis: el botó de baix ja no es barreja amb els títols en desplaçar-se."],

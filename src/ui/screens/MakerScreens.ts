@@ -7,7 +7,7 @@ import {
 import { clampRounds, MAX_ROUNDS, WorkoutPlan } from '../../domain/WorkoutPlan';
 import { MAX_SECONDS, MIN_SECONDS, STEP_SECONDS } from '../../domain/RoutineEditor';
 import { emptyRoutine, SECTION_IDS, SECTION_TITLES, usesWeight, type ExerciseDef, type SectionId } from '../../domain/types';
-import { tr } from '../../i18n';
+import { LOCALE, tr } from '../../i18n';
 import type { App, Screen } from '../App';
 import { clear, h, humanDuration, kg, plural, promptDialog, weightDialog } from '../dom';
 import { sortableList, type SortableRow } from '../components/sortable';
@@ -436,11 +436,15 @@ export function isEmptyResult(r: GenResult | null): boolean {
 const fold = (t: string) => t.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
 
 /** Elegir un ejercicio para añadirlo a un apartado de la tabla nueva (con tu material; con buscador). */
+type PickSort = 'zona' | 'musculo' | 'material' | 'az';
+const PICK_SORTS: Record<PickSort, string> = { zona: 'Zona del cuerpo', musculo: 'Por músculo', material: 'Por material', az: 'Alfabético (A-Z)' };
+
 class PickExerciseScreen implements Screen {
   readonly el = h('main', { class: 'screen maker-screen' });
   private readonly list = h('div', { class: 'maker-preview' });
   private readonly foot = h('div', { class: 'pick-foot' });
   private q = '';
+  private sort: PickSort = 'zona';
   /** Elegidos (en el orden en que se han tocado), si se pueden elegir varios. */
   private chosen: string[] = [];
 
@@ -450,8 +454,18 @@ class PickExerciseScreen implements Screen {
    */
   constructor(private readonly app: App, private readonly s: SectionId, private readonly have: ReadonlySet<string>,
     private readonly pick: (ids: string[]) => void, sub = 'Añadir un ejercicio', private readonly multi = false) {
-    const search = h('input', { class: 'text-input', type: 'search', placeholder: 'Buscar', 'aria-label': 'Buscar', oninput: () => { this.q = search.value; this.paint(); } });
-    this.el.append(header(app, SECTION_TITLES[s], sub), h('div', { class: 'maker-body' }, search, this.list, multi ? this.foot : ''));
+    const search = h('input', { class: 'search-input', type: 'search', placeholder: 'Buscar ejercicio o zona', 'aria-label': 'Buscar', oninput: () => { this.q = search.value; this.paint(); } });
+    // ordenar la lista (empieza siempre por zona; no se guarda)
+    const sort = h('select', { class: 'sort-select', 'aria-label': 'Ordenar por', onchange: (e: Event) => {
+      this.sort = (e.target as HTMLSelectElement).value as PickSort;
+      (e.target as HTMLSelectElement).blur();
+      this.paint();
+    } }, ...(Object.entries(PICK_SORTS) as Array<[PickSort, string]>).map(([v, label]) => h('option', { value: v, selected: v === this.sort }, label)));
+    this.el.append(header(app, SECTION_TITLES[s], sub), h('div', { class: 'maker-body' },
+      h('div', { class: 'pick-tools' },
+        h('label', { class: 'search pick-search' }, icon('search'), search),
+        h('label', { class: 'pick-sort' }, icon('tables'), h('span', { class: 'muted small' }, 'Ordenar:'), sort)),
+      this.list, multi ? this.foot : ''));
     this.paint();
   }
 
@@ -488,12 +502,18 @@ class PickExerciseScreen implements Screen {
     const rest = exs.filter((e) => !free.includes(e));
     if (free.length) this.list.append(h('h2', { class: 'maker-sec' }, icon('check'), 'Gratis'));
     free.forEach((ex) => this.row(ex));
+    // agrupados según el orden elegido (en A-Z, sin grupos)
+    const key = (e: ExerciseDef): string => this.sort === 'musculo' ? tr(e.zone)
+      : this.sort === 'material' ? (e.equip?.[0]?.[0] ? tr(EQUIP_INFO[e.equip[0][0]].name) : tr('Sin material'))
+      : this.sort === 'az' ? '' : (e.group ?? '');
+    const sorted = this.sort === 'zona' ? rest
+      : [...rest].sort((a, b) => (this.sort === 'material' && !a.equip?.length !== !b.equip?.length ? (a.equip?.length ? 1 : -1) : 0)
+        || key(a).localeCompare(key(b), LOCALE) || tr(a.name).localeCompare(tr(b.name), LOCALE));
     let group: string | undefined;
-    for (const ex of rest) {
-      if (ex.group !== group) {
-        group = ex.group;
-        if (group) this.list.append(h('h2', { class: 'maker-sec' }, group));
-      }
+    for (const ex of sorted) {
+      const g = key(ex);
+      if (g && g !== group) this.list.append(h('h2', { class: 'maker-sec pick-group' }, g));
+      group = g;
       this.row(ex);
     }
     if (!exs.length) this.list.append(h('p', { class: 'muted' }, 'No hay más ejercicios para añadir.'));
