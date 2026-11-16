@@ -240,10 +240,10 @@ export const RAW_SECTIONS: RawSection[] = [
    // (su rodilla sobre la otra y el pie al otro lado); 3) las dos caen juntas hacia la izquierda hasta el suelo
    [{uaL:180,faL:180,uaR:0,faR:0,th:93,sn:90,sTh:.5,sSh:.55},300,900],
    [{uaL:180,faL:180,uaR:0,faR:0,thL:93,snL:90,sThL:.5,sShL:.55,thR:122,snR:118,sThR:.62,sShR:.45,yKR:12},500,900],
-   [{uaL:180,faL:180,uaR:0,faR:0,thL:155,snL:82,sThL:.95,sShL:.9,thR:146,snR:118,sThR:.95,sShR:.95,yKR:7,yAR:2,hd:-70},1500,1000],
+   [{uaL:180,faL:180,uaR:0,faR:0,thL:150,snL:70,sThL:1,sShL:1,thR:160,snR:130,sThR:.95,sShR:.95,yKR:7,yAR:0,hd:-70},1500,1000],
    [{uaL:180,faL:180,uaR:0,faR:0,th:87,sn:90,sTh:.5,sSh:.55},300,900],
    [{uaL:180,faL:180,uaR:0,faR:0,thR:87,snR:90,sThR:.5,sShR:.55,thL:58,snL:62,sThL:.62,sShL:.45,yKL:12},500,900],
-   [{uaL:180,faL:180,uaR:0,faR:0,thR:25,snR:98,sThR:.95,sShR:.9,thL:34,snL:62,sThL:.95,sShL:.95,yKL:7,yAL:2,hd:-110},1500,1000]]},
+   [{uaL:180,faL:180,uaR:0,faR:0,thR:30,snR:110,sThR:1,sShR:1,thL:20,snL:50,sThL:.95,sShL:.95,yKL:7,yAL:0,hd:-110},1500,1000]]},
  {g:'Cadera y glúteos'},
  {n:'Figura 4 (glúteo y piriforme)',z:'Glúteos y cadera',mat:1,f:[
    [{tl:180,thL:-110,snL:-20,thR:-60,sThR:.7,snR:206,sShR:.8,ua:-40,fa:0},900,1100],
