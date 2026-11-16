@@ -1,7 +1,7 @@
 /* Herramienta de desarrollo: dibuja cada ejercicio en 4 instantes del movimiento.
    Uso: npm run dev y abrir /tools/figures.html?s=estiramientos (o ?ids=a,b; &side=1|2 para un lado; &mood=effort; &w=960; &t=0,0.5). */
 import * as THREE from 'three';
-import { SECTIONS } from '../src/data/catalog';
+import { CATALOG, SECTIONS } from '../src/data/catalog';
 import { MannequinScene } from '../src/figure/Mannequin';
 import type { SkinData } from '../src/figure/SkinnedFigure';
 import { muscleWeights } from '../src/figure/anatomy';
@@ -16,7 +16,8 @@ const mood = (q.get('mood') ?? 'relaxed') as 'neutral' | 'effort' | 'relaxed' | 
 const W = Number(q.get('w') ?? 480);
 const times = q.get('t') ? q.get('t')!.split(',').map(Number) : [0, 0.25, 0.5, 0.75];
 const side = q.get('side') ? (Number(q.get('side')) as 1 | 2) : undefined;
-const list = SECTIONS.flatMap((s) => s.exercises).filter((e) => (ids ? ids.includes(e.id) : !sec || e.section === sec))
+// con ?ids=… también los retirados de las listas (siguen en el catálogo)
+const list = (ids ? ids.map((id) => CATALOG.get(id)!).filter(Boolean) : SECTIONS.flatMap((s) => s.exercises)).filter((e) => (ids ? true : !sec || e.section === sec))
   // &anim=1: solo los ejercicios que ya tienen animación
   .filter((e) => !q.get('anim') || !!e.motion.fn || (e.motion.f?.length ?? 0) > 1);
 // &style=toon (dibujo: tonos planos y contorno) | flat (silueta plana, sin luces)
