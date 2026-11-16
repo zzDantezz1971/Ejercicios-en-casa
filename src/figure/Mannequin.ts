@@ -1025,5 +1025,5 @@ export class MannequinScene {
 /** Sombra del muñeco en el suelo: oscura en modo claro; en modo oscuro, gris claro para que se vea sobre el fondo negro. */
 function shadowMaterial(): THREE.ShadowMaterial {
   const light = typeof document !== 'undefined' && document.documentElement.dataset.theme === 'light';
-  return light ? new THREE.ShadowMaterial({ opacity: 0.38 }) : new THREE.ShadowMaterial({ color: '#AEB9C8', opacity: 0.22 });
+  return light ? new THREE.ShadowMaterial({ opacity: 0.38 }) : new THREE.ShadowMaterial({ color: '#5F6B7D', opacity: 0.3 });
 }
