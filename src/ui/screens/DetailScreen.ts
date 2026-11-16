@@ -2,20 +2,19 @@ import { MUSCLE_NAMES, muscleWeights, parseMuscles } from '../../figure/anatomy'
 import { bodyMaps } from '../components/bodyMaps';
 import { exerciseWeights, weightSuggestion } from '../../domain/weights';
 import { weightChart } from '../components/weightCard';
-import { RoutineEditor } from '../../domain/RoutineEditor';
 import { usesWeight, type ExerciseDef } from '../../domain/types';
 import { FigureView } from '../../figure/FigureView';
 import type { App, Screen } from '../App';
 import { badgeList, equipChips } from '../components/badges';
-import { clear, confirmDialog, h, kg } from '../dom';
+import { h, kg } from '../dom';
 import { icon, SECTION_STYLE } from '../icons';
 
-/** Ficha de un ejercicio: animación grande que se puede girar y la explicación. */
+/** Ficha de un ejercicio: solo información (animación grande que se puede girar, músculos y explicación).
+ *  Desde aquí no se añade, quita ni elimina nada: eso se hace en las listas y al editar las tablas. */
 export class DetailScreen implements Screen {
   readonly el = h('main', { class: 'screen detail' });
   private canvas = h('canvas', { class: 'stage-canvas' });
   private view: FigureView | null = null;
-  private action = h('div', { class: 'detail-action' });
 
   private weights = h('div', { class: 'ex-weights-wrap' });
   private favBtn = h('button', { class: 'icon-btn fav-btn', onclick: () => this.toggleFav() });
@@ -38,8 +37,7 @@ export class DetailScreen implements Screen {
    * @param list ejercicios de la lista desde la que se abrió, en su orden: deslizando el dedo a los lados
    * se pasa al siguiente o al anterior.
    */
-  /** @param viewOnly solo para ver el ejercicio (desde la lista de añadir o al montar una tabla): sin «Añadir a la tabla» ni «Eliminar». */
-  constructor(private readonly app: App, private readonly ex: ExerciseDef, private readonly list: readonly ExerciseDef[] = [], private readonly viewOnly = false) {
+    constructor(private readonly app: App, private readonly ex: ExerciseDef, private readonly list: readonly ExerciseDef[] = []) {
     this.paintFav();
     const d = ex.description;
     this.el.style.setProperty('--sec', SECTION_STYLE[ex.section].color);
@@ -68,7 +66,7 @@ export class DetailScreen implements Screen {
               d.mistakes ? how('close', 'Errores comunes', d.mistakes) : null,
               d.easier ? how('chevron', 'Versión fácil', d.easier) : null)
           : h('p', { class: 'muted' }, 'Descripción en preparación.'),
-        this.action),
+      ),
     );
     const nav = this.neighbours();
     if (nav.prev || nav.next) {
@@ -104,7 +102,7 @@ export class DetailScreen implements Screen {
   private open(to: ExerciseDef, dir: -1 | 1, motion: 'fade' | 'none'): void {
     this.app.haptics.tap();
     window.scrollTo(0, 0);
-    this.app.replace(new DetailScreen(this.app, to, this.list, this.viewOnly), motion === 'fade' ? (dir < 0 ? 'back' : 'forward') : 'none');
+    this.app.replace(new DetailScreen(this.app, to, this.list), motion === 'fade' ? (dir < 0 ? 'back' : 'forward') : 'none');
   }
 
   /** Coloca la hoja según lo arrastrado: se desplaza con el dedo, gira un poco en 3D y se oscurece en el borde. */
@@ -121,7 +119,7 @@ export class DetailScreen implements Screen {
 
   /** El ejercicio de al lado, debajo de la hoja: su ficha completa, ya montada (el muñeco quieto hasta que se suelta). */
   private peek(to: ExerciseDef, dir: -1 | 1): { el: HTMLElement; shade: HTMLElement; set: (p: number) => void; screen: DetailScreen } {
-    const screen = new DetailScreen(this.app, to, this.list, this.viewOnly);
+    const screen = new DetailScreen(this.app, to, this.list);
     const el = h('div', { class: 'page-peek', 'aria-hidden': 'true' }, screen.el);
     document.body.append(el);
     // el muñeco se prepara en el siguiente fotograma (así el dedo no nota el trabajo)
@@ -273,7 +271,6 @@ export class DetailScreen implements Screen {
   enter(): void {
     this.view ??= new FigureView(this.canvas, this.ex);
     this.view.start();
-    this.renderAction();
     this.renderWeights();
   }
 
@@ -314,59 +311,18 @@ export class DetailScreen implements Screen {
     if (!ws.length) return;
     const last = ws[ws.length - 1].kg, max = Math.max(...ws.map((w) => w.kg));
     const sug = weightSuggestion(app.store.history, ex.id);
-    const pos = app.store.routine[ex.section].findIndex((i) => i.exerciseId === ex.id);
-    const inTable = pos >= 0 ? app.store.routine[ex.section][pos] : undefined;
     this.weights.append(h('section', { class: 'card hr-card ex-weights' },
       h('div', { class: 'card-head' }, h('h3', {}, 'Tus pesos'), h('span', { class: 'muted small' }, 'por mancuerna')),
       h('p', { class: 'muted small' }, `Último: ${kg(last)} · Máximo: ${kg(max)} · ${ws.length} ${ws.length === 1 ? 'sesión' : 'sesiones'}`),
       ws.length > 1 ? (weightChart(ws) as unknown as HTMLElement) : null,
       sug ? h('div', { class: 'note tip' }, icon('bolt'),
-        h('div', {},
-          h('p', {}, `Llevas ${sug.sessions} sesiones completas con ${kg(sug.kg)}. ¿Probamos con ${kg(sug.next)}?`),
-          inTable && (inTable.weight ?? 0) < sug.next
-            ? h('button', { class: 'btn primary small', onclick: () => {
-                const ed = new RoutineEditor(app.store.routine);
-                ed.setWeight(ex.section, ex.id, sug.next);
-                app.store.saveRoutine(ed.value);
-                this.renderWeights();
-              } }, `Poner ${kg(sug.next)} en mi tabla`)
-            : null)) : null));
+        h('div', {}, h('p', {}, `Llevas ${sug.sessions} sesiones completas con ${kg(sug.kg)}. ¿Probamos con ${kg(sug.next)}?`))) : null));
   }
 
   dispose(): void {
     this.view?.dispose();
     this.view = null;
   }
-
-  private renderAction(): void {
-    if (this.viewOnly) { this.action.replaceChildren(); return; }
-    clear(this.action);
-    const editor = new RoutineEditor(this.app.store.routine);
-    const pos = editor.position(this.ex.section, this.ex.id);
-    this.action.append(
-      h('button', {
-        class: 'btn block ' + (pos ? 'ghost' : 'primary'),
-        onclick: () => {
-          editor.toggle(this.ex.section, this.ex.id, this.app.store.settings.defaultSeconds);
-          this.app.store.saveRoutine(editor.value);
-          this.renderAction();
-        },
-      }, pos ? icon('check') : icon('plus'), pos ? `En la tabla (n.º ${pos}) · Quitar` : 'Añadir a la tabla'),
-      h('button', { class: 'btn danger block delete-ex', onclick: () => void this.remove() }, icon('trash'), 'Eliminar ejercicio'),
-    );
-  }
-
-  /** Elimina el ejercicio de la lista y de todas las tablas para siempre. */
-  private async remove(): Promise<void> {
-    const ok = await confirmDialog(
-      `¿Eliminar "${this.ex.name}"? Desaparecerá para siempre de la lista y de todas tus tablas, y no se podrá recuperar.`,
-      'Eliminar',
-    );
-    if (!ok) return;
-    this.app.store.hideExercise(this.ex.id);
-    this.app.back();
-  }
-
 }
 
 function reducedMotion(): boolean {

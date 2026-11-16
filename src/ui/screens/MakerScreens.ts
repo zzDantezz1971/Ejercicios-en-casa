@@ -234,7 +234,7 @@ export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement
       if (!ex) return;
       const img = h('img', { class: 'maker-thumb', alt: '' });
       void app.thumbs.get(ex).then((url) => (img.src = url));
-      const open = () => app.push(new DetailScreen(app, ex, shown, true));
+      const open = () => app.push(new DetailScreen(app, ex, shown));
       const setSecs = (d: number) => {
         const next = items.slice();
         next[i] = { ...it, seconds: Math.min(MAX_SECONDS, Math.max(MIN_SECONDS, it.seconds + d)) };
@@ -616,7 +616,7 @@ class PickExerciseScreen implements Screen {
       } }, icon('dumbbell'), o.weight ? kg(o.weight) : 'Sin peso') : '') : '';
     const row: HTMLElement = h('div', { class: 'maker-row maker-pick' + (on ? ' on' : '') },
       h('div', { class: 'pick-top' },
-        h('button', { class: 'maker-open', 'aria-label': `Cómo se hace: ${ex.name}`, onclick: () => app.push(new DetailScreen(app, ex, shown, true)) },
+        h('button', { class: 'maker-open', 'aria-label': `Cómo se hace: ${ex.name}`, onclick: () => app.push(new DetailScreen(app, ex, shown)) },
           img,
           h('span', { class: 'maker-name' }, h('span', {}, ex.name), h('span', { class: 'maker-secs muted small' }, ex.zone))),
         sel),

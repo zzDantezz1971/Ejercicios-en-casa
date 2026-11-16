@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-16T22:11:42Z",
+    "es": ["La ficha de un ejercicio es ahora solo de información, se abra desde donde se abra: sin botones para añadir, quitar o eliminar."],
+    "ca": ["La fitxa d’un exercici ara és només d’informació, s’obri des d’on s’obri: sense botons per afegir, treure o eliminar."],
+    "en": ["An exercise’s page is now information only, wherever you open it from: no buttons to add, remove or delete."]
+  },
+  {
     "fecha": "2026-11-16T22:07:41Z",
     "es": ["Al ver un ejercicio desde la lista de añadir o al editar una tabla, ya no salen «Añadir a la tabla» ni «Eliminar el ejercicio»: es solo para verlo."],
     "ca": ["En veure un exercici des de la llista d’afegir o en editar una taula, ja no surten «Afegeix a la taula» ni «Elimina l’exercici»: és només per veure’l."],
