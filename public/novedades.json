@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-16T08:52:12Z",
+    "es": ["Nueva tabla: «Tabla vacía» pasa a ser la primera opción."],
+    "ca": ["Nova taula: «Taula buida» passa a ser la primera opció."],
+    "en": ["New table: “Empty table” is now the first option."]
+  },
+  {
     "fecha": "2026-11-16T00:47:36Z",
     "es": ["Mis datos › Peso: la gráfica pequeña también llega hasta hoy, con una línea recta desde el último peso y un puntito con el peso."],
     "ca": ["Les meves dades › Pes: la gràfica petita també arriba fins avui, amb una línia recta des de l’últim pes i un puntet amb el pes."],

@@ -34,9 +34,9 @@ export function openNewTable(app: App): void {
   const wrap = h('div', { class: 'dialog-wrap sheet-wrap', onclick: (e: Event) => e.target === wrap && close() },
     h('div', { class: 'sheet maker-sheet', role: 'dialog', 'aria-modal': 'true', 'aria-label': 'Nueva tabla' },
       h('p', { class: 'sheet-title' }, 'Nueva tabla'),
+      opt('edit', 'Tabla vacía', 'Elige tú los ejercicios', () => void emptyTable(app)),
       opt('bolt', 'Créala por mí', 'Elige objetivo, zona y tiempo', () => app.push(new GeneratorScreen(app))),
       opt('tables', 'Tablas hechas', 'Listas para usar', () => app.push(new TemplatesScreen(app))),
-      opt('edit', 'Tabla vacía', 'Elige tú los ejercicios', () => void emptyTable(app)),
       // plan de la semana (Prémium): una tabla para cada día de entrenamiento
       h('button', { class: 'maker-opt', onclick: () => { close(); newPlan(app); } },
         h('span', { class: 'maker-opt-icon' }, icon('calendar')),
