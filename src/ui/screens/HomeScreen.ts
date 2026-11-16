@@ -100,8 +100,9 @@ export class HomeScreen implements Screen {
               this.opt('tables', 'Tablas hechas', 'Listas para usar', () => app.push(new TemplatesScreen(app, activeIsEmpty(app)))),
               this.opt('calendar', 'Plan de la semana', 'Una tabla para cada día', () => newPlan(app), !app.access.premium))
             : h('button', { class: 'btn light block big', onclick: () => this.start(plan) }, icon('play'), 'Empezar'),
-          h('div', { class: 'hero-actions' },
-            plan.isEmpty ? null : h('button', { class: 'btn glass small', onclick: () => editTable(app, table.id) }, icon('edit'), 'Editar'),
+          // con la tabla vacía, solo las formas de crearla (ni Editar ni Cambiar tabla)
+          plan.isEmpty ? null : h('div', { class: 'hero-actions' },
+            h('button', { class: 'btn glass small', onclick: () => editTable(app, table.id) }, icon('edit'), 'Editar'),
             h('button', { class: 'btn glass small', onclick: () => app.openTab('tablas') }, icon('swap'), 'Cambiar tabla')))),
     );
 
