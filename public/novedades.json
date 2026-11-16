@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-16T23:43:42Z",
+    "es": ["Editar tabla: los bloques plegados muestran solo cuántos ejercicios tienen, sin el tiempo."],
+    "ca": ["Edita la taula: els blocs plegats mostren només quants exercicis tenen, sense el temps."],
+    "en": ["Edit routine: folded blocks show only how many exercises they have, without the time."]
+  },
+  {
     "fecha": "2026-11-16T23:42:06Z",
     "es": ["Editar tabla: con los bloques plegados, el resumen («6 ejercicios · 3 min») vuelve a quedar en la misma línea que el nombre; si no cabe, se parte en dos líneas a la derecha."],
     "ca": ["Edita la taula: amb els blocs plegats, el resum («6 exercicis · 3 min») torna a quedar a la mateixa línia que el nom; si no hi cap, es parteix en dues línies a la dreta."],

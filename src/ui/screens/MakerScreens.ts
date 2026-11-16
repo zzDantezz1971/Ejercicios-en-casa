@@ -212,8 +212,7 @@ export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement
       foldInfo.hidden = !now;
       head.classList.toggle('folded', now);
     } }, icon('chevron', 'ico'));
-    const secsTotal = items.reduce((t, it) => t + it.seconds, 0) * nr;
-    const foldInfo = h('span', { class: 'muted small sec-fold-info', hidden: !isFolded }, items.length ? `${plural(items.length, 'ejercicio', 'ejercicios')} · ${humanDuration(secsTotal)}` : 'Sin ejercicios');
+    const foldInfo = h('span', { class: 'muted small sec-fold-info', hidden: !isFolded }, items.length ? plural(items.length, 'ejercicio', 'ejercicios') : 'Sin ejercicios');
     head.prepend(fold);
     head.append(foldInfo);
     if (isFolded) head.classList.add('folded');
