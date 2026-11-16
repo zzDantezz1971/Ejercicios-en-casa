@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-16T21:49:40Z",
+    "es": ["Editar tabla: si el nombre del apartado es largo o la letra del móvil es grande, el control de vueltas pasa debajo en vez de salirse de la pantalla."],
+    "ca": ["Edita la taula: si el nom de l’apartat és llarg o la lletra del mòbil és gran, el control de voltes passa a sota en lloc de sortir de la pantalla."],
+    "en": ["Edit routine: if the section name is long or your phone uses large text, the rounds control moves below instead of going off screen."]
+  },
+  {
     "fecha": "2026-11-16T21:43:10Z",
     "es": ["Añadir ejercicios: en los que marcas puedes cambiar ya el tiempo y, si llevan mancuernas, el peso, antes de añadirlos."],
     "ca": ["Afegeix exercicis: als que marques ja pots canviar el temps i, si porten manuelles, el pes, abans d’afegir-los."],

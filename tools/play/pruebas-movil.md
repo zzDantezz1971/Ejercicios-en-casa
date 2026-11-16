@@ -28,7 +28,7 @@ Marca cada punto al probarlo. Si algo falla, haz una captura y cuéntamelo.
 - [ ] «Torsió de columna amb les cames creuades»: vídeo nuevo visto un poco de lado (brazos en cruz, una pierna pasa por encima de la otra y las piernas bajan al suelo con la de encima cruzada en X por encima de la otra).
 - [ ] Historial: ya no salen arriba los botones «Todas / Estiraments / De força»; récords y calendario cuentan todos los entrenamientos.
 - [ ] Ficha de un ejercicio: debajo del muñeco, cuerpo de frente y de espaldas con la zona que trabaja en rojo y la que estira en turquesa (probar uno de fuerza y uno de estiramiento). Al tocarlo se ve en grande; se cierra tocando, con la X o con el botón atrás de Android.
-- [ ] Edita la taula: tocar en cualquier parte del título del apartado (nombre, icono, «N exercicis · min») lo abre y lo cierra; los botones − / + de vueltas no lo cierran.
+- [ ] Edita la taula: tocar en cualquier parte del título del apartado (nombre, icono, «N exercicis · min») lo abre y lo cierra; los botones − / + de vueltas no lo cierran. En Escalfament (nombre largo), «Voltes − x1 +» se ve entero: si no cabe al lado, pasa a la línea de abajo.
 - [ ] «Afegeix exercicis»: tocar la imagen o el nombre abre la ficha del ejercicio; al volver, lo elegido sigue marcado; el + / ✓ de la derecha lo elige o lo quita. Al marcarlo salen debajo − tiempo + y, si lleva mancuernas, el peso; al añadir, la tabla los guarda con ese tiempo y peso.
 - [ ] **Versión gratis nueva** (sin suscripción ni código):
   - [ ] Todos los ejercicios se pueden ver y elegir, sin candados.
