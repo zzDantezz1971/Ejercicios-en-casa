@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-16T23:03:09Z",
+    "es": ["Modo oscuro: el fondo del muñeco es ahora gris pizarra en vez de casi negro, así se ve su sombra (también en los demás temas de color, con su tono)."],
+    "ca": ["Mode fosc: el fons del ninot ara és gris pissarra en lloc de gairebé negre, així se’n veu l’ombra (també als altres temes de color, amb el seu to)."],
+    "en": ["Dark mode: the figure’s background is now slate grey instead of almost black, so its shadow shows (also in the other colour themes, in their own tone)."]
+  },
+  {
     "fecha": "2026-11-16T22:59:38Z",
     "es": ["Modo oscuro: la sombra del muñeco vuelve a ser oscura (algo más marcada)."],
     "ca": ["Mode fosc: l’ombra del ninot torna a ser fosca (una mica més marcada)."],

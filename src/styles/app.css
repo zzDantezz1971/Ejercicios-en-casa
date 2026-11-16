@@ -28,7 +28,8 @@
   --sec-weights: #3D6BFF;
   --sec-abs: #F0457A;
   --sec-stretch: #22C7B8;
-  --stage: radial-gradient(120% 90% at 50% 15%, #1C2533 0%, #121821 55%, #0D1218 100%);
+  /* fondo del muñeco en modo oscuro: gris pizarra (más claro que el fondo, así se ve la sombra) */
+  --stage: radial-gradient(120% 90% at 50% 15%, #3A4453 0%, #2B333F 55%, #1F252E 100%);
   --display: "Barlow Condensed", "Arial Narrow", system-ui, sans-serif;
   --body: "Barlow", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --radius: 18px;
@@ -1628,22 +1629,22 @@ label.sort-row:focus-within, label.rem-hour:focus-within { outline: none; }
 /* ── Temas de color (Configuració › Pantalla): «blau» es el de siempre (sin data-color). En cada tema cambian el color
    principal, la tarjeta de la tabla en uso y un ligero tinte del fondo; los colores de los apartados no cambian. ── */
 :root[data-color="verd"] { --accent: #4E9F7A; --accent-2: #84C2A3; --accent-ink: #FFFFFF; --accent-deep: #3A7D5E; --accent-soft: color-mix(in srgb, #4E9F7A 16%, transparent); --accent-glow: rgb(78 159 122 / .30); --hero-1: #4F9A78; --hero-2: #3A7D5E; --hero-3: #23503D; --hero-glow: rgb(58 125 94 / .30); }
-:root[data-color="verd"]:not([data-theme="light"]) { --bg: #08100C; --bg-2: #0C1611; --surface: #111C16; --surface-2: #17261E; --line: #21342A; --glass: color-mix(in srgb, #08100C 93%, transparent); --stage: radial-gradient(120% 90% at 50% 15%, #17261E 0%, #111C16 55%, #08100C 100%); }
+:root[data-color="verd"]:not([data-theme="light"]) { --bg: #08100C; --bg-2: #0C1611; --surface: #111C16; --surface-2: #17261E; --line: #21342A; --glass: color-mix(in srgb, #08100C 93%, transparent); --stage: radial-gradient(120% 90% at 50% 15%, #35443C 0%, #2A352F 55%, #1A221E 100%); }
 :root[data-theme="light"][data-color="verd"] { --accent: #3E8466; --accent-2: #4A9473; --accent-ink: #FFFFFF; --accent-deep: #2F6A51; --accent-soft: rgb(62 132 102 / .12); --bg: #F2F6F4; --surface-2: #E8F0EC; --line: #D6E2DC; }
 :root[data-color="taronja"] { --accent: #B48766; --accent-2: #CCAF99; --accent-ink: #FFFFFF; --accent-deep: #7D4D3A; --accent-soft: color-mix(in srgb, #B48766 16%, transparent); --accent-glow: rgb(180 135 102 / .30); --hero-1: #9A714F; --hero-2: #7D4D3A; --hero-3: #502D23; --hero-glow: rgb(125 77 58 / .30); }
-:root[data-color="taronja"]:not([data-theme="light"]) { --bg: #110B08; --bg-2: #160F0B; --surface: #1C1410; --surface-2: #261B15; --line: #36261D; --glass: color-mix(in srgb, #110B08 93%, transparent); --stage: radial-gradient(120% 90% at 50% 15%, #261B15 0%, #1C1410 55%, #110B08 100%); }
+:root[data-color="taronja"]:not([data-theme="light"]) { --bg: #110B08; --bg-2: #160F0B; --surface: #1C1410; --surface-2: #261B15; --line: #36261D; --glass: color-mix(in srgb, #110B08 93%, transparent); --stage: radial-gradient(120% 90% at 50% 15%, #443933 0%, #352D29 55%, #231D1A 100%); }
 :root[data-theme="light"][data-color="taronja"] { --accent: #845A3E; --accent-2: #94684A; --accent-ink: #FFFFFF; --accent-deep: #6A452F; --accent-soft: rgb(132 90 62 / .12); --bg: #F9F5F2; --surface-2: #F3ECE6; --line: #E6DAD0; }
 :root[data-color="or"] { --accent: #C9A447; --accent-2: #E2C77E; --accent-ink: #FFFFFF; --accent-deep: #9C7A26; --accent-soft: color-mix(in srgb, #C9A447 16%, transparent); --accent-glow: rgb(201 164 71 / .30); --hero-1: #C29A32; --hero-2: #94711C; --hero-3: #55400C; --hero-glow: rgb(148 113 28 / .30); }
-:root[data-color="or"]:not([data-theme="light"]) { --bg: #0F0D08; --bg-2: #15120B; --surface: #1B1810; --surface-2: #252016; --line: #362E1F; --glass: color-mix(in srgb, #0F0D08 93%, transparent); --stage: radial-gradient(120% 90% at 50% 15%, #252016 0%, #1B1810 55%, #0F0D08 100%); }
+:root[data-color="or"]:not([data-theme="light"]) { --bg: #0F0D08; --bg-2: #15120B; --surface: #1B1810; --surface-2: #252016; --line: #362E1F; --glass: color-mix(in srgb, #0F0D08 93%, transparent); --stage: radial-gradient(120% 90% at 50% 15%, #433E34 0%, #343129 55%, #211F1A 100%); }
 :root[data-theme="light"][data-color="or"] { --accent: #9C7A26; --accent-2: #A8852D; --accent-ink: #FFFFFF; --accent-deep: #7E6219; --accent-soft: rgb(156 122 38 / .12); --bg: #F8F6F0; --surface-2: #F1ECE0; --line: #E3DAC6; }
 :root[data-color="lila"] { --accent: #9A80D5; --accent-2: #BDAEE3; --accent-ink: #FFFFFF; --accent-deep: #4A2D94; --accent-soft: color-mix(in srgb, #9A80D5 16%, transparent); --accent-glow: rgb(154 128 213 / .30); --hero-1: #6541B2; --hero-2: #4A2D94; --hero-3: #2E1B62; --hero-glow: rgb(74 45 148 / .30); }
-:root[data-color="lila"]:not([data-theme="light"]) { --bg: #0C0A12; --bg-2: #110E19; --surface: #16121F; --surface-2: #1E1829; --line: #2B2339; --glass: color-mix(in srgb, #0C0A12 93%, transparent); --stage: radial-gradient(120% 90% at 50% 15%, #1E1829 0%, #16121F 55%, #0C0A12 100%); }
+:root[data-color="lila"]:not([data-theme="light"]) { --bg: #0C0A12; --bg-2: #110E19; --surface: #16121F; --surface-2: #1E1829; --line: #2B2339; --glass: color-mix(in srgb, #0C0A12 93%, transparent); --stage: radial-gradient(120% 90% at 50% 15%, #3C3647 0%, #2F2B38 55%, #1E1C24 100%); }
 :root[data-theme="light"][data-color="lila"] { --accent: #51319C; --accent-2: #5D3CAC; --accent-ink: #FFFFFF; --accent-deep: #3E247F; --accent-soft: rgb(81 49 156 / .12); --bg: #F5F3FA; --surface-2: #EEEAF6; --line: #DED8EC; }
 :root[data-color="rosa"] { --accent: #DB6FA4; --accent-2: #E7A5C5; --accent-ink: #FFFFFF; --accent-deep: #A32466; --accent-soft: color-mix(in srgb, #DB6FA4 16%, transparent); --accent-glow: rgb(219 111 164 / .30); --hero-1: #C2367B; --hero-2: #A32466; --hero-3: #6E1546; --hero-glow: rgb(163 36 102 / .30); }
-:root[data-color="rosa"]:not([data-theme="light"]) { --bg: #110A0E; --bg-2: #170E13; --surface: #1D1218; --surface-2: #271820; --line: #38222D; --glass: color-mix(in srgb, #110A0E 93%, transparent); --stage: radial-gradient(120% 90% at 50% 15%, #271820 0%, #1D1218 55%, #110A0E 100%); }
+:root[data-color="rosa"]:not([data-theme="light"]) { --bg: #110A0E; --bg-2: #170E13; --surface: #1D1218; --surface-2: #271820; --line: #38222D; --glass: color-mix(in srgb, #110A0E 93%, transparent); --stage: radial-gradient(120% 90% at 50% 15%, #45363E 0%, #362B31 55%, #231C20 100%); }
 :root[data-theme="light"][data-color="rosa"] { --accent: #AB2765; --accent-2: #BC3173; --accent-ink: #FFFFFF; --accent-deep: #8D1B55; --accent-soft: rgb(171 39 101 / .12); --bg: #FAF3F6; --surface-2: #F4EAEF; --line: #EAD7E0; }
 :root[data-color="grafit"] { --accent: #C9CED6; --accent-2: #E6E9EE; --accent-ink: #0A0D12; --accent-deep: #9AA3AF; --accent-soft: color-mix(in srgb, #C9CED6 16%, transparent); --accent-glow: rgb(201 206 214 / .22); --hero-1: #555E6E; --hero-2: #373E4B; --hero-3: #212730; --hero-glow: rgb(0 0 0 / .45); }
-:root[data-color="grafit"]:not([data-theme="light"]) { --bg: #0B0C0E; --bg-2: #0F1013; --surface: #16181C; --surface-2: #1D2026; --line: #2A2E35; --glass: color-mix(in srgb, #0B0C0E 93%, transparent); --stage: radial-gradient(120% 90% at 50% 15%, #1D2026 0%, #16181C 55%, #0B0C0E 100%); }
+:root[data-color="grafit"]:not([data-theme="light"]) { --bg: #0B0C0E; --bg-2: #0F1013; --surface: #16181C; --surface-2: #1D2026; --line: #2A2E35; --glass: color-mix(in srgb, #0B0C0E 93%, transparent); --stage: radial-gradient(120% 90% at 50% 15%, #3B3E44 0%, #2F3135 55%, #1D1E20 100%); }
 :root[data-theme="light"][data-color="grafit"] { --accent: #2C323C; --accent-2: #3A414D; --accent-ink: #FFFFFF; --accent-deep: #171B21; --accent-soft: rgb(44 50 60 / .10); --bg: #F4F5F6; --surface-2: #ECEEF0; --line: #DADDE1; }
 /* selector del tema de color */
 .color-themes { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; padding: 6px 4px 2px; justify-items: center; }
