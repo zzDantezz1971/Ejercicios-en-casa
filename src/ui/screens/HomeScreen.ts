@@ -96,9 +96,9 @@ export class HomeScreen implements Screen {
             // tabla vacía: las mismas formas de crearla que en Tablas › Nueva
             ? h('div', { class: 'hero-empty hero-opts' },
               this.opt('edit', 'Tabla vacía', 'Elige tú los ejercicios', () => app.push(new RoutineScreen(app))),
-              this.opt('bolt', 'Créala por mí', 'Elige objetivo, zona y tiempo', () => app.push(new GeneratorScreen(app, activeIsEmpty(app)))),
+              this.opt('bolt', 'Créala por mí', 'Objetivo, zona y tiempo', () => app.push(new GeneratorScreen(app, activeIsEmpty(app)))),
               this.opt('tables', 'Tablas hechas', 'Listas para usar', () => app.push(new TemplatesScreen(app, activeIsEmpty(app)))),
-              this.opt('calendar', 'Plan de la semana', 'Una tabla para cada día que entrenas', () => newPlan(app), !app.access.premium))
+              this.opt('calendar', 'Plan de la semana', 'Una tabla para cada día', () => newPlan(app), !app.access.premium))
             : h('button', { class: 'btn light block big', onclick: () => this.start(plan) }, icon('play'), 'Empezar'),
           h('div', { class: 'hero-actions' },
             plan.isEmpty ? null : h('button', { class: 'btn glass small', onclick: () => editTable(app, table.id) }, icon('edit'), 'Editar'),
@@ -213,10 +213,12 @@ export class HomeScreen implements Screen {
 
   /** Una forma de crear la tabla (en Inicio, con la tabla vacía). */
   private opt(ic: IconName, title: string, help: string, go: () => void, locked = false): HTMLElement {
+    // cuadro: icono arriba, nombre y una ayuda corta (con candado en la esquina si es de Prémium)
     return h('button', { class: 'hero-opt', onclick: go },
       h('span', { class: 'hero-opt-icon' }, icon(ic)),
-      h('span', { class: 'hero-opt-text' }, h('strong', {}, title), h('span', { class: 'small' }, help)),
-      icon(locked ? 'lock' : 'chevron', 'ico chev'));
+      h('strong', {}, title),
+      h('span', { class: 'small' }, help),
+      locked ? icon('lock', 'ico hero-opt-lock') : null);
   }
 
   private start(plan: WorkoutPlan): void {

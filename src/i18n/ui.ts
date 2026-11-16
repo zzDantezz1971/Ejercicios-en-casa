@@ -1143,6 +1143,8 @@ const ROWS: Row[] = [
   ['Usar con Prémium', 'Fes-la servir amb Prèmium', 'Use with Premium'],
   ['La app ya guarda tus datos en la copia automática de Google. Aquí puedes restaurar una copia que hiciste en la web o en otro móvil (pulsa Restaurar y elige el archivo), o guardar una a mano.', 'L’app ja desa les teves dades a la còpia automàtica de Google. Aquí pots restaurar una còpia que vas fer a la web o en un altre mòbil (prem Restaura i tria el fitxer), o desar-ne una a mà.', 'The app already saves your data in Google’s automatic backup. Here you can restore a backup you made on the web or on another phone (tap Restore and choose the file), or save one manually.'],
   ['Borrar y restaurar', 'Esborra i restaura', 'Delete and restore'],
+  ['Objetivo, zona y tiempo', 'Objectiu, zona i temps', 'Goal, area and time'],
+  ['Una tabla para cada día', 'Una taula per a cada dia', 'A table for each day'],
 ];
 
 export const UI_CA: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[1]]));
