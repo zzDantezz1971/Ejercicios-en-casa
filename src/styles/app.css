@@ -1586,7 +1586,10 @@ label.sort-row:focus-within, label.rem-hour:focus-within { outline: none; }
 .pick-foot { position: sticky; bottom: 0; margin-top: 14px; z-index: 5; padding: 10px 0 calc(env(safe-area-inset-bottom, 0px) + 12px); background: linear-gradient(to top, var(--bg) 70%, transparent); }
 .pick-foot .btn:disabled { opacity: 1; filter: saturate(.4) brightness(.75); }
 .pick-foot .btn { box-shadow: 0 8px 24px rgb(0 0 0 / .35); }
-.maker-pick > .ico { width: 20px; height: 20px; color: var(--accent); flex: none; margin-right: 4px; }
+.maker-pick > .maker-open { flex: 1 1 auto; min-width: 0; }
+.pick-sel { margin-left: auto; flex: none; width: 48px; height: 48px; display: grid; place-items: center; border: 0; border-radius: 12px; background: none; color: var(--accent); cursor: pointer; padding: 0; }
+.pick-sel .ico { width: 22px; height: 22px; }
+.maker-pick.on .pick-sel { background: color-mix(in srgb, var(--accent) 18%, transparent); }
 /* tabla nueva: nombre del ejercicio y su tiempo (− 30 s +) */
 .maker-title { font-weight: 600; display: inline-flex; align-items: center; gap: 6px; flex: none; }
 .maker-time { margin-top: 2px; }

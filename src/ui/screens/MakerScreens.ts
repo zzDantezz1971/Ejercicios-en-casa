@@ -551,6 +551,7 @@ class PickExerciseScreen implements Screen {
       .filter((e) => !this.have.has(e.id) && !e.pending && canDo(e.equip, owned))
       .filter((e) => !q || fold(`${e.name} ${tr(e.name)} ${e.zone} ${e.group ? tr(e.group) : ''}`).includes(q));
     clear(this.list);
+    this.shown = [];
     const rest = exs;
     // agrupados según el orden elegido (en A-Z, sin grupos)
     const key = (e: ExerciseDef): string => this.sort === 'musculo' ? tr(e.zone)
@@ -570,25 +571,33 @@ class PickExerciseScreen implements Screen {
     if (this.multi) this.paintFoot();
   }
 
+  /** Ejercicios de la lista, en su orden (para pasar de uno a otro en la ficha). */
+  private shown: ExerciseDef[] = [];
+
   private row(ex: ExerciseDef): void {
     const { app } = this;
     {
       const img = h('img', { class: 'maker-thumb', alt: '' });
       void app.thumbs.get(ex).then((url) => (img.src = url));
       const on = this.chosen.includes(ex.id);
-      const row: HTMLElement = h('button', { class: 'maker-row maker-pick' + (on ? ' on' : ''), 'aria-pressed': this.multi ? String(on) : null, onclick: () => {
+      this.shown.push(ex);
+      const shown = this.shown;
+      // la miniatura y el nombre abren la ficha (ver cómo se hace); el botón de la derecha lo elige
+      const sel: HTMLElement = h('button', { class: 'pick-sel', 'aria-pressed': this.multi ? String(on) : null, 'aria-label': `Elegir ${ex.name}`, onclick: () => {
         if (!this.multi) { this.pick([ex.id]); return; }
         app.haptics.tap();
         this.chosen = this.chosen.includes(ex.id) ? this.chosen.filter((x) => x !== ex.id) : [...this.chosen, ex.id];
         const now = this.chosen.includes(ex.id);
         row.classList.toggle('on', now);
-        row.setAttribute('aria-pressed', String(now));
-        row.lastElementChild!.replaceWith(icon(now ? 'check' : 'plus'));
+        sel.setAttribute('aria-pressed', String(now));
+        sel.replaceChildren(icon(now ? 'check' : 'plus'));
         this.paintFoot();
-      } },
-        img,
-        h('span', { class: 'maker-name' }, h('span', {}, ex.name), h('span', { class: 'maker-secs muted small' }, ex.zone)),
-        icon(on ? 'check' : 'plus'));
+      } }, icon(on ? 'check' : 'plus'));
+      const row: HTMLElement = h('div', { class: 'maker-row maker-pick' + (on ? ' on' : '') },
+        h('button', { class: 'maker-open', 'aria-label': `Cómo se hace: ${ex.name}`, onclick: () => app.push(new DetailScreen(app, ex, shown)) },
+          img,
+          h('span', { class: 'maker-name' }, h('span', {}, ex.name), h('span', { class: 'maker-secs muted small' }, ex.zone))),
+        sel);
       this.list.append(row);
     }
   }

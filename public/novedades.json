@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-16T21:31:34Z",
+    "es": ["Añadir ejercicios: toca la imagen o el nombre para ver cómo se hace; con el + de la derecha lo eliges."],
+    "ca": ["Afegeix exercicis: toca la imatge o el nom per veure com es fa; amb el + de la dreta el tries."],
+    "en": ["Add exercises: tap the picture or the name to see how it’s done; use the + on the right to choose it."]
+  },
+  {
     "fecha": "2026-11-16T21:26:17Z",
     "es": ["Editar tabla: se abre y se cierra cada apartado tocando cualquier parte de su título, no solo la flecha."],
     "ca": ["Edita la taula: cada apartat s’obre i es tanca tocant qualsevol part del títol, no només la fletxa."],

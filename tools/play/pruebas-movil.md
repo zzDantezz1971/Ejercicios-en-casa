@@ -29,6 +29,7 @@ Marca cada punto al probarlo. Si algo falla, haz una captura y cuéntamelo.
 - [ ] Historial: ya no salen arriba los botones «Todas / Estiraments / De força»; récords y calendario cuentan todos los entrenamientos.
 - [ ] Ficha de un ejercicio: debajo del muñeco, cuerpo de frente y de espaldas con la zona que trabaja en rojo y la que estira en turquesa (probar uno de fuerza y uno de estiramiento). Al tocarlo se ve en grande; se cierra tocando, con la X o con el botón atrás de Android.
 - [ ] Edita la taula: tocar en cualquier parte del título del apartado (nombre, icono, «N exercicis · min») lo abre y lo cierra; los botones − / + de vueltas no lo cierran.
+- [ ] «Afegeix exercicis»: tocar la imagen o el nombre abre la ficha del ejercicio; al volver, lo elegido sigue marcado; el + / ✓ de la derecha lo elige o lo quita.
 - [ ] **Versión gratis nueva** (sin suscripción ni código):
   - [ ] Todos los ejercicios se pueden ver y elegir, sin candados.
   - [ ] Inicio con la tabla vacía: «Tabla vacía» funciona; «Créala por mí», «Tablas hechas» y «Plan de la semana» con candado (abren Prémium).
