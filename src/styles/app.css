@@ -1224,7 +1224,9 @@ button.wd:active .wd-dot { transform: scale(.92); }
 .routine .tabs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 10px; overflow: visible; }
 .routine .tab { min-width: 0; justify-content: center; padding: 9px 10px; }
 /* el cuadro de los apartados: tarjeta con su título encima de los cuatro botones */
-.routine .tabs { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 12px; margin: 10px 0 12px; gap: 10px; box-shadow: 0 0 0 10px var(--bg); }
+.routine .tabs { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 12px; margin: 0; gap: 10px; box-shadow: 0 0 0 8px var(--bg); }
+/* menos espacio entre los cuadros de arriba (bloques, filtros, buscador) */
+.screen.routine { gap: 10px; }
 .routine .tab { background: var(--bg); }
 .tabs-title { grid-column: 1 / -1; margin: 0; display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 1rem; color: var(--fg); }
 .tabs-title .ico { width: 18px; height: 18px; color: var(--muted); }

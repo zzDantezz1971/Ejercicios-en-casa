@@ -52,7 +52,7 @@ export class RoutineScreen implements Screen {
   private query = '';
   /** Ver también los ejercicios que necesitan material que no se tiene. */
   private showAllEquip = false;
-  private search = h('input', { type: 'search', id: 'ex-search', class: 'search-input', placeholder: 'Buscar ejercicio o zona', autocomplete: 'off', enterkeyhint: 'search' });
+  private search = h('input', { type: 'search', id: 'ex-search', class: 'search-input', placeholder: 'Buscar un ejercicio', 'aria-label': 'Buscar un ejercicio o una zona', autocomplete: 'off', enterkeyhint: 'search' });
   private io = new IntersectionObserver((entries) => entries.forEach((e) => e.isIntersecting && this.loadThumb(e.target as HTMLElement)), { rootMargin: '300px' });
 
   constructor(private readonly app: App, section?: SectionId) {

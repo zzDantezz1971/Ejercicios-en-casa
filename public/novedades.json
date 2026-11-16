@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-16T22:43:10Z",
+    "es": ["Lista de ejercicios: el buscador dice solo «Buscar un ejercicio» y hay menos espacio entre los cuadros de arriba, así se ven antes los ejercicios."],
+    "ca": ["Llista d’exercicis: el cercador diu només «Cerca un exercici» i hi ha menys espai entre els quadres de dalt, així es veuen abans els exercicis."],
+    "en": ["Exercise list: the search box just says “Search an exercise” and there’s less space between the boxes at the top, so the exercises show up sooner."]
+  },
+  {
     "fecha": "2026-11-16T22:38:19Z",
     "es": ["Lista de ejercicios más compacta: el botón «Ordenar» va al lado del buscador y abre la lista de órdenes; se quita el texto de ayuda de arriba."],
     "ca": ["Llista d’exercicis més compacta: el botó «Ordena» va al costat del cercador i obre la llista d’ordres; es treu el text d’ajuda de dalt."],
