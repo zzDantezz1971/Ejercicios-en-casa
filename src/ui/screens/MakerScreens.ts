@@ -124,10 +124,10 @@ function addTo(app: App, r: GenResult, s: SectionId, edit: PreviewEdit): void {
   const items = r.routine[s];
   // los segundos, como los demás ejercicios del apartado (o los de siempre)
   const secs = items.length ? items[items.length - 1].seconds : app.store.settings.defaultSeconds;
-  app.push(new PickExerciseScreen(app, s, have, (ids) => {
-    edit.set(withSection(r, s, [...items, ...ids.map((id) => ({ exerciseId: id, seconds: secs }))]));
+  app.push(new PickExerciseScreen(app, s, have, (_ids, picked) => {
+    edit.set(withSection(r, s, [...items, ...picked]));
     app.back();
-  }, 'Añadir ejercicios', true));
+  }, 'Añadir ejercicios', true, secs));
 }
 
 /** Portapapeles de la app: los ejercicios de un apartado copiados para pegarlos en otra tabla (mientras la app está abierta). */
@@ -501,13 +501,16 @@ class PickExerciseScreen implements Screen {
   private sort: PickSort = 'zona';
   /** Elegidos (en el orden en que se han tocado), si se pueden elegir varios. */
   private chosen: string[] = [];
+  /** Tiempo y peso de cada elegido (se cambian en la misma lista, antes de añadirlos). */
+  private opts = new Map<string, { seconds: number; weight?: number }>();
 
   /**
    * Lista de ejercicios de un apartado. Con `multi`, se tocan los que se quieran (se marcan) y se añaden todos
    * con el botón de abajo (o al volver atrás); sin `multi` (cambiar uno), al tocarlo ya está.
    */
   constructor(private readonly app: App, private readonly s: SectionId, private readonly have: ReadonlySet<string>,
-    private readonly pick: (ids: string[]) => void, sub = 'Añadir un ejercicio', private readonly multi = false) {
+    private readonly pick: (ids: string[], items: RoutineItem[]) => void, sub = 'Añadir un ejercicio', private readonly multi = false,
+    private readonly defSecs = app.store.settings.defaultSeconds) {
     const search = h('input', { class: 'search-input', type: 'search', placeholder: 'Buscar ejercicio o zona', 'aria-label': 'Buscar', oninput: () => { this.q = search.value; this.paint(); } });
     // ordenar la lista (empieza siempre por zona; no se guarda)
     const sort = h('select', { class: 'sort-select', 'aria-label': 'Ordenar por', onchange: (e: Event) => {
@@ -534,7 +537,11 @@ class PickExerciseScreen implements Screen {
   private done(): void {
     const ids = this.chosen;
     this.chosen = [];
-    this.pick(ids);
+    const items: RoutineItem[] = ids.map((id) => {
+      const o = this.opts.get(id);
+      return { exerciseId: id, seconds: o?.seconds ?? this.defSecs, ...(o?.weight ? { weight: o.weight } : {}) };
+    });
+    this.pick(ids, items);
   }
 
   private paintFoot(): void {
@@ -575,30 +582,45 @@ class PickExerciseScreen implements Screen {
   private shown: ExerciseDef[] = [];
 
   private row(ex: ExerciseDef): void {
+    this.shown.push(ex);
+    this.list.append(this.buildRow(ex));
+  }
+
+  /** Fila de un ejercicio: la miniatura y el nombre abren la ficha; el botón de la derecha lo elige.
+   *  Elegido (en la lista de varios): debajo, su tiempo (− +) y, si lleva mancuernas, el peso. */
+  private buildRow(ex: ExerciseDef): HTMLElement {
     const { app } = this;
-    {
-      const img = h('img', { class: 'maker-thumb', alt: '' });
-      void app.thumbs.get(ex).then((url) => (img.src = url));
-      const on = this.chosen.includes(ex.id);
-      this.shown.push(ex);
-      const shown = this.shown;
-      // la miniatura y el nombre abren la ficha (ver cómo se hace); el botón de la derecha lo elige
-      const sel: HTMLElement = h('button', { class: 'pick-sel', 'aria-pressed': this.multi ? String(on) : null, 'aria-label': `Elegir ${ex.name}`, onclick: () => {
-        if (!this.multi) { this.pick([ex.id]); return; }
-        app.haptics.tap();
-        this.chosen = this.chosen.includes(ex.id) ? this.chosen.filter((x) => x !== ex.id) : [...this.chosen, ex.id];
-        const now = this.chosen.includes(ex.id);
-        row.classList.toggle('on', now);
-        sel.setAttribute('aria-pressed', String(now));
-        sel.replaceChildren(icon(now ? 'check' : 'plus'));
-        this.paintFoot();
-      } }, icon(on ? 'check' : 'plus'));
-      const row: HTMLElement = h('div', { class: 'maker-row maker-pick' + (on ? ' on' : '') },
+    const img = h('img', { class: 'maker-thumb', alt: '' });
+    void app.thumbs.get(ex).then((url) => (img.src = url));
+    const on = this.chosen.includes(ex.id);
+    const shown = this.shown;
+    const repaint = () => row.replaceWith(this.buildRow(ex));
+    const sel = h('button', { class: 'pick-sel', 'aria-pressed': this.multi ? String(on) : null, 'aria-label': `Elegir ${ex.name}`, onclick: () => {
+      if (!this.multi) { this.pick([ex.id], [{ exerciseId: ex.id, seconds: this.defSecs }]); return; }
+      app.haptics.tap();
+      this.chosen = on ? this.chosen.filter((x) => x !== ex.id) : [...this.chosen, ex.id];
+      repaint();
+      this.paintFoot();
+    } }, icon(on ? 'check' : 'plus'));
+    const o = this.opts.get(ex.id) ?? { seconds: this.defSecs };
+    const set = (next: { seconds: number; weight?: number }) => { this.opts.set(ex.id, next); repaint(); };
+    const ctrls = this.multi && on ? h('div', { class: 'pick-ctrls' },
+      h('div', { class: 'stepper inline maker-time' },
+        h('button', { 'aria-label': 'Menos tiempo', disabled: o.seconds <= MIN_SECONDS, onclick: () => set({ ...o, seconds: Math.max(MIN_SECONDS, o.seconds - STEP_SECONDS) }) }, '−'),
+        h('span', { class: 'secs' }, `${o.seconds} s`),
+        h('button', { 'aria-label': 'Más tiempo', disabled: o.seconds >= MAX_SECONDS, onclick: () => set({ ...o, seconds: Math.min(MAX_SECONDS, o.seconds + STEP_SECONDS) }) }, '+')),
+      usesWeight(ex) ? h('button', { class: 'weight-btn small' + (o.weight ? '' : ' none'), 'aria-label': `Peso de ${ex.name}: ${o.weight ? kg(o.weight) + ' por mancuerna' : 'sin peso'}. Cambiar`, onclick: async () => {
+        const w = await weightDialog(ex.name, o.weight ?? app.store.lastWeight(ex.id) ?? 5);
+        if (w === null) return;
+        set({ seconds: o.seconds, ...(w ? { weight: w } : {}) });
+      } }, icon('dumbbell'), o.weight ? kg(o.weight) : 'Sin peso') : '') : '';
+    const row: HTMLElement = h('div', { class: 'maker-row maker-pick' + (on ? ' on' : '') },
+      h('div', { class: 'pick-top' },
         h('button', { class: 'maker-open', 'aria-label': `Cómo se hace: ${ex.name}`, onclick: () => app.push(new DetailScreen(app, ex, shown)) },
           img,
           h('span', { class: 'maker-name' }, h('span', {}, ex.name), h('span', { class: 'maker-secs muted small' }, ex.zone))),
-        sel);
-      this.list.append(row);
-    }
+        sel),
+      ctrls);
+    return row;
   }
 }

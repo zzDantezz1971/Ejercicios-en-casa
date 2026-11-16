@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-16T21:43:10Z",
+    "es": ["Añadir ejercicios: en los que marcas puedes cambiar ya el tiempo y, si llevan mancuernas, el peso, antes de añadirlos."],
+    "ca": ["Afegeix exercicis: als que marques ja pots canviar el temps i, si porten manuelles, el pes, abans d’afegir-los."],
+    "en": ["Add exercises: for the ones you tick you can now change the time and, if they use dumbbells, the weight, before adding them."]
+  },
+  {
     "fecha": "2026-11-16T21:31:34Z",
     "es": ["Añadir ejercicios: toca la imagen o el nombre para ver cómo se hace; con el + de la derecha lo eliges."],
     "ca": ["Afegeix exercicis: toca la imatge o el nom per veure com es fa; amb el + de la dreta el tries."],
