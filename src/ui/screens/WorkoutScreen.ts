@@ -230,7 +230,7 @@ export class WorkoutScreen implements Screen {
         u.position.textContent = 'Prepárate';
         u.phase.replaceChildren(icon('hourglass'), 'Prepárate');
         u.name.textContent = step.next.name;
-        u.next.textContent = 'Primer ejercicio del apartado';
+        u.next.textContent = 'Primer ejercicio del bloque';
         this.showFigure(step.next);
         this.view?.setMood('happy');
         break;
@@ -260,7 +260,7 @@ export class WorkoutScreen implements Screen {
         const count = this.session.plan.steps.filter((s) => s.kind === 'exercise' && s.section === step.next).length;
         const nextCard = h('div', { class: 'w-break-next' },
           h('span', { class: 'sec-icon big' }, icon(next.icon)),
-          h('div', {}, h('span', { class: 'muted small' }, 'Siguiente apartado'), h('strong', {}, SECTION_TITLES[step.next]), h('span', { class: 'muted small' }, plural(count, 'ejercicio', 'ejercicios'))));
+          h('div', {}, h('span', { class: 'muted small' }, 'Siguiente bloque'), h('strong', {}, SECTION_TITLES[step.next]), h('span', { class: 'muted small' }, plural(count, 'ejercicio', 'ejercicios'))));
         nextCard.style.setProperty('--sec', next.color);
         const badge = h('span', { class: 'w-break-badge' }, icon('check'));
         badge.style.setProperty('--sec', done.color);

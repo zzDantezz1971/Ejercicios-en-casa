@@ -26,7 +26,7 @@ export const MEDAL_GROUPS: Array<{ id: MedalGroup; title: string; icon: MedalIco
   { id: 'calorias', title: 'Calorías', icon: 'heart' },
   { id: 'peso', title: 'Peso corporal', icon: 'target' },
   { id: 'fuerza', title: 'Fuerza', icon: 'dumbbell' },
-  { id: 'apartados', title: 'Apartados', icon: 'check' },
+  { id: 'apartados', title: 'Bloques', icon: 'check' },
   { id: 'especiales', title: 'Especiales', icon: 'trophy' },
 ];
 
@@ -153,7 +153,7 @@ export const MEDALS: Medal[] = [
   { group: 'fuerza', id: 'pesas-10', title: 'Constructor', desc: '10 entrenamientos de fuerza.', icon: 'dumbbell', tier: 'bronce', earned: (c) => withSection(c, 'pesas') >= 10 },
   { group: 'fuerza', id: 'peso-10kg', title: 'Peso pesado', desc: 'Un ejercicio con 10 kg o más por mancuerna.', icon: 'dumbbell', tier: 'oro', earned: (c) => maxWeight(c) >= 10 },
   // Apartados
-  { group: 'apartados', id: 'completo', title: 'Tabla completa', desc: 'Un entrenamiento completo con los cuatro apartados.', icon: 'check', tier: 'bronce',
+  { group: 'apartados', id: 'completo', title: 'Tabla completa', desc: 'Un entrenamiento completo con los cuatro bloques.', icon: 'check', tier: 'bronce',
     earned: (c) => c.history.some((e) => e.completed && SECTION_IDS.every((s) => e.sections.includes(s))) },
   { group: 'apartados', id: 'calentamiento-10', title: 'Siempre a punto', desc: '10 entrenamientos con calentamiento.', icon: 'flame', tier: 'bronce', earned: (c) => withSection(c, 'calentamiento') >= 10 },
   { group: 'apartados', id: 'abdominales-10', title: 'Core de acero', desc: '10 entrenamientos con abdominales.', icon: 'target', tier: 'plata', earned: (c) => withSection(c, 'abdominales') >= 10 },

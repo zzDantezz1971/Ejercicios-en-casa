@@ -302,11 +302,11 @@ export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement
         CLIPBOARD = { section: s, items: items.map((i) => ({ ...i })), rounds: nr, from: edit.tableId };
         app.haptics.tap();
         copyBtn.replaceChildren(icon('check'), h('span', {}, 'Copiado'));
-      } }, icon('copy'), h('span', {}, 'Copiar el apartado'));
+      } }, icon('copy'), h('span', {}, 'Copiar el bloque'));
       const pasteBtn = clip ? h('button', { class: 'btn ghost small clip-btn', onclick: async () => {
         const have = new Set(items.map((i) => i.exerciseId));
         const add = clip.items.filter((i) => !have.has(i.exerciseId));
-        if (!add.length) { await confirmDialog('Esos ejercicios ya están en este apartado.', 'Vale', ''); return; }
+        if (!add.length) { await confirmDialog('Esos ejercicios ya están en este bloque.', 'Vale', ''); return; }
         app.haptics.tap();
         // pegado: ya no se ofrece «Pegar» hasta que se copie otra cosa
         CLIPBOARD = null;

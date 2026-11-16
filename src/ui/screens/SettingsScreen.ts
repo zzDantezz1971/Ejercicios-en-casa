@@ -28,7 +28,7 @@ interface NumField {
 }
 
 const FIELDS: NumField[] = [
-  { key: 'sectionCountdown', icon: 'hourglass', label: 'Cuenta atrás de cada apartado', help: 'Antes del primer ejercicio de cada apartado.', min: 0, max: 30, step: 1 },
+  { key: 'sectionCountdown', icon: 'hourglass', label: 'Cuenta atrás de cada bloque', help: 'Antes del primer ejercicio de cada bloque.', min: 0, max: 30, step: 1 },
   { key: 'defaultSeconds', icon: 'clock', label: 'Duración inicial de cada ejercicio', help: 'La que se pone al marcar un ejercicio. Luego puedes cambiarla.', min: 5, max: 300, step: 5 },
 ];
 
@@ -162,7 +162,7 @@ export class SettingsScreen implements Screen {
     return h('section', { class: 'card setting rest-card' },
       h('div', { class: 'rest-head' },
         h('span', { class: 'set-icon' }, icon('rest')),
-        h('div', { class: 'set-text' }, h('strong', {}, 'Pausa entre ejercicios'), h('p', { class: 'muted small' }, 'Tiempo para prepararte antes del siguiente ejercicio, en cada apartado.'))),
+        h('div', { class: 'set-text' }, h('strong', {}, 'Pausa entre ejercicios'), h('p', { class: 'muted small' }, 'Tiempo para prepararte antes del siguiente ejercicio, en cada bloque.'))),
       ...SECTION_IDS.map((sec) => {
         const v = s.rest[sec];
         const set = (n: number) => this.update({ rest: { ...s.rest, [sec]: Math.max(0, Math.min(90, n)) } });
@@ -391,7 +391,7 @@ export class SettingsScreen implements Screen {
           h('strong', {}, sub ? 'Suscripción activa' : a.kind === 'code' ? 'Acceso con código' : 'Versión gratis'),
           h('p', { class: 'muted small' }, sub
             ? 'Puedes cambiar de plan o cancelarla en Google Play.'
-            : a.kind === 'code' ? `Código: ${a.codeName ?? ''}. No se te cobra nada.` : 'Dos ejercicios de cada apartado. Hazte prémium para tenerlos todos.'))),
+            : a.kind === 'code' ? `Código: ${a.codeName ?? ''}. No se te cobra nada.` : 'Todos los ejercicios, una tabla y el historial de la primera semana. Hazte prémium para tenerlo todo.'))),
       sub ? h('button', { class: 'btn ghost block', onclick: () => void a.manage() }, 'Gestionar en Google Play')
         : a.kind === 'none' ? h('button', { class: 'btn primary block', onclick: () => this.app.showPremium() }, icon('star'), 'Hazte prémium') : null);
   }

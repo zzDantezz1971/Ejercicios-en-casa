@@ -8,7 +8,7 @@ import { HAS_BACKUP } from '../../services/Backup';
 const GUIDE: Array<{ icon: IconName; title: string; sub: string; points: Array<string | { h: string }> }> = [
   { icon: 'play', title: 'Primeros pasos', sub: 'Empieza a entrenar en tres pasos.', points: [
       'En Mis datos, marca el material que tienes en casa: verás los ejercicios que puedes hacer.',
-      'En Tablas, crea una tabla y elige los ejercicios de cada apartado: Calentamiento, Fuerza, Abdominales y Estiramientos.',
+      'En Tablas, crea una tabla y elige los ejercicios de cada bloque: Calentamiento, Fuerza, Abdominales y Estiramientos.',
       'En Inicio, pulsa Empezar y sigue al muñeco.'] },
   { icon: 'home', title: 'Menú Inicio', sub: 'Tu tabla, tu semana y el entrenamiento.', points: [
       'La tabla que vas a hacer, con su contenido y el botón para empezar. Puedes cambiar de tabla desde aquí.',
@@ -25,12 +25,12 @@ const GUIDE: Array<{ icon: IconName; title: string; sub: string; points: Array<s
       { h: 'Música' },
       'El botón verde de arriba pausa el entrenamiento y abre Spotify o la app de música del móvil. Al volver, pulsa Reanudar.',
       'En la app de Android, la música baja de volumen mientras la app habla o pita y luego vuelve a subir (se puede apagar en Ajustes).',
-      'La pausa entre ejercicios y la cuenta atrás de cada apartado se cambian en Ajustes.'] },
+      'La pausa entre ejercicios y la cuenta atrás de cada bloque se cambian en Ajustes.'] },
   { icon: 'tables', title: 'Menú Tablas', sub: 'Más de 200 ejercicios para armar tus tablas.', points: [
       'Crea tantas tablas como quieras, cámbiales el nombre, duplícalas o bórralas.',
-      'Con Editar ves la tabla por apartados: cambia el tiempo de cada ejercicio (− +), cámbialo por otro eligiéndolo de la lista, quítalo, arrástralo por el asa para moverlo o añade otros; también las vueltas de cada apartado y el peso de las mancuernas. Los botones están a la izquierda, para que puedas desplazar la pantalla por la derecha sin tocarlos.',
-      'En «Añadir un ejercicio» toca la imagen o el nombre para ver cómo se hace, marca con el + los que quieras, ajusta su tiempo (y el peso, si llevan mancuernas) y añádelos todos con el botón de abajo. Debajo del título de cada apartado ves el material que necesita (en naranja, el que no está en tu material).',
-      'Para pasar un apartado entero a otra tabla: en Editar, ábrelo y pulsa «Copiar el apartado»; después, en el mismo apartado de la otra tabla, pulsa «Pegar».',
+      'Con Editar ves la tabla por bloques: cambia el tiempo de cada ejercicio (− +), cámbialo por otro eligiéndolo de la lista, quítalo, arrástralo por el asa para moverlo o añade otros; también las vueltas de cada bloque y el peso de las mancuernas. Los botones están a la izquierda, para que puedas desplazar la pantalla por la derecha sin tocarlos.',
+      'En «Añadir un ejercicio» toca la imagen o el nombre para ver cómo se hace, marca con el + los que quieras, ajusta su tiempo (y el peso, si llevan mancuernas) y añádelos todos con el botón de abajo. Debajo del título de cada bloque ves el material que necesita (en naranja, el que no está en tu material).',
+      'Para pasar un bloque entero a otra tabla: en Editar, ábrelo y pulsa «Copiar el bloque»; después, en el mismo bloque de la otra tabla, pulsa «Pegar».',
       'Con Nueva puedes crearla de tres maneras: «Créala por mí» (eliges objetivo, zona, tiempo y nivel, y la app la arma con tu material), una de las «Tablas hechas» o vacía, eligiendo tú los ejercicios.',
       'Antes de guardarla, toca un ejercicio para ver cómo se hace, cambia su tiempo con − y +, cámbialo por otro de la lista o quítalo con sus botones (te pregunta antes de quitarlo), ordénalos arrastrándolos por el asa y añade otros con «Añadir un ejercicio». En «Créala por mí» también puedes pedir otra propuesta.',
       { h: 'Plan de la semana (Prémium)' },
@@ -39,17 +39,17 @@ const GUIDE: Array<{ icon: IconName; title: string; sub: string; points: Array<s
       'Puedes tener varios planes (por ejemplo, uno de fuerza y otro de estiramientos). Arriba en Tablas, toca el plan para ver la lista, elegir el que quieres usar, cambiarle el nombre o crear otro.',
       'En «Mi plan de la semana» (arriba de tus tablas) ves la semana de lunes a domingo con lo ya hecho. Toca un día para ver su tabla, cambiarla, pedir otra propuesta o empezar.',
       'Con «Renovar los ejercicios cada semana», cada lunes cambian los ejercicios de cada día (las zonas no). Al cumplir todos los días de una semana, ganas la medalla «Plan cumplido».',
-      'Cuatro apartados: Calentamiento, Fuerza, Abdominales y Estiramientos.',
+      'Cuatro bloques: Calentamiento, Fuerza, Abdominales y Estiramientos.',
       'Toca un ejercicio para ver al muñeco haciéndolo, cómo se hace paso a paso y los músculos que trabaja (en rojo) o estira (en turquesa) en un cuerpo de frente y de espaldas. Desliza para pasar al siguiente.',
       'Gira el muñeco con el dedo para verlo desde otro ángulo: se queda así para ese ejercicio, también al entrenar y en la lista.',
       'Busca por nombre o zona, marca favoritos con la estrella y ordena la lista por zona, músculo, material o nombre, o a tu manera con «Personalizada».',
       'En los ejercicios elegidos puedes cambiar los segundos, el orden y, si usan pesas, anotar el peso.',
-      'Vueltas: repite todos los ejercicios de un apartado 2, 3 o más veces seguidas.'] },
+      'Vueltas: repite todos los ejercicios de un bloque 2, 3 o más veces seguidas.'] },
   { icon: 'trophy', title: 'Menú Medallas', sub: 'Premios por tu constancia.', points: [
-      'Gana medallas por entrenamientos, constancia, tiempo entrenado, calorías, peso, fuerza y apartados, y alguna especial.'] },
+      'Gana medallas por entrenamientos, constancia, tiempo entrenado, calorías, peso, fuerza y bloques, y alguna especial.'] },
   { icon: 'calendar', title: 'Menú Historial', sub: 'Todo lo que has entrenado, día a día.', points: [
       'Calendario con los días entrenados; toca uno para ver el detalle de ese entrenamiento.',
-      'Resumen semanal y mensual: tiempo, calorías, pulsaciones medias, tiempo por apartado, récords y el mapa de los músculos trabajados.',
+      'Resumen semanal y mensual: tiempo, calorías, pulsaciones medias, tiempo por bloque, récords y el mapa de los músculos trabajados.',
       'Puedes repetir un entrenamiento, copiarlo a otro día o borrarlo.'] },
   { icon: 'user', title: 'Menú Mis datos', sub: 'Para calcular calorías e IMC y seguir tu peso.', points: [
       'Nombre, edad, altura y sexo: se usan para calcular las calorías y el IMC.',

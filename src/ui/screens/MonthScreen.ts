@@ -111,7 +111,7 @@ export class MonthScreen implements Screen {
       const max = Math.max(...SECTION_IDS.map((sec) => bySection[sec]));
       if (max > 0) {
         this.body.append(h('section', { class: 'card' },
-          h('div', { class: 'card-head' }, h('h3', {}, 'Tiempo por apartado'), approximate ? h('span', { class: 'muted small' }, 'aprox.') : null),
+          h('div', { class: 'card-head' }, h('h3', {}, 'Tiempo por bloque'), approximate ? h('span', { class: 'muted small' }, 'aprox.') : null),
           ...SECTION_IDS.map((sec) => {
             const st = SECTION_STYLE[sec];
             const fill = h('span', { class: 'sb-fill' });

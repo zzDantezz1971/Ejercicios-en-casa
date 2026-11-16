@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-16T22:23:38Z",
+    "es": ["Los «apartados» de la tabla (Calentamiento, Fuerza, Abdominales y Estiramientos) ahora se llaman «bloques»."],
+    "ca": ["Els «apartats» de la taula (Escalfament, Força, Abdominals i Estiraments) ara es diuen «blocs»."],
+    "en": ["The routine’s “sections” (Warm-up, Strength, Abs and Stretches) are now called “blocks”."]
+  },
+  {
     "fecha": "2026-11-16T22:19:34Z",
     "es": ["Lista de ejercicios: los cuatro apartados van en un cuadro con el título «Elige el apartado»."],
     "ca": ["Llista d’exercicis: els quatre apartats van en un quadre amb el títol «Tria l’apartat»."],

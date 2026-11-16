@@ -159,12 +159,12 @@ export class RoutineScreen implements Screen {
     this.toolbar.append(this.roundsControl());
     if (this.mode === 'fav') {
       this.hint.replaceChildren(this.favs().length
-        ? 'Tus ejercicios favoritos de este apartado. Pulsa Seleccionar para añadirlo a la tabla.'
-        : h('span', {}, 'Aún no tienes favoritos en este apartado. Toca un ejercicio y pulsa la estrella ', icon('star', 'ico inline'), '.'));
+        ? 'Tus ejercicios favoritos de este bloque. Pulsa Seleccionar para añadirlo a la tabla.'
+        : h('span', {}, 'Aún no tienes favoritos en este bloque. Toca un ejercicio y pulsa la estrella ', icon('star', 'ico inline'), '.'));
     } else if (this.mode === 'chosen') {
       this.hint.replaceChildren(n
         ? h('span', {}, 'Este es el orden en que se harán. Arrastra por el asa ', icon('tables', 'ico inline'), ' o usa las flechas para cambiarlo.')
-        : 'Aún no has elegido ejercicios en este apartado. Márcalos en "Todos".');
+        : 'Aún no has elegido ejercicios en este bloque. Márcalos en "Todos".');
     } else {
       this.hint.replaceChildren('Toca un ejercicio para ver cómo se hace. Pulsa Seleccionar para añadirlo al final de la tabla.');
     }
@@ -176,7 +176,7 @@ export class RoutineScreen implements Screen {
     const set = (v: number) => { this.app.store.setRounds(this.section, v); this.refresh(); };
     // al tocar el cuadro (no los botones) sale una nota corta que explica qué son las vueltas
     const tip = h('div', { class: 'rounds-tip', role: 'status', hidden: true },
-      'Cuántas veces seguidas se repiten todos los ejercicios de este apartado. Con x2, por ejemplo, se hace la lista entera dos veces.');
+      'Cuántas veces seguidas se repiten todos los ejercicios de este bloque. Con x2, por ejemplo, se hace la lista entera dos veces.');
     let timer = 0;
     const box: HTMLElement = h('div', { class: 'rounds-ctl', onclick: (ev: Event) => {
       if ((ev.target as HTMLElement).closest('button')) return;
@@ -343,7 +343,7 @@ export class RoutineScreen implements Screen {
   private renderTabs(): void {
     clear(this.tabs);
     // cuadro con los cuatro apartados y un título claro
-    this.tabs.append(h('p', { class: 'tabs-title' }, icon('tables'), 'Elige el apartado'));
+    this.tabs.append(h('p', { class: 'tabs-title' }, icon('tables'), 'Elige el bloque'));
     for (const s of this.app.sections) {
       // solo se ve cuántos ejercicios has elegido en cada apartado (si hay alguno)
       const n = this.editor.value[s.id].length;
@@ -522,7 +522,7 @@ export class RoutineScreen implements Screen {
     append(this.footer,
       h('div', { class: 'footer-info' },
         h('strong', {}, count ? `${plural(count, 'ejercicio', 'ejercicios')} · ${humanDuration(secs)}` : 'Ningún ejercicio elegido'),
-        h('span', { class: 'muted' }, inSection ? `${inSection} en este apartado` : 'Nada en este apartado')),
+        h('span', { class: 'muted' }, inSection ? `${inSection} en este bloque` : 'Nada en este bloque')),
       inSection ? h('button', { class: 'btn ghost small', onclick: () => { this.editor.clearSection(this.section); this.save(); this.refresh(); } }, 'Quitar todos') : null,
       h('button', { class: 'btn primary small', onclick: () => this.app.back() }, icon('check'), 'Hecho'),
     );
