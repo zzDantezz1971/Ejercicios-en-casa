@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-16T00:47:36Z",
+    "es": ["Mis datos › Peso: la gráfica pequeña también llega hasta hoy, con una línea recta desde el último peso y un puntito con el peso."],
+    "ca": ["Les meves dades › Pes: la gràfica petita també arriba fins avui, amb una línia recta des de l’últim pes i un puntet amb el pes."],
+    "en": ["My data › Weight: the small chart also reaches today, with a straight line from the latest weight and a dot with the weight."]
+  },
+  {
     "fecha": "2026-11-16T00:44:20Z",
     "es": ["Gráfica del peso: al tocar el punto de hoy sale solo la fecha (el peso ya está encima)."],
     "ca": ["Gràfica del pes: en tocar el punt d’avui surt només la data (el pes ja és a sobre)."],

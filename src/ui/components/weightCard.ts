@@ -66,8 +66,12 @@ export function weightChart(points: ReadonlyArray<{ date: string; kg: number }>,
   svg.setAttribute('role', 'img');
   const kgs = points.map((p) => p.kg).concat(goal ? [goal] : []);
   const lo = Math.floor(Math.min(...kgs) - 1), hi = Math.ceil(Math.max(...kgs) + 1);
-  const t0 = Date.parse(points[0].date), t1 = Date.parse(points[points.length - 1].date);
-  const x = (d: string) => pad.l + (t1 > t0 ? ((Date.parse(d) - t0) / (t1 - t0)) * (W - pad.l - pad.r) : (W - pad.l - pad.r) / 2);
+  // hasta hoy: el último peso sigue siendo el tuyo mientras no anotes otro (línea recta y un puntito hoy)
+  const now = Date.now(), lastT = Date.parse(points[points.length - 1].date);
+  const toToday = now - lastT > 36e5;
+  const t0 = Date.parse(points[0].date), t1 = toToday ? now : lastT;
+  const xt = (t: number) => pad.l + (t1 > t0 ? ((t - t0) / (t1 - t0)) * (W - pad.l - pad.r) : (W - pad.l - pad.r) / 2);
+  const x = (d: string) => xt(Date.parse(d));
   const y = (kg: number) => pad.t + (H - pad.t - pad.b) * (1 - (kg - lo) / (hi - lo));
   const el = (tag: string, attrs: Record<string, string | number>, text?: string) => {
     const e = document.createElementNS(NS, tag);
@@ -85,10 +89,17 @@ export function weightChart(points: ReadonlyArray<{ date: string; kg: number }>,
     el('text', { x: W - pad.r - 2, y: y(goal) - 4, class: 'w-goal-label', 'text-anchor': 'end' }, `Objetivo ${String(goal).replace('.', DEC)}`);
   }
   const short = (d: string) => new Date(d).toLocaleDateString(LOCALE, { day: 'numeric', month: 'short' });
-  el('text', { x: x(points[0].date), y: H - 4, class: 'axis', 'text-anchor': points.length > 1 ? 'start' : 'middle' }, short(points[0].date));
-  if (points.length > 1) el('text', { x: W - pad.r, y: H - 4, class: 'axis', 'text-anchor': 'end' }, short(points[points.length - 1].date));
-  if (points.length > 1) el('path', { d: smoothPath(points.map((p) => [x(p.date), y(p.kg)] as const)), class: 'w-line', pathLength: 1 });
+  el('text', { x: x(points[0].date), y: H - 4, class: 'axis', 'text-anchor': points.length > 1 || toToday ? 'start' : 'middle' }, short(points[0].date));
+  if (points.length > 1 || toToday) el('text', { x: W - pad.r, y: H - 4, class: 'axis', 'text-anchor': 'end' }, short(new Date(t1).toISOString()));
+  const last = points[points.length - 1];
+  const P = points.map((p) => [x(p.date), y(p.kg)] as const);
+  const curve = points.length > 1 ? smoothPath(P) : `M${P[0][0]},${P[0][1]}`;
+  if (points.length > 1 || toToday) el('path', { d: toToday ? `${curve} L${xt(now)},${y(last.kg)}` : curve, class: 'w-line', pathLength: 1 });
   points.forEach((p, i) => el('circle', { cx: x(p.date), cy: y(p.kg), r: i === points.length - 1 ? 4.5 : 3, class: i === points.length - 1 ? 'w-dot last' : 'w-dot' }));
+  if (toToday) {
+    el('circle', { cx: xt(now), cy: y(last.kg), r: 3.5, class: 'w-dot today' });
+    el('text', { x: xt(now), y: y(last.kg) - 8, class: 'w-val', 'text-anchor': 'end' }, last.kg.toFixed(1).replace('.', DEC));
+  }
   svg.setAttribute('aria-label', `Peso de ${fmtKg(points[0].kg)} a ${fmtKg(points[points.length - 1].kg)}`);
   return svg;
 }
