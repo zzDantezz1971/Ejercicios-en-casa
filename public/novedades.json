@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-16T00:34:32Z",
+    "es": ["Copia de seguridad: quitado el aviso rojo fijo; el aviso sale al pulsar Restaurar."],
+    "ca": ["Còpia de seguretat: tret l’avís vermell fix; l’avís surt en prémer Restaura."],
+    "en": ["Backup: removed the fixed red warning; the warning appears when you tap Restore."]
+  },
+  {
     "fecha": "2026-11-16T00:33:00Z",
     "es": ["Gráfica del peso en grande: la línea sigue recta desde el último peso hasta hoy."],
     "ca": ["Gràfica del pes en gran: la línia continua recta des de l’últim pes fins avui."],

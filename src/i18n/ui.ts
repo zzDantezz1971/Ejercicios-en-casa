@@ -1142,9 +1142,7 @@ const ROWS: Row[] = [
   ['Esta tabla lleva ejercicios de Prémium. Puedes verla entera; para usarla, hazte Prémium.', 'Aquesta taula porta exercicis de Prèmium. La pots veure sencera; per fer-la servir, fes-te Prèmium.', 'This table has Premium exercises. You can see all of it; to use it, go Premium.'],
   ['Usar con Prémium', 'Fes-la servir amb Prèmium', 'Use with Premium'],
   ['La app ya guarda tus datos en la copia automática de Google. Aquí puedes restaurar una copia que hiciste en la web o en otro móvil (pulsa Restaurar y elige el archivo), o guardar una a mano.', 'L’app ja desa les teves dades a la còpia automàtica de Google. Aquí pots restaurar una còpia que vas fer a la web o en un altre mòbil (prem Restaura i tria el fitxer), o desar-ne una a mà.', 'The app already saves your data in Google’s automatic backup. Here you can restore a backup you made on the web or on another phone (tap Restore and choose the file), or save one manually.'],
-  ['Atención:', 'Atenció:', 'Warning:'],
   ['Borrar y restaurar', 'Esborra i restaura', 'Delete and restore'],
-  ['restaurar una copia borra todo lo que hay ahora en la app (tablas, planes, historial, peso, medallas y ajustes) y lo sustituye por lo de la copia. No se puede deshacer.', 'restaurar una còpia esborra tot el que hi ha ara a l’app (taules, plans, historial, pes, medalles i configuració) i ho substitueix pel que hi ha a la còpia. No es pot desfer.', 'restoring a backup deletes everything currently in the app (tables, plans, history, weight, medals and settings) and replaces it with what’s in the backup. This can’t be undone.'],
 ];
 
 export const UI_CA: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[1]]));
