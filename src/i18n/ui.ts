@@ -1151,6 +1151,8 @@ const ROWS: Row[] = [
   ['Pegar ({x})', 'Enganxa ({x})', 'Paste ({x})'],
   ['Esos ejercicios ya están en este apartado.', 'Aquests exercicis ja són en aquest apartat.', 'Those exercises are already in this section.'],
   ['Para pasar un apartado entero a otra tabla: en Editar, ábrelo y pulsa «Copiar el apartado»; después, en el mismo apartado de la otra tabla, pulsa «Pegar».', 'Per passar un apartat sencer a una altra taula: a Edita, obre’l i prem «Copia l’apartat»; després, al mateix apartat de l’altra taula, prem «Enganxa».', 'To move a whole section to another table: in Edit, open it and tap “Copy section”; then, in the same section of the other table, tap “Paste”.'],
+  ['Ver los músculos en grande', 'Veure els músculs en gran', 'See the muscles larger'],
+  ['Músculos del ejercicio', 'Músculs de l’exercici', 'Muscles of the exercise'],
 ];
 
 export const UI_CA: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[1]]));

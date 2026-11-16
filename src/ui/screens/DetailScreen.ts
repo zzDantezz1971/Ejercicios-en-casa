@@ -56,7 +56,7 @@ export class DetailScreen implements Screen {
         badgeList(ex.badges),
         ex.equip?.length ? h('div', { class: 'detail-equip' }, h('strong', {}, 'Necesita'), equipChips(ex.equip, new Set<string>(app.store.settings.equipment)))
           : h('div', { class: 'detail-equip' }, h('span', { class: 'equip-chip' }, 'Sin material')),
-        musclesInfo(ex.muscles),
+        musclesInfo(ex.muscles, (card) => this.openMap(card)),
         ex.oneSided ? h('p', { class: 'note' }, icon('sides'), 'Se hace por lados: a mitad del tiempo el reloj se para, se avisa del cambio de lado y hay una cuenta atrás de 3 segundos.') : null,
         this.weights,
         d
@@ -278,6 +278,30 @@ export class DetailScreen implements Screen {
 
   leave(): void {
     this.view?.stop();
+    this.closeMap();
+  }
+
+  /** Mapa de los músculos en grande (al tocarlo); se cierra tocando, con la X o con Atrás. */
+  private mapZoom: HTMLElement | null = null;
+  private openMap(card: HTMLElement): void {
+    if (this.mapZoom) return;
+    const figs = card.querySelector('.mu-figs')!.cloneNode(true) as HTMLElement;
+    const lines = card.querySelector('.muscles')!.cloneNode(true) as HTMLElement;
+    this.mapZoom = h('div', { class: 'mu-zoom', role: 'dialog', 'aria-modal': 'true', 'aria-label': 'Músculos del ejercicio', onclick: () => this.closeMap() },
+      h('button', { class: 'icon-btn mu-zoom-close', 'aria-label': 'Cerrar' }, icon('close')),
+      h('h3', {}, this.ex.name), figs, lines);
+    document.body.append(this.mapZoom);
+  }
+
+  private closeMap(): void {
+    this.mapZoom?.remove();
+    this.mapZoom = null;
+  }
+
+  onBack(): boolean {
+    if (!this.mapZoom) return false;
+    this.closeMap();
+    return true;
   }
 
   /** Kilos usados en este ejercicio a lo largo del tiempo y propuesta de subir peso. */
@@ -348,7 +372,7 @@ function reducedMotion(): boolean {
 }
 
 /** Músculos que trabaja y que estira, con los mismos colores que el maniquí anatomía. */
-function musclesInfo(spec: string | undefined): HTMLElement | null {
+function musclesInfo(spec: string | undefined, zoom: (card: HTMLElement) => void): HTMLElement | null {
   const toks = parseMuscles(spec);
   if (!toks.length) return null;
   const names = (kinds: string[]) => [...new Set(toks.filter((t) => kinds.includes(t.kind)).map((t) => MUSCLE_NAMES[t.muscle]))];
@@ -360,7 +384,10 @@ function musclesInfo(spec: string | undefined): HTMLElement | null {
     line('work', 'Trabaja:', main, second),
     line('stretch', 'Estira:', stretch));
   // cuerpo de frente y de espaldas con los músculos coloreados (rojo trabaja, turquesa se estira)
-  return h('div', { class: 'mu-card' }, h('div', { class: 'mu-figs' }, mapImg(spec, false), mapImg(spec, true)), lines);
+  const card: HTMLElement = h('button', { class: 'mu-card', 'aria-label': 'Ver los músculos en grande', onclick: () => zoom(card) },
+    h('div', { class: 'mu-figs' }, mapImg(spec, false), mapImg(spec, true)), lines,
+    h('span', { class: 'mu-zoom-ico' }, icon('expand')));
+  return card;
 }
 
 /** Peso de cada músculo para el mapa del cuerpo: 1 trabaja, 0,55 suave, -1 se estira (los dos lados juntos). */
