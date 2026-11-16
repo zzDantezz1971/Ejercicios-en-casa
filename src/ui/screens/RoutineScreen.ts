@@ -140,7 +140,7 @@ export class RoutineScreen implements Screen {
       const sel = h('select', { class: 'sort-select', 'aria-label': 'Ordenar por', onchange: (e: Event) => {
         (e.target as HTMLSelectElement).blur();
         const v = (e.target as HTMLSelectElement).value as ListSort;
-        this.app.store.saveSettings({ ...this.app.store.settings, listSort: v });
+        this.sortNow = v;
         // al elegir «Personalizada» se abre la lista entera para ordenarla
         if (v === 'personalizada') { this.mode = 'sorting'; this.clearSearch(); }
         window.scrollTo(0, 0);
@@ -194,9 +194,12 @@ export class RoutineScreen implements Screen {
     return box;
   }
 
-  /** Ejercicios visibles de un apartado, en el orden elegido por el usuario. */
+  /** Orden de la lista mientras estás en esta pantalla; al volver a entrar, otra vez «por zona» (no se recuerda). */
+  private sortNow: ListSort = 'zona';
+
+  /** Ejercicios visibles de un apartado, en el orden elegido. */
   private get sort(): ListSort {
-    return this.app.store.settings.listSort ?? 'zona';
+    return this.sortNow;
   }
 
   /** Grupos de la lista en un tipo de orden (en A-Z no hay: un único grupo sin título). */

@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-16T09:01:27Z",
+    "es": ["Lista de ejercicios: cada vez que entras, ordenada por zona (el orden que elijas ya no se queda guardado)."],
+    "ca": ["Llista d’exercicis: cada vegada que hi entres, ordenada per zona (l’ordre que triïs ja no queda desat)."],
+    "en": ["Exercise list: every time you open it, it’s sorted by area (the order you pick is no longer remembered)."]
+  },
+  {
     "fecha": "2026-11-16T08:52:12Z",
     "es": ["Nueva tabla: «Tabla vacía» pasa a ser la primera opción."],
     "ca": ["Nova taula: «Taula buida» passa a ser la primera opció."],
