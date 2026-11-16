@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-16T23:37:43Z",
+    "es": ["Medallas renovadas: ahora hay 66 y cuestan más (rachas más largas, más horas, más calorías, más kilos…), con medallas nuevas como Explorador, Todo el año o Equilibrio.", "Para las medallas solo cuentan los entrenamientos de 10 minutos o más. Las medallas se han vuelto a calcular con las reglas nuevas."],
+    "ca": ["Medalles renovades: ara n’hi ha 66 i costen més (ratxes més llargues, més hores, més calories, més quilos…), amb medalles noves com Explorador, Tot l’any o Equilibri.", "Per a les medalles només compten els entrenaments de 10 minuts o més. Les medalles s’han tornat a calcular amb les regles noves."],
+    "en": ["Revamped medals: there are now 66 and they’re harder (longer streaks, more hours, more calories, more kilos…), with new ones such as Explorer, All year round and Balance.", "Only workouts of 10 minutes or more count for medals. Medals have been recalculated with the new rules."]
+  },
+  {
     "fecha": "2026-11-16T23:05:05Z",
     "es": ["Modo oscuro: el gris del fondo del muñeco es un poco más claro."],
     "ca": ["Mode fosc: el gris del fons del ninot és una mica més clar."],

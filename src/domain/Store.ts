@@ -13,7 +13,10 @@ import {
   type WeightEntry,
 } from './types';
 import { caloriesOf, type Calories } from './calories';
-import { earnedMedals } from './medals';
+import { countsForMedals, earnedMedals } from './medals';
+
+/** Reglas de las medallas: al subir este número, las medallas se recalculan una vez (se quitan las que ya no se cumplen). */
+const MEDALS_VER = 2;
 import { sanitizePlan, type WeekPlan } from './weekPlan';
 
 /** Todo lo que la app guarda en el móvil. */
@@ -47,6 +50,8 @@ export interface SavedData {
   welcomed: boolean;
   /** Medallas conseguidas: id → fecha (ISO). */
   medals?: Record<string, string>;
+  /** Versión de las reglas de las medallas con que se calcularon (al cambiar, se vuelven a calcular una vez). */
+  medalsVer?: number;
   /** Planes de la semana (Prémium); uno de ellos está en uso. */
   plans?: WeekPlan[];
   activePlanId?: string;
@@ -502,11 +507,27 @@ export class Store {
    * Comprueba las medallas y guarda las nuevas. Devuelve las conseguidas ahora.
    * La primera vez se apuntan las que ya se tenían sin celebrarlas.
    */
+  /** ¿Las medallas se calcularon con unas reglas anteriores? */
+  get medalsOutdated(): boolean {
+    return this.data.medalsVer !== MEDALS_VER;
+  }
+
   checkMedals(now: Date = new Date()): string[] {
     const first = !this.data.medals;
     const have = { ...(this.data.medals ?? {}) };
-    const kcal = this.data.history.reduce((n, e) => n + (this.caloriesFor(e)?.kcal ?? 0), 0);
+    // las calorías solo de los entrenamientos que cuentan para las medallas (10 minutos o más)
+    const kcal = this.data.history.filter(countsForMedals).reduce((n, e) => n + (this.caloriesFor(e)?.kcal ?? 0), 0);
     const got = earnedMedals({ history: this.data.history, weights: this.data.weights, goalKg: this.data.settings.profile.goalKg, kcal, planDays: this.plan?.days.map((d) => d.day) });
+    // reglas nuevas: se vuelven a calcular una vez; se quedan (con su fecha) las que se siguen cumpliendo,
+    // se quitan las demás y las nuevas se apuntan sin celebrarlas
+    if (this.data.medalsVer !== MEDALS_VER) {
+      const keep: Record<string, string> = {};
+      for (const id of got) keep[id] = have[id] ?? now.toISOString();
+      this.data.medals = keep;
+      this.data.medalsVer = MEDALS_VER;
+      this.persist();
+      return [];
+    }
     const fresh = got.filter((id) => !have[id]);
     if (!fresh.length && !first) return [];
     for (const id of fresh) have[id] = now.toISOString();
@@ -726,6 +747,7 @@ export class Store {
     const summarySeen = typeof input.summarySeen === 'string' ? input.summarySeen : undefined;
     const weekSeen = typeof input.weekSeen === 'string' ? input.weekSeen : undefined;
     const medals = input.medals && typeof input.medals === 'object' ? (input.medals as Record<string, string>) : undefined;
+    const medalsVer = typeof input.medalsVer === 'number' ? input.medalsVer : undefined;
     // bienvenida: si no consta, solo la ve quien empieza de cero (con datos de antes, ya se da por vista)
     const welcomed = typeof input.welcomed === 'boolean' ? input.welcomed : Object.keys(input).length > 0;
     // planes de la semana (antes solo había uno: `plan`)
@@ -735,7 +757,7 @@ export class Store {
     const activePlanId = plans.some((p) => p.id === input.activePlanId) ? (input.activePlanId as string) : plans[0]?.id;
     return {
       version: DATA_VERSION, routines, activeId, settings, history, hidden, order, orderVer: ORDER_VER, unhideVer: UNHIDE_VER, lastBackup, firstUse, favorites, weights,
-      summarySeen, weekSeen, medals, welcomed, ...(plans.length ? { plans, activePlanId } : {}),
+      summarySeen, weekSeen, medals, medalsVer, welcomed, ...(plans.length ? { plans, activePlanId } : {}),
     };
   }
 

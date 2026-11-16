@@ -74,7 +74,8 @@ export class App {
     // ejercicios que han cambiado de apartado en una versión nueva
     this.store.fixSections((id) => this.catalog.get(id)?.section);
     // la primera vez se apuntan las medallas que ya se tenían, sin celebrarlas
-    if (!Object.keys(this.store.medals).length) this.store.checkMedals();
+    // al abrir: apunta (sin celebrarlas) las medallas de la primera vez o las de unas reglas nuevas
+    if (!Object.keys(this.store.medals).length || this.store.medalsOutdated) this.store.checkMedals();
     this.applySettings();
     // el ángulo en que dejas cada muñeco se guarda en los ajustes
     setAngleStore({

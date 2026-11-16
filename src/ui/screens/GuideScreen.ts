@@ -46,7 +46,7 @@ const GUIDE: Array<{ icon: IconName; title: string; sub: string; points: Array<s
       'En los ejercicios elegidos puedes cambiar los segundos, el orden y, si usan pesas, anotar el peso.',
       'Vueltas: repite todos los ejercicios de un bloque 2, 3 o más veces seguidas.'] },
   { icon: 'trophy', title: 'Menú Medallas', sub: 'Premios por tu constancia.', points: [
-      'Gana medallas por entrenamientos, constancia, tiempo entrenado, calorías, peso, fuerza y bloques, y alguna especial.'] },
+      'Gana medallas por entrenamientos, constancia, tiempo entrenado, calorías, peso, fuerza y bloques, y alguna especial. Cuentan los entrenamientos de 10 minutos o más.'] },
   { icon: 'calendar', title: 'Menú Historial', sub: 'Todo lo que has entrenado, día a día.', points: [
       'Calendario con los días entrenados; toca uno para ver el detalle de ese entrenamiento.',
       'Resumen semanal y mensual: tiempo, calorías, pulsaciones medias, tiempo por bloque, récords y el mapa de los músculos trabajados.',

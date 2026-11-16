@@ -125,7 +125,7 @@ export function medalsBoard(app: App): HTMLElement[] {
       h('span', { class: 'mb-pct' }, `${pct} %`)),
     h('span', { class: 'mb-bar' }, bar),
     h('div', { class: 'mb-tiers' }, tierCount('oro'), tierCount('plata'), tierCount('bronce')),
-    h('p', { class: 'muted small mb-hint' }, 'Toca una medalla para ver su ficha.'));
+    h('p', { class: 'muted small mb-hint' }, 'Toca una medalla para ver su ficha. Cuentan los entrenamientos de 10 minutos o más.'));
   const groups = MEDAL_GROUPS.map((g) => {
     const ms = MEDALS.filter((m) => m.group === g.id);
     const n = ms.filter((m) => have[m.id]).length;

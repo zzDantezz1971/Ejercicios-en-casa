@@ -138,17 +138,43 @@ describe('Frases motivadoras', () => {
 });
 
 describe('Medallas', () => {
-  it('se consiguen con los datos y la primera vez no se celebran', () => {
+  const mk = () => {
     const data = new Map<string, string>();
     const kv = { getItem: (k: string) => data.get(k) ?? null, setItem: (k: string, v: string) => void data.set(k, v) };
-    const s = new Store(kv);
-    const e = (d: string): HistoryEntry => ({ date: d, durationSec: 1200, exercisesDone: 4, exercisesPlanned: 4, sections: ['calentamiento', 'pesas', 'abdominales', 'estiramientos'], completed: true });
+    return { data, kv };
+  };
+  const e = (d: string, sec = 1200): HistoryEntry => ({ date: d, durationSec: sec, exercisesDone: 4, exercisesPlanned: 4, sections: ['calentamiento', 'pesas', 'abdominales', 'estiramientos'], completed: true });
+
+  it('se consiguen con los datos y la primera vez no se celebran', () => {
+    const s = new Store(mk().kv);
     s.addHistory(e('2026-11-02T07:30:00'));
     expect(s.checkMedals()).toEqual([]); // primera vez: se apuntan sin celebrar
-    expect(Object.keys(s.medals)).toEqual(expect.arrayContaining(['entrenos-1', 'completo', 'madrugador']));
-    s.addHistory(e('2026-11-03T10:00:00'));
-    s.addHistory(e('2026-11-04T10:00:00'));
-    expect(s.checkMedals()).toEqual(expect.arrayContaining(['racha-3', 'semana-3']));
+    expect(Object.keys(s.medals)).toEqual(expect.arrayContaining(['entrenos-1', 'equilibrio']));
+    for (const d of ['03', '04', '05', '06']) s.addHistory(e(`2026-11-${d}T10:00:00`));
+    expect(s.checkMedals()).toEqual(expect.arrayContaining(['racha-5', 'semana-4']));
     expect(s.checkMedals()).toEqual([]);
   });
+
+  it('los entrenamientos de menos de 10 minutos no cuentan', () => {
+    const s = new Store(mk().kv);
+    s.checkMedals();
+    s.addHistory(e('2026-11-02T10:00:00', 300));
+    expect(s.checkMedals()).toEqual([]);
+    expect(s.medals['entrenos-1']).toBeUndefined();
+    s.addHistory(e('2026-11-03T10:00:00', 600));
+    expect(s.checkMedals()).toEqual(['entrenos-1', 'equilibrio']);
+  });
+
+  it('con reglas nuevas se recalculan una vez: se quitan las que ya no se cumplen y se conservan las fechas', () => {
+    const { kv } = mk();
+    const old = { version: 2, welcomed: true, history: [e('2026-11-02T07:30:00')], medals: { 'entrenos-1': '2026-11-02T08:00:00.000Z', madrugador: '2026-11-02T08:00:00.000Z', completo: '2026-11-02T08:00:00.000Z' } };
+    kv.setItem('ejercicios-en-casa', JSON.stringify(old));
+    const s = new Store(kv);
+    expect(s.checkMedals()).toEqual([]);
+    expect(s.medals['entrenos-1']).toBe('2026-11-02T08:00:00.000Z');
+    expect(s.medals.madrugador).toBeUndefined();
+    expect(s.medals.completo).toBeUndefined();
+    expect(Object.keys(s.medals).sort()).toEqual(['entrenos-1', 'equilibrio']);
+  });
 });
+
