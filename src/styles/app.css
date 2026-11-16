@@ -1184,8 +1184,11 @@ button.wd:active .wd-dot { transform: scale(.92); }
   --sec-stretch: #0FA394;
   --glass: rgb(255 255 255 / .92);
   --phrase: #B7791F;
+  /* fondo del muñeco (fichas, animación grande, mapas): gris claro en vez de negro */
+  --stage: radial-gradient(120% 90% at 50% 15%, #EEF1F5 0%, #E1E6ED 55%, #D3DAE3 100%);
   color-scheme: light;
 }
+:root[data-theme="light"] .fig-pending { color: var(--muted); }
 :root[data-theme="light"] .card, :root[data-theme="light"] .segmented { box-shadow: 0 1px 2px rgb(16 24 40 / .06); }
 :root[data-theme="light"] .tier-tag.plata { color: #5D6B7C; background: rgb(93 107 124 / .12); }
 :root[data-theme="light"] .tier-tag.oro { color: #A06A00; }
