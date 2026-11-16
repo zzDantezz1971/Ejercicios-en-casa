@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-16T10:12:06Z",
+    "es": ["Editar tabla: al entrar, todos los apartados salen plegados; toca ⌄ para abrir el que quieras."],
+    "ca": ["Edita la taula: en entrar, tots els apartats surten plegats; toca ⌄ per obrir el que vulguis."],
+    "en": ["Edit table: all sections start collapsed; tap ⌄ to open the one you want."]
+  },
+  {
     "fecha": "2026-11-16T10:05:42Z",
     "es": ["Editar tabla y días del plan: cada apartado se puede plegar con el botón de su título (se ve cuántos ejercicios y minutos tiene), para que la lista no sea interminable."],
     "ca": ["Edita la taula i dies del pla: cada apartat es pot plegar amb el botó del seu títol (es veu quants exercicis i minuts té), perquè la llista no sigui interminable."],

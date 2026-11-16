@@ -132,13 +132,14 @@ function addTo(app: App, r: GenResult, s: SectionId, edit: PreviewEdit): void {
   }, 'Añadir ejercicios', true));
 }
 
-/** Apartados plegados de cada lista (se recuerdan mientras estás en la pantalla, aunque se vuelva a pintar). */
+/** Apartados plegados de cada lista (todos al entrar; se recuerda mientras estás en la pantalla, aunque se vuelva a pintar). */
 const FOLDED = new WeakMap<object, Set<SectionId>>();
 const NO_EDIT = {};
 function foldedOf(edit?: PreviewEdit): Set<SectionId> {
   const k = edit?.ask ?? NO_EDIT;
   let f = FOLDED.get(k);
-  if (!f) { f = new Set(); FOLDED.set(k, f); }
+  // de entrada, todos plegados: se ve la tabla entera de un vistazo y se abre el apartado que interesa
+  if (!f) { f = new Set(SECTION_IDS); FOLDED.set(k, f); }
   return f;
 }
 
@@ -212,7 +213,7 @@ export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement
       head.classList.toggle('folded', now);
     } }, icon('chevron', 'ico'));
     const secsTotal = items.reduce((t, it) => t + it.seconds, 0) * nr;
-    const foldInfo = h('span', { class: 'muted small sec-fold-info', hidden: !isFolded }, `${plural(items.length, 'ejercicio', 'ejercicios')} · ${humanDuration(secsTotal)}`);
+    const foldInfo = h('span', { class: 'muted small sec-fold-info', hidden: !isFolded }, items.length ? `${plural(items.length, 'ejercicio', 'ejercicios')} · ${humanDuration(secsTotal)}` : 'Sin ejercicios');
     head.prepend(fold);
     head.append(foldInfo);
     if (isFolded) head.classList.add('folded');
