@@ -134,6 +134,8 @@ export class RoutineScreen implements Screen {
       h('button', { class: 'seg' + (this.mode === m ? ' on' : ''), 'aria-pressed': String(this.mode === m), onclick: () => { this.mode = m; this.clearSearch(); window.scrollTo(0, 0); this.render(); } }, label);
     // orden: Todos/Favoritos/Elegidos; después el tipo de orden, Ordenar lista y Vueltas (el buscador va debajo)
     this.toolbar.append(h('div', { class: 'segmented' }, seg('all', 'Todos'), seg('fav', h('span', { class: 'seg-fav' }, icon('starFill'), 'Favoritos')), seg('chosen', `Elegidos (${n})`)));
+    // vueltas: un botón pequeño al lado («↻ x1»); al tocarlo se abre debajo el control para cambiarlas
+    this.toolbar.append(...this.roundsControl());
     if (this.mode === 'all') {
       // ordenar la lista por zona, músculo, material o nombre (cada uno con su propio orden personalizado)
       const cur = this.sort;
@@ -155,8 +157,6 @@ export class RoutineScreen implements Screen {
           this.mode = 'sorting'; this.clearSearch(); window.scrollTo(0, 0); this.render();
         } }, icon('tables'), 'Ordenar lista') : null);
     }
-    // vueltas: en todos los apartados, aunque aún no tengan ejercicios elegidos
-    this.toolbar.append(this.roundsControl());
     if (this.mode === 'fav') {
       this.hint.replaceChildren(this.favs().length
         ? 'Tus ejercicios favoritos de este bloque. Pulsa Seleccionar para añadirlo a la tabla.'
@@ -170,28 +170,24 @@ export class RoutineScreen implements Screen {
     }
   }
 
-  /** Vueltas del apartado: repetir todos sus ejercicios 2, 3… veces seguidas. */
-  private roundsControl(): HTMLElement {
+  /** Vueltas del bloque (repetir todos sus ejercicios 2, 3… veces seguidas): botón pequeño y, al tocarlo, el control. */
+  private roundsOpen = false;
+  private roundsControl(): HTMLElement[] {
     const r = clampRounds(this.app.store.active.rounds?.[this.section]);
     const set = (v: number) => { this.app.store.setRounds(this.section, v); this.refresh(); };
-    // al tocar el cuadro (no los botones) sale una nota corta que explica qué son las vueltas
-    const tip = h('div', { class: 'rounds-tip', role: 'status', hidden: true },
-      'Cuántas veces seguidas se repiten todos los ejercicios de este bloque. Con x2, por ejemplo, se hace la lista entera dos veces.');
-    let timer = 0;
-    const box: HTMLElement = h('div', { class: 'rounds-ctl', onclick: (ev: Event) => {
-      if ((ev.target as HTMLElement).closest('button')) return;
-      tip.hidden = !tip.hidden;
-      window.clearTimeout(timer);
-      if (!tip.hidden) timer = window.setTimeout(() => (tip.hidden = true), 5000);
-    } },
-      icon('swap'),
-      h('span', { class: 'rounds-label' }, 'Vueltas', icon('info', 'ico rounds-info')),
+    const panel = h('div', { class: 'rounds-ctl', hidden: !this.roundsOpen },
+      h('span', { class: 'rounds-label' }, 'Vueltas'),
       h('div', { class: 'stepper inline' },
         h('button', { 'aria-label': 'Menos vueltas', disabled: r <= 1, onclick: () => set(r - 1) }, '−'),
         h('span', { class: 'secs' }, `x${r}`),
         h('button', { 'aria-label': 'Más vueltas', disabled: r >= MAX_ROUNDS, onclick: () => set(r + 1) }, '+')),
-      tip);
-    return box;
+      h('p', { class: 'rounds-tip' }, 'Cuántas veces seguidas se repiten todos los ejercicios de este bloque. Con x2, por ejemplo, se hace la lista entera dos veces.'));
+    const chip = h('button', { class: 'rounds-chip' + (r > 1 ? ' on' : ''), 'aria-expanded': String(this.roundsOpen), 'aria-label': `Vueltas: x${r}`, onclick: () => {
+      this.roundsOpen = !this.roundsOpen;
+      panel.hidden = !this.roundsOpen;
+      chip.setAttribute('aria-expanded', String(this.roundsOpen));
+    } }, icon('swap'), `x${r}`);
+    return [chip, panel];
   }
 
   /** Orden de la lista mientras estás en esta pantalla; al volver a entrar, otra vez «por zona» (no se recuerda). */

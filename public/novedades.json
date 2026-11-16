@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-16T22:27:34Z",
+    "es": ["Lista de ejercicios: las vueltas ocupan menos; ahora son un botón pequeño (↻ x1) al lado de Todos / Favoritos / Elegidos, que al tocarlo abre el control."],
+    "ca": ["Llista d’exercicis: les voltes ocupen menys; ara són un botó petit (↻ x1) al costat de Tots / Preferits / Triats, que en tocar-lo obre el control."],
+    "en": ["Exercise list: rounds take up less space; they’re now a small button (↻ x1) next to All / Favourites / Chosen that opens the control when tapped."]
+  },
+  {
     "fecha": "2026-11-16T22:23:38Z",
     "es": ["Los «apartados» de la tabla (Calentamiento, Fuerza, Abdominales y Estiramientos) ahora se llaman «bloques»."],
     "ca": ["Els «apartats» de la taula (Escalfament, Força, Abdominals i Estiraments) ara es diuen «blocs»."],

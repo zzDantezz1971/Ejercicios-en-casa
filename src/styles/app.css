@@ -755,7 +755,11 @@ button.hd-row { width: 100%; color: inherit; font: inherit; cursor: pointer; }
 .mu-line.stretch .mu-dot { background: #00B8A8; }
 
 /* Vueltas */
-.rounds-ctl { position: relative; cursor: pointer; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; width: 100%; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 6px 8px 6px 12px; }
+.rounds-ctl[hidden] { display: none; }
+.rounds-chip { display: inline-flex; align-items: center; gap: 6px; padding: 8px 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); font: inherit; font-weight: 800; cursor: pointer; }
+.rounds-chip .ico { width: 16px; height: 16px; color: var(--sec, var(--accent)); }
+.rounds-chip.on { border-color: var(--sec, var(--accent)); }
+.rounds-ctl { position: relative; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; width: 100%; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 6px 8px 6px 12px; }
 .rounds-ctl > .ico { color: var(--sec, var(--accent)); width: 18px; height: 18px; }
 .rounds-label { flex: 1; font-weight: 700; }
 .rounds-ctl .stepper.inline .secs { min-width: 48px; text-align: center; }
