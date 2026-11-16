@@ -25,6 +25,7 @@ Marca cada punto al probarlo. Si algo falla, haz una captura y cuéntamelo.
 - [ ] Contingut de la taula (al tocar un apartado en Inici): filas con número, tiempo, peso y zona.
 - [ ] Edita: al entrar, todos los apartados plegados; se abren/cierran con el botón ⌄ de su título.
 - [ ] Estiraments: vuelve «Torsió de columna amb les cames creuades» (también tras restaurar la copia de la web).
+- [ ] Edita: «Copia l’apartat» en una tabla y «Enganxa» en el mismo apartado de otra (en la misma tabla no sale «Enganxa»).
 - [ ] Afegeix exercicis: buscador y «Ordena» (zona, múscul, material, A-Z) fijos arriba al desplazar.
 - [ ] «Restaura» con la copia de la web recupera tablas, historial, peso y ajustes.
 

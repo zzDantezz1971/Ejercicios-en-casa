@@ -42,7 +42,7 @@ export class TableEditScreen implements Screen {
           const name = await promptDialog('Nuevo nombre', t.name, 'Guardar');
           if (name) { app.store.renameRoutine(t.id, name); this.render(); }
         } }, icon('edit'))),
-      h('div', { class: 'maker-body' }, preview(app, r, { set, ask: this.ask, full: true, addEmpty: (sec) => {
+      h('div', { class: 'maker-body' }, preview(app, r, { set, ask: this.ask, full: true, tableId: t.id, addEmpty: (sec) => {
         // la pantalla de elegir ejercicios trabaja sobre la tabla en uso: esta pasa a serlo
         if (app.store.active.id !== t.id) app.store.setActive(t.id);
         app.push(new RoutineScreen(app, sec));

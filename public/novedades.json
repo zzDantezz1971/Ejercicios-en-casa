@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-16T10:34:01Z",
+    "es": ["Editar tabla: «Copiar el apartado» y «Pegar» para pasar todos los ejercicios de un apartado al mismo apartado de otra tabla."],
+    "ca": ["Edita la taula: «Copia l’apartat» i «Enganxa» per passar tots els exercicis d’un apartat al mateix apartat d’una altra taula."],
+    "en": ["Edit table: “Copy section” and “Paste” to move all of a section’s exercises to the same section of another table."]
+  },
+  {
     "fecha": "2026-11-16T10:30:28Z",
     "es": ["Vuelve a la lista de Estiramientos «Torsión de columna con las piernas cruzadas»."],
     "ca": ["Torna a la llista d’Estiraments «Torsió de columna amb les cames creuades»."],

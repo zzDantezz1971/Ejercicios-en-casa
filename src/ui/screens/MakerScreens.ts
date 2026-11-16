@@ -6,10 +6,10 @@ import {
 } from '../../domain/generator';
 import { clampRounds, MAX_ROUNDS, WorkoutPlan } from '../../domain/WorkoutPlan';
 import { MAX_SECONDS, MIN_SECONDS, STEP_SECONDS } from '../../domain/RoutineEditor';
-import { emptyRoutine, SECTION_IDS, SECTION_TITLES, usesWeight, type ExerciseDef, type SectionId } from '../../domain/types';
+import { emptyRoutine, SECTION_IDS, SECTION_TITLES, usesWeight, type ExerciseDef, type RoutineItem, type SectionId } from '../../domain/types';
 import { LOCALE, tr } from '../../i18n';
 import type { App, Screen } from '../App';
-import { clear, h, humanDuration, kg, plural, promptDialog, weightDialog } from '../dom';
+import { clear, confirmDialog, h, humanDuration, kg, plural, promptDialog, weightDialog } from '../dom';
 import { sortableList, type SortableRow } from '../components/sortable';
 import { lockedThumb, premiumPill } from '../components/badges';
 import { icon, SECTION_STYLE, type IconName } from '../icons';
@@ -118,6 +118,8 @@ export interface PreviewEdit {
   full?: boolean;
   /** Añadir a un apartado vacío: en vez de la lista corta, la pantalla completa de ejercicios (la de elegirlos). */
   addEmpty?: (s: SectionId) => void;
+  /** Tabla que se edita (para copiar un apartado y pegarlo solo en otra tabla). */
+  tableId?: string;
 }
 
 /** Añadir ejercicios a un apartado: abre la lista, se eligen los que se quieran y se ponen al final. */
@@ -131,6 +133,9 @@ function addTo(app: App, r: GenResult, s: SectionId, edit: PreviewEdit): void {
     app.back();
   }, 'Añadir ejercicios', true));
 }
+
+/** Portapapeles de la app: los ejercicios de un apartado copiados para pegarlos en otra tabla (mientras la app está abierta). */
+let CLIPBOARD: { section: SectionId; items: RoutineItem[]; rounds: number; from?: string } | null = null;
 
 /** Apartados plegados de cada lista (todos al entrar; se recuerda mientras estás en la pantalla, aunque se vuelva a pintar). */
 const FOLDED = new WeakMap<object, Set<SectionId>>();
@@ -290,6 +295,26 @@ export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement
     }, { arrows: false, handleFirst: true }));
     else for (const row of rows) sbody.append(row.content);
     if (edit) sbody.append(h('button', { class: 'maker-add', onclick: () => (!items.length && edit.addEmpty ? edit.addEmpty(s) : addTo(app, r, s, edit)) }, icon('plus'), 'Añadir un ejercicio'));
+    // copiar todo el apartado y pegarlo en otra tabla (en el mismo apartado)
+    if (edit?.full) {
+      // pegar: solo en el mismo apartado y en otra tabla (no en la tabla de la que se copió)
+      const clip = CLIPBOARD && CLIPBOARD.section === s && CLIPBOARD.from !== edit.tableId ? CLIPBOARD : null;
+      const copyBtn: HTMLElement = h('button', { class: 'btn ghost small clip-btn', disabled: !items.length, onclick: () => {
+        CLIPBOARD = { section: s, items: items.map((i) => ({ ...i })), rounds: nr, from: edit.tableId };
+        app.haptics.tap();
+        copyBtn.replaceChildren(icon('check'), h('span', {}, 'Copiado'));
+      } }, icon('copy'), h('span', {}, 'Copiar el apartado'));
+      const pasteBtn = clip ? h('button', { class: 'btn ghost small clip-btn', onclick: async () => {
+        const have = new Set(items.map((i) => i.exerciseId));
+        const add = clip.items.filter((i) => !have.has(i.exerciseId));
+        if (!add.length) { await confirmDialog('Esos ejercicios ya están en este apartado.', 'Vale', ''); return; }
+        app.haptics.tap();
+        const next = withSection(r, s, [...items, ...add]);
+        // en un apartado vacío, también sus vueltas
+        edit.set(items.length ? next : { routine: next.routine, rounds: { ...next.rounds, [s]: clip.rounds } });
+      } }, icon('plus'), h('span', {}, `Pegar (${clip.items.length})`)) : null;
+      sbody.append(h('div', { class: 'clip-row' }, copyBtn, pasteBtn));
+    }
   }
   if (locked) box.append(h('p', { class: 'muted small maker-free' }, icon('lock'), 'Los ejercicios con candado son de Prémium: en la versión gratis se saltan.'));
   return box;
