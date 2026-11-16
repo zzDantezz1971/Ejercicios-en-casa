@@ -3,6 +3,7 @@ import type { App, Screen } from '../App';
 import { clear, h, promptDialog } from '../dom';
 import { icon } from '../icons';
 import { preview } from './MakerScreens';
+import { RoutineScreen } from './RoutineScreen';
 import { PlanDayScreen, planDayOf } from './PlanScreens';
 
 /** «Editar» una tabla: la de un día del plan, en su pantalla (con «Otra propuesta»); las demás, aquí. */
@@ -41,7 +42,11 @@ export class TableEditScreen implements Screen {
           const name = await promptDialog('Nuevo nombre', t.name, 'Guardar');
           if (name) { app.store.renameRoutine(t.id, name); this.render(); }
         } }, icon('edit'))),
-      h('div', { class: 'maker-body' }, preview(app, r, { set, ask: this.ask, full: true })));
+      h('div', { class: 'maker-body' }, preview(app, r, { set, ask: this.ask, full: true, addEmpty: (sec) => {
+        // la pantalla de elegir ejercicios trabaja sobre la tabla en uso: esta pasa a serlo
+        if (app.store.active.id !== t.id) app.store.setActive(t.id);
+        app.push(new RoutineScreen(app, sec));
+      } })));
     if (y >= 0) window.scrollTo({ top: y });
   }
 }

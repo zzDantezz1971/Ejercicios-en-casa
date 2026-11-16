@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-16T09:35:44Z",
+    "es": ["Editar tabla: «Añadir un ejercicio» en un apartado vacío abre la pantalla completa de ejercicios; en uno que ya tiene, la lista para añadir.", "La lista para añadir ejercicios: el botón de abajo ya no se mezcla con los títulos al desplazarse."],
+    "ca": ["Edita la taula: «Afegeix un exercici» en un apartat buit obre la pantalla completa d’exercicis; en un que ja en té, la llista per afegir.", "La llista per afegir exercicis: el botó de baix ja no es barreja amb els títols en desplaçar-se."],
+    "en": ["Edit table: “Add an exercise” in an empty section opens the full exercise screen; in one that already has some, the add list.", "The add-exercise list: the bottom button no longer overlaps the headings when scrolling."]
+  },
+  {
     "fecha": "2026-11-16T09:14:20Z",
     "es": ["Inicio con la tabla vacía: salen todas las formas de crearla (Tabla vacía, Créala por mí, Tablas hechas y Plan de la semana)."],
     "ca": ["Inici amb la taula buida: surten totes les maneres de crear-la (Taula buida, Crea-la per mi, Taules fetes i Pla setmanal)."],

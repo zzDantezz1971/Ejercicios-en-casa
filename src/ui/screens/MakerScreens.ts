@@ -116,6 +116,8 @@ export interface PreviewEdit {
   ask: { remove: boolean };
   /** Editar también las vueltas de cada apartado y el peso de las mancuernas (al editar una tabla guardada). */
   full?: boolean;
+  /** Añadir a un apartado vacío: en vez de la lista corta, la pantalla completa de ejercicios (la de elegirlos). */
+  addEmpty?: (s: SectionId) => void;
 }
 
 /** Añadir ejercicios a un apartado: abre la lista, se eligen los que se quieran y se ponen al final. */
@@ -258,7 +260,7 @@ export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement
       edit.set(withSection(r, s, next));
     }, { arrows: false, handleFirst: true }));
     else for (const row of rows) box.append(row.content);
-    if (edit) box.append(h('button', { class: 'maker-add', onclick: () => addTo(app, r, s, edit) }, icon('plus'), 'Añadir un ejercicio'));
+    if (edit) box.append(h('button', { class: 'maker-add', onclick: () => (!items.length && edit.addEmpty ? edit.addEmpty(s) : addTo(app, r, s, edit)) }, icon('plus'), 'Añadir un ejercicio'));
   }
   if (locked) box.append(h('p', { class: 'muted small maker-free' }, icon('lock'), 'Los ejercicios con candado son de Prémium: en la versión gratis se saltan.'));
   return box;

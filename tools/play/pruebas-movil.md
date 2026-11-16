@@ -21,6 +21,7 @@ Marca cada punto al probarlo. Si algo falla, haz una captura y cuéntamelo.
 - [ ] Nova taula: «Taula buida» es la primera opción.
 - [ ] Inici con la tabla vacía: salen las 4 opciones (Taula buida, Crea-la per mi, Taules fetes, Pla setmanal).
 - [ ] Lista de ejercicios: al volver a entrar, siempre ordenada «Per zona».
+- [ ] Edita: «Afegeix un exercici» en un apartado vacío abre la pantalla completa; en uno con ejercicios, la lista para añadir (el botón de abajo no se mezcla con los títulos).
 - [ ] «Restaura» con la copia de la web recupera tablas, historial, peso y ajustes.
 
 ## 1. Health Connect (Configuració › Apps de salut)
