@@ -1022,8 +1022,8 @@ export class MannequinScene {
   }
 }
 
-/** Sombra del muñeco en el suelo: oscura en modo claro; en modo oscuro, gris claro para que se vea sobre el fondo negro. */
+/** Sombra del muñeco en el suelo: siempre oscura (en modo oscuro, algo más marcada para que se vea sobre el fondo). */
 function shadowMaterial(): THREE.ShadowMaterial {
   const light = typeof document !== 'undefined' && document.documentElement.dataset.theme === 'light';
-  return light ? new THREE.ShadowMaterial({ opacity: 0.38 }) : new THREE.ShadowMaterial({ color: '#5F6B7D', opacity: 0.3 });
+  return new THREE.ShadowMaterial({ opacity: light ? 0.38 : 0.5 });
 }
