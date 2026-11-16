@@ -287,3 +287,14 @@ describe('bienvenida de la primera vez', () => {
     expect(new Store(mem(JSON.stringify({ version: 2, history: [] }))).welcomed).toBe(true);
   });
 });
+
+describe('Ejercicios que vuelven a las listas', () => {
+  it('si lo habías quitado, vuelve a salir una vez; si lo vuelves a quitar, se queda quitado', () => {
+    const kv = memory(JSON.stringify({ version: 2, welcomed: true, hidden: ['torsion-de-columna-con-piernas-cruzadas', 'flexiones'] }));
+    const store = new Store(kv);
+    expect(store.hidden.has('torsion-de-columna-con-piernas-cruzadas')).toBe(false);
+    expect(store.hidden.has('flexiones')).toBe(true);
+    store.hideExercise('torsion-de-columna-con-piernas-cruzadas');
+    expect(new Store(kv).hidden.has('torsion-de-columna-con-piernas-cruzadas')).toBe(true);
+  });
+});

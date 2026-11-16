@@ -24,6 +24,7 @@ Marca cada punto al probarlo. Si algo falla, haz una captura y cuéntamelo.
 - [ ] Edita: «Afegeix un exercici» en un apartado vacío abre la pantalla completa; en uno con ejercicios, la lista para añadir (el botón de abajo no se mezcla con los títulos).
 - [ ] Contingut de la taula (al tocar un apartado en Inici): filas con número, tiempo, peso y zona.
 - [ ] Edita: al entrar, todos los apartados plegados; se abren/cierran con el botón ⌄ de su título.
+- [ ] Estiraments: vuelve «Torsió de columna amb les cames creuades» (también tras restaurar la copia de la web).
 - [ ] Afegeix exercicis: buscador y «Ordena» (zona, múscul, material, A-Z) fijos arriba al desplazar.
 - [ ] «Restaura» con la copia de la web recupera tablas, historial, peso y ajustes.
 

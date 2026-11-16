@@ -29,6 +29,8 @@ export interface SavedData {
   /** Orden propio por apartado y tipo de orden (clave «apartado» = por zona; «apartado:tipo» = los demás). */
   order: Partial<Record<string, string[]>>;
   orderVer?: number;
+  /** Versión de «ejercicios que vuelven»: los que se habían quitado de la lista y han vuelto (se enseñan una vez). */
+  unhideVer?: number;
   /** Fecha de la última copia de seguridad guardada (ISO). */
   lastBackup?: string;
   /** Ejercicios marcados como favoritos. */
@@ -55,6 +57,9 @@ export const BACKUP_APP = 'ejercicios-en-casa';
 const HISTORY_LIMIT = 500;
 /** Versión del orden por defecto; al cambiar, se descartan los órdenes personalizados guardados. */
 const ORDER_VER = 2;
+/** Ejercicios que volvieron a las listas: si los habías quitado de la tuya, vuelven a salir (una sola vez). */
+const UNHIDE: Array<[number, string[]]> = [[1, ['torsion-de-columna-con-piernas-cruzadas', 'gemelos-contra-la-pared']]];
+const UNHIDE_VER = UNHIDE[UNHIDE.length - 1][0];
 const NAME_MAX = 40;
 
 /** Almacenamiento mínimo (localStorage en la app, un mapa en las pruebas). */
@@ -685,7 +690,9 @@ export class Store {
     if (routines.length === 0) routines = [newRoutine(DEFAULT_ROUTINE_NAME)];
     const activeId = routines.some((r) => r.id === input.activeId) ? (input.activeId as string) : routines[0].id;
 
-    const hidden = Array.isArray(input.hidden) ? (input.hidden as unknown[]).filter((x): x is string => typeof x === 'string') : [];
+    const prevUnhide = typeof input.unhideVer === 'number' ? input.unhideVer : 0;
+    const back = new Set(UNHIDE.filter(([v]) => v > prevUnhide).flatMap(([, ids]) => ids));
+    const hidden = Array.isArray(input.hidden) ? (input.hidden as unknown[]).filter((x): x is string => typeof x === 'string' && !back.has(x)) : [];
     const order: SavedData['order'] = {};
     const rawOrder = (input.order ?? {}) as Record<string, unknown>;
     for (const [k, o] of Object.entries(rawOrder)) {
@@ -716,7 +723,7 @@ export class Store {
     const plans = rawPlans.map(sanitizePlan).filter((p): p is WeekPlan => !!p && !seenIds.has(p.id) && !!seenIds.add(p.id));
     const activePlanId = plans.some((p) => p.id === input.activePlanId) ? (input.activePlanId as string) : plans[0]?.id;
     return {
-      version: DATA_VERSION, routines, activeId, settings, history, hidden, order, orderVer: ORDER_VER, lastBackup, favorites, weights,
+      version: DATA_VERSION, routines, activeId, settings, history, hidden, order, orderVer: ORDER_VER, unhideVer: UNHIDE_VER, lastBackup, favorites, weights,
       summarySeen, weekSeen, medals, welcomed, ...(plans.length ? { plans, activePlanId } : {}),
     };
   }
