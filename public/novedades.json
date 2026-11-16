@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-16T16:17:51Z",
+    "es": ["Historial: se quitan los botones para filtrar por tabla; siempre se ven todos los entrenamientos."],
+    "ca": ["Historial: es treuen els botons per filtrar per taula; sempre es veuen tots els entrenaments."],
+    "en": ["History: the buttons to filter by routine are gone; all your workouts are always shown."]
+  },
+  {
     "fecha": "2026-11-16T13:04:08Z",
     "es": ["«Torsión de columna con piernas cruzadas»: al bajar las piernas, la de encima se ve claramente cruzada por encima de la otra."],
     "ca": ["«Torsió de columna amb les cames creuades»: en baixar les cames, la de sobre es veu clarament creuada per sobre de l’altra."],

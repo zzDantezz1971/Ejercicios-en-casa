@@ -540,10 +540,6 @@ button:focus-visible, input:focus-visible, label:focus-within { outline: 2px sol
 /* Historial: filtros, estadísticas y detalle */
 .stats-row.four { grid-template-columns: repeat(2, 1fr); }
 .stats-row.four .stat:nth-child(2) .ico { color: #F5A524; }
-.filter-chips { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
-.filter-chips::-webkit-scrollbar { display: none; }
-.filter-chip { flex: none; border: 1px solid var(--line); background: var(--surface); color: var(--muted); font: 700 .92rem var(--body); padding: 8px 14px; border-radius: 999px; cursor: pointer; }
-.filter-chip.on { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
 .sb-row { display: grid; grid-template-columns: 24px 104px 1fr auto; align-items: center; gap: 10px; padding: 5px 0; }
 .sb-name { font-weight: 600; font-size: .92rem; }
 .sb-bar { height: 10px; border-radius: 999px; background: var(--surface-2); overflow: hidden; }
@@ -927,8 +923,8 @@ body:has(.screen.workout) .update-banner { display: none; }
 @media (prefers-reduced-motion: reduce) { .celebrate-box.pop, .celebrate-box.pop .medal-badge { animation: none; } }
 
 /* Detalles: botones y pestañas con respuesta al toque */
-.icon-btn, .ex-main, .sec-row, .history-row, .medal-cell, .seg, .filter-chip, .weight-btn, .link-btn { transition: transform .12s ease, background-color .2s, color .2s; }
-.icon-btn:active, .sec-row:active, .seg:active, .filter-chip:active, .weight-btn:active { transform: scale(.94); }
+.icon-btn, .ex-main, .sec-row, .history-row, .medal-cell, .seg, .weight-btn, .link-btn { transition: transform .12s ease, background-color .2s, color .2s; }
+.icon-btn:active, .sec-row:active, .seg:active, .weight-btn:active { transform: scale(.94); }
 .ex-main:active { transform: scale(.98); }
 .btn { transition: transform .12s ease, box-shadow .2s, background .2s; }
 .tab-item { transition: color .2s; }

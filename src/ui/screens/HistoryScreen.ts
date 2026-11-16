@@ -1,5 +1,5 @@
 import { LOCALE } from '../../i18n';
-import { bestStreak, routineNames } from '../../domain/stats';
+import { bestStreak } from '../../domain/stats';
 import { MonthScreen } from './MonthScreen';
 import type { Store } from '../../domain/Store';
 import { SECTION_TITLES, type HistoryEntry } from '../../domain/types';
@@ -17,8 +17,6 @@ export class HistoryScreen implements Screen {
   readonly tab = 'historial' as const;
   private body = h('div', { class: 'history-body' });
   private month = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
-  /** Tabla por la que se filtra (null = todas). */
-  private filter: string | null = null;
 
   constructor(private readonly app: App) {
     this.el.append(h('header', { class: 'page-head' }, h('h1', {}, 'Historial')), this.body);
@@ -35,12 +33,9 @@ export class HistoryScreen implements Screen {
       this.body.append(h('div', { class: 'empty-state' }, icon('calendar', 'ico big'), h('p', {}, 'Aún no hay entrenamientos. Cuando termines el primero aparecerá aquí.')));
       return;
     }
-    const names = routineNames(all);
-    if (this.filter && !names.includes(this.filter)) this.filter = null;
-    const list = this.filter ? all.filter((e) => e.routineName === this.filter) : all;
+    const list = all;
     append(this.body,
       backupDue(this.app) ? backupCard(this.app) : null,
-      names.length > 1 ? this.filters(names) : null,
       this.records(list),
       this.calendar(list),
       h('div', { class: 'summary-btns' },
@@ -70,19 +65,7 @@ export class HistoryScreen implements Screen {
     window.scrollTo(0, y);
   }
 
-  /** Chips para ver solo los entrenamientos de una tabla. */
-  private filters(names: string[]): HTMLElement {
-    const chip = (label: string, value: string | null) =>
-      h('button', {
-        class: 'filter-chip' + (this.filter === value ? ' on' : ''),
-        'aria-pressed': String(this.filter === value),
-        onclick: () => { this.filter = value; this.rerender(); },
-      }, label);
-    return h('div', { class: 'filter-chips', role: 'group', 'aria-label': 'Filtrar por tabla' },
-      chip('Todas', null), ...names.map((n) => chip(n, n)));
-  }
-
-  /** Récords de siempre (con el filtro de tabla): rachas, entrenamiento más largo, más calorías y mejor mes. */
+  /** Récords de siempre : rachas, entrenamiento más largo, más calorías y mejor mes. */
   private records(list: readonly HistoryEntry[]): HTMLElement {
     const { app } = this;
     const now = new Date();
