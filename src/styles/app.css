@@ -1108,6 +1108,9 @@ button.wd:active .wd-dot { transform: scale(.92); }
 .wv-diff { font-weight: 700; font-size: .88rem; color: var(--muted); }
 .wv-diff.down { color: var(--sec-stretch); }
 .wv-diff.up { color: #F5A524; }
+.wb-goal-box { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); }
+.wb-goal-title { display: flex; align-items: center; gap: 6px; margin: 0; font-size: .95rem; }
+.wb-goal-title .ico { width: 16px; height: 16px; color: var(--accent); }
 .wb-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .wb-bmi { display: flex; flex-direction: column; gap: 10px; }
 .wb-bmi-top { display: flex; align-items: center; gap: 10px; }

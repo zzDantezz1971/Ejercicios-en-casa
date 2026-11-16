@@ -104,8 +104,8 @@ export function weightChart(points: ReadonlyArray<{ date: string; kg: number }>,
   return svg;
 }
 
-/** Mis datos: tres tarjetas. Peso (el actual en grande, el cambio, botón para anotar y la gráfica),
-    Objetivo (cuánto falta, con un solo botón para cambiarlo o quitarlo) e IMC (con su escala de colores). */
+/** Mis datos: dos tarjetas. Peso (el actual en grande, el cambio, botón para anotar, la gráfica y, debajo, el objetivo:
+    cuánto falta, con un solo botón para cambiarlo o quitarlo) e IMC (con su escala de colores). */
 export function weightCards(app: App, onChange: () => void, onOpen: () => void, onChart: () => void = onOpen): HTMLElement[] {
   const ws = app.store.weights;
   const profile = app.store.settings.profile;
@@ -128,30 +128,12 @@ export function weightCards(app: App, onChange: () => void, onOpen: () => void, 
   };
   const first = ws[0], last = ws[ws.length - 1];
 
-  // 1. Peso
-  const peso = !last
-    ? h('section', { class: 'card weight-card' }, h('div', { class: 'card-head' }, h('h3', {}, 'Peso')),
-      h('div', { class: 'wa-hero' }, h('p', { class: 'muted small' }, 'Anota tu peso para ver cómo evoluciona y calcular las calorías de cada entrenamiento.'), add))
-    : (() => {
-      const diff = last.kg - first.kg;
-      const when = new Date(last.date).toLocaleDateString(LOCALE, { day: 'numeric', month: 'short' });
-      const chip = ws.length > 1 ? h('span', { class: 'wv-diff' + (diff < 0 ? ' down' : diff > 0 ? ' up' : '') }, `${diff < 0 ? '↓ ' : diff > 0 ? '↑ ' : ''}${fmtDiff(diff).replace(/^[−+]/, '')} desde el inicio`) : null;
-      return h('section', { class: 'card weight-card' },
-        h('div', { class: 'card-head' }, h('h3', {}, 'Peso'), h('button', { class: 'link-btn', onclick: onOpen }, 'Ver todo', icon('chevron'))),
-        h('div', { class: 'wa-hero' },
-          h('div', {}, h('strong', { class: 'wa-kg' }, fmtKg(last.kg)), h('div', { class: 'wa-sub' }, chip, h('span', { class: 'muted small' }, when))),
-          add),
-        // tocar la gráfica la abre grande, en horizontal
-        h('button', { class: 'wf-open', 'aria-label': 'Ver la gráfica grande', onclick: onChart }, weightChart(ws, goal) as unknown as HTMLElement),
-        h('p', { class: 'wf-hint muted small' }, icon('search'), 'Toca la gráfica para verla en grande'));
-    })();
-
-  // 2. Objetivo: "Peso objetivo 78,0 kg · 61 %", "Te faltan 2,6 kg", la barra y el botón Cambiar objetivo
+  // Objetivo, dentro del cuadro de Peso: "Peso objetivo 78,0 kg · 61 %", "Te faltan 2,6 kg", la barra y Cambiar objetivo
   const g = goal && last ? goalProgress(first.kg, last.kg, goal) : null;
   const fill = h('span', { class: 'goal-fill' });
   if (g) fill.style.width = `${Math.round(g.done * 100)}%`;
-  const objetivo = h('section', { class: 'card weight-card' },
-    h('div', { class: 'card-head' }, h('h3', {}, 'Objetivo')),
+  const objetivo = h('div', { class: 'wb-goal-box' },
+    h('h4', { class: 'wb-goal-title' }, icon('target'), 'Objetivo'),
     goal
       ? h('div', { class: 'wb-goal' },
         h('div', { class: 'wb-goal-line' }, h('span', {}, 'Peso objetivo'), h('strong', {}, fmtKg(goal)), g ? h('strong', { class: 'wb-pct' }, `${Math.round(g.done * 100)} %`) : null),
@@ -163,13 +145,32 @@ export function weightCards(app: App, onChange: () => void, onOpen: () => void, 
           ? h('button', { class: 'btn primary small', onclick: () => void askGoal() }, 'Fijar')
           : h('button', { class: 'btn ghost small', onclick: () => app.showPremium() }, icon('lock'), 'Prémium')));
 
+  // 1. Peso (con el objetivo dentro)
+  const peso = !last
+    ? h('section', { class: 'card weight-card' }, h('div', { class: 'card-head' }, h('h3', {}, 'Peso')),
+      h('div', { class: 'wa-hero' }, h('p', { class: 'muted small' }, 'Anota tu peso para ver cómo evoluciona y calcular las calorías de cada entrenamiento.'), add), objetivo)
+    : (() => {
+      const diff = last.kg - first.kg;
+      const when = new Date(last.date).toLocaleDateString(LOCALE, { day: 'numeric', month: 'short' });
+      const chip = ws.length > 1 ? h('span', { class: 'wv-diff' + (diff < 0 ? ' down' : diff > 0 ? ' up' : '') }, `${diff < 0 ? '↓ ' : diff > 0 ? '↑ ' : ''}${fmtDiff(diff).replace(/^[−+]/, '')} desde el inicio`) : null;
+      return h('section', { class: 'card weight-card' },
+        h('div', { class: 'card-head' }, h('h3', {}, 'Peso'), h('button', { class: 'link-btn', onclick: onOpen }, 'Ver todo', icon('chevron'))),
+        h('div', { class: 'wa-hero' },
+          h('div', {}, h('strong', { class: 'wa-kg' }, fmtKg(last.kg)), h('div', { class: 'wa-sub' }, chip, h('span', { class: 'muted small' }, when))),
+          add),
+        // tocar la gráfica la abre grande, en horizontal
+        h('button', { class: 'wf-open', 'aria-label': 'Ver la gráfica grande', onclick: onChart }, weightChart(ws, goal) as unknown as HTMLElement),
+        h('p', { class: 'wf-hint muted small' }, icon('search'), 'Toca la gráfica para verla en grande'),
+        objetivo);
+    })();
+
   // 3. IMC (solo con peso anotado)
-  if (!last) return [peso, objetivo];
+  if (!last) return [peso];
   const height = profile.height;
   const v = height ? bmi(last.kg, height) : null;
   const imc = h('section', { class: 'card weight-card' }, h('div', { class: 'card-head' }, h('h3', {}, 'IMC')),
     v !== null ? bmiScale(v) : h('p', { class: 'muted small' }, 'Pon tu altura arriba para calcular tu IMC.'));
-  return [peso, objetivo, imc];
+  return [peso, imc];
 }
 
 /** Valor del IMC con una escala de colores (bajo peso, normal, sobrepeso, obesidad) y una marca donde estás. */

@@ -35,7 +35,7 @@ Marca cada punto al probarlo. Si algo falla, haz una captura y cuéntamelo.
   - [ ] Historial: los 7 primeros días, aviso «puedes ver el historial hasta el …»; después, pantalla «Tu historial está guardado» con «Hazte prémium».
   - [ ] Resumen semanal y del mes con candado; en Inicio no salen los avisos de resumen.
   - [ ] Copia de seguridad: Guardar y Restaurar abren Prémium.
-  - [ ] Mis datos › Objetivo: botón «Prémium» con candado; la gráfica del peso sin la línea de objetivo; en la bienvenida no se pide el objetivo.
+  - [ ] Mis datos › Peso: el objetivo va dentro del cuadro de Peso, debajo de la gráfica (ya no es un cuadro aparte). Sin Prémium: botón «Prémium» con candado; la gráfica del peso sin la línea de objetivo; en la bienvenida no se pide el objetivo.
   - [ ] Pantalla Prémium con la lista nueva («Organiza todo tu entrenamiento»).
   - [ ] Con un código: todo desbloqueado.
 - [ ] Edita: «Copia l’apartat» en una tabla y «Enganxa» en el mismo apartado de otra (en la misma tabla no sale «Enganxa»; después de pegar, «Enganxa» desaparece).
