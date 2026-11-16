@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-16T22:52:34Z",
+    "es": ["Modo oscuro: la sombra del muñeco en el suelo es ahora gris claro, para que se vea sobre el fondo oscuro."],
+    "ca": ["Mode fosc: l’ombra del ninot a terra ara és gris clar, perquè es vegi sobre el fons fosc."],
+    "en": ["Dark mode: the figure’s shadow on the floor is now light grey so it shows up on the dark background."]
+  },
+  {
     "fecha": "2026-11-16T22:48:45Z",
     "es": ["Modo claro: el fondo del muñeco (fichas, animación grande y mapas de músculos) es ahora gris claro en vez de negro."],
     "ca": ["Mode clar: el fons del ninot (fitxes, animació gran i mapes de músculs) ara és gris clar en lloc de negre."],

@@ -171,7 +171,7 @@ export class Thumbnails {
   get(ex: ExerciseDef): Promise<string> {
     if (ex.pending) return Promise.resolve(pendingThumb(ex));
     const skin = getFigureSkin();
-    return this.enqueue(`${skin ? 'a' : 'p'}:${getFigureStyle()}:${lookKey()}:${ex.id}:${savedAngle(ex.id)}`, () => this.draw(ex, skin));
+    return this.enqueue(`${skin ? 'a' : 'p'}:${getFigureStyle()}:${document.documentElement.dataset.theme ?? ''}:${lookKey()}:${ex.id}:${savedAngle(ex.id)}`, () => this.draw(ex, skin));
   }
 
   private enqueue(key: string, render: () => string): Promise<string> {

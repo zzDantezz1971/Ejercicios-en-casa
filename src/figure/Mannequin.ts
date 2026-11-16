@@ -425,7 +425,7 @@ export class MannequinScene {
 
   private buildStage(): void {
     const { motion } = this, spec = motion.spec, G = this.geo, view = motion.view;
-    const floor = new THREE.Mesh(new THREE.PlaneGeometry(1400, 1400), new THREE.ShadowMaterial({ opacity: 0.38 }));
+    const floor = new THREE.Mesh(new THREE.PlaneGeometry(1400, 1400), shadowMaterial());
     floor.rotation.x = -Math.PI / 2;
     floor.receiveShadow = true;
     this.scene.add(floor);
@@ -1020,4 +1020,10 @@ export class MannequinScene {
     this.disposables.forEach((d) => d.dispose());
     Object.values(this.geo).forEach((g) => g.dispose());
   }
+}
+
+/** Sombra del muñeco en el suelo: oscura en modo claro; en modo oscuro, gris claro para que se vea sobre el fondo negro. */
+function shadowMaterial(): THREE.ShadowMaterial {
+  const light = typeof document !== 'undefined' && document.documentElement.dataset.theme === 'light';
+  return light ? new THREE.ShadowMaterial({ opacity: 0.38 }) : new THREE.ShadowMaterial({ color: '#AEB9C8', opacity: 0.22 });
 }
