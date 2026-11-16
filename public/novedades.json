@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-16T09:14:20Z",
+    "es": ["Inicio con la tabla vacía: salen todas las formas de crearla (Tabla vacía, Créala por mí, Tablas hechas y Plan de la semana)."],
+    "ca": ["Inici amb la taula buida: surten totes les maneres de crear-la (Taula buida, Crea-la per mi, Taules fetes i Pla setmanal)."],
+    "en": ["Home with an empty table: all the ways to create it are shown (Empty table, Make it for me, Ready-made tables and Weekly plan)."]
+  },
+  {
     "fecha": "2026-11-16T09:01:27Z",
     "es": ["Lista de ejercicios: cada vez que entras, ordenada por zona (el orden que elijas ya no se queda guardado)."],
     "ca": ["Llista d’exercicis: cada vegada que hi entres, ordenada per zona (l’ordre que triïs ja no queda desat)."],

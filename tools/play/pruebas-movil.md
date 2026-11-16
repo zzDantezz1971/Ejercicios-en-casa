@@ -19,6 +19,7 @@ Marca cada punto al probarlo. Si algo falla, haz una captura y cuéntamelo.
 - [ ] Gráfica del peso en grande: línea recta desde el último peso hasta hoy, con un puntito hoy con el peso encima; al tocarlo, la fecha.
 - [ ] Les meves dades › Pes (gráfica pequeña): llega hasta hoy con línea recta y un puntito con el peso.
 - [ ] Nova taula: «Taula buida» es la primera opción.
+- [ ] Inici con la tabla vacía: salen las 4 opciones (Taula buida, Crea-la per mi, Taules fetes, Pla setmanal).
 - [ ] Lista de ejercicios: al volver a entrar, siempre ordenada «Per zona».
 - [ ] «Restaura» con la copia de la web recupera tablas, historial, peso y ajustes.
 

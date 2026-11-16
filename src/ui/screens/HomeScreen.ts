@@ -4,9 +4,9 @@ import { SECTION_IDS, SECTION_TITLES, type SectionId } from '../../domain/types'
 import type { App, Screen } from '../App';
 import { addDays, dayKey, greeting, startOfWeek, streak, trainedDays, WEEKDAY_LETTERS } from '../dates';
 import { clear, h, humanDuration, plural } from '../dom';
-import { icon, SECTION_STYLE } from '../icons';
+import { icon, SECTION_STYLE, type IconName } from '../icons';
 import { RoutineScreen } from './RoutineScreen';
-import { activeIsEmpty, GeneratorScreen } from './MakerScreens';
+import { activeIsEmpty, GeneratorScreen, TemplatesScreen } from './MakerScreens';
 import { TableViewScreen } from './TableViewScreen';
 import { startWorkout } from '../components/startWorkout';
 import { MonthScreen } from './MonthScreen';
@@ -15,7 +15,7 @@ import { randomPhrase } from '../../domain/phrases';
 import { weekGoalsDialog } from '../components/weekGoals';
 import { openDay } from './HistoryScreen';
 import { editTable } from './TableEditScreen';
-import { dayName, planDayOf, refreshPlan } from './PlanScreens';
+import { dayName, newPlan, planDayOf, refreshPlan } from './PlanScreens';
 import { kindLabel } from '../../domain/weekPlan';
 
 export class HomeScreen implements Screen {
@@ -93,12 +93,15 @@ export class HomeScreen implements Screen {
             h('span', { class: 'chip' }, icon('clock'), plan.isEmpty ? '—' : humanDuration(plan.estimatedSeconds)),
             h('span', { class: 'chip' }, icon('bolt'), plural(plan.exerciseCount, 'ejercicio', 'ejercicios'))),
           plan.isEmpty
-            ? h('div', { class: 'hero-empty' },
-              h('button', { class: 'btn light block big', onclick: () => app.push(new GeneratorScreen(app, activeIsEmpty(app))) }, icon('bolt'), 'Créala por mí'),
-              h('button', { class: 'btn glass block', onclick: () => app.push(new RoutineScreen(app)) }, icon('plus'), 'Elegir ejercicios'))
+            // tabla vacía: las mismas formas de crearla que en Tablas › Nueva
+            ? h('div', { class: 'hero-empty hero-opts' },
+              this.opt('edit', 'Tabla vacía', 'Elige tú los ejercicios', () => app.push(new RoutineScreen(app))),
+              this.opt('bolt', 'Créala por mí', 'Elige objetivo, zona y tiempo', () => app.push(new GeneratorScreen(app, activeIsEmpty(app)))),
+              this.opt('tables', 'Tablas hechas', 'Listas para usar', () => app.push(new TemplatesScreen(app, activeIsEmpty(app)))),
+              this.opt('calendar', 'Plan de la semana', 'Una tabla para cada día que entrenas', () => newPlan(app), !app.access.premium))
             : h('button', { class: 'btn light block big', onclick: () => this.start(plan) }, icon('play'), 'Empezar'),
           h('div', { class: 'hero-actions' },
-            h('button', { class: 'btn glass small', onclick: () => editTable(app, table.id) }, icon('edit'), 'Editar'),
+            plan.isEmpty ? null : h('button', { class: 'btn glass small', onclick: () => editTable(app, table.id) }, icon('edit'), 'Editar'),
             h('button', { class: 'btn glass small', onclick: () => app.openTab('tablas') }, icon('swap'), 'Cambiar tabla')))),
     );
 
@@ -206,6 +209,14 @@ export class HomeScreen implements Screen {
       icon('chevron', 'ico chev'));
     row.style.setProperty('--sec', st.color);
     return row;
+  }
+
+  /** Una forma de crear la tabla (en Inicio, con la tabla vacía). */
+  private opt(ic: IconName, title: string, help: string, go: () => void, locked = false): HTMLElement {
+    return h('button', { class: 'hero-opt', onclick: go },
+      h('span', { class: 'hero-opt-icon' }, icon(ic)),
+      h('span', { class: 'hero-opt-text' }, h('strong', {}, title), h('span', { class: 'small' }, help)),
+      icon(locked ? 'lock' : 'chevron', 'ico chev'));
   }
 
   private start(plan: WorkoutPlan): void {
