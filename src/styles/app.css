@@ -1511,6 +1511,7 @@ label.sort-row:focus-within, label.rem-hour:focus-within { outline: none; }
 .sec-fold .ico { width: 16px; height: 16px; transform: rotate(-90deg); transition: transform .2s; }
 .sec-fold.folded .ico { transform: rotate(90deg); }
 .sec-fold-info { margin-left: auto; text-transform: none; font-family: var(--body, inherit); font-weight: 600; white-space: nowrap; }
+.maker-sec.foldable { cursor: pointer; -webkit-tap-highlight-color: transparent; user-select: none; }
 .maker-sec.folded .maker-rounds-ctl, .maker-sec.folded .maker-rounds { display: none; }
 .sec-body[hidden] { display: none; }
 .sec-body { display: flex; flex-direction: column; gap: 6px; }

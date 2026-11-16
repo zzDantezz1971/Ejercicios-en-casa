@@ -217,6 +217,12 @@ export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement
     head.prepend(fold);
     head.append(foldInfo);
     if (isFolded) head.classList.add('folded');
+    // toda la fila del título abre y cierra el apartado (menos sus propios botones, como las vueltas)
+    head.classList.add('foldable');
+    head.addEventListener('click', (e) => {
+      if ((e.target as HTMLElement).closest('button, input, select')) return;
+      fold.click();
+    });
     box.append(head, sbody);
     // el material que pide este apartado (el que no está en tu material, marcado)
     const need = neededEquip(app, r, [s]);

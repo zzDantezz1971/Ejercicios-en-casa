@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-16T21:26:17Z",
+    "es": ["Editar tabla: se abre y se cierra cada apartado tocando cualquier parte de su título, no solo la flecha."],
+    "ca": ["Edita la taula: cada apartat s’obre i es tanca tocant qualsevol part del títol, no només la fletxa."],
+    "en": ["Edit routine: open and close each section by tapping anywhere on its title, not just the arrow."]
+  },
+  {
     "fecha": "2026-11-16T21:17:41Z",
     "es": ["Mis datos: el objetivo de peso está ahora dentro del cuadro de Peso, debajo de la gráfica."],
     "ca": ["Les meves dades: l’objectiu de pes ara és dins del quadre de Pes, sota la gràfica."],
