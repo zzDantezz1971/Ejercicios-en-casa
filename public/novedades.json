@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-16T10:42:27Z",
+    "es": ["«Torsión de columna con las piernas cruzadas»: la animación muestra mejor cómo una pierna se cruza por encima de la otra (vista más de lado).", "Pegar: después de pegar un apartado, «Pegar» ya no vuelve a salir hasta que copies otra cosa."],
+    "ca": ["«Torsió de columna amb les cames creuades»: l’animació mostra millor com una cama es creua per sobre de l’altra (vista més de costat).", "Enganxa: després d’enganxar un apartat, «Enganxa» ja no torna a sortir fins que copiïs una altra cosa."],
+    "en": ["“Spinal twist with crossed legs”: the animation shows better how one leg crosses over the other (viewed more from the side).", "Paste: after pasting a section, “Paste” no longer appears until you copy something else."]
+  },
+  {
     "fecha": "2026-11-16T10:34:01Z",
     "es": ["Editar tabla: «Copiar el apartado» y «Pegar» para pasar todos los ejercicios de un apartado al mismo apartado de otra tabla."],
     "ca": ["Edita la taula: «Copia l’apartat» i «Enganxa» per passar tots els exercicis d’un apartat al mateix apartat d’una altra taula."],

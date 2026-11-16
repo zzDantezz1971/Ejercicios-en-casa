@@ -309,6 +309,8 @@ export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement
         const add = clip.items.filter((i) => !have.has(i.exerciseId));
         if (!add.length) { await confirmDialog('Esos ejercicios ya están en este apartado.', 'Vale', ''); return; }
         app.haptics.tap();
+        // pegado: ya no se ofrece «Pegar» hasta que se copie otra cosa
+        CLIPBOARD = null;
         const next = withSection(r, s, [...items, ...add]);
         // en un apartado vacío, también sus vueltas
         edit.set(items.length ? next : { routine: next.routine, rounds: { ...next.rounds, [s]: clip.rounds } });
