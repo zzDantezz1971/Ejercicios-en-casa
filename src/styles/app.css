@@ -756,8 +756,12 @@ button.hd-row { width: 100%; color: inherit; font: inherit; cursor: pointer; }
 
 /* Vueltas */
 .rounds-ctl[hidden] { display: none; }
-.rounds-chip { display: inline-flex; align-items: center; gap: 6px; padding: 8px 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); font: inherit; font-weight: 800; cursor: pointer; }
-.rounds-chip .ico { width: 16px; height: 16px; color: var(--sec, var(--accent)); }
+.rounds-chip { margin-left: auto; flex: none; display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--muted); font: 600 .8rem var(--body, inherit); text-transform: none; letter-spacing: 0; cursor: pointer; }
+.rounds-chip strong { color: var(--fg); font-weight: 800; }
+.rounds-chip .ico { width: 13px; height: 13px; color: var(--sec, var(--accent)); }
+.group-title.with-rounds { display: flex; align-items: center; gap: 8px; }
+.rounds-row { grid-column: 1 / -1; display: flex; justify-content: flex-end; }
+.ex-grid > .rounds-ctl, .ex-rows > .rounds-ctl { grid-column: 1 / -1; }
 .rounds-chip.on { border-color: var(--sec, var(--accent)); }
 .rounds-ctl { position: relative; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; width: 100%; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 6px 8px 6px 12px; }
 .rounds-ctl > .ico { color: var(--sec, var(--accent)); width: 18px; height: 18px; }

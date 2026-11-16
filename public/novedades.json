@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-16T22:31:46Z",
+    "es": ["Lista de ejercicios: las vueltas son ahora un botón pequeño «Vueltas x1» a la derecha del primer título de la lista; al tocarlo se abre el control."],
+    "ca": ["Llista d’exercicis: les voltes ara són un botó petit «Voltes x1» a la dreta del primer títol de la llista; en tocar-lo s’obre el control."],
+    "en": ["Exercise list: rounds are now a small “Rounds x1” button to the right of the list’s first heading; tap it to open the control."]
+  },
+  {
     "fecha": "2026-11-16T22:27:34Z",
     "es": ["Lista de ejercicios: las vueltas ocupan menos; ahora son un botón pequeño (↻ x1) al lado de Todos / Favoritos / Elegidos, que al tocarlo abre el control."],
     "ca": ["Llista d’exercicis: les voltes ocupen menys; ara són un botó petit (↻ x1) al costat de Tots / Preferits / Triats, que en tocar-lo obre el control."],

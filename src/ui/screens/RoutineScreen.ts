@@ -134,8 +134,6 @@ export class RoutineScreen implements Screen {
       h('button', { class: 'seg' + (this.mode === m ? ' on' : ''), 'aria-pressed': String(this.mode === m), onclick: () => { this.mode = m; this.clearSearch(); window.scrollTo(0, 0); this.render(); } }, label);
     // orden: Todos/Favoritos/Elegidos; después el tipo de orden, Ordenar lista y Vueltas (el buscador va debajo)
     this.toolbar.append(h('div', { class: 'segmented' }, seg('all', 'Todos'), seg('fav', h('span', { class: 'seg-fav' }, icon('starFill'), 'Favoritos')), seg('chosen', `Elegidos (${n})`)));
-    // vueltas: un botón pequeño al lado («↻ x1»); al tocarlo se abre debajo el control para cambiarlas
-    this.toolbar.append(...this.roundsControl());
     if (this.mode === 'all') {
       // ordenar la lista por zona, músculo, material o nombre (cada uno con su propio orden personalizado)
       const cur = this.sort;
@@ -186,7 +184,7 @@ export class RoutineScreen implements Screen {
       this.roundsOpen = !this.roundsOpen;
       panel.hidden = !this.roundsOpen;
       chip.setAttribute('aria-expanded', String(this.roundsOpen));
-    } }, icon('swap'), `x${r}`);
+    } }, icon('swap'), h('span', {}, 'Vueltas'), h('strong', {}, `x${r}`));
     return [chip, panel];
   }
 
@@ -360,7 +358,29 @@ export class RoutineScreen implements Screen {
     this.search.value = '';
   }
 
+  /** Lista de ejercicios y, a la derecha del primer título de grupo, el botón pequeño de las vueltas. */
   private renderList(): void {
+    this.renderListInner();
+    this.placeRounds();
+  }
+
+  /** Vueltas: botón pequeño («↻ Vueltas x1») a la derecha del primer título de la lista; al tocarlo se abre debajo el control. */
+  private placeRounds(): void {
+    if (this.mode === 'sorting') return;
+    const [chip, panel] = this.roundsControl();
+    const first = this.list.querySelector('.group-title');
+    if (first) {
+      first.classList.add('with-rounds');
+      first.append(chip);
+      first.after(panel);
+    } else {
+      const row = h('div', { class: 'rounds-row' }, chip);
+      this.list.prepend(row);
+      row.after(panel);
+    }
+  }
+
+  private renderListInner(): void {
     this.io.disconnect();
     clear(this.list);
     this.shown = [];
