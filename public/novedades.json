@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-16T23:42:06Z",
+    "es": ["Editar tabla: con los bloques plegados, el resumen («6 ejercicios · 3 min») vuelve a quedar en la misma línea que el nombre; si no cabe, se parte en dos líneas a la derecha."],
+    "ca": ["Edita la taula: amb els blocs plegats, el resum («6 exercicis · 3 min») torna a quedar a la mateixa línia que el nom; si no hi cap, es parteix en dues línies a la dreta."],
+    "en": ["Edit routine: with the blocks folded, the summary (“6 exercises · 3 min”) is back on the same line as the name; if it doesn’t fit, it wraps onto two lines on the right."]
+  },
+  {
     "fecha": "2026-11-16T23:37:43Z",
     "es": ["Medallas renovadas: ahora hay 66 y cuestan más (rachas más largas, más horas, más calorías, más kilos…), con medallas nuevas como Explorador, Todo el año o Equilibrio.", "Para las medallas solo cuentan los entrenamientos de 10 minutos o más. Las medallas se han vuelto a calcular con las reglas nuevas."],
     "ca": ["Medalles renovades: ara n’hi ha 66 i costen més (ratxes més llargues, més hores, més calories, més quilos…), amb medalles noves com Explorador, Tot l’any o Equilibri.", "Per a les medalles només compten els entrenaments de 10 minuts o més. Les medalles s’han tornat a calcular amb les regles noves."],
