@@ -220,7 +220,7 @@ function bigChart(points: ReadonlyArray<{ date: string; kg: number }>, goal: num
     el('text', { x: tx, y: ty - 9, class: 'w-val', 'text-anchor': 'end' }, kg.toFixed(1).replace('.', DEC));
     el('circle', { cx: tx, cy: ty, r: 16, class: 'w-hit' }).addEventListener('click', (e) => {
       e.stopPropagation();
-      showAt(tx, ty, `${fmtKg(kg)} · ${new Date().toLocaleDateString(LOCALE, { day: 'numeric', month: 'short' })}`);
+      showAt(tx, ty, new Date().toLocaleDateString(LOCALE, { day: 'numeric', month: 'short' }));
     });
   }
   return svg;

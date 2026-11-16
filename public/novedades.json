@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-16T00:44:20Z",
+    "es": ["Gráfica del peso: al tocar el punto de hoy sale solo la fecha (el peso ya está encima)."],
+    "ca": ["Gràfica del pes: en tocar el punt d’avui surt només la data (el pes ja és a sobre)."],
+    "en": ["Weight chart: tapping today’s dot shows just the date (the weight is already above it)."]
+  },
+  {
     "fecha": "2026-11-16T00:40:50Z",
     "es": ["Gráfica del peso en grande: el punto de hoy también lleva el peso encima, como los demás."],
     "ca": ["Gràfica del pes en gran: el punt d’avui també porta el pes a sobre, com els altres."],
