@@ -132,6 +132,16 @@ function addTo(app: App, r: GenResult, s: SectionId, edit: PreviewEdit): void {
   }, 'Añadir ejercicios', true));
 }
 
+/** Apartados plegados de cada lista (se recuerdan mientras estás en la pantalla, aunque se vuelva a pintar). */
+const FOLDED = new WeakMap<object, Set<SectionId>>();
+const NO_EDIT = {};
+function foldedOf(edit?: PreviewEdit): Set<SectionId> {
+  const k = edit?.ask ?? NO_EDIT;
+  let f = FOLDED.get(k);
+  if (!f) { f = new Set(); FOLDED.set(k, f); }
+  return f;
+}
+
 /** «¿Quitar X de la tabla?» con la casilla «No volver a preguntar en esta lista». */
 function confirmRemove(name: string): Promise<{ ok: boolean; stop: boolean }> {
   return new Promise((resolve) => {
@@ -188,10 +198,28 @@ export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement
           h('button', { 'aria-label': 'Más vueltas', disabled: nr >= MAX_ROUNDS, onclick: () => setRounds(nr + 1) }, '+')))
         : nr > 1 ? h('span', { class: 'maker-rounds' }, plural(nr, 'vuelta', 'vueltas')) : '');
     head.style.setProperty('--sec', st.color);
-    box.append(head);
+    // cada apartado se puede plegar (tocando su título) para que la lista no sea interminable
+    const folded = foldedOf(edit);
+    const isFolded = folded.has(s);
+    const sbody = h('div', { class: 'sec-body', hidden: isFolded });
+    const fold = h('button', { class: 'sec-fold' + (isFolded ? ' folded' : ''), 'aria-expanded': String(!isFolded), 'aria-label': isFolded ? 'Desplegar' : 'Plegar', onclick: () => {
+      const now = !sbody.hidden;
+      sbody.hidden = now;
+      fold.classList.toggle('folded', now);
+      fold.setAttribute('aria-expanded', String(!now));
+      if (now) folded.add(s); else folded.delete(s);
+      foldInfo.hidden = !now;
+      head.classList.toggle('folded', now);
+    } }, icon('chevron', 'ico'));
+    const secsTotal = items.reduce((t, it) => t + it.seconds, 0) * nr;
+    const foldInfo = h('span', { class: 'muted small sec-fold-info', hidden: !isFolded }, `${plural(items.length, 'ejercicio', 'ejercicios')} · ${humanDuration(secsTotal)}`);
+    head.prepend(fold);
+    head.append(foldInfo);
+    if (isFolded) head.classList.add('folded');
+    box.append(head, sbody);
     // el material que pide este apartado (el que no está en tu material, marcado)
     const need = neededEquip(app, r, [s]);
-    if (need.length) box.append(h('div', { class: 'sec-need small', style: `--sec: ${st.color}` }, h('span', {}, 'Necesitas:'),
+    if (need.length) sbody.append(h('div', { class: 'sec-need small', style: `--sec: ${st.color}` }, h('span', {}, 'Necesitas:'),
       h('div', { class: 'sec-need-items' }, ...need.map(({ e, missing }) => h('span', { class: 'miss-item' + (missing ? ' missing' : '') }, icon(EQUIP_INFO[e].icon as IconName), tr(EQUIP_INFO[e].name), missing ? h('span', { class: 'miss-flag' }, '(no está en tu material)') : '')))));
     const rows: SortableRow[] = [];
     items.forEach((it, i) => {
@@ -253,14 +281,14 @@ export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement
       rows.push({ content, label: ex.name });
     });
     // se ordena arrastrando con el asa (sin flechas)
-    if (edit) box.append(sortableList(rows, (from, to) => {
+    if (edit) sbody.append(sortableList(rows, (from, to) => {
       const next = items.slice();
       const [moved] = next.splice(from, 1);
       next.splice(to, 0, moved);
       edit.set(withSection(r, s, next));
     }, { arrows: false, handleFirst: true }));
-    else for (const row of rows) box.append(row.content);
-    if (edit) box.append(h('button', { class: 'maker-add', onclick: () => (!items.length && edit.addEmpty ? edit.addEmpty(s) : addTo(app, r, s, edit)) }, icon('plus'), 'Añadir un ejercicio'));
+    else for (const row of rows) sbody.append(row.content);
+    if (edit) sbody.append(h('button', { class: 'maker-add', onclick: () => (!items.length && edit.addEmpty ? edit.addEmpty(s) : addTo(app, r, s, edit)) }, icon('plus'), 'Añadir un ejercicio'));
   }
   if (locked) box.append(h('p', { class: 'muted small maker-free' }, icon('lock'), 'Los ejercicios con candado son de Prémium: en la versión gratis se saltan.'));
   return box;

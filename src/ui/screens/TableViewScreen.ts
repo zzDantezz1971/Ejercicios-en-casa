@@ -43,7 +43,6 @@ export class TableViewScreen implements Screen {
       const st = SECTION_STYLE[s];
       const R = clampRounds(table.rounds?.[s]);
       const secs = items.reduce((t, i) => t + i.seconds, 0) * R;
-      const V = (() => { try { return localStorage.getItem('tv-variant') ?? 'B'; } catch { return 'B'; } })();
       // título del apartado como en Editar (grande, con su color), con el resumen al lado
       const head = h('div', { class: 'tv-head' },
         h('h2', { class: 'maker-sec' }, icon(st.icon), SECTION_TITLES[s]),
@@ -52,13 +51,6 @@ export class TableViewScreen implements Screen {
       const need = neededEquip(app, { routine: table.routine, rounds: table.rounds ?? {} }, [s]);
       const needEl = need.length ? h('div', { class: 'sec-need small', style: `--sec: ${st.color}` }, h('span', {}, 'Necesitas:'),
         h('div', { class: 'sec-need-items' }, ...need.map(({ e, missing }) => h('span', { class: 'miss-item' + (missing ? ' missing' : '') }, icon(EQUIP_INFO[e].icon as IconName), EQUIP_INFO[e].name)))) : null;
-      const zones = [...new Set(items.map((i) => app.catalog.get(i.exerciseId)!.zone))];
-      const summary = V === 'C' ? h('div', { class: 'card tv-summary', style: `--sec: ${st.color}` },
-        h('div', { class: 'chips' },
-          h('span', { class: 'chip' }, icon('clock'), humanDuration(secs)),
-          h('span', { class: 'chip' }, icon('bolt'), plural(items.length, 'ejercicio', 'ejercicios')),
-          R > 1 ? h('span', { class: 'chip' }, icon('swap'), `x${R}`) : null),
-        h('p', { class: 'small tv-zones' }, h('strong', {}, 'Trabaja: '), zones.slice(0, 6).join(', '))) : null;
       const list = h('div', { class: 'tv-list' });
       for (const it of items) {
         const ex = app.catalog.get(it.exerciseId)!;
@@ -68,20 +60,20 @@ export class TableViewScreen implements Screen {
         void app.thumbs.get(ex).then((url) => (img.src = url));
         const locked = !app.access.canUse(ex.id);
         const row = h('button', { class: 'maker-row tv-row' + (locked ? ' locked' : ''), 'aria-label': `Cómo se hace: ${ex.name}`, onclick: () => (app.access.canUse(ex.id) ? app.push(new DetailScreen(app, ex, shown)) : app.showPremium()) },
-          V !== 'A' ? h('span', { class: 'tv-n' }, String(n)) : null,
+          h('span', { class: 'tv-n' }, String(n)),
           lockedThumb(img, locked),
           h('span', { class: 'maker-name' },
             h('span', { class: 'maker-title' }, ex.name),
             h('span', { class: 'muted small tv-sub' }, h('span', { class: 'tv-secs' }, icon('clock'), `${it.seconds} s`),
-              V !== 'A' && it.weight ? h('span', { class: 'tv-secs' }, icon('dumbbell'), kg(it.weight)) : null,
+              it.weight ? h('span', { class: 'tv-secs' }, icon('dumbbell'), kg(it.weight)) : null,
               ex.oneSided ? h('span', { class: 'by-sides' }, icon('sides'), 'por lados') : null),
-            V !== 'A' ? h('span', { class: 'muted small' }, ex.zone) : null,
+            h('span', { class: 'muted small' }, ex.zone),
             locked ? premiumPill() : null),
           icon('chevron', 'ico chev'));
         row.style.setProperty('--sec', st.color);
         list.append(row);
       }
-      blocks.push(head, ...(summary ? [summary] : []), ...(needEl ? [needEl] : []), list);
+      blocks.push(head, ...(needEl ? [needEl] : []), list);
     }
 
     this.el.replaceChildren(

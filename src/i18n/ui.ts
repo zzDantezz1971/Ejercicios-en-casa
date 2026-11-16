@@ -1146,6 +1146,8 @@ const ROWS: Row[] = [
   ['Objetivo, zona y tiempo', 'Objectiu, zona i temps', 'Goal, area and time'],
   ['Una tabla para cada día', 'Una taula per a cada dia', 'A table for each day'],
   ['Por músculo', 'Per múscul', 'By muscle'],
+  ['Desplegar', 'Desplega', 'Expand'],
+  ['Plegar', 'Plega', 'Collapse'],
 ];
 
 export const UI_CA: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[1]]));
