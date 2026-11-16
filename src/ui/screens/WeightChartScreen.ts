@@ -95,8 +95,10 @@ export class WeightChartScreen implements Screen {
     } else this.stats.replaceChildren();
     // tamaño real del hueco (en horizontal: el ancho es el lado largo)
     const portrait = window.innerHeight > window.innerWidth;
-    const W = Math.max(320, (portrait ? window.innerHeight : window.innerWidth) - 24);
-    const H = Math.max(200, (portrait ? window.innerWidth : window.innerHeight) - 70);
+    // el hueco real de la gráfica (sin las barras del móvil); si aún no se sabe, la pantalla
+    const bw = portrait ? this.box.clientHeight : this.box.clientWidth, bh = portrait ? this.box.clientWidth : this.box.clientHeight;
+    const W = Math.max(320, bw > 100 ? bw : (portrait ? window.innerHeight : window.innerWidth) - 24);
+    const H = Math.max(200, bh > 100 ? bh : (portrait ? window.innerWidth : window.innerHeight) - 70);
     this.plotW = W - 60;
     this.box.replaceChildren(line.length
       ? bigChart(line, this.app.store.settings.profile.goalKg ?? null, W, H, this.range ? [since, until] : undefined)
@@ -140,7 +142,10 @@ function bigChart(points: ReadonlyArray<{ date: string; kg: number }>, goal: num
   svg.setAttribute('class', 'weight-chart big');
   const kgs = points.map((p) => p.kg).concat(goal ? [goal] : []);
   const lo = Math.floor(Math.min(...kgs) - 0.5), hi = Math.ceil(Math.max(...kgs) + 0.5);
-  const t0 = domain ? domain[0] : Date.parse(points[0].date), t1 = domain ? domain[1] : Date.parse(points[points.length - 1].date);
+  // un poco de margen a los lados: el último peso (normalmente, el de hoy) no queda pegado al borde
+  const a = domain ? domain[0] : Date.parse(points[0].date), b = domain ? domain[1] : Date.parse(points[points.length - 1].date);
+  const m = Math.max(864e5 * 0.5, (b - a) * 0.04);
+  const t0 = domain ? a : a - m, t1 = b + m;
   const x = (t: number) => pad.l + (t1 > t0 ? ((t - t0) / (t1 - t0)) * (W - pad.l - pad.r) : (W - pad.l - pad.r) / 2);
   const y = (kg: number) => pad.t + (H - pad.t - pad.b) * (1 - (kg - lo) / (hi - lo));
   const el = (tag: string, attrs: Record<string, string | number>, text?: string) => {

@@ -14,6 +14,7 @@ Marca cada punto al probarlo. Si algo falla, haz una captura y cuéntamelo.
 - [ ] Versión gratis: en cada apartado (también Estiraments) salen arriba los 2 gratis y se pueden seleccionar.
 - [ ] Versión gratis: «Crea-la per mi» y «Taules fetes» se ven enteras; el botón «Fes-la servir amb Prèmium» abre Prèmium.
 - [ ] Configuració › Còpia de seguretat: se ve el aviso rojo «Atenció: restaurar… esborra tot…»; al restaurar, la pregunta lo repite y el botón es «Esborra i restaura».
+- [ ] Gráfica del peso en grande (horizontal): el último peso y su número se ven enteros, sin quedar debajo de la barra de botones.
 - [ ] «Restaura» con la copia de la web recupera tablas, historial, peso y ajustes.
 
 ## 1. Health Connect (Configuració › Apps de salut)
