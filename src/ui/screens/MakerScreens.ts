@@ -96,7 +96,7 @@ function missingEquip(app: App, r: GenResult): Equip[] {
 }
 
 /** Todo el material que pide la tabla (o unos apartados) (de cada requisito, el que se tiene o, si no, el primero) y si falta. */
-function neededEquip(app: App, r: GenResult, sections: readonly SectionId[] = SECTION_IDS): Array<{ e: Equip; missing: boolean }> {
+export function neededEquip(app: App, r: GenResult, sections: readonly SectionId[] = SECTION_IDS): Array<{ e: Equip; missing: boolean }> {
   const owned = new Set<string>(app.store.settings.equipment);
   const out = new Map<Equip, boolean>();
   for (const s of sections) for (const it of r.routine[s]) {

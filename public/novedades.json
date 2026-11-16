@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-16T09:53:29Z",
+    "es": ["Contenido de la tabla: nuevo diseño en filas, como al editar (orden, tiempo, peso y zona de cada ejercicio)."],
+    "ca": ["Contingut de la taula: nou disseny en files, com en editar (ordre, temps, pes i zona de cada exercici)."],
+    "en": ["Table contents: new row layout, like when editing (order, time, weight and area of each exercise)."]
+  },
+  {
     "fecha": "2026-11-16T09:41:15Z",
     "es": ["Añadir ejercicios: buscador y «Ordenar» (zona, músculo, material o A-Z) fijos arriba mientras bajas por la lista."],
     "ca": ["Afegeix exercicis: cercador i «Ordena» (zona, múscul, material o A-Z) fixos a dalt mentre baixes per la llista."],

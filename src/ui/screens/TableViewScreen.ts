@@ -2,8 +2,11 @@ import { WorkoutPlan, clampRounds } from '../../domain/WorkoutPlan';
 import { SECTION_IDS, SECTION_TITLES, type ExerciseDef, type SectionId } from '../../domain/types';
 import type { App, Screen } from '../App';
 import { h, humanDuration, kg, plural } from '../dom';
-import { icon, SECTION_STYLE } from '../icons';
+import { icon, SECTION_STYLE, type IconName } from '../icons';
 import { DetailScreen } from './DetailScreen';
+import { neededEquip } from './MakerScreens';
+import { lockedThumb, premiumPill } from '../components/badges';
+import { EQUIP_INFO } from '../../domain/equipment';
 
 /**
  * Ver la tabla en uso, solo para mirar: los ejercicios del apartado elegido (o todos), en el orden en que se harán,
@@ -40,28 +43,45 @@ export class TableViewScreen implements Screen {
       const st = SECTION_STYLE[s];
       const R = clampRounds(table.rounds?.[s]);
       const secs = items.reduce((t, i) => t + i.seconds, 0) * R;
-      const head = h('h3', { class: 'hd-sec tv-sec' },
-        h('span', { class: 'sec-dot' }, icon(st.icon)), SECTION_TITLES[s],
-        h('span', { class: 'muted small' }, `${plural(items.length, 'ejercicio', 'ejercicios')}${R > 1 ? ` x${R} vueltas` : ''} · ${humanDuration(secs)}`));
+      const V = (() => { try { return localStorage.getItem('tv-variant') ?? 'B'; } catch { return 'B'; } })();
+      // título del apartado como en Editar (grande, con su color), con el resumen al lado
+      const head = h('div', { class: 'tv-head' },
+        h('h2', { class: 'maker-sec' }, icon(st.icon), SECTION_TITLES[s]),
+        h('span', { class: 'muted small tv-meta' }, `${plural(items.length, 'ejercicio', 'ejercicios')}${R > 1 ? ` · x${R} vueltas` : ''} · ${humanDuration(secs)}`));
       head.style.setProperty('--sec', st.color);
-      const grid = h('div', { class: 'hd-grid tv-grid' });
+      const need = neededEquip(app, { routine: table.routine, rounds: table.rounds ?? {} }, [s]);
+      const needEl = need.length ? h('div', { class: 'sec-need small', style: `--sec: ${st.color}` }, h('span', {}, 'Necesitas:'),
+        h('div', { class: 'sec-need-items' }, ...need.map(({ e, missing }) => h('span', { class: 'miss-item' + (missing ? ' missing' : '') }, icon(EQUIP_INFO[e].icon as IconName), EQUIP_INFO[e].name)))) : null;
+      const zones = [...new Set(items.map((i) => app.catalog.get(i.exerciseId)!.zone))];
+      const summary = V === 'C' ? h('div', { class: 'card tv-summary', style: `--sec: ${st.color}` },
+        h('div', { class: 'chips' },
+          h('span', { class: 'chip' }, icon('clock'), humanDuration(secs)),
+          h('span', { class: 'chip' }, icon('bolt'), plural(items.length, 'ejercicio', 'ejercicios')),
+          R > 1 ? h('span', { class: 'chip' }, icon('swap'), `x${R}`) : null),
+        h('p', { class: 'small tv-zones' }, h('strong', {}, 'Trabaja: '), zones.slice(0, 6).join(', '))) : null;
+      const list = h('div', { class: 'tv-list' });
       for (const it of items) {
         const ex = app.catalog.get(it.exerciseId)!;
         shown.push(ex);
         n++;
-        const img = h('img', { alt: '', class: 'thumb', 'data-id': ex.id });
+        const img = h('img', { alt: '', class: 'maker-thumb', 'data-id': ex.id });
+        void app.thumbs.get(ex).then((url) => (img.src = url));
         const locked = !app.access.canUse(ex.id);
-        const fig = h('div', { class: 'thumb-box tv-thumb' }, img, h('span', { class: 'tv-num' }, String(n)),
-          locked ? h('span', { class: 'lock-mark', 'aria-hidden': 'true' }, icon('lock')) : null);
-        this.io.observe(fig);
-        const tile = h('button', { class: 'card hd-row tv-tile' + (locked ? ' locked' : ''), 'aria-label': `Cómo se hace: ${ex.name}`, onclick: () => (app.access.canUse(ex.id) ? app.push(new DetailScreen(app, ex, shown)) : app.showPremium()) },
-          fig,
-          h('strong', { class: 'hd-name' }, ex.name),
-          h('span', { class: 'muted small hd-sub' }, `${it.seconds} s`, it.weight ? ` · ${kg(it.weight)}` : '', ex.oneSided ? ' · ' : '', ex.oneSided ? h('span', { class: 'by-sides' }, 'por lados') : null));
-        tile.style.setProperty('--sec', st.color);
-        grid.append(tile);
+        const row = h('button', { class: 'maker-row tv-row' + (locked ? ' locked' : ''), 'aria-label': `Cómo se hace: ${ex.name}`, onclick: () => (app.access.canUse(ex.id) ? app.push(new DetailScreen(app, ex, shown)) : app.showPremium()) },
+          V !== 'A' ? h('span', { class: 'tv-n' }, String(n)) : null,
+          lockedThumb(img, locked),
+          h('span', { class: 'maker-name' },
+            h('span', { class: 'maker-title' }, ex.name),
+            h('span', { class: 'muted small tv-sub' }, h('span', { class: 'tv-secs' }, icon('clock'), `${it.seconds} s`),
+              V !== 'A' && it.weight ? h('span', { class: 'tv-secs' }, icon('dumbbell'), kg(it.weight)) : null,
+              ex.oneSided ? h('span', { class: 'by-sides' }, icon('sides'), 'por lados') : null),
+            V !== 'A' ? h('span', { class: 'muted small' }, ex.zone) : null,
+            locked ? premiumPill() : null),
+          icon('chevron', 'ico chev'));
+        row.style.setProperty('--sec', st.color);
+        list.append(row);
       }
-      blocks.push(head, grid);
+      blocks.push(head, ...(summary ? [summary] : []), ...(needEl ? [needEl] : []), list);
     }
 
     this.el.replaceChildren(

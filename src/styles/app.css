@@ -1279,6 +1279,19 @@ button.wd:active .wd-dot { transform: scale(.92); }
 
 /* Ver tabla (contenido de la tabla, solo para mirar) */
 .tv-body { gap: 10px; }
+.tv-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.tv-head .maker-sec { margin: 6px 0 0; }
+.tv-meta { font-weight: 700; }
+.tv-list { display: flex; flex-direction: column; gap: 8px; }
+.tv-row { width: 100%; text-align: left; cursor: pointer; color: var(--fg); font: inherit; }
+.tv-row .chev { width: 18px; height: 18px; color: var(--muted); flex: none; margin-left: auto; }
+.tv-n { width: 26px; height: 26px; border-radius: 8px; display: grid; place-items: center; flex: none; font-weight: 800; font-size: .85rem; color: #fff; background: var(--sec); }
+.tv-sub { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.tv-secs { display: inline-flex; align-items: center; gap: 4px; font-weight: 700; color: var(--fg); }
+.tv-secs .ico { width: 14px; height: 14px; color: var(--sec); }
+.tv-summary { display: flex; flex-direction: column; gap: 8px; border-color: color-mix(in srgb, var(--sec) 40%, var(--line)); }
+.tv-zones { margin: 0; color: var(--muted); }
+.tv-zones strong { color: var(--fg); }
 .tv-chips { margin: 0; }
 .tv-tile { padding: 0 0 10px; overflow: hidden; gap: 4px; }
 .tv-tile .hd-name, .tv-tile .hd-sub { padding: 0 10px; }
