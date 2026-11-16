@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-16T22:38:19Z",
+    "es": ["Lista de ejercicios más compacta: el botón «Ordenar» va al lado del buscador y abre la lista de órdenes; se quita el texto de ayuda de arriba."],
+    "ca": ["Llista d’exercicis més compacta: el botó «Ordena» va al costat del cercador i obre la llista d’ordres; es treu el text d’ajuda de dalt."],
+    "en": ["More compact exercise list: the “Sort” button sits next to the search box and opens the sort options; the help text at the top is gone."]
+  },
+  {
     "fecha": "2026-11-16T22:31:46Z",
     "es": ["Lista de ejercicios: las vueltas son ahora un botón pequeño «Vueltas x1» a la derecha del primer título de la lista; al tocarlo se abre el control."],
     "ca": ["Llista d’exercicis: les voltes ara són un botó petit «Voltes x1» a la dreta del primer títol de la llista; en tocar-lo s’obre el control."],

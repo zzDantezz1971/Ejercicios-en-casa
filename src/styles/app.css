@@ -1714,3 +1714,12 @@ button.plan-row { cursor: pointer; }
 .hist-locked p { margin: 0; }
 .hist-free { width: 100%; text-align: left; color: var(--fg); cursor: pointer; font: inherit; }
 .hist-free strong { color: var(--accent); }
+
+/* buscador con el botón «Ordenar» al lado */
+.search-row { display: flex; gap: 8px; align-items: stretch; }
+.search-row[hidden] { display: none; }
+.search-row > .search { flex: 1 1 auto; min-width: 0; margin: 0; }
+.sort-slot { display: flex; }
+.sort-slot:empty { display: none; }
+.sort-btn { display: inline-flex; align-items: center; gap: 6px; padding: 0 14px; border-radius: 14px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); font: 700 .95rem var(--body, inherit); cursor: pointer; white-space: nowrap; }
+.sort-btn .ico { width: 18px; height: 18px; color: var(--sec, var(--accent)); }

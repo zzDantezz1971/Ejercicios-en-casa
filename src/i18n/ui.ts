@@ -1153,6 +1153,7 @@ const ROWS: Row[] = [
   ['Elegir {x}', 'Tria {x}', 'Choose {x}'],
   ['Elige el bloque', 'Tria el bloc', 'Choose the block'],
   ['Vueltas: x{n}', 'Voltes: x{n}', 'Rounds: x{n}'],
+  ['Ordenar', 'Ordena', 'Sort'],
 ];
 
 export const UI_CA: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[1]]));

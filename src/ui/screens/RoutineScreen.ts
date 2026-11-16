@@ -3,7 +3,7 @@ import { RoutineEditor, STEP_SECONDS } from '../../domain/RoutineEditor';
 import { clampRounds, MAX_ROUNDS } from '../../domain/WorkoutPlan';
 import { SECTION_IDS, SECTION_TITLES, usesWeight, type ExerciseDef, type SectionId } from '../../domain/types';
 import type { App, Screen } from '../App';
-import { append, clear, h, humanDuration, kg, plural, promptDialog, weightDialog } from '../dom';
+import { actionSheet, append, clear, h, humanDuration, kg, plural, promptDialog, weightDialog } from '../dom';
 import { icon, SECTION_STYLE, zoneIcon } from '../icons';
 import { badgeList, equipMarks } from '../components/badges';
 import { canDo } from '../../domain/equipment';
@@ -41,7 +41,9 @@ export class RoutineScreen implements Screen {
   /** Todos los ejercicios, solo los elegidos (en su orden) o reordenando la lista. */
   private mode: 'all' | 'fav' | 'chosen' | 'sorting' = 'all';
   private toolbar = h('div', { class: 'routine-toolbar' });
-  private searchBox: HTMLElement;
+  /** Buscador y, a su lado, el botón de ordenar. */
+  private searchRow!: HTMLElement;
+  private sortSlot = h('div', { class: 'sort-slot' });
   private hint = h('p', { class: 'hint' });
   private tabs = h('div', { class: 'tabs', role: 'tablist' });
   private list = h('div', { class: 'ex-grid' });
@@ -67,7 +69,7 @@ export class RoutineScreen implements Screen {
         h('button', { class: 'icon-btn rename-btn', 'aria-label': 'Cambiar nombre', title: 'Cambiar nombre', onclick: () => void this.rename() }, icon('edit'))),
       this.tabs,
       this.toolbar,
-      (this.searchBox = h('label', { class: 'search', for: 'ex-search' }, icon('search'), this.search)),
+      (this.searchRow = h('div', { class: 'search-row' }, h('label', { class: 'search', for: 'ex-search' }, icon('search'), this.search), this.sortSlot)),
       this.hint,
       this.list,
       this.footer,
@@ -113,7 +115,9 @@ export class RoutineScreen implements Screen {
     this.toolbar.classList.toggle('sticky-sort', this.mode === 'sorting');
     const n = this.editor.value[this.section].length;
     const title = this.app.sections.find((s) => s.id === this.section)!.title;
-    this.searchBox.hidden = this.mode !== 'all';
+    this.searchRow.hidden = this.mode !== 'all';
+    this.hint.hidden = false;
+    this.sortSlot.replaceChildren();
     if (this.mode === 'sorting') {
       this.toolbar.append(
         h('div', { class: 'sorting-bar' },
@@ -135,21 +139,20 @@ export class RoutineScreen implements Screen {
     // orden: Todos/Favoritos/Elegidos; después el tipo de orden, Ordenar lista y Vueltas (el buscador va debajo)
     this.toolbar.append(h('div', { class: 'segmented' }, seg('all', 'Todos'), seg('fav', h('span', { class: 'seg-fav' }, icon('starFill'), 'Favoritos')), seg('chosen', `Elegidos (${n})`)));
     if (this.mode === 'all') {
-      // ordenar la lista por zona, músculo, material o nombre (cada uno con su propio orden personalizado)
+      // ordenar la lista por zona, músculo, material o nombre (cada uno con su propio orden personalizado):
+      // botón «Ordenar» al lado del buscador, que abre la lista de órdenes
       const cur = this.sort;
-      const sel = h('select', { class: 'sort-select', 'aria-label': 'Ordenar por', onchange: (e: Event) => {
-        (e.target as HTMLSelectElement).blur();
-        const v = (e.target as HTMLSelectElement).value as ListSort;
+      this.sortSlot.append(h('button', { class: 'sort-btn', 'aria-label': 'Ordenar por', onclick: async () => {
+        const v = await actionSheet<ListSort>('Ordenar por', (Object.entries(SORT_LABELS) as Array<[ListSort, string]>)
+          .map(([id, label]) => ({ id, label: (id === cur ? '✓ ' : '') + tr(label) })));
+        if (!v) return;
         this.sortNow = v;
         // al elegir «Personalizada» se abre la lista entera para ordenarla
         if (v === 'personalizada') { this.mode = 'sorting'; this.clearSearch(); }
         window.scrollTo(0, 0);
         this.render();
-      } },
-        ...(Object.entries(SORT_LABELS) as Array<[ListSort, string]>)
-          .map(([v, label]) => h('option', { value: v, selected: v === cur }, label)));
+      } }, icon('sort'), h('span', {}, 'Ordenar')));
       append(this.toolbar,
-        h('label', { class: 'sort-row' }, icon('tables'), h('span', { class: 'muted small' }, 'Ordenar:'), sel),
         // con «Personalizada», para volver a cambiar tu orden
         cur === 'personalizada' ? h('button', { class: 'btn ghost small', onclick: () => {
           this.mode = 'sorting'; this.clearSearch(); window.scrollTo(0, 0); this.render();
@@ -164,7 +167,8 @@ export class RoutineScreen implements Screen {
         ? h('span', {}, 'Este es el orden en que se harán. Arrastra por el asa ', icon('tables', 'ico inline'), ' o usa las flechas para cambiarlo.')
         : 'Aún no has elegido ejercicios en este bloque. Márcalos en "Todos".');
     } else {
-      this.hint.replaceChildren('Toca un ejercicio para ver cómo se hace. Pulsa Seleccionar para añadirlo al final de la tabla.');
+      // en «Todos» no hace falta la ayuda: ocupa sitio y se entiende sola
+      this.hint.hidden = true;
     }
   }
 

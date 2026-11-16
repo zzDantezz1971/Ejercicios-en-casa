@@ -32,6 +32,7 @@ Marca cada punto al probarlo. Si algo falla, haz una captura y cuéntamelo.
 - [ ] «Afegeix exercicis»: tocar la imagen o el nombre abre la ficha del ejercicio (solo información, sin botones de añadir, treure ni eliminar; igual se abra desde la lista de ejercicios, «Edita la taula», «Contingut de la taula» o el historial); al volver, lo elegido sigue marcado; el + / ✓ de la derecha lo elige o lo quita. Al marcarlo salen debajo − tiempo + y, si lleva mancuernas, el peso; al añadir, la tabla los guarda con ese tiempo y peso.
 - [ ] «Taula buida» (lista con Selecciona): los cuatro apartados en un cuadro con el título «Tria el bloc»; al bajar, el cuadro se queda fijo arriba. Las voltes: botón pequeño «↻ Voltes x1» a la derecha del primer título de la lista (p. ej. «Mobilitat articular»); al tocarlo se abre debajo − x1 + con la explicación.
 - [ ] «Apartat» pasa a llamarse «Bloc» en toda la app (lista de ejercicios, «Edita la taula», «Copia el bloc», entrenamiento, resúmenes, medallas, ajustes y guía).
+- [ ] «Taula buida» (lista con Selecciona): debajo de Tots / Preferits / Triats, el cercador y a su lado el botón «⇅ Ordena» (abre Zona del cos, Per múscul, Per material, A-Z, Personalitzada, con ✓ en el actual); ya no sale el texto «Toca un exercici per veure…».
 - [ ] **Versión gratis nueva** (sin suscripción ni código):
   - [ ] Todos los ejercicios se pueden ver y elegir, sin candados.
   - [ ] Inicio con la tabla vacía: «Tabla vacía» funciona; «Créala por mí», «Tablas hechas» y «Plan de la semana» con candado (abren Prémium).
