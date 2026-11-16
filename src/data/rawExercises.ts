@@ -235,11 +235,15 @@ export const RAW_SECTIONS: RawSection[] = [
    [{uaL:180,faL:180,uaR:0,faR:0,th:25,sn:100,hd:-110},1500,1000],
    [{uaL:180,faL:180,uaR:0,faR:0,th:93,sn:90,sTh:.35,sSh:.4},200,1000],
    [{uaL:180,faL:180,uaR:0,faR:0,th:155,sn:80,hd:-70},1500,1000]]},
- {n:'Torsión de columna con piernas cruzadas',split:true,z:'Columna y lumbar',v:'top',mat:'top',az:28,el:44,top:'Vista desde arriba',b:['lumbar'],f:[
-   [{uaL:-112,faL:-104,uaR:-68,faR:-76,thL:80,snL:100,thR:110,snR:72,sThL:.7,sThR:.78,sShL:.6,sShR:.55,zKR:8},250,1100],
-   [{uaL:-112,faL:-104,uaR:-68,faR:-76,thL:14,snL:92,thR:4,snR:118,sThL:.97,sThR:.95,sShL:.85,sShR:.7,hd:-106},700,1100],
-   [{uaL:-112,faL:-104,uaR:-68,faR:-76,thL:80,snL:100,thR:110,snR:72,sThL:.78,sThR:.7,sShL:.6,sShR:.55,zKL:8},250,1100],
-   [{uaL:-112,faL:-104,uaR:-68,faR:-76,thL:176,snL:62,thR:166,snR:88,sThL:.95,sThR:.97,sShL:.7,sShR:.85,hd:-74},700,1100]]},
+ {n:'Torsión de columna con piernas cruzadas',split:true,z:'Columna y lumbar',v:'top',mat:'top',top:'Vista desde arriba',b:['lumbar'],az:62,el:30,f:[
+   // 1) tumbado, brazos en cruz, rodillas dobladas y pies en el suelo; 2) la pierna derecha cruza por encima de la izquierda
+   // (su rodilla sobre la otra y el pie al otro lado); 3) las dos caen juntas hacia la izquierda hasta el suelo
+   [{uaL:180,faL:180,uaR:0,faR:0,th:93,sn:90,sTh:.5,sSh:.55},300,900],
+   [{uaL:180,faL:180,uaR:0,faR:0,thL:93,snL:90,sThL:.5,sShL:.55,thR:122,snR:118,sThR:.62,sShR:.45,yKR:12},500,900],
+   [{uaL:180,faL:180,uaR:0,faR:0,thL:155,snL:82,sThL:.95,sShL:.9,thR:146,snR:118,sThR:.95,sShR:.95,yKR:7,yAR:2,hd:-70},1500,1000],
+   [{uaL:180,faL:180,uaR:0,faR:0,th:87,sn:90,sTh:.5,sSh:.55},300,900],
+   [{uaL:180,faL:180,uaR:0,faR:0,thR:87,snR:90,sThR:.5,sShR:.55,thL:58,snL:62,sThL:.62,sShL:.45,yKL:12},500,900],
+   [{uaL:180,faL:180,uaR:0,faR:0,thR:25,snR:98,sThR:.95,sShR:.9,thL:34,snL:62,sThL:.95,sShL:.95,yKL:7,yAL:2,hd:-110},1500,1000]]},
  {g:'Cadera y glúteos'},
  {n:'Figura 4 (glúteo y piriforme)',z:'Glúteos y cadera',mat:1,f:[
    [{tl:180,thL:-110,snL:-20,thR:-60,sThR:.7,snR:206,sShR:.8,ua:-40,fa:0},900,1100],

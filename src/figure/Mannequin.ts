@@ -83,8 +83,9 @@ export function to3D(spec: MotionSpec, view: string, J: Joints, pose: Pose): Rec
       o['el' + s].y = base + rise(pose['sa' + s], LEN.ua);
       o['ha' + s].y = o['el' + s].y + rise(pose['sa' + s], LEN.fa);
       const kneeDy = rise(pose['sTh' + s], 34) * (spec.legsDown ? -1 : 1);
-      o['kn' + s].y = Math.max(4, base + kneeDy);
-      o['an' + s].y = Math.max(3.5, o['kn' + s].y - rise(pose['sSh' + s], 33));
+      // yK / yA: subir la rodilla o el tobillo (una pierna cruzada por encima de la otra)
+      o['kn' + s].y = Math.max(4, base + kneeDy) + (pose['yK' + s] ?? 0);
+      o['an' + s].y = Math.max(3.5, o['kn' + s].y - rise(pose['sSh' + s], 33)) + (pose['yA' + s] ?? 0);
       // pie: apoyado, plano y en la prolongación de la espinilla; en el aire, en L (punta hacia arriba)
       const an = o['an' + s], fl = V(an.x - o['kn' + s].x, 0, an.z - o['kn' + s].z);
       if (fl.lengthSq() < 0.01) fl.set(J['ti' + s][0] - J['an' + s][0], 0, J['ti' + s][1] - J['an' + s][1]);
