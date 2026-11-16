@@ -195,10 +195,10 @@ function bigChart(points: ReadonlyArray<{ date: string; kg: number }>, goal: num
   // al tocar un punto: su fecha (corta) en una etiqueta pequeña, debajo del punto
   const tip = document.createElementNS(NS, 'g');
   tip.setAttribute('class', 'w-tip');
-  const show = (i: number) => {
-    const text = new Date(points[i].date).toLocaleDateString(LOCALE, { day: 'numeric', month: 'short' });
-    const w = text.length * 6.6 + 14, bx = Math.min(W - pad.r - w, Math.max(pad.l, P[i][0] - w / 2));
-    const by = P[i][1] + 30 > H - pad.b ? P[i][1] - 50 : P[i][1] + 10;
+  const show = (i: number) => showAt(P[i][0], P[i][1], new Date(points[i].date).toLocaleDateString(LOCALE, { day: 'numeric', month: 'short' }));
+  const showAt = (px: number, py: number, text: string) => {
+    const w = text.length * 6.6 + 14, bx = Math.min(W - pad.r - w, Math.max(pad.l, px - w / 2));
+    const by = py + 30 > H - pad.b ? py - 50 : py + 10;
     tip.innerHTML = `<rect x="${bx}" y="${by}" width="${w}" height="26" rx="8"></rect><text x="${bx + w / 2}" y="${by + 17}" text-anchor="middle"></text>`;
     tip.querySelector('text')!.textContent = text;
     svg.append(tip);
@@ -210,5 +210,15 @@ function bigChart(points: ReadonlyArray<{ date: string; kg: number }>, goal: num
     el('circle', { cx: P[i][0], cy: P[i][1], r: 16, class: 'w-hit' }).addEventListener('click', (e) => { e.stopPropagation(); show(i); });
     if (label || i === points.length - 1 || i === 0) el('text', { x: P[i][0], y: P[i][1] - 9, class: 'w-val', 'text-anchor': i === 0 ? 'start' : i === points.length - 1 ? 'end' : 'middle' }, p.kg.toFixed(1).replace('.', DEC));
   });
+  // hoy: un puntito al final de la línea; al tocarlo, el peso y la fecha de hoy
+  if (tail.length) {
+    const [tx, ty] = tail[0];
+    const kg = points[points.length - 1].kg;
+    el('circle', { cx: tx, cy: ty, r: 3.5, class: 'w-dot today' });
+    el('circle', { cx: tx, cy: ty, r: 16, class: 'w-hit' }).addEventListener('click', (e) => {
+      e.stopPropagation();
+      showAt(tx, ty, `${fmtKg(kg)} · ${new Date().toLocaleDateString(LOCALE, { day: 'numeric', month: 'short' })}`);
+    });
+  }
   return svg;
 }

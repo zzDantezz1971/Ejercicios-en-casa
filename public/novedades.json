@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-16T00:36:11Z",
+    "es": ["Gráfica del peso en grande: un puntito en el día de hoy; al tocarlo, el peso y la fecha."],
+    "ca": ["Gràfica del pes en gran: un puntet al dia d’avui; en tocar-lo, el pes i la data."],
+    "en": ["Full-screen weight chart: a small dot on today; tap it to see the weight and date."]
+  },
+  {
     "fecha": "2026-11-16T00:34:32Z",
     "es": ["Copia de seguridad: quitado el aviso rojo fijo; el aviso sale al pulsar Restaurar."],
     "ca": ["Còpia de seguretat: tret l’avís vermell fix; l’avís surt en prémer Restaura."],

@@ -15,7 +15,7 @@ Marca cada punto al probarlo. Si algo falla, haz una captura y cuéntamelo.
 - [ ] Versión gratis: «Crea-la per mi» y «Taules fetes» se ven enteras; el botón «Fes-la servir amb Prèmium» abre Prèmium.
 - [ ] Configuració › Còpia de seguretat: al pulsar Restaura, la pregunta avisa de que se borra todo y el botón es «Esborra i restaura».
 - [ ] Gráfica del peso en grande (horizontal): el último peso y su número se ven enteros, sin quedar debajo de la barra de botones.
-- [ ] Gráfica del peso en grande: línea recta desde el último peso hasta hoy.
+- [ ] Gráfica del peso en grande: línea recta desde el último peso hasta hoy, con un puntito hoy; al tocarlo, el peso y la fecha.
 - [ ] «Restaura» con la copia de la web recupera tablas, historial, peso y ajustes.
 
 ## 1. Health Connect (Configuració › Apps de salut)
