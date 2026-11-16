@@ -180,10 +180,15 @@ function bigChart(points: ReadonlyArray<{ date: string; kg: number }>, goal: num
   defs.innerHTML = `<clipPath id="${clipId}"><rect x="${pad.l - 6}" y="0" width="${W - pad.l - pad.r + 12}" height="${H}"></rect></clipPath>`;
   svg.append(defs);
   const inside = (i: number) => P[i][0] >= pad.l - 6 && P[i][0] <= W - pad.r + 6;
-  if (points.length > 1) {
-    const curve = smoothPath(P);
-    el('path', { d: `${curve} L${P[P.length - 1][0]},${H - pad.b} L${P[0][0]},${H - pad.b} Z`, class: 'w-area', 'clip-path': `url(#${clipId})` });
-    el('path', { d: curve, class: 'w-line', 'clip-path': `url(#${clipId})` });
+  // desde el último peso hasta hoy, recta (el peso sigue siendo ese mientras no anotes otro)
+  const lastT = Date.parse(points[points.length - 1].date), now = Date.now();
+  const tail: Array<readonly [number, number]> = now - lastT > 36e5 && now >= t0 && lastT <= b ? [[x(Math.min(now, t1)), P[P.length - 1][1]] as const] : [];
+  if (points.length > 1 || tail.length) {
+    const curve = points.length > 1 ? smoothPath(P) : `M${P[0][0]},${P[0][1]}`;
+    const full = tail.length ? `${curve} L${tail[0][0]},${tail[0][1]}` : curve;
+    const endX = tail.length ? tail[0][0] : P[P.length - 1][0];
+    el('path', { d: `${full} L${endX},${H - pad.b} L${P[0][0]},${H - pad.b} Z`, class: 'w-area', 'clip-path': `url(#${clipId})` });
+    el('path', { d: full, class: 'w-line', 'clip-path': `url(#${clipId})` });
   }
   // el valor encima de cada punto (si no hay demasiados)
   const label = points.length <= 24;

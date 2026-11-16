@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-16T00:33:00Z",
+    "es": ["Gráfica del peso en grande: la línea sigue recta desde el último peso hasta hoy."],
+    "ca": ["Gràfica del pes en gran: la línia continua recta des de l’últim pes fins avui."],
+    "en": ["Full-screen weight chart: the line continues straight from the latest weight to today."]
+  },
+  {
     "fecha": "2026-11-16T00:30:10Z",
     "es": ["Gráfica del peso en grande: el último peso ya no queda pegado al borde ni se corta por la barra de botones del móvil."],
     "ca": ["Gràfica del pes en gran: l’últim pes ja no queda enganxat a la vora ni es talla per la barra de botons del mòbil."],
