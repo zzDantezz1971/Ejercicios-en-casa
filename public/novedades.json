@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-16T00:19:22Z",
+    "es": ["App Android: en Ajustes › Copia de seguridad puedes restaurar la copia que hiciste en la web (o en otro móvil) y guardar una a mano."],
+    "ca": ["App d’Android: a Configuració › Còpia de seguretat pots restaurar la còpia que vas fer a la web (o en un altre mòbil) i desar-ne una a mà."],
+    "en": ["Android app: in Settings › Backup you can restore the backup you made on the web (or on another phone) and save one manually."]
+  },
+  {
     "fecha": "2026-11-16T00:14:51Z",
     "es": ["Versión gratis: los ejercicios gratis salen siempre arriba («Gratis») y se pueden elegir, aunque antes los hubieras quitado de la lista."],
     "ca": ["Versió gratuïta: els exercicis gratuïts surten sempre a dalt («Gratis») i es poden triar, encara que abans els haguessis tret de la llista."],

@@ -340,7 +340,9 @@ export class SettingsScreen implements Screen {
         h('span', { class: 'set-icon' }, icon('copy')),
         h('div', { class: 'set-text' },
           h('strong', {}, 'Tablas, historial y ajustes'),
-          h('p', { class: 'muted small' }, 'Al guardar se abre el menú de compartir: elige Drive para tener la copia a salvo. Para recuperarla, pulsa Restaurar y elige el archivo.'))),
+          h('p', { class: 'muted small' }, IS_NATIVE
+            ? 'La app ya guarda tus datos en la copia automática de Google. Aquí puedes restaurar una copia que hiciste en la web o en otro móvil (pulsa Restaurar y elige el archivo), o guardar una a mano.'
+            : 'Al guardar se abre el menú de compartir: elige Drive para tener la copia a salvo. Para recuperarla, pulsa Restaurar y elige el archivo.'))),
       msg,
       h('div', { class: 'backup-actions' },
         h('button', { class: 'btn primary', onclick: () => void save() }, icon('check'), 'Guardar copia'),
@@ -453,8 +455,9 @@ export class SettingsScreen implements Screen {
       this.watchSection(),
       this.healthSection(),
       // copia a mano solo en la web (en la app de Android los datos van en la copia automática de Google)
-      HAS_BACKUP ? h('h3', { class: 'block-title' }, 'Copia de seguridad') : null,
-      HAS_BACKUP ? this.backupSection() : null,
+      // en la app de Android también: para traer la copia de la web (o de otro móvil) y guardar una a mano
+      h('h3', { class: 'block-title' }, 'Copia de seguridad'),
+      this.backupSection(),
       this.versionSection(),
       !this.app.voice.available ? h('p', { class: 'muted' }, 'Este navegador no tiene voz disponible.') : null,
     );

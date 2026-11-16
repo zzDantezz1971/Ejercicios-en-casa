@@ -71,7 +71,7 @@ const GUIDE: Array<{ icon: IconName; title: string; sub: string; points: Array<s
       'Samsung Galaxy Watch, Pixel Watch y otros Wear OS: instala en el reloj una app que emita el pulso por Bluetooth (en Ajustes › Smartwatch te explicamos cómo).',
       ...(IS_NATIVE ? [{ h: 'Apps de salud' },
         'En Ajustes › Apps de salud puedes guardar tus entrenamientos (tiempo, calorías y pulsaciones) y tu peso en Health Connect, para verlos en Samsung Health, Google Fit, Fitbit y otras apps de salud. Kasa Fit solo escribe: nunca lee tus datos de salud.'] : []),
-      ...(HAS_BACKUP ? [{ h: 'Copia de seguridad' }, 'Guarda tus tablas, historial y ajustes en un archivo (por ejemplo, en Drive) y restáuralo si cambias de móvil.'] : []),
+      { h: 'Copia de seguridad' }, 'Guarda tus tablas, historial y ajustes en un archivo (por ejemplo, en Drive) y restáuralo si cambias de móvil.',
       { h: 'Gratis y prémium' },
       'Gratis: dos ejercicios de cada apartado y todas las funciones de la app.',
       HAS_BACKUP ? 'Prémium: todos los ejercicios, el plan de la semana, la personalización completa del muñeco, todos los temas de color y el recordatorio de copia de seguridad. Se paga y se cancela en Google Play.'
