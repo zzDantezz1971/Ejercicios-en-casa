@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-16T00:40:50Z",
+    "es": ["Gráfica del peso en grande: el punto de hoy también lleva el peso encima, como los demás."],
+    "ca": ["Gràfica del pes en gran: el punt d’avui també porta el pes a sobre, com els altres."],
+    "en": ["Full-screen weight chart: today’s dot also shows the weight above it, like the others."]
+  },
+  {
     "fecha": "2026-11-16T00:38:26Z",
     "es": ["Gráfica del peso en grande: con el móvil en vertical vuelve a salir girada y grande (se veía diminuta)."],
     "ca": ["Gràfica del pes en gran: amb el mòbil en vertical torna a sortir girada i gran (es veia diminuta)."],

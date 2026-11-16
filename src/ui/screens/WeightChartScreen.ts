@@ -209,13 +209,15 @@ function bigChart(points: ReadonlyArray<{ date: string; kg: number }>, goal: num
     el('circle', { cx: P[i][0], cy: P[i][1], r: i === points.length - 1 ? 5 : 3.5, class: i === points.length - 1 ? 'w-dot last' : 'w-dot' });
     // zona grande y transparente para tocar con el dedo
     el('circle', { cx: P[i][0], cy: P[i][1], r: 16, class: 'w-hit' }).addEventListener('click', (e) => { e.stopPropagation(); show(i); });
-    if (label || i === points.length - 1 || i === 0) el('text', { x: P[i][0], y: P[i][1] - 9, class: 'w-val', 'text-anchor': i === 0 ? 'start' : i === points.length - 1 ? 'end' : 'middle' }, p.kg.toFixed(1).replace('.', DEC));
+    if (label || i === points.length - 1 || i === 0) el('text', { x: P[i][0], y: P[i][1] - 9, class: 'w-val', 'text-anchor': i === 0 ? 'start' : i === points.length - 1 && !tail.length ? 'end' : 'middle' }, p.kg.toFixed(1).replace('.', DEC));
   });
   // hoy: un puntito al final de la línea; al tocarlo, el peso y la fecha de hoy
   if (tail.length) {
     const [tx, ty] = tail[0];
     const kg = points[points.length - 1].kg;
     el('circle', { cx: tx, cy: ty, r: 3.5, class: 'w-dot today' });
+    // el peso encima, como en los demás puntos
+    el('text', { x: tx, y: ty - 9, class: 'w-val', 'text-anchor': 'end' }, kg.toFixed(1).replace('.', DEC));
     el('circle', { cx: tx, cy: ty, r: 16, class: 'w-hit' }).addEventListener('click', (e) => {
       e.stopPropagation();
       showAt(tx, ty, `${fmtKg(kg)} · ${new Date().toLocaleDateString(LOCALE, { day: 'numeric', month: 'short' })}`);
