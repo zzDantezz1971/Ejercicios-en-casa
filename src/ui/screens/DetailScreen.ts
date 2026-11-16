@@ -38,7 +38,8 @@ export class DetailScreen implements Screen {
    * @param list ejercicios de la lista desde la que se abrió, en su orden: deslizando el dedo a los lados
    * se pasa al siguiente o al anterior.
    */
-  constructor(private readonly app: App, private readonly ex: ExerciseDef, private readonly list: readonly ExerciseDef[] = []) {
+  /** @param viewOnly solo para ver el ejercicio (desde la lista de añadir o al montar una tabla): sin «Añadir a la tabla» ni «Eliminar». */
+  constructor(private readonly app: App, private readonly ex: ExerciseDef, private readonly list: readonly ExerciseDef[] = [], private readonly viewOnly = false) {
     this.paintFav();
     const d = ex.description;
     this.el.style.setProperty('--sec', SECTION_STYLE[ex.section].color);
@@ -103,7 +104,7 @@ export class DetailScreen implements Screen {
   private open(to: ExerciseDef, dir: -1 | 1, motion: 'fade' | 'none'): void {
     this.app.haptics.tap();
     window.scrollTo(0, 0);
-    this.app.replace(new DetailScreen(this.app, to, this.list), motion === 'fade' ? (dir < 0 ? 'back' : 'forward') : 'none');
+    this.app.replace(new DetailScreen(this.app, to, this.list, this.viewOnly), motion === 'fade' ? (dir < 0 ? 'back' : 'forward') : 'none');
   }
 
   /** Coloca la hoja según lo arrastrado: se desplaza con el dedo, gira un poco en 3D y se oscurece en el borde. */
@@ -120,7 +121,7 @@ export class DetailScreen implements Screen {
 
   /** El ejercicio de al lado, debajo de la hoja: su ficha completa, ya montada (el muñeco quieto hasta que se suelta). */
   private peek(to: ExerciseDef, dir: -1 | 1): { el: HTMLElement; shade: HTMLElement; set: (p: number) => void; screen: DetailScreen } {
-    const screen = new DetailScreen(this.app, to, this.list);
+    const screen = new DetailScreen(this.app, to, this.list, this.viewOnly);
     const el = h('div', { class: 'page-peek', 'aria-hidden': 'true' }, screen.el);
     document.body.append(el);
     // el muñeco se prepara en el siguiente fotograma (así el dedo no nota el trabajo)
@@ -338,6 +339,7 @@ export class DetailScreen implements Screen {
   }
 
   private renderAction(): void {
+    if (this.viewOnly) { this.action.replaceChildren(); return; }
     clear(this.action);
     const editor = new RoutineEditor(this.app.store.routine);
     const pos = editor.position(this.ex.section, this.ex.id);

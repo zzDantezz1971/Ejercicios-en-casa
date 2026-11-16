@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-16T22:07:41Z",
+    "es": ["Al ver un ejercicio desde la lista de añadir o al editar una tabla, ya no salen «Añadir a la tabla» ni «Eliminar el ejercicio»: es solo para verlo."],
+    "ca": ["En veure un exercici des de la llista d’afegir o en editar una taula, ja no surten «Afegeix a la taula» ni «Elimina l’exercici»: és només per veure’l."],
+    "en": ["When you view an exercise from the add list or while editing a routine, “Add to routine” and “Delete exercise” no longer appear: it’s just for viewing."]
+  },
+  {
     "fecha": "2026-11-16T21:49:40Z",
     "es": ["Editar tabla: si el nombre del apartado es largo o la letra del móvil es grande, el control de vueltas pasa debajo en vez de salirse de la pantalla."],
     "ca": ["Edita la taula: si el nom de l’apartat és llarg o la lletra del mòbil és gran, el control de voltes passa a sota en lloc de sortir de la pantalla."],
