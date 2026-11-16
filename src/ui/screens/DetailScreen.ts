@@ -1,4 +1,5 @@
-import { MUSCLE_NAMES, parseMuscles } from '../../figure/anatomy';
+import { MUSCLE_NAMES, muscleWeights, parseMuscles } from '../../figure/anatomy';
+import { bodyMaps } from '../components/bodyMaps';
 import { exerciseWeights, weightSuggestion } from '../../domain/weights';
 import { weightChart } from '../components/weightCard';
 import { RoutineEditor } from '../../domain/RoutineEditor';
@@ -355,9 +356,23 @@ function musclesInfo(spec: string | undefined): HTMLElement | null {
   const line = (cls: string, label: string, list: string[], extra?: string[]) => list.length || extra?.length
     ? h('p', { class: 'mu-line ' + cls }, h('span', { class: 'mu-dot' }), h('strong', {}, label + ' '), [...list, ...(extra ?? []).map((x) => `${x} (suave)`)].join(', '))
     : null;
-  return h('div', { class: 'muscles' },
+  const lines = h('div', { class: 'muscles' },
     line('work', 'Trabaja:', main, second),
     line('stretch', 'Estira:', stretch));
+  // cuerpo de frente y de espaldas con los músculos coloreados (rojo trabaja, turquesa se estira)
+  return h('div', { class: 'mu-card' }, h('div', { class: 'mu-figs' }, mapImg(spec, false), mapImg(spec, true)), lines);
+}
+
+/** Peso de cada músculo para el mapa del cuerpo: 1 trabaja, 0,55 suave, -1 se estira (los dos lados juntos). */
+function mapWeights(spec: string | undefined): number[] {
+  const { L, R } = muscleWeights(spec, undefined);
+  return L.map((v, i) => (Math.abs(v) >= Math.abs(R[i]) ? v : R[i]));
+}
+
+function mapImg(spec: string | undefined, back: boolean): HTMLElement {
+  const el = h('img', { class: 'mu-img', alt: back ? 'Músculos de espaldas' : 'Músculos de frente' });
+  void bodyMaps().bodyMap(mapWeights(spec), back).then((u) => { if (u) el.src = u; else el.remove(); });
+  return el;
 }
 
 function how(ic: Parameters<typeof icon>[0], title: string, text: string): HTMLElement {

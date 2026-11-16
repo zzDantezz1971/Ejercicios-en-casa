@@ -737,6 +737,11 @@ button.hd-row { width: 100%; color: inherit; font: inherit; cursor: pointer; }
 
 /* Músculos de cada ejercicio */
 .muscles { display: flex; flex-direction: column; gap: 4px; margin: 4px 0 2px; }
+.mu-card { display: grid; grid-template-columns: 120px 1fr; gap: 12px; align-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 8px 12px 8px 6px; }
+.mu-figs { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+.mu-img { width: 100%; aspect-ratio: 1 / 2.4; object-fit: cover; display: block; transform: scale(1.45); transform-origin: 50% 47%; }
+.mu-card .mu-img { aspect-ratio: 1 / 2.2; }
+.mu-img:not([src]) { visibility: hidden; }
 .mu-line { display: flex; align-items: baseline; gap: 6px; margin: 0; flex-wrap: wrap; font-size: .95rem; }
 .mu-dot { width: 10px; height: 10px; border-radius: 50%; flex: none; align-self: center; }
 .mu-line.work .mu-dot { background: #E5142A; }

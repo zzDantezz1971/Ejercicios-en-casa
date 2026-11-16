@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-16T16:26:17Z",
+    "es": ["Ficha del ejercicio: un cuerpo de frente y de espaldas muestra la zona que trabaja (en rojo) y la que estira (en turquesa)."],
+    "ca": ["Fitxa de l’exercici: un cos de cara i d’esquena mostra la zona que treballa (en vermell) i la que estira (en turquesa)."],
+    "en": ["Exercise page: a body from the front and back shows the area it works (red) and the area it stretches (teal)."]
+  },
+  {
     "fecha": "2026-11-16T16:17:51Z",
     "es": ["Historial: se quitan los botones para filtrar por tabla; siempre se ven todos los entrenamientos."],
     "ca": ["Historial: es treuen els botons per filtrar per taula; sempre es veuen tots els entrenaments."],

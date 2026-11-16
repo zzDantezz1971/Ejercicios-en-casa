@@ -40,7 +40,7 @@ const GUIDE: Array<{ icon: IconName; title: string; sub: string; points: Array<s
       'En «Mi plan de la semana» (arriba de tus tablas) ves la semana de lunes a domingo con lo ya hecho. Toca un día para ver su tabla, cambiarla, pedir otra propuesta o empezar.',
       'Con «Renovar los ejercicios cada semana», cada lunes cambian los ejercicios de cada día (las zonas no). Al cumplir todos los días de una semana, ganas la medalla «Plan cumplido».',
       'Cuatro apartados: Calentamiento, Fuerza, Abdominales y Estiramientos.',
-      'Toca un ejercicio para ver al muñeco haciéndolo, cómo se hace paso a paso y los músculos que trabaja. Desliza para pasar al siguiente.',
+      'Toca un ejercicio para ver al muñeco haciéndolo, cómo se hace paso a paso y los músculos que trabaja (en rojo) o estira (en turquesa) en un cuerpo de frente y de espaldas. Desliza para pasar al siguiente.',
       'Gira el muñeco con el dedo para verlo desde otro ángulo: se queda así para ese ejercicio, también al entrenar y en la lista.',
       'Busca por nombre o zona, marca favoritos con la estrella y ordena la lista por zona, músculo, material o nombre, o a tu manera con «Personalizada».',
       'En los ejercicios elegidos puedes cambiar los segundos, el orden y, si usan pesas, anotar el peso.',

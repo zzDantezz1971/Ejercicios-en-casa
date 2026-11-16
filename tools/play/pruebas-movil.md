@@ -27,6 +27,7 @@ Marca cada punto al probarlo. Si algo falla, haz una captura y cuéntamelo.
 - [ ] Estiraments: vuelve «Torsió de columna amb les cames creuades» (también tras restaurar la copia de la web).
 - [ ] «Torsió de columna amb les cames creuades»: vídeo nuevo visto un poco de lado (brazos en cruz, una pierna pasa por encima de la otra y las piernas bajan al suelo con la de encima cruzada en X por encima de la otra).
 - [ ] Historial: ya no salen arriba los botones «Todas / Estiraments / De força»; récords y calendario cuentan todos los entrenamientos.
+- [ ] Ficha de un ejercicio: debajo del muñeco, cuerpo de frente y de espaldas con la zona que trabaja en rojo y la que estira en turquesa (probar uno de fuerza y uno de estiramiento).
 - [ ] Edita: «Copia l’apartat» en una tabla y «Enganxa» en el mismo apartado de otra (en la misma tabla no sale «Enganxa»; después de pegar, «Enganxa» desaparece).
 - [ ] Afegeix exercicis: buscador y «Ordena» (zona, múscul, material, A-Z) fijos arriba al desplazar.
 - [ ] «Restaura» con la copia de la web recupera tablas, historial, peso y ajustes.

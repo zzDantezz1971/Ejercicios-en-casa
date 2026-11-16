@@ -40,6 +40,8 @@ const toSrgb = (x: number) => {
 /** Un solo color, rojo vivo: entero en lo más trabajado (peso 1) y suave (más transparente) en lo que se trabajó algo. */
 const hot = [0.85, 0.12, 0.15];
 const SOFT = 0.45;
+/** Músculos que se estiran (pesos negativos), en turquesa. */
+const cool = [0.0, 0.48, 0.42];
 
 /** Colorea el mapa de músculos. */
 function paint(src: ImageData, box: readonly number[], weights: number[]): string {
@@ -59,13 +61,18 @@ function paint(src: ImageData, box: readonly number[], weights: number[]): strin
       const m1 = s[a + 1] / 255, m2 = s[b] / 255, w1 = wt(s[a]), w2 = wt(s[a + 2]);
       // cada músculo aporta su intensidad (entera si es de lo más trabajado, suave si algo) y se queda la mayor:
       // así, donde se tocan dos músculos el color pasa de uno a otro de forma continua, sin manchas
+      // peso negativo: músculo que se estira (turquesa)
       const amt = (m: number, w: number) => m * (w >= 0.65 ? 1 : w > 0.001 ? SOFT : 0);
       const shorts = flag > 191;
       const base = shorts ? [0.12, 0.15, 0.2] : [0.6, 0.64, 0.7];
-      const k = Math.min(1, Math.max(amt(m1, w1), amt(m2, w2), amt(s[d + 2] / 255, wt(s[e]))) * (shorts ? 0.5 : 1));
+      const m3 = s[d + 2] / 255, w3 = wt(s[e]);
+      const kw = Math.max(amt(m1, w1), amt(m2, w2), amt(m3, w3));
+      const ks = Math.max(amt(m1, -w1), amt(m2, -w2), amt(m3, -w3));
+      const col = ks > kw ? cool : hot;
+      const k = Math.min(1, Math.max(kw, ks) * (shorts ? 0.5 : 1));
       const dark = 1 - 0.2 * (s[b + 1] / 255) * k;
       const L = (s[d + 1] / 255) * 2;
-      for (let ch = 0; ch < 3; ch++) o[t + ch] = toSrgb((base[ch] * (1 - k) + hot[ch] * k) * dark * L + hot[ch] * k * 0.3);
+      for (let ch = 0; ch < 3; ch++) o[t + ch] = toSrgb((base[ch] * (1 - k) + col[ch] * k) * dark * L + col[ch] * k * 0.3);
     }
   }
   const cv = document.createElement('canvas');
