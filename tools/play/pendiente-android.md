@@ -46,3 +46,8 @@ una vista previa de la versión gratis). Falta configurarlo en Google:
   - Pendiente en Play Console: Contenido de la app › Permisos de salud (Health Connect): declarar los 4 permisos de
     escritura (ejercicio, calorías activas, frecuencia cardíaca, peso), explicar el uso y enlazar la política.
 - Más adelante, si hace falta: servidor de activaciones de los códigos (ver arriba), app para iPhone, ficha de Play en castellano.
+
+## Ideas para más adelante
+- «Mode esquena» dentro de Kasa Fit (o un plan semanal de espalda bien trabajado): ver si se usa antes de pensar en una
+  app dedicada. Si un día se hace app aparte: contenido propio (programas progresivos, niveles según el dolor, consejos
+  de postura), revisión de un fisioterapeuta, avisos de salud y su propia prueba cerrada de 12 personas y 14 días.
