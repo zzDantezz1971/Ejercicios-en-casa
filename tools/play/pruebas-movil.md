@@ -13,7 +13,8 @@ Marca cada punto al probarlo. Si algo falla, haz una captura y cuéntamelo.
 - [ ] Versión gratis: ejercicios de Prèmium con etiqueta dorada y candado sobre la miniatura (listas, Edita, Crea-la per mi, Taules fetes).
 - [ ] Versión gratis: en cada apartado (también Estiraments) salen arriba los 2 gratis y se pueden seleccionar.
 - [ ] Versión gratis: «Crea-la per mi» y «Taules fetes» se ven enteras; el botón «Fes-la servir amb Prèmium» abre Prèmium.
-- [ ] Configuració › Còpia de seguretat: «Restaura» con la copia de la web recupera tablas, historial, peso y ajustes.
+- [ ] Configuració › Còpia de seguretat: se ve el aviso rojo «Atenció: restaurar… esborra tot…»; al restaurar, la pregunta lo repite y el botón es «Esborra i restaura».
+- [ ] «Restaura» con la copia de la web recupera tablas, historial, peso y ajustes.
 
 ## 1. Health Connect (Configuració › Apps de salut)
 - [ ] Sale la tarjeta «Health Connect». Si pide instalarla, el botón abre Play Store; al volver a la app, la tarjeta cambia sola.

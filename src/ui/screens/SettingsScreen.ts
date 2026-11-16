@@ -326,8 +326,8 @@ export class SettingsScreen implements Screen {
       }
       const when = info.exportedAt ? ` del ${new Date(info.exportedAt).toLocaleDateString(LOCALE, { day: 'numeric', month: 'long', year: 'numeric' })}` : '';
       const ok = await confirmDialog(
-        `¿Restaurar la copia${when}? Tiene ${plural(info.routines, 'tabla', 'tablas')} y ${plural(info.history, 'entrenamiento', 'entrenamientos')}. Se sustituirá todo lo que hay ahora en la app.`,
-        'Restaurar');
+        `¿Restaurar la copia${when}? Tiene ${plural(info.routines, 'tabla', 'tablas')} y ${plural(info.history, 'entrenamiento', 'entrenamientos')}. Se borrará todo lo que hay ahora en la app (tablas, planes, historial, peso, medallas y ajustes) y se sustituirá por la copia. No se puede deshacer.`,
+        'Borrar y restaurar', 'Cancelar', true);
       if (!ok) return;
       this.app.store.importBackup(text);
       await flushDurable();
@@ -346,7 +346,9 @@ export class SettingsScreen implements Screen {
       msg,
       h('div', { class: 'backup-actions' },
         h('button', { class: 'btn primary', onclick: () => void save() }, icon('check'), 'Guardar copia'),
-        h('button', { class: 'btn ghost', onclick: () => void restore() }, icon('back'), 'Restaurar copia')));
+        h('button', { class: 'btn ghost', onclick: () => void restore() }, icon('back'), 'Restaurar copia')),
+      // aviso bien visible: restaurar borra todo lo que hay ahora
+      h('p', { class: 'restore-warn small' }, icon('info'), h('span', {}, h('strong', {}, 'Atención:'), ' ', h('span', {}, 'restaurar una copia borra todo lo que hay ahora en la app (tablas, planes, historial, peso, medallas y ajustes) y lo sustituye por lo de la copia. No se puede deshacer.'))));
   }
 
   /** Recordatorios: abre su pantalla; debajo, un resumen de los que están activos. */
