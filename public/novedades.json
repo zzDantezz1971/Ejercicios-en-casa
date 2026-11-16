@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-16T00:14:51Z",
+    "es": ["Versión gratis: los ejercicios gratis salen siempre arriba («Gratis») y se pueden elegir, aunque antes los hubieras quitado de la lista."],
+    "ca": ["Versió gratuïta: els exercicis gratuïts surten sempre a dalt («Gratis») i es poden triar, encara que abans els haguessis tret de la llista."],
+    "en": ["Free version: the free exercises always appear at the top (“Free”) and can be chosen, even if you had removed them from the list."]
+  },
+  {
     "fecha": "2026-11-16T00:07:06Z",
     "es": ["Los ejercicios de Prémium se ven más claros: etiqueta dorada «Prémium» con candado y la miniatura apagada con el candado encima.", "Versión gratis: «Créala por mí» y «Tablas hechas» se pueden ver enteras; para usar una tabla con ejercicios de Prémium, el botón abre Prémium."],
     "ca": ["Els exercicis de Prèmium es veuen més clars: etiqueta daurada «Prèmium» amb cadenat i la miniatura apagada amb el cadenat a sobre.", "Versió gratuïta: «Crea-la per mi» i «Taules fetes» es poden veure senceres; per fer servir una taula amb exercicis de Prèmium, el botó obre Prèmium."],

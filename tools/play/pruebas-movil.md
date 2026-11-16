@@ -11,6 +11,7 @@ Marca cada punto al probarlo. Si algo falla, haz una captura y cuéntamelo.
 - [ ] Al cambiar el idioma, la app vuelve a Configuració (no a Inici).
 - [ ] Entrenamiento: arriba ya no sale el nombre pequeño de la tabla.
 - [ ] Versión gratis: ejercicios de Prèmium con etiqueta dorada y candado sobre la miniatura (listas, Edita, Crea-la per mi, Taules fetes).
+- [ ] Versión gratis: en cada apartado (también Estiraments) salen arriba los 2 gratis y se pueden seleccionar.
 - [ ] Versión gratis: «Crea-la per mi» y «Taules fetes» se ven enteras; el botón «Fes-la servir amb Prèmium» abre Prèmium.
 
 ## 1. Health Connect (Configuració › Apps de salut)

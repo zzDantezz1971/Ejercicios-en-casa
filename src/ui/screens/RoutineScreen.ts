@@ -241,7 +241,9 @@ export class RoutineScreen implements Screen {
   private ordered(sectionId: SectionId, sort: ListSort = this.sort): Listed[] {
     const sec = this.app.sections.find((s) => s.id === sectionId)!;
     const hidden = this.app.store.hidden;
-    const visible = sec.exercises.filter((e) => !hidden.has(e.id)).sort(byName);
+    // en la versión gratis, los ejercicios gratis salen siempre, aunque se hayan quitado de la lista
+    const freeShown = (id: string) => !this.app.access.premium && this.app.access.canUse(id);
+    const visible = sec.exercises.filter((e) => !hidden.has(e.id) || freeShown(e.id)).sort(byName);
     if (sort === 'personalizada') {
       // tu orden, una sola lista sin grupos; de entrada (o los que falten), el orden por zona
       const base = this.ordered(sectionId, 'zona');
