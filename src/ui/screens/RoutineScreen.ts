@@ -342,6 +342,8 @@ export class RoutineScreen implements Screen {
 
   private renderTabs(): void {
     clear(this.tabs);
+    // cuadro con los cuatro apartados y un título claro
+    this.tabs.append(h('p', { class: 'tabs-title' }, icon('tables'), 'Elige el apartado'));
     for (const s of this.app.sections) {
       // solo se ve cuántos ejercicios has elegido en cada apartado (si hay alguno)
       const n = this.editor.value[s.id].length;

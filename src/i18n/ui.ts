@@ -1151,6 +1151,7 @@ const ROWS: Row[] = [
   ['Prémium: tablas sin límite, «Créala por mí», tablas hechas, el plan de la semana, todo el historial, los resúmenes, el objetivo de peso, la personalización completa del muñeco, todos los temas de color y la copia de seguridad. Se paga y se cancela en Google Play.', 'Prèmium: taules sense límit, «Crea-la per mi», taules fetes, el pla setmanal, tot l’historial, els resums, l’objectiu de pes, la personalització completa del ninot, tots els temes de color i la còpia de seguretat. Es paga i es cancel·la a Google Play.', 'Premium: unlimited routines, “Make it for me”, ready-made routines, the weekly plan, your whole history, the summaries, the weight goal, full figure customisation, every colour theme and backups. Paid and cancelled in Google Play.'],
   ['Objetivo de peso: mira cuánto te falta para llegar', 'Objectiu de pes: mira quant et falta per arribar-hi', 'Weight goal: see how far you are from it'],
   ['Elegir {x}', 'Tria {x}', 'Choose {x}'],
+  ['Elige el apartado', 'Tria l’apartat', 'Choose the section'],
 ];
 
 export const UI_CA: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[1]]));
