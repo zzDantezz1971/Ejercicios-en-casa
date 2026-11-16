@@ -311,10 +311,13 @@ export class SettingsScreen implements Screen {
         ? h('div', {}, h('strong', {}, `Última copia: ${new Date(last).toLocaleDateString(LOCALE, { day: 'numeric', month: 'long', year: 'numeric' })}, ${new Date(last).toLocaleTimeString(LOCALE, { hour: '2-digit', minute: '2-digit' })}`),
           h('span', { class: 'small' }, old ? `${ago}. Conviene hacer otra.` : ago))
         : h('strong', {}, 'Aún no has guardado ninguna copia.'));
+    // guardar y restaurar copias es de Prémium (la copia automática de Google funciona igual)
     const save = async () => {
+      if (!this.app.access.premium) { this.app.showPremium(); return; }
       if (await saveBackupNow(this.app)) this.render();
     };
     const restore = async () => {
+      if (!this.app.access.premium) { this.app.showPremium(); return; }
       const text = await pickBackupFile();
       if (text == null) return;
       let info;
@@ -374,7 +377,7 @@ export class SettingsScreen implements Screen {
         h('div', { class: 'rest-head' },
           h('span', { class: 'set-icon' }, icon('lock')),
           h('div', { class: 'set-text' }, h('strong', {}, 'Vista previa de la versión gratis'),
-            h('p', { class: 'muted small' }, 'Solo en este navegador: verás la app como alguien sin suscripción, con un ejercicio gratis de cada apartado. En la web no se paga nada.'))),
+            h('p', { class: 'muted small' }, 'Solo en este navegador: verás la app como alguien sin suscripción (todos los ejercicios, una sola tabla y el historial solo la primera semana). En la web no se paga nada.'))),
         h('div', { class: 'segmented lang-segs' },
           h('button', { class: 'seg' + (on ? '' : ' on'), 'aria-pressed': String(!on), onclick: () => { a.setPreview(false); this.app.applySettings(); this.render(); } }, 'Todo desbloqueado'),
           h('button', { class: 'seg' + (on ? ' on' : ''), 'aria-pressed': String(on), onclick: () => { a.setPreview(true); this.app.applySettings(); this.render(); } }, 'Versión gratis')),

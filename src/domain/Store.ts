@@ -33,6 +33,8 @@ export interface SavedData {
   unhideVer?: number;
   /** Fecha de la última copia de seguridad guardada (ISO). */
   lastBackup?: string;
+  /** Primer día de uso de la app (ISO): en la versión gratis, el historial se ve solo la primera semana. */
+  firstUse?: string;
   /** Ejercicios marcados como favoritos. */
   favorites: string[];
   /** Histórico del peso corporal, del más antiguo al más reciente. */
@@ -338,6 +340,11 @@ export class Store {
   }
 
   /* ── Copia de seguridad ── */
+
+  /** Primer día de uso de la app. */
+  get firstUse(): Date {
+    return new Date(this.data.firstUse ?? Date.now());
+  }
 
   get lastBackup(): string | undefined {
     return this.data.lastBackup;
@@ -700,6 +707,10 @@ export class Store {
       order[k] = o.filter((x): x is string => typeof x === 'string');
     }
     const lastBackup = typeof input.lastBackup === 'string' ? input.lastBackup : undefined;
+    // primer uso: si no consta, el entrenamiento más antiguo (o ahora)
+    const firstTimes = [typeof input.firstUse === 'string' ? Date.parse(input.firstUse) : NaN, ...history.map((e) => Date.parse(e.date)), Date.now()]
+      .filter((t) => Number.isFinite(t));
+    const firstUse = new Date(Math.min(...firstTimes)).toISOString();
     const favorites = Array.isArray(input.favorites) ? (input.favorites as unknown[]).filter((x): x is string => typeof x === 'string') : [];
     let weights: WeightEntry[] = Array.isArray(input.weights)
       ? (input.weights as WeightEntry[]).filter((w) => w && typeof w.date === 'string' && Number.isFinite(w.kg) && w.kg > 0)
@@ -723,7 +734,7 @@ export class Store {
     const plans = rawPlans.map(sanitizePlan).filter((p): p is WeekPlan => !!p && !seenIds.has(p.id) && !!seenIds.add(p.id));
     const activePlanId = plans.some((p) => p.id === input.activePlanId) ? (input.activePlanId as string) : plans[0]?.id;
     return {
-      version: DATA_VERSION, routines, activeId, settings, history, hidden, order, orderVer: ORDER_VER, unhideVer: UNHIDE_VER, lastBackup, favorites, weights,
+      version: DATA_VERSION, routines, activeId, settings, history, hidden, order, orderVer: ORDER_VER, unhideVer: UNHIDE_VER, lastBackup, firstUse, favorites, weights,
       summarySeen, weekSeen, medals, welcomed, ...(plans.length ? { plans, activePlanId } : {}),
     };
   }

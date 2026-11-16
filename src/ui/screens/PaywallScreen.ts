@@ -87,12 +87,12 @@ export class PaywallScreen implements Screen {
         h('span', { class: 'bar-title' }, 'Prémium')),
       h('div', { class: 'welcome-top pw-top' },
         h('img', { class: 'welcome-logo', src: `${import.meta.env.BASE_URL}icon-192.png`, alt: '' }),
-        h('h1', {}, 'Desbloquea todos los ejercicios')),
+        h('h1', {}, 'Organiza todo tu entrenamiento')),
       h('ul', { class: 'pw-perks' },
-        ...['Más de 200 ejercicios con muñeco animado y personalizable', 'Arma tus tablas con los ejercicios que quieras, con o sin material', 'Tablas hechas a tu medida según tu objetivo, zona y tiempo, o listas para usar', 'Plan de la semana: una tabla para cada día que entrenas', 'Voz, pitidos y cuenta atrás: entrena sin mirar el móvil', 'Conecta tu reloj y ve las pulsaciones', 'Historial, rachas y medallas para motivarte', 'Siete temas de color para la app', 'Resumen de cada semana y de cada mes'].map((t) =>
+        ...['Todas las tablas que quieras', 'Tablas hechas a tu medida según tu objetivo, zona y tiempo, o listas para usar', 'Plan de la semana: una tabla para cada día que entrenas', 'Todo tu historial y tus récords, siempre', 'Resumen de cada semana y de cada mes', 'Personaliza el muñeco y elige entre siete temas de color', 'Copia de seguridad de tus tablas e historial'].map((t) =>
           h('li', {}, icon('check'), t)),
         h('li', {}, icon('check'), 'Y mucho más 😃')),
-      h('p', { class: 'muted small pw-free' }, 'Ahora tienes la versión gratis: dos ejercicios de cada apartado, con todo lo demás de la app.'),
+      h('p', { class: 'muted small pw-free' }, 'Ahora tienes la versión gratis: todos los ejercicios, una tabla y el historial de la primera semana.'),
       CAN_PAY ? null : h('p', { class: 'note pw-preview' }, icon('info'), 'Vista previa: en la versión web no se puede pagar. La suscripción solo funciona en la app de Google Play.'),
       h('section', { class: 'pw-plans' },
         ...(plans === null ? [h('p', { class: 'muted small' }, 'Cargando precios…')]

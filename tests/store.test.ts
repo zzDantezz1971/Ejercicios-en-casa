@@ -298,3 +298,18 @@ describe('Ejercicios que vuelven a las listas', () => {
     expect(new Store(kv).hidden.has('torsion-de-columna-con-piernas-cruzadas')).toBe(true);
   });
 });
+
+describe('Primer día de uso (historial de la versión gratis)', () => {
+  it('con datos de antes, es el entrenamiento más antiguo; luego se mantiene', () => {
+    const old = '2026-01-10T10:00:00.000Z';
+    const kv = memory(JSON.stringify({ version: 2, welcomed: true, history: [{ date: '2026-03-01T10:00:00.000Z' }, { date: old }] }));
+    const s = new Store(kv);
+    expect(s.firstUse.toISOString()).toBe(old);
+    s.markWelcomed();
+    expect(new Store(kv).firstUse.toISOString()).toBe(old);
+  });
+  it('sin datos, es ahora', () => {
+    const t = Date.now();
+    expect(Math.abs(new Store(memory()).firstUse.getTime() - t)).toBeLessThan(5000);
+  });
+});

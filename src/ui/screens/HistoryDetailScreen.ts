@@ -38,7 +38,7 @@ export class HistoryDetailScreen implements Screen {
         const ex = app.catalog.get(it.exerciseId);
         const status = it.completed ? '' : it.seconds > 0 ? 'Saltado a medias' : 'Saltado';
         const r = h(ex ? 'button' : 'div', { class: 'card hd-row' + (it.completed ? '' : ' skipped'),
-          ...(ex ? { 'aria-label': `Cómo se hace: ${ex.name}`, onclick: () => (app.access.canUse(ex.id) ? app.push(new DetailScreen(app, ex, shown)) : app.showPremium()) } : {}) },
+          ...(ex ? { 'aria-label': `Cómo se hace: ${ex.name}`, onclick: () => app.push(new DetailScreen(app, ex, shown)) } : {}) },
           h('div', { class: 'hd-top' },
             h('span', { class: 'hd-mark' }, icon(it.completed ? 'check' : 'next')),
             h('span', { class: 'hd-secs' }, mmss(it.seconds), it.seconds < it.planned ? h('span', { class: 'muted small' }, ` / ${mmss(it.planned)}`) : null)),
@@ -164,7 +164,7 @@ export class HistoryDetailScreen implements Screen {
       const sec = app.catalog.get(it.exerciseId)?.section;
       if (sec) routine[sec].push({ exerciseId: it.exerciseId, seconds: it.planned, ...(it.weight ? { weight: it.weight } : {}) });
     }
-    const plan = WorkoutPlan.build(app.playable(routine), app.catalog, app.store.settings);
+    const plan = WorkoutPlan.build(routine, app.catalog, app.store.settings);
     if (plan.isEmpty) return;
     const table: SavedRoutine = app.store.routines.find((r) => r.id === entry.routineId)
       ?? { id: entry.routineId ?? 'historial', name: entry.routineName ?? 'Entrenamiento repetido', routine, createdAt: entry.date };

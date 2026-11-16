@@ -42,13 +42,3 @@ export function equipMarks(need: Equip[][] | undefined, owned?: ReadonlySet<stri
       ...alts.flatMap((e, i) => (i ? [h('span', { class: 'or', 'aria-hidden': 'true' }, '/'), icon(EQUIP_INFO[e].icon as IconName)] : [icon(EQUIP_INFO[e].icon as IconName)])));
   }));
 }
-
-/** Etiqueta «Prémium» con candado (dorada), para los ejercicios que solo son de Prémium. */
-export function premiumPill(): HTMLElement {
-  return h('span', { class: 'prem-pill' }, icon('lock'), 'Prémium');
-}
-
-/** Miniatura con el candado encima (y apagada) si el ejercicio es de Prémium. */
-export function lockedThumb(img: HTMLElement, locked: boolean): HTMLElement {
-  return locked ? h('span', { class: 'thumb-lock' }, img, h('span', { class: 'lock-mark', 'aria-hidden': 'true' }, icon('lock'))) : img;
-}

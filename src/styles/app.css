@@ -1373,18 +1373,10 @@ button.wd:active .wd-dot { transform: scale(.92); }
 .hd-nav .muted { text-align: center; flex: 1; min-width: 0; }
 
 /* Versión gratis: ejercicios de pago con candado */
-.ex-card.locked .thumb-box img { filter: grayscale(.85) brightness(.6); }
-.ex-card.locked .ex-name, .ex-card.locked .ex-zone { opacity: .55; }
-.lock-mark { position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none; }
-.lock-mark svg { width: 34px; height: 34px; padding: 9px; border-radius: 50%; background: rgb(0 0 0 / .55); color: #fff; }
-.select-btn.premium { color: var(--warn, #F5A524); border-color: color-mix(in srgb, var(--warn, #F5A524) 45%, transparent); }
-.tv-tile.locked img, .hd-row.locked img { filter: grayscale(.85) brightness(.6); }
 .paywall .bar { margin-bottom: -24px; }
 .pw-top { padding-top: 8px; }
 .pw-free { margin: 0; text-align: center; }
 .pw-preview { margin: 0; }
-.pw-home { width: 100%; text-align: left; color: var(--fg); cursor: pointer; font: inherit; border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent); }
-.pw-home strong { color: var(--accent); }
 .rounds-label { display: inline-flex; align-items: center; gap: 6px; }
 .rounds-info { width: 15px; height: 15px; color: var(--muted); }
 .rounds-tip { flex-basis: 100%; margin: 2px 0 4px; padding: 8px 10px; border-radius: 10px; background: var(--accent-soft); font-size: .88rem; line-height: 1.35; color: var(--fg); }
@@ -1526,25 +1518,11 @@ label.sort-row:focus-within, label.rem-hour:focus-within { outline: none; }
 .maker-row {
   display: flex; align-items: center; gap: 10px; padding: 6px 8px 6px 6px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line);
 }
-.maker-row.locked .maker-title, .maker-row.locked .maker-name > span:first-child { opacity: .6; }
-/* ejercicio de Prémium: etiqueta dorada con candado y miniatura apagada con el candado encima */
-.prem-pill { display: inline-flex; align-items: center; gap: 4px; align-self: flex-start; padding: 2px 8px 2px 6px; border-radius: 999px; font-size: .72rem; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; color: #F5B83D; background: rgb(245 165 36 / .16); border: 1px solid rgb(245 165 36 / .45); }
-.prem-pill .ico { width: 12px; height: 12px; }
-.thumb-lock { position: relative; display: inline-flex; flex: none; }
-.thumb-lock img { filter: grayscale(.85) brightness(.6); }
-.thumb-lock .lock-mark svg { width: 26px; height: 26px; padding: 6px; }
-.ex-card.locked { border-color: rgb(245 165 36 / .35); }
-.maker-body:has(.prem-note) .maker-free { display: none; }
-.prem-note { align-items: center; border: 1px solid rgb(245 165 36 / .45); background: rgb(245 165 36 / .08); }
-.prem-note .ico { color: #F5B83D; }
-.btn.prem-btn { background: linear-gradient(135deg, #F5B83D, #D98E12); color: #1B1405; }
 .maker-open { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; background: none; border: 0; padding: 0; color: inherit; font: inherit; text-align: left; cursor: pointer; }
 .maker-thumb { width: 52px; height: 52px; border-radius: 10px; object-fit: cover; background: var(--surface-2); flex: none; }
 .maker-name { flex: 1; min-width: 0; font-weight: 600; display: flex; flex-direction: column; align-items: flex-start; gap: 2px; }
 .maker-secs { display: inline-flex; align-items: center; gap: 6px; font-weight: 500; }
 .maker-name .lock { width: 15px; height: 15px; color: var(--muted); flex: none; }
-.maker-free { display: flex; align-items: center; gap: 6px; margin-top: 6px; }
-.maker-free .ico { width: 15px; height: 15px; flex: none; }
 .maker-actions { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
 .maker-tpl { display: flex; align-items: center; gap: 14px; width: 100%; text-align: left; cursor: pointer; color: var(--fg); font: inherit; }
 .maker-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; color: var(--muted); margin-top: 2px; }
@@ -1705,3 +1683,11 @@ button.plan-row { cursor: pointer; }
 .hero-title { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .hero-title.long { font-size: 1.9rem; }
 .hero-title.longer { font-size: 1.6rem; }
+
+/* versión gratis: historial pasada la primera semana, y aviso de hasta cuándo se ve */
+.hist-locked { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px; padding: 24px 18px; }
+.hist-locked .ico.big { width: 40px; height: 40px; color: var(--accent); }
+.hist-locked h3 { margin: 0; }
+.hist-locked p { margin: 0; }
+.hist-free { width: 100%; text-align: left; color: var(--fg); cursor: pointer; font: inherit; }
+.hist-free strong { color: var(--accent); }

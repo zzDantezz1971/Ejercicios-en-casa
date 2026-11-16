@@ -4,18 +4,11 @@ import { IS_NATIVE } from '../platform/native';
 import { checkCode } from './accessCodes';
 
 /* Acceso a la app de Google Play: suscripción (0,99 €/mes o 9,99 €/año, con prueba gratis de Google)
-   o un código de acceso gratis. Sin suscripción ni código se usa la versión gratis (opción B): todo funciona,
-   pero solo con dos ejercicios de cada apartado. La versión web no se cobra; ahí se puede activar una vista previa
+   o un código de acceso gratis. Sin suscripción ni código se usa la versión gratis: todos los ejercicios y una sola
+   tabla (hecha con «Tabla vacía»), y el historial solo la primera semana de uso. «Créala por mí», las tablas hechas,
+   el plan de la semana, los resúmenes, personalizar el muñeco, la copia de seguridad y algunos avisos son de Prémium. La versión web no se cobra; ahí se puede activar una vista previa
    de la versión gratis (solo en ese navegador) para ver cómo queda. */
 
-/** Ejercicios gratis: uno de cada apartado. */
-// dos de cada apartado (el curl sale aunque no se tengan mancuernas, para ver ejercicios de distintos tipos)
-export const FREE_IDS: ReadonlySet<string> = new Set([
-  'saltos-de-tijera-jumping-jacks', 'inclinaciones-laterales-de-tronco',
-  'flexiones', 'curl-de-biceps',
-  'crunch-abdominal', 'toques-de-talon',
-  'gato-camello', 'rotacion-de-tronco-con-brazos-al-frente',
-]);
 const PREVIEW_KEY = 'vista-previa-gratis';
 
 /** Producto de suscripción en Play Console y sus dos planes base. */
@@ -55,11 +48,6 @@ export class Access {
   /** Con suscripción o código (o en la web): todos los ejercicios. */
   get premium(): boolean {
     return this.kind !== 'none';
-  }
-
-  /** ¿Se puede usar este ejercicio? */
-  canUse(id: string): boolean {
-    return this.premium || FREE_IDS.has(id);
   }
 
   /** En la web: vista previa de la versión gratis (solo en este navegador). */

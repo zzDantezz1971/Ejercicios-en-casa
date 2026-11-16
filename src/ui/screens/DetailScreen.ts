@@ -79,9 +79,9 @@ export class DetailScreen implements Screen {
     }
   }
 
-  /** Ejercicios de al lado en la lista (sin contar los bloqueados ni los eliminados). */
+  /** Ejercicios de al lado en la lista (sin contar los eliminados). */
   private neighbours(): { prev?: ExerciseDef; next?: ExerciseDef; pos: number; total: number } {
-    const usable = this.list.filter((e, i, a) => a.findIndex((x) => x.id === e.id) === i && this.app.access.canUse(e.id) && !this.app.store.hidden.has(e.id));
+    const usable = this.list.filter((e, i, a) => a.findIndex((x) => x.id === e.id) === i && !this.app.store.hidden.has(e.id));
     const i = usable.findIndex((e) => e.id === this.ex.id);
     if (i < 0) return { pos: 0, total: 0 };
     return { prev: usable[i - 1], next: usable[i + 1], pos: i + 1, total: usable.length };

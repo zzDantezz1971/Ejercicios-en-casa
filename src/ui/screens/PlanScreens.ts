@@ -124,7 +124,7 @@ function routineSeconds(app: App, id: string): number {
 function startDay(app: App, planId: string, d: PlanDay): void {
   const r = app.store.routineById(d.routineId);
   if (!r) return;
-  const plan = WorkoutPlan.build(app.playable(r.routine), app.catalog, app.store.settings, r.rounds);
+  const plan = WorkoutPlan.build(r.routine, app.catalog, app.store.settings, r.rounds);
   if (plan.isEmpty) { app.push(new PlanDayScreen(app, planId, d.day)); return; }
   void startWorkout(app, plan, r);
 }
@@ -434,7 +434,7 @@ export function planTableCard(app: App, plan: WeekPlan, opts: { eyebrow?: string
   const routines = plan.days.map((d) => app.store.routineById(d.routineId)).filter((r): r is NonNullable<typeof r> => !!r);
   const counts = Object.fromEntries(SECTION_IDS.map((sec) => [sec, routines.reduce((n, r) => n + r.routine[sec].length, 0)])) as Record<SectionId, number>;
   const total = Math.max(1, SECTION_IDS.reduce((n, sec) => n + counts[sec], 0));
-  const secs = routines.map((r) => WorkoutPlan.build(app.playable(r.routine), app.catalog, app.store.settings, r.rounds).estimatedSeconds);
+  const secs = routines.map((r) => WorkoutPlan.build(r.routine, app.catalog, app.store.settings, r.rounds).estimatedSeconds);
   const perDay = secs.length ? secs.reduce((a, b) => a + b, 0) / secs.length : 0;
   const last = routines.map((r) => r.lastUsed).filter((x): x is string => !!x).sort().pop();
   const withEx = SECTION_IDS.filter((sec) => counts[sec]);

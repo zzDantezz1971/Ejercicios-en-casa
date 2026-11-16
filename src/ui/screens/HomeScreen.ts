@@ -33,8 +33,7 @@ export class HomeScreen implements Screen {
     // plan de la semana: ejercicios nuevos si empieza otra semana
     refreshPlan(app);
     const table = app.store.active;
-    // en la versión gratis, solo los ejercicios gratis de la tabla
-    const plan = WorkoutPlan.build(app.playable(table.routine), app.catalog, app.store.settings, table.rounds);
+    const plan = WorkoutPlan.build(table.routine, app.catalog, app.store.settings, table.rounds);
     const now = new Date();
     clear(this.el);
 
@@ -51,7 +50,9 @@ export class HomeScreen implements Screen {
     const prevMonth = addMonths(monthStart(now), -1);
     const prevKey = monthKey(prevMonth);
     const hadPrev = app.store.history.some((e) => monthKey(new Date(e.date)) === prevKey);
-    if (hadPrev && app.store.summarySeen !== prevKey) {
+    // los resúmenes son de Prémium: en la versión gratis no se avisa
+    const premium = app.access.premium;
+    if (premium && hadPrev && app.store.summarySeen !== prevKey) {
       const name = prevMonth.toLocaleDateString(LOCALE, { month: 'long' });
       const card: HTMLElement = h('section', { class: 'card month-banner' },
         icon('calendar'),
@@ -64,7 +65,7 @@ export class HomeScreen implements Screen {
       const prevWeek = addWeeks(weekStart(now), -1);
       const wk = weekKey(prevWeek);
       const hadWeek = app.store.history.some((e) => weekKey(new Date(e.date)) === wk);
-      if (hadWeek && app.store.weekSeen !== wk) {
+      if (premium && hadWeek && app.store.weekSeen !== wk) {
         const card: HTMLElement = h('section', { class: 'card month-banner' },
           icon('calendar'),
           h('div', { class: 'mb-text' }, h('strong', {}, 'Ya tienes el resumen de la semana pasada'), h('span', { class: 'muted small' }, 'Días, tiempo, calorías, peso y músculos.')),
@@ -96,8 +97,8 @@ export class HomeScreen implements Screen {
             // tabla vacía: las mismas formas de crearla que en Tablas › Nueva
             ? h('div', { class: 'hero-empty hero-opts' },
               this.opt('edit', 'Tabla vacía', 'Elige tú los ejercicios', () => app.push(new RoutineScreen(app))),
-              this.opt('bolt', 'Créala por mí', 'Objetivo, zona y tiempo', () => app.push(new GeneratorScreen(app, activeIsEmpty(app)))),
-              this.opt('tables', 'Tablas hechas', 'Listas para usar', () => app.push(new TemplatesScreen(app, activeIsEmpty(app)))),
+              this.opt('bolt', 'Créala por mí', 'Objetivo, zona y tiempo', () => (app.access.premium ? app.push(new GeneratorScreen(app, activeIsEmpty(app))) : app.showPremium()), !app.access.premium),
+              this.opt('tables', 'Tablas hechas', 'Listas para usar', () => (app.access.premium ? app.push(new TemplatesScreen(app, activeIsEmpty(app))) : app.showPremium()), !app.access.premium),
               this.opt('calendar', 'Plan de la semana', 'Una tabla para cada día', () => newPlan(app), !app.access.premium))
             : h('button', { class: 'btn light block big', onclick: () => this.start(plan) }, icon('play'), 'Empezar'),
           // con la tabla vacía, solo las formas de crearla (ni Editar ni Cambiar tabla)
@@ -105,13 +106,6 @@ export class HomeScreen implements Screen {
             h('button', { class: 'btn glass small', onclick: () => editTable(app, table.id) }, icon('edit'), 'Editar'),
             h('button', { class: 'btn glass small', onclick: () => app.openTab('tablas') }, icon('swap'), 'Cambiar tabla')))),
     );
-
-    // versión gratis: aviso si la tabla tiene ejercicios de pago (no se hacen)
-    const lockedN = SECTION_IDS.reduce((n, sec) => n + this.app.store.routine[sec].filter((i) => !this.app.access.canUse(i.exerciseId)).length, 0);
-    if (lockedN) {
-      this.el.append(h('button', { class: 'note pw-home', onclick: () => this.app.showPremium() }, icon('lock'),
-        h('span', {}, `Versión gratis: ${plural(lockedN, 'ejercicio', 'ejercicios')} de esta tabla son de Prémium y se saltan. `, h('strong', {}, 'Hazte prémium'))));
-    }
 
     // Apartados de la tabla (solo los que tienen ejercicios), justo debajo de la tabla en uso
     const withEx = SECTION_IDS.filter((sec) => this.app.store.routine[sec].some((i) => this.app.catalog.has(i.exerciseId)));

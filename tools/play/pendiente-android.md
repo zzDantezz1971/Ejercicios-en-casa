@@ -11,9 +11,10 @@
 
 ## Suscripción (0,99 €/mes o 9,99 €/año, sin prueba gratis)
 
-La app ya lo tiene programado (`src/services/Access.ts`, pantalla `PaywallScreen`). Modelo: versión gratis con un ejercicio
-de cada apartado (saltos de tijera, flexiones, crunch abdominal y gato-camello) y el resto con candado; la
-suscripción o un código lo desbloquean todo. Solo afecta a la app de Google Play; la web no se cobra (en Configuración hay
+La app ya lo tiene programado (`src/services/Access.ts`, pantalla `PaywallScreen`). Modelo (nov 2026): versión gratis con
+todos los ejercicios, una sola tabla (con «Tabla vacía») y el historial solo la primera semana de uso; «Créala por mí»,
+tablas hechas, plan de la semana, resúmenes, personalizar el muñeco, temas de color, copia de seguridad y algunos avisos
+son de Prémium. La suscripción o un código lo desbloquean todo. Solo afecta a la app de Google Play; la web no se cobra (en Configuración hay
 una vista previa de la versión gratis). Falta configurarlo en Google:
 
 1. Play Console › Configuración › **Perfil de pagos** (datos fiscales y cuenta bancaria).

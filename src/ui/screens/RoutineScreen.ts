@@ -5,7 +5,7 @@ import { SECTION_IDS, SECTION_TITLES, usesWeight, type ExerciseDef, type Section
 import type { App, Screen } from '../App';
 import { append, clear, h, humanDuration, kg, plural, promptDialog, weightDialog } from '../dom';
 import { icon, SECTION_STYLE, zoneIcon } from '../icons';
-import { premiumPill, badgeList, equipMarks } from '../components/badges';
+import { badgeList, equipMarks } from '../components/badges';
 import { canDo } from '../../domain/equipment';
 import { sortableList, type SortableRow } from '../components/sortable';
 import { moveItem } from '../../domain/ordering';
@@ -244,9 +244,7 @@ export class RoutineScreen implements Screen {
   private ordered(sectionId: SectionId, sort: ListSort = this.sort): Listed[] {
     const sec = this.app.sections.find((s) => s.id === sectionId)!;
     const hidden = this.app.store.hidden;
-    // en la versión gratis, los ejercicios gratis salen siempre, aunque se hayan quitado de la lista
-    const freeShown = (id: string) => !this.app.access.premium && this.app.access.canUse(id);
-    const visible = sec.exercises.filter((e) => !hidden.has(e.id) || freeShown(e.id)).sort(byName);
+    const visible = sec.exercises.filter((e) => !hidden.has(e.id)).sort(byName);
     if (sort === 'personalizada') {
       // tu orden, una sola lista sin grupos; de entrada (o los que falten), el orden por zona
       const base = this.ordered(sectionId, 'zona');
@@ -403,39 +401,27 @@ export class RoutineScreen implements Screen {
     const owned = new Set<string>(this.app.store.settings.equipment);
     const gr = this.grouping(this.section, sort);
     const all = this.ordered(this.section, sort);
-    // versión gratis: el ejercicio gratis del apartado va el primero, aparte
-    const free = this.app.access.premium ? [] : all.filter((e) => this.app.access.canUse(e.id));
-    if (free.length) {
-      this.list.append(h('h2', { class: 'group-title zone-title' }, icon('check'), 'Gratis'));
-      free.forEach((ex) => this.list.append(this.card(ex)));
-    }
-    // cada grupo con su título (en A-Z no hay); tras el gratis, si no hay grupos, uno de «Prémium»
-    const put = (list: Listed[], titled: boolean) => {
+    // cada grupo con su título (en A-Z no hay)
+    const put = (list: Listed[]) => {
       let g: string | undefined;
       for (const ex of list) {
         if (ex.listGroup && ex.listGroup !== g) {
           g = ex.listGroup;
           this.list.append(h('h2', { class: 'group-title zone-title' }, gr.icon(g), gr.title(g)));
-          titled = true;
-        }
-        if (!titled) {
-          this.list.append(h('h2', { class: 'group-title zone-title' }, icon('lock'), 'Prémium'));
-          titled = true;
         }
         this.list.append(this.card(ex));
       }
     };
-    put(all.filter((e) => canDo(e.equip, owned) && !free.some((f) => f.id === e.id)), !free.length);
+    put(all.filter((e) => canDo(e.equip, owned)));
     const note = this.equipNote(this.section);
     if (note) this.list.append(note);
     // los que necesitan material que no se tiene van aparte, al final (también con sus grupos)
-    if (this.showAllEquip) put(all.filter((e) => !canDo(e.equip, owned)), true);
+    if (this.showAllEquip) put(all.filter((e) => !canDo(e.equip, owned)));
   }
 
-  /** Abre la ficha del ejercicio; en la versión gratis, los de pago llevan a hacerse prémium. */
+  /** Abre la ficha del ejercicio. */
   private open(ex: ExerciseDef): void {
-    if (this.app.access.canUse(ex.id)) this.app.push(new DetailScreen(this.app, ex, this.shown));
-    else this.app.showPremium();
+    this.app.push(new DetailScreen(this.app, ex, this.shown));
   }
 
   /** Ejercicios de la lista que se ve, en su orden (para pasar de uno a otro en la ficha). */
@@ -444,7 +430,6 @@ export class RoutineScreen implements Screen {
   private card(ex: ExerciseDef): HTMLElement {
     this.shown.push(ex);
     const pos = this.editor.position(ex.section, ex.id);
-    const locked = !this.app.access.canUse(ex.id);
     const secs = this.editor.seconds(ex.section, ex.id);
     const owned = new Set<string>(this.app.store.settings.equipment);
     const img = h('img', { alt: '', class: 'thumb', 'data-id': ex.id });
@@ -452,19 +437,14 @@ export class RoutineScreen implements Screen {
       equipMarks(ex.equip, owned),
       h('span', { class: 'sec-mark', title: SECTION_TITLES[ex.section], 'aria-label': SECTION_TITLES[ex.section] }, icon(SECTION_STYLE[ex.section].icon)));
     this.io.observe(fig);
-    if (locked) fig.append(h('span', { class: 'lock-mark', 'aria-hidden': 'true' }, icon('lock')));
-    const card = h('article', { class: 'ex-card' + (pos ? ' selected' : '') + (locked ? ' locked' : ''), style: { '--sec': SECTION_STYLE[ex.section].color } },
+    const card = h('article', { class: 'ex-card' + (pos ? ' selected' : ''), style: { '--sec': SECTION_STYLE[ex.section].color } },
       // toda la ficha (menos sus botones) abre el ejercicio: muñeco y cómo se hace
       h('button', { class: 'ex-main', 'aria-label': `Cómo se hace: ${ex.name}`, onclick: () => this.open(ex) },
         fig,
         h('span', { class: 'ex-name' }, pos ? h('span', { class: 'order' }, pos) : null, h('span', {}, ex.name, this.app.store.favorites.has(ex.id) ? icon('starFill', 'ico fav-star') : null)),
         h('span', { class: 'ex-zone' }, h('span', {}, ex.zone), ex.oneSided ? h('span', { class: 'by-sides' }, icon('sides'), 'por lados') : null),
-        locked ? premiumPill() : null,
         badgeList(ex.badges)),
-      locked
-        ? h('div', { class: 'ex-actions' },
-          h('button', { class: 'select-btn premium', onclick: () => this.app.showPremium() }, icon('lock'), h('span', {}, 'Prémium')))
-        : h('div', { class: 'ex-actions' },
+      h('div', { class: 'ex-actions' },
         pos ? h('div', { class: 'stepper' },
           h('button', { 'aria-label': 'Menos tiempo', onclick: () => this.adjust(ex, -STEP_SECONDS) }, '−'),
           h('span', { class: 'secs' }, icon('clock'), `${secs} s`),

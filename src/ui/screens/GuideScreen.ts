@@ -74,9 +74,8 @@ const GUIDE: Array<{ icon: IconName; title: string; sub: string; points: Array<s
         'En Ajustes › Apps de salud puedes guardar tus entrenamientos (tiempo, calorías y pulsaciones) y tu peso en Health Connect, para verlos en Samsung Health, Google Fit, Fitbit y otras apps de salud. Kasa Fit solo escribe: nunca lee tus datos de salud.'] : []),
       { h: 'Copia de seguridad' }, 'Guarda tus tablas, historial y ajustes en un archivo (por ejemplo, en Drive) y restáuralo si cambias de móvil.',
       { h: 'Gratis y prémium' },
-      'Gratis: dos ejercicios de cada apartado y todas las funciones de la app.',
-      HAS_BACKUP ? 'Prémium: todos los ejercicios, el plan de la semana, la personalización completa del muñeco, todos los temas de color y el recordatorio de copia de seguridad. Se paga y se cancela en Google Play.'
-        : 'Prémium: todos los ejercicios, el plan de la semana, la personalización completa del muñeco y todos los temas de color. Se paga y se cancela en Google Play.'] },
+      'Gratis: todos los ejercicios, con el muñeco y cómo se hacen; una tabla (con «Tabla vacía») y el historial durante la primera semana.',
+      'Prémium: tablas sin límite, «Créala por mí», tablas hechas, el plan de la semana, todo el historial, los resúmenes, la personalización completa del muñeco, todos los temas de color y la copia de seguridad. Se paga y se cancela en Google Play.'] },
 ];
 
 /** Guía de la app: todo lo que se puede hacer, organizado en apartados que se abren y cierran. */

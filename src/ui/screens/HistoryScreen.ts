@@ -33,14 +33,28 @@ export class HistoryScreen implements Screen {
       this.body.append(h('div', { class: 'empty-state' }, icon('calendar', 'ico big'), h('p', {}, 'Aún no hay entrenamientos. Cuando termines el primero aparecerá aquí.')));
       return;
     }
+    // versión gratis: pasada la primera semana, el historial queda para Prémium (se sigue guardando)
+    if (!this.app.historyOpen) {
+      this.body.append(h('section', { class: 'card hist-locked' },
+        icon('lock', 'ico big'),
+        h('h3', {}, 'Tu historial está guardado'),
+        h('p', { class: 'muted' }, 'En la versión gratis, el historial se puede ver la primera semana. Tus entrenamientos se siguen guardando: hazte Prémium para ver todo tu historial, tus récords y los resúmenes.'),
+        h('button', { class: 'btn primary block', onclick: () => this.app.showPremium() }, icon('star'), 'Hazte prémium')));
+      return;
+    }
+    const until = this.app.historyUntil();
+    const premium = this.app.access.premium;
+    const summary = (mode: 'week' | 'month') => () => (premium ? this.app.push(new MonthScreen(this.app, undefined, mode)) : this.app.showPremium());
     const list = all;
     append(this.body,
+      until ? h('button', { class: 'note hist-free', onclick: () => this.app.showPremium() }, icon('info'),
+        h('span', {}, `Versión gratis: puedes ver el historial hasta el ${until.toLocaleDateString(LOCALE, { day: 'numeric', month: 'long' })}. `, h('strong', {}, 'Hazte prémium'))) : null,
       backupDue(this.app) ? backupCard(this.app) : null,
       this.records(list),
       this.calendar(list),
       h('div', { class: 'summary-btns' },
-        h('button', { class: 'btn ghost', onclick: () => this.app.push(new MonthScreen(this.app, undefined, 'week')) }, icon('calendar'), 'Resumen semanal'),
-        h('button', { class: 'btn ghost', onclick: () => this.app.push(new MonthScreen(this.app, undefined, 'month')) }, icon('calendar'), 'Resumen del mes')),
+        h('button', { class: 'btn ghost', onclick: summary('week') }, icon(premium ? 'calendar' : 'lock'), 'Resumen semanal'),
+        h('button', { class: 'btn ghost', onclick: summary('month') }, icon(premium ? 'calendar' : 'lock'), 'Resumen del mes')),
     );
 
     this.body.append(
@@ -103,7 +117,7 @@ export class HistoryScreen implements Screen {
         longest ? tile('clock', humanDuration(longest.durationSec), 'Entreno más largo', short(new Date(longest.date)), open(longest)) : null,
         topKcal ? tile('flame', `${topKcal.kcal} kcal`, 'Récord de calorías', short(new Date(topKcal.e.date)), open(topKcal.e)) : null,
         bm ? tile('calendar', plural(bm.days.size, 'día', 'días'), 'Mejor mes', bm.start.toLocaleDateString(LOCALE, { month: 'short', year: 'numeric' }),
-          () => app.push(new MonthScreen(app, bm.start, 'month')), humanDuration(bm.sec)) : null));
+          () => (app.access.premium ? app.push(new MonthScreen(app, bm.start, 'month')) : app.showPremium()), humanDuration(bm.sec)) : null));
   }
 
   private calendar(list: readonly HistoryEntry[]): HTMLElement {

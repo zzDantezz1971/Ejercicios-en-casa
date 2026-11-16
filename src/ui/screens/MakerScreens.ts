@@ -11,7 +11,6 @@ import { LOCALE, tr } from '../../i18n';
 import type { App, Screen } from '../App';
 import { clear, confirmDialog, h, humanDuration, kg, plural, promptDialog, weightDialog } from '../dom';
 import { sortableList, type SortableRow } from '../components/sortable';
-import { lockedThumb, premiumPill } from '../components/badges';
 import { icon, SECTION_STYLE, type IconName } from '../icons';
 import { DetailScreen } from './DetailScreen';
 import { RoutineScreen } from './RoutineScreen';
@@ -26,27 +25,33 @@ import { newPlan } from './PlanScreens';
 /** Menú de «Nueva tabla»: tres formas de crearla. */
 export function openNewTable(app: App): void {
   const close = () => wrap.remove();
-  const opt = (ic: IconName, title: string, help: string, go: () => void) =>
-    h('button', { class: 'maker-opt', onclick: () => { close(); go(); } },
+  // versión gratis: una sola tabla (la vacía); el resto de formas de crear tablas, con candado
+  const opt = (ic: IconName, title: string, help: string, go: () => void, locked = false) =>
+    h('button', { class: 'maker-opt', onclick: () => { close(); if (locked) app.showPremium(); else go(); } },
       h('span', { class: 'maker-opt-icon' }, icon(ic)),
       h('span', { class: 'maker-opt-text' }, h('strong', {}, title), h('span', { class: 'muted small' }, help)),
-      icon('chevron', 'ico chev'));
+      locked ? icon('lock', 'ico lock') : icon('chevron', 'ico chev'));
+  const free = !app.access.premium;
   const wrap = h('div', { class: 'dialog-wrap sheet-wrap', onclick: (e: Event) => e.target === wrap && close() },
     h('div', { class: 'sheet maker-sheet', role: 'dialog', 'aria-modal': 'true', 'aria-label': 'Nueva tabla' },
       h('p', { class: 'sheet-title' }, 'Nueva tabla'),
-      opt('edit', 'Tabla vacía', 'Elige tú los ejercicios', () => void emptyTable(app)),
-      opt('bolt', 'Créala por mí', 'Elige objetivo, zona y tiempo', () => app.push(new GeneratorScreen(app))),
-      opt('tables', 'Tablas hechas', 'Listas para usar', () => app.push(new TemplatesScreen(app))),
-      // plan de la semana (Prémium): una tabla para cada día de entrenamiento
-      h('button', { class: 'maker-opt', onclick: () => { close(); newPlan(app); } },
-        h('span', { class: 'maker-opt-icon' }, icon('calendar')),
-        h('span', { class: 'maker-opt-text' }, h('strong', {}, 'Plan de la semana'), h('span', { class: 'muted small' }, 'Una tabla para cada día que entrenas')),
-        app.access.premium ? icon('chevron', 'ico chev') : icon('lock', 'ico lock')),
+      opt('edit', 'Tabla vacía', 'Elige tú los ejercicios', () => void emptyTable(app), free && !canAddFreeTable(app)),
+      opt('bolt', 'Créala por mí', 'Elige objetivo, zona y tiempo', () => app.push(new GeneratorScreen(app)), free),
+      opt('tables', 'Tablas hechas', 'Listas para usar', () => app.push(new TemplatesScreen(app)), free),
+      // plan de la semana: una tabla para cada día de entrenamiento
+      opt('calendar', 'Plan de la semana', 'Una tabla para cada día que entrenas', () => newPlan(app), free),
       h('button', { class: 'sheet-btn cancel', onclick: close }, 'Cancelar')));
   document.body.append(wrap);
 }
 
+/** Versión gratis: solo una tabla. Si la única que hay está vacía, se rellena esa. */
+export function canAddFreeTable(app: App): boolean {
+  return app.store.routines.length < 1 || (app.store.routines.length === 1 && activeIsEmpty(app));
+}
+
 async function emptyTable(app: App): Promise<void> {
+  // versión gratis con su única tabla vacía: se eligen los ejercicios de esa misma tabla
+  if (!app.access.premium && app.store.routines.length === 1) { app.push(new RoutineScreen(app)); return; }
   const name = await promptDialog('Nombre de la nueva tabla', '', 'Crear');
   if (!name) return;
   app.store.createRoutine(name);
@@ -55,8 +60,8 @@ async function emptyTable(app: App): Promise<void> {
 
 /** Guarda la tabla propuesta (en la activa si está vacía y se pidió así) y lleva a Inicio para empezar. */
 async function saveTable(app: App, defName: string, r: GenResult, fillActive: boolean): Promise<void> {
-  // versión gratis: se puede ver la propuesta, pero para usarla (con ejercicios de Prémium) hace falta Prémium
-  if (needsPremium(app, r)) { app.showPremium(); return; }
+  // «Créala por mí» y las tablas hechas son de Prémium
+  if (!app.access.premium) { app.showPremium(); return; }
   const name = await promptDialog('Nombre de la tabla', defName, 'Guardar');
   if (!name) return;
   if (fillActive) app.store.fillActive(name, r.routine, r.rounds);
@@ -65,18 +70,9 @@ async function saveTable(app: App, defName: string, r: GenResult, fillActive: bo
   app.openTab('inicio');
 }
 
-/** ¿La propuesta lleva ejercicios de Prémium y el usuario no lo tiene? */
-function needsPremium(app: App, r: GenResult): boolean {
-  return !app.access.premium && SECTION_IDS.some((s) => r.routine[s].some((i) => !app.access.canUse(i.exerciseId)));
-}
-
-/** Botón para guardar la propuesta; en la versión gratis (con ejercicios de Prémium), con candado y abre Prémium. */
-function saveButton(app: App, r: GenResult, label: string, save: () => void): HTMLElement[] {
-  const lock = needsPremium(app, r);
-  return [
-    lock ? h('p', { class: 'note small prem-note' }, icon('lock'), h('span', {}, 'Esta tabla lleva ejercicios de Prémium. Puedes verla entera; para usarla, hazte Prémium.')) : '',
-    h('button', { class: 'btn primary block big' + (lock ? ' prem-btn' : ''), disabled: isEmptyResult(r), onclick: save }, icon(lock ? 'lock' : 'check'), lock ? 'Usar con Prémium' : label),
-  ].filter(Boolean) as HTMLElement[];
+/** Botón para guardar la propuesta. */
+function saveButton(_app: App, r: GenResult, label: string, save: () => void): HTMLElement[] {
+  return [h('button', { class: 'btn primary block big', disabled: isEmptyResult(r), onclick: save }, icon('check'), label)];
 }
 
 /** ¿Está vacía la tabla en uso? (entonces el asistente la llena en vez de crear otra). */
@@ -180,7 +176,6 @@ function missLine(miss: readonly Equip[]): HTMLElement[] {
 
 export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement {
   const plan = WorkoutPlan.build(r.routine, app.catalog, app.store.settings, r.rounds);
-  const locked = SECTION_IDS.some((s) => r.routine[s].some((i) => !app.access.canUse(i.exerciseId)));
   const shown = SECTION_IDS.flatMap((s) => r.routine[s].map((i) => app.catalog.get(i.exerciseId)).filter((e): e is NonNullable<typeof e> => !!e));
   const box = h('div', { class: 'maker-preview' },
     h('p', { class: 'maker-total' }, icon('clock'), plan.isEmpty ? 'Sin ejercicios' : `${humanDuration(plan.estimatedSeconds)} · ${plural(plan.exerciseCount, 'ejercicio', 'ejercicios')}`));
@@ -233,8 +228,7 @@ export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement
       if (!ex) return;
       const img = h('img', { class: 'maker-thumb', alt: '' });
       void app.thumbs.get(ex).then((url) => (img.src = url));
-      const lock = !app.access.canUse(ex.id);
-      const open = () => (lock ? app.showPremium() : app.push(new DetailScreen(app, ex, shown)));
+      const open = () => app.push(new DetailScreen(app, ex, shown));
       const setSecs = (d: number) => {
         const next = items.slice();
         next[i] = { ...it, seconds: Math.min(MAX_SECONDS, Math.max(MIN_SECONDS, it.seconds + d)) };
@@ -261,12 +255,11 @@ export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement
           next.splice(i, 1);
           edit.set(withSection(r, s, next));
         } }, icon('trash')) : '';
-      const content = h('div', { class: 'maker-row' + (lock ? ' locked' : '') },
+      const content = h('div', { class: 'maker-row' },
         // tocar la miniatura o el nombre abre la ficha (cómo se hace)
-        h('button', { class: 'maker-open', 'aria-label': `Cómo se hace: ${ex.name}`, onclick: open }, lockedThumb(img, lock)),
+        h('button', { class: 'maker-open', 'aria-label': `Cómo se hace: ${ex.name}`, onclick: open }, img),
         h('div', { class: 'maker-name' },
           h('button', { class: 'maker-open maker-title', onclick: open }, ex.name),
-          lock ? premiumPill() : '',
           // tiempo (− +) y, al lado, cambiar y quitar: todo a la izquierda (la derecha queda libre para desplazar)
           edit ? h('div', { class: 'maker-ctrls' },
             h('div', { class: 'stepper inline maker-time' },
@@ -318,7 +311,6 @@ export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement
       sbody.append(h('div', { class: 'clip-row' }, copyBtn, pasteBtn));
     }
   }
-  if (locked) box.append(h('p', { class: 'muted small maker-free' }, icon('lock'), 'Los ejercicios con candado son de Prémium: en la versión gratis se saltan.'));
   return box;
 }
 
@@ -553,11 +545,7 @@ class PickExerciseScreen implements Screen {
       .filter((e) => !this.have.has(e.id) && !e.pending && canDo(e.equip, owned))
       .filter((e) => !q || fold(`${e.name} ${tr(e.name)} ${e.zone} ${e.group ? tr(e.group) : ''}`).includes(q));
     clear(this.list);
-    // versión gratis: primero los gratis (aparte) y después los de Prémium, con candado
-    const free = app.access.premium ? [] : exs.filter((e) => app.access.canUse(e.id));
-    const rest = exs.filter((e) => !free.includes(e));
-    if (free.length) this.list.append(h('h2', { class: 'maker-sec' }, icon('check'), 'Gratis'));
-    free.forEach((ex) => this.row(ex));
+    const rest = exs;
     // agrupados según el orden elegido (en A-Z, sin grupos)
     const key = (e: ExerciseDef): string => this.sort === 'musculo' ? tr(e.zone)
       : this.sort === 'material' ? (e.equip?.[0]?.[0] ? tr(EQUIP_INFO[e.equip[0][0]].name) : tr('Sin material'))
@@ -581,11 +569,8 @@ class PickExerciseScreen implements Screen {
     {
       const img = h('img', { class: 'maker-thumb', alt: '' });
       void app.thumbs.get(ex).then((url) => (img.src = url));
-      const lock = !app.access.canUse(ex.id);
       const on = this.chosen.includes(ex.id);
-      const row: HTMLElement = h('button', { class: 'maker-row maker-pick' + (lock ? ' locked' : '') + (on ? ' on' : ''), 'aria-pressed': this.multi ? String(on) : null, onclick: () => {
-        // con candado: no se puede elegir; se enseña qué ofrece Prémium
-        if (lock) { app.showPremium(); return; }
+      const row: HTMLElement = h('button', { class: 'maker-row maker-pick' + (on ? ' on' : ''), 'aria-pressed': this.multi ? String(on) : null, onclick: () => {
         if (!this.multi) { this.pick([ex.id]); return; }
         app.haptics.tap();
         this.chosen = this.chosen.includes(ex.id) ? this.chosen.filter((x) => x !== ex.id) : [...this.chosen, ex.id];
@@ -595,9 +580,9 @@ class PickExerciseScreen implements Screen {
         row.lastElementChild!.replaceWith(icon(now ? 'check' : 'plus'));
         this.paintFoot();
       } },
-        lockedThumb(img, lock),
-        h('span', { class: 'maker-name' }, h('span', {}, ex.name), h('span', { class: 'maker-secs muted small' }, ex.zone), lock ? premiumPill() : ''),
-        icon(on ? 'check' : lock ? 'lock' : 'plus'));
+        img,
+        h('span', { class: 'maker-name' }, h('span', {}, ex.name), h('span', { class: 'maker-secs muted small' }, ex.zone)),
+        icon(on ? 'check' : 'plus'));
       this.list.append(row);
     }
   }

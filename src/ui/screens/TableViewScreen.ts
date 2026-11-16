@@ -5,7 +5,6 @@ import { h, humanDuration, kg, plural } from '../dom';
 import { icon, SECTION_STYLE, type IconName } from '../icons';
 import { DetailScreen } from './DetailScreen';
 import { neededEquip } from './MakerScreens';
-import { lockedThumb, premiumPill } from '../components/badges';
 import { EQUIP_INFO } from '../../domain/equipment';
 
 /**
@@ -29,7 +28,7 @@ export class TableViewScreen implements Screen {
   private render(): void {
     const { app } = this;
     const table = app.store.active;
-    const plan = WorkoutPlan.build(app.playable(table.routine), app.catalog, app.store.settings, table.rounds);
+    const plan = WorkoutPlan.build(table.routine, app.catalog, app.store.settings, table.rounds);
     const blocks: HTMLElement[] = [];
     // todos los ejercicios que se ven, en orden: desde la ficha se pasa de uno a otro deslizando el dedo
     const shown: ExerciseDef[] = [];
@@ -58,17 +57,15 @@ export class TableViewScreen implements Screen {
         n++;
         const img = h('img', { alt: '', class: 'maker-thumb', 'data-id': ex.id });
         void app.thumbs.get(ex).then((url) => (img.src = url));
-        const locked = !app.access.canUse(ex.id);
-        const row = h('button', { class: 'maker-row tv-row' + (locked ? ' locked' : ''), 'aria-label': `Cómo se hace: ${ex.name}`, onclick: () => (app.access.canUse(ex.id) ? app.push(new DetailScreen(app, ex, shown)) : app.showPremium()) },
+        const row = h('button', { class: 'maker-row tv-row', 'aria-label': `Cómo se hace: ${ex.name}`, onclick: () => app.push(new DetailScreen(app, ex, shown)) },
           h('span', { class: 'tv-n' }, String(n)),
-          lockedThumb(img, locked),
+          img,
           h('span', { class: 'maker-name' },
             h('span', { class: 'maker-title' }, ex.name),
             h('span', { class: 'muted small tv-sub' }, h('span', { class: 'tv-secs' }, icon('clock'), `${it.seconds} s`),
               it.weight ? h('span', { class: 'tv-secs' }, icon('dumbbell'), kg(it.weight)) : null,
               ex.oneSided ? h('span', { class: 'by-sides' }, icon('sides'), 'por lados') : null),
-            h('span', { class: 'muted small' }, ex.zone),
-            locked ? premiumPill() : null),
+            h('span', { class: 'muted small' }, ex.zone)),
           icon('chevron', 'ico chev'));
         row.style.setProperty('--sec', st.color);
         list.append(row);

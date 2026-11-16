@@ -28,6 +28,15 @@ Marca cada punto al probarlo. Si algo falla, haz una captura y cuéntamelo.
 - [ ] «Torsió de columna amb les cames creuades»: vídeo nuevo visto un poco de lado (brazos en cruz, una pierna pasa por encima de la otra y las piernas bajan al suelo con la de encima cruzada en X por encima de la otra).
 - [ ] Historial: ya no salen arriba los botones «Todas / Estiraments / De força»; récords y calendario cuentan todos los entrenamientos.
 - [ ] Ficha de un ejercicio: debajo del muñeco, cuerpo de frente y de espaldas con la zona que trabaja en rojo y la que estira en turquesa (probar uno de fuerza y uno de estiramiento). Al tocarlo se ve en grande; se cierra tocando, con la X o con el botón atrás de Android.
+- [ ] **Versión gratis nueva** (sin suscripción ni código):
+  - [ ] Todos los ejercicios se pueden ver y elegir, sin candados.
+  - [ ] Inicio con la tabla vacía: «Tabla vacía» funciona; «Créala por mí», «Tablas hechas» y «Plan de la semana» con candado (abren Prémium).
+  - [ ] Tablas › Nueva: con tu única tabla ya llena, «Tabla vacía» también con candado; «Duplicar» abre Prémium.
+  - [ ] Historial: los 7 primeros días, aviso «puedes ver el historial hasta el …»; después, pantalla «Tu historial está guardado» con «Hazte prémium».
+  - [ ] Resumen semanal y del mes con candado; en Inicio no salen los avisos de resumen.
+  - [ ] Copia de seguridad: Guardar y Restaurar abren Prémium.
+  - [ ] Pantalla Prémium con la lista nueva («Organiza todo tu entrenamiento»).
+  - [ ] Con un código: todo desbloqueado.
 - [ ] Edita: «Copia l’apartat» en una tabla y «Enganxa» en el mismo apartado de otra (en la misma tabla no sale «Enganxa»; después de pegar, «Enganxa» desaparece).
 - [ ] Afegeix exercicis: buscador y «Ordena» (zona, múscul, material, A-Z) fijos arriba al desplazar.
 - [ ] «Restaura» con la copia de la web recupera tablas, historial, peso y ajustes.

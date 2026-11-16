@@ -11,7 +11,6 @@ import { Access } from '../services/Access';
 import { durableStorage } from '../platform/durable';
 import { CATALOG, SECTIONS } from '../data/catalog';
 import { Store } from '../domain/Store';
-import { SECTION_IDS, type Routine } from '../domain/types';
 import { Thumbnails } from '../figure/FigureView';
 import { Haptics } from '../services/Haptics';
 import { ScreenAwake } from '../services/ScreenAwake';
@@ -20,6 +19,9 @@ import { Voice } from '../services/Voice';
 import { exportWeight, exportWorkout } from '../services/Health';
 import { clear, h } from './dom';
 import { icon, type IconName } from './icons';
+
+/** Días que se ve el historial en la versión gratis (desde el primer uso). */
+export const FREE_HISTORY_DAYS = 7;
 
 export type TabId = 'inicio' | 'tablas' | 'medallas' | 'historial' | 'datos' | 'ajustes';
 
@@ -109,17 +111,20 @@ export class App {
     this.paywall = factory;
   }
 
+  /** Versión gratis: el historial solo se ve durante la primera semana de uso (luego, con Prémium). */
+  historyUntil(): Date | null {
+    if (this.access.premium) return null;
+    return new Date(this.store.firstUse.getTime() + FREE_HISTORY_DAYS * 864e5);
+  }
+
+  get historyOpen(): boolean {
+    const until = this.historyUntil();
+    return !until || Date.now() < until.getTime();
+  }
+
   /** Abre la pantalla para hacerse prémium. */
   showPremium(): void {
     if (this.paywall && !this.current?.el.classList.contains('paywall')) this.push(this.paywall());
-  }
-
-  /** La tabla con solo los ejercicios que se pueden hacer (en la versión gratis, los gratis). */
-  playable(routine: Routine): Routine {
-    if (this.access.premium) return routine;
-    const out = { ...routine };
-    for (const s of SECTION_IDS) out[s] = routine[s].filter((i) => this.access.canUse(i.exerciseId));
-    return out;
   }
 
   /** Abre una pestaña de la barra inferior. Sin suscripción ni código, la de suscribirse. */
