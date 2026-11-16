@@ -96,7 +96,8 @@ export class WeightChartScreen implements Screen {
     // tamaño real del hueco (en horizontal: el ancho es el lado largo)
     const portrait = window.innerHeight > window.innerWidth;
     // el hueco real de la gráfica (sin las barras del móvil); si aún no se sabe, la pantalla
-    const bw = portrait ? this.box.clientHeight : this.box.clientWidth, bh = portrait ? this.box.clientWidth : this.box.clientHeight;
+    // (en vertical la pantalla va girada, pero el ancho y el alto del hueco ya son los de antes de girar)
+    const bw = this.box.clientWidth, bh = this.box.clientHeight;
     const W = Math.max(320, bw > 100 ? bw : (portrait ? window.innerHeight : window.innerWidth) - 24);
     const H = Math.max(200, bh > 100 ? bh : (portrait ? window.innerWidth : window.innerHeight) - 70);
     this.plotW = W - 60;
