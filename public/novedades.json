@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-16T00:07:06Z",
+    "es": ["Los ejercicios de Prémium se ven más claros: etiqueta dorada «Prémium» con candado y la miniatura apagada con el candado encima.", "Versión gratis: «Créala por mí» y «Tablas hechas» se pueden ver enteras; para usar una tabla con ejercicios de Prémium, el botón abre Prémium."],
+    "ca": ["Els exercicis de Prèmium es veuen més clars: etiqueta daurada «Prèmium» amb cadenat i la miniatura apagada amb el cadenat a sobre.", "Versió gratuïta: «Crea-la per mi» i «Taules fetes» es poden veure senceres; per fer servir una taula amb exercicis de Prèmium, el botó obre Prèmium."],
+    "en": ["Premium exercises stand out more: a gold “Premium” tag with a lock and a dimmed thumbnail with the lock on top.", "Free version: “Make it for me” and “Ready-made tables” can be viewed in full; to use a table with Premium exercises, the button opens Premium."]
+  },
+  {
     "fecha": "2026-11-15T23:53:51Z",
     "es": ["Entrenamiento: quitado el nombre pequeño de la tabla de arriba."],
     "ca": ["Entrenament: tret el nom petit de la taula de dalt."],

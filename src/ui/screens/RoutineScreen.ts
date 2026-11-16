@@ -5,7 +5,7 @@ import { SECTION_IDS, SECTION_TITLES, usesWeight, type ExerciseDef, type Section
 import type { App, Screen } from '../App';
 import { append, clear, h, humanDuration, kg, plural, promptDialog, weightDialog } from '../dom';
 import { icon, SECTION_STYLE, zoneIcon } from '../icons';
-import { badgeList, equipMarks } from '../components/badges';
+import { premiumPill, badgeList, equipMarks } from '../components/badges';
 import { canDo } from '../../domain/equipment';
 import { sortableList, type SortableRow } from '../components/sortable';
 import { moveItem } from '../../domain/ordering';
@@ -454,6 +454,7 @@ export class RoutineScreen implements Screen {
         fig,
         h('span', { class: 'ex-name' }, pos ? h('span', { class: 'order' }, pos) : null, h('span', {}, ex.name, this.app.store.favorites.has(ex.id) ? icon('starFill', 'ico fav-star') : null)),
         h('span', { class: 'ex-zone' }, h('span', {}, ex.zone), ex.oneSided ? h('span', { class: 'by-sides' }, icon('sides'), 'por lados') : null),
+        locked ? premiumPill() : null,
         badgeList(ex.badges)),
       locked
         ? h('div', { class: 'ex-actions' },

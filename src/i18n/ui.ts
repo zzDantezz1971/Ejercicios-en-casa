@@ -1139,6 +1139,8 @@ const ROWS: Row[] = [
   ['En Avisos › Voz eliges la voz de los avisos entre las de tu móvil (de hombre o de mujer): escúchalas con ▶ antes de elegir.', 'A Avisos › Veu tries la veu dels avisos entre les del teu mòbil (d’home o de dona): escolta-les amb ▶ abans de triar.', 'In Alerts › Voice you choose the alerts’ voice from your phone’s voices (male or female): listen with ▶ before choosing.'],
   ['Este móvil solo tiene una voz para este idioma. Puedes instalar otras en los ajustes del móvil (Texto a voz › Motor de voz de Google › Instalar datos de voz).', 'Aquest mòbil només té una veu per a aquest idioma. En pots instal·lar d’altres als ajustos del mòbil (Text a veu › Motor de veu de Google › Instal·la dades de veu).', 'This phone only has one voice for this language. You can install others in the phone settings (Text-to-speech › Google speech engine › Install voice data).'],
   ['El navegador solo ofrece una voz para este idioma. En la app de Android podrás elegir entre las voces que tenga instaladas el móvil.', 'El navegador només ofereix una veu per a aquest idioma. A l’app d’Android podràs triar entre les veus que tingui instal·lades el mòbil.', 'The browser only offers one voice for this language. In the Android app you’ll be able to choose from the voices installed on the phone.'],
+  ['Esta tabla lleva ejercicios de Prémium. Puedes verla entera; para usarla, hazte Prémium.', 'Aquesta taula porta exercicis de Prèmium. La pots veure sencera; per fer-la servir, fes-te Prèmium.', 'This table has Premium exercises. You can see all of it; to use it, go Premium.'],
+  ['Usar con Prémium', 'Fes-la servir amb Prèmium', 'Use with Premium'],
 ];
 
 export const UI_CA: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[1]]));

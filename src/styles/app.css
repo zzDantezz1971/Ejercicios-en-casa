@@ -1493,7 +1493,18 @@ label.sort-row:focus-within, label.rem-hour:focus-within { outline: none; }
 .maker-row {
   display: flex; align-items: center; gap: 10px; padding: 6px 8px 6px 6px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line);
 }
-.maker-row.locked { opacity: .7; }
+.maker-row.locked .maker-title, .maker-row.locked .maker-name > span:first-child { opacity: .6; }
+/* ejercicio de Prémium: etiqueta dorada con candado y miniatura apagada con el candado encima */
+.prem-pill { display: inline-flex; align-items: center; gap: 4px; align-self: flex-start; padding: 2px 8px 2px 6px; border-radius: 999px; font-size: .72rem; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; color: #F5B83D; background: rgb(245 165 36 / .16); border: 1px solid rgb(245 165 36 / .45); }
+.prem-pill .ico { width: 12px; height: 12px; }
+.thumb-lock { position: relative; display: inline-flex; flex: none; }
+.thumb-lock img { filter: grayscale(.85) brightness(.6); }
+.thumb-lock .lock-mark svg { width: 26px; height: 26px; padding: 6px; }
+.ex-card.locked { border-color: rgb(245 165 36 / .35); }
+.maker-body:has(.prem-note) .maker-free { display: none; }
+.prem-note { align-items: center; border: 1px solid rgb(245 165 36 / .45); background: rgb(245 165 36 / .08); }
+.prem-note .ico { color: #F5B83D; }
+.btn.prem-btn { background: linear-gradient(135deg, #F5B83D, #D98E12); color: #1B1405; }
 .maker-open { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; background: none; border: 0; padding: 0; color: inherit; font: inherit; text-align: left; cursor: pointer; }
 .maker-thumb { width: 52px; height: 52px; border-radius: 10px; object-fit: cover; background: var(--surface-2); flex: none; }
 .maker-name { flex: 1; min-width: 0; font-weight: 600; display: flex; flex-direction: column; align-items: flex-start; gap: 2px; }

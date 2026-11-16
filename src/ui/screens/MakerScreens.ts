@@ -11,6 +11,7 @@ import { tr } from '../../i18n';
 import type { App, Screen } from '../App';
 import { clear, h, humanDuration, kg, plural, promptDialog, weightDialog } from '../dom';
 import { sortableList, type SortableRow } from '../components/sortable';
+import { lockedThumb, premiumPill } from '../components/badges';
 import { icon, SECTION_STYLE, type IconName } from '../icons';
 import { DetailScreen } from './DetailScreen';
 import { RoutineScreen } from './RoutineScreen';
@@ -54,12 +55,28 @@ async function emptyTable(app: App): Promise<void> {
 
 /** Guarda la tabla propuesta (en la activa si está vacía y se pidió así) y lleva a Inicio para empezar. */
 async function saveTable(app: App, defName: string, r: GenResult, fillActive: boolean): Promise<void> {
+  // versión gratis: se puede ver la propuesta, pero para usarla (con ejercicios de Prémium) hace falta Prémium
+  if (needsPremium(app, r)) { app.showPremium(); return; }
   const name = await promptDialog('Nombre de la tabla', defName, 'Guardar');
   if (!name) return;
   if (fillActive) app.store.fillActive(name, r.routine, r.rounds);
   else app.store.createRoutineFrom(name, r.routine, r.rounds);
   app.haptics.tap();
   app.openTab('inicio');
+}
+
+/** ¿La propuesta lleva ejercicios de Prémium y el usuario no lo tiene? */
+function needsPremium(app: App, r: GenResult): boolean {
+  return !app.access.premium && SECTION_IDS.some((s) => r.routine[s].some((i) => !app.access.canUse(i.exerciseId)));
+}
+
+/** Botón para guardar la propuesta; en la versión gratis (con ejercicios de Prémium), con candado y abre Prémium. */
+function saveButton(app: App, r: GenResult, label: string, save: () => void): HTMLElement[] {
+  const lock = needsPremium(app, r);
+  return [
+    lock ? h('p', { class: 'note small prem-note' }, icon('lock'), h('span', {}, 'Esta tabla lleva ejercicios de Prémium. Puedes verla entera; para usarla, hazte Prémium.')) : '',
+    h('button', { class: 'btn primary block big' + (lock ? ' prem-btn' : ''), disabled: isEmptyResult(r), onclick: save }, icon(lock ? 'lock' : 'check'), lock ? 'Usar con Prémium' : label),
+  ].filter(Boolean) as HTMLElement[];
 }
 
 /** ¿Está vacía la tabla en uso? (entonces el asistente la llena en vez de crear otra). */
@@ -210,9 +227,10 @@ export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement
         } }, icon('trash')) : '';
       const content = h('div', { class: 'maker-row' + (lock ? ' locked' : '') },
         // tocar la miniatura o el nombre abre la ficha (cómo se hace)
-        h('button', { class: 'maker-open', 'aria-label': `Cómo se hace: ${ex.name}`, onclick: open }, img),
+        h('button', { class: 'maker-open', 'aria-label': `Cómo se hace: ${ex.name}`, onclick: open }, lockedThumb(img, lock)),
         h('div', { class: 'maker-name' },
-          h('button', { class: 'maker-open maker-title', onclick: open }, ex.name, lock ? icon('lock', 'ico lock') : ''),
+          h('button', { class: 'maker-open maker-title', onclick: open }, ex.name),
+          lock ? premiumPill() : '',
           // tiempo (− +) y, al lado, cambiar y quitar: todo a la izquierda (la derecha queda libre para desplazar)
           edit ? h('div', { class: 'maker-ctrls' },
             h('div', { class: 'stepper inline maker-time' },
@@ -339,7 +357,7 @@ export class GeneratorScreen implements Screen {
         }),
         h('div', { class: 'maker-actions' },
           h('button', { class: 'btn ghost block', onclick: () => { this.result = generate(o, this.ctx()); this.ask = { remove: true }; this.render(); window.scrollTo({ top: 0 }); } }, icon('swap'), 'Otra propuesta'),
-          h('button', { class: 'btn primary block big', disabled: isEmptyResult(this.result), onclick: () => void saveTable(this.app, `${tr(name.label)} · ${name.minutes} min`, this.result!, this.fillActive) }, icon('check'), 'Guardar la tabla')));
+          ...saveButton(this.app, this.result, 'Guardar la tabla', () => void saveTable(this.app, `${tr(name.label)} · ${name.minutes} min`, this.result!, this.fillActive))));
     }
   }
 }
@@ -403,7 +421,7 @@ class TemplateScreen implements Screen {
           ask: this.ask,
         }),
         h('div', { class: 'maker-actions' },
-          h('button', { class: 'btn primary block big', disabled: isEmptyResult(this.r), onclick: () => void saveTable(app, tr(t.name), this.r, this.fillActive) }, icon('check'), 'Usar esta tabla'))));
+          ...saveButton(app, this.r, 'Usar esta tabla', () => void saveTable(app, tr(t.name), this.r, this.fillActive)))));
     if (y >= 0) window.scrollTo({ top: y });
   }
 }
@@ -499,8 +517,8 @@ class PickExerciseScreen implements Screen {
         row.lastElementChild!.replaceWith(icon(now ? 'check' : 'plus'));
         this.paintFoot();
       } },
-        img,
-        h('span', { class: 'maker-name' }, h('span', {}, ex.name), h('span', { class: 'maker-secs muted small' }, ex.zone, lock ? icon('lock', 'ico lock') : '')),
+        lockedThumb(img, lock),
+        h('span', { class: 'maker-name' }, h('span', {}, ex.name), h('span', { class: 'maker-secs muted small' }, ex.zone), lock ? premiumPill() : ''),
         icon(on ? 'check' : lock ? 'lock' : 'plus'));
       this.list.append(row);
     }

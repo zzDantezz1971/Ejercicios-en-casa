@@ -10,6 +10,8 @@ Marca cada punto al probarlo. Si algo falla, haz una captura y cuéntamelo.
 - [ ] Configuració: al entrar, todos los grupos cerrados; con atrás se cierran los abiertos.
 - [ ] Al cambiar el idioma, la app vuelve a Configuració (no a Inici).
 - [ ] Entrenamiento: arriba ya no sale el nombre pequeño de la tabla.
+- [ ] Versión gratis: ejercicios de Prèmium con etiqueta dorada y candado sobre la miniatura (listas, Edita, Crea-la per mi, Taules fetes).
+- [ ] Versión gratis: «Crea-la per mi» y «Taules fetes» se ven enteras; el botón «Fes-la servir amb Prèmium» abre Prèmium.
 
 ## 1. Health Connect (Configuració › Apps de salut)
 - [ ] Sale la tarjeta «Health Connect». Si pide instalarla, el botón abre Play Store; al volver a la app, la tarjeta cambia sola.
