@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-17T07:51:50Z",
+    "es": ["Inicio › «Esta semana»: al abrir un día y deslizar, solo se pasa por los entrenamientos de esta semana."],
+    "ca": ["Inici › «Aquesta setmana»: en obrir un dia i lliscar, només es passa pels entrenaments d’aquesta setmana."],
+    "en": ["Home › “This week”: when you open a day and swipe, you only move through this week’s workouts."]
+  },
+  {
     "fecha": "2026-11-17T07:46:22Z",
     "es": ["Editar tabla: los botones de mover, cambiar y quitar son más grandes y quedan centrados en cada ejercicio (cambiar y quitar, a la derecha)."],
     "ca": ["Edita la taula: els botons de moure, canviar i treure són més grans i queden centrats a cada exercici (canviar i treure, a la dreta)."],

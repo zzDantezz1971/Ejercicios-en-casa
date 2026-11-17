@@ -10,7 +10,8 @@ import { blockNav } from '../components/blockNav';
 export class HistoryDetailScreen implements Screen {
   readonly el = h('main', { class: 'screen history-detail' });
 
-  constructor(private readonly app: App, private readonly entry: HistoryEntry) {
+  /** @param onlySince solo se pasa a otros entrenamientos desde esta fecha (p. ej., desde Inicio, los de esta semana). */
+  constructor(private readonly app: App, private readonly entry: HistoryEntry, private readonly onlySince?: Date) {
     const e = entry;
     const d = new Date(e.date);
     const end = new Date(d.getTime() + (e.durationSec + (e.pausedSec ?? 0)) * 1000);
@@ -41,7 +42,8 @@ export class HistoryDetailScreen implements Screen {
 
     // entrenamiento anterior y siguiente (por fecha), para pasar de uno a otro deslizando o con las flechas
     // en la versión gratis, solo los de la semana en curso (los anteriores son de Prémium)
-    const since = app.historySince();
+    const free = app.historySince();
+    const since = this.onlySince && (!free || this.onlySince > free) ? this.onlySince : free;
     const all = [...app.store.history].filter((x) => !since || Date.parse(x.date) >= since.getTime()).sort((a, b) => Date.parse(a.date) - Date.parse(b.date));
     const pos = all.findIndex((x) => x === e || x.date === e.date);
     const older = pos > 0 ? all[pos - 1] : null;
@@ -88,7 +90,7 @@ export class HistoryDetailScreen implements Screen {
     const to = dir < 0 ? this.older : this.newer;
     if (!to) return;
     this.app.haptics.tap();
-    this.app.replace(new HistoryDetailScreen(this.app, to), dir < 0 ? 'back' : 'forward');
+    this.app.replace(new HistoryDetailScreen(this.app, to, this.onlySince), dir < 0 ? 'back' : 'forward');
   }
 
   /** Deslizar el dedo a los lados: hacia la izquierda, el siguiente; hacia la derecha, el anterior. */

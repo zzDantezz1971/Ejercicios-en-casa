@@ -133,7 +133,7 @@ export class HomeScreen implements Screen {
             const d = addDays(monday, i), k = dayKey(d);
             const cls = 'wd' + (days.has(k) ? ' done' : '') + (k === todayKey ? ' today' : '') + (d > now ? ' future' : '');
             return h(days.has(k) ? 'button' : 'div', days.has(k)
-              ? { class: cls, 'aria-label': `Ver el entrenamiento del ${d.toLocaleDateString(LOCALE)}`, onclick: () => openDay(app, app.store.history, k) }
+              ? { class: cls, 'aria-label': `Ver el entrenamiento del ${d.toLocaleDateString(LOCALE)}`, onclick: () => openDay(app, app.store.history, k, monday) }
               : { class: cls },
               h('span', { class: 'wd-letter' }, l),
               h('span', { class: 'wd-dot' }, days.has(k) ? icon('check') : String(d.getDate())));

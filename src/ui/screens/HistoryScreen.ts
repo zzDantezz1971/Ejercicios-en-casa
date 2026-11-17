@@ -176,15 +176,16 @@ function row(e: HistoryEntry, store: Store, onOpen: () => void): HTMLElement {
 }
 
 /** Abre el entrenamiento de un día; si hubo varios, deja elegir. */
-export function openDay(app: App, list: readonly HistoryEntry[], k: string): void {
+/** Abre el entrenamiento de un día (o elige entre varios). `since`: al deslizar, solo los entrenamientos desde esa fecha. */
+export function openDay(app: App, list: readonly HistoryEntry[], k: string, since?: Date): void {
   const es = list.filter((e) => dayKey(new Date(e.date)) === k);
-  if (es.length === 1) return app.push(new HistoryDetailScreen(app, es[0]));
+  if (es.length === 1) return app.push(new HistoryDetailScreen(app, es[0], since));
   const close = () => wrap.remove();
   const d = new Date(es[0].date);
   const wrap = h('div', { class: 'dialog-wrap', onclick: (ev: Event) => ev.target === wrap && close() },
     h('div', { class: 'dialog day-pick', role: 'dialog', 'aria-modal': 'true' },
       h('p', { class: 'dialog-title' }, d.toLocaleDateString(LOCALE, { weekday: 'long', day: 'numeric', month: 'long' })),
-      ...es.map((e) => row(e, app.store, () => { close(); app.push(new HistoryDetailScreen(app, e)); })),
+      ...es.map((e) => row(e, app.store, () => { close(); app.push(new HistoryDetailScreen(app, e, since)); })),
       h('div', { class: 'dialog-actions' }, h('button', { class: 'btn ghost', onclick: close }, 'Cerrar'))));
   document.body.append(wrap);
 }
