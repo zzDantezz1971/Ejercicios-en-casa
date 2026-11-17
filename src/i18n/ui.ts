@@ -1215,13 +1215,17 @@ const ROWS: Row[] = [
   ['Sin tablas', 'Sense taules', 'No routines'],
   ['Para meter una tabla aquí, toca sus tres puntos y «Mover a un grupo».', 'Per posar-hi una taula, toca’n els tres punts i «Mou a un grup».', 'To put a routine here, tap its three dots and “Move to a group”.'],
   ['Borrar el grupo', 'Esborra el grup', 'Delete the group'],
-  ['¿Borrar el grupo "{x}"? Sus tablas no se borran: vuelven a la lista.', 'Vols esborrar el grup «{x}»? Les seves taules no s’esborren: tornen a la llista.', 'Delete the group “{x}”? Its routines aren’t deleted: they go back to the list.'],
   ['Mover a un grupo', 'Mou a un grup', 'Move to a group'],
   ['Mover a otro grupo', 'Mou a un altre grup', 'Move to another group'],
   ['+ Nuevo grupo', '+ Grup nou', '+ New group'],
   ['Sacar del grupo', 'Treu del grup', 'Remove from group'],
   ['Con «+ Grupo» puedes crear carpetas para ordenar tus tablas: en los tres puntos de una tabla, «Mover a un grupo». Toca un grupo para abrirlo o cerrarlo.', 'Amb «+ Grup» pots crear carpetes per ordenar les teves taules: als tres punts d’una taula, «Mou a un grup». Toca un grup per obrir-lo o tancar-lo.', 'With “+ Group” you can create folders to organise your routines: in a routine’s three dots, “Move to a group”. Tap a group to open or close it.'],
   ['Tabla', 'Taula', 'Routine'],
+  ['¿Borrar el grupo "{x}"?', 'Vols esborrar el grup «{x}»?', 'Delete the group “{x}”?'],
+  ['Si no marcas la casilla, sus tablas no se borran: vuelven a la lista.', 'Si no marques la casella, les seves taules no s’esborren: tornen a la llista.', 'If you don’t tick the box, its routines aren’t deleted: they go back to the list.'],
+  ['Borrar las tablas también', 'Esborra també les taules', 'Delete the routines too'],
+  ['Se borrarán el grupo "{x}" y {y} que tiene. No se puede deshacer.', 'S’esborraran el grup «{x}» i les {y} que té. No es pot desfer.', 'The group “{x}” and its {y} will be deleted. This can’t be undone.'],
+  ['Borrar todo', 'Esborra-ho tot', 'Delete everything'],
 ];
 
 export const UI_CA: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[1]]));

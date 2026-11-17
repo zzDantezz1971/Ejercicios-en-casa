@@ -328,6 +328,16 @@ describe('Grupos de tablas', () => {
     expect(new Store(kv).active.group).toBeUndefined();
     expect(new Store(kv).routines).toHaveLength(1);
   });
+  it('al borrar el grupo con sus tablas, se borran (y siempre queda una)', () => {
+    const s = new Store(memory());
+    const t = s.active.id;
+    const g = s.createGroup('Viejo');
+    s.moveToGroup(t, g);
+    s.deleteGroup(g, true);
+    expect(s.groups).toEqual([]);
+    expect(s.routines).toHaveLength(1);
+    expect(s.routines[0].id).not.toBe(t);
+  });
   it('una tabla de un grupo que no existe vuelve a la lista', () => {
     const kv = memory(JSON.stringify({ version: 2, welcomed: true, routines: [{ id: 'a', name: 'A', routine: {}, group: 'nope' }], activeId: 'a' }));
     expect(new Store(kv).active.group).toBeUndefined();

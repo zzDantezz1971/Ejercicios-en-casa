@@ -333,10 +333,16 @@ export class Store {
     this.persist();
   }
 
-  /** Borra un grupo; sus tablas no se borran: vuelven a la lista. */
-  deleteGroup(id: string): void {
+  /** Borra un grupo. Sus tablas vuelven a la lista o, con `withTables`, se borran también (siempre queda al menos una). */
+  deleteGroup(id: string, withTables = false): void {
     this.data.groups = (this.data.groups ?? []).filter((g) => g.id !== id);
-    for (const r of this.data.routines) if (r.group === id) delete r.group;
+    if (withTables) {
+      this.data.routines = this.data.routines.filter((r) => r.group !== id);
+      if (this.data.routines.length === 0) this.data.routines.push(newRoutine(DEFAULT_ROUTINE_NAME));
+      if (!this.data.routines.some((r) => r.id === this.data.activeId)) this.data.activeId = this.data.routines[0].id;
+    } else {
+      for (const r of this.data.routines) if (r.group === id) delete r.group;
+    }
     this.persist();
   }
 

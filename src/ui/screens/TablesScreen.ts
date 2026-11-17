@@ -103,7 +103,12 @@ export class TablesScreen implements Screen {
       const n = await promptDialog('Nuevo nombre', name, 'Guardar');
       if (n) this.app.store.renameGroup(id, n);
     } else if (choice === 'delete') {
-      if (await confirmDialog(`¿Borrar el grupo "${name}"? Sus tablas no se borran: vuelven a la lista.`, 'Borrar')) this.app.store.deleteGroup(id);
+      const n = this.app.store.routines.filter((t) => t.group === id).length;
+      const r = await deleteGroupDialog(name, n);
+      if (!r.ok) return this.render();
+      // con «Borrar las tablas también»: se avisa otra vez antes (no se puede deshacer)
+      if (r.withTables && n && !(await confirmDialog(`Se borrarán el grupo "${name}" y ${plural(n, 'tabla', 'tablas')} que tiene. No se puede deshacer.`, 'Borrar todo', 'Cancelar', true))) return this.render();
+      this.app.store.deleteGroup(id, r.withTables);
     }
     this.render();
   }
@@ -201,4 +206,21 @@ export class TablesScreen implements Screen {
     }
     this.render();
   }
+}
+
+/** Borrar un grupo: casilla «Borrar las tablas también» (sin marcar); si no, sus tablas vuelven a la lista. */
+function deleteGroupDialog(name: string, n: number): Promise<{ ok: boolean; withTables: boolean }> {
+  return new Promise((resolve) => {
+    const box = h('input', { type: 'checkbox', id: 'grp-del-tables' }) as HTMLInputElement;
+    const close = (ok: boolean) => { wrap.remove(); resolve({ ok, withTables: ok && box.checked }); };
+    const wrap = h('div', { class: 'dialog-wrap', onclick: (e: Event) => e.target === wrap && close(false) },
+      h('div', { class: 'dialog', role: 'dialog', 'aria-modal': 'true' },
+        h('p', { class: 'dialog-title' }, `¿Borrar el grupo "${name}"?`),
+        h('p', { class: 'muted small' }, 'Si no marcas la casilla, sus tablas no se borran: vuelven a la lista.'),
+        n ? h('label', { class: 'rm-stop', for: 'grp-del-tables' }, box, h('span', {}, 'Borrar las tablas también')) : '',
+        h('div', { class: 'dialog-actions' },
+          h('button', { class: 'btn ghost', onclick: () => close(false) }, 'Cancelar'),
+          h('button', { class: 'btn danger', onclick: () => close(true) }, 'Borrar'))));
+    document.body.append(wrap);
+  });
 }
