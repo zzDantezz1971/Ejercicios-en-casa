@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-17T08:13:38Z",
+    "es": ["Guía: el menú Tablas está reordenado y más corto (sin repeticiones), y el menú Historial explica lo que hay ahora."],
+    "ca": ["Guia: el menú Taules està reordenat i és més curt (sense repeticions), i el menú Historial explica el que hi ha ara."],
+    "en": ["Guide: the Routines menu is reorganised and shorter (no repetition), and the History menu describes what’s there now."]
+  },
+  {
     "fecha": "2026-11-17T07:58:59Z",
     "es": ["Historial: los récords (rachas, entreno más largo, calorías, mejor mes) tienen el texto más grande."],
     "ca": ["Historial: els rècords (ratxes, entrenament més llarg, calories, millor mes) tenen el text més gran."],
