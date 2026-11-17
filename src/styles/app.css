@@ -1740,4 +1740,6 @@ button.plan-row { cursor: pointer; }
 .hd-fold { width: 100%; background: none; border: 0; padding: 0; color: inherit; font: inherit; text-align: left; cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .tv-list[hidden] { display: none; }
 .hd-fold { align-items: center; flex-wrap: nowrap; }
-.hd-fold .maker-sec { margin: 6px 0; }
+/* títulos de bloque del entrenamiento: algo más pequeños y en una sola línea, con el resumen a la derecha */
+.hd-fold .maker-sec { margin: 6px 0; font-size: 1.2rem; flex-wrap: nowrap; white-space: nowrap; min-width: 0; }
+.hd-fold .tv-meta { white-space: nowrap; flex: none; }

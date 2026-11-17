@@ -1,11 +1,8 @@
 import { LOCALE, DEC } from '../../i18n';
-import { WorkoutPlan } from '../../domain/WorkoutPlan';
-import { SECTION_IDS, SECTION_TITLES, emptyRoutine, type ExerciseDef, type HeartSummary, type HistoryEntry, type SavedRoutine } from '../../domain/types';
+import { SECTION_IDS, SECTION_TITLES, type ExerciseDef, type HeartSummary, type HistoryEntry } from '../../domain/types';
 import type { App, Screen } from '../App';
 import { confirmDialog, h, humanDuration, kg, mmss, plural } from '../dom';
 import { icon, SECTION_STYLE } from '../icons';
-import { startWorkout } from '../components/startWorkout';
-import { checkAndCelebrate } from '../components/medals';
 import { DetailScreen } from './DetailScreen';
 
 /** Detalle de un entrenamiento del historial: qué se hizo, cuánto tiempo y repetirlo. */
@@ -64,7 +61,6 @@ export class HistoryDetailScreen implements Screen {
       list.push(rows);
     }
 
-    const canRepeat = items.some((i) => app.catalog.has(i.exerciseId) && !app.store.hidden.has(i.exerciseId));
     // entrenamiento anterior y siguiente (por fecha), para pasar de uno a otro deslizando o con las flechas
     // en la versión gratis, solo los de la semana en curso (los anteriores son de Prémium)
     const since = app.historySince();
@@ -100,11 +96,8 @@ export class HistoryDetailScreen implements Screen {
         ...(items.length
           ? list
           : [h('p', { class: 'muted' }, 'Este entrenamiento es de una versión anterior de la app y no guarda el detalle de cada ejercicio.')]),
-        canRepeat
-          ? h('button', { class: 'btn primary block', onclick: () => this.repeat() }, icon('play'), 'Repetir este entrenamiento')
-          : null,
-        h('button', { class: 'btn ghost block', onclick: () => this.copyToDay() }, icon('copy'), 'Copiar a otro día'),
-        h('button', { class: 'btn danger block', onclick: () => void this.remove() }, icon('trash'), 'Borrar este entrenamiento')),
+        // pequeño y apartado, para no tocarlo sin querer (como «Borrar todo el historial»)
+        h('button', { class: 'clear-history', onclick: () => void this.remove() }, icon('trash'), 'Borrar este entrenamiento')),
     );
     if (older || newer) this.swipe();
   }
@@ -137,54 +130,6 @@ export class HistoryDetailScreen implements Screen {
       if (Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy) * 1.6 || Date.now() - t0 > 800) return;
       this.go(dx < 0 ? 1 : -1);
     }, { passive: true });
-  }
-
-  /** Crea un entrenamiento igual en otro día (para recuperar uno que no se guardó). */
-  private copyToDay(): void {
-    const { app, entry } = this;
-    const src = new Date(entry.date);
-    const next = new Date(src.getTime() + 864e5);
-    const pad = (n: number) => String(n).padStart(2, '0');
-    const dayIn = h('input', { type: 'date', class: 'text-input', value: `${next.getFullYear()}-${pad(next.getMonth() + 1)}-${pad(next.getDate())}` });
-    const timeIn = h('input', { type: 'time', class: 'text-input', value: `${pad(src.getHours())}:${pad(src.getMinutes())}` });
-    const close = () => wrap.remove();
-    const ok = () => {
-      const [y, m, d] = dayIn.value.split('-').map(Number);
-      const [hh, mm] = (timeIn.value || '12:00').split(':').map(Number);
-      if (!y || !m || !d) return;
-      const when = new Date(y, m - 1, d, hh, mm);
-      if (when.getTime() > Date.now()) { dayIn.setCustomValidity('—'); dayIn.reportValidity(); return; }
-      app.store.copyHistoryTo(entry, when);
-      close();
-      app.back();
-      checkAndCelebrate(app);
-    };
-    const wrap = h('div', { class: 'dialog-wrap', onclick: (e: Event) => e.target === wrap && close() },
-      h('div', { class: 'dialog copy-day', role: 'dialog', 'aria-modal': 'true' },
-        h('p', { class: 'dialog-title' }, 'Copiar a otro día'),
-        h('p', { class: 'muted small' }, 'Se crea un entrenamiento igual a este (ejercicios, tiempo, calorías y pulso) en el día y la hora que elijas.'),
-        h('label', { class: 'cd-field' }, h('span', { class: 'muted small' }, 'Día'), dayIn),
-        h('label', { class: 'cd-field' }, h('span', { class: 'muted small' }, 'Hora de inicio'), timeIn),
-        h('div', { class: 'dialog-actions' },
-          h('button', { class: 'btn ghost', onclick: close }, 'Cancelar'),
-          h('button', { class: 'btn primary', onclick: ok }, 'Copiar'))));
-    document.body.append(wrap);
-  }
-
-  /** Vuelve a hacer los mismos ejercicios, en el mismo orden y con los tiempos previstos. */
-  private repeat(): void {
-    const { app, entry } = this;
-    const routine = emptyRoutine();
-    for (const it of entry.items ?? []) {
-      if (app.store.hidden.has(it.exerciseId)) continue;
-      const sec = app.catalog.get(it.exerciseId)?.section;
-      if (sec) routine[sec].push({ exerciseId: it.exerciseId, seconds: it.planned, ...(it.weight ? { weight: it.weight } : {}) });
-    }
-    const plan = WorkoutPlan.build(routine, app.catalog, app.store.settings);
-    if (plan.isEmpty) return;
-    const table: SavedRoutine = app.store.routines.find((r) => r.id === entry.routineId)
-      ?? { id: entry.routineId ?? 'historial', name: entry.routineName ?? 'Entrenamiento repetido', routine, createdAt: entry.date };
-    void startWorkout(app, plan, { ...table, routine });
   }
 
   private async remove(): Promise<void> {

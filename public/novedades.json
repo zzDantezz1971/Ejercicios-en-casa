@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-17T06:37:40Z",
+    "es": ["Historial › entrenamiento: títulos de los bloques más pequeños y alineados; se quitan «Repetir» y «Copiar a otro día»; «Borrar este entrenamiento» es ahora un enlace pequeño."],
+    "ca": ["Historial › entrenament: títols dels blocs més petits i alineats; es treuen «Repeteix» i «Copia a un altre dia»; «Esborra aquest entrenament» ara és un enllaç petit."],
+    "en": ["History › workout: smaller, aligned block titles; “Repeat” and “Copy to another day” are gone; “Delete this workout” is now a small link."]
+  },
+  {
     "fecha": "2026-11-17T06:33:22Z",
     "es": ["Historial: al abrir un entrenamiento, los bloques salen plegados; tócalos para ver sus ejercicios."],
     "ca": ["Historial: en obrir un entrenament, els blocs surten plegats; toca’ls per veure’n els exercicis."],
