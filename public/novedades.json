@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-17T16:20:45Z",
+    "es": ["App Android: arreglado que en Ajustes › Avisos › Voz solo saliera una voz aunque el móvil tuviera varias."],
+    "ca": ["App Android: arreglat que a Configuració › Avisos › Veu només sortís una veu encara que el mòbil en tingués diverses."],
+    "en": ["Android app: fixed Settings › Alerts › Voice showing only one voice even when the phone had several."]
+  },
+  {
     "fecha": "2026-11-17T15:54:14Z",
     "es": ["Ajustes: al cambiar un valor (por ejemplo, la pausa entre ejercicios con − y +) la pantalla ya no vuelve arriba del todo."],
     "ca": ["Configuració: en canviar un valor (per exemple, la pausa entre exercicis amb − i +) la pantalla ja no torna amunt de tot."],

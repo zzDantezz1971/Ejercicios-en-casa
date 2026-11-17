@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { pickFew } from '../src/services/Voice';
+import { nativeVoiceList, pickFew } from '../src/services/Voice';
 
 describe('pickFew (voces para elegir)', () => {
   it('una de cada voz (la local), como mucho 3', () => {
@@ -19,5 +19,14 @@ describe('pickFew (voces para elegir)', () => {
       { id: 'c', name: 'en-au-x-aua-local', lang: 'en-AU' },
     ]);
     expect(r.map((x) => x.id)).toEqual(['b']);
+  });
+  it('Android: todas las voces se llaman «español España»; se distinguen por voiceURI', () => {
+    const v = ['eea', 'eec', 'eed', 'eef'].flatMap((x) => [
+      { voiceURI: `es-es-x-${x}-local`, name: 'español España', lang: 'es-ES' },
+      { voiceURI: `es-es-x-${x}-network`, name: 'español España', lang: 'es-ES' },
+    ]).concat([{ voiceURI: 'es-us-x-esc-local', name: 'español Estados Unidos', lang: 'es-US' }]);
+    const r = nativeVoiceList(v, 'es');
+    expect(r.length).toBe(3);
+    expect(r.every((x) => x.id.startsWith('es-es-') && x.id.endsWith('-local'))).toBe(true);
   });
 });

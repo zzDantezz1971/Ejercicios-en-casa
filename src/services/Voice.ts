@@ -25,6 +25,14 @@ export function pickFew(voices: Array<{ id: string; name: string; lang: string }
   return [...seen.values()].slice(0, MAX_VOICES);
 }
 
+/**
+ * Voces del motor de Android para el idioma. Ojo: el complemento pone en «name» solo el idioma («español España»,
+ * igual en todas las voces); el nombre de verdad (es-es-x-eea-local…) viene en voiceURI, y con él se distinguen.
+ */
+export function nativeVoiceList(voices: ReadonlyArray<{ voiceURI?: string; name: string; lang: string }>, l: Lang): Array<{ id: string; name: string }> {
+  return pickFew(voices.filter((v) => forLang(v.lang, l)).map((v) => ({ id: v.voiceURI || v.name, name: v.voiceURI || v.name, lang: v.lang })));
+}
+
 /** ¿Esta voz sirve para el idioma? En castellano, solo la de España (no las de Latinoamérica). */
 function forLang(voiceLang: string, l: Lang): boolean {
   const v = voiceLang.replace('_', '-').toLowerCase();
@@ -91,7 +99,7 @@ export class Voice {
     if (IS_NATIVE) {
       try {
         const { voices } = await TextToSpeech.getSupportedVoices();
-        return pickFew(voices.filter((v) => forLang(v.lang, this.lang)).map((v) => ({ id: v.voiceURI || v.name, name: v.name, lang: v.lang })));
+        return nativeVoiceList(voices, this.lang);
       } catch {
         return [];
       }
