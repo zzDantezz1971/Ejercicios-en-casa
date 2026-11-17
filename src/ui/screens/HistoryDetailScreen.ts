@@ -2,7 +2,7 @@ import { LOCALE, DEC } from '../../i18n';
 import { WorkoutPlan } from '../../domain/WorkoutPlan';
 import { SECTION_IDS, SECTION_TITLES, emptyRoutine, type ExerciseDef, type HeartSummary, type HistoryEntry, type SavedRoutine } from '../../domain/types';
 import type { App, Screen } from '../App';
-import { confirmDialog, h, humanDuration, kg, mmss } from '../dom';
+import { confirmDialog, h, humanDuration, kg, mmss, plural } from '../dom';
 import { icon, SECTION_STYLE } from '../icons';
 import { startWorkout } from '../components/startWorkout';
 import { checkAndCelebrate } from '../components/medals';
@@ -28,26 +28,34 @@ export class HistoryDetailScreen implements Screen {
       const its = items.filter((i) => i.section === s);
       if (!its.length) continue;
       const st = SECTION_STYLE[s];
-      const head = h('h3', { class: 'hd-sec' }, h('span', { class: 'sec-dot' }, icon(st.icon)), SECTION_TITLES[s],
-        h('span', { class: 'muted small' }, mmss(its.reduce((n, i) => n + i.seconds, 0))));
+      // como «Contenido de la tabla»: título del bloque y una fila por ejercicio (miniatura, nombre, tiempo, peso)
+      const head = h('div', { class: 'tv-head' },
+        h('h2', { class: 'maker-sec' }, icon(st.icon), SECTION_TITLES[s]),
+        h('span', { class: 'muted small tv-meta' }, `${plural(its.length, 'ejercicio', 'ejercicios')} · ${mmss(its.reduce((n, i) => n + i.seconds, 0))}`));
       head.style.setProperty('--sec', st.color);
       list.push(head);
-      // ejercicios en cuadrícula (2 o 3 por fila); tocar uno abre su ficha (muñeco, cómo se hace, músculos…)
-      const grid = h('div', { class: 'hd-grid' });
+      const rows = h('div', { class: 'tv-list' });
       for (const it of its) {
         const ex = app.catalog.get(it.exerciseId);
         const status = it.completed ? '' : it.seconds > 0 ? 'Saltado a medias' : 'Saltado';
-        const r = h(ex ? 'button' : 'div', { class: 'card hd-row' + (it.completed ? '' : ' skipped'),
+        const img = h('img', { alt: '', class: 'maker-thumb' });
+        if (ex) void app.thumbs.get(ex).then((url) => (img.src = url));
+        const r = h(ex ? 'button' : 'div', { class: 'maker-row tv-row hd-tv' + (it.completed ? '' : ' skipped'),
           ...(ex ? { 'aria-label': `Cómo se hace: ${ex.name}`, onclick: () => app.push(new DetailScreen(app, ex, shown)) } : {}) },
-          h('div', { class: 'hd-top' },
-            h('span', { class: 'hd-mark' }, icon(it.completed ? 'check' : 'next')),
-            h('span', { class: 'hd-secs' }, mmss(it.seconds), it.seconds < it.planned ? h('span', { class: 'muted small' }, ` / ${mmss(it.planned)}`) : null)),
-          h('strong', { class: 'hd-name' }, ex?.name ?? 'Ejercicio eliminado'),
-          status || it.weight ? h('span', { class: 'muted small hd-sub' }, status, status && it.weight ? ' · ' : '', it.weight ? kg(it.weight) : '') : null);
+          h('span', { class: 'hd-mark' }, icon(it.completed ? 'check' : 'next')),
+          img,
+          h('span', { class: 'maker-name' },
+            h('span', { class: 'maker-title' }, ex?.name ?? 'Ejercicio eliminado'),
+            h('span', { class: 'muted small tv-sub' },
+              h('span', { class: 'tv-secs' }, icon('clock'), mmss(it.seconds), it.seconds < it.planned ? ` / ${mmss(it.planned)}` : ''),
+              it.weight ? h('span', { class: 'tv-secs' }, icon('dumbbell'), kg(it.weight)) : null,
+              ex?.oneSided ? h('span', { class: 'by-sides' }, icon('sides'), 'por lados') : null),
+            status ? h('span', { class: 'muted small hd-status' }, status) : ex ? h('span', { class: 'muted small' }, ex.zone) : null),
+          ex ? icon('chevron', 'ico chev') : null);
         r.style.setProperty('--sec', st.color);
-        grid.append(r);
+        rows.append(r);
       }
-      list.push(grid);
+      list.push(rows);
     }
 
     const canRepeat = items.some((i) => app.catalog.has(i.exerciseId) && !app.store.hidden.has(i.exerciseId));

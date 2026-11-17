@@ -550,8 +550,6 @@ button:focus-visible, input:focus-visible, label:focus-within { outline: 2px sol
 .hd-body > .muted { margin: -6px 0 4px; }
 .hd-sec { display: flex; align-items: center; gap: 10px; margin: 10px 0 0; font-size: 1.1rem; }
 .hd-sec .muted { margin-left: auto; font-variant-numeric: tabular-nums; }
-.hd-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
-@media (min-width: 400px) { .hd-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 .hd-row { display: flex; flex-direction: column; align-items: stretch; gap: 6px; padding: 9px 10px 10px; border-top: 3px solid var(--sec); text-align: left; }
 .hd-top { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
 .hd-mark { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: color-mix(in srgb, var(--sec) 20%, transparent); color: var(--sec); flex: none; }
@@ -1733,3 +1731,8 @@ button.plan-row { cursor: pointer; }
 /* Historial: «Borrar todo el historial» pequeño, en texto y separado del resto */
 .clear-history { align-self: center; margin-top: 18px; padding: 6px 10px; font-size: .82rem; color: var(--danger, #E5484D); opacity: .8; display: inline-flex; align-items: center; gap: 6px; background: none; border: 0; cursor: pointer; }
 .clear-history .ico { width: 14px; height: 14px; }
+
+/* Entrenamiento del historial: filas como «Contenido de la tabla» */
+.hd-tv.skipped { opacity: .7; }
+.hd-tv.skipped .hd-mark { background: var(--surface-2); color: var(--muted); }
+.hd-tv .hd-status { color: var(--warn, #F5A524); }

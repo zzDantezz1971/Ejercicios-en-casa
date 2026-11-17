@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-17T06:27:27Z",
+    "es": ["Historial: al abrir un entrenamiento, los ejercicios se ven como en «Contenido de la tabla» (miniatura, nombre, tiempo hecho, peso), con una marca si se hizo o se saltó."],
+    "ca": ["Historial: en obrir un entrenament, els exercicis es veuen com a «Contingut de la taula» (miniatura, nom, temps fet, pes), amb una marca si es va fer o es va saltar."],
+    "en": ["History: when you open a workout, the exercises look like “Routine contents” (thumbnail, name, time done, weight), with a mark showing whether it was done or skipped."]
+  },
+  {
     "fecha": "2026-11-17T06:21:19Z",
     "es": ["Versión gratis: al ver un entrenamiento, las flechas y el deslizar solo pasan por los de la semana en curso."],
     "ca": ["Versió gratuïta: en veure un entrenament, les fletxes i el lliscar només passen pels de la setmana en curs."],
