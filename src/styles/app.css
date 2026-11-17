@@ -1717,7 +1717,8 @@ button.plan-row { cursor: pointer; }
 .hero-title.longer { font-size: 1.6rem; }
 
 /* versión gratis: aviso de que solo se ven los últimos 7 días */
-.hist-free { width: 100%; text-align: left; color: var(--fg); cursor: pointer; font: inherit; }
+.hist-free { width: 100%; text-align: left; color: var(--fg); cursor: pointer; font: inherit; border: 0; outline: none; -webkit-tap-highlight-color: transparent; }
+.hist-free:focus-visible { box-shadow: 0 0 0 2px var(--accent); }
 .hist-free strong { color: var(--accent); }
 
 /* buscador con el botón «Ordenar» al lado */

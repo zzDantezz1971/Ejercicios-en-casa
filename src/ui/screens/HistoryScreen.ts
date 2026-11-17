@@ -33,7 +33,7 @@ export class HistoryScreen implements Screen {
       this.body.append(h('div', { class: 'empty-state' }, icon('calendar', 'ico big'), h('p', {}, 'Aún no hay entrenamientos. Cuando termines el primero aparecerá aquí.')));
       return;
     }
-    // versión gratis: solo los últimos 7 días (lo anterior se sigue guardando y se ve con Prémium)
+    // versión gratis: solo la semana en curso, de lunes a domingo (lo anterior se sigue guardando y se ve con Prémium)
     const since = this.app.historySince();
     const premium = this.app.access.premium;
     const summary = (mode: 'week' | 'month') => () => (premium ? this.app.push(new MonthScreen(this.app, undefined, mode)) : this.app.showPremium());
@@ -41,8 +41,8 @@ export class HistoryScreen implements Screen {
     const hiddenN = all.length - list.length;
     append(this.body,
       since ? h('button', { class: 'note hist-free', onclick: () => this.app.showPremium() }, icon('lock'),
-        h('span', {}, 'Versión gratis: ves los entrenamientos de los últimos 7 días. ',
-          hiddenN ? `${hiddenN} anteriores guardados. ` : '',
+        h('span', {}, h('span', {}, 'Versión gratis: ves los entrenamientos de esta semana.'), ' ',
+          hiddenN ? h('span', {}, plural(hiddenN, 'entrenamiento anterior guardado.', 'entrenamientos anteriores guardados.')) : '', hiddenN ? ' ' : '',
           h('strong', {}, 'Hazte prémium'))) : null,
       backupDue(this.app) ? backupCard(this.app) : null,
       // primero el mes, luego los resúmenes y después los récords

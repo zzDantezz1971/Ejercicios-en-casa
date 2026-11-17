@@ -1,3 +1,4 @@
+import { weekStart } from '../domain/monthSummary';
 import { App as NativeApp } from '@capacitor/app';
 import { IS_NATIVE } from '../platform/native';
 import { setAngleStore } from '../figure/angles';
@@ -20,8 +21,6 @@ import { exportWeight, exportWorkout } from '../services/Health';
 import { clear, h } from './dom';
 import { icon, type IconName } from './icons';
 
-/** Días que se ven del historial en la versión gratis (los últimos, hoy incluido). */
-export const FREE_HISTORY_DAYS = 7;
 
 export type TabId = 'inicio' | 'tablas' | 'medallas' | 'historial' | 'datos' | 'ajustes';
 
@@ -112,10 +111,10 @@ export class App {
     this.paywall = factory;
   }
 
-  /** Desde cuándo se ve el historial: con Prémium, todo (null); en la versión gratis, los últimos 7 días (hoy incluido). */
+  /** Desde cuándo se ve el historial: con Prémium, todo (null); en la versión gratis, la semana en curso (desde el lunes). */
   historySince(now = new Date()): Date | null {
     if (this.access.premium) return null;
-    return new Date(now.getFullYear(), now.getMonth(), now.getDate() - (FREE_HISTORY_DAYS - 1));
+    return weekStart(now);
   }
 
   /** Abre la pantalla para hacerse prémium. */

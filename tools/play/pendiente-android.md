@@ -12,7 +12,7 @@
 ## Suscripción (0,99 €/mes o 9,99 €/año, sin prueba gratis)
 
 La app ya lo tiene programado (`src/services/Access.ts`, pantalla `PaywallScreen`). Modelo (nov 2026): versión gratis con
-todos los ejercicios, una sola tabla (con «Tabla vacía») y el historial de los últimos 7 días; «Créala por mí»,
+todos los ejercicios, una sola tabla (con «Tabla vacía») y el historial de la semana en curso; «Créala por mí»,
 tablas hechas, plan de la semana, resúmenes, objetivo de peso, personalizar el muñeco, temas de color, copia de seguridad y algunos avisos
 son de Prémium. La suscripción o un código lo desbloquean todo. Solo afecta a la app de Google Play; la web no se cobra (en Configuración hay
 una vista previa de la versión gratis). Falta configurarlo en Google:

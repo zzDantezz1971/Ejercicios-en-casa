@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-17T06:10:30Z",
+    "es": ["Versión gratis: el historial muestra la semana en curso (de lunes a domingo). El aviso de arriba ya sale bien traducido y sin el borde blanco."],
+    "ca": ["Versió gratuïta: l’historial mostra la setmana en curs (de dilluns a diumenge). L’avís de dalt ja surt ben traduït i sense la vora blanca."],
+    "en": ["Free version: history shows the current week (Monday to Sunday). The notice at the top is now properly translated and has no white border."]
+  },
+  {
     "fecha": "2026-11-17T06:05:42Z",
     "es": ["Versión gratis: el historial muestra siempre los entrenamientos de los últimos 7 días (antes solo se veía la primera semana de uso). Los anteriores se guardan y se ven con Prémium."],
     "ca": ["Versió gratuïta: l’historial mostra sempre els entrenaments dels últims 7 dies (abans només es veia la primera setmana d’ús). Els anteriors es desen i es veuen amb Prèmium."],

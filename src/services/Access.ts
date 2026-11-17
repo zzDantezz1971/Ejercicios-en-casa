@@ -5,7 +5,7 @@ import { checkCode } from './accessCodes';
 
 /* Acceso a la app de Google Play: suscripción (0,99 €/mes o 9,99 €/año, con prueba gratis de Google)
    o un código de acceso gratis. Sin suscripción ni código se usa la versión gratis: todos los ejercicios y una sola
-   tabla (hecha con «Tabla vacía»), y el historial de los últimos 7 días. «Créala por mí», las tablas hechas,
+   tabla (hecha con «Tabla vacía»), y el historial de la semana en curso. «Créala por mí», las tablas hechas,
    el plan de la semana, los resúmenes, el objetivo de peso, personalizar el muñeco, la copia de seguridad y algunos avisos son de Prémium. La versión web no se cobra; ahí se puede activar una vista previa
    de la versión gratis (solo en ese navegador) para ver cómo queda. */
 
