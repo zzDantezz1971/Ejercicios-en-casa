@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-17T07:29:25Z",
+    "es": ["Mis tablas: los botones «+ Grupo» y «+ Tabla» son más pequeños y van a la derecha."],
+    "ca": ["Les meves taules: els botons «+ Grup» i «+ Taula» són més petits i van a la dreta."],
+    "en": ["My routines: the “+ Group” and “+ Routine” buttons are smaller and aligned to the right."]
+  },
+  {
     "fecha": "2026-11-17T07:26:08Z",
     "es": ["Mis tablas: el título va en una línea y debajo los botones «+ Grupo» y «+ Tabla», los dos en azul."],
     "ca": ["Les meves taules: el títol va en una línia i a sota els botons «+ Grup» i «+ Taula», tots dos en blau."],
