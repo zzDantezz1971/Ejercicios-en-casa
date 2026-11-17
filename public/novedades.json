@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-17T06:56:23Z",
+    "es": ["Los botones para ir al bloque anterior o siguiente son ahora más pequeños: solo el icono y el nombre del bloque."],
+    "ca": ["Els botons per anar al bloc anterior o següent ara són més petits: només la icona i el nom del bloc."],
+    "en": ["The buttons to go to the previous or next block are now smaller: just the block’s icon and name."]
+  },
+  {
     "fecha": "2026-11-17T06:51:40Z",
     "es": ["Al ver los ejercicios de un bloque (desde Inicio o desde un entrenamiento del historial), al final hay botones para ir al bloque anterior o al siguiente."],
     "ca": ["En veure els exercicis d’un bloc (des d’Inici o des d’un entrenament de l’historial), al final hi ha botons per anar al bloc anterior o al següent."],

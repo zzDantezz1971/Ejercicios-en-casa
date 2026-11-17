@@ -9,10 +9,10 @@ export function blockNav(blocks: readonly SectionId[], cur: SectionId, go: (s: S
   const next = i >= 0 && i < blocks.length - 1 ? blocks[i + 1] : undefined;
   if (!prev && !next) return null;
   const btn = (s: SectionId, dir: -1 | 1) => {
-    const b = h('button', { class: 'block-nav-btn ' + (dir < 0 ? 'prev' : 'next'), onclick: () => go(s, dir) },
+    const b = h('button', { class: 'block-nav-btn ' + (dir < 0 ? 'prev' : 'next'), 'aria-label': `${dir < 0 ? 'Bloque anterior' : 'Bloque siguiente'}: ${SECTION_TITLES[s]}`, onclick: () => go(s, dir) },
       dir < 0 ? icon('back', 'ico arrow') : null,
       h('span', { class: 'bn-icon' }, icon(SECTION_STYLE[s].icon)),
-      h('span', { class: 'bn-text' }, h('span', { class: 'muted small' }, dir < 0 ? 'Bloque anterior' : 'Bloque siguiente'), h('strong', {}, SECTION_TITLES[s])),
+      h('strong', { class: 'bn-name' }, SECTION_TITLES[s]),
       dir > 0 ? icon('chevron', 'ico arrow') : null);
     b.style.setProperty('--sec', SECTION_STYLE[s].color);
     return b;
