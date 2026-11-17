@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-17T20:09:11Z",
+    "es": ["Recordatorios: ahora hay uno solo para entrenar. Con un plan de la semana en uso, puede seguirlo («Seguir el plan de la semana»): te avisa los días del plan y te dice qué toca. Ya no hay un aviso aparte por cada plan."],
+    "ca": ["Recordatoris: ara n’hi ha un de sol per entrenar. Amb un pla setmanal en ús, el pot seguir («Segueix el pla setmanal»): t’avisa els dies del pla i et diu què toca. Ja no hi ha un avís a part per a cada pla."],
+    "en": ["Reminders: there’s now a single one for training. With a weekly plan in use, it can follow it (“Follow the weekly plan”): it reminds you on the plan’s days and tells you what’s up. There’s no longer a separate reminder for each plan."]
+  },
+  {
     "fecha": "2026-11-17T19:52:55Z",
     "es": ["App Android: los recordatorios ya no se quedan sin programar si el móvil no permite avisos a la hora exacta. Si es así, en Recordatorios sale un botón «Permitir» para que lleguen a la hora justa."],
     "ca": ["App Android: els recordatoris ja no es queden sense programar si el mòbil no permet avisos a l’hora exacta. Si és així, a Recordatoris surt un botó «Permet» perquè arribin a l’hora justa."],

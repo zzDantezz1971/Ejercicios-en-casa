@@ -1461,8 +1461,7 @@ body:has(.page-lifted) { overflow-x: hidden; }
 .rem-hour { display: flex; align-items: center; gap: 12px; }
 .rem-day.fixed { cursor: default; display: inline-flex; align-items: center; justify-content: center; }
 .rem-fixed { margin-top: -2px; }
-.rem-plans-open { background: none; border: 0; color: inherit; font: inherit; text-align: left; }
-.rem-plans-open .chev { width: 20px; height: 20px; color: var(--muted); flex: none; }
+.rem-card .rem-opts .rem-follow { padding: 0 0 12px; margin-bottom: 10px; border-bottom: 1px solid var(--line); }
 .rem-empty p { margin: 14px 0; }
 .rem-warn { display: flex; align-items: center; gap: 6px; color: #E5A13A; }
 .rem-warn .ico { width: 16px; height: 16px; }

@@ -40,7 +40,7 @@ const GUIDE: Array<{ icon: IconName; title: string; sub: string; points: Array<s
       'Gira el muñeco con el dedo para verlo desde otro ángulo: se queda así para ese ejercicio, también al entrenar y en la lista.',
       'Busca por nombre o zona, marca favoritos con la estrella y ordena la lista por zona, músculo, material o nombre, o a tu manera con «Personalizada».',
       { h: 'Plan de la semana (Prémium)' },
-      'En «+ Tabla» › Plan de la semana eliges objetivo, días (de 2 a 6), minutos y nivel, y la app crea una tabla para cada día, repartiendo las zonas para que descansen entre sesiones. Antes de crearlo, toca un día para ver sus ejercicios y el tiempo de cada uno y cambiar lo que quieras. Al final te pregunta si quieres que te avise esos días (cada plan tiene su aviso en Recordatorios › Plan de la semana).',
+      'En «+ Tabla» › Plan de la semana eliges objetivo, días (de 2 a 6), minutos y nivel, y la app crea una tabla para cada día, repartiendo las zonas para que descansen entre sesiones. Antes de crearlo, toca un día para ver sus ejercicios y el tiempo de cada uno y cambiar lo que quieras. Al final te pregunta si quieres que te avise esos días (el recordatorio de entrenar sigue el plan en uso).',
       'Con un plan, la tabla en uso de Inicio es la del día (o, si hoy descansas, la del próximo día de entrenamiento). Si eliges otra tabla tuya, se respeta y el plan deja de salir en Inicio hasta que vuelvas a ponerlo en uso.',
       'Puedes tener varios planes (por ejemplo, uno de fuerza y otro de estiramientos). Arriba en Tablas, toca el plan para ver la lista, elegir el que quieres usar, cambiarle el nombre o crear otro.',
       'En «Mi plan de la semana» (arriba de tus tablas) ves la semana de lunes a domingo con lo ya hecho. Toca un día para ver su tabla, cambiarla, pedir otra propuesta o empezar.',
@@ -64,7 +64,7 @@ const GUIDE: Array<{ icon: IconName; title: string; sub: string; points: Array<s
       { h: 'Recordatorios' },
       HAS_BACKUP ? 'Para entrenar con tus tablas, pesarte y hacer la copia de seguridad, los días y a la hora que elijas. Llegan como notificación en la app de Android, aunque esté cerrada.'
         : 'Para entrenar con tus tablas y pesarte, los días y a la hora que elijas. Llegan como notificación, aunque la app esté cerrada.',
-      'En Recordatorios › Plan de la semana, cada plan tiene su propio aviso: sus días, a la hora que elijas. Si borras el plan, se borra también su aviso.',
+      'Con un plan de la semana en uso, el recordatorio de entrenar puede seguirlo («Seguir el plan de la semana»): te avisa los días del plan y te dice qué toca. Si lo apagas, eliges tú los días.',
       'El aviso de «Hace X días que no te pesas» (al acabar un entrenamiento) sigue los días y la hora del recordatorio de peso.',
       { h: 'Pulsaciones del reloj' },
       'Conecta un reloj o una pulsera que difunda la frecuencia cardíaca por Bluetooth: verás tus pulsaciones durante el entrenamiento y las calorías se calcularán con tu pulso.',

@@ -4,6 +4,9 @@ Recordatorio: **cuando instales la app de prueba** (el APK de GitHub o la prueba
 Marca cada punto al probarlo. Si algo falla, haz una captura y cuéntamelo.
 
 ## 0d. Para probar en el build 19
+- [ ] Recordatoris: ya no está la tarjeta «Pla setmanal». En «Entrenament», con un plan en uso, sale «Segueix el pla setmanal»: encendido, los días son los del plan (fijos) y la notificación dice «Pla setmanal: … / Avui toca: …»; apagado, eliges los días y dice «Hora d’entrenar».
+- [ ] Quien tenía activado el aviso de un plan (build 18): al actualizar, «Entrenament» queda activado siguiendo el plan (con la hora del aviso del plan si el de entrenar estaba apagado). Solo llega una notificación.
+- [ ] Crear un plan nuevo: pregunta «¿Vols que t’avisi els dies d’entrenament?» y, si dices que sí, activa «Entrenament» siguiendo el plan.
 - [ ] Recordatoris (y Recordatoris › Pla de la setmana): si Android no deja avisos a la hora exacta, sale la tarjeta «Avisos a l’hora exacta» con «Permet»; al permitirlo en el ajuste del móvil y volver, desaparece.
 - [ ] Recordatorio de un plan de la semana para dentro de 3–5 minutos, un día del plan y sin haber entrenado hoy: llega la notificación a la hora (con la app cerrada).
 - [ ] Configuració › Avisos › «Música mentre parla l’app»: la primera opción es «Baixa» y es la de serie en una instalación nueva (quien ya tenía elegida otra la conserva).

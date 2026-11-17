@@ -11,6 +11,16 @@ function memory(initial?: string): KeyValue & { data: Map<string, string> } {
 }
 
 describe('Store', () => {
+  it('el aviso de un plan pasa a ser el recordatorio de entrenar siguiendo el plan', () => {
+    const plan = { id: 'p1', goal: 'forma', level: 'normal', minutes: 20, days: [{ day: 1, kind: 'entero', routineId: 'r1' }], remind: { on: true, time: '21:15' } };
+    const d = Store.migrate({ plans: [plan], activePlanId: 'p1' });
+    expect(d.settings.reminders?.train).toMatchObject({ on: true, followPlan: true, time: '21:15' });
+    expect(d.plans?.[0].remind).toBeUndefined();
+    // si ya tenía el de entrenar activado, se queda su hora
+    const d2 = Store.migrate({ plans: [plan], settings: { reminders: { train: { on: true, days: [2], time: '07:00' } } } });
+    expect(d2.settings.reminders?.train).toMatchObject({ on: true, followPlan: true, time: '07:00' });
+  });
+
   it('música al hablar: de serie se baja; quien tenía apagado «bajar la música» sigue sin tocarla', () => {
     expect(Store.migrate({}).settings.musicMode).toBe('duck');
     expect(Store.migrate({ settings: { duckMusic: true } }).settings.musicMode).toBe('duck');

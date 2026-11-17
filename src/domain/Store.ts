@@ -20,6 +20,7 @@ import { countsForMedals, earnedMedals } from './medals';
 /** Reglas de las medallas: al subir este número, las medallas se recalculan una vez (se quitan las que ya no se cumplen). */
 const MEDALS_VER = 3;
 import { sanitizePlan, type WeekPlan } from './weekPlan';
+import { remindersOf } from './reminders';
 
 /** Todo lo que la app guarda en el móvil. */
 export interface SavedData {
@@ -808,6 +809,13 @@ export class Store {
     const seenIds = new Set<string>();
     const plans = rawPlans.map(sanitizePlan).filter((p): p is WeekPlan => !!p && !seenIds.has(p.id) && !!seenIds.add(p.id));
     const activePlanId = plans.some((p) => p.id === input.activePlanId) ? (input.activePlanId as string) : plans[0]?.id;
+    // antes cada plan tenía su propio aviso; ahora hay uno solo (Entrenamiento), que puede seguir el plan en uso
+    const planRemind = (plans.find((p) => p.id === activePlanId && p.remind?.on) ?? plans.find((p) => p.remind?.on))?.remind;
+    if (planRemind) {
+      const r = remindersOf(settings.reminders);
+      settings.reminders = { ...r, train: { ...r.train, on: true, followPlan: true, ...(r.train.on ? {} : { time: planRemind.time }) } };
+    }
+    for (const p of plans) delete p.remind;
     // grupos de tablas: sin repetir; las tablas de un grupo que ya no existe vuelven a la lista
     const seenG = new Set<string>();
     const groups = (Array.isArray(input.groups) ? (input.groups as Array<Partial<TableGroup>>) : [])

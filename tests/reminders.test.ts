@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { planDayReminders, planReminders, reminderDue, remindersOf } from '../src/domain/reminders';
+import { planReminders, reminderDue, remindersOf } from '../src/domain/reminders';
 
 // miércoles 11-11-2026 a las 10:00
 const NOW = new Date(2026, 10, 11, 10, 0);
@@ -76,16 +76,10 @@ describe('reminderDue (aviso dentro de la app)', () => {
   });
 });
 
-describe('planDayReminders (avisos de los planes)', () => {
-  const now = new Date(2026, 10, 15, 10, 0); // domingo
-  it('cada plan, sus días a su hora; ids distintos por plan', () => {
-    const r = planDayReminders(now, [{ days: [1, 3], time: '19:00' }, { days: [2], time: '08:00' }], []);
-    expect(r.filter((x) => x.plan === 0).every((x) => [1, 3].includes(x.at.getDay()) && x.at.getHours() === 19)).toBe(true);
-    expect(r.filter((x) => x.plan === 1).every((x) => x.at.getDay() === 2 && x.at.getHours() === 8)).toBe(true);
-    expect(new Set(r.map((x) => x.id)).size).toBe(r.length);
-  });
-  it('hoy no avisa si ya has entrenado', () => {
-    const r = planDayReminders(now, [{ days: [0], time: '19:00' }], [new Date(2026, 10, 15, 9).toISOString()]);
-    expect(r.some((x) => x.at.getDate() === 15)).toBe(false);
+describe('Recordatorio de entrenar que sigue el plan', () => {
+  it('guarda «seguir el plan» solo en el de entrenar', () => {
+    const r = remindersOf({ train: { on: true, followPlan: true }, weigh: { on: true, followPlan: true } as never });
+    expect(r.train.followPlan).toBe(true);
+    expect(r.weigh.followPlan).toBeUndefined();
   });
 });
