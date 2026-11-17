@@ -92,7 +92,7 @@ export class PaywallScreen implements Screen {
         ...['Todas las tablas que quieras', 'Tablas hechas a tu medida según tu objetivo, zona y tiempo, o listas para usar', 'Plan de la semana: una tabla para cada día que entrenas', 'Todo tu historial y tus récords, siempre', 'Resumen de cada semana y de cada mes', 'Objetivo de peso: mira cuánto te falta para llegar', 'Personaliza el muñeco y elige entre siete temas de color', 'Copia de seguridad de tus tablas e historial'].map((t) =>
           h('li', {}, icon('check'), t)),
         h('li', {}, icon('check'), 'Y mucho más 😃')),
-      h('p', { class: 'muted small pw-free' }, 'Ahora tienes la versión gratis: todos los ejercicios, una tabla y el historial de la primera semana.'),
+      h('p', { class: 'muted small pw-free' }, 'Ahora tienes la versión gratis: todos los ejercicios, una tabla y el historial de los últimos 7 días.'),
       CAN_PAY ? null : h('p', { class: 'note pw-preview' }, icon('info'), 'Vista previa: en la versión web no se puede pagar. La suscripción solo funciona en la app de Google Play.'),
       h('section', { class: 'pw-plans' },
         ...(plans === null ? [h('p', { class: 'muted small' }, 'Cargando precios…')]

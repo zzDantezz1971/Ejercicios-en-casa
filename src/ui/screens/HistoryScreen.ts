@@ -33,22 +33,17 @@ export class HistoryScreen implements Screen {
       this.body.append(h('div', { class: 'empty-state' }, icon('calendar', 'ico big'), h('p', {}, 'Aún no hay entrenamientos. Cuando termines el primero aparecerá aquí.')));
       return;
     }
-    // versión gratis: pasada la primera semana, el historial queda para Prémium (se sigue guardando)
-    if (!this.app.historyOpen) {
-      this.body.append(h('section', { class: 'card hist-locked' },
-        icon('lock', 'ico big'),
-        h('h3', {}, 'Tu historial está guardado'),
-        h('p', { class: 'muted' }, 'En la versión gratis, el historial se puede ver la primera semana. Tus entrenamientos se siguen guardando: hazte Prémium para ver todo tu historial, tus récords y los resúmenes.'),
-        h('button', { class: 'btn primary block', onclick: () => this.app.showPremium() }, icon('star'), 'Hazte prémium')));
-      return;
-    }
-    const until = this.app.historyUntil();
+    // versión gratis: solo los últimos 7 días (lo anterior se sigue guardando y se ve con Prémium)
+    const since = this.app.historySince();
     const premium = this.app.access.premium;
     const summary = (mode: 'week' | 'month') => () => (premium ? this.app.push(new MonthScreen(this.app, undefined, mode)) : this.app.showPremium());
-    const list = all;
+    const list = since ? all.filter((e) => Date.parse(e.date) >= since.getTime()) : all;
+    const hiddenN = all.length - list.length;
     append(this.body,
-      until ? h('button', { class: 'note hist-free', onclick: () => this.app.showPremium() }, icon('info'),
-        h('span', {}, `Versión gratis: puedes ver el historial hasta el ${until.toLocaleDateString(LOCALE, { day: 'numeric', month: 'long' })}. `, h('strong', {}, 'Hazte prémium'))) : null,
+      since ? h('button', { class: 'note hist-free', onclick: () => this.app.showPremium() }, icon('lock'),
+        h('span', {}, 'Versión gratis: ves los entrenamientos de los últimos 7 días. ',
+          hiddenN ? `${hiddenN} anteriores guardados. ` : '',
+          h('strong', {}, 'Hazte prémium'))) : null,
       backupDue(this.app) ? backupCard(this.app) : null,
       // primero el mes, luego los resúmenes y después los récords
       this.calendar(list),

@@ -377,7 +377,7 @@ export class SettingsScreen implements Screen {
         h('div', { class: 'rest-head' },
           h('span', { class: 'set-icon' }, icon('lock')),
           h('div', { class: 'set-text' }, h('strong', {}, 'Vista previa de la versión gratis'),
-            h('p', { class: 'muted small' }, 'Solo en este navegador: verás la app como alguien sin suscripción (todos los ejercicios, una sola tabla y el historial solo la primera semana). En la web no se paga nada.'))),
+            h('p', { class: 'muted small' }, 'Solo en este navegador: verás la app como alguien sin suscripción (todos los ejercicios, una sola tabla y el historial de los últimos 7 días). En la web no se paga nada.'))),
         h('div', { class: 'segmented lang-segs' },
           h('button', { class: 'seg' + (on ? '' : ' on'), 'aria-pressed': String(!on), onclick: () => { a.setPreview(false); this.app.applySettings(); this.render(); } }, 'Todo desbloqueado'),
           h('button', { class: 'seg' + (on ? ' on' : ''), 'aria-pressed': String(on), onclick: () => { a.setPreview(true); this.app.applySettings(); this.render(); } }, 'Versión gratis')),
@@ -391,7 +391,7 @@ export class SettingsScreen implements Screen {
           h('strong', {}, sub ? 'Suscripción activa' : a.kind === 'code' ? 'Acceso con código' : 'Versión gratis'),
           h('p', { class: 'muted small' }, sub
             ? 'Puedes cambiar de plan o cancelarla en Google Play.'
-            : a.kind === 'code' ? `Código: ${a.codeName ?? ''}. No se te cobra nada.` : 'Todos los ejercicios, una tabla y el historial de la primera semana. Hazte prémium para tenerlo todo.'))),
+            : a.kind === 'code' ? `Código: ${a.codeName ?? ''}. No se te cobra nada.` : 'Todos los ejercicios, una tabla y el historial de los últimos 7 días. Hazte prémium para tenerlo todo.'))),
       sub ? h('button', { class: 'btn ghost block', onclick: () => void a.manage() }, 'Gestionar en Google Play')
         : a.kind === 'none' ? h('button', { class: 'btn primary block', onclick: () => this.app.showPremium() }, icon('star'), 'Hazte prémium') : null);
   }

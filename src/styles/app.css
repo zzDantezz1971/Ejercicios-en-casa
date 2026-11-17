@@ -1716,11 +1716,7 @@ button.plan-row { cursor: pointer; }
 .hero-title.long { font-size: 1.9rem; }
 .hero-title.longer { font-size: 1.6rem; }
 
-/* versión gratis: historial pasada la primera semana, y aviso de hasta cuándo se ve */
-.hist-locked { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px; padding: 24px 18px; }
-.hist-locked .ico.big { width: 40px; height: 40px; color: var(--accent); }
-.hist-locked h3 { margin: 0; }
-.hist-locked p { margin: 0; }
+/* versión gratis: aviso de que solo se ven los últimos 7 días */
 .hist-free { width: 100%; text-align: left; color: var(--fg); cursor: pointer; font: inherit; }
 .hist-free strong { color: var(--accent); }
 

@@ -36,7 +36,7 @@ export interface SavedData {
   unhideVer?: number;
   /** Fecha de la última copia de seguridad guardada (ISO). */
   lastBackup?: string;
-  /** Primer día de uso de la app (ISO): en la versión gratis, el historial se ve solo la primera semana. */
+  /** Primer día de uso de la app (ISO): (antes se usaba para el historial de la versión gratis). */
   firstUse?: string;
   /** Ejercicios marcados como favoritos. */
   favorites: string[];

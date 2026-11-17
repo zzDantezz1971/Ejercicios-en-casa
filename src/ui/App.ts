@@ -20,7 +20,7 @@ import { exportWeight, exportWorkout } from '../services/Health';
 import { clear, h } from './dom';
 import { icon, type IconName } from './icons';
 
-/** Días que se ve el historial en la versión gratis (desde el primer uso). */
+/** Días que se ven del historial en la versión gratis (los últimos, hoy incluido). */
 export const FREE_HISTORY_DAYS = 7;
 
 export type TabId = 'inicio' | 'tablas' | 'medallas' | 'historial' | 'datos' | 'ajustes';
@@ -112,15 +112,10 @@ export class App {
     this.paywall = factory;
   }
 
-  /** Versión gratis: el historial solo se ve durante la primera semana de uso (luego, con Prémium). */
-  historyUntil(): Date | null {
+  /** Desde cuándo se ve el historial: con Prémium, todo (null); en la versión gratis, los últimos 7 días (hoy incluido). */
+  historySince(now = new Date()): Date | null {
     if (this.access.premium) return null;
-    return new Date(this.store.firstUse.getTime() + FREE_HISTORY_DAYS * 864e5);
-  }
-
-  get historyOpen(): boolean {
-    const until = this.historyUntil();
-    return !until || Date.now() < until.getTime();
+    return new Date(now.getFullYear(), now.getMonth(), now.getDate() - (FREE_HISTORY_DAYS - 1));
   }
 
   /** Abre la pantalla para hacerse prémium. */
