@@ -267,13 +267,13 @@ export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement
           h('button', { class: 'maker-open maker-title', onclick: open }, ex.name),
           // se hace por lados (una vez con cada lado): que se vea al montar la tabla
           ex.oneSided ? h('span', { class: 'by-sides small' }, icon('sides'), 'por lados') : '',
-          // tiempo (− +) y, al lado, cambiar y quitar: todo a la izquierda (la derecha queda libre para desplazar)
+          // tiempo (− +)
           edit ? h('div', { class: 'maker-ctrls' },
             h('div', { class: 'stepper inline maker-time' },
               h('button', { 'aria-label': 'Menos tiempo', disabled: it.seconds <= MIN_SECONDS, onclick: () => setSecs(-STEP_SECONDS) }, '−'),
               h('span', { class: 'secs' }, `${it.seconds} s`),
               h('button', { 'aria-label': 'Más tiempo', disabled: it.seconds >= MAX_SECONDS, onclick: () => setSecs(STEP_SECONDS) }, '+')),
-            swapBtn, removeBtn)
+            )
             : h('span', { class: 'maker-secs muted small' }, `${it.seconds} s`),
           // peso de la mancuerna (al editar una tabla guardada)
           edit?.full && usesWeight(ex) ? h('button', { class: 'weight-btn small' + (it.weight ? '' : ' none'), 'aria-label': `Peso de ${ex.name}: ${it.weight ? kg(it.weight) + ' por mancuerna' : 'sin peso'}. Cambiar`, onclick: async () => {
@@ -283,7 +283,9 @@ export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement
             const { weight: _old, ...rest } = it;
             next[i] = w ? { ...rest, weight: w } : rest;
             edit.set(withSection(r, s, next));
-          } }, icon('dumbbell'), it.weight ? kg(it.weight) : 'Sin peso') : ''));
+          } }, icon('dumbbell'), it.weight ? kg(it.weight) : 'Sin peso') : ''),
+        // cambiar y quitar: a la derecha, más grandes y centrados en la fila
+        edit ? h('div', { class: 'maker-acts' }, swapBtn, removeBtn) : '');
       rows.push({ content, label: ex.name });
     });
     // se ordena arrastrando con el asa (sin flechas)

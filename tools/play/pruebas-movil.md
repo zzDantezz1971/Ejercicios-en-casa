@@ -43,6 +43,7 @@ Marca cada punto al probarlo. Si algo falla, haz una captura y cuéntamelo.
 - [ ] Inici › un bloque y Historial › entrenamiento › un bloque: al final, botones pequeños «‹ [icono] Escalfament» / «[icono] Estiraments ›» (sin el texto «Bloc anterior/següent»); el botón atrás vuelve a Inici / al entrenamiento.
 - [ ] Inici: la frase motivadora cambia al volver a Inici; ahora hay 150 (en el idioma elegido, algunas con tu nombre).
 - [ ] Les meves taules: título en una línea y debajo, pequeños y a la derecha, «+ Grup» y «+ Taula» (los dos azules). «+ Grup»: crear un grupo; en los ··· de una taula, «Mou a un grup» (también «+ Grup nou»); si ya está en un grupo, «Mou a un altre grup» y «Treu del grup» directamente en los ···; al entrar en Taules (también al volver de editar), todos los grupos salen plegados con «N taules · En ús»; al tocarlo se abren sus tablas; ··· del grupo: canviar nom / esborrar: casilla «Esborra també les taules» desmarcada (sin marcar, las tablas vuelven a la lista; marcada, segundo aviso «Esborra-ho tot» y se borran grupo y tablas). Se guarda al cerrar la app y en la copia.
+- [ ] Edita la taula: asa de arrastrar (izquierda) y botones Canvia / Treu (derecha) más grandes y centrados en vertical en cada ejercicio; arrastrar sigue funcionando.
 - [ ] **Versión gratis nueva** (sin suscripción ni código):
   - [ ] Todos los ejercicios se pueden ver y elegir, sin candados.
   - [ ] Inicio con la tabla vacía: «Tabla vacía» funciona; «Créala por mí», «Tablas hechas» y «Plan de la semana» con candado (abren Prémium).

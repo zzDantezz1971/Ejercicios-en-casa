@@ -1777,3 +1777,12 @@ button.plan-row { cursor: pointer; }
 .grp-del p.muted { font-size: 1.02rem; line-height: 1.4; }
 .grp-del .rm-stop { font-size: 1.05rem; color: var(--fg); }
 .grp-del .rm-stop input { width: 22px; height: 22px; }
+
+/* Editar tabla: cambiar y quitar a la derecha, centrados en vertical; asa para arrastrar más grande */
+.maker-acts { display: flex; align-items: center; gap: 8px; flex: none; align-self: center; }
+.maker-acts .icon-btn.small { width: 44px; height: 44px; border-radius: 13px; }
+.maker-acts .icon-btn.small .ico { width: 20px; height: 20px; }
+.maker-acts .maker-remove { margin-left: 0; }
+.maker-acts .maker-remove::before { display: none; }
+.sort-row.handle-first .drag-handle { width: 36px; align-self: stretch; height: auto; }
+.sort-row.handle-first .drag-handle .ico { width: 22px; height: 22px; }

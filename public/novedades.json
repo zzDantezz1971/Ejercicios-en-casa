@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-17T07:46:22Z",
+    "es": ["Editar tabla: los botones de mover, cambiar y quitar son más grandes y quedan centrados en cada ejercicio (cambiar y quitar, a la derecha)."],
+    "ca": ["Edita la taula: els botons de moure, canviar i treure són més grans i queden centrats a cada exercici (canviar i treure, a la dreta)."],
+    "en": ["Edit routine: the move, swap and remove buttons are bigger and centred on each exercise (swap and remove on the right)."]
+  },
+  {
     "fecha": "2026-11-17T07:41:49Z",
     "es": ["Mis tablas: la ventana para borrar un grupo tiene el texto más grande."],
     "ca": ["Les meves taules: la finestra per esborrar un grup té el text més gran."],
