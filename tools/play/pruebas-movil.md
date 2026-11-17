@@ -4,6 +4,7 @@ Recordatorio: **cuando instales la app de prueba** (el APK de GitHub o la prueba
 Marca cada punto al probarlo. Si algo falla, haz una captura y cuéntamelo.
 
 ## 0b. Para probar en el build 17
+- [ ] Con una voz elegida en català, pasar la app a castellano: «Prova el so i la veu» / «Probar sonido y voz» suena con voz de España, no catalana.
 - [ ] Configuració › Avisos › Veu (con el motor de Google y varias voces instaladas): salen hasta 3 voces del idioma («Veu 1, 2, 3»), cada una suena distinta con ▶, y al elegir una los avisos del entrenamiento usan esa.
 - [ ] Configuració › Temps d’exercicis › Pausa entre exercicis: tocar − / + no hace saltar la pantalla arriba (también en los demás ajustes).
 

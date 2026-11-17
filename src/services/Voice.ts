@@ -116,7 +116,9 @@ export class Voice {
       try {
         const { voices } = await TextToSpeech.getSupportedVoices();
         const i = voices.findIndex((v) => (v.voiceURI || v.name) === this.chosenId);
-        this.nativeIndex = i >= 0 ? i : undefined;
+        // una voz elegida en otro idioma (p. ej., la catalana al pasar la app a castellano) no se usa:
+        // si no, leería el texto en castellano con acento catalán
+        this.nativeIndex = i >= 0 && forLang(voices[i].lang, this.lang) ? i : undefined;
       } catch { /* sin lista de voces: la de siempre */ }
       return;
     }
