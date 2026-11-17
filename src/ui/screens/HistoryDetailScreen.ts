@@ -52,7 +52,9 @@ export class HistoryDetailScreen implements Screen {
 
     const canRepeat = items.some((i) => app.catalog.has(i.exerciseId) && !app.store.hidden.has(i.exerciseId));
     // entrenamiento anterior y siguiente (por fecha), para pasar de uno a otro deslizando o con las flechas
-    const all = [...app.store.history].sort((a, b) => Date.parse(a.date) - Date.parse(b.date));
+    // en la versión gratis, solo los de la semana en curso (los anteriores son de Prémium)
+    const since = app.historySince();
+    const all = [...app.store.history].filter((x) => !since || Date.parse(x.date) >= since.getTime()).sort((a, b) => Date.parse(a.date) - Date.parse(b.date));
     const pos = all.findIndex((x) => x === e || x.date === e.date);
     const older = pos > 0 ? all[pos - 1] : null;
     const newer = pos >= 0 && pos < all.length - 1 ? all[pos + 1] : null;

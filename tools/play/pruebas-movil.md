@@ -43,7 +43,7 @@ Marca cada punto al probarlo. Si algo falla, haz una captura y cuéntamelo.
   - [ ] Todos los ejercicios se pueden ver y elegir, sin candados.
   - [ ] Inicio con la tabla vacía: «Tabla vacía» funciona; «Créala por mí», «Tablas hechas» y «Plan de la semana» con candado (abren Prémium).
   - [ ] Tablas › Nueva: con tu única tabla ya llena, «Tabla vacía» también con candado; «Duplicar» abre Prémium.
-  - [ ] Historial: solo la semana en curso (de dilluns a diumenge), con el aviso (sin borde blanco) «Versió gratuïta: veus els entrenaments d’aquesta setmana. N entrenaments anteriors desats. Fes-te prèmium».
+  - [ ] Historial: solo la semana en curso (de dilluns a diumenge), con el aviso (sin borde blanco) «Versió gratuïta: veus els entrenaments d’aquesta setmana. N entrenaments anteriors desats. Fes-te prèmium». Al abrir un entrenamiento, las flechas / deslizar no llevan a entrenamientos de semanas anteriores.
   - [ ] Resumen semanal y del mes con candado; en Inicio no salen los avisos de resumen.
   - [ ] Copia de seguridad: Guardar y Restaurar abren Prémium.
   - [ ] Mis datos › Peso: el objetivo va dentro del cuadro de Peso, debajo de la gráfica (ya no es un cuadro aparte). Sin Prémium: botón «Prémium» con candado; la gráfica del peso sin la línea de objetivo; en la bienvenida no se pide el objetivo.
