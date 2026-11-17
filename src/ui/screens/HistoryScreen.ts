@@ -54,8 +54,9 @@ export class HistoryScreen implements Screen {
     );
 
     this.body.append(
+      // pequeño y apartado, para no tocarlo sin querer
       h('button', {
-        class: 'btn danger block',
+        class: 'link-btn danger-link clear-history',
         onclick: async () => {
           // doble confirmación: es irreversible (salvo con una copia de seguridad)
           const n = this.app.store.history.length;
@@ -80,7 +81,6 @@ export class HistoryScreen implements Screen {
     const { app } = this;
     const now = new Date();
     const short = (d: Date) => d.toLocaleDateString(LOCALE, { day: 'numeric', month: 'short' });
-    const open = (e: HistoryEntry) => () => app.push(new HistoryDetailScreen(app, e));
     const run = streak(list, now), best = bestStreak(list);
 
     let longest: HistoryEntry | null = null;
@@ -99,8 +99,9 @@ export class HistoryScreen implements Screen {
     // mejor mes: más días entrenados y, si empatan, más tiempo
     const bm = [...months.values()].sort((a, b) => b.days.size - a.days.size || b.sec - a.sec)[0];
 
-    const tile = (ic: IconName, value: string, label: string, sub: string | null, onclick?: () => void, sub2?: string) =>
-      h(onclick ? 'button' : 'div', { class: 'rec-tile' + (onclick ? ' tap' : ''), ...(onclick ? { onclick } : {}) },
+    // solo informativo: los récords no se pueden tocar
+    const tile = (ic: IconName, value: string, label: string, sub: string | null, sub2?: string) =>
+      h('div', { class: 'rec-tile' },
         h('span', { class: 'rec-top' }, icon(ic), h('span', { class: 'stat-value' }, value)),
         h('span', { class: 'rec-label' }, label),
         sub ? h('span', { class: 'rec-sub' }, sub) : null,
@@ -110,10 +111,10 @@ export class HistoryScreen implements Screen {
         tile('flame', String(run), 'Racha actual', run === 1 ? 'día seguido' : 'días seguidos'),
         tile('trophy', String(best), 'Mejor racha', best === 1 ? 'día seguido' : 'días seguidos')),
       h('div', { class: 'rec-row' + (topKcal ? '' : ' two') },
-        longest ? tile('clock', humanDuration(longest.durationSec), 'Entreno más largo', short(new Date(longest.date)), open(longest)) : null,
-        topKcal ? tile('flame', `${topKcal.kcal} kcal`, 'Récord de calorías', short(new Date(topKcal.e.date)), open(topKcal.e)) : null,
+        longest ? tile('clock', humanDuration(longest.durationSec), 'Entreno más largo', short(new Date(longest.date))) : null,
+        topKcal ? tile('flame', `${topKcal.kcal} kcal`, 'Récord de calorías', short(new Date(topKcal.e.date))) : null,
         bm ? tile('calendar', plural(bm.days.size, 'día', 'días'), 'Mejor mes', bm.start.toLocaleDateString(LOCALE, { month: 'short', year: 'numeric' }),
-          () => (app.access.premium ? app.push(new MonthScreen(app, bm.start, 'month')) : app.showPremium()), humanDuration(bm.sec)) : null));
+          humanDuration(bm.sec)) : null));
   }
 
   private calendar(list: readonly HistoryEntry[]): HTMLElement {

@@ -1729,3 +1729,7 @@ button.plan-row { cursor: pointer; }
 .sort-slot:empty { display: none; }
 .sort-btn { display: inline-flex; align-items: center; gap: 6px; padding: 0 14px; border-radius: 14px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); font: 700 .95rem var(--body, inherit); cursor: pointer; white-space: nowrap; }
 .sort-btn .ico { width: 18px; height: 18px; color: var(--sec, var(--accent)); }
+
+/* Historial: «Borrar todo el historial» pequeño, en texto y separado del resto */
+.clear-history { align-self: center; margin-top: 18px; padding: 6px 10px; font-size: .82rem; color: var(--danger, #E5484D); opacity: .8; display: inline-flex; align-items: center; gap: 6px; background: none; border: 0; cursor: pointer; }
+.clear-history .ico { width: 14px; height: 14px; }

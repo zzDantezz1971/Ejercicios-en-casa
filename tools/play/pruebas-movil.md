@@ -38,6 +38,7 @@ Marca cada punto al probarlo. Si algo falla, haz una captura y cuéntamelo.
 - [ ] Menú de abajo: Inici · Taules · Historial · Medalles · Les meves dades · Configuració.
 - [ ] «Edita la taula» y «Afegeix exercicis»: los ejercicios por lados (p. ej. Rem a una mà recolzat al banc) muestran «⇄ per costats» debajo del nombre.
 - [ ] Historial: orden calendario del mes → Resum setmanal / Resum del mes → rècords.
+- [ ] Historial: tocar los récords (ratxa, entrenament més llarg, calories, millor mes) no hace nada; «Esborra tot l’historial» es un enlace pequeño en rojo al final (sigue pidiendo doble confirmación).
 - [ ] **Versión gratis nueva** (sin suscripción ni código):
   - [ ] Todos los ejercicios se pueden ver y elegir, sin candados.
   - [ ] Inicio con la tabla vacía: «Tabla vacía» funciona; «Créala por mí», «Tablas hechas» y «Plan de la semana» con candado (abren Prémium).
