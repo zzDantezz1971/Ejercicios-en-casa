@@ -28,6 +28,8 @@ export class TablesScreen implements Screen {
   }
 
   enter(): void {
+    // al entrar, todos los grupos plegados
+    TablesScreen.open.clear();
     this.render();
   }
 
@@ -60,7 +62,7 @@ export class TablesScreen implements Screen {
     for (const t of loose) if (!t.group || !store.groups.some((g) => g.id === t.group)) this.body.append(this.card(t, t.id === store.active.id));
   }
 
-  /** Grupos abiertos (mientras la app está abierta). */
+  /** Grupos abiertos (mientras estás en la pantalla; al volver a entrar, todos plegados). */
   private static open = new Set<string>();
 
   private groupCard(id: string, name: string, tables: SavedRoutine[]): HTMLElement {
