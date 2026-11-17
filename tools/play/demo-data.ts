@@ -9,7 +9,7 @@ const lang = (process.argv[2] ?? 'ca') as 'ca' | 'es' | 'en';
 const mem = new Map<string, string>();
 const store = new Store({ getItem: (k) => mem.get(k) ?? null, setItem: (k, v) => void mem.set(k, v) });
 
-const NOW = new Date('2026-11-08T18:30:00');
+const NOW = new Date('2026-11-17T18:30:00');
 const day = (d: number, h = 18, m = 30) => { const x = new Date(NOW); x.setDate(x.getDate() - d); x.setHours(h, m, 0, 0); return x; };
 
 // tabla
@@ -29,7 +29,7 @@ store.saveRoutine(routine);
 
 // ajustes y perfil
 const s = store.settings;
-store.saveSettings({ ...s, lang, askWatch: false, profile: { ...s.profile, name: 'Alex', age: 45, height: 176, sex: 'h', goalKg: 78 } });
+store.saveSettings({ ...s, lang, askWatch: false, equipment: ['mancuernas', 'banco'], profile: { ...s.profile, name: 'Alex', age: 45, height: 176, sex: 'h', goalKg: 78 } });
 
 // peso: de 84,6 a 80,4 kg en 10 semanas
 for (let w = 10; w >= 0; w--) store.addWeight(Math.round((80.4 + w * 0.42 + (w % 3 === 0 ? 0.2 : 0)) * 10) / 10, day(w * 7 + 1, 8, 0));
@@ -56,6 +56,7 @@ for (let w = 9; w >= 0; w--) {
     store.addHistory(e);
   }
 }
+store.markWelcomed();
 store.markUsed(store.active.id, day(0));
 store.checkMedals(NOW);
 store.markBackedUp(day(1));
