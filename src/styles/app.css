@@ -1753,7 +1753,9 @@ button.plan-row { cursor: pointer; }
 .block-nav-btn .arrow { width: 14px; height: 14px; color: var(--muted); flex: none; }
 
 /* Mis tablas: grupos (carpetas) plegables */
-.tables-head-btns { display: flex; gap: 8px; }
+.tables-head { flex-direction: column; align-items: stretch; gap: 12px; }
+.tables-head h1 { white-space: nowrap; font-size: clamp(1.7rem, 8.5vw, 2.3rem); }
+.tables-head-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .group-card { display: flex; flex-direction: column; gap: 12px; }
 .group-card.active { border-color: color-mix(in srgb, var(--accent) 60%, var(--line)); }
 .group-head { display: flex; align-items: center; gap: 8px; }

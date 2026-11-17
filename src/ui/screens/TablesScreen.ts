@@ -17,11 +17,12 @@ export class TablesScreen implements Screen {
 
   constructor(private readonly app: App) {
     this.el.append(
-      h('header', { class: 'page-head' },
+      // título en una línea y, debajo, los dos botones para crear (grupo y tabla)
+      h('header', { class: 'page-head tables-head' },
         h('h1', {}, 'Mis tablas'),
         h('div', { class: 'tables-head-btns' },
-          h('button', { class: 'btn ghost small', 'aria-label': 'Crear un grupo', onclick: () => void this.newGroup() }, icon('folder'), 'Grupo'),
-          h('button', { class: 'btn primary small', onclick: () => this.create() }, icon('plus'), 'Nueva'))),
+          h('button', { class: 'btn primary small', 'aria-label': 'Crear un grupo', onclick: () => void this.newGroup() }, icon('plus'), 'Grupo'),
+          h('button', { class: 'btn primary small', 'aria-label': 'Nueva tabla', onclick: () => this.create() }, icon('plus'), 'Tabla'))),
       this.body,
     );
   }

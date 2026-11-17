@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-17T07:26:08Z",
+    "es": ["Mis tablas: el título va en una línea y debajo los botones «+ Grupo» y «+ Tabla», los dos en azul."],
+    "ca": ["Les meves taules: el títol va en una línia i a sota els botons «+ Grup» i «+ Taula», tots dos en blau."],
+    "en": ["My routines: the title fits on one line, with the “+ Group” and “+ Routine” buttons below, both in blue."]
+  },
+  {
     "fecha": "2026-11-17T07:06:31Z",
     "es": ["Mis tablas: ahora puedes crear grupos (botón «Grupo») y mover tus tablas a ellos desde sus tres puntos. Los grupos salen plegados; al tocarlos se ven sus tablas."],
     "ca": ["Les meves taules: ara pots crear grups (botó «Grup») i moure-hi les teves taules des dels seus tres punts. Els grups surten plegats; en tocar-los es veuen les seves taules."],
