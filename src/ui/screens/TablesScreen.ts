@@ -113,11 +113,9 @@ export class TablesScreen implements Screen {
     const { store } = this.app;
     const opts: Array<{ id: string; label: string }> = store.groups.filter((g) => g.id !== t.group).map((g) => ({ id: g.id, label: g.name }));
     opts.push({ id: '__new', label: '+ Nuevo grupo' });
-    if (t.group) opts.push({ id: '__out', label: 'Sacar del grupo' });
     const choice = await actionSheet('Mover a un grupo', opts);
     if (!choice) return;
-    if (choice === '__out') store.moveToGroup(t.id, null);
-    else if (choice === '__new') {
+    if (choice === '__new') {
       const id = await this.newGroup();
       if (id) store.moveToGroup(t.id, id);
     } else {
@@ -176,6 +174,7 @@ export class TablesScreen implements Screen {
     const choice = await actionSheet(t.name, [
       { id: 'rename', label: 'Cambiar nombre' },
       { id: 'move', label: t.group ? 'Mover a otro grupo' : 'Mover a un grupo' },
+      ...(t.group ? [{ id: 'out', label: 'Sacar del grupo' }] : []),
       { id: 'duplicate', label: 'Duplicar' },
       { id: 'delete', label: 'Borrar', danger: true },
     ]);
@@ -183,6 +182,8 @@ export class TablesScreen implements Screen {
     if (choice === 'rename') {
       const name = await promptDialog('Nuevo nombre', t.name, 'Guardar');
       if (name) store.renameRoutine(t.id, name);
+    } else if (choice === 'out') {
+      store.moveToGroup(t.id, null);
     } else if (choice === 'move') {
       await this.moveTo(t);
       return;

@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-17T07:33:16Z",
+    "es": ["Mis tablas: en los tres puntos de una tabla que está en un grupo hay ahora «Sacar del grupo»."],
+    "ca": ["Les meves taules: als tres punts d’una taula que és en un grup ara hi ha «Treu del grup»."],
+    "en": ["My routines: a routine in a group now has “Remove from group” in its three dots."]
+  },
+  {
     "fecha": "2026-11-17T07:30:21Z",
     "es": ["Mis tablas: al entrar, todos los grupos salen plegados."],
     "ca": ["Les meves taules: en entrar, tots els grups surten plegats."],
