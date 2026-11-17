@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-17T05:57:09Z",
+    "es": ["Historial: primero el calendario del mes, después los resúmenes semanal y mensual, y al final los récords."],
+    "ca": ["Historial: primer el calendari del mes, després els resums setmanal i mensual, i al final els rècords."],
+    "en": ["History: the month calendar first, then the weekly and monthly summaries, and the records at the end."]
+  },
+  {
     "fecha": "2026-11-17T05:54:55Z",
     "es": ["Editar tabla y añadir ejercicios: los ejercicios que se hacen por lados lo indican debajo del nombre («por lados»)."],
     "ca": ["Edita la taula i afegeix exercicis: els exercicis que es fan per costats ho indiquen sota el nom («per costats»)."],

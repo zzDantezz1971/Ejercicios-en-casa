@@ -50,11 +50,12 @@ export class HistoryScreen implements Screen {
       until ? h('button', { class: 'note hist-free', onclick: () => this.app.showPremium() }, icon('info'),
         h('span', {}, `Versión gratis: puedes ver el historial hasta el ${until.toLocaleDateString(LOCALE, { day: 'numeric', month: 'long' })}. `, h('strong', {}, 'Hazte prémium'))) : null,
       backupDue(this.app) ? backupCard(this.app) : null,
-      this.records(list),
+      // primero el mes, luego los resúmenes y después los récords
       this.calendar(list),
       h('div', { class: 'summary-btns' },
         h('button', { class: 'btn ghost', onclick: summary('week') }, icon(premium ? 'calendar' : 'lock'), 'Resumen semanal'),
         h('button', { class: 'btn ghost', onclick: summary('month') }, icon(premium ? 'calendar' : 'lock'), 'Resumen del mes')),
+      this.records(list),
     );
 
     this.body.append(
