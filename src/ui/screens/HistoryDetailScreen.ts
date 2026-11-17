@@ -29,12 +29,18 @@ export class HistoryDetailScreen implements Screen {
       if (!its.length) continue;
       const st = SECTION_STYLE[s];
       // como «Contenido de la tabla»: título del bloque y una fila por ejercicio (miniatura, nombre, tiempo, peso)
-      const head = h('div', { class: 'tv-head' },
-        h('h2', { class: 'maker-sec' }, icon(st.icon), SECTION_TITLES[s]),
+      // los bloques empiezan plegados: se abren tocando su título
+      const rows = h('div', { class: 'tv-list', hidden: true });
+      const fold = h('span', { class: 'sec-fold folded', 'aria-hidden': 'true' }, icon('chevron', 'ico'));
+      const head: HTMLElement = h('button', { class: 'tv-head hd-fold', 'aria-expanded': 'false', onclick: () => {
+          rows.hidden = !rows.hidden;
+          fold.classList.toggle('folded', rows.hidden);
+          head.setAttribute('aria-expanded', String(!rows.hidden));
+        } },
+        h('h2', { class: 'maker-sec' }, fold, icon(st.icon), SECTION_TITLES[s]),
         h('span', { class: 'muted small tv-meta' }, `${plural(its.length, 'ejercicio', 'ejercicios')} · ${mmss(its.reduce((n, i) => n + i.seconds, 0))}`));
       head.style.setProperty('--sec', st.color);
       list.push(head);
-      const rows = h('div', { class: 'tv-list' });
       for (const it of its) {
         const ex = app.catalog.get(it.exerciseId);
         const status = it.completed ? '' : it.seconds > 0 ? 'Saltado a medias' : 'Saltado';

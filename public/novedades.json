@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-17T06:33:22Z",
+    "es": ["Historial: al abrir un entrenamiento, los bloques salen plegados; tócalos para ver sus ejercicios."],
+    "ca": ["Historial: en obrir un entrenament, els blocs surten plegats; toca’ls per veure’n els exercicis."],
+    "en": ["History: when you open a workout, the blocks start folded; tap them to see their exercises."]
+  },
+  {
     "fecha": "2026-11-17T06:27:27Z",
     "es": ["Historial: al abrir un entrenamiento, los ejercicios se ven como en «Contenido de la tabla» (miniatura, nombre, tiempo hecho, peso), con una marca si se hizo o se saltó."],
     "ca": ["Historial: en obrir un entrenament, els exercicis es veuen com a «Contingut de la taula» (miniatura, nom, temps fet, pes), amb una marca si es va fer o es va saltar."],
