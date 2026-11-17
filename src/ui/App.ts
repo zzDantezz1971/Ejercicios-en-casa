@@ -1,3 +1,4 @@
+import { usesWeight, weightKind } from '../domain/types';
 import { weekStart } from '../domain/monthSummary';
 import { App as NativeApp } from '@capacitor/app';
 import { IS_NATIVE } from '../platform/native';
@@ -72,6 +73,8 @@ export class App {
     this.store = new Store(durableStorage());
     // ejercicios que han cambiado de apartado en una versión nueva
     this.store.fixSections((id) => this.catalog.get(id)?.section);
+    // medallas de fuerza: con qué peso se hace cada ejercicio (mancuernas, pesa rusa o barra)
+    this.store.weightKindOf = (id) => { const ex = this.catalog.get(id); return ex && usesWeight(ex) ? weightKind(ex) : undefined; };
     // la primera vez se apuntan las medallas que ya se tenían, sin celebrarlas
     // al abrir: apunta (sin celebrarlas) las medallas de la primera vez o las de unas reglas nuevas
     if (!Object.keys(this.store.medals).length || this.store.medalsOutdated) this.store.checkMedals();

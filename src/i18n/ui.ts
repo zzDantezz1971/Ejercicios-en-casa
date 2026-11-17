@@ -1239,6 +1239,14 @@ const ROWS: Row[] = [
   ['pesa rusa', 'pesa russa', 'kettlebell'],
   ['barra con discos (total)', 'barra amb discs (total)', 'barbell with plates (total)'],
   ['Para verlos, añade ese material en Mis datos › Mi material.', 'Per veure’ls, afegeix aquest material a Les meves dades › El meu material.', 'To see them, add that equipment in My data › My equipment.'],
+  ['Bola de hierro', 'Bola de ferro', 'Iron ball'],
+  ['Pesa de campeón', 'Pesa de campió', 'Champion’s kettlebell'],
+  ['Zar de la pesa rusa', 'Tsar de la pesa russa', 'Kettlebell tsar'],
+  ['Un ejercicio con una pesa rusa de {n} kg o más.', 'Un exercici amb una pesa russa de {n} kg o més.', 'An exercise with a {n} kg kettlebell or heavier.'],
+  ['Barra cargada', 'Barra carregada', 'Loaded bar'],
+  ['Levantador', 'Aixecador', 'Lifter'],
+  ['Rey de la barra', 'Rei de la barra', 'King of the bar'],
+  ['Un ejercicio con la barra cargada a {n} kg o más (en total).', 'Un exercici amb la barra carregada a {n} kg o més (en total).', 'An exercise with the bar loaded to {n} kg or more (in total).'],
 ];
 
 export const UI_CA: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[1]]));

@@ -1,11 +1,11 @@
 import { LOCALE } from '../i18n';
-import { SECTION_IDS, type HistoryEntry, type WeightEntry } from './types';
+import { SECTION_IDS, type HistoryEntry, type WeightEntry, type WeightKind } from './types';
 import { bestStreak } from './stats';
 import { weekKey } from './monthSummary';
 import { fullPlanWeek } from './weekPlan';
 
 export type Tier = 'bronce' | 'plata' | 'oro';
-export type MedalIcon = 'trophy' | 'flame' | 'clock' | 'bolt' | 'calendar' | 'target' | 'dumbbell' | 'heart' | 'check';
+export type MedalIcon = 'trophy' | 'flame' | 'clock' | 'bolt' | 'calendar' | 'target' | 'dumbbell' | 'kettlebell' | 'barbell' | 'heart' | 'check';
 
 export interface MedalContext {
   history: readonly HistoryEntry[];
@@ -14,6 +14,8 @@ export interface MedalContext {
   kcal: number;
   /** Días de entrenamiento del plan de la semana (si hay plan). */
   planDays?: readonly number[];
+  /** Con qué peso se hace cada ejercicio (mancuernas, pesa rusa o barra); sin esto, se toma como mancuernas. */
+  kindOf?: (exerciseId: string) => WeightKind | undefined;
 }
 
 export type MedalGroup = 'entrenos' | 'constancia' | 'tiempo' | 'calorias' | 'peso' | 'fuerza' | 'apartados' | 'especiales';
@@ -55,7 +57,9 @@ const maxDaysInWeek = (c: MedalContext) => {
 };
 const hourOf = (e: HistoryEntry) => new Date(e.date).getHours();
 const withSection = (c: MedalContext, sec: string) => c.history.filter((e) => e.sections.includes(sec as never)).length;
-const maxWeight = (c: MedalContext) => Math.max(0, ...c.history.flatMap((e) => (e.items ?? []).filter((i) => i.completed && i.weight).map((i) => i.weight!)));
+/** Mayor peso usado (completo) con un tipo de peso: por mancuerna, la pesa rusa o la barra entera. */
+const maxWeight = (c: MedalContext, kind: WeightKind) => Math.max(0, ...c.history.flatMap((e) => (e.items ?? [])
+  .filter((i) => i.completed && i.weight && (c.kindOf?.(i.exerciseId) ?? 'mancuernas') === kind).map((i) => i.weight!)));
 /** Semanas seguidas (hasta la última con entrenos) con al menos 3 días entrenados. */
 const habitWeeks = (c: MedalContext) => {
   const m = new Map<string, Set<string>>();
@@ -174,8 +178,17 @@ export const MEDALS: Medal[] = [
     { id: 'record-peso-1', tier: 'bronce', title: 'Más fuerte', desc: 'Has subido el peso en un ejercicio.', earned: (c) => weightUps(c) >= 1 },
     ...([[5, 'plata', 'Cada vez más fuerte'], [20, 'oro', 'Progreso sin fin']] as Array<[number, Tier, string]>)
       .map(([n, tier, title]): M => ({ id: `record-peso-${n}`, tier, title, desc: `Has subido el peso ${n} veces.`, earned: (c) => weightUps(c) >= n })),
-    ...([[10, 'plata', 'Peso pesado'], [15, 'oro', 'Titán'], [20, 'oro', 'Hércules']] as Array<[number, Tier, string]>)
-      .map(([n, tier, title]): M => ({ id: `peso-${n}kg`, tier, title, desc: `Un ejercicio con ${n} kg o más por mancuerna.`, earned: (c) => maxWeight(c) >= n })),
+    // por mancuerna, con pesa rusa y con la barra entera (con discos): bronce, plata y oro de cada una
+    ...([[10, 'bronce', 'Peso pesado'], [15, 'plata', 'Titán'], [20, 'oro', 'Hércules']] as Array<[number, Tier, string]>)
+      .map(([n, tier, title]): M => ({ id: `mancuerna-${n}`, tier, title, desc: `Un ejercicio con ${n} kg o más por mancuerna.`, earned: (c) => maxWeight(c, 'mancuernas') >= n })),
+  ]),
+  ...g('fuerza', 'kettlebell', [
+    ...([[12, 'bronce', 'Bola de hierro'], [16, 'plata', 'Pesa de campeón'], [24, 'oro', 'Zar de la pesa rusa']] as Array<[number, Tier, string]>)
+      .map(([n, tier, title]): M => ({ id: `pesarusa-${n}`, tier, title, desc: `Un ejercicio con una pesa rusa de ${n} kg o más.`, earned: (c) => maxWeight(c, 'kettlebell') >= n })),
+  ]),
+  ...g('fuerza', 'barbell', [
+    ...([[40, 'bronce', 'Barra cargada'], [60, 'plata', 'Levantador'], [80, 'oro', 'Rey de la barra']] as Array<[number, Tier, string]>)
+      .map(([n, tier, title]): M => ({ id: `barra-${n}`, tier, title, desc: `Un ejercicio con la barra cargada a ${n} kg o más (en total).`, earned: (c) => maxWeight(c, 'barra') >= n })),
   ]),
   // Bloques
   ...g('apartados', 'check', [

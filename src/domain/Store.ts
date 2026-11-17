@@ -11,13 +11,14 @@ import {
   type SectionId,
   type Settings,
   type TableGroup,
+  type WeightKind,
   type WeightEntry,
 } from './types';
 import { caloriesOf, type Calories } from './calories';
 import { countsForMedals, earnedMedals } from './medals';
 
 /** Reglas de las medallas: al subir este número, las medallas se recalculan una vez (se quitan las que ya no se cumplen). */
-const MEDALS_VER = 2;
+const MEDALS_VER = 3;
 import { sanitizePlan, type WeekPlan } from './weekPlan';
 
 /** Todo lo que la app guarda en el móvil. */
@@ -553,6 +554,9 @@ export class Store {
    * Comprueba las medallas y guarda las nuevas. Devuelve las conseguidas ahora.
    * La primera vez se apuntan las que ya se tenían sin celebrarlas.
    */
+  /** Con qué peso se hace cada ejercicio (lo pone la app, que tiene el catálogo): para las medallas de fuerza. */
+  weightKindOf?: (exerciseId: string) => WeightKind | undefined;
+
   /** ¿Las medallas se calcularon con unas reglas anteriores? */
   get medalsOutdated(): boolean {
     return this.data.medalsVer !== MEDALS_VER;
@@ -563,7 +567,7 @@ export class Store {
     const have = { ...(this.data.medals ?? {}) };
     // las calorías solo de los entrenamientos que cuentan para las medallas (10 minutos o más)
     const kcal = this.data.history.filter(countsForMedals).reduce((n, e) => n + (this.caloriesFor(e)?.kcal ?? 0), 0);
-    const got = earnedMedals({ history: this.data.history, weights: this.data.weights, goalKg: this.data.settings.profile.goalKg, kcal, planDays: this.plan?.days.map((d) => d.day) });
+    const got = earnedMedals({ history: this.data.history, weights: this.data.weights, goalKg: this.data.settings.profile.goalKg, kcal, planDays: this.plan?.days.map((d) => d.day), kindOf: this.weightKindOf });
     // reglas nuevas: se vuelven a calcular una vez; se quedan (con su fecha) las que se siguen cumpliendo,
     // se quitan las demás y las nuevas se apuntan sin celebrarlas
     if (this.data.medalsVer !== MEDALS_VER) {

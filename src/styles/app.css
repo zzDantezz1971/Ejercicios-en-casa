@@ -1793,3 +1793,5 @@ button.plan-row { cursor: pointer; }
 .rec-top .stat-value { font-size: 1.5rem; }
 .rec-row.two .rec-top .stat-value { font-size: 1.85rem; }
 .rec-top .ico { width: 22px; height: 22px; }
+
+.medal-group.by3 .medal-grid { grid-template-columns: repeat(3, 1fr); }

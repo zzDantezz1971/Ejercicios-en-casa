@@ -176,5 +176,17 @@ describe('Medallas', () => {
     expect(s.medals.completo).toBeUndefined();
     expect(Object.keys(s.medals).sort()).toEqual(['entrenos-1', 'equilibrio']);
   });
+
+  it('fuerza: medallas de mancuernas, pesa rusa y barra por separado', () => {
+    const s = new Store(mk().kv);
+    s.weightKindOf = (id) => (id === 'kb' ? 'kettlebell' : id === 'bar' ? 'barra' : 'mancuernas');
+    s.checkMedals();
+    const item = (exerciseId: string, weight: number) => ({ exerciseId, section: 'pesas' as const, planned: 30, seconds: 30, completed: true, weight });
+    s.addHistory({ ...e('2026-11-02T10:00:00'), items: [item('db', 10), item('kb', 16), item('bar', 40)] });
+    const got = s.checkMedals();
+    expect(got).toEqual(expect.arrayContaining(['mancuerna-10', 'pesarusa-12', 'pesarusa-16', 'barra-40']));
+    expect(got).not.toContain('mancuerna-15');
+    expect(got).not.toContain('barra-60');
+  });
 });
 

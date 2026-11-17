@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-17T18:08:15Z",
+    "es": ["Medallas de Fuerza ordenadas de 3 en 3, con medallas propias para cada peso: mancuernas (10, 15 y 20 kg por mancuerna), pesa rusa (12, 16 y 24 kg) y barra con discos (40, 60 y 80 kg en total)."],
+    "ca": ["Medalles de Força ordenades de 3 en 3, amb medalles pròpies per a cada pes: manuelles (10, 15 i 20 kg per manuella), pesa russa (12, 16 i 24 kg) i barra amb discs (40, 60 i 80 kg en total)."],
+    "en": ["Strength medals arranged in rows of 3, with separate medals for each weight: dumbbells (10, 15 and 20 kg per dumbbell), kettlebell (12, 16 and 24 kg) and barbell (40, 60 and 80 kg in total)."]
+  },
+  {
     "fecha": "2026-11-17T18:03:43Z",
     "es": ["Los ejercicios con pesa rusa o con barra y discos también piden el peso al añadirlos (en la barra, el peso total).", "Lista de ejercicios: ya no hay botón para ver los ejercicios de material que no tienes; para verlos, añade ese material en Mis datos › Mi material."],
     "ca": ["Els exercicis amb pesa russa o amb barra i discs també demanen el pes en afegir-los (a la barra, el pes total).", "Llista d’exercicis: ja no hi ha botó per veure els exercicis de material que no tens; per veure’ls, afegeix aquest material a Les meves dades › El meu material."],

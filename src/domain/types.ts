@@ -145,6 +145,15 @@ export function usesWeight(ex: Pick<ExerciseDef, 'motion' | 'equip'>): boolean {
   return !!ex.motion.db || !!ex.equip?.some((alts) => alts.every((a) => (WEIGHT_EQUIP as readonly string[]).includes(a)));
 }
 
+/** Con qué peso se hace: barra con discos, pesa rusa o mancuernas. */
+export type WeightKind = 'mancuernas' | 'kettlebell' | 'barra';
+export function weightKind(ex: Pick<ExerciseDef, 'motion' | 'equip'>): WeightKind {
+  const all = (ex.equip ?? []).flat();
+  if (all.includes('barra')) return 'barra';
+  if (all.includes('kettlebell') && !all.includes('mancuernas')) return 'kettlebell';
+  return 'mancuernas';
+}
+
 /** Cómo se cuenta el peso: por mancuerna, la pesa rusa o la barra entera (con discos). */
 export function weightUnit(ex: Pick<ExerciseDef, 'motion' | 'equip'>): string {
   const all = (ex.equip ?? []).flat();

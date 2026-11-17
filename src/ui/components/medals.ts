@@ -129,7 +129,8 @@ export function medalsBoard(app: App): HTMLElement[] {
   const groups = MEDAL_GROUPS.map((g) => {
     const ms = MEDALS.filter((m) => m.group === g.id);
     const n = ms.filter((m) => have[m.id]).length;
-    return h('section', { class: 'card medal-group' + (n === ms.length ? ' full' : '') },
+    // en Fuerza, de 3 en 3: cada fila es una serie (entrenos, subir peso, mancuernas, pesa rusa y barra)
+    return h('section', { class: 'card medal-group' + (n === ms.length ? ' full' : '') + (g.id === 'fuerza' ? ' by3' : '') },
       h('div', { class: 'mg-head' },
         h('span', { class: 'mg-icon' }, icon(g.icon)),
         h('h3', {}, g.title),
