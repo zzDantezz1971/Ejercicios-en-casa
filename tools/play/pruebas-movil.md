@@ -4,7 +4,8 @@ Recordatorio: **cuando instales la app de prueba** (el APK de GitHub o la prueba
 Marca cada punto al probarlo. Si algo falla, haz una captura y cuéntamelo.
 
 ## 0b. Para probar en el build 17
-- [ ] Llista d’exercicis: «Mostra’ls / Amaga’ls» (exercicis amb material que no tens) y «Selecciona» no hacen saltar la pantalla arriba.
+- [ ] Llista d’exercicis: ya no hay «Mostra’ls»; al final, aviso «N exercicis necessiten material que no tens. Per veure’ls, afegeix aquest material…». «Selecciona» no hace saltar la pantalla arriba.
+- [ ] Con pesa russa o barra (marcadas en El meu material): al seleccionar uno de sus ejercicios pide el pes («pesa russa» / «barra amb discs (total)», en la barra los atajos 10–60 kg); también en Edita la taula y Afegeix exercicis.
 - [ ] Con una voz elegida en català, pasar la app a castellano: «Prova el so i la veu» / «Probar sonido y voz» suena con voz de España, no catalana.
 - [ ] Configuració › Avisos › Veu (con el motor de Google y varias voces instaladas): salen hasta 3 voces del idioma («Veu 1, 2, 3»), cada una suena distinta con ▶, y al elegir una los avisos del entrenamiento usan esa.
 - [ ] Configuració › Temps d’exercicis › Pausa entre exercicis: tocar − / + no hace saltar la pantalla arriba (también en los demás ajustes).

@@ -138,8 +138,19 @@ export interface RoutineItem {
 }
 
 /** Ejercicios en los que se pide el peso (los que usan mancuerna). */
+/** Material con peso: mancuernas, pesa rusa o barra con discos (se pide con cuántos kilos). */
+const WEIGHT_EQUIP = ['mancuernas', 'kettlebell', 'barra'] as const;
+
 export function usesWeight(ex: Pick<ExerciseDef, 'motion' | 'equip'>): boolean {
-  return !!ex.motion.db || !!ex.equip?.some((alts) => alts.length === 1 && alts[0] === 'mancuernas');
+  return !!ex.motion.db || !!ex.equip?.some((alts) => alts.every((a) => (WEIGHT_EQUIP as readonly string[]).includes(a)));
+}
+
+/** Cómo se cuenta el peso: por mancuerna, la pesa rusa o la barra entera (con discos). */
+export function weightUnit(ex: Pick<ExerciseDef, 'motion' | 'equip'>): string {
+  const all = (ex.equip ?? []).flat();
+  if (all.includes('barra')) return 'barra con discos (total)';
+  if (all.includes('kettlebell') && !all.includes('mancuernas')) return 'pesa rusa';
+  return 'por mancuerna';
 }
 
 /** La rutina guarda los ejercicios elegidos de cada apartado en el orden en que se marcaron. */

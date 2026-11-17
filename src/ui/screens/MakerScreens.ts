@@ -6,7 +6,7 @@ import {
 } from '../../domain/generator';
 import { clampRounds, MAX_ROUNDS, WorkoutPlan } from '../../domain/WorkoutPlan';
 import { MAX_SECONDS, MIN_SECONDS, STEP_SECONDS } from '../../domain/RoutineEditor';
-import { emptyRoutine, SECTION_IDS, SECTION_TITLES, usesWeight, type ExerciseDef, type RoutineItem, type SectionId } from '../../domain/types';
+import { emptyRoutine, SECTION_IDS, SECTION_TITLES, usesWeight, weightUnit, type ExerciseDef, type RoutineItem, type SectionId } from '../../domain/types';
 import { LOCALE, tr } from '../../i18n';
 import type { App, Screen } from '../App';
 import { clear, confirmDialog, h, humanDuration, kg, plural, promptDialog, weightDialog } from '../dom';
@@ -277,7 +277,7 @@ export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement
             : h('span', { class: 'maker-secs muted small' }, `${it.seconds} s`),
           // peso de la mancuerna (al editar una tabla guardada)
           edit?.full && usesWeight(ex) ? h('button', { class: 'weight-btn small' + (it.weight ? '' : ' none'), 'aria-label': `Peso de ${ex.name}: ${it.weight ? kg(it.weight) + ' por mancuerna' : 'sin peso'}. Cambiar`, onclick: async () => {
-            const w = await weightDialog(ex.name, it.weight ?? app.store.lastWeight(ex.id) ?? 5);
+            const w = await weightDialog(ex.name, it.weight ?? app.store.lastWeight(ex.id) ?? (/barra/.test(weightUnit(ex)) ? 20 : 5), weightUnit(ex));
             if (w === null) return;
             const next = items.slice();
             const { weight: _old, ...rest } = it;
@@ -613,7 +613,7 @@ class PickExerciseScreen implements Screen {
         h('span', { class: 'secs' }, `${o.seconds} s`),
         h('button', { 'aria-label': 'Más tiempo', disabled: o.seconds >= MAX_SECONDS, onclick: () => set({ ...o, seconds: Math.min(MAX_SECONDS, o.seconds + STEP_SECONDS) }) }, '+')),
       usesWeight(ex) ? h('button', { class: 'weight-btn small' + (o.weight ? '' : ' none'), 'aria-label': `Peso de ${ex.name}: ${o.weight ? kg(o.weight) + ' por mancuerna' : 'sin peso'}. Cambiar`, onclick: async () => {
-        const w = await weightDialog(ex.name, o.weight ?? app.store.lastWeight(ex.id) ?? 5);
+        const w = await weightDialog(ex.name, o.weight ?? app.store.lastWeight(ex.id) ?? (/barra/.test(weightUnit(ex)) ? 20 : 5), weightUnit(ex));
         if (w === null) return;
         set({ seconds: o.seconds, ...(w ? { weight: w } : {}) });
       } }, icon('dumbbell'), o.weight ? kg(o.weight) : 'Sin peso') : '') : '';

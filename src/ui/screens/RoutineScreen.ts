@@ -1,7 +1,7 @@
 import { tr } from '../../i18n';
 import { RoutineEditor, STEP_SECONDS } from '../../domain/RoutineEditor';
 import { clampRounds, MAX_ROUNDS } from '../../domain/WorkoutPlan';
-import { SECTION_IDS, SECTION_TITLES, usesWeight, type ExerciseDef, type SectionId } from '../../domain/types';
+import { SECTION_IDS, SECTION_TITLES, usesWeight, weightUnit, type ExerciseDef, type SectionId } from '../../domain/types';
 import type { App, Screen } from '../App';
 import { actionSheet, append, clear, h, humanDuration, kg, plural, promptDialog, weightDialog } from '../dom';
 import { icon, SECTION_STYLE, zoneIcon } from '../icons';
@@ -51,7 +51,6 @@ export class RoutineScreen implements Screen {
   private title = h('div', { class: 'titles' });
   private query = '';
   /** Ver también los ejercicios que necesitan material que no se tiene. */
-  private showAllEquip = false;
   private search = h('input', { type: 'search', id: 'ex-search', class: 'search-input', placeholder: 'Buscar un ejercicio', 'aria-label': 'Buscar un ejercicio o una zona', autocomplete: 'off', enterkeyhint: 'search' });
   private io = new IntersectionObserver((entries) => entries.forEach((e) => e.isIntersecting && this.loadThumb(e.target as HTMLElement)), { rootMargin: '300px' });
 
@@ -267,15 +266,15 @@ export class RoutineScreen implements Screen {
     return [...segs.values()].flat();
   }
 
-  /** Aviso al final de la lista: cuántos ejercicios necesitan material que no tiene, y botón para verlos. */
+  /** Aviso al final de la lista: cuántos ejercicios necesitan material que no tiene (para verlos, añadirlo en Mis datos). */
   private equipNote(sectionId: SectionId): HTMLElement | null {
     const owned = new Set<string>(this.app.store.settings.equipment);
     const n = this.ordered(sectionId).filter((e) => !canDo(e.equip, owned)).length;
     if (!n) return null;
     return h('div', { class: 'equip-note' },
       icon('dumbbell'),
-      h('span', {}, this.showAllEquip ? 'Se muestran también los que necesitan material que no tienes.' : plural(n, 'ejercicio necesita material que no tienes.', 'ejercicios necesitan material que no tienes.')),
-      h('button', { class: 'link-btn', onclick: () => { this.showAllEquip = !this.showAllEquip; this.renderList(); } }, this.showAllEquip ? 'Ocultarlos' : 'Mostrarlos'));
+      h('span', {}, h('span', {}, plural(n, 'ejercicio necesita material que no tienes.', 'ejercicios necesitan material que no tienes.')), ' ',
+        h('span', {}, 'Para verlos, añade ese material en Mis datos › Mi material.')));
   }
 
   /** Favoritos del apartado, en el orden de la lista. */
@@ -442,7 +441,6 @@ export class RoutineScreen implements Screen {
     const note = this.equipNote(this.section);
     if (note) this.list.append(note);
     // los que necesitan material que no se tiene van aparte, al final (también con sus grupos)
-    if (this.showAllEquip) put(all.filter((e) => !canDo(e.equip, owned)));
   }
 
   /** Abre la ficha del ejercicio. */
@@ -488,7 +486,7 @@ export class RoutineScreen implements Screen {
       class: 'weight-btn' + (weight ? '' : ' none'),
       'aria-label': `Peso de ${ex.name}: ${weight ? kg(weight) + ' por mancuerna' : 'sin peso'}. Cambiar`,
       onclick: async () => {
-        const w = await weightDialog(ex.name, weight ?? this.app.store.lastWeight(ex.id) ?? 5);
+        const w = await weightDialog(ex.name, weight ?? this.app.store.lastWeight(ex.id) ?? (/barra/.test(weightUnit(ex)) ? 20 : 5), weightUnit(ex));
         if (w === null) return;
         this.editor.setWeight(ex.section, ex.id, w || undefined);
         this.save();
@@ -508,7 +506,7 @@ export class RoutineScreen implements Screen {
     let weight: number | undefined;
     if (!this.editor.position(ex.section, ex.id) && usesWeight(ex)) {
       // al elegir un ejercicio con mancuerna se pide el peso (propone el último usado)
-      const w = await weightDialog(ex.name, this.app.store.lastWeight(ex.id) ?? 5);
+      const w = await weightDialog(ex.name, this.app.store.lastWeight(ex.id) ?? (/barra/.test(weightUnit(ex)) ? 20 : 5), weightUnit(ex));
       if (w === null) return;
       weight = w || undefined;
     }

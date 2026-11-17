@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-17T18:03:43Z",
+    "es": ["Los ejercicios con pesa rusa o con barra y discos también piden el peso al añadirlos (en la barra, el peso total).", "Lista de ejercicios: ya no hay botón para ver los ejercicios de material que no tienes; para verlos, añade ese material en Mis datos › Mi material."],
+    "ca": ["Els exercicis amb pesa russa o amb barra i discs també demanen el pes en afegir-los (a la barra, el pes total).", "Llista d’exercicis: ja no hi ha botó per veure els exercicis de material que no tens; per veure’ls, afegeix aquest material a Les meves dades › El meu material."],
+    "en": ["Kettlebell and barbell exercises now also ask for the weight when you add them (for the barbell, the total weight).", "Exercise list: the button to show exercises for equipment you don’t have is gone; to see them, add that equipment in My data › My equipment."]
+  },
+  {
     "fecha": "2026-11-17T17:59:12Z",
     "es": ["Lista de ejercicios: al mostrar u ocultar los ejercicios con material que no tienes (o al seleccionar uno), la pantalla se queda donde estabas."],
     "ca": ["Llista d’exercicis: en mostrar o amagar els exercicis amb material que no tens (o en seleccionar-ne un), la pantalla es queda on eres."],

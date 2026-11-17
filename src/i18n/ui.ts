@@ -1236,6 +1236,9 @@ const ROWS: Row[] = [
   ['Los ejercicios', 'Els exercicis', 'The exercises'],
   ['Calendario con los días entrenados; toca uno para ver sus bloques y ejercicios (desliza para pasar al entrenamiento anterior o al siguiente).', 'Calendari amb els dies entrenats; toca’n un per veure’n els blocs i els exercicis (llisca per passar a l’entrenament anterior o al següent).', 'Calendar with the days you trained; tap one to see its blocks and exercises (swipe to go to the previous or next workout).'],
   ['Tus récords: racha actual y mejor racha, el entreno más largo, el de más calorías y el mejor mes.', 'Els teus rècords: ratxa actual i millor ratxa, l’entrenament més llarg, el de més calories i el millor mes.', 'Your records: current and best streak, the longest workout, the one with most calories and the best month.'],
+  ['pesa rusa', 'pesa russa', 'kettlebell'],
+  ['barra con discos (total)', 'barra amb discs (total)', 'barbell with plates (total)'],
+  ['Para verlos, añade ese material en Mis datos › Mi material.', 'Per veure’ls, afegeix aquest material a Les meves dades › El meu material.', 'To see them, add that equipment in My data › My equipment.'],
 ];
 
 export const UI_CA: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[1]]));

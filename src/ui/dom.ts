@@ -138,23 +138,23 @@ export function kg(w: number): string {
 /**
  * Pide el peso por mancuerna. Devuelve el peso, 0 si se elige "Sin peso" o null si se cancela.
  */
-export function weightDialog(name: string, initial: number): Promise<number | null> {
+export function weightDialog(name: string, initial: number, unit = 'por mancuerna'): Promise<number | null> {
   return new Promise((resolve) => {
     let value = initial;
     const shown = h('span', { class: 'wd-value' });
     const paint = () => {
       shown.textContent = kg(value);
       minus.disabled = value <= 0.5;
-      plus.disabled = value >= 50;
+      plus.disabled = value >= 200;
       quick.querySelectorAll('button').forEach((b) => b.classList.toggle('on', Number(b.dataset.kg) === value));
     };
     const set = (v: number) => {
-      value = Math.min(50, Math.max(0.5, Math.round(v * 2) / 2));
+      value = Math.min(200, Math.max(0.5, Math.round(v * 2) / 2));
       paint();
     };
     const minus = h('button', { class: 'wd-step', 'aria-label': 'Menos peso', onclick: () => set(value - 0.5) }, '−');
     const plus = h('button', { class: 'wd-step', 'aria-label': 'Más peso', onclick: () => set(value + 0.5) }, '+');
-    const quick = h('div', { class: 'wd-quick' }, ...[2, 4, 5, 6, 8, 10, 12, 15].map((n) =>
+    const quick = h('div', { class: 'wd-quick' }, ...(/barra/.test(unit) ? [10, 15, 20, 25, 30, 40, 50, 60] : [2, 4, 5, 6, 8, 10, 12, 15]).map((n) =>
       h('button', { class: 'wd-chip', 'data-kg': String(n), onclick: () => set(n) }, String(n))));
     const close = (v: number | null) => {
       wrap.remove();
@@ -162,7 +162,7 @@ export function weightDialog(name: string, initial: number): Promise<number | nu
     };
     const wrap = h('div', { class: 'dialog-wrap', onclick: (e: Event) => e.target === wrap && close(null) },
       h('div', { class: 'dialog weight-dialog', role: 'dialog', 'aria-modal': 'true', 'aria-label': `Peso para ${name}` },
-        h('div', {}, h('p', { class: 'dialog-title' }, '¿Con cuánto peso?'), h('p', { class: 'muted small' }, `${name} · por mancuerna`)),
+        h('div', {}, h('p', { class: 'dialog-title' }, '¿Con cuánto peso?'), h('p', { class: 'muted small' }, h('span', {}, name), ' · ', h('span', {}, unit))),
         h('div', { class: 'wd-row' }, minus, shown, plus),
         quick,
         h('div', { class: 'dialog-actions' },
