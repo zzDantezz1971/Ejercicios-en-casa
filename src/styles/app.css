@@ -1771,3 +1771,9 @@ button.plan-row { cursor: pointer; }
 .group-card.open .group-chev { transform: rotate(-90deg); }
 .group-body { display: flex; flex-direction: column; gap: 12px; }
 .group-body .table-card { background: var(--bg-2, var(--bg)); }
+
+/* borrar un grupo: textos algo más grandes */
+.grp-del .dialog-title { font-size: 1.2rem; }
+.grp-del p.muted { font-size: 1.02rem; line-height: 1.4; }
+.grp-del .rm-stop { font-size: 1.05rem; color: var(--fg); }
+.grp-del .rm-stop input { width: 22px; height: 22px; }

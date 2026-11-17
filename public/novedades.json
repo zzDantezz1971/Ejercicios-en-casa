@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-17T07:41:49Z",
+    "es": ["Mis tablas: la ventana para borrar un grupo tiene el texto más grande."],
+    "ca": ["Les meves taules: la finestra per esborrar un grup té el text més gran."],
+    "en": ["My routines: the delete-group window has larger text."]
+  },
+  {
     "fecha": "2026-11-17T07:37:44Z",
     "es": ["Mis tablas: al borrar un grupo puedes marcar «Borrar las tablas también» (sin marcar de entrada). Si lo marcas, se avisa otra vez antes de borrar el grupo y sus tablas."],
     "ca": ["Les meves taules: en esborrar un grup pots marcar «Esborra també les taules» (desmarcat d’entrada). Si ho marques, s’avisa un altre cop abans d’esborrar el grup i les seves taules."],
