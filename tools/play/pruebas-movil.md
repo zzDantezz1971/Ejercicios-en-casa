@@ -42,6 +42,7 @@ Marca cada punto al probarlo. Si algo falla, haz una captura y cuéntamelo.
 - [ ] Historial › tocar un día: «Contingut de l’entrenament» con una fila por bloque (como Inici); al tocar un bloque, sus ejercicios numerados (temps fet / previst, kg, per costats, «Saltat»); sin «Repeteix» ni «Copia a un altre dia»; «Esborra aquest entrenament» pequeño al final.
 - [ ] Inici › un bloque y Historial › entrenamiento › un bloque: al final, botones pequeños «‹ [icono] Escalfament» / «[icono] Estiraments ›» (sin el texto «Bloc anterior/següent»); el botón atrás vuelve a Inici / al entrenamiento.
 - [ ] Inici: la frase motivadora cambia al volver a Inici; ahora hay 150 (en el idioma elegido, algunas con tu nombre).
+- [ ] Les meves taules › «Grup»: crear un grupo; en los ··· de una taula, «Mou a un grup» (también «+ Grup nou» y «Treu del grup»); el grupo sale plegado con «N taules · En ús»; al tocarlo se abren sus tablas; ··· del grupo: canviar nom / esborrar (las tablas vuelven a la lista). Se guarda al cerrar la app y en la copia.
 - [ ] **Versión gratis nueva** (sin suscripción ni código):
   - [ ] Todos los ejercicios se pueden ver y elegir, sin candados.
   - [ ] Inicio con la tabla vacía: «Tabla vacía» funciona; «Créala por mí», «Tablas hechas» y «Plan de la semana» con candado (abren Prémium).

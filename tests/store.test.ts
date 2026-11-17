@@ -313,3 +313,23 @@ describe('Primer día de uso (historial de la versión gratis)', () => {
     expect(Math.abs(new Store(memory()).firstUse.getTime() - t)).toBeLessThan(5000);
   });
 });
+
+describe('Grupos de tablas', () => {
+  it('se crean, se mueven tablas, se guardan y al borrar el grupo las tablas vuelven a la lista', () => {
+    const kv = memory();
+    const s = new Store(kv);
+    const t = s.active.id;
+    const g = s.createGroup('Verano');
+    s.moveToGroup(t, g);
+    const again = new Store(kv);
+    expect(again.groups).toEqual([{ id: g, name: 'Verano' }]);
+    expect(again.active.group).toBe(g);
+    again.deleteGroup(g);
+    expect(new Store(kv).active.group).toBeUndefined();
+    expect(new Store(kv).routines).toHaveLength(1);
+  });
+  it('una tabla de un grupo que no existe vuelve a la lista', () => {
+    const kv = memory(JSON.stringify({ version: 2, welcomed: true, routines: [{ id: 'a', name: 'A', routine: {}, group: 'nope' }], activeId: 'a' }));
+    expect(new Store(kv).active.group).toBeUndefined();
+  });
+});

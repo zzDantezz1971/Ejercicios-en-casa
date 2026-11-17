@@ -1751,3 +1751,19 @@ button.plan-row { cursor: pointer; }
 .block-nav-btn .bn-icon .ico { width: 16px; height: 16px; }
 .block-nav-btn .bn-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .block-nav-btn .arrow { width: 14px; height: 14px; color: var(--muted); flex: none; }
+
+/* Mis tablas: grupos (carpetas) plegables */
+.tables-head-btns { display: flex; gap: 8px; }
+.group-card { display: flex; flex-direction: column; gap: 12px; }
+.group-card.active { border-color: color-mix(in srgb, var(--accent) 60%, var(--line)); }
+.group-head { display: flex; align-items: center; gap: 8px; }
+.group-main { flex: 1; min-width: 0; display: flex; align-items: center; gap: 12px; background: none; border: 0; padding: 0; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+.group-icon { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; flex: none; background: var(--accent-soft); color: var(--accent-2); }
+.group-icon .ico { width: 22px; height: 22px; }
+.group-text { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+.group-text strong { font-family: var(--display); font-size: 1.35rem; text-transform: uppercase; line-height: 1.1; overflow-wrap: anywhere; }
+.group-inuse { color: var(--accent-2); font-weight: 700; }
+.group-chev { width: 18px; height: 18px; color: var(--muted); transform: rotate(90deg); transition: transform .2s; flex: none; }
+.group-card.open .group-chev { transform: rotate(-90deg); }
+.group-body { display: flex; flex-direction: column; gap: 12px; }
+.group-body .table-card { background: var(--bg-2, var(--bg)); }

@@ -10,6 +10,7 @@ import {
   type SavedRoutine,
   type SectionId,
   type Settings,
+  type TableGroup,
   type WeightEntry,
 } from './types';
 import { caloriesOf, type Calories } from './calories';
@@ -55,6 +56,8 @@ export interface SavedData {
   /** Planes de la semana (Prémium); uno de ellos está en uso. */
   plans?: WeekPlan[];
   activePlanId?: string;
+  /** Grupos de tablas de «Mis tablas». */
+  groups?: TableGroup[];
 }
 
 export const STORAGE_KEY = 'ejercicios-en-casa';
@@ -306,6 +309,43 @@ export class Store {
     this.data.routines = this.data.routines.filter((r) => r.id !== id);
     if (this.data.routines.length === 0) this.data.routines.push(newRoutine(DEFAULT_ROUTINE_NAME));
     if (!this.data.routines.some((r) => r.id === this.data.activeId)) this.data.activeId = this.data.routines[0].id;
+    this.persist();
+  }
+
+  /* ── Grupos de tablas ── */
+
+  get groups(): readonly TableGroup[] {
+    return this.data.groups ?? [];
+  }
+
+  /** Crea un grupo (vacío) y devuelve su id. */
+  createGroup(name: string): string {
+    const g: TableGroup = { id: newId(), name: cleanName(name) };
+    this.data.groups = [...(this.data.groups ?? []), g];
+    this.persist();
+    return g.id;
+  }
+
+  renameGroup(id: string, name: string): void {
+    const g = this.data.groups?.find((x) => x.id === id);
+    if (!g) return;
+    g.name = cleanName(name);
+    this.persist();
+  }
+
+  /** Borra un grupo; sus tablas no se borran: vuelven a la lista. */
+  deleteGroup(id: string): void {
+    this.data.groups = (this.data.groups ?? []).filter((g) => g.id !== id);
+    for (const r of this.data.routines) if (r.group === id) delete r.group;
+    this.persist();
+  }
+
+  /** Mete una tabla en un grupo (o la saca, con null). */
+  moveToGroup(routineId: string, groupId: string | null): void {
+    const r = this.data.routines.find((x) => x.id === routineId);
+    if (!r) return;
+    if (groupId && this.data.groups?.some((g) => g.id === groupId)) r.group = groupId;
+    else delete r.group;
     this.persist();
   }
 
@@ -710,6 +750,7 @@ export class Store {
           createdAt: typeof r.createdAt === 'string' ? r.createdAt : new Date().toISOString(),
           lastUsed: typeof r.lastUsed === 'string' ? r.lastUsed : undefined,
           rounds: sanitizeRounds(r.rounds),
+          ...(typeof r.group === 'string' ? { group: r.group } : {}),
         }));
     } else if (input.routine) {
       // v1 -> v2: la rutina única pasa a ser la tabla "Mi rutina"
@@ -755,9 +796,15 @@ export class Store {
     const seenIds = new Set<string>();
     const plans = rawPlans.map(sanitizePlan).filter((p): p is WeekPlan => !!p && !seenIds.has(p.id) && !!seenIds.add(p.id));
     const activePlanId = plans.some((p) => p.id === input.activePlanId) ? (input.activePlanId as string) : plans[0]?.id;
+    // grupos de tablas: sin repetir; las tablas de un grupo que ya no existe vuelven a la lista
+    const seenG = new Set<string>();
+    const groups = (Array.isArray(input.groups) ? (input.groups as Array<Partial<TableGroup>>) : [])
+      .filter((g): g is TableGroup => !!g && typeof g.id === 'string' && typeof g.name === 'string' && !seenG.has(g.id) && !!seenG.add(g.id))
+      .map((g) => ({ id: g.id, name: cleanName(g.name) }));
+    for (const r of routines) if (r.group && !seenG.has(r.group)) delete r.group;
     return {
       version: DATA_VERSION, routines, activeId, settings, history, hidden, order, orderVer: ORDER_VER, unhideVer: UNHIDE_VER, lastBackup, firstUse, favorites, weights,
-      summarySeen, weekSeen, medals, medalsVer, welcomed, ...(plans.length ? { plans, activePlanId } : {}),
+      summarySeen, weekSeen, medals, medalsVer, welcomed, ...(plans.length ? { plans, activePlanId } : {}), ...(groups.length ? { groups } : {}),
     };
   }
 

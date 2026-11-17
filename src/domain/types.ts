@@ -296,6 +296,14 @@ export interface SavedRoutine {
   lastUsed?: string;
   /** Vueltas de cada apartado (1 si no se indica). */
   rounds?: Partial<Record<SectionId, number>>;
+  /** Grupo en el que está (en «Mis tablas»), si se ha movido a uno. */
+  group?: string;
+}
+
+/** Grupo de tablas en «Mis tablas». */
+export interface TableGroup {
+  id: string;
+  name: string;
 }
 
 export function emptyRoutine(): Routine {

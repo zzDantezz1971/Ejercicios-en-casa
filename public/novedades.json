@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-17T07:06:31Z",
+    "es": ["Mis tablas: ahora puedes crear grupos (botón «Grupo») y mover tus tablas a ellos desde sus tres puntos. Los grupos salen plegados; al tocarlos se ven sus tablas."],
+    "ca": ["Les meves taules: ara pots crear grups (botó «Grup») i moure-hi les teves taules des dels seus tres punts. Els grups surten plegats; en tocar-los es veuen les seves taules."],
+    "en": ["My routines: you can now create groups (“Group” button) and move your routines into them from their three dots. Groups start folded; tap one to see its routines."]
+  },
+  {
     "fecha": "2026-11-17T06:58:27Z",
     "es": ["Frases motivadoras: de 40 a 150, para que tarden mucho más en repetirse."],
     "ca": ["Frases motivadores: de 40 a 150, perquè triguin molt més a repetir-se."],
