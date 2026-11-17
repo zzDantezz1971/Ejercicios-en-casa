@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-17T06:43:48Z",
+    "es": ["Historial › entrenamiento: los bloques se ven como «Contenido de la tabla» en Inicio; al tocar uno se abren sus ejercicios numerados, con el tiempo hecho, el peso y si se saltó."],
+    "ca": ["Historial › entrenament: els blocs es veuen com «Contingut de la taula» a Inici; en tocar-ne un s’obren els seus exercicis numerats, amb el temps fet, el pes i si es va saltar."],
+    "en": ["History › workout: blocks look like “Routine contents” on Home; tap one to open its numbered exercises, with time done, weight and whether it was skipped."]
+  },
+  {
     "fecha": "2026-11-17T06:37:40Z",
     "es": ["Historial › entrenamiento: títulos de los bloques más pequeños y alineados; se quitan «Repetir» y «Copiar a otro día»; «Borrar este entrenamiento» es ahora un enlace pequeño."],
     "ca": ["Historial › entrenament: títols dels blocs més petits i alineats; es treuen «Repeteix» i «Copia a un altre dia»; «Esborra aquest entrenament» ara és un enllaç petit."],

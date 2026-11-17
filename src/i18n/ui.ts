@@ -1205,6 +1205,7 @@ const ROWS: Row[] = [
   ['Versión gratis: ves los entrenamientos de esta semana.', 'Versió gratuïta: veus els entrenaments d’aquesta setmana.', 'Free version: you see this week’s workouts.'],
   ['{n} entrenamiento anterior guardado.', '{n} entrenament anterior desat.', '{n} earlier workout saved.'],
   ['{n} entrenamientos anteriores guardados.', '{n} entrenaments anteriors desats.', '{n} earlier workouts saved.'],
+  ['Contenido del entrenamiento', 'Contingut de l’entrenament', 'Workout contents'],
 ];
 
 export const UI_CA: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[1]]));

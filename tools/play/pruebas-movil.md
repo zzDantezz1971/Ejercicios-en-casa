@@ -39,7 +39,7 @@ Marca cada punto al probarlo. Si algo falla, haz una captura y cuéntamelo.
 - [ ] «Edita la taula» y «Afegeix exercicis»: los ejercicios por lados (p. ej. Rem a una mà recolzat al banc) muestran «⇄ per costats» debajo del nombre.
 - [ ] Historial: orden calendario del mes → Resum setmanal / Resum del mes → rècords.
 - [ ] Historial: tocar los récords (ratxa, entrenament més llarg, calories, millor mes) no hace nada; «Esborra tot l’historial» es un enlace pequeño en rojo al final (sigue pidiendo doble confirmación).
-- [ ] Historial › tocar un día: títulos de bloque en una línea (más pequeños, resumen a la derecha); sin «Repeteix» ni «Copia a un altre dia»; «Esborra aquest entrenament» pequeño al final. Los bloques salen plegados (tocar el título los abre); dentro, los ejercicios salen en filas como «Contingut de la taula» (miniatura, nombre, tiempo hecho / previsto, kg, per costats) con ✓ o «Saltat»; tocar uno abre su ficha (solo información).
+- [ ] Historial › tocar un día: «Contingut de l’entrenament» con una fila por bloque (como Inici); al tocar un bloque, sus ejercicios numerados (temps fet / previst, kg, per costats, «Saltat»); sin «Repeteix» ni «Copia a un altre dia»; «Esborra aquest entrenament» pequeño al final.
 - [ ] **Versión gratis nueva** (sin suscripción ni código):
   - [ ] Todos los ejercicios se pueden ver y elegir, sin candados.
   - [ ] Inicio con la tabla vacía: «Tabla vacía» funciona; «Créala por mí», «Tablas hechas» y «Plan de la semana» con candado (abren Prémium).

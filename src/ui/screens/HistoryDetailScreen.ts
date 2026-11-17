@@ -1,5 +1,5 @@
 import { LOCALE, DEC } from '../../i18n';
-import { SECTION_IDS, SECTION_TITLES, type ExerciseDef, type HeartSummary, type HistoryEntry } from '../../domain/types';
+import { SECTION_IDS, SECTION_TITLES, type SectionId, type ExerciseDef, type HeartSummary, type HistoryEntry } from '../../domain/types';
 import type { App, Screen } from '../App';
 import { confirmDialog, h, humanDuration, kg, mmss, plural } from '../dom';
 import { icon, SECTION_STYLE } from '../icons';
@@ -15,50 +15,27 @@ export class HistoryDetailScreen implements Screen {
     const end = new Date(d.getTime() + (e.durationSec + (e.pausedSec ?? 0)) * 1000);
     const hm = (x: Date) => x.toLocaleTimeString(LOCALE, { hour: '2-digit', minute: '2-digit' });
     const items = e.items ?? [];
-    // ejercicios de este entrenamiento, por apartados: desde la ficha se pasa de uno a otro deslizando el dedo
-    const shown = SECTION_IDS.flatMap((s) => items.filter((i) => i.section === s)).map((i) => app.catalog.get(i.exerciseId)).filter((x): x is ExerciseDef => !!x);
     const activeSec = items.reduce((n, i) => n + i.seconds, 0);
     const cal = app.store.caloriesFor(e);
 
+    // como «Contenido de la tabla» en Inicio: una fila por bloque; al tocarla, sus ejercicios numerados
     const list: HTMLElement[] = [];
-    for (const s of SECTION_IDS) {
-      const its = items.filter((i) => i.section === s);
-      if (!its.length) continue;
-      const st = SECTION_STYLE[s];
-      // como «Contenido de la tabla»: título del bloque y una fila por ejercicio (miniatura, nombre, tiempo, peso)
-      // los bloques empiezan plegados: se abren tocando su título
-      const rows = h('div', { class: 'tv-list', hidden: true });
-      const fold = h('span', { class: 'sec-fold folded', 'aria-hidden': 'true' }, icon('chevron', 'ico'));
-      const head: HTMLElement = h('button', { class: 'tv-head hd-fold', 'aria-expanded': 'false', onclick: () => {
-          rows.hidden = !rows.hidden;
-          fold.classList.toggle('folded', rows.hidden);
-          head.setAttribute('aria-expanded', String(!rows.hidden));
-        } },
-        h('h2', { class: 'maker-sec' }, fold, icon(st.icon), SECTION_TITLES[s]),
-        h('span', { class: 'muted small tv-meta' }, `${plural(its.length, 'ejercicio', 'ejercicios')} · ${mmss(its.reduce((n, i) => n + i.seconds, 0))}`));
-      head.style.setProperty('--sec', st.color);
-      list.push(head);
-      for (const it of its) {
-        const ex = app.catalog.get(it.exerciseId);
-        const status = it.completed ? '' : it.seconds > 0 ? 'Saltado a medias' : 'Saltado';
-        const img = h('img', { alt: '', class: 'maker-thumb' });
-        if (ex) void app.thumbs.get(ex).then((url) => (img.src = url));
-        const r = h(ex ? 'button' : 'div', { class: 'maker-row tv-row hd-tv' + (it.completed ? '' : ' skipped'),
-          ...(ex ? { 'aria-label': `Cómo se hace: ${ex.name}`, onclick: () => app.push(new DetailScreen(app, ex, shown)) } : {}) },
-          h('span', { class: 'hd-mark' }, icon(it.completed ? 'check' : 'next')),
-          img,
-          h('span', { class: 'maker-name' },
-            h('span', { class: 'maker-title' }, ex?.name ?? 'Ejercicio eliminado'),
-            h('span', { class: 'muted small tv-sub' },
-              h('span', { class: 'tv-secs' }, icon('clock'), mmss(it.seconds), it.seconds < it.planned ? ` / ${mmss(it.planned)}` : ''),
-              it.weight ? h('span', { class: 'tv-secs' }, icon('dumbbell'), kg(it.weight)) : null,
-              ex?.oneSided ? h('span', { class: 'by-sides' }, icon('sides'), 'por lados') : null),
-            status ? h('span', { class: 'muted small hd-status' }, status) : ex ? h('span', { class: 'muted small' }, ex.zone) : null),
-          ex ? icon('chevron', 'ico chev') : null);
-        r.style.setProperty('--sec', st.color);
-        rows.append(r);
-      }
-      list.push(rows);
+    const blocks = SECTION_IDS.filter((s) => items.some((i) => i.section === s));
+    if (blocks.length) {
+      list.push(h('section', { class: 'sections' },
+        h('h3', { class: 'block-title' }, 'Contenido del entrenamiento'),
+        ...blocks.map((s) => {
+          const its = items.filter((i) => i.section === s);
+          const st = SECTION_STYLE[s];
+          const row = h('button', { class: 'sec-row', onclick: () => app.push(new HistoryBlockScreen(app, e, s)) },
+            h('span', { class: 'sec-icon' }, icon(st.icon)),
+            h('span', { class: 'sec-text' },
+              h('strong', {}, SECTION_TITLES[s]),
+              h('span', { class: 'muted small' }, `${plural(its.length, 'ejercicio', 'ejercicios')} · ${humanDuration(its.reduce((n, i) => n + i.seconds, 0))}`)),
+            icon('chevron', 'ico chev'));
+          row.style.setProperty('--sec', st.color);
+          return row;
+        })));
     }
 
     // entrenamiento anterior y siguiente (por fecha), para pasar de uno a otro deslizando o con las flechas
@@ -184,3 +161,45 @@ function stat(ic: Parameters<typeof icon>[0], value: string, label: string): HTM
   return h('div', { class: 'stat' }, icon(ic), h('span', { class: 'stat-value' }, value), h('span', { class: 'muted small' }, label));
 }
 
+
+/** Un bloque de un entrenamiento del historial: sus ejercicios numerados, como «Contenido de la tabla» (solo información). */
+class HistoryBlockScreen implements Screen {
+  readonly el = h('main', { class: 'screen table-view' });
+
+  constructor(app: App, entry: HistoryEntry, sec: SectionId) {
+    const its = (entry.items ?? []).filter((i) => i.section === sec);
+    const st = SECTION_STYLE[sec];
+    const shown = its.map((i) => app.catalog.get(i.exerciseId)).filter((x): x is ExerciseDef => !!x);
+    const date = new Date(entry.date).toLocaleDateString(LOCALE, { weekday: 'long', day: 'numeric', month: 'long' });
+    const head = h('div', { class: 'tv-head' },
+      h('h2', { class: 'maker-sec' }, icon(st.icon), SECTION_TITLES[sec]),
+      h('span', { class: 'muted small tv-meta' }, `${plural(its.length, 'ejercicio', 'ejercicios')} · ${humanDuration(its.reduce((n, i) => n + i.seconds, 0))}`));
+    head.style.setProperty('--sec', st.color);
+    const list = h('div', { class: 'tv-list' });
+    its.forEach((it, k) => {
+      const ex = app.catalog.get(it.exerciseId);
+      const status = it.completed ? '' : it.seconds > 0 ? 'Saltado a medias' : 'Saltado';
+      const img = h('img', { alt: '', class: 'maker-thumb' });
+      if (ex) void app.thumbs.get(ex).then((url) => (img.src = url));
+      const row = h(ex ? 'button' : 'div', { class: 'maker-row tv-row hd-tv' + (it.completed ? '' : ' skipped'),
+        ...(ex ? { 'aria-label': `Cómo se hace: ${ex.name}`, onclick: () => app.push(new DetailScreen(app, ex, shown)) } : {}) },
+        h('span', { class: 'tv-n' }, String(k + 1)),
+        img,
+        h('span', { class: 'maker-name' },
+          h('span', { class: 'maker-title' }, ex?.name ?? 'Ejercicio eliminado'),
+          h('span', { class: 'muted small tv-sub' },
+            h('span', { class: 'tv-secs' }, icon('clock'), mmss(it.seconds), it.seconds < it.planned ? ` / ${mmss(it.planned)}` : ''),
+            it.weight ? h('span', { class: 'tv-secs' }, icon('dumbbell'), kg(it.weight)) : null,
+            ex?.oneSided ? h('span', { class: 'by-sides' }, icon('sides'), 'por lados') : null),
+          status ? h('span', { class: 'muted small hd-status' }, icon('next'), status) : ex ? h('span', { class: 'muted small' }, ex.zone) : null),
+        ex ? icon('chevron', 'ico chev') : null);
+      row.style.setProperty('--sec', st.color);
+      list.append(row);
+    });
+    this.el.append(
+      h('header', { class: 'bar sticky' },
+        h('button', { class: 'icon-btn', 'aria-label': 'Volver', onclick: () => app.back() }, icon('back')),
+        h('div', { class: 'titles' }, h('span', { class: 'subtitle' }, date), h('h1', {}, SECTION_TITLES[sec]))),
+      h('section', { class: 'detail-body tv-body' }, head, list));
+  }
+}
