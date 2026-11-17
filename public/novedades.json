@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-17T17:59:12Z",
+    "es": ["Lista de ejercicios: al mostrar u ocultar los ejercicios con material que no tienes (o al seleccionar uno), la pantalla se queda donde estabas."],
+    "ca": ["Llista d’exercicis: en mostrar o amagar els exercicis amb material que no tens (o en seleccionar-ne un), la pantalla es queda on eres."],
+    "en": ["Exercise list: showing or hiding the exercises that need equipment you don’t have (or selecting one) keeps the screen where you were."]
+  },
+  {
     "fecha": "2026-11-17T16:23:59Z",
     "es": ["App Android: si cambias el idioma de la app, la voz ya no lee con el acento del idioma anterior (por ejemplo, castellano con voz catalana)."],
     "ca": ["App Android: si canvies l’idioma de l’app, la veu ja no llegeix amb l’accent de l’idioma anterior (per exemple, castellà amb veu catalana)."],

@@ -364,8 +364,12 @@ export class RoutineScreen implements Screen {
 
   /** Lista de ejercicios y, a la derecha del primer título de grupo, el botón pequeño de las vueltas. */
   private renderList(): void {
+    // se repinta sin moverse de sitio (en Android, al vaciar la lista la pantalla volvía arriba)
+    const y = window.scrollY;
     this.renderListInner();
     this.placeRounds();
+    window.scrollTo(0, y);
+    requestAnimationFrame(() => window.scrollTo(0, y));
   }
 
   /** Vueltas: botón pequeño («↻ Vueltas x1») a la derecha del primer título de la lista; al tocarlo se abre debajo el control. */
@@ -525,6 +529,7 @@ export class RoutineScreen implements Screen {
     const y = window.scrollY;
     this.render();
     window.scrollTo(0, y);
+    requestAnimationFrame(() => window.scrollTo(0, y));
   }
 
   private renderFooter(): void {
