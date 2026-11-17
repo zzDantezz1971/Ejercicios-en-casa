@@ -25,7 +25,25 @@ export class MonthScreen implements Screen {
         h('button', { class: 'icon-btn', 'aria-label': 'Volver', onclick: () => app.back() }, icon('back')),
         h('span', { class: 'bar-title' }, mode === 'week' ? 'Resumen semanal' : 'Resumen del mes')),
       this.body);
+    // deslizar a los lados: semana (o mes) anterior / siguiente, como las flechas
+    let x0 = 0, y0 = 0, t0 = 0, on = false;
+    this.el.addEventListener('touchstart', (ev) => {
+      const t = ev.touches[0];
+      on = ev.touches.length === 1;
+      x0 = t.clientX; y0 = t.clientY; t0 = Date.now();
+    }, { passive: true });
+    this.el.addEventListener('touchend', (ev) => {
+      if (!on) return;
+      on = false;
+      const t = ev.changedTouches[0];
+      const dx = t.clientX - x0, dy = t.clientY - y0;
+      if (Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy) * 1.6 || Date.now() - t0 > 800) return;
+      this.nav?.(dx < 0 ? 1 : -1);
+    }, { passive: true });
   }
+
+  /** Ir a la semana (o mes) anterior (-1) o siguiente (1); no se pasa de la actual. */
+  private nav?: (d: number) => void;
 
   enter(): void {
     if (this.mode === 'month') this.app.store.markSummarySeen(monthKey(addMonths(monthStart(new Date()), -1)));
@@ -59,11 +77,13 @@ export class MonthScreen implements Screen {
       title = t0.charAt(0).toUpperCase() + t0.slice(1);
     }
     const go = (d: number) => {
+      if (d > 0 && isNow) return;
       if (W) this.week = addWeeks(this.week, d);
       else this.month = addMonths(this.month, d);
       this.render();
       window.scrollTo(0, 0);
     };
+    this.nav = go;
     append(this.body,
       h('div', { class: 'card-head month-nav' },
         h('button', { class: 'icon-btn small', 'aria-label': W ? 'Semana anterior' : 'Mes anterior', onclick: () => go(-1) }, icon('back')),

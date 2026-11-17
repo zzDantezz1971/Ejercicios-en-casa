@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-17T07:55:08Z",
+    "es": ["Inicio › «Esta semana»: los «días seguidos» cuentan solo desde el lunes de esta semana.", "Resumen semanal y del mes: desliza a los lados para pasar a la semana o al mes anterior o siguiente."],
+    "ca": ["Inici › «Aquesta setmana»: els «dies seguits» compten només des del dilluns d’aquesta setmana.", "Resum setmanal i del mes: llisca als costats per passar a la setmana o al mes anterior o següent."],
+    "en": ["Home › “This week”: “days in a row” now only count from this week’s Monday.", "Weekly and monthly summary: swipe sideways to go to the previous or next week or month."]
+  },
+  {
     "fecha": "2026-11-17T07:51:50Z",
     "es": ["Inicio › «Esta semana»: al abrir un día y deslizar, solo se pasa por los entrenamientos de esta semana."],
     "ca": ["Inici › «Aquesta setmana»: en obrir un dia i lliscar, només es passa pels entrenaments d’aquesta setmana."],

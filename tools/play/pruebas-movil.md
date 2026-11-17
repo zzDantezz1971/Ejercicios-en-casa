@@ -45,6 +45,8 @@ Marca cada punto al probarlo. Si algo falla, haz una captura y cuéntamelo.
 - [ ] Les meves taules: título en una línea y debajo, pequeños y a la derecha, «+ Grup» y «+ Taula» (los dos azules). «+ Grup»: crear un grupo; en los ··· de una taula, «Mou a un grup» (también «+ Grup nou»); si ya está en un grupo, «Mou a un altre grup» y «Treu del grup» directamente en los ···; al entrar en Taules (también al volver de editar), todos los grupos salen plegados con «N taules · En ús»; al tocarlo se abren sus tablas; ··· del grupo: canviar nom / esborrar: casilla «Esborra també les taules» desmarcada (sin marcar, las tablas vuelven a la lista; marcada, segundo aviso «Esborra-ho tot» y se borran grupo y tablas). Se guarda al cerrar la app y en la copia.
 - [ ] Edita la taula: asa de arrastrar (izquierda) y botones Canvia / Treu (derecha) más grandes y centrados en vertical en cada ejercicio; arrastrar sigue funcionando.
 - [ ] Inici › «Aquesta setmana»: tocar un día entrenado abre su entrenamiento; deslizar / flechas solo pasan por los de esta semana (también con Prèmium).
+- [ ] Inici › «Aquesta setmana»: «N dies seguits» solo cuenta desde el dilluns (si entrenaste domingo y lunes, el lunes/martes pone 1).
+- [ ] Resum setmanal / Resum del mes: deslizar a la derecha = semana/mes anterior; a la izquierda = siguiente (no pasa de la actual).
 - [ ] **Versión gratis nueva** (sin suscripción ni código):
   - [ ] Todos los ejercicios se pueden ver y elegir, sin candados.
   - [ ] Inicio con la tabla vacía: «Tabla vacía» funciona; «Créala por mí», «Tablas hechas» y «Plan de la semana» con candado (abren Prémium).

@@ -121,7 +121,8 @@ export class HomeScreen implements Screen {
     const days = trainedDays(app.store.history);
     const monday = startOfWeek(now);
     const todayKey = dayKey(now);
-    const run = streak(app.store.history, now);
+    // días seguidos dentro de esta semana (desde el lunes): lo de la semana pasada no cuenta aquí
+    const run = streak(app.store.history.filter((e) => new Date(e.date) >= monday), now);
     const weekCount = WEEKDAY_LETTERS.filter((_, i) => days.has(dayKey(addDays(monday, i)))).length;
     this.el.append(
       h('section', { class: 'card week' },
