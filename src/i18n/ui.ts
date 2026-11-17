@@ -1258,6 +1258,9 @@ const ROWS: Row[] = [
   ["La música baja durante la voz y los pitidos, y la voz suena más alta para que se oiga bien.", "La música baixa durant la veu i els xiulets, i la veu sona més forta perquè se senti bé.", "The music lowers during the voice and beeps, and the voice is louder so you can hear it clearly."],
   ["La música sigue igual mientras habla la app.", "La música continua igual mentre parla l’app.", "The music stays the same while the app speaks."],
   ["En la app de Android, la música baja mientras la app habla o pita, y la voz suena más alta. En Configuración › Avisos puedes elegir que se pare un momento o que no cambie.", "A l’app d’Android, la música baixa mentre l’app parla o xiula, i la veu sona més forta. A Configuració › Avisos pots triar que s’aturi un moment o que no canviï.", "In the Android app, the music goes down while the app speaks or beeps, and the voice is louder. In Settings › Alerts you can choose to pause it for a moment or leave it unchanged."],
+  ["Avisos a la hora exacta", "Avisos a l’hora exacta", "Reminders on time"],
+  ["Android no deja que los avisos lleguen a la hora justa y pueden llegar tarde. Permite «Alarmas y recordatorios» para Kasa Fit.", "Android no deixa que els avisos arribin a l’hora justa i poden arribar tard. Permet «Alarmes i recordatoris» per a Kasa Fit.", "Android isn’t letting reminders arrive right on time, so they may come late. Allow “Alarms & reminders” for Kasa Fit."],
+  ["Permitir", "Permet", "Allow"],
 ];
 
 export const UI_CA: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[1]]));

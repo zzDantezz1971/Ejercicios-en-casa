@@ -4,6 +4,8 @@ Recordatorio: **cuando instales la app de prueba** (el APK de GitHub o la prueba
 Marca cada punto al probarlo. Si algo falla, haz una captura y cuéntamelo.
 
 ## 0d. Para probar en el build 19
+- [ ] Recordatoris (y Recordatoris › Pla de la setmana): si Android no deja avisos a la hora exacta, sale la tarjeta «Avisos a l’hora exacta» con «Permet»; al permitirlo en el ajuste del móvil y volver, desaparece.
+- [ ] Recordatorio de un plan de la semana para dentro de 3–5 minutos, un día del plan y sin haber entrenado hoy: llega la notificación a la hora (con la app cerrada).
 - [ ] Configuració › Avisos › «Música mentre parla l’app»: la primera opción es «Baixa» y es la de serie en una instalación nueva (quien ya tenía elegida otra la conserva).
 
 ## 0c. Para probar en el build 18 (probado: la pausa y la voz amplificada van bien)

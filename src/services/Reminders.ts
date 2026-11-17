@@ -28,6 +28,31 @@ export async function askNotificationPermission(): Promise<boolean> {
   }
 }
 
+/** ¿Android deja programar avisos a la hora exacta? (Android 12 o más: ajuste «Alarmas y recordatorios».) */
+export async function exactAllowed(): Promise<boolean> {
+  if (!IS_NATIVE) return true;
+  try {
+    return (await LocalNotifications.checkExactNotificationSetting()).exact_alarm === 'granted';
+  } catch {
+    return true;
+  }
+}
+
+/** Abre el ajuste del móvil para permitir los avisos a la hora exacta. */
+export async function allowExact(): Promise<void> {
+  if (!IS_NATIVE) return;
+  try {
+    await LocalNotifications.changeExactNotificationSetting();
+  } catch {
+    /* sin ese ajuste (Android antiguo): ya se puede */
+  }
+}
+
+/** Una llamada al sistema que no contesta no puede dejar los avisos parados para siempre. */
+function withTimeout<T>(p: Promise<T>, ms: number): Promise<T | undefined> {
+  return Promise.race([p, new Promise<undefined>((r) => window.setTimeout(() => r(undefined), ms))]);
+}
+
 let timer = 0;
 let busy: Promise<void> = Promise.resolve();
 
@@ -36,7 +61,7 @@ export function rescheduleReminders(store: Store, premium: () => boolean): void 
   if (!IS_NATIVE) return;
   window.clearTimeout(timer);
   timer = window.setTimeout(() => {
-    busy = busy.then(() => reschedule(store, premium())).catch(() => undefined);
+    busy = busy.then(() => withTimeout(reschedule(store, premium()), 15000)).then(() => undefined, () => undefined);
   }, 800);
 }
 
@@ -57,7 +82,11 @@ async function reschedule(store: Store, premium: boolean): Promise<void> {
   const byPlan = planDayReminders(new Date(), plans.map((p) => ({ days: p.days.map((d) => d.day), time: p.remind!.time })), store.history.map((e) => e.date));
   if (!plan.length && !byPlan.length) return;
   if ((await LocalNotifications.checkPermissions()).display !== 'granted') return;
-  const look = { smallIcon: 'ic_stat_kasa', iconColor: '#3D6BFF' };
+  // a la hora exacta solo si Android lo permite: si no, el complemento abriría el ajuste del sistema cada vez
+  // (y, con la app en segundo plano, se quedaba esperando y ya no programaba nada); así llegan, aunque con algún
+  // minuto de retraso, hasta que se permita en Recordatorios
+  const exact = await exactAllowed();
+  const look = { smallIcon: 'ic_stat_kasa', iconColor: '#3D6BFF', isExactNotification: exact };
   await LocalNotifications.schedule({
     notifications: [
       ...plan.map((p) => ({ id: p.id, title: tr(TEXT[p.kind][0]), body: tr(TEXT[p.kind][1]), schedule: { at: p.at, allowWhileIdle: true }, ...look })),

@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-17T19:52:55Z",
+    "es": ["App Android: los recordatorios ya no se quedan sin programar si el móvil no permite avisos a la hora exacta. Si es así, en Recordatorios sale un botón «Permitir» para que lleguen a la hora justa."],
+    "ca": ["App Android: els recordatoris ja no es queden sense programar si el mòbil no permet avisos a l’hora exacta. Si és així, a Recordatoris surt un botó «Permet» perquè arribin a l’hora justa."],
+    "en": ["Android app: reminders no longer fail to be scheduled when the phone doesn’t allow exact-time alerts. If so, Reminders shows an “Allow” button so they arrive right on time."]
+  },
+  {
     "fecha": "2026-11-17T19:44:28Z",
     "es": ["App Android: de serie, la música ahora baja mientras habla la app (con la voz más alta) en lugar de pararse. Se puede cambiar en Configuración › Avisos."],
     "ca": ["App Android: de sèrie, la música ara baixa mentre parla l’app (amb la veu més forta) en lloc d’aturar-se. Es pot canviar a Configuració › Avisos."],

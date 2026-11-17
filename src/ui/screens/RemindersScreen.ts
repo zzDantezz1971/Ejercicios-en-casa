@@ -1,6 +1,6 @@
 import { LOCALE } from '../../i18n';
 import { remindersOf, type ReminderKind, type ReminderSettings } from '../../domain/reminders';
-import { askNotificationPermission, REMINDERS_AVAILABLE } from '../../services/Reminders';
+import { allowExact, askNotificationPermission, exactAllowed, REMINDERS_AVAILABLE } from '../../services/Reminders';
 import { HAS_BACKUP } from '../../services/Backup';
 import type { App, Screen } from '../App';
 import { clear, confirmDialog, h, keepScroll } from '../dom';
@@ -22,6 +22,28 @@ const OPTIONS: Array<{ kind: ReminderKind; icon: IconName; title: string; help: 
 ];
 
 /** Recordatorios: elige qué te avisa (entrenamiento, peso, copia) y, para cada uno, los días y la hora. */
+/**
+ * Aviso si Android no deja programar a la hora exacta (Android 12 o más, ajuste «Alarmas y recordatorios»): sin él,
+ * los recordatorios pueden llegar bastante más tarde. Se rellena al saber la respuesta (vacío si ya está permitido).
+ */
+function exactCard(): HTMLElement {
+  const box = h('div', { class: 'rem-exact-box' });
+  if (!REMINDERS_AVAILABLE) return box;
+  void exactAllowed().then((ok) => {
+    if (ok) return;
+    box.append(h('section', { class: 'card rem-card rem-exact' },
+      h('div', { class: 'switch-row' },
+        h('span', { class: 'set-icon' }, icon('info')),
+        h('span', { class: 'set-text' }, h('strong', {}, 'Avisos a la hora exacta'),
+          h('span', { class: 'muted block small' }, 'Android no deja que los avisos lleguen a la hora justa y pueden llegar tarde. Permite «Alarmas y recordatorios» para Kasa Fit.'))),
+      h('button', { class: 'btn primary block', onclick: async () => {
+        await allowExact();
+        if (await exactAllowed()) box.replaceChildren();
+      } }, 'Permitir')));
+  });
+  return box;
+}
+
 export class RemindersScreen implements Screen {
   readonly el = h('main', { class: 'screen reminders-screen' });
   private body = h('div', { class: 'settings-body' });
@@ -87,7 +109,8 @@ export class RemindersScreen implements Screen {
     const premium = this.app.access.premium;
     this.body.append(h('p', { class: 'muted small rem-intro' }, REMINDERS_AVAILABLE
       ? 'Elige qué quieres que te recuerde y, para cada uno, los días y la hora. Llegan como notificación aunque la app esté cerrada.'
-      : 'Los recordatorios llegan como notificación en la app de Android, aunque esté cerrada. Aquí puedes ver cómo se configuran.'));
+      : 'Los recordatorios llegan como notificación en la app de Android, aunque esté cerrada. Aquí puedes ver cómo se configuran.'),
+      exactCard());
     // la copia de seguridad solo existe en la web
     for (const o of OPTIONS.filter((x) => x.kind !== 'backup' || HAS_BACKUP)) {
       const locked = !!o.premium && !premium;
@@ -170,7 +193,7 @@ export class PlanRemindersScreen implements Screen {
     clear(this.body);
     const { app } = this;
     const plans = app.store.plans;
-    this.body.append(h('p', { class: 'muted small rem-intro' }, 'Cada plan te avisa sus días de entrenamiento, a la hora que elijas. Si ese día ya has entrenado, no te avisa. Al borrar un plan, se borra también su aviso.'));
+    this.body.append(h('p', { class: 'muted small rem-intro' }, 'Cada plan te avisa sus días de entrenamiento, a la hora que elijas. Si ese día ya has entrenado, no te avisa. Al borrar un plan, se borra también su aviso.'), exactCard());
     if (!plans.length) {
       this.body.append(h('section', { class: 'card rem-card rem-empty' }, h('p', { class: 'muted' }, 'Aún no tienes ningún plan de la semana.')));
       return;
