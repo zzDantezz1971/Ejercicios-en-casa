@@ -51,7 +51,11 @@ export class SettingsScreen implements Screen {
   private update(patch: Partial<Settings>): void {
     this.app.store.saveSettings({ ...this.app.store.settings, ...patch });
     this.app.applySettings();
+    // se vuelve a pintar sin moverse de sitio (si no, cada toque en − / + llevaba arriba del todo)
+    const y = window.scrollY;
     this.render();
+    window.scrollTo(0, y);
+    requestAnimationFrame(() => window.scrollTo(0, y));
   }
 
   /** Fecha y hora de la versión instalada y botón para buscar una nueva. */

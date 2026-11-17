@@ -3,6 +3,9 @@
 Recordatorio: **cuando instales la app de prueba** (el APK de GitHub o la prueba interna de Play), repasa esta lista.
 Marca cada punto al probarlo. Si algo falla, haz una captura y cuéntamelo.
 
+## 0b. Para probar en el build 17
+- [ ] Configuració › Temps d’exercicis › Pausa entre exercicis: tocar − / + no hace saltar la pantalla arriba (también en los demás ajustes).
+
 ## 0. Para probar en el build 16 (cambios hechos durante la prueba del build 15)
 - [ ] Botón atrás de Android: vuelve a la pantalla anterior; en Inici cierra la app (antes cerraba la app desde cualquier pantalla).
 - [ ] Versión gratis, «Afegeix un exercici»: primero el grupo «Gratis»; los de Prèmium con candado y al tocarlos se abre Prèmium (antes se podían marcar).

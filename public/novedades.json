@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-17T15:54:14Z",
+    "es": ["Ajustes: al cambiar un valor (por ejemplo, la pausa entre ejercicios con − y +) la pantalla ya no vuelve arriba del todo."],
+    "ca": ["Configuració: en canviar un valor (per exemple, la pausa entre exercicis amb − i +) la pantalla ja no torna amunt de tot."],
+    "en": ["Settings: changing a value (for example, the rest between exercises with − and +) no longer jumps back to the top."]
+  },
+  {
     "fecha": "2026-11-17T08:13:38Z",
     "es": ["Guía: el menú Tablas está reordenado y más corto (sin repeticiones), y el menú Historial explica lo que hay ahora."],
     "ca": ["Guia: el menú Taules està reordenat i és més curt (sense repeticions), i el menú Historial explica el que hi ha ara."],
