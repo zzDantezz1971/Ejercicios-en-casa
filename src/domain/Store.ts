@@ -716,6 +716,8 @@ export class Store {
     settings.phrases = typeof known.phrases === 'boolean' ? known.phrases : true;
     if (!['ca', 'es', 'en'].includes(settings.lang)) settings.lang = 'ca';
     if (!['dark', 'light', 'auto'].includes(settings.theme)) settings.theme = 'dark';
+    // antes solo había «bajar la música» (sí / no); quien lo tenía apagado sigue sin tocarla
+    if (!['pause', 'duck', 'off'].includes(known.musicMode as string)) settings.musicMode = known.duckMusic === false ? 'off' : 'pause';
     // solo queda el muñeco de piezas (el realista y el de dibujo se quitaron)
     settings.figureStyle = 'pieces';
     // material: quien ya usaba la app (antes de existir esta opción) tenía mancuernas y banco

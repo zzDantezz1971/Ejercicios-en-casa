@@ -1250,6 +1250,14 @@ const ROWS: Row[] = [
   ['Entrenamientos de fuerza', 'Entrenaments de força', 'Strength workouts'],
   ['Subir de peso', 'Pujar de pes', 'Going heavier'],
   ['Esta versión de la app no puede comprobar códigos.', 'Aquesta versió de l’app no pot comprovar codis.', 'This version of the app can’t check codes.'],
+  ["Música mientras habla la app", "Música mentre parla l’app", "Music while the app speaks"],
+  ["Se pausa", "S’atura", "Pauses"],
+  ["Se baja", "Baixa", "Lowers"],
+  ["No cambia", "No canvia", "No change"],
+  ["Si escuchas música (Spotify, la radio...), se para un momento cuando habla la app y luego sigue sola.", "Si escoltes música (Spotify, la ràdio...), s’atura un moment quan parla l’app i després continua sola.", "If you’re listening to music (Spotify, the radio...), it stops for a moment while the app speaks and then carries on by itself."],
+  ["La música baja durante la voz y los pitidos, y la voz suena más alta para que se oiga bien.", "La música baixa durant la veu i els xiulets, i la veu sona més forta perquè se senti bé.", "The music lowers during the voice and beeps, and the voice is louder so you can hear it clearly."],
+  ["La música sigue igual mientras habla la app.", "La música continua igual mentre parla l’app.", "The music stays the same while the app speaks."],
+  ["En la app de Android, la música se para un momento mientras la app habla y luego sigue sola. En Configuración › Avisos puedes elegir que solo baje (con la voz más alta) o que no cambie.", "A l’app d’Android, la música s’atura un moment mentre l’app parla i després continua sola. A Configuració › Avisos pots triar que només baixi (amb la veu més forta) o que no canviï.", "In the Android app, the music stops for a moment while the app speaks and then carries on by itself. In Settings › Alerts you can choose to just lower it (with a louder voice) or leave it unchanged."],
 ];
 
 export const UI_CA: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[1]]));

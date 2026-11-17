@@ -3,7 +3,7 @@ import { weekStart } from '../domain/monthSummary';
 import { App as NativeApp } from '@capacitor/app';
 import { IS_NATIVE } from '../platform/native';
 import { setAngleStore } from '../figure/angles';
-import { setMusicDuck } from '../services/MusicDuck';
+import { setMusicMode } from '../services/MusicDuck';
 import { applyColor, setColorGate } from '../platform/theme';
 import { rescheduleReminders } from '../services/Reminders';
 import { setFigureStyle } from '../figure/skinAsset';
@@ -142,7 +142,7 @@ export class App {
     this.sounds.enabled = this.store.settings.sound;
     this.voice.enabled = this.store.settings.voice;
     void this.voice.useVoice(this.store.settings.voiceId);
-    setMusicDuck(this.store.settings.duckMusic);
+    setMusicMode(this.store.settings.musicMode);
     // tema de color (los de pago, solo con Prémium)
     setColorGate(() => this.access.premium);
     applyColor(this.store.settings.colorTheme);

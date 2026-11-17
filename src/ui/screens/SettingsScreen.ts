@@ -372,6 +372,21 @@ export class SettingsScreen implements Screen {
         icon('chevron')));
   }
 
+  /** Qué hace la música de otras apps (Spotify, la radio...) cuando habla la app. */
+  private musicCard(s: Settings): HTMLElement {
+    const m = s.musicMode;
+    const opt = (v: Settings['musicMode'], label: string) =>
+      h('button', { class: 'seg' + (m === v ? ' on' : ''), 'aria-pressed': String(m === v), onclick: () => this.update({ musicMode: v }) }, label);
+    const help = m === 'pause' ? 'Si escuchas música (Spotify, la radio...), se para un momento cuando habla la app y luego sigue sola.'
+      : m === 'duck' ? 'La música baja durante la voz y los pitidos, y la voz suena más alta para que se oiga bien.'
+      : 'La música sigue igual mientras habla la app.';
+    return h('section', { class: 'card setting rest-card lang-card' },
+      h('div', { class: 'rest-head' },
+        h('span', { class: 'set-icon' }, icon('music')),
+        h('div', { class: 'set-text' }, h('strong', {}, 'Música mientras habla la app'), h('p', { class: 'muted small' }, help))),
+      h('div', { class: 'segmented lang-segs' }, opt('pause', 'Se pausa'), opt('duck', 'Se baja'), opt('off', 'No cambia')));
+  }
+
   /** Suscripción de la app de Google Play (o acceso con código); en la web, la vista previa de la versión gratis. */
   private accessCard(): HTMLElement {
     const a = this.app.access;
@@ -428,7 +443,7 @@ export class SettingsScreen implements Screen {
             h('button', { 'aria-label': 'Más', disabled: v >= f.max, onclick: () => this.update({ [f.key]: Math.min(f.max, v + f.step) }) }, '+')),
           h('p', { class: 'muted small sc-help' }, f.help));
       })));
-    const toggle = (key: 'sound' | 'voice' | 'voiceCount' | 'phrases' | 'duckMusic', ic: IconName, label: string, help: string) =>
+    const toggle = (key: 'sound' | 'voice' | 'voiceCount' | 'phrases', ic: IconName, label: string, help: string) =>
       h('section', { class: 'card setting' },
         h('label', { class: 'switch-row', for: `set-${key}` },
           h('span', { class: 'set-icon' }, icon(ic)),
@@ -440,7 +455,7 @@ export class SettingsScreen implements Screen {
       toggle('voice', 'voice', 'Avisos por voz', 'Dice el nombre del ejercicio, el siguiente y cuándo cambiar de lado.'),
       s.voice ? toggle('voiceCount', 'hourglass', 'Cuenta atrás por voz', 'Dice "tres, dos, uno" al final de cada ejercicio, descanso y cuenta atrás.') : null,
       s.voice && this.app.voice.available ? this.voiceCard() : null,
-      IS_NATIVE ? toggle('duckMusic', 'music', 'Bajar la música mientras habla la app', 'Si escuchas música (Spotify, la radio...), baja el volumen durante la voz y los pitidos y luego vuelve a subir.') : null,
+      IS_NATIVE ? this.musicCard(s) : null,
       h('button', {
         class: 'btn ghost block',
         onclick: () => {

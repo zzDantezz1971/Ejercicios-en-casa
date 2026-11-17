@@ -168,6 +168,9 @@ export type Routine = Record<SectionId, RoutineItem[]>;
 export const FIGURE_STYLES = ['real', 'toon', 'pieces'] as const;
 export type FigureStyle = (typeof FIGURE_STYLES)[number];
 
+/** Música de otras apps mientras habla la app. */
+export type MusicMode = 'pause' | 'duck' | 'off';
+
 export interface Settings {
   /** Pausa entre ejercicios de cada apartado (s). */
   rest: Record<SectionId, number>;
@@ -185,6 +188,9 @@ export interface Settings {
   voiceId?: string;
   /** App Android: bajar la música de otras apps (Spotify, radio...) mientras la app habla o pita. */
   duckMusic: boolean;
+  /** App Android: qué hace la música de otras apps cuando habla la app: se pausa, se baja (y la voz suena más alta)
+   *  o no cambia. Sustituye a duckMusic (que se deja por los datos antiguos). */
+  musicMode: MusicMode;
   /** Al empezar, preguntar por el reloj (pulsaciones) si no está conectado. */
   askWatch: boolean;
   /** Datos personales para calcular las calorías. */
@@ -244,6 +250,7 @@ export const DEFAULT_SETTINGS: Settings = {
   phrases: true,
   voiceCount: true,
   duckMusic: true,
+  musicMode: 'pause',
   askWatch: true,
   profile: { age: null, height: null, sex: 'h' },
   lang: 'ca',

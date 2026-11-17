@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-17T19:27:28Z",
+    "es": ["App Android: nuevo ajuste «Música mientras habla la app» en Configuración › Avisos. De serie, la música se pausa un momento cuando habla la app y luego sigue sola; si eliges «Se baja», la música baja y la voz suena más alta."],
+    "ca": ["App Android: nou ajust «Música mentre parla l’app» a Configuració › Avisos. De sèrie, la música s’atura un moment quan parla l’app i després continua sola; si tries «Baixa», la música baixa i la veu sona més forta."],
+    "en": ["Android app: new “Music while the app speaks” setting in Settings › Alerts. By default the music pauses for a moment while the app speaks and then carries on; if you choose “Lowers”, the music goes down and the voice is louder."]
+  },
+  {
     "fecha": "2026-11-17T18:30:22Z",
     "es": ["Si esta versión de la app no puede comprobar códigos de acceso, ahora lo dice claramente en lugar de «código no válido»."],
     "ca": ["Si aquesta versió de l’app no pot comprovar codis d’accés, ara ho diu clarament en lloc de «codi no vàlid»."],

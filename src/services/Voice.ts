@@ -1,7 +1,8 @@
 import { TextToSpeech } from '@capacitor-community/text-to-speech';
 import { LANG, type Lang } from '../i18n';
 import { IS_NATIVE } from '../platform/native';
-import { duckWhile, stopSpeechDuck } from './MusicDuck';
+import { KasaNative } from '../platform/kasaNative';
+import { duckWhile, loudVoice, stopSpeechDuck } from './MusicDuck';
 
 const CODE: Record<Lang, string> = { ca: 'ca', es: 'es', en: 'en' };
 
@@ -54,6 +55,8 @@ export class Voice {
   private chosenId = '';
   /** App Android: posición de la voz elegida en la lista del motor de voz. */
   private nativeIndex: number | undefined;
+  /** App Android: nombre de esa voz (para la voz amplificada, que la busca por nombre). */
+  private nativeName: string | undefined;
   /** Web: todas las voces del navegador para el idioma. */
   private webVoices: SpeechSynthesisVoice[] = [];
 
@@ -112,6 +115,7 @@ export class Voice {
     this.chosenId = id ?? '';
     if (IS_NATIVE) {
       this.nativeIndex = undefined;
+      this.nativeName = undefined;
       if (!this.chosenId) return;
       try {
         const { voices } = await TextToSpeech.getSupportedVoices();
@@ -119,6 +123,7 @@ export class Voice {
         // una voz elegida en otro idioma (p. ej., la catalana al pasar la app a castellano) no se usa:
         // si no, leería el texto en castellano con acento catalán
         this.nativeIndex = i >= 0 && forLang(voices[i].lang, this.lang) ? i : undefined;
+        this.nativeName = this.nativeIndex !== undefined ? this.chosenId : undefined;
       } catch { /* sin lista de voces: la de siempre */ }
       return;
     }
@@ -144,8 +149,15 @@ export class Voice {
   say(text: string, queue = false): void {
     if (!this.enabled) return;
     if (IS_NATIVE) {
-      // la música de otras apps baja mientras habla (la promesa se cumple al acabar la frase)
-      void duckWhile(TextToSpeech.speak({ text, lang: this.nativeLang || 'es-ES', rate: queue ? 1.15 : 1.02, queueStrategy: queue ? 1 : 0, ...(this.nativeIndex !== undefined ? { voice: this.nativeIndex } : {}) })).catch(() => undefined);
+      // la música de otras apps se pausa o baja mientras habla (la promesa se cumple al acabar la frase)
+      const lang = this.nativeLang || 'es-ES';
+      const rate = queue ? 1.15 : 1.02;
+      const plain = () => TextToSpeech.speak({ text, lang, rate, queueStrategy: queue ? 1 : 0, ...(this.nativeIndex !== undefined ? { voice: this.nativeIndex } : {}) });
+      // con la música bajada (no pausada), la voz va amplificada; si eso falla, la normal
+      const speech = loudVoice()
+        ? KasaNative.speakLoud({ text, lang, rate, queue, ...(this.nativeName ? { voice: this.nativeName } : {}) }).catch(plain)
+        : plain();
+      void duckWhile(speech).catch(() => undefined);
       return;
     }
     if (!this.synth) return;
@@ -168,6 +180,7 @@ export class Voice {
   stop(): void {
     if (IS_NATIVE) {
       void TextToSpeech.stop().catch(() => undefined);
+      void KasaNative.stopLoud().catch(() => undefined);
       stopSpeechDuck();
       return;
     }

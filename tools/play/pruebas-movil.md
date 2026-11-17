@@ -3,6 +3,11 @@
 Recordatorio: **cuando instales la app de prueba** (el APK de GitHub o la prueba interna de Play), repasa esta lista.
 Marca cada punto al probarlo. Si algo falla, haz una captura y cuéntamelo.
 
+## 0c. Para probar en el build 18
+- [ ] Configuració › Avisos › «Música mentre parla l’app»: de serie «S’atura». Con Spotify sonando, en un entrenamiento la música se para cuando habla la app y sigue sola después (los pitidos solo la bajan).
+- [ ] «Baixa»: la música baja y la voz suena claramente más alta que antes (también con la voz elegida en Veu). Si en algún momento no habla, apuntarlo.
+- [ ] «No canvia»: la música sigue igual.
+
 ## 0b. Para probar en el build 17
 - [ ] Prèmium › Codi d’accés: un código recién generado entra. Si sale «Aquesta versió de l’app no pot comprovar codis», el build se hizo sin el secreto ACCESS_CODE_SECRET.
 - [ ] Medalles › Força: 15 medallas de 3 en 3, cada fila con su título pequeño (Entrenaments de força, Pujar de pes, Manuelles, Pesa russa, Barra amb discs). Un ejercicio de barra con 40 kg da «Barra carregada», no las de manuelles.
