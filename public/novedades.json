@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-17T07:58:59Z",
+    "es": ["Historial: los récords (rachas, entreno más largo, calorías, mejor mes) tienen el texto más grande."],
+    "ca": ["Historial: els rècords (ratxes, entrenament més llarg, calories, millor mes) tenen el text més gran."],
+    "en": ["History: the records (streaks, longest workout, calories, best month) have larger text."]
+  },
+  {
     "fecha": "2026-11-17T07:55:08Z",
     "es": ["Inicio › «Esta semana»: los «días seguidos» cuentan solo desde el lunes de esta semana.", "Resumen semanal y del mes: desliza a los lados para pasar a la semana o al mes anterior o siguiente."],
     "ca": ["Inici › «Aquesta setmana»: els «dies seguits» compten només des del dilluns d’aquesta setmana.", "Resum setmanal i del mes: llisca als costats per passar a la setmana o al mes anterior o següent."],

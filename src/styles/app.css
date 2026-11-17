@@ -1786,3 +1786,10 @@ button.plan-row { cursor: pointer; }
 .maker-acts .maker-remove::before { display: none; }
 .sort-row.handle-first .drag-handle { width: 36px; align-self: stretch; height: auto; }
 .sort-row.handle-first .drag-handle .ico { width: 22px; height: 22px; }
+
+/* Historial: récords con el texto algo más grande */
+.rec-label { font-size: .92rem; }
+.rec-sub { font-size: .84rem; }
+.rec-top .stat-value { font-size: 1.5rem; }
+.rec-row.two .rec-top .stat-value { font-size: 1.85rem; }
+.rec-top .ico { width: 22px; height: 22px; }
