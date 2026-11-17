@@ -4,6 +4,7 @@ import type { App, Screen } from '../App';
 import { confirmDialog, h, humanDuration, kg, mmss, plural } from '../dom';
 import { icon, SECTION_STYLE } from '../icons';
 import { DetailScreen } from './DetailScreen';
+import { blockNav } from '../components/blockNav';
 
 /** Detalle de un entrenamiento del historial: qué se hizo, cuánto tiempo y repetirlo. */
 export class HistoryDetailScreen implements Screen {
@@ -200,6 +201,8 @@ class HistoryBlockScreen implements Screen {
       h('header', { class: 'bar sticky' },
         h('button', { class: 'icon-btn', 'aria-label': 'Volver', onclick: () => app.back() }, icon('back')),
         h('div', { class: 'titles' }, h('span', { class: 'subtitle' }, date), h('h1', {}, SECTION_TITLES[sec]))),
-      h('section', { class: 'detail-body tv-body' }, head, list));
+      h('section', { class: 'detail-body tv-body' }, head, list,
+        blockNav(SECTION_IDS.filter((x) => (entry.items ?? []).some((i) => i.section === x)), sec,
+          (x, dir) => app.replace(new HistoryBlockScreen(app, entry, x), dir < 0 ? 'back' : 'forward'))));
   }
 }

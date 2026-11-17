@@ -1743,3 +1743,13 @@ button.plan-row { cursor: pointer; }
 /* títulos de bloque del entrenamiento: algo más pequeños y en una sola línea, con el resumen a la derecha */
 .hd-fold .maker-sec { margin: 6px 0; font-size: 1.2rem; flex-wrap: nowrap; white-space: nowrap; min-width: 0; }
 .hd-fold .tv-meta { white-space: nowrap; flex: none; }
+
+/* al final de un bloque: ir al anterior / siguiente */
+.block-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+.block-nav-btn { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 16px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); font: inherit; text-align: left; cursor: pointer; min-width: 0; }
+.block-nav-btn.next { justify-content: flex-end; text-align: right; }
+.block-nav-btn .bn-icon { width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; flex: none; background: color-mix(in srgb, var(--sec) 18%, transparent); color: var(--sec); }
+.block-nav-btn .bn-icon .ico { width: 18px; height: 18px; }
+.block-nav-btn .bn-text { display: flex; flex-direction: column; min-width: 0; }
+.block-nav-btn .bn-text strong { color: var(--sec); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.block-nav-btn .arrow { width: 16px; height: 16px; color: var(--muted); flex: none; }

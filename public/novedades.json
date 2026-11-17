@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-17T06:51:40Z",
+    "es": ["Al ver los ejercicios de un bloque (desde Inicio o desde un entrenamiento del historial), al final hay botones para ir al bloque anterior o al siguiente."],
+    "ca": ["En veure els exercicis d’un bloc (des d’Inici o des d’un entrenament de l’historial), al final hi ha botons per anar al bloc anterior o al següent."],
+    "en": ["When viewing a block’s exercises (from Home or from a workout in History), buttons at the end take you to the previous or next block."]
+  },
+  {
     "fecha": "2026-11-17T06:43:48Z",
     "es": ["Historial › entrenamiento: los bloques se ven como «Contenido de la tabla» en Inicio; al tocar uno se abren sus ejercicios numerados, con el tiempo hecho, el peso y si se saltó."],
     "ca": ["Historial › entrenament: els blocs es veuen com «Contingut de la taula» a Inici; en tocar-ne un s’obren els seus exercicis numerats, amb el temps fet, el pes i si es va saltar."],

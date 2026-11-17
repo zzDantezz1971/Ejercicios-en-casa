@@ -6,6 +6,7 @@ import { icon, SECTION_STYLE, type IconName } from '../icons';
 import { DetailScreen } from './DetailScreen';
 import { neededEquip } from './MakerScreens';
 import { EQUIP_INFO } from '../../domain/equipment';
+import { blockNav } from '../components/blockNav';
 
 /**
  * Ver la tabla en uso, solo para mirar: los ejercicios del apartado elegido (o todos), en el orden en que se harán,
@@ -82,7 +83,10 @@ export class TableViewScreen implements Screen {
           h('span', { class: 'chip' }, icon('clock'), plan.isEmpty ? '—' : humanDuration(plan.estimatedSeconds)),
           h('span', { class: 'chip' }, icon('bolt'), plural(plan.exerciseCount, 'ejercicio', 'ejercicios'))),
         h('p', { class: 'muted small' }, 'Toca un ejercicio para ver cómo se hace.'),
-        ...blocks),
+        ...blocks,
+        // viendo un bloque: al final, botones al bloque anterior y al siguiente (de los que tienen ejercicios)
+        this.focus ? blockNav(SECTION_IDS.filter((x) => table.routine[x].some((i) => app.catalog.has(i.exerciseId))), this.focus,
+          (x, dir) => app.replace(new TableViewScreen(app, x), dir < 0 ? 'back' : 'forward')) : null),
     );
   }
 

@@ -1206,6 +1206,9 @@ const ROWS: Row[] = [
   ['{n} entrenamiento anterior guardado.', '{n} entrenament anterior desat.', '{n} earlier workout saved.'],
   ['{n} entrenamientos anteriores guardados.', '{n} entrenaments anteriors desats.', '{n} earlier workouts saved.'],
   ['Contenido del entrenamiento', 'Contingut de l’entrenament', 'Workout contents'],
+  ['Bloque anterior', 'Bloc anterior', 'Previous block'],
+  ['Bloque siguiente', 'Bloc següent', 'Next block'],
+  ['Otros bloques', 'Altres blocs', 'Other blocks'],
 ];
 
 export const UI_CA: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[1]]));
