@@ -265,6 +265,8 @@ export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement
         h('button', { class: 'maker-open', 'aria-label': `Cómo se hace: ${ex.name}`, onclick: open }, img),
         h('div', { class: 'maker-name' },
           h('button', { class: 'maker-open maker-title', onclick: open }, ex.name),
+          // se hace por lados (una vez con cada lado): que se vea al montar la tabla
+          ex.oneSided ? h('span', { class: 'by-sides small' }, icon('sides'), 'por lados') : '',
           // tiempo (− +) y, al lado, cambiar y quitar: todo a la izquierda (la derecha queda libre para desplazar)
           edit ? h('div', { class: 'maker-ctrls' },
             h('div', { class: 'stepper inline maker-time' },
@@ -617,7 +619,8 @@ class PickExerciseScreen implements Screen {
       h('div', { class: 'pick-top' },
         h('button', { class: 'maker-open', 'aria-label': `Cómo se hace: ${ex.name}`, onclick: () => app.push(new DetailScreen(app, ex, shown)) },
           img,
-          h('span', { class: 'maker-name' }, h('span', {}, ex.name), h('span', { class: 'maker-secs muted small' }, ex.zone))),
+          h('span', { class: 'maker-name' }, h('span', {}, ex.name), h('span', { class: 'maker-secs muted small' }, ex.zone),
+            ex.oneSided ? h('span', { class: 'by-sides small' }, icon('sides'), 'por lados') : '')),
         sel),
       ctrls);
     return row;

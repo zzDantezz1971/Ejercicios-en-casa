@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-17T05:54:55Z",
+    "es": ["Editar tabla y añadir ejercicios: los ejercicios que se hacen por lados lo indican debajo del nombre («por lados»)."],
+    "ca": ["Edita la taula i afegeix exercicis: els exercicis que es fan per costats ho indiquen sota el nom («per costats»)."],
+    "en": ["Edit routine and add exercises: exercises done one side at a time say so under the name (“each side”)."]
+  },
+  {
     "fecha": "2026-11-16T23:58:58Z",
     "es": ["Menú de abajo: Historial va ahora antes que Medallas."],
     "ca": ["Menú de baix: Historial va ara abans que Medalles."],

@@ -36,6 +36,7 @@ Marca cada punto al probarlo. Si algo falla, haz una captura y cuéntamelo.
 - [ ] Modo clar: el fondo del ninot en las fichas de la lista, la animación grande, el entrenamiento y el mapa de músculos es gris claro (no negro). En modo fosc, el fondo del ninot es gris pizarra (no negro) y se ve su sombra oscura; probar también otro tema de color (verd, taronja…).
 - [ ] Medalles: ahora 66 (0 oro, plata y bronce más difíciles); al abrir la app se recalculan una vez con las reglas nuevas (se quitan las que ya no se cumplen, sin aviso). Un entrenamiento de menos de 10 minutos no da medallas. Arriba: «Compten els entrenaments de 10 minuts o més».
 - [ ] Menú de abajo: Inici · Taules · Historial · Medalles · Les meves dades · Configuració.
+- [ ] «Edita la taula» y «Afegeix exercicis»: los ejercicios por lados (p. ej. Rem a una mà recolzat al banc) muestran «⇄ per costats» debajo del nombre.
 - [ ] **Versión gratis nueva** (sin suscripción ni código):
   - [ ] Todos los ejercicios se pueden ver y elegir, sin candados.
   - [ ] Inicio con la tabla vacía: «Tabla vacía» funciona; «Créala por mí», «Tablas hechas» y «Plan de la semana» con candado (abren Prémium).
