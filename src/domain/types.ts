@@ -188,8 +188,8 @@ export interface Settings {
   voiceId?: string;
   /** App Android: bajar la música de otras apps (Spotify, radio...) mientras la app habla o pita. */
   duckMusic: boolean;
-  /** App Android: qué hace la música de otras apps cuando habla la app: se pausa, se baja (y la voz suena más alta)
-   *  o no cambia. Sustituye a duckMusic (que se deja por los datos antiguos). */
+  /** App Android: qué hace la música de otras apps cuando habla la app: se baja (de serie; y la voz suena más alta),
+   *  se pausa o no cambia. Sustituye a duckMusic (que se deja por los datos antiguos). */
   musicMode: MusicMode;
   /** Al empezar, preguntar por el reloj (pulsaciones) si no está conectado. */
   askWatch: boolean;
@@ -250,7 +250,7 @@ export const DEFAULT_SETTINGS: Settings = {
   phrases: true,
   voiceCount: true,
   duckMusic: true,
-  musicMode: 'pause',
+  musicMode: 'duck',
   askWatch: true,
   profile: { age: null, height: null, sex: 'h' },
   lang: 'ca',

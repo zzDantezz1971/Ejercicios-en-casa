@@ -3,7 +3,10 @@
 Recordatorio: **cuando instales la app de prueba** (el APK de GitHub o la prueba interna de Play), repasa esta lista.
 Marca cada punto al probarlo. Si algo falla, haz una captura y cuéntamelo.
 
-## 0c. Para probar en el build 18
+## 0d. Para probar en el build 19
+- [ ] Configuració › Avisos › «Música mentre parla l’app»: la primera opción es «Baixa» y es la de serie en una instalación nueva (quien ya tenía elegida otra la conserva).
+
+## 0c. Para probar en el build 18 (probado: la pausa y la voz amplificada van bien)
 - [ ] Configuració › Avisos › «Música mentre parla l’app»: de serie «S’atura». Con Spotify sonando, en un entrenamiento la música se para cuando habla la app y sigue sola después (los pitidos solo la bajan).
 - [ ] «Baixa»: la música baja y la voz suena claramente más alta que antes (también con la voz elegida en Veu). Si en algún momento no habla, apuntarlo.
 - [ ] «No canvia»: la música sigue igual.

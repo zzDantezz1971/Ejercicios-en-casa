@@ -7,7 +7,7 @@ import type { MusicMode } from '../domain/types';
  * subirla al acabar. Solo en la app Android. Se pide el foco una vez y se mantiene mientras sigan llegando avisos
  * seguidos (p. ej., la cuenta atrás), para que la música no suba y baje a cada pitido.
  */
-let mode: MusicMode = 'pause';
+let mode: MusicMode = 'duck';
 let enabled = true;
 let held = false;
 /** Con qué foco se tiene ahora: para la voz con «pausa», la música se para; para los pitidos, solo baja. */
@@ -44,7 +44,7 @@ function schedule(): void {
   else timer = setTimeout(schedule, wait);
 }
 
-/** Ajuste de Configuración: la música se pausa (de serie), se baja o no cambia. Al apagarlo, vuelve enseguida. */
+/** Ajuste de Configuración: la música se baja (de serie), se pausa o no cambia. Al apagarlo, vuelve enseguida. */
 export function setMusicMode(m: MusicMode): void {
   mode = m;
   enabled = m !== 'off';

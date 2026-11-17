@@ -384,7 +384,7 @@ export class SettingsScreen implements Screen {
       h('div', { class: 'rest-head' },
         h('span', { class: 'set-icon' }, icon('music')),
         h('div', { class: 'set-text' }, h('strong', {}, 'Música mientras habla la app'), h('p', { class: 'muted small' }, help))),
-      h('div', { class: 'segmented lang-segs' }, opt('pause', 'Se pausa'), opt('duck', 'Se baja'), opt('off', 'No cambia')));
+      h('div', { class: 'segmented lang-segs' }, opt('duck', 'Se baja'), opt('pause', 'Se pausa'), opt('off', 'No cambia')));
   }
 
   /** Suscripción de la app de Google Play (o acceso con código); en la web, la vista previa de la versión gratis. */

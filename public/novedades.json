@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-17T19:44:28Z",
+    "es": ["App Android: de serie, la música ahora baja mientras habla la app (con la voz más alta) en lugar de pararse. Se puede cambiar en Configuración › Avisos."],
+    "ca": ["App Android: de sèrie, la música ara baixa mentre parla l’app (amb la veu més forta) en lloc d’aturar-se. Es pot canviar a Configuració › Avisos."],
+    "en": ["Android app: by default the music now goes down while the app speaks (with a louder voice) instead of pausing. You can change it in Settings › Alerts."]
+  },
+  {
     "fecha": "2026-11-17T19:27:28Z",
     "es": ["App Android: nuevo ajuste «Música mientras habla la app» en Configuración › Avisos. De serie, la música se pausa un momento cuando habla la app y luego sigue sola; si eliges «Se baja», la música baja y la voz suena más alta."],
     "ca": ["App Android: nou ajust «Música mentre parla l’app» a Configuració › Avisos. De sèrie, la música s’atura un moment quan parla l’app i després continua sola; si tries «Baixa», la música baixa i la veu sona més forta."],

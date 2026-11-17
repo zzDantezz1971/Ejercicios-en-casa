@@ -24,7 +24,7 @@ const GUIDE: Array<{ icon: IconName; title: string; sub: string; points: Array<s
       'Puedes pausar, saltar un ejercicio, volver al anterior o terminar antes: lo que hayas hecho se guarda en el historial.',
       { h: 'Música' },
       'El botón verde de arriba pausa el entrenamiento y abre Spotify o la app de música del móvil. Al volver, pulsa Reanudar.',
-      'En la app de Android, la música se para un momento mientras la app habla y luego sigue sola. En Configuración › Avisos puedes elegir que solo baje (con la voz más alta) o que no cambie.',
+      'En la app de Android, la música baja mientras la app habla o pita, y la voz suena más alta. En Configuración › Avisos puedes elegir que se pare un momento o que no cambie.',
       'La pausa entre ejercicios y la cuenta atrás de cada bloque se cambian en Ajustes.'] },
   { icon: 'tables', title: 'Menú Tablas', sub: 'Más de 200 ejercicios para armar tus tablas.', points: [
       'Crea tantas tablas como quieras con «+ Tabla»: «Créala por mí» (objetivo, zona, tiempo y nivel, con tu material), una de las «Tablas hechas» o vacía, eligiendo tú los ejercicios.',

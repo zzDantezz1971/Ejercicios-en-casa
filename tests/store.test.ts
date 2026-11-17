@@ -11,12 +11,12 @@ function memory(initial?: string): KeyValue & { data: Map<string, string> } {
 }
 
 describe('Store', () => {
-  it('música al hablar: de serie se pausa; quien tenía apagado «bajar la música» sigue sin tocarla', () => {
-    expect(Store.migrate({}).settings.musicMode).toBe('pause');
-    expect(Store.migrate({ settings: { duckMusic: true } }).settings.musicMode).toBe('pause');
+  it('música al hablar: de serie se baja; quien tenía apagado «bajar la música» sigue sin tocarla', () => {
+    expect(Store.migrate({}).settings.musicMode).toBe('duck');
+    expect(Store.migrate({ settings: { duckMusic: true } }).settings.musicMode).toBe('duck');
     expect(Store.migrate({ settings: { duckMusic: false } }).settings.musicMode).toBe('off');
-    expect(Store.migrate({ settings: { musicMode: 'duck' } }).settings.musicMode).toBe('duck');
-    expect(Store.migrate({ settings: { musicMode: 'xx' } }).settings.musicMode).toBe('pause');
+    expect(Store.migrate({ settings: { musicMode: 'pause' } }).settings.musicMode).toBe('pause');
+    expect(Store.migrate({ settings: { musicMode: 'xx' } }).settings.musicMode).toBe('duck');
   });
 
   it('empieza con una tabla vacía "Mi rutina" y ajustes por defecto', () => {
