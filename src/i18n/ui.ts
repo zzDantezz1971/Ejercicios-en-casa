@@ -875,7 +875,7 @@ const ROWS: Row[] = [
   // Material
   ['Mancuernas', 'Manuelles', 'Dumbbells'],
   ['Pesa rusa', 'Pesa russa', 'Kettlebell'],
-  ['Barra con discos', 'Barra amb discos', 'Barbell'],
+  ['Barra con discos', 'Barra amb discs', 'Barbell with plates'],
   ['Banco', 'Banc', 'Bench'],
   ['Bandas elásticas', 'Bandes elàstiques', 'Resistance bands'],
   ['Step', 'Step', 'Step'],
@@ -1247,6 +1247,8 @@ const ROWS: Row[] = [
   ['Levantador', 'Aixecador', 'Lifter'],
   ['Rey de la barra', 'Rei de la barra', 'King of the bar'],
   ['Un ejercicio con la barra cargada a {n} kg o más (en total).', 'Un exercici amb la barra carregada a {n} kg o més (en total).', 'An exercise with the bar loaded to {n} kg or more (in total).'],
+  ['Entrenamientos de fuerza', 'Entrenaments de força', 'Strength workouts'],
+  ['Subir de peso', 'Pujar de pes', 'Going heavier'],
 ];
 
 export const UI_CA: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[1]]));

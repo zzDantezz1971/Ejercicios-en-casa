@@ -40,6 +40,8 @@ export interface Medal {
   icon: MedalIcon;
   tier: Tier;
   earned: (c: MedalContext) => boolean;
+  /** Serie dentro del grupo (un pequeño título encima de sus medallas), p. ej. «Pesa rusa» en Fuerza. */
+  series?: string;
 }
 
 const sessions = (c: MedalContext) => c.history.length;
@@ -131,7 +133,7 @@ const allBlocksWeek = (c: MedalContext) => {
 };
 
 type M = Omit<Medal, 'group' | 'icon'>;
-const g = (group: MedalGroup, icon: MedalIcon, ms: M[]): Medal[] => ms.map((m) => ({ ...m, group, icon }));
+const g = (group: MedalGroup, icon: MedalIcon, ms: M[], series?: string): Medal[] => ms.map((m) => ({ ...m, group, icon, ...(series ? { series } : {}) }));
 
 export const MEDALS: Medal[] = [
   // Entrenamientos
@@ -171,25 +173,20 @@ export const MEDALS: Medal[] = [
   ]),
   { group: 'peso', id: 'objetivo', title: 'Objetivo cumplido', desc: 'Has llegado a tu objetivo de peso.', icon: 'trophy', tier: 'oro',
     earned: (c) => !!c.goalKg && c.weights.length > 1 && (c.goalKg <= c.weights[0].kg ? c.weights.at(-1)!.kg <= c.goalKg : c.weights.at(-1)!.kg >= c.goalKg) },
-  // Fuerza
+  // Fuerza: primero las generales y después una serie por cada material con peso
+  ...g('fuerza', 'dumbbell', ([[10, 'bronce', 'Constructor'], [50, 'plata', 'Forjado'], [100, 'oro', 'Acero puro']] as Array<[number, Tier, string]>)
+    .map(([n, tier, title]): M => ({ id: `pesas-${n}`, tier, title, desc: `${n} entrenamientos de fuerza.`, earned: (c) => withSection(c, 'pesas') >= n })), 'Entrenamientos de fuerza'),
   ...g('fuerza', 'dumbbell', [
-    ...([[10, 'bronce', 'Constructor'], [50, 'plata', 'Forjado'], [100, 'oro', 'Acero puro']] as Array<[number, Tier, string]>)
-      .map(([n, tier, title]): M => ({ id: `pesas-${n}`, tier, title, desc: `${n} entrenamientos de fuerza.`, earned: (c) => withSection(c, 'pesas') >= n })),
     { id: 'record-peso-1', tier: 'bronce', title: 'Más fuerte', desc: 'Has subido el peso en un ejercicio.', earned: (c) => weightUps(c) >= 1 },
     ...([[5, 'plata', 'Cada vez más fuerte'], [20, 'oro', 'Progreso sin fin']] as Array<[number, Tier, string]>)
       .map(([n, tier, title]): M => ({ id: `record-peso-${n}`, tier, title, desc: `Has subido el peso ${n} veces.`, earned: (c) => weightUps(c) >= n })),
-    // por mancuerna, con pesa rusa y con la barra entera (con discos): bronce, plata y oro de cada una
-    ...([[10, 'bronce', 'Peso pesado'], [15, 'plata', 'Titán'], [20, 'oro', 'Hércules']] as Array<[number, Tier, string]>)
-      .map(([n, tier, title]): M => ({ id: `mancuerna-${n}`, tier, title, desc: `Un ejercicio con ${n} kg o más por mancuerna.`, earned: (c) => maxWeight(c, 'mancuernas') >= n })),
-  ]),
-  ...g('fuerza', 'kettlebell', [
-    ...([[12, 'bronce', 'Bola de hierro'], [16, 'plata', 'Pesa de campeón'], [24, 'oro', 'Zar de la pesa rusa']] as Array<[number, Tier, string]>)
-      .map(([n, tier, title]): M => ({ id: `pesarusa-${n}`, tier, title, desc: `Un ejercicio con una pesa rusa de ${n} kg o más.`, earned: (c) => maxWeight(c, 'kettlebell') >= n })),
-  ]),
-  ...g('fuerza', 'barbell', [
-    ...([[40, 'bronce', 'Barra cargada'], [60, 'plata', 'Levantador'], [80, 'oro', 'Rey de la barra']] as Array<[number, Tier, string]>)
-      .map(([n, tier, title]): M => ({ id: `barra-${n}`, tier, title, desc: `Un ejercicio con la barra cargada a ${n} kg o más (en total).`, earned: (c) => maxWeight(c, 'barra') >= n })),
-  ]),
+  ], 'Subir de peso'),
+  ...g('fuerza', 'dumbbell', ([[10, 'bronce', 'Peso pesado'], [15, 'plata', 'Titán'], [20, 'oro', 'Hércules']] as Array<[number, Tier, string]>)
+    .map(([n, tier, title]): M => ({ id: `mancuerna-${n}`, tier, title, desc: `Un ejercicio con ${n} kg o más por mancuerna.`, earned: (c) => maxWeight(c, 'mancuernas') >= n })), 'Mancuernas'),
+  ...g('fuerza', 'kettlebell', ([[12, 'bronce', 'Bola de hierro'], [16, 'plata', 'Pesa de campeón'], [24, 'oro', 'Zar de la pesa rusa']] as Array<[number, Tier, string]>)
+    .map(([n, tier, title]): M => ({ id: `pesarusa-${n}`, tier, title, desc: `Un ejercicio con una pesa rusa de ${n} kg o más.`, earned: (c) => maxWeight(c, 'kettlebell') >= n })), 'Pesa rusa'),
+  ...g('fuerza', 'barbell', ([[40, 'bronce', 'Barra cargada'], [60, 'plata', 'Levantador'], [80, 'oro', 'Rey de la barra']] as Array<[number, Tier, string]>)
+    .map(([n, tier, title]): M => ({ id: `barra-${n}`, tier, title, desc: `Un ejercicio con la barra cargada a ${n} kg o más (en total).`, earned: (c) => maxWeight(c, 'barra') >= n })), 'Barra con discos'),
   // Bloques
   ...g('apartados', 'check', [
     { id: 'completo-10', tier: 'bronce', title: 'Tabla completa', desc: '10 entrenamientos completos con los cuatro bloques.', earned: (c) => complete(c) >= 10 },

@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-17T18:14:24Z",
+    "es": ["Medallas de Fuerza: cada serie tiene su título (Entrenamientos de fuerza, Subir de peso, Mancuernas, Pesa rusa y Barra con discos)."],
+    "ca": ["Medalles de Força: cada sèrie té el seu títol (Entrenaments de força, Pujar de pes, Manuelles, Pesa russa i Barra amb discs)."],
+    "en": ["Strength medals: each series has its own heading (Strength workouts, Going heavier, Dumbbells, Kettlebell and Barbell with plates)."]
+  },
+  {
     "fecha": "2026-11-17T18:08:15Z",
     "es": ["Medallas de Fuerza ordenadas de 3 en 3, con medallas propias para cada peso: mancuernas (10, 15 y 20 kg por mancuerna), pesa rusa (12, 16 y 24 kg) y barra con discos (40, 60 y 80 kg en total)."],
     "ca": ["Medalles de Força ordenades de 3 en 3, amb medalles pròpies per a cada pes: manuelles (10, 15 i 20 kg per manuella), pesa russa (12, 16 i 24 kg) i barra amb discs (40, 60 i 80 kg en total)."],

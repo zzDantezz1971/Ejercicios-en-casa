@@ -135,13 +135,15 @@ export function medalsBoard(app: App): HTMLElement[] {
         h('span', { class: 'mg-icon' }, icon(g.icon)),
         h('h3', {}, g.title),
         h('span', { class: 'mg-count' }, n === ms.length ? icon('check') : null, `${n}/${ms.length}`)),
-      h('div', { class: 'medal-grid' }, ...ms.map((m) => {
+      h('div', { class: 'medal-grid' }, ...ms.flatMap((m, i) => {
         const when = have[m.id];
-        return h('button', {
+        // al empezar una serie (p. ej. «Pesa rusa»), su título pequeño ocupando toda la fila
+        const head = m.series && m.series !== ms[i - 1]?.series ? [h('p', { class: 'medal-series' }, m.series)] : [];
+        return [...head, h('button', {
           class: 'medal-cell' + (when ? '' : ' locked'),
           'aria-label': `${m.title}${when ? ', conseguida' : ', por conseguir'}`,
           onclick: () => medalDialog(app, m),
-        }, medalBadge(m, !!when), h('span', { class: 'medal-name' }, m.title));
+        }, medalBadge(m, !!when), h('span', { class: 'medal-name' }, m.title))];
       })));
   });
   return [summary, ...groups];
