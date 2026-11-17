@@ -10,7 +10,7 @@ castellano (el texto ya está preparado abajo, en «Castellano», pero **no se s
 
 - Política de privacidad: https://zzdantezz1971.github.io/kasa-fit-privacidad/privacidad.html (repositorio aparte, público, para que siga funcionando cuando el de la app pase a privado)
 - Correo de contacto: exercicisacasa.app@gmail.com
-- Categoría: Salud y forma física · Sin anuncios · Gratis con compras dentro de la app (suscripción Prémium: 0,99 €/mes o 9,99 €/año)
+- Categoría: Salud y forma física · Sin anuncios · Gratis con compras dentro de la app (suscripción Prémium mensual o anual; el precio lo muestra Google Play)
 - En Play Console › Contenido de la app: marcar «Contiene compras dentro de la aplicación».
 
 ---
@@ -32,7 +32,8 @@ Res de registres ni de formularis interminables. Obre l’app, tria l’idioma i
 Cada exercici t’explica com es fa i t’assenyala en vermell els músculs que treballes i en turquesa els que estires.
 
 QUÈ POTS FER
-• Crear les teves taules amb més de 200 exercicis i triar quant dura cadascun i el pes de les manuelles.
+• Crear les teves taules amb més de 200 exercicis i triar quant dura cadascun i el pes (manuelles, pesa russa o barra).
+• Que l’app et faci la taula, triar-ne una de feta o seguir un pla setmanal amb recordatoris.
 • Entrenar amb compte enrere, avisos per veu i vibració, i la pantalla sempre encesa.
 • Connectar un rellotge o un pulsòmetre per Bluetooth i veure el pols mentre entrenes.
 • Consultar l’historial al calendari, els minuts de cada setmana i el resum de cada mes.
@@ -47,7 +48,7 @@ LES TEVES DADES SÓN TEVES
 • Pots fer i recuperar còpies de seguretat quan vulguis.
 
 GRATIS I PRÈMIUM
-Prova-la gratis amb dos exercicis de cada apartat i totes les funcions. Amb Prèmium (0,99 € al mes o 9,99 € l’any) desbloqueges tots els exercicis. Es paga i es cancel·la a Google Play.
+Gratis: tots els exercicis, una taula i l’historial de la setmana. Amb Prèmium (mensual o anual) ho tens tot: «Crea-la per mi», taules fetes, pla setmanal, resums, objectiu de pes, temes i més. Es paga i es cancel·la a Google Play.
 
 En català, castellà i anglès.
 
@@ -70,7 +71,8 @@ Nada de registros ni de formularios interminables. Abres la app, eliges el idiom
 Cada ejercicio te explica cómo se hace y te marca en rojo los músculos que trabajas y en turquesa los que estiras.
 
 QUÉ PUEDES HACER
-• Crear tus tablas con más de 200 ejercicios y elegir cuánto dura cada uno y el peso de las mancuernas.
+• Crear tus tablas con más de 200 ejercicios y elegir cuánto dura cada uno y el peso (mancuernas, pesa rusa o barra).
+• Que la app te haga la tabla, elegir una ya hecha o seguir un plan semanal con recordatorios.
 • Entrenar con cuenta atrás, avisos por voz y vibración, y la pantalla siempre encendida.
 • Conectar un reloj o un pulsómetro por Bluetooth y ver tu pulso mientras entrenas.
 • Consultar tu historial en el calendario, los minutos de cada semana y el resumen de cada mes.
@@ -85,7 +87,7 @@ TUS DATOS SON TUYOS
 • Puedes hacer y recuperar copias de seguridad cuando quieras.
 
 GRATIS Y PRÉMIUM
-Pruébala gratis con dos ejercicios de cada apartado y todas las funciones. Con Prémium (0,99 € al mes o 9,99 € al año) desbloqueas todos los ejercicios. Se paga y se cancela en Google Play.
+Gratis: todos los ejercicios, una tabla y el historial de la semana. Con Prémium (mensual o anual) lo tienes todo: «Créala por mí», tablas hechas, plan semanal, resúmenes, objetivo de peso, temas y más. Se paga y se cancela en Google Play.
 
 En catalán, castellano e inglés.
 
@@ -108,7 +110,8 @@ No sign-up and no endless forms. Open the app, pick your language and start trai
 Each exercise explains how to do it and highlights in red the muscles you work and in teal the ones you stretch.
 
 WHAT YOU CAN DO
-• Build your own routines from over 200 exercises and choose how long each one lasts and your dumbbell weight.
+• Build your own routines from over 200 exercises and choose how long each one lasts and the weight (dumbbells, kettlebell or barbell).
+• Let the app build a routine for you, pick a ready-made one or follow a weekly plan with reminders.
 • Train with a countdown, voice and vibration cues, and the screen always on.
 • Connect a watch or heart rate monitor over Bluetooth and see your heart rate as you train.
 • Check your history on the calendar, your minutes each week and your monthly summary.
@@ -123,6 +126,6 @@ YOUR DATA IS YOURS
 • Make and restore backups whenever you like.
 
 FREE AND PREMIUM
-Try it free with two exercises per section and every feature. With Premium (€0.99 a month or €9.99 a year) you unlock every exercise. Payment and cancellation are handled in Google Play.
+Free: every exercise, one routine and this week’s history. With Premium (monthly or yearly) you get everything: “Make it for me”, ready-made routines, weekly plan, summaries, weight goal, themes and more. Payment and cancellation are handled in Google Play.
 
 In Catalan, Spanish and English.
