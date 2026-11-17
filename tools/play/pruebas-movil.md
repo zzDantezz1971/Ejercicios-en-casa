@@ -41,6 +41,7 @@ Marca cada punto al probarlo. Si algo falla, haz una captura y cuéntamelo.
 - [ ] Historial: tocar los récords (ratxa, entrenament més llarg, calories, millor mes) no hace nada; «Esborra tot l’historial» es un enlace pequeño en rojo al final (sigue pidiendo doble confirmación).
 - [ ] Historial › tocar un día: «Contingut de l’entrenament» con una fila por bloque (como Inici); al tocar un bloque, sus ejercicios numerados (temps fet / previst, kg, per costats, «Saltat»); sin «Repeteix» ni «Copia a un altre dia»; «Esborra aquest entrenament» pequeño al final.
 - [ ] Inici › un bloque y Historial › entrenamiento › un bloque: al final, botones pequeños «‹ [icono] Escalfament» / «[icono] Estiraments ›» (sin el texto «Bloc anterior/següent»); el botón atrás vuelve a Inici / al entrenamiento.
+- [ ] Inici: la frase motivadora cambia al volver a Inici; ahora hay 150 (en el idioma elegido, algunas con tu nombre).
 - [ ] **Versión gratis nueva** (sin suscripción ni código):
   - [ ] Todos los ejercicios se pueden ver y elegir, sin candados.
   - [ ] Inicio con la tabla vacía: «Tabla vacía» funciona; «Créala por mí», «Tablas hechas» y «Plan de la semana» con candado (abren Prémium).
