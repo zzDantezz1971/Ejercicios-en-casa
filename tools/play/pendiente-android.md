@@ -11,6 +11,10 @@
 
 ## Suscripción (0,99 €/mes o 9,99 €/año, sin prueba gratis)
 
+**Estado (17 nov 2026): HECHO en Play Console** — perfil de pagos creado; suscripción `premium` (nombre «Kasa Fit Prèmium»,
+ventajas en ca/es/en-GB) con planes base `mensual` (0,99 €) y `anual` (9,99 €) activos, precios convertidos a todos los
+países. Notificaciones en tiempo real desactivadas (no hay servidor). Falta: pruebas de licencias y probar la compra en el build 16.
+
 La app ya lo tiene programado (`src/services/Access.ts`, pantalla `PaywallScreen`). Modelo (nov 2026): versión gratis con
 todos los ejercicios, una sola tabla (con «Tabla vacía») y el historial de la semana en curso; «Créala por mí»,
 tablas hechas, plan de la semana, resúmenes, objetivo de peso, personalizar el muñeco, temas de color, copia de seguridad y algunos avisos
