@@ -77,7 +77,7 @@ export class PaywallScreen implements Screen {
     const redeem = async () => {
       const name = await this.app.access.redeem(codeInput.value);
       if (name) return this.done();
-      codeMsg.textContent = 'Este código no es válido.';
+      codeMsg.textContent = this.app.access.codesReady ? 'Este código no es válido.' : 'Esta versión de la app no puede comprobar códigos.';
       codeMsg.classList.add('pw-err');
     };
 

@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-17T18:30:22Z",
+    "es": ["Si esta versión de la app no puede comprobar códigos de acceso, ahora lo dice claramente en lugar de «código no válido»."],
+    "ca": ["Si aquesta versió de l’app no pot comprovar codis d’accés, ara ho diu clarament en lloc de «codi no vàlid»."],
+    "en": ["If this version of the app can’t check access codes, it now says so clearly instead of “invalid code”."]
+  },
+  {
     "fecha": "2026-11-17T18:14:24Z",
     "es": ["Medallas de Fuerza: cada serie tiene su título (Entrenamientos de fuerza, Subir de peso, Mancuernas, Pesa rusa y Barra con discos)."],
     "ca": ["Medalles de Força: cada sèrie té el seu títol (Entrenaments de força, Pujar de pes, Manuelles, Pesa russa i Barra amb discs)."],

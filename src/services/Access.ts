@@ -151,6 +151,11 @@ export class Access {
     return this.checkSubscription();
   }
 
+  /** false si esta versión se compiló sin la clave de los códigos (entonces ningún código vale). */
+  get codesReady(): boolean {
+    return SECRET.length > 0;
+  }
+
   /** Canjea un código de acceso. Devuelve el nombre si es válido. */
   async redeem(code: string): Promise<string | null> {
     const name = await checkCode(SECRET, code, REVOKED);

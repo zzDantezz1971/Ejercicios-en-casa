@@ -1249,6 +1249,7 @@ const ROWS: Row[] = [
   ['Un ejercicio con la barra cargada a {n} kg o más (en total).', 'Un exercici amb la barra carregada a {n} kg o més (en total).', 'An exercise with the bar loaded to {n} kg or more (in total).'],
   ['Entrenamientos de fuerza', 'Entrenaments de força', 'Strength workouts'],
   ['Subir de peso', 'Pujar de pes', 'Going heavier'],
+  ['Esta versión de la app no puede comprobar códigos.', 'Aquesta versió de l’app no pot comprovar codis.', 'This version of the app can’t check codes.'],
 ];
 
 export const UI_CA: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[1]]));
