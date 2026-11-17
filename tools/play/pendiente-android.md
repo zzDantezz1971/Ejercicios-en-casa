@@ -42,6 +42,30 @@ una vista previa de la versión gratis). Falta configurarlo en Google:
   para limitar cada código a 2 móviles, ver qué códigos se han canjeado y liberar plazas. Ahora la app comprueba los códigos
   sin internet y nadie sabe si se usan ni en cuántos móviles. Los códigos ya repartidos seguirían valiendo.
 
+## Prueba cerrada (después del build 19)
+
+Los probadores se apuntan solos a un **Grupo de Google** con el Gmail que usan en Play Store. Requisito de Google
+para cuentas personales: **al menos 12 probadores apuntados durante 14 días seguidos** antes de pedir el acceso a producción.
+
+1. **Grupo de Google** (groups.google.com): crear el grupo (p. ej. «Kasa Fit probadors»), tipo de correo
+   `...@googlegroups.com`; en Configuración: «Quién puede unirse: cualquier persona en la web» (o «Pedir unirse» si se
+   quieren aprobar a mano); que no se pueda ver la lista de miembros. Copiar el enlace del grupo.
+2. Play Console › **Contenido de la app**: que no quede nada en rojo (sobre todo **Permisos de salud / Health Connect**,
+   Seguridad de los datos, Clasificación de contenido, Público objetivo, Anuncios = no, Acceso a la app).
+3. Play Console › Prueba › **Prueba cerrada** › pista «Alpha» (o crear una) › pestaña **Testers**: «Grupos de Google» →
+   pegar el correo del grupo. Guardar.
+4. **Países**: España (y los que se quieran).
+5. **Versión**: en Prueba interna, «Promocionar versión › Prueba cerrada» del build 19 (o subir el mismo .aab).
+6. **Resumen de la publicación › Enviar cambios a revisión.** La primera revisión puede tardar unos días.
+7. Aprobada: en Testers, copiar el **enlace para unirse** («Unirse en la web» / opt-in).
+8. Mensaje a los probadores (orden importante): ① unirse al grupo con su Gmail de Play Store; ② abrir el enlace de
+   prueba y pulsar «Convertirse en tester»; ③ instalar desde Play Store (enlace de la ficha). Que no se salgan del
+   grupo ni desinstalen durante los 14 días.
+9. Prémium para probadores: un **código de acceso** para cada uno (generador) o añadir su Gmail a Pruebas de licencias
+   (compras de prueba sin cobro). Si no, la suscripción se cobra de verdad.
+10. Pasados 14 días con ≥12 probadores: Panel › **Solicitar acceso a producción** (preguntas sobre la prueba: cuántos,
+    qué opinaron, qué se cambió). Mientras tanto, ir subiendo versiones a la prueba cerrada con lo que digan.
+
 ## Versión 1.1 (después del lanzamiento)
 
 - **Health Connect: HECHO (adelantado a la 1.0).** Configuració › Apps de salut: interruptor «Desa els entrenaments a
