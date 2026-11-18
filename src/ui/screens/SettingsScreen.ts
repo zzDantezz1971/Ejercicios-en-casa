@@ -1,8 +1,8 @@
 import { LANG, LANGS, LOCALE } from '../../i18n';
 import { applyColor, applyTheme, COLOR_INFO, COLOR_THEMES, FREE_COLORS, type ColorTheme } from '../../platform/theme';
 import { flushDurable } from '../../platform/durable';
-import { showUpdateDialog } from '../components/updateDialog';
-import { BUILD_TIME, checkForUpdate, updateReady } from '../../services/Updates';
+import { showUpdateDialog, showVersionNews } from '../components/updateDialog';
+import { APP_BUILD, APP_VERSION, BUILD_TIME, checkForUpdate, updateReady } from '../../services/Updates';
 import { IS_NATIVE } from '../../platform/native';
 import { healthStatus, installHealth, requestHealth } from '../../services/Health';
 import { remindersOf, type ReminderKind } from '../../domain/reminders';
@@ -64,11 +64,14 @@ export class SettingsScreen implements Screen {
     const when = `${d.toLocaleDateString(LOCALE, { day: 'numeric', month: 'long', year: 'numeric' })}, ${d.toLocaleTimeString(LOCALE, { hour: '2-digit', minute: '2-digit' })}`;
     if (IS_NATIVE) {
       // en la app Android las versiones nuevas llegan por Google Play
-      return h('section', { class: 'card version-card' },
+      // al tocarla: qué hay de nuevo en esta versión
+      return h('button', { class: 'card version-card version-open', onclick: () => void showVersionNews() },
         h('div', { class: 'set-text' },
-          h('strong', {}, 'Versión de la app'),
+          h('strong', {}, APP_BUILD ? `Versión ${APP_BUILD}` : 'Versión de la app'),
+          APP_VERSION ? h('p', { class: 'muted small', 'data-no-tr': '' }, APP_VERSION) : null,
           h('p', { class: 'muted small' }, `Del ${when}`),
-          h('p', { class: 'muted small' }, 'Las actualizaciones llegan desde Google Play.')));
+          h('p', { class: 'muted small version-news' }, 'Toca para ver qué hay de nuevo.')),
+        icon('chevron', 'ico chev'));
     }
     const status = h('p', { class: 'muted small', 'aria-live': 'polite' }, updateReady() ? 'Hay una versión nueva lista.' : '');
     const btn = h('button', { class: 'btn ghost small' }, updateReady() ? 'Actualizar ahora' : 'Buscar actualización');
@@ -88,7 +91,8 @@ export class SettingsScreen implements Screen {
     return h('section', { class: 'card version-card' },
       h('div', { class: 'set-text' },
         h('strong', {}, 'Versión de la app'),
-        h('p', { class: 'muted small' }, `Del ${when}`)),
+        h('p', { class: 'muted small' }, `Del ${when}`),
+        h('button', { class: 'link-btn version-news', onclick: () => void showVersionNews() }, 'Ver novedades')),
       btn,
       status);
   }

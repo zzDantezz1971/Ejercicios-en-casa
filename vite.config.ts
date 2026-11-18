@@ -9,7 +9,13 @@ export default defineConfig(({ mode }) => ({
   base: './',
   resolve: mode === 'android' ? { alias: { 'virtual:pwa-register': fileURLToPath(new URL('./src/platform/pwa-stub.ts', import.meta.url)) } } : undefined,
   // fecha y hora de esta versión (se muestra en Ajustes)
-  define: { __BUILD_TIME__: JSON.stringify(new Date().toISOString()) },
+  // y, en la app Android, su número y nombre de versión y la fecha de la versión anterior (los pone el workflow)
+  define: {
+    __BUILD_TIME__: JSON.stringify(new Date().toISOString()),
+    __APP_BUILD__: JSON.stringify(process.env.ANDROID_VERSION_CODE ?? ''),
+    __APP_VERSION__: JSON.stringify(process.env.ANDROID_VERSION_NAME ?? ''),
+    __PREV_BUILD__: JSON.stringify(process.env.ANDROID_PREV_BUILD ?? ''),
+  },
   plugins: mode === 'android' ? [] : [
     VitePWA({
       // la versión nueva se aplica cuando el usuario pulsa "Actualizar" (nunca en mitad de un entrenamiento)

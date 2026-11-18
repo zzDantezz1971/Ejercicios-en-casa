@@ -1264,6 +1264,10 @@ const ROWS: Row[] = [
   ["Seguir el plan de la semana", "Segueix el pla setmanal", "Follow the weekly plan"],
   ["Te avisa sus días y te dice qué toca.", "T’avisa els seus dies i et diu què toca.", "It reminds you on its days and tells you what’s up."],
   ["Desactivado", "Desactivat", "Off"],
+  ["Versión {n}", "Versió {n}", "Version {n}"],
+  ["Novedades de la versión {n}", "Novetats de la versió {n}", "What’s new in version {n}"],
+  ["Últimas novedades", "Últimes novetats", "Latest changes"],
+  ["Toca para ver qué hay de nuevo.", "Toca per veure què hi ha de nou.", "Tap to see what’s new."],
 ];
 
 export const UI_CA: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[1]]));

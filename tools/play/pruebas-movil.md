@@ -4,6 +4,7 @@ Recordatorio: **cuando instales la app de prueba** (el APK de GitHub o la prueba
 Marca cada punto al probarlo. Si algo falla, haz una captura y cuéntamelo.
 
 ## 0e. Para probar en el build 20
+- [ ] Configuració › al final: «Versió 20» con «2026.11.xx-20» y la fecha; al tocarla, «Novetats de la versió 20» con solo lo hecho desde el build 19 (agrupado por día).
 - [ ] Configuració › Recordatoris (al abrir el grupo): una fila por recordatorio (Entrenament y Pes) con días y hora o «Desactivat»; con «Segueix el pla setmanal», pone «Pla setmanal · días · hora». Tocar cualquiera abre la pantalla de recordatorios.
 
 ## 0d. Para probar en el build 19

@@ -863,6 +863,12 @@ button.hd-row { width: 100%; color: inherit; font: inherit; cursor: pointer; }
 .version-card { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 6px 12px; padding: 14px; margin-top: 8px; }
 .version-card .muted:last-child { grid-column: 1 / -1; margin: 0; }
 .version-card .muted:last-child:empty { display: none; }
+.version-open { width: 100%; text-align: left; color: inherit; font: inherit; cursor: pointer; }
+.version-open .chev { width: 20px; height: 20px; color: var(--muted); }
+.version-open .muted.version-news { grid-column: auto; color: var(--accent); }
+.version-card .version-news { margin-top: 4px; }
+.news-day + .news-day { margin-top: 12px; }
+.news-date { margin: 0 0 4px; }
 .update-banner {
   position: fixed; left: 12px; right: 12px; top: calc(18px + var(--safe-area-inset-top, env(safe-area-inset-top, 0px))); z-index: 80; max-width: 560px; margin: 0 auto;
   display: flex; align-items: center; gap: 10px; padding: 10px 10px 10px 16px; border-radius: 16px;

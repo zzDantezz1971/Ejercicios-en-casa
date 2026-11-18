@@ -9,6 +9,10 @@ let ready = false;
 const listeners = new Set<() => void>();
 
 export const BUILD_TIME: string = typeof __BUILD_TIME__ !== 'undefined' ? __BUILD_TIME__ : new Date().toISOString();
+/** App Android: número y nombre de esta versión, y fecha de la anterior (vacíos en la web). */
+export const APP_BUILD: string = typeof __APP_BUILD__ !== 'undefined' ? __APP_BUILD__ : '';
+export const APP_VERSION: string = typeof __APP_VERSION__ !== 'undefined' ? __APP_VERSION__ : '';
+export const PREV_BUILD: string = typeof __PREV_BUILD__ !== 'undefined' ? __PREV_BUILD__ : '';
 
 export function initUpdates(): void {
   // en la app Android las versiones nuevas llegan por Google Play

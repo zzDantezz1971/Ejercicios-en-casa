@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-18T22:23:21Z",
+    "es": ["Configuración › Versión de la app: en la app de Android sale el número de versión y, al tocarla, lo que hay de nuevo en esa versión. En la web, «Ver novedades» enseña los últimos cambios."],
+    "ca": ["Configuració › Versió de l’app: a l’app d’Android surt el número de versió i, en tocar-la, el que hi ha de nou en aquella versió. Al web, «Mostra les novetats» ensenya els últims canvis."],
+    "en": ["Settings › App version: the Android app shows the version number and, when you tap it, what’s new in that version. On the web, “See what’s new” shows the latest changes."]
+  },
+  {
     "fecha": "2026-11-18T21:52:25Z",
     "es": ["Configuración › Recordatorios: ahora se ve cada recordatorio (entrenamiento, peso…) con sus días y su hora, o «Desactivado», sin tener que entrar."],
     "ca": ["Configuració › Recordatoris: ara es veu cada recordatori (entrenament, pes…) amb els seus dies i l’hora, o «Desactivat», sense haver d’entrar-hi."],

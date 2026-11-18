@@ -13,6 +13,8 @@ on:
 permissions:
   # para guardar en el repositorio la clave de subida cifrada (solo la primera vez)
   contents: write
+  # para saber cuándo se hizo la versión anterior (las novedades de cada versión, en Configuración)
+  actions: read
 
 concurrency:
   group: android
@@ -37,10 +39,15 @@ jobs:
       - run: npm ci
       - run: npm test
       - name: Versión
-        # número de versión para Google Play: tiene que crecer en cada versión subida (el número de compilación)
+        # número de versión para Google Play: tiene que crecer en cada versión subida (el número de compilación);
+        # y la fecha de la última compilación buena (las novedades de esta versión son las posteriores a ella)
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           echo "ANDROID_VERSION_NAME=$(date -u +%Y.%m.%d)-${{ github.run_number }}" >> "$GITHUB_ENV"
           echo "ANDROID_VERSION_CODE=${{ github.run_number }}" >> "$GITHUB_ENV"
+          PREV=$(gh api "repos/${{ github.repository }}/actions/workflows/android.yml/runs?status=success&per_page=1" --jq '.workflow_runs[0].created_at' 2>/dev/null || true)
+          echo "ANDROID_PREV_BUILD=$PREV" >> "$GITHUB_ENV"
       # clave de los códigos de acceso gratis (secreto ACCESS_CODE_SECRET); sin él, los códigos no funcionan
       - run: npm run build:android
         env:
