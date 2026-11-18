@@ -77,6 +77,7 @@ para cuentas personales: **al menos 12 probadores apuntados durante 14 días seg
 - Más adelante, si hace falta: servidor de activaciones de los códigos (ver arriba), app para iPhone, ficha de Play en castellano.
 
 ## Ideas para más adelante
+- **Lista completa de ideas para versiones futuras: `tools/play/ideas-versiones-futuras.md`.**
 - «Mode esquena» dentro de Kasa Fit (o un plan semanal de espalda bien trabajado): ver si se usa antes de pensar en una
   app dedicada. Si un día se hace app aparte: contenido propio (programas progresivos, niveles según el dolor, consejos
   de postura), revisión de un fisioterapeuta, avisos de salud y su propia prueba cerrada de 12 personas y 14 días.
