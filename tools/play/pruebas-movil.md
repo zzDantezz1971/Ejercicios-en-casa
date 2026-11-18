@@ -3,6 +3,9 @@
 Recordatorio: **cuando instales la app de prueba** (el APK de GitHub o la prueba interna de Play), repasa esta lista.
 Marca cada punto al probarlo. Si algo falla, haz una captura y cuéntamelo.
 
+## 0e. Para probar en el build 20
+- [ ] Configuració › Recordatoris (al abrir el grupo): una fila por recordatorio (Entrenament y Pes) con días y hora o «Desactivat»; con «Segueix el pla setmanal», pone «Pla setmanal · días · hora». Tocar cualquiera abre la pantalla de recordatorios.
+
 ## 0d. Para probar en el build 19
 - [ ] Recordatoris: ya no está la tarjeta «Pla setmanal». En «Entrenament», con un plan en uso, sale «Segueix el pla setmanal»: encendido, los días son los del plan (fijos) y la notificación dice «Pla setmanal: … / Avui toca: …»; apagado, eliges los días y dice «Hora d’entrenar».
 - [ ] Quien tenía activado el aviso de un plan (build 18): al actualizar, «Entrenament» queda activado siguiendo el plan (con la hora del aviso del plan si el de entrenar estaba apagado). Solo llega una notificación.

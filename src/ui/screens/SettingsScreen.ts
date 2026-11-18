@@ -5,7 +5,7 @@ import { showUpdateDialog } from '../components/updateDialog';
 import { BUILD_TIME, checkForUpdate, updateReady } from '../../services/Updates';
 import { IS_NATIVE } from '../../platform/native';
 import { healthStatus, installHealth, requestHealth } from '../../services/Health';
-import { REMINDER_KINDS, remindersOf, type ReminderKind } from '../../domain/reminders';
+import { remindersOf, type ReminderKind } from '../../domain/reminders';
 import { dayName, EVERY, RemindersScreen, WEEK } from './RemindersScreen';
 import { Store } from '../../domain/Store';
 import { SECTION_IDS, SECTION_TITLES, type Settings } from '../../domain/types';
@@ -357,19 +357,37 @@ export class SettingsScreen implements Screen {
   }
 
   /** Recordatorios: abre su pantalla; debajo, un resumen de los que están activos. */
+  /**
+   * Recordatorios: una fila por cada uno (entrenamiento, peso y, en la web, copia), con sus días y su hora o «Desactivado».
+   * Cualquiera abre la pantalla de recordatorios.
+   */
   private remindersCard(): HTMLElement {
     const r = remindersOf(this.app.store.settings.reminders);
-    const names: Record<ReminderKind, string> = { train: 'Entrenamiento', weigh: 'Peso', backup: 'Copia de seguridad' };
-    const active = REMINDER_KINDS.filter((k) => r[k].on && r[k].days.length && (k !== 'backup' || (HAS_BACKUP && this.app.access.premium)));
-    // con alguno activo: campana encendida con el número de recordatorios y la tarjeta resaltada
-    return h('button', { class: 'card setting rest-card look-open rem-open' + (active.length ? ' on' : ''), onclick: () => this.app.push(new RemindersScreen(this.app)) },
-      h('div', { class: 'rest-head' },
-        h('span', { class: 'set-icon rem-bell' }, icon('bell'), active.length ? h('span', { class: 'rem-count', 'aria-label': `${active.length}` }, String(active.length)) : null),
-        h('div', { class: 'set-text' }, h('strong', {}, 'Recordatorios'),
-          active.length
-            ? h('p', { class: 'muted small rem-summary' }, ...active.map((k) => h('span', { class: 'block' }, h('span', {}, names[k]), ': ', h('span', { 'data-no-tr': '' }, `${WEEK.filter((d) => r[k].days.includes(d)).map(dayName).join(', ')} · ${r[k].time}`), (r[k].every ?? 1) > 1 ? h('span', { 'data-no-tr': '' }, ' · ') : null, (r[k].every ?? 1) > 1 ? h('span', { class: 'rem-lc' }, EVERY[(r[k].every ?? 1) - 1][1]) : null)))
-            : h('p', { class: 'muted small' }, HAS_BACKUP ? 'Entrenamiento, peso y copia de seguridad, los días y a la hora que elijas.' : 'Entrenamiento y peso, los días y a la hora que elijas.')),
-        icon('chevron')));
+    const premium = this.app.access.premium;
+    const rows: Array<{ k: ReminderKind; ic: IconName; title: string }> = [
+      { k: 'train', ic: 'bolt', title: 'Entrenamiento' },
+      { k: 'weigh', ic: 'scale', title: 'Peso' },
+      ...(HAS_BACKUP ? [{ k: 'backup' as ReminderKind, ic: 'copy' as IconName, title: 'Copia de seguridad' }] : []),
+    ];
+    const open = () => this.app.push(new RemindersScreen(this.app));
+    return h('section', { class: 'card setting rem-list' },
+      ...rows.map(({ k, ic, title }) => {
+        const locked = k === 'backup' && !premium;
+        const on = !locked && r[k].on && r[k].days.length > 0;
+        const every = r[k].every ?? 1;
+        const plan = k === 'train' && premium && r.train.followPlan ? this.app.store.plan : undefined;
+        const days = plan ? plan.days.map((x) => x.day) : r[k].days;
+        const sub = on
+          ? h('span', { class: 'muted small block' },
+            plan ? h('span', {}, 'Plan de la semana') : null, plan ? h('span', { 'data-no-tr': '' }, ' · ') : null,
+            h('span', { 'data-no-tr': '' }, `${WEEK.filter((d) => days.includes(d)).map(dayName).join(', ')} · ${r[k].time}`),
+            every > 1 ? h('span', { 'data-no-tr': '' }, ' · ') : null, every > 1 ? h('span', { class: 'rem-lc' }, EVERY[every - 1][1]) : null)
+          : h('span', { class: 'muted small block' }, locked ? 'Prémium' : 'Desactivado');
+        return h('button', { class: 'rem-row' + (on ? ' on' : ''), onclick: open },
+          h('span', { class: 'set-icon rem-bell' }, icon(ic)),
+          h('span', { class: 'set-text' }, h('strong', {}, title), sub),
+          icon('chevron', 'ico chev'));
+      }));
   }
 
   /** Qué hace la música de otras apps (Spotify, la radio...) cuando habla la app. */

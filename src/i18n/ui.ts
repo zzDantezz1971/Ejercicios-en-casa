@@ -1263,6 +1263,7 @@ const ROWS: Row[] = [
   ["Con un plan de la semana en uso, el recordatorio de entrenar puede seguirlo («Seguir el plan de la semana»): te avisa los días del plan y te dice qué toca. Si lo apagas, eliges tú los días.", "Amb un pla setmanal en ús, el recordatori d’entrenar el pot seguir («Segueix el pla setmanal»): t’avisa els dies del pla i et diu què toca. Si l’apagues, tries tu els dies.", "With a weekly plan in use, the training reminder can follow it (“Follow the weekly plan”): it reminds you on the plan’s days and tells you what’s up. If you turn it off, you choose the days."],
   ["Seguir el plan de la semana", "Segueix el pla setmanal", "Follow the weekly plan"],
   ["Te avisa sus días y te dice qué toca.", "T’avisa els seus dies i et diu què toca.", "It reminds you on its days and tells you what’s up."],
+  ["Desactivado", "Desactivat", "Off"],
 ];
 
 export const UI_CA: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[1]]));
