@@ -6,6 +6,8 @@ arreglos). Cuando David la pida, repasarla con él y decidir qué entra en cada 
 Cada idea: de dónde sale, qué sería y qué hay que tener en cuenta.
 
 ## Plan de versiones (decidido el 18 nov 2026)
+- **Prueba cerrada:** 12 testers alcanzados el 18 nov 2026 → los 14 días se cumplen hacia el **2 dic 2026**; entonces,
+  Panel › Solicitar acceso a producción.
 - **Durante la prueba cerrada (14 días):** la app se queda con el build 19, salvo que aparezca un error grave.
 - **Build 20 (ya hecho, sin compilar):** una fila por recordatorio en Configuració; número de versión y sus novedades
   al tocarla.
