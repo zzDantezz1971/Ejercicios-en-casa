@@ -45,13 +45,26 @@ Cada idea: de dónde sale, qué sería y qué hay que tener en cuenta.
   con cualquier entrenamiento). Se habló el 17 nov 2026; se dejó como está.
 
 ## Google Play y negocio
-- **Ficha de Play en castellano** (texto ya preparado en `ficha-google-play.md`): sobre todo si hay muchos usuarios de
-  Ecuador / Latinoamérica, que ahora ven la ficha en catalán.
+- **Ficha de Play en castellano** (texto ya preparado en `ficha-google-play.md`): decidido el 18 nov 2026 dejarla
+  **solo en catalán** por ahora. Más adelante, si hace falta (p. ej. muchos usuarios de Ecuador / Latinoamérica).
 - **Precios:** en Play salen 11,99 €/año y 1,19 €/mes (Google sumó el IVA a 9,99 € y 0,99 €). Decidir si se dejan así o
   se ajustan para que el precio final sea 9,99 € y 0,99 €.
 - **Servidor de activaciones** de los códigos de acceso (limitar cada código a 2 móviles, ver cuáles se usan). Ver
   `pendiente-android.md`.
 - **App para iPhone.**
+
+## Promoción (cuando la app esté en producción)
+Decidido el 18 nov 2026: hacerlo en dos fases.
+1. **Instagram gratis (orgánico)** desde que salga en Play Store: cuenta de Kasa Fit y **reels cortos** (10-20 s) con el
+   muñeco haciendo ejercicios («Exercici del dia», «5 minuts d’estiraments», «Rutina sense material»), el plan semanal,
+   medallas, mapa de músculos. Sobre todo en catalán, alguno en castellano. Pedir a los probadores que sigan, compartan
+   y **valoren la app en Play Store**. Claude puede preparar los vídeos a partir de las animaciones de la app.
+2. **Anuncios de pago pequeños**, solo cuando haya algunas valoraciones buenas: Meta Ads (Instagram) empezando con
+   ~5 €/día durante una semana; solo móviles **Android**; Cataluña (y Baleares, Valencia, Andorra); 25-60 años; intereses
+   fitness, salud, entrenar en casa. Alternativa: Google Ads (campañas de apps, Play Store y YouTube).
+   Números orientativos: 0,50-2 € por instalación y 2-5 % de suscripciones → con 0,99 €/mes cuesta recuperar la
+   inversión al principio. Medir en Play Console › Estadísticas (de dónde vienen las instalaciones).
+   Buen momento: con alguna mejora nueva que contar (p. ej. el modo suave).
 
 ## Pequeños detalles
 - La guía todavía dice «una frase motivadora distinta cada día» (revisar si sigue siendo exacto).
