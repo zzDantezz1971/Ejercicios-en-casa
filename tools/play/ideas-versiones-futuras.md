@@ -5,6 +5,13 @@ arreglos). Cuando David la pida, repasarla con él y decidir qué entra en cada 
 
 Cada idea: de dónde sale, qué sería y qué hay que tener en cuenta.
 
+## Plan de versiones (decidido el 18 nov 2026)
+- **Durante la prueba cerrada (14 días):** la app se queda con el build 19, salvo que aparezca un error grave.
+- **Build 20 (ya hecho, sin compilar):** una fila por recordatorio en Configuració; número de versión y sus novedades
+  al tocarla.
+- **Versión 21 (después de la prueba):** **polea de pesas** como material nuevo (ver abajo). Antes, preguntar a los
+  probadores qué material tienen en casa (polea, gomas, TRX…).
+
 ## Ejercicios y planes
 
 ### Modo suave / dolor crónico (fibromialgia)
@@ -24,8 +31,8 @@ Cada idea: de dónde sale, qué sería y qué hay que tener en cuenta.
 
 ## Material nuevo
 
-### Polea con pesos
-- **De dónde:** probador, 18 nov 2026.
+### Polea con pesos — para la versión 21
+- **De dónde:** probador, 18 nov 2026. David la quiere para la versión 21.
 - **Qué:** material «Polea» en Mi material y ejercicios propios (jalón al pecho, remo, tríceps en polea, face pull,
   curl, leñador…), con peso como en mancuernas, pesa rusa y barra; medallas de Fuerza si encaja.
 - **Cuidado:** cada ejercicio nuevo necesita su animación del muñeco (lo más costoso). Poca gente tiene polea en casa.
