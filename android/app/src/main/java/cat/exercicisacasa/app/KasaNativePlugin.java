@@ -37,7 +37,8 @@ import java.util.Locale;
  * - la voz amplificada: el motor de voz del móvil escribe la frase en un archivo y se reproduce con un refuerzo de
  *   volumen (LoudnessEnhancer), para que se oiga por encima de la música bajada;
  * - el color de las barras del sistema (fondo e iconos) según el tema claro u oscuro de la app;
- * - abrir Spotify (o, si no está, la app de música del móvil).
+ * - abrir Spotify (o, si no está, la app de música del móvil);
+ * - cerrar la app de verdad al salir con «atrás» (también desaparece de las apps recientes).
  */
 @CapacitorPlugin(name = "KasaNative")
 public class KasaNativePlugin extends Plugin {
@@ -101,6 +102,16 @@ public class KasaNativePlugin extends Plugin {
             }
         }
         call.resolve();
+    }
+
+    /** Cierra la app y la quita de las apps recientes (con «atrás» desde Inicio). */
+    @PluginMethod
+    public void closeApp(PluginCall call) {
+        call.resolve();
+        getActivity().runOnUiThread(() -> {
+            stopAll();
+            getActivity().finishAndRemoveTask();
+        });
     }
 
     @PluginMethod

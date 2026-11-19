@@ -15,6 +15,8 @@ export interface KasaNative {
   setBars(o: { light: boolean; color: string }): Promise<void>;
   /** ¿Está Spotify instalado? */
   musicApp(): Promise<{ spotify: boolean }>;
+  /** Cierra la app de verdad: la quita también de las apps recientes. */
+  closeApp(): Promise<void>;
   /** Abre Spotify o, si no está, la app de música del móvil. */
   openMusic(): Promise<{ opened: boolean }>;
 }

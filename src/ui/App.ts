@@ -6,6 +6,7 @@ import { setAngleStore } from '../figure/angles';
 import { setMusicMode } from '../services/MusicDuck';
 import { applyColor, setColorGate } from '../platform/theme';
 import { rescheduleReminders } from '../services/Reminders';
+import { KasaNative } from '../platform/kasaNative';
 import { setFigureStyle } from '../figure/skinAsset';
 import { setLook } from '../figure/look';
 import { HeartRate } from '../services/HeartRate';
@@ -194,7 +195,8 @@ export class App {
     const cur = this.current;
     if (cur?.onBack && (await cur.onBack())) return;
     if (cur?.tab && cur.tab !== 'inicio' && this.tabFactory) { this.home(this.tabFactory.inicio()); return; }
-    void NativeApp.exitApp();
+    // se cierra de verdad (también de las apps recientes); si no se puede, como antes
+    KasaNative.closeApp().catch(() => NativeApp.exitApp());
   }
 
   private async handleBack(): Promise<void> {

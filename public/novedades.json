@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-19T08:59:06Z",
+    "es": ["App Android: al salir con el botón «atrás» desde Inicio, la app se cierra del todo y ya no se queda en las apps recientes."],
+    "ca": ["App Android: en sortir amb el botó «enrere» des d’Inici, l’app es tanca del tot i ja no es queda a les apps recents."],
+    "en": ["Android app: when you leave with the “back” button from Home, the app closes completely and no longer stays in recent apps."]
+  },
+  {
     "fecha": "2026-11-18T22:23:21Z",
     "es": ["Configuración › Versión de la app: en la app de Android sale el número de versión y, al tocarla, lo que hay de nuevo en esa versión. En la web, «Ver novedades» enseña los últimos cambios."],
     "ca": ["Configuració › Versió de l’app: a l’app d’Android surt el número de versió i, en tocar-la, el que hi ha de nou en aquella versió. Al web, «Mostra les novetats» ensenya els últims canvis."],
