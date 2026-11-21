@@ -292,7 +292,8 @@ button:focus-visible, input:focus-visible, label:focus-within { outline: 2px sol
 }
 .w-sec-chip .ico { width: 18px; height: 18px; }
 .w-where-row { display: flex; align-items: center; gap: 4px; }
-.w-rounds { font: 700 .82rem var(--display); letter-spacing: .03em; color: var(--sec); border: 1.5px solid var(--sec); border-radius: 999px; padding: 1px 7px; line-height: 1.2; }
+/* las vueltas («x2»), con el mismo estilo que el nombre del bloque */
+.w-rounds { display: inline-flex; align-items: center; font: 700 1.05rem var(--display); text-transform: uppercase; letter-spacing: .06em; color: var(--sec); background: color-mix(in srgb, var(--sec) 15%, transparent); border-radius: 999px; padding: 5px 12px; }
 .w-rounds[hidden] { display: none; }
 .detail-body { display: flex; flex-direction: column; gap: 12px; }
 .detail-pager { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: -2px; }
