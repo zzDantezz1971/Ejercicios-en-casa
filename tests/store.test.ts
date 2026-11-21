@@ -361,3 +361,23 @@ describe('Grupos de tablas', () => {
     expect(new Store(kv).active.group).toBeUndefined();
   });
 });
+
+describe('Orden de los bloques de una tabla', () => {
+  it('se guarda por tabla, se valida al cargar y el de siempre no se guarda', async () => {
+    const { sectionOrder } = await import('../src/domain/types');
+    expect(sectionOrder(undefined)).toEqual(['calentamiento', 'pesas', 'abdominales', 'estiramientos']);
+    expect(sectionOrder(['pesas', 'pesas', 'abdominales', 'estiramientos'])).toEqual(['calentamiento', 'pesas', 'abdominales', 'estiramientos']);
+    const mem = new Map<string, string>();
+    const store = new Store({ getItem: (k) => mem.get(k) ?? null, setItem: (k, v) => void mem.set(k, v) });
+    const id = store.active.id;
+    store.setSectionOrder(id, ['estiramientos', 'calentamiento', 'pesas', 'abdominales']);
+    expect(store.active.order).toEqual(['estiramientos', 'calentamiento', 'pesas', 'abdominales']);
+    const copy = store.duplicateRoutine(id)!;
+    expect(copy.order).toEqual(['estiramientos', 'calentamiento', 'pesas', 'abdominales']);
+    const again = Store.migrate(JSON.parse(mem.get(STORAGE_KEY)!));
+    expect(again.routines[0].order).toEqual(['estiramientos', 'calentamiento', 'pesas', 'abdominales']);
+    store.setSectionOrder(id, ['calentamiento', 'pesas', 'abdominales', 'estiramientos']);
+    expect(store.active.order).toBeUndefined();
+    expect(Store.migrate({ routines: [{ id: 'a', name: 'A', routine: {}, order: ['pesas', 'x'] }] }).routines[0].order).toBeUndefined();
+  });
+});

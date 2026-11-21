@@ -35,6 +35,8 @@ export interface GenContext {
 export interface GenResult {
   routine: Routine;
   rounds: Partial<Record<SectionId, number>>;
+  /** Orden de los bloques (al editar una tabla guardada); sin él, el de siempre. */
+  order?: SectionId[];
 }
 
 export const GOALS: readonly Goal[] = ['forma', 'perder', 'fuerza', 'flexibilidad', 'espalda'];

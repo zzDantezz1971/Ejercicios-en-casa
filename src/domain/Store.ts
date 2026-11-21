@@ -3,6 +3,7 @@ import { EQUIPMENT, type Equip } from './equipment';
 import {
   DEFAULT_SETTINGS,
   SECTION_IDS,
+  sectionOrder,
   SEXES,
   emptyRoutine,
   type HistoryEntry,
@@ -92,6 +93,13 @@ function newRoutine(name: string, routine: Routine = emptyRoutine()): SavedRouti
 export function cleanName(name: string): string {
   const n = name.replace(/\s+/g, ' ').trim().slice(0, NAME_MAX);
   return n || DEFAULT_ROUTINE_NAME;
+}
+
+/** Guarda el orden de los bloques de una tabla (el de siempre no se guarda). */
+function setOrderOf(r: SavedRoutine, order: readonly SectionId[]): void {
+  const o = sectionOrder(order);
+  if (o.join() === SECTION_IDS.join()) delete r.order;
+  else r.order = o;
 }
 
 function sanitizeRounds(input: unknown): Partial<Record<SectionId, number>> | undefined {
@@ -211,13 +219,22 @@ export class Store {
     return r;
   }
 
-  /** Cambia los ejercicios (y las vueltas) de una tabla cualquiera. */
-  setRoutineContent(id: string, routine: Routine, rounds: Partial<Record<SectionId, number>> = {}): void {
+  /** Cambia los ejercicios (y las vueltas) de una tabla cualquiera; con `order`, también el orden de sus bloques. */
+  setRoutineContent(id: string, routine: Routine, rounds: Partial<Record<SectionId, number>> = {}, order?: readonly SectionId[]): void {
     const r = this.data.routines.find((x) => x.id === id);
     if (!r) return;
     r.routine = structuredCloneRoutine(routine);
     if (Object.keys(rounds).length) r.rounds = { ...rounds };
     else delete r.rounds;
+    if (order) setOrderOf(r, order);
+    this.persist();
+  }
+
+  /** Cambia el orden de los bloques de una tabla. */
+  setSectionOrder(id: string, order: readonly SectionId[]): void {
+    const r = this.data.routines.find((x) => x.id === id);
+    if (!r) return;
+    setOrderOf(r, order);
     this.persist();
   }
 
@@ -301,6 +318,8 @@ export class Store {
     if (i < 0) return undefined;
     const src = this.data.routines[i];
     const copy = newRoutine(`${src.name} (copia)`, structuredCloneRoutine(src.routine));
+    if (src.rounds) copy.rounds = { ...src.rounds };
+    if (src.order) copy.order = [...src.order];
     this.data.routines.splice(i + 1, 0, copy);
     this.persist();
     return copy;
@@ -764,6 +783,7 @@ export class Store {
           lastUsed: typeof r.lastUsed === 'string' ? r.lastUsed : undefined,
           rounds: sanitizeRounds(r.rounds),
           ...(typeof r.group === 'string' ? { group: r.group } : {}),
+          ...(Array.isArray(r.order) && sectionOrder(r.order).join() === r.order.join() && r.order.join() !== SECTION_IDS.join() ? { order: [...r.order] } : {}),
         }));
     } else if (input.routine) {
       // v1 -> v2: la rutina única pasa a ser la tabla "Mi rutina"

@@ -1268,6 +1268,11 @@ const ROWS: Row[] = [
   ["Novedades de la versión {n}", "Novetats de la versió {n}", "What’s new in version {n}"],
   ["Últimas novedades", "Últimes novetats", "Latest changes"],
   ["Toca para ver qué hay de nuevo.", "Toca per veure què hi ha de nou.", "Tap to see what’s new."],
+  ["Ordenar los bloques", "Ordena els blocs", "Reorder blocks"],
+  ["Orden de los bloques", "Ordre dels blocs", "Block order"],
+  ["El entrenamiento seguirá este orden. Los bloques sin ejercicios se saltan.", "L’entrenament seguirà aquest ordre. Els blocs sense exercicis se salten.", "The workout will follow this order. Blocks with no exercises are skipped."],
+  ["Orden de siempre", "Ordre de sempre", "Default order"],
+  ["Con «Ordenar los bloques» cambias el orden de los bloques de esa tabla (por ejemplo, abdominales antes que fuerza): el entrenamiento, Inicio y el historial siguen ese orden.", "Amb «Ordena els blocs» canvies l’ordre dels blocs d’aquesta taula (per exemple, abdominals abans que força): l’entrenament, Inici i l’historial segueixen aquest ordre.", "With “Reorder blocks” you change the order of that routine’s blocks (for example, abs before strength): the workout, Home and history follow that order."],
 ];
 
 export const UI_CA: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[1]]));

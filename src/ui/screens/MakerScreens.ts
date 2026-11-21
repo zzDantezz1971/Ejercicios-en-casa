@@ -6,7 +6,7 @@ import {
 } from '../../domain/generator';
 import { clampRounds, MAX_ROUNDS, WorkoutPlan } from '../../domain/WorkoutPlan';
 import { MAX_SECONDS, MIN_SECONDS, STEP_SECONDS } from '../../domain/RoutineEditor';
-import { emptyRoutine, SECTION_IDS, SECTION_TITLES, usesWeight, weightUnit, type ExerciseDef, type RoutineItem, type SectionId } from '../../domain/types';
+import { emptyRoutine, SECTION_IDS, sectionOrder, SECTION_TITLES, usesWeight, weightUnit, type ExerciseDef, type RoutineItem, type SectionId } from '../../domain/types';
 import { LOCALE, tr } from '../../i18n';
 import type { App, Screen } from '../App';
 import { clear, confirmDialog, h, humanDuration, kg, plural, promptDialog, weightDialog } from '../dom';
@@ -164,7 +164,43 @@ function confirmRemove(name: string): Promise<{ ok: boolean; stop: boolean }> {
 function withSection(r: GenResult, s: SectionId, items: GenResult['routine'][SectionId]): GenResult {
   const rounds = { ...r.rounds };
   if (!items.length) delete rounds[s];
-  return { routine: { ...r.routine, [s]: items }, rounds };
+  return { routine: { ...r.routine, [s]: items }, rounds, ...(r.order ? { order: r.order } : {}) };
+}
+
+/** Ventana para cambiar el orden de los bloques de una tabla: cada uno con flechas para subirlo o bajarlo. */
+function orderDialog(initial: readonly SectionId[] | undefined, save: (order: SectionId[]) => void): void {
+  let order = sectionOrder(initial);
+  const list = h('div', { class: 'order-list' });
+  const paint = () => {
+    list.replaceChildren(...order.map((s, i) => {
+      const st = SECTION_STYLE[s];
+      const move = (d: number) => {
+        const next = order.slice();
+        [next[i], next[i + d]] = [next[i + d], next[i]];
+        order = next;
+        paint();
+      };
+      const row = h('div', { class: 'order-row' },
+        h('span', { class: 'order-n' }, String(i + 1)),
+        h('span', { class: 'sec-icon' }, icon(st.icon)),
+        h('strong', {}, SECTION_TITLES[s]),
+        h('button', { class: 'icon-btn small order-up', 'aria-label': `Subir ${SECTION_TITLES[s]}`, disabled: i === 0, onclick: () => move(-1) }, icon('chevron')),
+        h('button', { class: 'icon-btn small order-down', 'aria-label': `Bajar ${SECTION_TITLES[s]}`, disabled: i === order.length - 1, onclick: () => move(1) }, icon('chevron')));
+      row.style.setProperty('--sec', st.color);
+      return row;
+    }));
+  };
+  paint();
+  const close = () => wrap.remove();
+  const wrap = h('div', { class: 'dialog-wrap', onclick: (e: Event) => e.target === wrap && close() },
+    h('div', { class: 'dialog order-dialog', role: 'dialog', 'aria-modal': 'true' },
+      h('h3', {}, 'Orden de los bloques'),
+      h('p', { class: 'muted small' }, 'El entrenamiento seguirá este orden. Los bloques sin ejercicios se saltan.'),
+      list,
+      h('div', { class: 'dialog-actions' },
+        h('button', { class: 'btn ghost', onclick: () => { order = [...SECTION_IDS]; paint(); } }, 'Orden de siempre'),
+        h('button', { class: 'btn primary', onclick: () => { close(); save(order); } }, 'Guardar'))));
+  document.body.append(wrap);
 }
 
 /** Vista previa de una tabla: resumen y ejercicios por apartado. Al tocar un ejercicio se ve cómo se hace;
@@ -175,7 +211,7 @@ function missLine(miss: readonly Equip[]): HTMLElement[] {
 }
 
 export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement {
-  const plan = WorkoutPlan.build(r.routine, app.catalog, app.store.settings, r.rounds);
+  const plan = WorkoutPlan.build(r.routine, app.catalog, app.store.settings, r.rounds, r.order);
   const shown = SECTION_IDS.flatMap((s) => r.routine[s].map((i) => app.catalog.get(i.exerciseId)).filter((e): e is NonNullable<typeof e> => !!e));
   const box = h('div', { class: 'maker-preview' },
     h('p', { class: 'maker-total' }, icon('clock'), plan.isEmpty ? 'Sin ejercicios' : `${humanDuration(plan.estimatedSeconds)} · ${plural(plan.exerciseCount, 'ejercicio', 'ejercicios')}`));
@@ -184,7 +220,10 @@ export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement
     h('span', {}, icon('swap'), 'Cambiar'),
     h('span', {}, icon('trash', 'ico danger'), 'Quitar'),
     h('span', {}, icon('tables'), 'Arrastra para mover')));
-  for (const s of SECTION_IDS) {
+  // al editar una tabla guardada: cambiar el orden de sus bloques
+  if (edit?.full) box.append(h('button', { class: 'btn ghost small order-open', onclick: () => orderDialog(r.order, (order) => edit.set({ ...r, order })) },
+    icon('sort'), 'Ordenar los bloques'));
+  for (const s of sectionOrder(r.order)) {
     const items = r.routine[s];
     // sin ejercicios: solo se ve si se puede añadir alguno
     if (!items.length && !edit) continue;

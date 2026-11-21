@@ -33,8 +33,8 @@ export class TableEditScreen implements Screen {
     clear(this.el);
     const back = h('button', { class: 'icon-btn', 'aria-label': 'Volver', onclick: () => app.back() }, icon('back'));
     if (!t) { this.el.append(h('header', { class: 'bar sticky' }, back)); return; }
-    const r: GenResult = { routine: t.routine, rounds: { ...(t.rounds ?? {}) } };
-    const set = (next: GenResult) => { app.store.setRoutineContent(t.id, next.routine, next.rounds); this.render(); };
+    const r: GenResult = { routine: t.routine, rounds: { ...(t.rounds ?? {}) }, ...(t.order ? { order: t.order } : {}) };
+    const set = (next: GenResult) => { app.store.setRoutineContent(t.id, next.routine, next.rounds, next.order); this.render(); };
     this.el.append(
       h('header', { class: 'bar sticky' }, back,
         h('div', { class: 'titles' }, h('span', { class: 'subtitle' }, 'Editar tabla'), h('h1', { class: 'bar-title' }, t.name)),

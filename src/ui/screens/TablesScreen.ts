@@ -1,6 +1,6 @@
 import { tr } from '../../i18n';
 import { WorkoutPlan } from '../../domain/WorkoutPlan';
-import { SECTION_IDS, SECTION_TITLES, type SavedRoutine } from '../../domain/types';
+import { SECTION_IDS, sectionOrder, SECTION_TITLES, type SavedRoutine } from '../../domain/types';
 import type { App, Screen } from '../App';
 import { actionSheet, clear, confirmDialog, h, humanDuration, plural, promptDialog } from '../dom';
 import { icon, SECTION_STYLE } from '../icons';
@@ -131,15 +131,16 @@ export class TablesScreen implements Screen {
   }
 
   private card(t: SavedRoutine, active: boolean): HTMLElement {
-    const plan = WorkoutPlan.build(t.routine, this.app.catalog, this.app.store.settings, t.rounds);
+    const plan = WorkoutPlan.build(t.routine, this.app.catalog, this.app.store.settings, t.rounds, t.order);
     const total = Math.max(1, SECTION_IDS.reduce((n, s) => n + t.routine[s].length, 0));
-    const mix = h('div', { class: 'mix' }, ...SECTION_IDS.filter((s) => t.routine[s].length).map((s) => {
+    const order = sectionOrder(t.order);
+    const mix = h('div', { class: 'mix' }, ...order.filter((s) => t.routine[s].length).map((s) => {
       const seg = h('span', { title: `${SECTION_TITLES[s]}: ${t.routine[s].length}` });
       seg.style.flex = String(t.routine[s].length / total);
       seg.style.background = SECTION_STYLE[s].color;
       return seg;
     }));
-    const pills = SECTION_IDS.filter((s) => t.routine[s].length).map((s) => {
+    const pills = order.filter((s) => t.routine[s].length).map((s) => {
       const p = h('span', { class: 'sec-pill' }, icon(SECTION_STYLE[s].icon), String(t.routine[s].length));
       p.style.setProperty('--sec', SECTION_STYLE[s].color);
       p.title = SECTION_TITLES[s];

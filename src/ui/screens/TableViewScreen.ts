@@ -1,5 +1,5 @@
 import { WorkoutPlan, clampRounds } from '../../domain/WorkoutPlan';
-import { SECTION_IDS, SECTION_TITLES, type ExerciseDef, type SectionId } from '../../domain/types';
+import { sectionOrder, SECTION_TITLES, type ExerciseDef, type SectionId } from '../../domain/types';
 import type { App, Screen } from '../App';
 import { h, humanDuration, kg, plural } from '../dom';
 import { icon, SECTION_STYLE, type IconName } from '../icons';
@@ -29,14 +29,15 @@ export class TableViewScreen implements Screen {
   private render(): void {
     const { app } = this;
     const table = app.store.active;
-    const plan = WorkoutPlan.build(table.routine, app.catalog, app.store.settings, table.rounds);
+    const plan = WorkoutPlan.build(table.routine, app.catalog, app.store.settings, table.rounds, table.order);
     const blocks: HTMLElement[] = [];
     // todos los ejercicios que se ven, en orden: desde la ficha se pasa de uno a otro deslizando el dedo
     const shown: ExerciseDef[] = [];
     // número de orden dentro de toda la tabla
-    let n = SECTION_IDS.slice(0, this.focus ? SECTION_IDS.indexOf(this.focus) : 0)
+    const order = sectionOrder(table.order);
+    let n = order.slice(0, this.focus ? order.indexOf(this.focus) : 0)
       .reduce((t, s) => t + table.routine[s].filter((i) => app.catalog.has(i.exerciseId)).length, 0);
-    for (const s of SECTION_IDS) {
+    for (const s of order) {
       if (this.focus && s !== this.focus) continue;
       const items = table.routine[s].filter((i) => app.catalog.has(i.exerciseId));
       if (!items.length) continue;
@@ -85,7 +86,7 @@ export class TableViewScreen implements Screen {
         h('p', { class: 'muted small' }, 'Toca un ejercicio para ver cómo se hace.'),
         ...blocks,
         // viendo un bloque: al final, botones al bloque anterior y al siguiente (de los que tienen ejercicios)
-        this.focus ? blockNav(SECTION_IDS.filter((x) => table.routine[x].some((i) => app.catalog.has(i.exerciseId))), this.focus,
+        this.focus ? blockNav(order.filter((x) => table.routine[x].some((i) => app.catalog.has(i.exerciseId))), this.focus,
           (x, dir) => app.replace(new TableViewScreen(app, x), dir < 0 ? 'back' : 'forward')) : null),
     );
   }

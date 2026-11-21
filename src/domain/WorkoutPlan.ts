@@ -1,4 +1,4 @@
-import { SECTION_IDS, type ExerciseDef, type Routine, type SectionId, type Settings } from './types';
+import { sectionOrder, type ExerciseDef, type Routine, type SectionId, type Settings } from './types';
 
 /** Cambio de lado en los ejercicios por lados: con el tiempo parado, primero se anuncia
     («Cambio de lado») y luego hay una cuenta atrás de 3 s. */
@@ -45,11 +45,12 @@ export class WorkoutPlan {
     this.steps = steps;
   }
 
-  static build(routine: Routine, catalog: Catalog, settings: Settings, rounds: Partial<Record<SectionId, number>> = {}): WorkoutPlan {
+  /** `order`: orden de los bloques de la tabla (sin él, el de siempre). */
+  static build(routine: Routine, catalog: Catalog, settings: Settings, rounds: Partial<Record<SectionId, number>> = {}, order?: readonly SectionId[]): WorkoutPlan {
     const steps: Step[] = [];
     let previous: SectionId | null = null;
 
-    for (const section of SECTION_IDS) {
+    for (const section of sectionOrder(order)) {
       const items = routine[section]
         .map((item) => ({ item, ex: catalog.get(item.exerciseId) }))
         .filter((x): x is { item: (typeof routine)[SectionId][number]; ex: ExerciseDef } => !!x.ex && x.item.seconds > 0);

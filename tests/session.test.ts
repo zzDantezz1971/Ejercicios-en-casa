@@ -32,6 +32,12 @@ function run(session: WorkoutSession, c: ReturnType<typeof clock>, seconds: numb
 }
 
 describe('WorkoutPlan', () => {
+  it('sigue el orden de bloques de la tabla', () => {
+    const plan = WorkoutPlan.build(routine(), catalog, DEFAULT_SETTINGS, {}, ['estiramientos', 'pesas', 'calentamiento', 'abdominales']);
+    const ids = plan.steps.flatMap((s) => (s.kind === 'exercise' ? [s.exercise.id] : []));
+    expect(ids).toEqual(['d', 'c', 'a', 'b']);
+  });
+
   it('ordena apartados, añade cuenta atrás, pausas y esperas entre apartados', () => {
     const plan = WorkoutPlan.build(routine(), catalog, DEFAULT_SETTINGS);
     expect(plan.steps.map((s) => s.kind)).toEqual([

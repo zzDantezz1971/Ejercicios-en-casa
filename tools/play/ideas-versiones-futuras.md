@@ -11,7 +11,7 @@ Cada idea: de dónde sale, qué sería y qué hay que tener en cuenta.
 - **Durante la prueba cerrada (14 días):** la app se queda con el build 19, salvo que aparezca un error grave.
 - **Build 20 (ya hecho, sin compilar):** una fila por recordatorio en Configuració; número de versión y sus novedades
   al tocarla; salir con «atrás» cierra la app de verdad (también de las recientes); grupos de tablas que se distinguen de las
-  tablas sueltas (propuesta C).
+  tablas sueltas (propuesta C); orden de bloques propio de cada tabla (Edita › Ordena els blocs).
 - **Versión 21 (después de la prueba):** **polea de pesas** como material nuevo (ver abajo). Antes, preguntar a los
   probadores qué material tienen en casa (polea, gomas, TRX…).
 

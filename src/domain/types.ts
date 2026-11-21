@@ -4,6 +4,12 @@ import type { Equip } from './equipment';
 export const SECTION_IDS = ['calentamiento', 'pesas', 'abdominales', 'estiramientos'] as const;
 export type SectionId = (typeof SECTION_IDS)[number];
 
+/** Orden de los bloques de una tabla: el suyo si es válido (los cuatro, sin repetir); si no, el de siempre. */
+export function sectionOrder(order?: readonly string[] | null): SectionId[] {
+  if (!order || order.length !== SECTION_IDS.length || !SECTION_IDS.every((s) => order.includes(s))) return [...SECTION_IDS];
+  return [...order] as SectionId[];
+}
+
 export const SECTION_TITLES: Record<SectionId, string> = {
   calentamiento: 'Calentamiento',
   pesas: 'Fuerza',
@@ -325,6 +331,8 @@ export interface SavedRoutine {
   rounds?: Partial<Record<SectionId, number>>;
   /** Grupo en el que está (en «Mis tablas»), si se ha movido a uno. */
   group?: string;
+  /** Orden de los bloques (si no está, el de siempre: calentamiento, fuerza, abdominales, estiramientos). */
+  order?: SectionId[];
 }
 
 /** Grupo de tablas en «Mis tablas». */

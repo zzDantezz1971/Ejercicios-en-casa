@@ -22,7 +22,8 @@ export class HistoryDetailScreen implements Screen {
 
     // como «Contenido de la tabla» en Inicio: una fila por bloque; al tocarla, sus ejercicios numerados
     const list: HTMLElement[] = [];
-    const blocks = SECTION_IDS.filter((s) => items.some((i) => i.section === s));
+    // en el orden en que se hicieron (cada tabla puede tener su orden de bloques)
+    const blocks = blocksOf(items);
     if (blocks.length) {
       list.push(h('section', { class: 'sections' },
         h('h3', { class: 'block-title' }, 'Contenido del entrenamiento'),
@@ -204,7 +205,12 @@ class HistoryBlockScreen implements Screen {
         h('button', { class: 'icon-btn', 'aria-label': 'Volver', onclick: () => app.back() }, icon('back')),
         h('div', { class: 'titles' }, h('span', { class: 'subtitle' }, date), h('h1', {}, SECTION_TITLES[sec]))),
       h('section', { class: 'detail-body tv-body' }, head, list,
-        blockNav(SECTION_IDS.filter((x) => (entry.items ?? []).some((i) => i.section === x)), sec,
+        blockNav(blocksOf(entry.items ?? []), sec,
           (x, dir) => app.replace(new HistoryBlockScreen(app, entry, x), dir < 0 ? 'back' : 'forward'))));
   }
+}
+
+/** Bloques de un entrenamiento, en el orden en que se hicieron. */
+function blocksOf(items: ReadonlyArray<{ section: SectionId }>): SectionId[] {
+  return [...new Set(items.map((i) => i.section))].filter((s) => SECTION_IDS.includes(s));
 }

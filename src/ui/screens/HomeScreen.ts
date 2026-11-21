@@ -1,6 +1,6 @@
 import { LOCALE, tr } from '../../i18n';
 import { WorkoutPlan, clampRounds } from '../../domain/WorkoutPlan';
-import { SECTION_IDS, SECTION_TITLES, type SectionId } from '../../domain/types';
+import { SECTION_IDS, sectionOrder, SECTION_TITLES, type SectionId } from '../../domain/types';
 import type { App, Screen } from '../App';
 import { addDays, dayKey, greeting, startOfWeek, streak, trainedDays, WEEKDAY_LETTERS } from '../dates';
 import { clear, h, humanDuration, plural } from '../dom';
@@ -33,7 +33,7 @@ export class HomeScreen implements Screen {
     // plan de la semana: ejercicios nuevos si empieza otra semana
     refreshPlan(app);
     const table = app.store.active;
-    const plan = WorkoutPlan.build(table.routine, app.catalog, app.store.settings, table.rounds);
+    const plan = WorkoutPlan.build(table.routine, app.catalog, app.store.settings, table.rounds, table.order);
     const now = new Date();
     clear(this.el);
 
@@ -108,7 +108,7 @@ export class HomeScreen implements Screen {
     );
 
     // Apartados de la tabla (solo los que tienen ejercicios), justo debajo de la tabla en uso
-    const withEx = SECTION_IDS.filter((sec) => this.app.store.routine[sec].some((i) => this.app.catalog.has(i.exerciseId)));
+    const withEx = sectionOrder(this.app.store.active.order).filter((sec) => this.app.store.routine[sec].some((i) => this.app.catalog.has(i.exerciseId)));
     if (withEx.length) {
       this.el.append(
         h('section', { class: 'sections' },
