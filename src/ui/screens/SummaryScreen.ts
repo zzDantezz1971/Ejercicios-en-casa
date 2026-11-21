@@ -5,7 +5,6 @@ import { checkAndCelebrate } from '../components/medals';
 import type { App, Screen } from '../App';
 import { h, humanDuration } from '../dom';
 import { icon, SECTION_STYLE } from '../icons';
-import { remindersDue, showReminders } from '../components/weightReminder';
 import { finishPhrase } from '../../services/Coach';
 import { streak } from '../dates';
 
@@ -51,11 +50,10 @@ export class SummaryScreen implements Screen {
         heart ? h('p', { class: 'hr-summary' }, icon('heart'), `Pulso medio ${heart.avg} · máximo ${heart.max} ppm`) : null,
         this.streakLine(s),
         s.exercisesDone ? h('p', { class: 'muted small' }, 'Guardado en el historial.') : null,
-        // los recordatorios (peso, copia) salen después, en una ventana, al volver al inicio
+        // los recordatorios (peso…) llegan solo como notificación del móvil: aquí ya no sale ninguna ventana
         h('button', { class: 'btn primary block big', onclick: () => {
           this.app.voice.stop();
           this.app.openTab('inicio');
-          if (s.exercisesDone && remindersDue(this.app)) showReminders(this.app);
         } }, 'Volver al inicio')),
     );
   }

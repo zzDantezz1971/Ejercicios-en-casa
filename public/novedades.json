@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-21T22:37:35Z",
+    "es": ["Al terminar un entrenamiento ya no sale la ventana de «Hace X días que no te pesas». El recordatorio de peso llega solo como notificación del móvil (app Android), el día y la hora que elijas en Recordatorios."],
+    "ca": ["En acabar un entrenament ja no surt la finestra de «Fa X dies que no et peses». El recordatori de pes arriba només com a notificació del mòbil (app d’Android), el dia i l’hora que triïs a Recordatoris."],
+    "en": ["The “You haven’t weighed yourself for X days” window no longer appears after a workout. The weight reminder now arrives only as a phone notification (Android app), on the day and time you choose in Reminders."]
+  },
+  {
     "fecha": "2026-11-21T22:26:13Z",
     "es": ["Entrenamiento: si un bloque se repite, al lado de su nombre sale «x2», «x3»… (y debajo, en qué vuelta vas)."],
     "ca": ["Entrenament: si un bloc es repeteix, al costat del nom surt «x2», «x3»… (i a sota, a quina volta vas)."],

@@ -16,8 +16,6 @@ const GUIDE: Array<{ icon: IconName; title: string; sub: string; points: Array<s
       'Con un plan de la semana en uso, la tabla es la del día (o la del próximo día de entrenamiento): arriba pone «Plan de la semana» y el día.',
       'Tu semana: minutos y calorías, con unas metas que puedes cambiar.',
       'Una frase motivadora distinta cada día (se puede quitar en Ajustes).',
-      HAS_BACKUP ? 'Si los tienes activados en Recordatorios, al acabar un entrenamiento te avisa cuando toca anotar el peso o hacer la copia de seguridad.'
-        : 'Si lo tienes activado en Recordatorios, al acabar un entrenamiento te avisa cuando toca anotar el peso.',
       { h: 'Entrenar' },
       'Cada ejercicio con el muñeco animado y una cuenta atrás.',
       'Pitidos, vibración y voz te avisan del siguiente ejercicio, del cambio de lado y de los últimos segundos.',
@@ -66,7 +64,6 @@ const GUIDE: Array<{ icon: IconName; title: string; sub: string; points: Array<s
       HAS_BACKUP ? 'Para entrenar con tus tablas, pesarte y hacer la copia de seguridad, los días y a la hora que elijas. Llegan como notificación en la app de Android, aunque esté cerrada.'
         : 'Para entrenar con tus tablas y pesarte, los días y a la hora que elijas. Llegan como notificación, aunque la app esté cerrada.',
       'Con un plan de la semana en uso, el recordatorio de entrenar puede seguirlo («Seguir el plan de la semana»): te avisa los días del plan y te dice qué toca. Si lo apagas, eliges tú los días.',
-      'El aviso de «Hace X días que no te pesas» (al acabar un entrenamiento) sigue los días y la hora del recordatorio de peso.',
       { h: 'Pulsaciones del reloj' },
       'Conecta un reloj o una pulsera que difunda la frecuencia cardíaca por Bluetooth: verás tus pulsaciones durante el entrenamiento y las calorías se calcularán con tu pulso.',
       'En Ajustes › Smartwatch tienes los pasos para conectarlo.',

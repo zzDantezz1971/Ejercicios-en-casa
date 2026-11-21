@@ -4,6 +4,7 @@ Recordatorio: **cuando instales la app de prueba** (el APK de GitHub o la prueba
 Marca cada punto al probarlo. Si algo falla, haz una captura y cuéntamelo.
 
 ## 0e. Para probar en el build 20
+- [ ] En acabar un entrenament ja no surt cap finestra d’avisos (pes): el recordatori de pes només arriba com a notificació el dia i l’hora triats.
 - [ ] Entrenament amb un bloc de 2 o 3 voltes: al costat del nom del bloc (a dalt) surt «x2» / «x3» amb el color del bloc; als blocs d’una sola volta, res.
 - [ ] En acabar un entrenament amb pes ja no surt cap suggeriment de pujar de pes; a la fitxa de l’exercici, «Els teus pesos» mostra els quilos però sense «Provem amb…».
 - [ ] Llista d’exercicis › ⇅ Ordena: «Zona del cos», «Per múscul», «Per material» i «Alfabètic»; dins de cada grup, per ordre alfabètic. En castellà, «Puntillas» abans que «Puñetazos». Per material, «Bandes elàstiques + Barra de dominades» just després de «Bandes elàstiques».
