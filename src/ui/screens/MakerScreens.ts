@@ -172,23 +172,23 @@ function orderDialog(initial: readonly SectionId[] | undefined, save: (order: Se
   let order = sectionOrder(initial);
   const list = h('div', { class: 'order-list' });
   const paint = () => {
-    list.replaceChildren(...order.map((s, i) => {
+    // cada bloque con su asa para arrastrarlo (a la izquierda) y flechas ↑ ↓, como los ejercicios
+    const rows: SortableRow[] = order.map((s, i) => {
       const st = SECTION_STYLE[s];
-      const move = (d: number) => {
-        const next = order.slice();
-        [next[i], next[i + d]] = [next[i + d], next[i]];
-        order = next;
-        paint();
-      };
-      const row = h('div', { class: 'order-row' },
+      const content = h('div', { class: 'order-row' },
         h('span', { class: 'order-n' }, String(i + 1)),
         h('span', { class: 'sec-icon' }, icon(st.icon)),
-        h('strong', {}, SECTION_TITLES[s]),
-        h('button', { class: 'icon-btn small order-up', 'aria-label': `Subir ${SECTION_TITLES[s]}`, disabled: i === 0, onclick: () => move(-1) }, icon('chevron')),
-        h('button', { class: 'icon-btn small order-down', 'aria-label': `Bajar ${SECTION_TITLES[s]}`, disabled: i === order.length - 1, onclick: () => move(1) }, icon('chevron')));
-      row.style.setProperty('--sec', st.color);
-      return row;
-    }));
+        h('strong', {}, SECTION_TITLES[s]));
+      content.style.setProperty('--sec', st.color);
+      return { content, label: SECTION_TITLES[s] };
+    });
+    list.replaceChildren(sortableList(rows, (from, to) => {
+      const next = order.slice();
+      const [x] = next.splice(from, 1);
+      next.splice(to, 0, x);
+      order = next;
+      paint();
+    }, { handleFirst: true }));
   };
   paint();
   const close = () => wrap.remove();

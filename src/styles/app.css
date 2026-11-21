@@ -1813,12 +1813,13 @@ button.plan-row { cursor: pointer; }
 /* Edita › Ordenar los bloques */
 .order-open { align-self: flex-start; margin: 2px 0 6px; }
 .order-list { display: flex; flex-direction: column; gap: 8px; margin: 10px 0 4px; }
-.order-row { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 12px; background: var(--surface-2); border-left: 4px solid var(--sec); }
+.order-row { display: flex; align-items: center; gap: 10px; padding: 6px 4px; }
+.order-row .sec-icon { width: 36px; height: 36px; border-radius: 10px; display: inline-grid; place-items: center; background: color-mix(in srgb, var(--sec) 18%, transparent); }
 .order-row strong { flex: 1; min-width: 0; }
 .order-n { width: 22px; text-align: center; font-weight: 700; color: var(--muted); }
 .order-row .sec-icon { color: var(--sec); display: inline-flex; }
 .order-row .sec-icon .ico { width: 20px; height: 20px; }
-.order-up .ico { transform: rotate(-90deg); }
-.order-down .ico { transform: rotate(90deg); }
-.order-row .icon-btn:disabled { opacity: .3; }
+.order-list .sortable { margin: 0; padding: 0; }
+.order-list .sort-row { padding: 0; }
 .order-dialog .dialog-actions { flex-wrap: wrap; }
+.order-list .order-row .sec-icon .ico { color: var(--sec); }
