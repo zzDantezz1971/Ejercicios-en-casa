@@ -4,6 +4,7 @@ Recordatorio: **cuando instales la app de prueba** (el APK de GitHub o la prueba
 Marca cada punto al probarlo. Si algo falla, haz una captura y cuéntamelo.
 
 ## 0e. Para probar en el build 20
+- [ ] Entrenament amb un bloc de 2 o 3 voltes: al costat del nom del bloc (a dalt) surt «x2» / «x3» amb el color del bloc; als blocs d’una sola volta, res.
 - [ ] En acabar un entrenament amb pes ja no surt cap suggeriment de pujar de pes; a la fitxa de l’exercici, «Els teus pesos» mostra els quilos però sense «Provem amb…».
 - [ ] Llista d’exercicis › ⇅ Ordena: «Zona del cos», «Per múscul», «Per material» i «Alfabètic»; dins de cada grup, per ordre alfabètic. En castellà, «Puntillas» abans que «Puñetazos». Per material, «Bandes elàstiques + Barra de dominades» just després de «Bandes elàstiques».
 - [ ] Edita una taula: arrossegar un bloc sencer per la seva nansa ≡ (a l’esquerra del títol) per canviar l’ordre dels blocs (ja no hi ha botó «Ordena els blocs»). També amb un bloc obert. Comprovar que Inici › Contingut de la taula, l’entrenament (anuncis «Següent…») i l’historial d’aquest entrenament surten en el nou ordre. Duplicar la taula conserva l’ordre (i les voltes).

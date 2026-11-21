@@ -291,6 +291,9 @@ button:focus-visible, input:focus-visible, label:focus-within { outline: 2px sol
   color: var(--sec); background: color-mix(in srgb, var(--sec) 15%, transparent); border-radius: 999px; padding: 5px 12px 5px 10px;
 }
 .w-sec-chip .ico { width: 18px; height: 18px; }
+.w-where-row { display: flex; align-items: center; gap: 8px; }
+.w-rounds { font: 700 1.05rem var(--display); letter-spacing: .04em; color: var(--sec); border: 2px solid var(--sec); border-radius: 999px; padding: 3px 10px; line-height: 1.1; }
+.w-rounds[hidden] { display: none; }
 .detail-body { display: flex; flex-direction: column; gap: 12px; }
 .detail-pager { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: -2px; }
 .detail-pager .icon-btn { width: 36px; height: 36px; }

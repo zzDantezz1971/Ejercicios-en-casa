@@ -32,6 +32,8 @@ export class WorkoutScreen implements Screen {
 
   private ui = {
     secChip: h('span', { class: 'w-sec-chip' }),
+    /** Vueltas del bloque («x2», «x3»), al lado del nombre del bloque. */
+    rounds: h('span', { class: 'w-rounds', hidden: true }),
     position: h('span', { class: 'w-position' }),
     dots: h('div', { class: 'w-dots' }),
     canvas: h('canvas', { class: 'stage-canvas' }),
@@ -73,7 +75,7 @@ export class WorkoutScreen implements Screen {
     this.el.append(
       h('header', { class: 'w-top' },
         h('button', { class: 'icon-btn', 'aria-label': 'Terminar', onclick: () => void this.askStop() }, icon('close')),
-        h('div', { class: 'w-where' }, u.secChip, u.position),
+        h('div', { class: 'w-where' }, h('div', { class: 'w-where-row' }, u.secChip, u.rounds), u.position),
         h('button', { class: 'icon-btn music-btn', 'aria-label': 'Abrir la música', onclick: () => void this.openMusic() }, icon('music'))),
       u.dots,
       h('div', { class: 'stage' }, u.canvas, u.phase, app.heart.available ? u.hr : null),
@@ -196,6 +198,12 @@ export class WorkoutScreen implements Screen {
     const st = SECTION_STYLE[section];
     this.el.style.setProperty('--sec', st.color);
     this.ui.secChip.replaceChildren(icon(st.icon), SECTION_TITLES[section]);
+    // si el bloque se repite, «x2», «x3»… al lado de su nombre
+    const first = this.session.plan.steps.find((x) => x.kind === 'exercise' && x.section === section);
+    const R = first && first.kind === 'exercise' ? first.rounds : 1;
+    this.ui.rounds.textContent = `x${R}`;
+    this.ui.rounds.hidden = R <= 1;
+    this.ui.rounds.setAttribute('aria-label', `${R} vueltas`);
   }
 
   /** Un punto por ejercicio del apartado: hechos, actual y pendientes. */

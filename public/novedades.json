@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-21T22:26:13Z",
+    "es": ["Entrenamiento: si un bloque se repite, al lado de su nombre sale «x2», «x3»… (y debajo, en qué vuelta vas)."],
+    "ca": ["Entrenament: si un bloc es repeteix, al costat del nom surt «x2», «x3»… (i a sota, a quina volta vas)."],
+    "en": ["Workout: if a block repeats, “x2”, “x3”… appears next to its name (and below, which round you’re on)."]
+  },
+  {
     "fecha": "2026-11-21T19:42:57Z",
     "es": ["Ya no se sugiere subir de peso (ni al terminar un entrenamiento ni en la ficha del ejercicio). En «Tus pesos» sigues viendo los kilos que has usado."],
     "ca": ["Ja no es suggereix pujar de pes (ni en acabar un entrenament ni a la fitxa de l’exercici). A «Els teus pesos» continues veient els quilos que has fet servir."],
