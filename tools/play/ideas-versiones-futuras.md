@@ -82,3 +82,10 @@ Decidido el 18 nov 2026: hacerlo en dos fases.
   título, series, material, músculos y el logo). Un script de Playwright recoge los fotogramas y ffmpeg hace el MP4
   (bucle exacto: un número entero de repeticiones del movimiento). Primer Reel de prueba: «Exercici del dia: Esquat goblet
   amb pesa russa» (21 nov 2026). La música se añade en Instagram o CapCut (biblioteca de Instagram).
+- **Fit** (nombre del muñeco, decidido el 21 nov 2026) es la cara de la marca en los vídeos.
+- Vídeos promocionales: `tools/promo.html` + `tools/promo.ts`. Primero: «Despertador» (Fit dormido en el suelo, suena el
+  despertador «Dilluns, 7:00 h», «Bon dia, Fit!», los 4 bloques con sus colores y las barras del logo llenándose,
+  «Activat en 10 minuts» con confeti y final con el logo, «Entrena a casa en segons» y «Aviat a Google Play»).
+  Textos por parámetro (day, hello, win, slogan, soon) e idioma el de la app en el navegador.
+  Ideas siguientes: «Un muñeco, mil estils» (cambios de look), «Sense excuses» (humor), «Repte de la setmana»,
+  «Vista de 360°», «Abans i després».
