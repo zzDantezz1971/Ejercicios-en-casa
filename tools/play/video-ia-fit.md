@@ -20,11 +20,11 @@ Alternativas si Flow no convence: **Kling AI** (función «Elements» para mante
 
 ## Descripción de Fit (pegar delante de cada escena)
 Fit, a friendly stylized 3D cartoon mannequin character, like a smooth wooden artist's mannequin turned into a cute toy:
-bald round head, simple cute face with small black dot eyes, thin eyebrows and a small smile, matte light-tan skin,
-visible round ball joints at elbows and knees, slim segmented limbs. He wears a bright royal-blue t-shirt with big
-puffy rounded shoulders and thin white trim on the sleeves, black shorts with a white stripe and white hem, short white
-socks and orange-yellow sneakers, an orange wristband on one wrist and a black watch on the other. Clean soft 3D render,
-Pixar-like toy style, soft lighting. Vertical 9:16.
+bald round head, medium tan matte skin, short light stubble beard, small smile, round black sunglasses, visible round
+ball joints at shoulders, elbows and knees, slim segmented limbs. He wears a bright royal-blue sleeveless tank top
+(bare arms), long dark burgundy-red leggings with a thin white stripe down the sides, short white socks and red
+sneakers, a black watch with a light purple face on one wrist and an orange wristband on the other. Clean soft 3D
+render, Pixar-like toy style, soft lighting. Vertical 9:16.
 
 ## Escenas (8 s cada una como máximo)
 **1 · Dormido (gancho)**
@@ -54,10 +54,10 @@ falls around him, he winks at the camera. Bright, joyful.
 ## Consejos
 - Que cada clip dure poco (1,5-2 s en el montaje): engancha más y se notan menos los fallos de la IA.
 - Revisa que la técnica de los ejercicios sea razonable (es una app de ejercicio: la gente se fija).
-- Si la IA cambia demasiado a Fit (pelo, ropa…), repite la escena o añade «same character as the reference images».
+- Si la IA cambia demasiado a Fit (gafas, barba, ropa…), repite la escena o añade «same character as the reference images».
 
 ## Cómo se hicieron las imágenes de referencia
 Con `npm run dev`, `tools/figures.html?ids=saltos-suaves-en-el-sitio&t=0&w=1500&mood=happy&az=90&el=6` (de frente;
 az 50 = tres cuartos, 0 = de lado, 270 = de espaldas), `ids=saltos-de-tijera-jumping-jacks&t=0.5&mood=happy`
-(celebrando) y `ids=torsion-lumbar-tumbado&t=0&mood=relaxed` (dormido). Se recorta sin la sombra y se pone sobre fondo
+(celebrando) y `ids=torsion-lumbar-tumbado&t=0&mood=relaxed` (dormido). Con el aspecto de Fit (decidido el 21 nov 2026): `&look={"skin":"#C68B62","shirt":"#2F5BEA","shorts":"#7A1F2B","shoe":"#E5484D","glasses":"sun","beard":"stubble","hair":"none","top":"tank","bottom":"leggings","body":"man"}`. Se recorta sin la sombra y se pone sobre fondo
 gris claro (#E8ECF2), 1536×1536.
