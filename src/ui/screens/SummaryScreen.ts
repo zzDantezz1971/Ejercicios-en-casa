@@ -86,7 +86,9 @@ export class SummaryScreen implements Screen {
     if (!tips.length) return null;
     return h('div', { class: 'note tip weight-tips' }, icon('bolt'),
       h('div', {}, ...tips.map(({ id, sug }) =>
-        h('p', {}, h('strong', {}, this.app.catalog.get(id)?.name ?? ''), `: ${sug!.sessions} sesiones completas con ${kg(sug!.kg)}. Prueba con ${kg(sug!.next)} la próxima vez.`))));
+        // el nombre (en negrita) y la frase van por separado, para que la frase se traduzca entera
+        h('p', {}, h('strong', {}, this.app.catalog.get(id)?.name ?? ''), ': ',
+          h('span', {}, `${sug!.sessions} sesiones completas con ${kg(sug!.kg)}. Prueba con ${kg(sug!.next)} la próxima vez.`)))));
   }
 
   enter(): void {

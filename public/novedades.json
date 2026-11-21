@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-21T19:35:16Z",
+    "es": ["Al terminar un entrenamiento, la sugerencia de subir de peso («… sesiones completas con … Prueba con … la próxima vez») ya sale traducida al catalán y al inglés."],
+    "ca": ["En acabar un entrenament, el suggeriment de pujar de pes («… sessions completes amb … Prova amb … la pròxima vegada») ja surt traduït al català i a l’anglès."],
+    "en": ["At the end of a workout, the tip to go up in weight (“… full sessions with … Try … next time”) is now translated into Catalan and English."]
+  },
+  {
     "fecha": "2026-11-21T19:32:45Z",
     "es": ["Lista de ejercicios: el orden alfabético sigue bien las reglas de cada idioma (en castellano, la ñ va después de la n) y, «Por material», los ejercicios con dos materiales van justo detrás del primero."],
     "ca": ["Llista d’exercicis: l’ordre alfabètic segueix bé les regles de cada idioma (en castellà, la ñ va després de la n) i, «Per material», els exercicis amb dos materials van just darrere del primer."],
