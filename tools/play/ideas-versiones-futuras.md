@@ -76,3 +76,9 @@ Decidido el 18 nov 2026: hacerlo en dos fases.
 
 ## Ideas de los probadores (ir añadiendo aquí)
 - (vacío)
+
+## Reels de Instagram
+- Herramienta: `tools/reel.html` + `tools/reel.ts` (con `npm run dev`; dibuja el muñeco de la app en vertical 1080×1920 con
+  título, series, material, músculos y el logo). Un script de Playwright recoge los fotogramas y ffmpeg hace el MP4
+  (bucle exacto: un número entero de repeticiones del movimiento). Primer Reel de prueba: «Exercici del dia: Esquat goblet
+  amb pesa russa» (21 nov 2026). La música se añade en Instagram o CapCut (biblioteca de Instagram).
