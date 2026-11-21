@@ -1763,8 +1763,8 @@ button.plan-row { cursor: pointer; }
 .tables-head-btns { display: flex; justify-content: flex-end; gap: 8px; }
 .tables-head-btns .btn { padding: 7px 14px; font-size: .9rem; min-height: 0; }
 .tables-head-btns .btn .ico { width: 16px; height: 16px; }
-.group-card { display: flex; flex-direction: column; gap: 12px; background: color-mix(in srgb, var(--accent) 9%, var(--surface)); border-color: color-mix(in srgb, var(--accent) 35%, var(--line)); }
-.group-card.active { border-color: color-mix(in srgb, var(--accent) 60%, var(--line)); }
+/* todos los grupos con el mismo contorno azul (el de la tabla en uso ya se distingue por su propia tarjeta) */
+.group-card { display: flex; flex-direction: column; gap: 12px; background: color-mix(in srgb, var(--accent) 9%, var(--surface)); border-color: color-mix(in srgb, var(--accent) 60%, var(--line)); }
 .group-head { display: flex; align-items: center; gap: 8px; }
 .group-main { flex: 1; min-width: 0; display: flex; align-items: center; gap: 12px; background: none; border: 0; padding: 0; color: inherit; font: inherit; text-align: left; cursor: pointer; }
 .group-icon { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; flex: none; background: var(--accent-soft); color: var(--accent-2); }
