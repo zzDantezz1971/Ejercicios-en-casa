@@ -866,6 +866,11 @@ button.hd-row { width: 100%; color: inherit; font: inherit; cursor: pointer; }
 .version-open .chev { width: 20px; height: 20px; color: var(--muted); }
 .version-open .muted.version-news { grid-column: auto; color: var(--accent); }
 .version-card .version-news { margin-top: 4px; }
+.version-web { display: flex; flex-direction: column; align-items: stretch; gap: 12px; }
+.version-web .set-text p { margin: 2px 0 0; }
+.version-btns { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 8px; }
+.version-btns .btn { white-space: nowrap; min-width: 0; }
+.version-web .muted:last-child { margin: 0; }
 .news-day + .news-day { margin-top: 12px; }
 .news-date { margin: 0 0 4px; }
 .update-banner {

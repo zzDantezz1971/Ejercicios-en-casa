@@ -88,12 +88,14 @@ export class SettingsScreen implements Screen {
         status.textContent = navigator.onLine ? 'Ya tienes la última versión.' : 'Sin conexión: no se puede comprobar ahora.';
       }
     });
-    return h('section', { class: 'card version-card' },
+    // título y fecha arriba; debajo, los dos botones uno al lado del otro; y el resultado de buscar
+    return h('section', { class: 'card version-card version-web' },
       h('div', { class: 'set-text' },
         h('strong', {}, 'Versión de la app'),
-        h('p', { class: 'muted small' }, `Del ${when}`),
-        h('button', { class: 'link-btn version-news', onclick: () => void showVersionNews() }, 'Ver novedades')),
-      btn,
+        h('p', { class: 'muted small' }, `Del ${when}`)),
+      h('div', { class: 'version-btns' },
+        h('button', { class: 'btn ghost small', onclick: () => void showVersionNews() }, icon('info'), 'Ver novedades'),
+        btn),
       status);
   }
 
