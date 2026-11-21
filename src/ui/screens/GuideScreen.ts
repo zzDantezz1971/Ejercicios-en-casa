@@ -32,7 +32,7 @@ const GUIDE: Array<{ icon: IconName; title: string; sub: string; points: Array<s
       { h: 'Editar una tabla' },
       'La tabla se ve por bloques (Calentamiento, Fuerza, Abdominales y Estiramientos); toca el título de un bloque para abrirlo o cerrarlo.',
       'En cada ejercicio: el tiempo (− +), el peso si usa mancuernas, cambiarlo por otro, quitarlo o moverlo arrastrando por el asa. Toca la imagen o el nombre para ver cómo se hace.',
-      'Con «Ordenar los bloques» cambias el orden de los bloques de esa tabla (por ejemplo, abdominales antes que fuerza): el entrenamiento, Inicio y el historial siguen ese orden.',
+      'Los bloques también se ordenan arrastrándolos por su asa (a la izquierda del título): por ejemplo, abdominales antes que fuerza. El entrenamiento, Inicio y el historial siguen ese orden.',
       'Vueltas: repite todos los ejercicios de un bloque 2, 3 o más veces seguidas.',
       'En «Añadir un ejercicio» marca con el + los que quieras, ajusta su tiempo (y el peso) y añádelos todos con el botón de abajo. Debajo de cada bloque ves el material que necesita (en naranja, el que no tienes).',
       'Para pasar un bloque entero a otra tabla: «Copiar el bloque» y, en el mismo bloque de la otra tabla, «Pegar».',

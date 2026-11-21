@@ -167,42 +167,6 @@ function withSection(r: GenResult, s: SectionId, items: GenResult['routine'][Sec
   return { routine: { ...r.routine, [s]: items }, rounds, ...(r.order ? { order: r.order } : {}) };
 }
 
-/** Ventana para cambiar el orden de los bloques de una tabla: cada uno con flechas para subirlo o bajarlo. */
-function orderDialog(initial: readonly SectionId[] | undefined, save: (order: SectionId[]) => void): void {
-  let order = sectionOrder(initial);
-  const list = h('div', { class: 'order-list' });
-  const paint = () => {
-    // cada bloque con su asa para arrastrarlo (a la izquierda) y flechas ↑ ↓, como los ejercicios
-    const rows: SortableRow[] = order.map((s, i) => {
-      const st = SECTION_STYLE[s];
-      const content = h('div', { class: 'order-row' },
-        h('span', { class: 'order-n' }, String(i + 1)),
-        h('span', { class: 'sec-icon' }, icon(st.icon)),
-        h('strong', {}, SECTION_TITLES[s]));
-      content.style.setProperty('--sec', st.color);
-      return { content, label: SECTION_TITLES[s] };
-    });
-    list.replaceChildren(sortableList(rows, (from, to) => {
-      const next = order.slice();
-      const [x] = next.splice(from, 1);
-      next.splice(to, 0, x);
-      order = next;
-      paint();
-    }, { handleFirst: true }));
-  };
-  paint();
-  const close = () => wrap.remove();
-  const wrap = h('div', { class: 'dialog-wrap', onclick: (e: Event) => e.target === wrap && close() },
-    h('div', { class: 'dialog order-dialog', role: 'dialog', 'aria-modal': 'true' },
-      h('h3', {}, 'Orden de los bloques'),
-      h('p', { class: 'muted small' }, 'El entrenamiento seguirá este orden. Los bloques sin ejercicios se saltan.'),
-      list,
-      h('div', { class: 'dialog-actions' },
-        h('button', { class: 'btn ghost', onclick: () => { order = [...SECTION_IDS]; paint(); } }, 'Orden de siempre'),
-        h('button', { class: 'btn primary', onclick: () => { close(); save(order); } }, 'Guardar'))));
-  document.body.append(wrap);
-}
-
 /** Vista previa de una tabla: resumen y ejercicios por apartado. Al tocar un ejercicio se ve cómo se hace;
  *  con `edit`, se ordenan arrastrándolos con el asa y cada uno se puede cambiar o quitar (con aviso). */
 /** «Necesitas: [icono] Step, [icono] Mancuernas»: cada material con su icono. */
@@ -220,9 +184,8 @@ export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement
     h('span', {}, icon('swap'), 'Cambiar'),
     h('span', {}, icon('trash', 'ico danger'), 'Quitar'),
     h('span', {}, icon('tables'), 'Arrastra para mover')));
-  // al editar una tabla guardada: cambiar el orden de sus bloques
-  if (edit?.full) box.append(h('button', { class: 'btn ghost small order-open', onclick: () => orderDialog(r.order, (order) => edit.set({ ...r, order })) },
-    icon('sort'), 'Ordenar los bloques'));
+  // al editar una tabla guardada, los bloques también se ordenan arrastrándolos por su asa
+  const blockRows: SortableRow[] = [];
   for (const s of sectionOrder(r.order)) {
     const items = r.routine[s];
     // sin ejercicios: solo se ve si se puede añadir alguno
@@ -261,7 +224,8 @@ export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement
       if ((e.target as HTMLElement).closest('button, input, select')) return;
       fold.click();
     });
-    box.append(head, sbody);
+    if (edit?.full) blockRows.push({ content: h('div', { class: 'sec-block' }, head, sbody), label: SECTION_TITLES[s] });
+    else box.append(head, sbody);
     // el material que pide este apartado (el que no está en tu material, marcado)
     const need = neededEquip(app, r, [s]);
     if (need.length) sbody.append(h('div', { class: 'sec-need small', style: `--sec: ${st.color}` }, h('span', {}, 'Necesitas:'),
@@ -359,6 +323,12 @@ export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement
       sbody.append(h('div', { class: 'clip-row' }, copyBtn, pasteBtn));
     }
   }
+  if (edit?.full) box.append(h('div', { class: 'blocks-sort' }, sortableList(blockRows, (from, to) => {
+    const order = sectionOrder(r.order);
+    const [moved] = order.splice(from, 1);
+    order.splice(to, 0, moved);
+    edit.set({ ...r, order });
+  }, { arrows: false, handleFirst: true })));
   return box;
 }
 
