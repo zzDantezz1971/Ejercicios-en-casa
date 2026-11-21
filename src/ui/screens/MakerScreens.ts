@@ -116,6 +116,10 @@ export interface PreviewEdit {
   addEmpty?: (s: SectionId) => void;
   /** Tabla que se edita (para copiar un apartado y pegarlo solo en otra tabla). */
   tableId?: string;
+  /** Vista general de la tabla: una tarjeta por bloque (que se ordenan arrastrándolas); al tocar una, se abre. */
+  openSection?: (s: SectionId) => void;
+  /** Solo este bloque, abierto (la pantalla de un bloque). */
+  section?: SectionId;
 }
 
 /** Añadir ejercicios a un apartado: abre la lista, se eligen los que se quieran y se ponen al final. */
@@ -178,14 +182,43 @@ export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement
   const plan = WorkoutPlan.build(r.routine, app.catalog, app.store.settings, r.rounds, r.order);
   const shown = SECTION_IDS.flatMap((s) => r.routine[s].map((i) => app.catalog.get(i.exerciseId)).filter((e): e is NonNullable<typeof e> => !!e));
   const box = h('div', { class: 'maker-preview' },
-    h('p', { class: 'maker-total' }, icon('clock'), plan.isEmpty ? 'Sin ejercicios' : `${humanDuration(plan.estimatedSeconds)} · ${plural(plan.exerciseCount, 'ejercicio', 'ejercicios')}`));
+    // en la pantalla de un bloque, el tiempo y los ejercicios de ese bloque; si no, los de toda la tabla
+    h('p', { class: 'maker-total' }, icon('clock'), ...(() => {
+      if (!edit?.section) return [plan.isEmpty ? 'Sin ejercicios' : `${humanDuration(plan.estimatedSeconds)} · ${plural(plan.exerciseCount, 'ejercicio', 'ejercicios')}`];
+      const its = r.routine[edit.section].filter((i) => app.catalog.has(i.exerciseId));
+      const secs = its.reduce((n, i) => n + i.seconds, 0) * clampRounds(r.rounds[edit.section]);
+      return [its.length ? `${humanDuration(secs)} · ${plural(its.length, 'ejercicio', 'ejercicios')}` : 'Sin ejercicios'];
+    })()));
   // leyenda de los botones de cada ejercicio
   // leyenda: solo el asa para mover (los botones de cambiar y quitar ya se entienden por su icono)
   if (edit) box.append(h('div', { class: 'maker-legend' },
     h('span', {}, icon('tables'), 'Arrastra para mover')));
-  // al editar una tabla guardada, los bloques también se ordenan arrastrándolos por su asa
-  const blockRows: SortableRow[] = [];
-  for (const s of sectionOrder(r.order)) {
+  // vista general (Editar tabla): una tarjeta por bloque como en Inicio, con las vueltas, que se ordenan arrastrándolas
+  if (edit?.openSection) {
+    const open = edit.openSection;
+    const cards: SortableRow[] = sectionOrder(r.order).map((s) => {
+      const items = r.routine[s].filter((i) => app.catalog.has(i.exerciseId));
+      const R = clampRounds(r.rounds[s]);
+      const secs = items.reduce((n, i) => n + i.seconds, 0) * R;
+      const st = SECTION_STYLE[s];
+      const row = h('button', { class: 'sec-row' + (items.length ? '' : ' empty'), onclick: () => open(s) },
+        h('span', { class: 'sec-icon' }, icon(st.icon)),
+        h('span', { class: 'sec-text' },
+          h('strong', {}, h('span', {}, SECTION_TITLES[s]), items.length && R > 1 ? h('span', { class: 'sec-rounds' }, `x${R}`) : null),
+          h('span', { class: 'muted small' }, items.length ? `${plural(items.length, 'ejercicio', 'ejercicios')} · ${humanDuration(secs)}` : 'Sin ejercicios · toca para añadir')),
+        icon('chevron', 'ico chev'));
+      row.style.setProperty('--sec', st.color);
+      return { content: row, label: SECTION_TITLES[s] };
+    });
+    box.append(h('div', { class: 'blocks-sort sections' }, sortableList(cards, (from, to) => {
+      const order = sectionOrder(r.order);
+      const [moved] = order.splice(from, 1);
+      order.splice(to, 0, moved);
+      edit.set({ ...r, order });
+    }, { arrows: false, handleFirst: true })));
+    return box;
+  }
+  for (const s of edit?.section ? [edit.section] : sectionOrder(r.order)) {
     const items = r.routine[s];
     // sin ejercicios: solo se ve si se puede añadir alguno
     if (!items.length && !edit) continue;
@@ -202,6 +235,8 @@ export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement
     head.style.setProperty('--sec', st.color);
     // cada apartado se puede plegar (tocando su título) para que la lista no sea interminable
     const folded = foldedOf(edit);
+    // en la pantalla de un bloque, siempre abierto
+    if (edit?.section) folded.delete(s);
     const isFolded = folded.has(s);
     const sbody = h('div', { class: 'sec-body', hidden: isFolded });
     const fold = h('button', { class: 'sec-fold' + (isFolded ? ' folded' : ''), 'aria-expanded': String(!isFolded), 'aria-label': isFolded ? 'Desplegar' : 'Plegar', onclick: () => {
@@ -214,17 +249,16 @@ export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement
       head.classList.toggle('folded', now);
     } }, icon('chevron', 'ico'));
     const foldInfo = h('span', { class: 'muted small sec-fold-info', hidden: !isFolded }, items.length ? plural(items.length, 'ejercicio', 'ejercicios') : 'Sin ejercicios');
-    head.prepend(fold);
+    if (!edit?.section) head.prepend(fold);
     head.append(foldInfo);
     if (isFolded) head.classList.add('folded');
     // toda la fila del título abre y cierra el apartado (menos sus propios botones, como las vueltas)
-    head.classList.add('foldable');
-    head.addEventListener('click', (e) => {
+    if (!edit?.section) head.classList.add('foldable');
+    if (!edit?.section) head.addEventListener('click', (e) => {
       if ((e.target as HTMLElement).closest('button, input, select')) return;
       fold.click();
     });
-    if (edit?.full) blockRows.push({ content: h('div', { class: 'sec-block' }, head, sbody), label: SECTION_TITLES[s] });
-    else box.append(head, sbody);
+    box.append(head, sbody);
     // el material que pide este apartado (el que no está en tu material, marcado)
     const need = neededEquip(app, r, [s]);
     if (need.length) sbody.append(h('div', { class: 'sec-need small', style: `--sec: ${st.color}` }, h('span', {}, 'Necesitas:'),
@@ -322,12 +356,6 @@ export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement
       sbody.append(h('div', { class: 'clip-row' }, copyBtn, pasteBtn));
     }
   }
-  if (edit?.full) box.append(h('div', { class: 'blocks-sort' }, sortableList(blockRows, (from, to) => {
-    const order = sectionOrder(r.order);
-    const [moved] = order.splice(from, 1);
-    order.splice(to, 0, moved);
-    edit.set({ ...r, order });
-  }, { arrows: false, handleFirst: true })));
   return box;
 }
 

@@ -14,6 +14,7 @@ import { SECTION_IDS, SECTION_TITLES, type SectionId } from '../../domain/types'
 import { icon, SECTION_STYLE, type IconName } from '../icons';
 import { startWorkout } from '../components/startWorkout';
 import { header, isEmptyResult, preview } from './MakerScreens';
+import { TableBlockScreen } from './TableEditScreen';
 
 /*
  * Plan de la semana (Prémium): asistente (objetivo, días, minutos y nivel), pantalla «Mi plan» con la semana de
@@ -376,7 +377,7 @@ export class PlanDayScreen implements Screen {
     const set = (next: GenResult) => { app.store.setRoutineContent(t.id, next.routine, next.rounds, next.order); this.render(); };
     this.el.append(header(app, tr(kindLabel(plan, pd.kind)), dayName(pd.day)),
       h('div', { class: 'maker-body' },
-        preview(app, r, { set, ask: this.ask, full: true, tableId: t.id }),
+        preview(app, r, { set, ask: this.ask, full: true, tableId: t.id, openSection: (s) => app.push(new TableBlockScreen(app, t.id, s)) }),
         h('div', { class: 'maker-actions' },
           h('button', { class: 'btn ghost block', onclick: () => { const g = generate(o, genCtx(app)); this.ask.remove = true; set(g); window.scrollTo({ top: 0 }); } }, icon('swap'), 'Otra propuesta'),
           h('button', { class: 'btn primary block big', disabled: isEmptyResult(r), onclick: () => startDay(app, plan.id, pd) }, icon('play'), 'Empezar'))));

@@ -1,4 +1,5 @@
 import type { GenResult } from '../../domain/generator';
+import { SECTION_TITLES, type SectionId } from '../../domain/types';
 import type { App, Screen } from '../App';
 import { clear, h, promptDialog } from '../dom';
 import { icon } from '../icons';
@@ -42,7 +43,36 @@ export class TableEditScreen implements Screen {
           const name = await promptDialog('Nuevo nombre', t.name, 'Guardar');
           if (name) { app.store.renameRoutine(t.id, name); this.render(); }
         } }, icon('edit'))),
-      h('div', { class: 'maker-body' }, preview(app, r, { set, ask: this.ask, full: true, tableId: t.id, addEmpty: (sec) => {
+      // una tarjeta por bloque (se ordenan arrastrándolas); al tocar una, se abre el bloque
+      h('div', { class: 'maker-body' }, preview(app, r, { set, ask: this.ask, full: true, tableId: t.id, openSection: (s) => app.push(new TableBlockScreen(app, t.id, s)) })));
+    if (y >= 0) window.scrollTo({ top: y });
+  }
+}
+
+/** Un bloque de una tabla guardada: sus ejercicios con el tiempo, cambiar, quitar, arrastrar, añadir, vueltas y peso. */
+export class TableBlockScreen implements Screen {
+  readonly el = h('main', { class: 'screen maker-screen' });
+  private readonly ask = { remove: true };
+
+  constructor(private readonly app: App, private readonly id: string, private readonly section: SectionId) {}
+
+  enter(): void {
+    this.render();
+  }
+
+  private render(): void {
+    const { app } = this;
+    const t = app.store.routineById(this.id);
+    const y = this.el.isConnected ? window.scrollY : -1;
+    clear(this.el);
+    const back = h('button', { class: 'icon-btn', 'aria-label': 'Volver', onclick: () => app.back() }, icon('back'));
+    if (!t) { this.el.append(h('header', { class: 'bar sticky' }, back)); return; }
+    const r: GenResult = { routine: t.routine, rounds: { ...(t.rounds ?? {}) }, ...(t.order ? { order: t.order } : {}) };
+    const set = (next: GenResult) => { app.store.setRoutineContent(t.id, next.routine, next.rounds, next.order); this.render(); };
+    this.el.append(
+      h('header', { class: 'bar sticky' }, back,
+        h('div', { class: 'titles' }, h('span', { class: 'subtitle', 'data-no-tr': '' }, t.name), h('h1', { class: 'bar-title' }, SECTION_TITLES[this.section]))),
+      h('div', { class: 'maker-body' }, preview(app, r, { set, ask: this.ask, full: true, tableId: t.id, section: this.section, addEmpty: (sec) => {
         // la pantalla de elegir ejercicios trabaja sobre la tabla en uso: esta pasa a serlo
         if (app.store.active.id !== t.id) app.store.setActive(t.id);
         app.push(new RoutineScreen(app, sec));

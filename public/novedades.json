@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-21T23:17:50Z",
+    "es": ["Editar tabla, más clara: una tarjeta por bloque como en Inicio, con «x2» si se repite, que se ordenan arrastrándolas por su asa. Al tocar un bloque se abren sus ejercicios para cambiarlos."],
+    "ca": ["Edita la taula, més clara: una targeta per bloc com a Inici, amb «x2» si es repeteix, que s’ordenen arrossegant-les per la nansa. En tocar un bloc s’obren els seus exercicis per canviar-los."],
+    "en": ["Edit routine, clearer: one card per block like on Home, with “x2” if it repeats, reordered by dragging their handle. Tap a block to open and change its exercises."]
+  },
+  {
     "fecha": "2026-11-21T22:37:35Z",
     "es": ["Al terminar un entrenamiento ya no sale la ventana de «Hace X días que no te pesas». El recordatorio de peso llega solo como notificación del móvil (app Android), el día y la hora que elijas en Recordatorios."],
     "ca": ["En acabar un entrenament ja no surt la finestra de «Fa X dies que no et peses». El recordatori de pes arriba només com a notificació del mòbil (app d’Android), el dia i l’hora que triïs a Recordatoris."],
