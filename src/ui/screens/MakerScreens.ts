@@ -180,9 +180,8 @@ export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement
   const box = h('div', { class: 'maker-preview' },
     h('p', { class: 'maker-total' }, icon('clock'), plan.isEmpty ? 'Sin ejercicios' : `${humanDuration(plan.estimatedSeconds)} · ${plural(plan.exerciseCount, 'ejercicio', 'ejercicios')}`));
   // leyenda de los botones de cada ejercicio
+  // leyenda: solo el asa para mover (los botones de cambiar y quitar ya se entienden por su icono)
   if (edit) box.append(h('div', { class: 'maker-legend' },
-    h('span', {}, icon('swap'), 'Cambiar'),
-    h('span', {}, icon('trash', 'ico danger'), 'Quitar'),
     h('span', {}, icon('tables'), 'Arrastra para mover')));
   // al editar una tabla guardada, los bloques también se ordenan arrastrándolos por su asa
   const blockRows: SortableRow[] = [];
