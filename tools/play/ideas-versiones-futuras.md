@@ -9,9 +9,11 @@ Cada idea: de dónde sale, qué sería y qué hay que tener en cuenta.
 - **Prueba cerrada:** 12 testers alcanzados el 18 nov 2026 → los 14 días se cumplen hacia el **2 dic 2026**; entonces,
   Panel › Solicitar acceso a producción.
 - **Durante la prueba cerrada (14 días):** la app se queda con el build 19, salvo que aparezca un error grave.
-- **Build 20 (ya hecho, sin compilar):** una fila por recordatorio en Configuració; número de versión y sus novedades
-  al tocarla; salir con «atrás» cierra la app de verdad (también de las recientes); grupos de tablas que se distinguen de las
-  tablas sueltas (propuesta C); orden de bloques propio de cada tabla (Edita › Ordena els blocs).
+- **Build 20 (ya hecho, sin compilar):** se compila y se sube **al acabar la prueba cerrada, antes de pasar a producción**
+  (decidido el 21 nov 2026). Lleva: una fila por recordatorio en Configuració; número de versión y sus novedades al
+  tocarla; salir con «atrás» cierra la app de verdad; grupos de tablas distinguibles (propuesta C); orden de bloques
+  propio de cada tabla (flechas y arrastrar); orden alfabético según el idioma y materiales combinados en su sitio;
+  sin sugerencias de subir de peso. Lista de pruebas: `pruebas-movil.md` › «Para probar en el build 20».
 - **Versión 21 (después de la prueba):** **polea de pesas** como material nuevo (ver abajo). Antes, preguntar a los
   probadores qué material tienen en casa (polea, gomas, TRX…).
 
