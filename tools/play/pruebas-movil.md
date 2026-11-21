@@ -4,6 +4,7 @@ Recordatorio: **cuando instales la app de prueba** (el APK de GitHub o la prueba
 Marca cada punto al probarlo. Si algo falla, haz una captura y cuéntamelo.
 
 ## 0e. Para probar en el build 20
+- [ ] Les meves taules con un grup obert: el grup té fons blavós i el nom en lletra normal; les seves taules són més petites (sense les pastilles de colors, botons més baixos) i es distingeixen de les soltes. Mirar-ho també en mode clar.
 - [ ] Desde Inici, botón «enrere» de Android: la app se cierra y NO aparece en la lista de apps recientes (botón ▢). Al abrirla de nuevo, arranca desde el principio. Desde otra pestaña, «enrere» sigue llevando a Inici.
 - [ ] Configuració › al final: «Versió 20» con «2026.11.xx-20» y la fecha; al tocarla, «Novetats de la versió 20» con solo lo hecho desde el build 19 (agrupado por día).
 - [ ] Configuració › Recordatoris (al abrir el grupo): una fila por recordatorio (Entrenament y Pes) con días y hora o «Desactivat»; con «Segueix el pla setmanal», pone «Pla setmanal · días · hora». Tocar cualquiera abre la pantalla de recordatorios.

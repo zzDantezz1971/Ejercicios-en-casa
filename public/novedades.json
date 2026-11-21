@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-21T19:05:46Z",
+    "es": ["Mis tablas: los grupos se distinguen mejor de las tablas sueltas. El grupo tiene fondo azulado y su nombre en letra normal, y sus tablas se ven más pequeñas."],
+    "ca": ["Les meves taules: els grups es distingeixen millor de les taules soltes. El grup té fons blavós i el nom en lletra normal, i les seves taules es veuen més petites."],
+    "en": ["My routines: groups now stand out from single routines. A group has a bluish background and its name in normal type, and its routines look smaller."]
+  },
+  {
     "fecha": "2026-11-19T08:59:06Z",
     "es": ["App Android: al salir con el botón «atrás» desde Inicio, la app se cierra del todo y ya no se queda en las apps recientes."],
     "ca": ["App Android: en sortir amb el botó «enrere» des d’Inici, l’app es tanca del tot i ja no es queda a les apps recents."],
