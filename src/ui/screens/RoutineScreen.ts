@@ -1,4 +1,4 @@
-import { tr } from '../../i18n';
+import { LOCALE, tr } from '../../i18n';
 import { RoutineEditor, STEP_SECONDS } from '../../domain/RoutineEditor';
 import { clampRounds, MAX_ROUNDS } from '../../domain/WorkoutPlan';
 import { SECTION_IDS, SECTION_TITLES, usesWeight, weightUnit, type ExerciseDef, type SectionId } from '../../domain/types';
@@ -31,7 +31,9 @@ function mainMuscle(e: ExerciseDef): Muscle | undefined {
 type Listed = ExerciseDef & { listGroup: string };
 /** Cómo se agrupa la lista en un tipo de orden: grupo de cada ejercicio, grupos en orden, título e icono. */
 interface Grouping { keyOf: (e: ExerciseDef) => string; keys: string[]; title: (k: string) => string; icon: (k: string) => SVGSVGElement }
-const byName = (a: ExerciseDef, b: ExerciseDef) => tr(a.name).localeCompare(tr(b.name));
+/** Orden alfabético del idioma de la app (en castellano, la ñ va después de la n; los acentos no cuentan). */
+const collator = new Intl.Collator(LOCALE, { sensitivity: 'base' });
+const byName = (a: ExerciseDef, b: ExerciseDef) => collator.compare(tr(a.name), tr(b.name));
 
 /** Preparar rutina: elegir ejercicios por apartado (se numeran en el orden en que se marcan) y su duración. */
 export class RoutineScreen implements Screen {
@@ -217,7 +219,8 @@ export class RoutineScreen implements Screen {
       title = (k) => (k === '-' ? 'Otros' : MUSCLE_NAMES[k as Muscle]);
       ico = (k) => zoneIcon(k === '-' ? '' : k);
     } else if (sort === 'material') {
-      const eqOf = (e: ExerciseDef) => (e.equip ?? []).map((g) => g[0] as (typeof EQUIPMENT)[number]);
+      // el material de cada ejercicio, siempre en el mismo orden (así «Bandas + Barra» va justo después de «Bandas»)
+      const eqOf = (e: ExerciseDef) => (e.equip ?? []).map((g) => g[0] as (typeof EQUIPMENT)[number]).sort((a, b) => EQUIPMENT.indexOf(a) - EQUIPMENT.indexOf(b));
       keyOf = (e) => eqOf(e).join('+') || '-';
       rank = (k) => {
         if (k === '-') return -1;
@@ -230,7 +233,7 @@ export class RoutineScreen implements Screen {
       // A-Z y personalizada: una sola lista, sin títulos
       keyOf = () => '';
     }
-    const keys = [...new Set(sec.exercises.map(keyOf))].sort((x, y) => rank(x) - rank(y) || title(x).localeCompare(title(y)));
+    const keys = [...new Set(sec.exercises.map(keyOf))].sort((x, y) => rank(x) - rank(y) || collator.compare(title(x), title(y)));
     return { keyOf, keys, title, icon: ico };
   }
 

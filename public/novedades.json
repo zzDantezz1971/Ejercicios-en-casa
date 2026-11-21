@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-21T19:32:45Z",
+    "es": ["Lista de ejercicios: el orden alfabético sigue bien las reglas de cada idioma (en castellano, la ñ va después de la n) y, «Por material», los ejercicios con dos materiales van justo detrás del primero."],
+    "ca": ["Llista d’exercicis: l’ordre alfabètic segueix bé les regles de cada idioma (en castellà, la ñ va després de la n) i, «Per material», els exercicis amb dos materials van just darrere del primer."],
+    "en": ["Exercise list: alphabetical order follows each language’s rules (in Spanish, ñ comes after n) and, “By equipment”, exercises with two items come right after the first one."]
+  },
+  {
     "fecha": "2026-11-21T19:17:15Z",
     "es": ["Cada tabla puede tener su propio orden de bloques: en Editar › «Ordenar los bloques» (por ejemplo, abdominales antes que fuerza o empezar con estiramientos). El entrenamiento, Inicio y el historial siguen ese orden."],
     "ca": ["Cada taula pot tenir el seu propi ordre de blocs: a Edita › «Ordena els blocs» (per exemple, abdominals abans que força o començar amb estiraments). L’entrenament, Inici i l’historial segueixen aquest ordre."],
