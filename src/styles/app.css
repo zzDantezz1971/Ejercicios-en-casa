@@ -806,7 +806,6 @@ button.hd-row { width: 100%; color: inherit; font: inherit; cursor: pointer; }
 .note.tip > .ico { color: #F5A524; flex: none; margin-top: 2px; }
 .note.tip p { margin: 0 0 8px; }
 .note.tip p:last-child { margin-bottom: 0; }
-.weight-tips { text-align: left; width: 100%; }
 
 /* Objetivo de peso */
 .weight-chart .w-goal { stroke: var(--sec-stretch); stroke-width: 1.5; stroke-dasharray: 5 4; }

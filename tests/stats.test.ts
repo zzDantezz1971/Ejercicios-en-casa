@@ -2,7 +2,7 @@ import { Store } from '../src/domain/Store';
 import { personalize, phraseOfDay } from '../src/domain/phrases';
 import { addMonths, monthKey, monthStats, weekKey, weekStart, weekStats } from '../src/domain/monthSummary';
 import { goalProgress } from '../src/domain/goal';
-import { exerciseWeights, weightSuggestion } from '../src/domain/weights';
+import { exerciseWeights } from '../src/domain/weights';
 import { MUSCLES } from '../src/figure/anatomy';
 import { muscleLoad, loadWeights } from '../src/domain/muscleLoad';
 import { describe, expect, it } from 'vitest';
@@ -87,12 +87,9 @@ describe('Músculos trabajados', () => {
 describe('Evolución de pesos', () => {
   const e = (d: string, kg: number, completed = true): HistoryEntry => ({ date: d, durationSec: 60, exercisesDone: 1, exercisesPlanned: 1, sections: ['pesas'], completed,
     items: [{ exerciseId: 'curl', section: 'pesas', planned: 30, seconds: 30, completed, weight: kg }] });
-  it('ordena los kilos por fecha y propone subir tras 4 sesiones completas con el mismo peso', () => {
+  it('ordena los kilos por fecha', () => {
     const h = [e('2026-11-06', 8), e('2026-11-04', 8), e('2026-11-02', 8), e('2026-10-30', 7), e('2026-11-01', 8)];
     expect(exerciseWeights(h, 'curl').map((w) => w.kg)).toEqual([7, 8, 8, 8, 8]);
-    expect(weightSuggestion(h, 'curl')).toEqual({ kg: 8, next: 9, sessions: 4 });
-    expect(weightSuggestion(h.slice(1), 'curl')).toBeNull();
-    expect(weightSuggestion([e('2026-11-07', 8, false), ...h], 'curl')).toBeNull();
   });
 });
 

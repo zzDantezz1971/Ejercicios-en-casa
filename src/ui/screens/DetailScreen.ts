@@ -1,6 +1,6 @@
 import { MUSCLE_NAMES, muscleWeights, parseMuscles } from '../../figure/anatomy';
 import { bodyMaps } from '../components/bodyMaps';
-import { exerciseWeights, weightSuggestion } from '../../domain/weights';
+import { exerciseWeights } from '../../domain/weights';
 import { weightChart } from '../components/weightCard';
 import { usesWeight, type ExerciseDef } from '../../domain/types';
 import { FigureView } from '../../figure/FigureView';
@@ -302,7 +302,7 @@ export class DetailScreen implements Screen {
     return true;
   }
 
-  /** Kilos usados en este ejercicio a lo largo del tiempo y propuesta de subir peso. */
+  /** Kilos usados en este ejercicio a lo largo del tiempo. */
   private renderWeights(): void {
     const { app, ex } = this;
     this.weights.replaceChildren();
@@ -310,13 +310,10 @@ export class DetailScreen implements Screen {
     const ws = exerciseWeights(app.store.history, ex.id);
     if (!ws.length) return;
     const last = ws[ws.length - 1].kg, max = Math.max(...ws.map((w) => w.kg));
-    const sug = weightSuggestion(app.store.history, ex.id);
     this.weights.append(h('section', { class: 'card hr-card ex-weights' },
       h('div', { class: 'card-head' }, h('h3', {}, 'Tus pesos'), h('span', { class: 'muted small' }, 'por mancuerna')),
       h('p', { class: 'muted small' }, `Último: ${kg(last)} · Máximo: ${kg(max)} · ${ws.length} ${ws.length === 1 ? 'sesión' : 'sesiones'}`),
-      ws.length > 1 ? (weightChart(ws) as unknown as HTMLElement) : null,
-      sug ? h('div', { class: 'note tip' }, icon('bolt'),
-        h('div', {}, h('p', {}, `Llevas ${sug.sessions} sesiones completas con ${kg(sug.kg)}. ¿Probamos con ${kg(sug.next)}?`))) : null));
+      ws.length > 1 ? (weightChart(ws) as unknown as HTMLElement) : null));
   }
 
   dispose(): void {

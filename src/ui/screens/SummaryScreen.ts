@@ -1,10 +1,9 @@
 import type { SessionSummary } from '../../domain/WorkoutSession';
 import { SECTION_TITLES, type HeartSummary } from '../../domain/types';
 import { caloriesOf } from '../../domain/calories';
-import { weightSuggestion } from '../../domain/weights';
 import { checkAndCelebrate } from '../components/medals';
 import type { App, Screen } from '../App';
-import { h, humanDuration, kg } from '../dom';
+import { h, humanDuration } from '../dom';
 import { icon, SECTION_STYLE } from '../icons';
 import { remindersDue, showReminders } from '../components/weightReminder';
 import { finishPhrase } from '../../services/Coach';
@@ -51,7 +50,6 @@ export class SummaryScreen implements Screen {
           : null,
         heart ? h('p', { class: 'hr-summary' }, icon('heart'), `Pulso medio ${heart.avg} · máximo ${heart.max} ppm`) : null,
         this.streakLine(s),
-        this.weightTips(s),
         s.exercisesDone ? h('p', { class: 'muted small' }, 'Guardado en el historial.') : null,
         // los recordatorios (peso, copia) salen después, en una ventana, al volver al inicio
         h('button', { class: 'btn primary block big', onclick: () => {
@@ -76,19 +74,6 @@ export class SummaryScreen implements Screen {
     const today = { date: s.startedAt.toISOString() } as (typeof this.app.store.history)[number];
     const n = streak([...this.app.store.history, today]);
     return h('p', { class: 'kcal-summary' }, icon('calendar'), n === 1 ? 'Primer día de racha' : `Racha de ${n} días seguidos`);
-  }
-
-  /** Ejercicios en los que ya toca subir de peso. */
-  private weightTips(s: SessionSummary): HTMLElement | null {
-    if (!s.exercisesDone) return null;
-    const ids = [...new Set(s.items.filter((i) => i.weight && i.completed).map((i) => i.exerciseId))];
-    const tips = ids.map((id) => ({ id, sug: weightSuggestion(this.app.store.history, id) })).filter((t) => t.sug).slice(0, 3);
-    if (!tips.length) return null;
-    return h('div', { class: 'note tip weight-tips' }, icon('bolt'),
-      h('div', {}, ...tips.map(({ id, sug }) =>
-        // el nombre (en negrita) y la frase van por separado, para que la frase se traduzca entera
-        h('p', {}, h('strong', {}, this.app.catalog.get(id)?.name ?? ''), ': ',
-          h('span', {}, `${sug!.sessions} sesiones completas con ${kg(sug!.kg)}. Prueba con ${kg(sug!.next)} la próxima vez.`)))));
   }
 
   enter(): void {

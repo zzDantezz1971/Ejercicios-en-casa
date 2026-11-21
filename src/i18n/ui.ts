@@ -282,7 +282,6 @@ const ROWS: Row[] = [
   ['Máximo: {a}', 'Màxim: {a}', 'Max: {a}'],
   ['{n} sesión', '{n} sessió', '{n} session'],
   ['{n} sesiones', '{n} sessions', '{n} sessions'],
-  ['Llevas {n} sesiones completas con {a}. ¿Probamos con {b}?', 'Ja portes {n} sessions completes amb {a}. Provem amb {b}?', 'You’ve done {n} full sessions with {a}. Shall we try {b}?'],
   ['Poner {a} en mi tabla', 'Posa {a} a la meva taula', 'Put {a} in my routine'],
   ['En la tabla (n.º {p}) · Quitar', 'A la taula (núm. {p}) · Treu', 'In the routine (no. {p}) · Remove'],
   ['Añadir a la tabla', 'Afegeix a la taula', 'Add to routine'],
@@ -374,7 +373,6 @@ const ROWS: Row[] = [
   ['Volver al inicio', 'Torna a l’inici', 'Back to home'],
   ['con tu pulso', 'amb el teu pols', 'from your heart rate'],
   ['estimadas', 'estimades', 'estimated'],
-  ['{x}: {n} sesiones completas con {a}. Prueba con {b} la próxima vez.', '{x}: {n} sessions completes amb {a}. Prova amb {b} la pròxima vegada.', '{x}: {n} full sessions with {a}. Try {b} next time.'],
   ['¿Anotas tu peso de hoy?', 'Anotes el teu pes d’avui?', 'Log today’s weight?'],
   ['Aún no has anotado tu peso', 'Encara no has anotat el teu pes', 'You haven’t logged your weight yet'],
   ['Hace {d} días que no te pesas', 'Fa {d} dies que no et peses', 'You haven’t weighed yourself for {d} days'],
@@ -1273,7 +1271,6 @@ const ROWS: Row[] = [
   ["El entrenamiento seguirá este orden. Los bloques sin ejercicios se saltan.", "L’entrenament seguirà aquest ordre. Els blocs sense exercicis se salten.", "The workout will follow this order. Blocks with no exercises are skipped."],
   ["Orden de siempre", "Ordre de sempre", "Default order"],
   ["Con «Ordenar los bloques» cambias el orden de los bloques de esa tabla (por ejemplo, abdominales antes que fuerza): el entrenamiento, Inicio y el historial siguen ese orden.", "Amb «Ordena els blocs» canvies l’ordre dels blocs d’aquesta taula (per exemple, abdominals abans que força): l’entrenament, Inici i l’historial segueixen aquest ordre.", "With “Reorder blocks” you change the order of that routine’s blocks (for example, abs before strength): the workout, Home and history follow that order."],
-  ["{n} sesiones completas con {a}. Prueba con {b} la próxima vez.", "{n} sessions completes amb {a}. Prova amb {b} la pròxima vegada.", "{n} full sessions with {a}. Try {b} next time."],
 ];
 
 export const UI_CA: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[1]]));
