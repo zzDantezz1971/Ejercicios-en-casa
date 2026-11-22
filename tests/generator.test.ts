@@ -12,6 +12,14 @@ function seeded(seed: number) {
 const ctx = (owned: string[], seed = 1): GenContext => ({ sections: SECTIONS, catalog: CATALOG, owned: new Set(owned), settings: DEFAULT_SETTINGS, rng: seeded(seed) });
 
 describe('Asistente «Crea-la per mi»', () => {
+  it('pilates: después del calentamiento, solo ejercicios de pilates', () => {
+    for (const level of LEVELS) for (const minutes of MINUTES) {
+      const r = generate({ goal: 'pilates', zone: 'entero', level, minutes }, ctx([], minutes + level.length));
+      const main = (['pesas', 'abdominales', 'estiramientos'] as const).flatMap((s) => r.routine[s].map((i) => CATALOG.get(i.exerciseId)!));
+      expect(main.length).toBeGreaterThan(2);
+      for (const ex of main) expect(ex.pilates, ex.id).toBe(true);
+    }
+  });
   it('cuadra el tiempo, no repite ejercicios y respeta el material en todas las combinaciones', () => {
     const worst: string[] = [];
     for (const owned of [[], ['mancuernas', 'banco', 'bandas', 'kettlebell', 'step', 'fitball', 'comba', 'barra', 'dominadas', 'rueda']])

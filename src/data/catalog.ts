@@ -196,6 +196,21 @@ const RETIRED = new Set(['peso-muerto-rumano-con-mancuernas', 'curl-alterno-de-b
   'halo-con-pesa-rusa', 'press-de-pecho-con-banda', 'plancha-con-toques-de-hombro',
   // eliminados desde la app (copia del 13-11-2026, 22:46)
   'retroversion-pelvica']);
-const ALL_SECTIONS: SectionInfo[] = buildSections();
+/** Ejercicios de pilates: los 9 de data/extra/pilates.ts y los que ya había y son de pilates (25 en total). */
+export const PILATES_IDS = new Set([
+  'el-cien', 'enrollarse-roll-up', 'estiramiento-de-una-pierna', 'estiramiento-de-dos-piernas', 'circulos-de-pierna-tumbado',
+  'rodar-como-una-pelota', 'estiramiento-de-columna-sentado', 'patada-de-una-pierna-boca-abajo', 'puente-de-hombros-con-patada',
+  'puente-de-gluteos', 'puente-a-una-pierna', 'dead-bug-bicho-muerto', 'nadador-suave-superman-alterno', 'gato-camello',
+  'plancha-frontal', 'plancha-lateral', 'tijeras', 'elevaciones-de-piernas', 'barquita-hollow-hold', 'abdominal-en-v',
+  'bicicleta', 'abduccion-de-cadera-tumbado-de-lado', 'postura-del-nino', 'bird-dog-perro-de-caza', 'cobra',
+]);
+function markPilates(sections: SectionInfo[]): SectionInfo[] {
+  for (const s of sections) for (const e of s.exercises) if (PILATES_IDS.has(e.id)) {
+    e.pilates = true;
+    e.badges = [...(e.badges ?? []).filter((b) => b !== 'pilates'), 'pilates'];
+  }
+  return sections;
+}
+const ALL_SECTIONS: SectionInfo[] = markPilates(buildSections());
 export const SECTIONS: SectionInfo[] = ALL_SECTIONS.map((s) => ({ ...s, exercises: s.exercises.filter((e) => !RETIRED.has(e.id)) }));
 export const CATALOG: Catalog = new Map(ALL_SECTIONS.flatMap((s) => s.exercises).map((e) => [e.id, e]));

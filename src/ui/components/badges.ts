@@ -7,6 +7,7 @@ const LABELS: Record<Badge, [string, string]> = {
   lumbar: ['good', 'Bueno para la lumbar'],
   caution: ['warn', 'Ojo con la lumbar'],
   gentle: ['warn', 'Hazlo suave'],
+  pilates: ['pilates', 'Pilates'],
 };
 
 export function badgeList(badges?: Badge[]): HTMLElement | null {

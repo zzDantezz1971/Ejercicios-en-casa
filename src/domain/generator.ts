@@ -8,13 +8,13 @@ import { emptyRoutine, SECTION_IDS, type ExerciseDef, type Routine, type Section
  * (sin repetir el mismo músculo seguido), estira los músculos que se han trabajado y ajusta el total al tiempo pedido.
  */
 
-export type Goal = 'forma' | 'perder' | 'fuerza' | 'flexibilidad' | 'espalda';
+export type Goal = 'forma' | 'perder' | 'fuerza' | 'flexibilidad' | 'espalda' | 'pilates';
 export type Zone = 'entero' | 'superior' | 'inferior' | 'abdomen';
 export type Level = 'suave' | 'normal' | 'intenso';
 
 export interface GenOptions {
   goal: Goal;
-  /** Con «espalda» no se pregunta (va enfocado a la espalda y el core). */
+  /** Con «espalda», «flexibilidad» y «pilates» no se pregunta (va al cuerpo entero o a la espalda y el core). */
   zone: Zone;
   minutes: number;
   level: Level;
@@ -39,7 +39,10 @@ export interface GenResult {
   order?: SectionId[];
 }
 
-export const GOALS: readonly Goal[] = ['forma', 'perder', 'fuerza', 'flexibilidad', 'espalda'];
+export const GOALS: readonly Goal[] = ['forma', 'perder', 'fuerza', 'flexibilidad', 'espalda', 'pilates'];
+
+/** Objetivos en los que no se pregunta la zona. */
+export const noZone = (g: Goal): boolean => g === 'espalda' || g === 'flexibilidad' || g === 'pilates';
 export const ZONES: readonly Zone[] = ['entero', 'superior', 'inferior', 'abdomen'];
 export const LEVELS: readonly Level[] = ['suave', 'normal', 'intenso'];
 export const MINUTES: readonly number[] = [10, 15, 20, 30, 45];
@@ -51,6 +54,7 @@ export const GOAL_INFO: Record<Goal, { name: string; help: string; icon: string 
   fuerza: { name: 'Ganar fuerza', help: 'Más ejercicios de fuerza y más vueltas.', icon: 'dumbbell' },
   flexibilidad: { name: 'Flexibilidad', help: 'Movilidad y estiramientos.', icon: 'stretch' },
   espalda: { name: 'Espalda sana', help: 'Suave: movilidad, core y estiramientos de espalda.', icon: 'heart' },
+  pilates: { name: 'Pilates', help: 'Ejercicios de pilates en la esterilla: core, control y estiramientos.', icon: 'target' },
 };
 export const ZONE_INFO: Record<Zone, { name: string; help: string }> = {
   entero: { name: 'Cuerpo entero', help: 'Brazos, tronco y piernas.' },
@@ -79,6 +83,7 @@ const SHARE: Record<Goal, Record<SectionId, number>> = {
   fuerza: { calentamiento: 0.13, pesas: 0.6, abdominales: 0.14, estiramientos: 0.13 },
   flexibilidad: { calentamiento: 0.22, pesas: 0, abdominales: 0, estiramientos: 0.78 },
   espalda: { calentamiento: 0.2, pesas: 0.18, abdominales: 0.27, estiramientos: 0.35 },
+  pilates: { calentamiento: 0.15, pesas: 0, abdominales: 0.55, estiramientos: 0.3 },
 };
 
 /** Segundos de cada ejercicio según el nivel. */
@@ -127,6 +132,8 @@ function allowed(ex: ExerciseDef, o: GenOptions, owned: ReadonlySet<string>): bo
   if (ex.pending || !canDo(ex.equip, owned)) return false;
   // en suave y para la espalda, nada marcado como exigente
   if ((o.level === 'suave' || o.goal === 'espalda') && ex.badges?.includes('caution')) return false;
+  // pilates: después del calentamiento, solo ejercicios de pilates
+  if (o.goal === 'pilates' && ex.section !== 'calentamiento' && !ex.pilates) return false;
   return true;
 }
 
@@ -138,9 +145,10 @@ function weightOf(ex: ExerciseDef, section: SectionId, o: GenOptions, worked: Re
     const g = ex.group ?? '';
     w = 1;
     if (o.goal === 'perder' && /pulsaciones|comba/i.test(g)) w = 3;
-    if ((o.goal === 'flexibilidad' || o.goal === 'espalda') && /movilidad/i.test(g)) w = 3;
+    if ((o.goal === 'flexibilidad' || o.goal === 'espalda' || o.goal === 'pilates') && /movilidad/i.test(g)) w = 3;
     if (o.goal === 'espalda' && /pulsaciones/i.test(g)) w = 0.3;
-    if ((o.goal === 'flexibilidad' || o.goal === 'espalda' || o.level === 'suave') && /comba/i.test(g)) w = 0.2;
+    if ((o.goal === 'flexibilidad' || o.goal === 'espalda' || o.goal === 'pilates' || o.level === 'suave') && /comba/i.test(g)) w = 0.2;
+    if (o.goal === 'pilates' && /pulsaciones/i.test(g)) w = 0.3;
     w *= 1 + Math.min(2, zoneScore(ex, zone, section)) * 0.3;
   } else if (section === 'estiramientos') {
     // estirar lo que se ha trabajado (y la zona elegida)
@@ -149,7 +157,7 @@ function weightOf(ex: ExerciseDef, section: SectionId, o: GenOptions, worked: Re
     for (const m of stretches) if (worked.has(m)) s += 1;
     s += 3 * zoneScore(ex, zone, section);
     // «Fortalecer zona lumbar» (sin estirar nada): solo para la espalda
-    if (!stretches.size && works.size && zone !== 'espalda') s = 0;
+    if (!stretches.size && works.size && zone !== 'espalda' && o.goal !== 'pilates') s = 0;
     w = s > 0 ? s : 0.15;
   } else {
     const z = zoneScore(ex, zone, section);
@@ -185,7 +193,7 @@ function warmupRank(ex: ExerciseDef): number {
 
 function roundsFor(o: GenOptions, section: SectionId): number {
   if (section !== 'pesas' && section !== 'abdominales') return 1;
-  if (o.goal === 'flexibilidad' || o.goal === 'espalda' || o.level === 'suave') return 1;
+  if (o.goal === 'flexibilidad' || o.goal === 'espalda' || o.goal === 'pilates' || o.level === 'suave') return 1;
   if (o.level === 'intenso' || o.goal === 'perder') return o.minutes >= 20 ? 2 : 1;
   if (o.goal === 'fuerza') return o.minutes >= 30 ? 2 : 1;
   return 1;
@@ -297,6 +305,6 @@ export function swapExercise(r: GenResult, section: SectionId, index: number, o:
 
 /** Nombre propuesto para la tabla (en castellano; se traduce con i18n antes de guardarla). */
 export function suggestedName(o: GenOptions): { label: string; minutes: number } {
-  const label = o.goal === 'espalda' || o.goal === 'flexibilidad' ? GOAL_INFO[o.goal].name : ZONE_INFO[o.zone].name;
+  const label = noZone(o.goal) ? GOAL_INFO[o.goal].name : ZONE_INFO[o.zone].name;
   return { label, minutes: o.minutes };
 }

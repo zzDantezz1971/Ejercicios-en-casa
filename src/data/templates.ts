@@ -97,4 +97,34 @@ export const TEMPLATES: readonly TableTemplate[] = [
         ['postura-de-la-paloma', 40], ['mariposa-aductores', 30], ['torsion-lumbar-tumbado', 30], ['postura-del-nino', 30]],
     },
   },
+  {
+    id: 'pilates-empezar', name: 'Pilates para empezar', icon: 'stretch',
+    desc: 'Pilates suave en la esterilla: respiración, core y espalda.',
+    routine: {
+      calentamiento: [['circulos-de-cadera', 30], ['giros-de-tronco', 30], ['circulos-de-brazos', 30]],
+      abdominales: [['estiramiento-de-una-pierna', 40], ['dead-bug-bicho-muerto', 40], ['circulos-de-pierna-tumbado', 40], ['barquita-hollow-hold', 30], ['plancha-frontal', 30]],
+      estiramientos: [['puente-de-gluteos', 40], ['nadador-suave-superman-alterno', 40], ['gato-camello', 40], ['estiramiento-de-columna-sentado', 40], ['postura-del-nino', 40]],
+    },
+  },
+  {
+    id: 'pilates-core', name: 'Pilates core', icon: 'bolt',
+    desc: 'Los clásicos de pilates para el abdomen: el cien, roll up, tijeras…',
+    routine: {
+      calentamiento: [['marcha-en-el-sitio', 30], ['circulos-de-cadera', 30], ['giros-de-tronco', 30]],
+      abdominales: [['el-cien', 45], ['enrollarse-roll-up', 40], ['estiramiento-de-una-pierna', 40], ['estiramiento-de-dos-piernas', 40], ['tijeras', 40],
+        ['circulos-de-pierna-tumbado', 40], ['rodar-como-una-pelota', 30], ['abdominal-en-v', 30], ['plancha-lateral', 30], ['bicicleta', 40]],
+      estiramientos: [['estiramiento-de-columna-sentado', 40], ['cobra', 30], ['postura-del-nino', 40]],
+    },
+  },
+  {
+    id: 'pilates-espalda-gluteos', name: 'Pilates de espalda y glúteos', icon: 'heart',
+    desc: 'Puentes, patadas y extensiones para una espalda fuerte y unos glúteos activos.',
+    routine: {
+      calentamiento: [['circulos-de-cadera', 30], ['inclinaciones-laterales-de-tronco', 30], ['circulos-de-brazos', 30]],
+      pesas: [['abduccion-de-cadera-tumbado-de-lado', 40]],
+      abdominales: [['plancha-frontal', 40], ['dead-bug-bicho-muerto', 40]],
+      estiramientos: [['puente-de-hombros-con-patada', 40], ['puente-a-una-pierna', 40], ['patada-de-una-pierna-boca-abajo', 40], ['bird-dog-perro-de-caza', 40],
+        ['nadador-suave-superman-alterno', 40], ['cobra', 30], ['gato-camello', 40], ['postura-del-nino', 40]],
+    },
+  },
 ];

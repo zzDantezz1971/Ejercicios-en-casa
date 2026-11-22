@@ -22,7 +22,7 @@ export class RoutineScreen implements Screen {
   private editor: RoutineEditor;
   private section: SectionId = 'calentamiento';
   /** Todos los ejercicios, solo los elegidos (en su orden) o reordenando la lista. */
-  private mode: 'all' | 'fav' | 'chosen' | 'sorting' = 'all';
+  private mode: 'all' | 'fav' | 'pilates' | 'chosen' | 'sorting' = 'all';
   private toolbar = h('div', { class: 'routine-toolbar' });
   /** Buscador y, a su lado, el botón de ordenar. */
   private searchRow!: HTMLElement;
@@ -116,10 +116,12 @@ export class RoutineScreen implements Screen {
       this.hint.replaceChildren('Arrastra cada ejercicio por el asa ', icon('tables', 'ico inline'), ' o usa las flechas para colocarlo donde quieras. Este orden es el de la lista, igual para todas tus tablas.');
       return;
     }
-    const seg = (m: 'all' | 'fav' | 'chosen', label: string | Node) =>
+    const seg = (m: 'all' | 'fav' | 'pilates' | 'chosen', label: string | Node) =>
       h('button', { class: 'seg' + (this.mode === m ? ' on' : ''), 'aria-pressed': String(this.mode === m), onclick: () => { this.mode = m; this.clearSearch(); window.scrollTo(0, 0); this.render(); } }, label);
     // orden: Todos/Favoritos/Elegidos; después el tipo de orden, Ordenar lista y Vueltas (el buscador va debajo)
-    this.toolbar.append(h('div', { class: 'segmented' }, seg('all', 'Todos'), seg('fav', h('span', { class: 'seg-fav' }, icon('starFill'), 'Favoritos')), seg('chosen', `Elegidos (${n})`)));
+    this.toolbar.append(h('div', { class: 'segmented' }, seg('all', 'Todos'), seg('fav', h('span', { class: 'seg-fav' }, icon('starFill'), 'Favoritos')),
+      // solo los de pilates de este bloque (si tiene alguno)
+      this.pilatesIn(this.section) ? seg('pilates', 'Pilates') : null, seg('chosen', `Elegidos (${n})`)));
     if (this.mode === 'all') {
       // ordenar la lista por zona, músculo, material o nombre (cada uno con su propio orden personalizado):
       // botón «Ordenar» al lado del buscador, que abre la lista de órdenes
@@ -140,7 +142,9 @@ export class RoutineScreen implements Screen {
           this.mode = 'sorting'; this.clearSearch(); window.scrollTo(0, 0); this.render();
         } }, icon('tables'), 'Ordenar lista') : null);
     }
-    if (this.mode === 'fav') {
+    if (this.mode === 'pilates') {
+      this.hint.replaceChildren('Ejercicios de pilates de este bloque. Pulsa Seleccionar para añadirlo a la tabla.');
+    } else if (this.mode === 'fav') {
       this.hint.replaceChildren(this.favs().length
         ? 'Tus ejercicios favoritos de este bloque. Pulsa Seleccionar para añadirlo a la tabla.'
         : h('span', {}, 'Aún no tienes favoritos en este bloque. Toca un ejercicio y pulsa la estrella ', icon('star', 'ico inline'), '.'));
@@ -228,6 +232,11 @@ export class RoutineScreen implements Screen {
       icon('dumbbell'),
       h('span', {}, h('span', {}, plural(n, 'ejercicio necesita material que no tienes.', 'ejercicios necesitan material que no tienes.')), ' ',
         h('span', {}, 'Para verlos, añade ese material en Mis datos › Mi material.')));
+  }
+
+  /** ¿Tiene ejercicios de pilates este bloque? */
+  private pilatesIn(sectionId: SectionId): boolean {
+    return !!this.app.sections.find((s) => s.id === sectionId)?.exercises.some((e) => e.pilates && !this.app.store.hidden.has(e.id));
   }
 
   /** Favoritos del apartado, en el orden de la lista. */
@@ -344,9 +353,15 @@ export class RoutineScreen implements Screen {
     this.io.disconnect();
     clear(this.list);
     this.shown = [];
-    this.list.className = this.mode === 'all' || this.mode === 'fav' ? 'ex-grid' : 'ex-rows';
+    this.list.className = this.mode === 'all' || this.mode === 'fav' || this.mode === 'pilates' ? 'ex-grid' : 'ex-rows';
     if (this.mode === 'fav') {
       this.favs().forEach((ex) => this.list.append(this.card(ex)));
+      return;
+    }
+    if (this.mode === 'pilates') {
+      // los de pilates del bloque, en el orden de la lista (los que piden material que no tienes, no)
+      const owned = new Set<string>(this.app.store.settings.equipment);
+      this.ordered(this.section).filter((e) => e.pilates && canDo(e.equip, owned)).forEach((ex) => this.list.append(this.card(ex)));
       return;
     }
     if (this.mode === 'chosen') return this.renderChosen();

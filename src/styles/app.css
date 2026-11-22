@@ -259,6 +259,7 @@ button:focus-visible, input:focus-visible, label:focus-within { outline: 2px sol
 .badge { font-size: .68rem; font-weight: 700; border-radius: 6px; padding: 2px 7px; }
 .badge.good { color: var(--good); background: var(--good-soft); }
 .badge.warn { color: var(--warn); background: var(--warn-soft); }
+.badge.pilates { color: #B794F6; background: rgb(139 92 246 / .16); }
 .info-btn {
   position: absolute; top: 7px; right: 7px; width: 34px; height: 34px; border-radius: 11px; border: 0; cursor: pointer;
   background: rgb(10 13 18 / .72); color: #F1F4F8; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(6px);

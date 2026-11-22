@@ -7,9 +7,10 @@ import { PESA_BARRA } from './pesaBarra';
 import { BANDAS_STEP } from './bandasStep';
 import { OTROS } from './otros';
 import { NEW_GROUP, NUEVOS } from './nuevos';
+import { PILATES } from './pilates';
 
 /* Ejercicios nuevos por material (todavía sin animación). */
-export const EXTRAS: ExtraEx[] = [...LIBRE_A, ...LIBRE_B, ...MANCUERNAS, ...PESA_BARRA, ...BANDAS_STEP, ...OTROS, ...NUEVOS];
+export const EXTRAS: ExtraEx[] = [...LIBRE_A, ...LIBRE_B, ...MANCUERNAS, ...PESA_BARRA, ...BANDAS_STEP, ...OTROS, ...NUEVOS, ...PILATES];
 export { NEW_GROUP };
 
 /** Grupos nuevos de los apartados (traducciones). */

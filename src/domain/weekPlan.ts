@@ -81,8 +81,8 @@ export function splitFor(goal: Goal, days: readonly number[]): Array<{ day: numb
 /** Opciones del asistente para la tabla de un día. */
 export function dayOptions(plan: Pick<WeekPlan, 'goal' | 'minutes' | 'level'>, kind: DayKind): GenOptions {
   const { goal, minutes, level } = plan;
-  // espalda sana y flexibilidad: todos los días con ese objetivo (cambia la zona en la que se fija)
-  if (goal === 'espalda') return { goal, zone: 'entero', minutes, level };
+  // espalda sana, pilates y flexibilidad: todos los días con ese objetivo (cambia la zona en la que se fija)
+  if (goal === 'espalda' || goal === 'pilates') return { goal, zone: 'entero', minutes, level };
   const zone = kind === 'superior' ? 'superior' : kind === 'inferior' ? 'inferior' : kind === 'abdomen' ? 'abdomen' : 'entero';
   if (goal === 'flexibilidad') return { goal, zone, minutes, level };
   if (kind === 'movilidad') return { goal: 'flexibilidad', zone: 'entero', minutes, level };
@@ -94,6 +94,7 @@ export function dayOptions(plan: Pick<WeekPlan, 'goal' | 'minutes' | 'level'>, k
 /** Nombre de la sesión de un día (con «Espalda sana» o «Flexibilidad» todos los días se llaman así). */
 export function kindLabel(plan: Pick<WeekPlan, 'goal'>, kind: DayKind): string {
   if (plan.goal === 'espalda') return 'Espalda sana';
+  if (plan.goal === 'pilates') return 'Pilates';
   if (plan.goal === 'flexibilidad') return 'Flexibilidad';
   return KIND_NAME[kind];
 }
@@ -154,7 +155,7 @@ const KINDS = Object.keys(KIND_NAME) as DayKind[];
 export function sanitizePlan(input: unknown): WeekPlan | undefined {
   if (!input || typeof input !== 'object') return undefined;
   const p = input as Partial<WeekPlan>;
-  const goals = ['forma', 'perder', 'fuerza', 'flexibilidad', 'espalda'];
+  const goals = ['forma', 'perder', 'fuerza', 'flexibilidad', 'espalda', 'pilates'];
   const levels = ['suave', 'normal', 'intenso'];
   if (!goals.includes(p.goal as string) || !levels.includes(p.level as string) || !Number.isFinite(p.minutes) || !Array.isArray(p.days)) return undefined;
   const seen = new Set<number>();

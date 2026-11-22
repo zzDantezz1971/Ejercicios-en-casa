@@ -1,7 +1,7 @@
 import { TEMPLATES, type TableTemplate } from '../../data/templates';
 import { canDo, EQUIP_INFO, type Equip } from '../../domain/equipment';
 import {
-  generate, GOAL_INFO, GOALS, LEVEL_INFO, LEVELS, MINUTES, suggestedName, tableSeconds, ZONE_INFO, ZONES,
+  generate, GOAL_INFO, GOALS, LEVEL_INFO, noZone, LEVELS, MINUTES, suggestedName, tableSeconds, ZONE_INFO, ZONES,
   type GenContext, type GenOptions, type GenResult, type Goal,
 } from '../../domain/generator';
 import { clampRounds, MAX_ROUNDS, WorkoutPlan } from '../../domain/WorkoutPlan';
@@ -378,9 +378,9 @@ export class GeneratorScreen implements Screen {
     this.render();
   }
 
-  /** La zona no se pregunta con «Espalda sana» ni con «Flexibilidad». */
+  /** La zona no se pregunta con «Espalda sana», «Flexibilidad» ni «Pilates». */
   private get askZone(): boolean {
-    return this.o.goal !== 'espalda' && this.o.goal !== 'flexibilidad';
+    return !noZone(this.o.goal as Goal);
   }
 
   private ctx(): GenContext {
@@ -429,7 +429,7 @@ export class GeneratorScreen implements Screen {
       body.append(h('h2', { class: 'maker-q' }, '¿Cuál es tu objetivo?'),
         ...GOALS.map((g: Goal) => opt(GOAL_INFO[g].name, GOAL_INFO[g].help, this.o.goal === g, () => {
           this.o.goal = g;
-          if (g === 'espalda' || g === 'flexibilidad') this.o.zone = 'entero';
+          if (noZone(g)) this.o.zone = 'entero';
         }, GOAL_INFO[g].icon)));
     } else if (this.step === 1) {
       body.append(h('h2', { class: 'maker-q' }, '¿Qué zona quieres trabajar?'),

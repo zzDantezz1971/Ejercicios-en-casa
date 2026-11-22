@@ -613,6 +613,51 @@ export const EXTRA_MOTIONS: Record<string, M> = {
     [{ ...PRONE, ua: 172, fa: 12 }, 400, 1200], [{ ...PRONE, tl: -6, tu: -60, hd: -64, ua: 158, fa: 36 }, 1500, 1200]] },
   'tibiales-sentado-sobre-los-talones': { mat: 1, f: [
     [{ th: 90, sn: 180, ft: 180, ua: 90, fa: 90 }, 400, 1300], [{ th: 8, sn: 182, ft: 180, tl: -88, ua: 82, fa: 58 }, 1600, 1300]] },
+
+  // ── Pilates ──
+  // el cien: curl arriba, piernas en diagonal y los brazos bombeando cortos y rápidos
+  'el-cien': { mat: 1, f: [
+    [{ tl: 180, tu: 203, hd: 214, th: -38, sn: -38, ua: -10, fa: -10 }, 0, 170],
+    [{ tl: 180, tu: 203, hd: 214, th: -38, sn: -38, ua: 3, fa: 3 }, 0, 170]] },
+  // roll up: de tumbado con los brazos atrás a sentado inclinado hacia los pies, vértebra a vértebra
+  'enrollarse-roll-up': { mat: 1, f: [
+    [{ tl: 180, hd: 180, ua: 182, fa: 182, th: -2, sn: -2 }, 300, 1300],
+    [{ tl: 232, tu: 252, hd: 268, ua: 300, fa: 305, th: -4, sn: -2 }, 0, 1000],
+    [{ tl: 318, tu: 334, hd: 346, ua: 365, fa: 365, th: -6, sn: 4, ft: -90 }, 600, 1300],
+    [{ tl: 232, tu: 252, hd: 268, ua: 300, fa: 305, th: -4, sn: -2 }, 0, 1000]] },
+  'estiramiento-de-una-pierna': { mat: 1, f: [
+    [{ tl: 180, tu: 203, hd: 213, thL: -125, snL: 15, thR: -32, snR: -32, ua: -40, fa: -20 }, 80, 450],
+    [{ tl: 180, tu: 203, hd: 213, thR: -125, snR: 15, thL: -32, snL: -32, ua: -40, fa: -20 }, 80, 450]] },
+  // dos piernas: rodillas al pecho y luego piernas en diagonal y brazos por encima de la cabeza (pasando por arriba)
+  'estiramiento-de-dos-piernas': { mat: 1, f: [
+    [{ tl: 180, tu: 205, hd: 214, th: -125, sn: 15, ua: -40, fa: -20 }, 250, 750],
+    [{ tl: 180, tu: 205, hd: 214, th: -35, sn: -35, ua: -164, fa: -164 }, 300, 750]] },
+  // círculos con la pierna de arriba (la de cerca): sube y baja un poco y se abre y cruza
+  'circulos-de-pierna-tumbado': { mat: 1, per: 2600, fn: (t) => {
+    const a = t * Math.PI * 2;
+    return { tl: 180, ua: 0, fa: 0, thL: 0, snL: 0, thR: -88 + 12 * Math.cos(a), snR: -88 + 12 * Math.cos(a), zKR: 9 * Math.sin(a), zAR: 18 * Math.sin(a) };
+  } },
+  // rodar como una pelota: en equilibrio con las rodillas al pecho y rodar atrás hasta los omóplatos (la forma no cambia)
+  'rodar-como-una-pelota': { mat: 1, f: [
+    [{ tl: -112, tu: -122, hd: -78, th: -52, sn: 145, ua: 15, fa: 70 }, 350, 700],
+    [{ tl: -187, tu: -197, hd: -153, th: -127, sn: 70, ua: -60, fa: -5 }, 120, 700]] },
+  'estiramiento-de-columna-sentado': { mat: 1, f: [
+    [{ th: -6, sn: 4, ft: -90, ua: 0, fa: 0 }, 400, 1300],
+    [{ tl: -55, tu: -10, hd: 25, th: -6, sn: 4, ft: -90, ua: 10, fa: 15 }, 900, 1300]] },
+  // patada de una pierna: en esfinge, el talón va al glúteo con dos golpes y vuelve; luego la otra
+  'patada-de-una-pierna-boca-abajo': { mat: 1, f: [
+    [{ ...PRONE, tl: -4, tu: -35, hd: -40, ua: 80, fa: 0 }, 150, 350],
+    [{ ...PRONE, tl: -4, tu: -35, hd: -40, ua: 80, fa: 0, snL: 300 }, 0, 260],
+    [{ ...PRONE, tl: -4, tu: -35, hd: -40, ua: 80, fa: 0, snL: 320 }, 0, 200],
+    [{ ...PRONE, tl: -4, tu: -35, hd: -40, ua: 80, fa: 0 }, 150, 350],
+    [{ ...PRONE, tl: -4, tu: -35, hd: -40, ua: 80, fa: 0, snR: 300 }, 0, 260],
+    [{ ...PRONE, tl: -4, tu: -35, hd: -40, ua: 80, fa: 0, snR: 320 }, 0, 200]] },
+  // puente de hombros: con la cadera arriba, la pierna de cerca sube estirada al techo y baja hasta la altura de la rodilla
+  'puente-de-hombros-con-patada': { mat: 1, feetDown: true, f: [
+    [{ ...SUP, tl: 140, tu: 165, th: -18, sn: 76.5 }, 300, 900],
+    [{ ...SUP, tl: 140, tu: 165, thL: -18, snL: 76.5, thR: -88, snR: -88 }, 250, 800],
+    [{ ...SUP, tl: 140, tu: 165, thL: -18, snL: 76.5, thR: -22, snR: -22 }, 250, 800],
+    [{ ...SUP, tl: 140, tu: 165, thL: -18, snL: 76.5, thR: -88, snR: -88 }, 250, 800]] },
 };
 
 /** Ejercicios de antes (rawExercises.ts) con movimiento nuevo: sustituyen al de allí. */

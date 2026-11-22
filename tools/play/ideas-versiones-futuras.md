@@ -13,7 +13,8 @@ Cada idea: de dónde sale, qué sería y qué hay que tener en cuenta.
   (decidido el 21 nov 2026). Lleva: una fila por recordatorio en Configuració; número de versión y sus novedades al
   tocarla; salir con «atrás» cierra la app de verdad; grupos de tablas distinguibles (propuesta C); orden de bloques
   propio de cada tabla (flechas y arrastrar); orden alfabético según el idioma y materiales combinados en su sitio;
-  sin sugerencias de subir de peso. Lista de pruebas: `pruebas-movil.md` › «Para probar en el build 20».
+  sin sugerencias de subir de peso; **Pilates** (25 ejercicios con etiqueta y filtro, 9 nuevos, 3 tablas hechas y objetivo
+  «Pilates» en Créala por mí y el plan semanal; decidido el 21 nov 2026). Lista de pruebas: `pruebas-movil.md` › «Para probar en el build 20».
 - **Versión 21 (después de la prueba):** **polea de pesas** como material nuevo (ver abajo). Antes, preguntar a los
   probadores qué material tienen en casa (polea, gomas, TRX…).
 

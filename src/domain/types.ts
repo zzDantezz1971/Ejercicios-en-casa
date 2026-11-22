@@ -17,7 +17,7 @@ export const SECTION_TITLES: Record<SectionId, string> = {
   estiramientos: 'Estiramientos',
 };
 
-export type Badge = 'lumbar' | 'caution' | 'gentle';
+export type Badge = 'lumbar' | 'caution' | 'gentle' | 'pilates';
 
 export interface ExerciseDescription {
   /** Posición inicial. */
@@ -134,6 +134,8 @@ export interface ExerciseDef {
   equip?: Equip[][];
   /** Aún sin animación del muñeco: se muestra "Animación en preparación". */
   pending?: boolean;
+  /** Ejercicio de pilates (sale con la etiqueta «Pilates» y en su filtro de la lista). */
+  pilates?: boolean;
 }
 
 export interface RoutineItem {

@@ -1259,6 +1259,17 @@ const ROWS: Row[] = [
   ["Toca para ver qué hay de nuevo.", "Toca per veure què hi ha de nou.", "Tap to see what’s new."],
   ["La tabla se ve por bloques, como en Inicio (con «x2» si el bloque se repite): toca uno para ver y cambiar sus ejercicios.", "La taula es veu per blocs, com a Inici (amb «x2» si el bloc es repeteix): toca’n un per veure i canviar els seus exercicis.", "The routine is shown by blocks, like on Home (with “x2” if the block repeats): tap one to see and change its exercises."],
   ["Los bloques se ordenan arrastrándolos por su asa ≡ (a la izquierda): por ejemplo, abdominales antes que fuerza. El entrenamiento, Inicio y el historial siguen ese orden.", "Els blocs s’ordenen arrossegant-los per la nansa ≡ (a l’esquerra): per exemple, abdominals abans que força. L’entrenament, Inici i l’historial segueixen aquest ordre.", "Blocks are reordered by dragging their ≡ handle (on the left): for example, abs before strength. The workout, Home and history follow that order."],
+  ["Pilates", "Pilates", "Pilates"],
+  ["Ejercicios de pilates de este bloque. Pulsa Seleccionar para añadirlo a la tabla.", "Exercicis de pilates d’aquest bloc. Prem Selecciona per afegir-lo a la taula.", "Pilates exercises in this block. Tap Select to add one to your routine."],
+  ['Ejercicios de pilates en la esterilla: core, control y estiramientos.', 'Exercicis de pilates a terra, sobre una estora: core, control i estiraments.', 'Mat Pilates exercises: core, control and stretches.'],
+  ['Pilates para empezar', 'Pilates per començar', 'Pilates for beginners'],
+  ['Pilates suave en la esterilla: respiración, core y espalda.', 'Pilates suau sobre una estora: respiració, core i esquena.', 'Gentle mat Pilates: breathing, core and back.'],
+  ['Pilates core', 'Pilates core', 'Pilates core'],
+  ['Los clásicos de pilates para el abdomen: el cien, roll up, tijeras…', 'Els clàssics de pilates per a l’abdomen: el cent, roll up, tisores…', 'Classic Pilates for the abs: the hundred, roll up, scissors…'],
+  ['Pilates de espalda y glúteos', 'Pilates d’esquena i glutis', 'Pilates for back and glutes'],
+  ['Puentes, patadas y extensiones para una espalda fuerte y unos glúteos activos.', 'Ponts, puntades i extensions per a una esquena forta i uns glutis actius.', 'Bridges, kicks and extensions for a strong back and active glutes.'],
+  ['Los ejercicios de pilates llevan la etiqueta «Pilates». En la lista de cada bloque, «Pilates» (arriba) enseña solo esos.', 'Els exercicis de pilates porten l’etiqueta «Pilates». A la llista de cada bloc, «Pilates» (a dalt) ensenya només aquests.', 'Pilates exercises have the «Pilates» tag. In each block’s list, «Pilates» (at the top) shows only those.'],
+  ['Para una sesión de pilates: en «Tablas hechas» hay tres (para empezar, core, y espalda y glúteos), y en «Créala por mí» o en el plan de la semana puedes elegir el objetivo «Pilates».', 'Per a una sessió de pilates: a «Taules fetes» n’hi ha tres (per començar, core, i esquena i glutis), i a «Crea-la per mi» o al Pla setmanal pots triar l’objectiu «Pilates».', 'For a Pilates session: «Ready-made routines» has three (beginners, core, and back and glutes), and in «Make it for me» or the Weekly plan you can choose the «Pilates» goal.'],
 ];
 
 export const UI_CA: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[1]]));
