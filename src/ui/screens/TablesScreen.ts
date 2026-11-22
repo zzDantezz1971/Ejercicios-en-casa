@@ -7,7 +7,10 @@ import { icon, SECTION_STYLE } from '../icons';
 import { formatDate } from './HomeScreen';
 import { editTable } from './TableEditScreen';
 import { openNewTable } from './MakerScreens';
-import { newPlan, openPlan, planTitle } from './PlanScreens';
+import { newPlan, planTableCard, planTitle } from './PlanScreens';
+
+/** Clave de la tarjeta de los planes en la lista de grupos abiertos. */
+const PLANS_KEY = '__plans';
 
 /** Mis tablas: lista de tablas guardadas con nombre. */
 export class TablesScreen implements Screen {
@@ -44,24 +47,27 @@ export class TablesScreen implements Screen {
       // una sola entrada «Plan(es) de la semana»; dentro, la lista de planes para elegir o crear otro
       const n = store.plans.length;
       const inUse = planIds.has(store.active.id);
-      const open = () => openPlan(this.app);
-      // igual que la tarjeta de un grupo: al tocarla se ven los planes; en los tres puntos, ver los planes o crear otro
-      const more = async () => {
-        const choice = await actionSheet(tr(n > 1 ? 'Planes de la semana' : 'Plan de la semana'), [
-          { id: 'open', label: n > 1 ? 'Ver los planes' : 'Ver el plan' },
-          { id: 'new', label: 'Nuevo plan' },
-        ]);
-        if (choice === 'open') open();
-        else if (choice === 'new') newPlan(this.app);
+      // como un grupo: al tocarla se despliega y se ven los planes (con las mismas tarjetas que las tablas)
+      const isOpen = TablesScreen.open.has(PLANS_KEY);
+      const toggle = () => {
+        if (isOpen) TablesScreen.open.delete(PLANS_KEY); else TablesScreen.open.add(PLANS_KEY);
+        this.render();
       };
-      this.body.append(h('section', { class: 'card group-card plan-group' + (inUse ? ' active' : '') },
+      const more = async () => {
+        const choice = await actionSheet(tr(n > 1 ? 'Planes de la semana' : 'Plan de la semana'), [{ id: 'new', label: 'Nuevo plan' }]);
+        if (choice === 'new') newPlan(this.app);
+      };
+      this.body.append(h('section', { class: 'card group-card plan-group' + (isOpen ? ' open' : '') + (inUse ? ' active' : '') },
         h('div', { class: 'group-head' },
-          h('button', { class: 'group-main', onclick: open },
+          h('button', { class: 'group-main', 'aria-expanded': String(isOpen), onclick: toggle },
             h('span', { class: 'group-icon' }, icon('calendar')),
             h('span', { class: 'group-text' }, h('strong', {}, n > 1 ? 'Planes de la semana' : 'Plan de la semana'),
               h('span', { class: 'muted small' }, plural(n, 'plan', 'planes'), ' · ', inUse ? h('span', { class: 'group-inuse' }, 'En uso') : tr('Último usado'), ': ', h('span', { 'data-no-tr': '' }, planTitle(plan)))),
-            icon('chevron', 'ico chev')),
-          h('button', { class: 'more-btn', 'aria-label': tr('Más opciones'), onclick: () => void more() }, icon('more')))));
+            icon('chevron', 'ico chev group-chev')),
+          h('button', { class: 'more-btn', 'aria-label': tr('Más opciones'), onclick: () => void more() }, icon('more'))),
+        isOpen ? h('div', { class: 'group-body' },
+          ...store.plans.map((p) => planTableCard(this.app, p, { after: () => this.render() })),
+          h('button', { class: 'maker-add', onclick: () => newPlan(this.app) }, icon('plus'), 'Nuevo plan de la semana')) : ''));
     }
     // grupos (plegados; al tocarlos se ven sus tablas) y después las tablas que no están en ningún grupo
     const loose = store.routines.filter((t) => !planIds.has(t.id));
