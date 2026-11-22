@@ -105,6 +105,7 @@ export const TEMPLATES: readonly TableTemplate[] = [
       abdominales: [['estiramiento-de-una-pierna', 40], ['dead-bug-bicho-muerto', 40], ['circulos-de-pierna-tumbado', 40], ['barquita-hollow-hold', 30], ['plancha-frontal', 30]],
       estiramientos: [['puente-de-gluteos', 40], ['nadador-suave-superman-alterno', 40], ['gato-camello', 40], ['estiramiento-de-columna-sentado', 40], ['postura-del-nino', 40]],
     },
+    rounds: { abdominales: 2 },
   },
   {
     id: 'pilates-core', name: 'Pilates core', icon: 'bolt',
@@ -115,6 +116,7 @@ export const TEMPLATES: readonly TableTemplate[] = [
         ['circulos-de-pierna-tumbado', 40], ['rodar-como-una-pelota', 30], ['abdominal-en-v', 30], ['plancha-lateral', 30], ['bicicleta', 40]],
       estiramientos: [['estiramiento-de-columna-sentado', 40], ['cobra', 30], ['postura-del-nino', 40]],
     },
+    rounds: { abdominales: 2 },
   },
   {
     id: 'pilates-espalda-gluteos', name: 'Pilates de espalda y glúteos', icon: 'heart',
@@ -126,5 +128,6 @@ export const TEMPLATES: readonly TableTemplate[] = [
       estiramientos: [['puente-de-hombros-con-patada', 40], ['puente-a-una-pierna', 40], ['patada-de-una-pierna-boca-abajo', 40], ['bird-dog-perro-de-caza', 40],
         ['nadador-suave-superman-alterno', 40], ['cobra', 30], ['gato-camello', 40], ['postura-del-nino', 40]],
     },
+    rounds: { abdominales: 2, estiramientos: 2 },
   },
 ];
