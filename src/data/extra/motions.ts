@@ -626,7 +626,7 @@ export const EXTRA_MOTIONS: Record<string, M> = {
     [{ tl: 180, tu: 203, hd: 214, th: -38, sn: -38, ua: -10, fa: -10 }, 0, 170],
     [{ tl: 180, tu: 203, hd: 214, th: -38, sn: -38, ua: 3, fa: 3 }, 0, 170]] },
   // roll up: de tumbado con los brazos atrás a sentado inclinado hacia los pies, vértebra a vértebra
-  'enrollarse-roll-up': { mat: 1, f: [
+  enrollarse: { mat: 1, f: [
     [{ tl: 180, hd: 180, ua: 182, fa: 182, th: -2, sn: -2 }, 300, 1300],
     [{ tl: 232, tu: 252, hd: 268, ua: 300, fa: 305, th: -4, sn: -2 }, 0, 1000],
     [{ tl: 318, tu: 334, hd: 346, ua: 365, fa: 365, th: -6, sn: 4, ft: -90 }, 600, 1300],
@@ -661,21 +661,13 @@ export const EXTRA_MOTIONS: Record<string, M> = {
     [{ ...PRONE, tl: -4, tu: -35, hd: -40, ua: 80, fa: 0, snR: 320 }, 0, 200]] },
   // ── Pilates (fuerza) ──
   // natación: boca abajo con brazos y piernas despegados, aleteo alterno corto y rápido
-  'natacion-swimming': { mat: 1, anchor: { j: 'pel', y: -13.1 }, f: [
+  natacion: { mat: 1, anchor: { j: 'pel', y: -13.1 }, f: [
     [{ ...PRONE, tu: -14, hd: -20, uaR: -18, faR: -18, uaL: -4, faL: -4, thL: 192, snL: 192, thR: 183, snR: 183 }, 0, 320],
     [{ ...PRONE, tu: -14, hd: -20, uaL: -18, faL: -18, uaR: -4, faR: -4, thR: 192, snR: 192, thL: 183, snL: 183 }, 0, 320]] },
   // plancha invertida (leg pull back): cuerpo recto boca arriba sobre manos y talones; una pierna sube estirada y baja
   'plancha-invertida-con-patada': { mat: 1, plant: 'haR', f: [
     [{ ...LPB }, 250, 800], [{ ...LPB, thR: -40, snR: -40 }, 200, 800],
     [{ ...LPB }, 250, 800], [{ ...LPB, thL: -40, snL: -40 }, 200, 800]] },
-  // flexión de pilates: de pie, enrollarse hasta el suelo, plancha, flexión y volver
-  'flexion-de-pilates': { mat: 1, f: [
-    [{}, 300, 700], [{ tl: 82, tu: 90, hd: 100, ua: 90, fa: 90 }, 100, 700],
-    [{ ...PLH }, 100, 600], [{ ...PUSH_DEEP_AT(DEEP) }, 100, 700], [{ ...PLH }, 100, 600],
-    [{ tl: 82, tu: 90, hd: 100, ua: 90, fa: 90 }, 100, 700]] },
-  // cisne: boca abajo, manos junto a los hombros; levanta el pecho estirando la espalda alta y baja
-  'cisne-swan': { mat: 1, anchor: { j: 'pel', y: -13.1 }, f: [
-    [{ ...PRONE, ua: 172, fa: 12 }, 300, 1100], [{ ...PRONE, tl: -5, tu: -48, hd: -54, ua: 163, fa: 28 }, 600, 1100]] },
   // las dos piernas juntas suben de lado
   'elevacion-de-dos-piernas-de-lado': { v: 'front', mat: 1, f: [
     [{ tl: 180, hd: 186, th: 0, sn: 0, ft: -60, uaL: 182, faL: 182, uaR: 20, faR: 20 }, 200, 900],

@@ -198,12 +198,12 @@ const RETIRED = new Set(['peso-muerto-rumano-con-mancuernas', 'curl-alterno-de-b
   'retroversion-pelvica']);
 /** Ejercicios de pilates: los 9 de data/extra/pilates.ts y los que ya había y son de pilates (25 en total). */
 export const PILATES_IDS = new Set([
-  'el-cien', 'enrollarse-roll-up', 'estiramiento-de-una-pierna', 'estiramiento-de-dos-piernas', 'circulos-de-pierna-tumbado',
+  'el-cien', 'enrollarse', 'estiramiento-de-una-pierna', 'estiramiento-de-dos-piernas', 'circulos-de-pierna-tumbado',
   'rodar-como-una-pelota', 'estiramiento-de-columna-sentado', 'patada-de-una-pierna-boca-abajo', 'puente-de-hombros-con-patada',
   'puente-de-gluteos', 'puente-a-una-pierna', 'dead-bug-bicho-muerto', 'nadador-suave-superman-alterno', 'gato-camello',
   'plancha-frontal', 'plancha-lateral', 'tijeras', 'elevaciones-de-piernas', 'barquita-hollow-hold', 'abdominal-en-v',
   'bicicleta', 'abduccion-de-cadera-tumbado-de-lado', 'postura-del-nino', 'bird-dog-perro-de-caza', 'cobra',
-  'natacion-swimming', 'plancha-invertida-con-patada', 'flexion-de-pilates', 'cisne-swan', 'elevacion-de-dos-piernas-de-lado',
+  'natacion', 'plancha-invertida-con-patada', 'elevacion-de-dos-piernas-de-lado',
 ]);
 function markPilates(sections: SectionInfo[]): SectionInfo[] {
   for (const s of sections) for (const e of s.exercises) if (PILATES_IDS.has(e.id)) {

@@ -1,9 +1,15 @@
 [
   {
+    "fecha": "2026-11-22T09:27:50Z",
+    "es": "Pilates: «Natación» pasa a Estiramientos (junto al nadador suave) y se quitan «Cisne» (muy parecido a la cobra) y «Flexión de pilates». Los nombres de los ejercicios nuevos, sin el nombre en inglés: «Enrollarse», «Natación». Ya son 28 ejercicios de pilates.",
+    "ca": "Pilates: «Natació» passa a Estiraments (al costat del nedador suau) i es treuen «Cigne» (molt semblant a la cobra) i «Flexió de pilates». Els noms dels exercicis nous, sense el nom en anglès: «Enrotllar-se», «Natació». Ja són 28 exercicis de pilates.",
+    "en": "Pilates: «Swimming» moves to Stretches (next to gentle swimmers) and «Swan» (very similar to the cobra) and «Pilates push-up» are removed. New exercise names no longer carry an English tag. There are now 28 Pilates exercises."
+  },
+  {
     "fecha": "2026-11-22T09:20:44Z",
-    "es": "Pilates en Fuerza: 5 ejercicios nuevos (natación, plancha invertida con patada, flexión de pilates, cisne y elevación de dos piernas de lado); ya son 30 con la etiqueta «Pilates». «Rodar como una pelota»: las rodillas se doblan bien, hacia delante.",
-    "ca": "Pilates a Força: 5 exercicis nous (natació, planxa invertida amb puntada, flexió de pilates, cigne i elevació de dues cames de costat); ja en són 30 amb l’etiqueta «Pilates». «Rodar com una pilota»: els genolls es dobleguen bé, cap endavant.",
-    "en": "Pilates in Strength: 5 new exercises (swimming, reverse plank with kick, Pilates push-up, swan and side-lying double leg lift); now 30 with the «Pilates» tag. «Rolling like a ball»: the knees now bend the right way, forwards."
+    "es": "Pilates: 2 ejercicios nuevos en Fuerza (plancha invertida con patada y elevación de dos piernas de lado) y «Natación» en Estiramientos. «Rodar como una pelota»: las rodillas se doblan bien, hacia delante.",
+    "ca": "Pilates: 2 exercicis nous a Força (planxa invertida amb puntada i elevació de dues cames de costat) i «Natació» a Estiraments. «Rodar com una pilota»: els genolls es dobleguen bé, cap endavant.",
+    "en": "Pilates: 2 new exercises in Strength (reverse plank with kick and side-lying double leg lift) and «Swimming» in Stretches. «Rolling like a ball»: the knees now bend the right way, forwards."
   },
   {
     "fecha": "2026-11-22T09:13:45Z",
@@ -31,8 +37,8 @@
   },
   {
     "fecha": "2026-11-22T00:18:35Z",
-    "es": "Pilates: 9 ejercicios nuevos (el cien, roll up, rodar como una pelota…) y 25 en total con la etiqueta «Pilates»; filtro «Pilates» en la lista de cada bloque, tres tablas hechas de pilates y el objetivo «Pilates» en «Créala por mí» y en el plan de la semana.",
-    "ca": "Pilates: 9 exercicis nous (el cent, roll up, rodar com una pilota…) i 25 en total amb l’etiqueta «Pilates»; filtre «Pilates» a la llista de cada bloc, tres taules fetes de pilates i l’objectiu «Pilates» a «Crea-la per mi» i al Pla setmanal.",
+    "es": "Pilates: 9 ejercicios nuevos (el cien, enrollarse, rodar como una pelota…) y 25 en total con la etiqueta «Pilates»; filtro «Pilates» en la lista de cada bloque, tres tablas hechas de pilates y el objetivo «Pilates» en «Créala por mí» y en el plan de la semana.",
+    "ca": "Pilates: 9 exercicis nous (el cent, enrotllar-se, rodar com una pilota…) i 25 en total amb l’etiqueta «Pilates»; filtre «Pilates» a la llista de cada bloc, tres taules fetes de pilates i l’objectiu «Pilates» a «Crea-la per mi» i al Pla setmanal.",
     "en": "Pilates: 9 new exercises (the hundred, roll up, rolling like a ball…) and 25 in total with the «Pilates» tag; a «Pilates» filter in each block’s list, three ready-made Pilates routines and the «Pilates» goal in «Make it for me» and the Weekly plan."
   },
   {

@@ -1265,7 +1265,7 @@ const ROWS: Row[] = [
   ['Pilates para empezar', 'Pilates per començar', 'Pilates for beginners'],
   ['Pilates suave en la esterilla: respiración, core y espalda.', 'Pilates suau sobre una estora: respiració, core i esquena.', 'Gentle mat Pilates: breathing, core and back.'],
   ['Pilates core', 'Pilates core', 'Pilates core'],
-  ['Los clásicos de pilates para el abdomen: el cien, roll up, tijeras…', 'Els clàssics de pilates per a l’abdomen: el cent, roll up, tisores…', 'Classic Pilates for the abs: the hundred, roll up, scissors…'],
+  ['Los clásicos de pilates para el abdomen: el cien, enrollarse, tijeras…', 'Els clàssics de pilates per a l’abdomen: el cent, enrotllar-se, tisores…', 'Classic Pilates for the abs: the hundred, roll up, scissors…'],
   ['Pilates de espalda y glúteos', 'Pilates d’esquena i glutis', 'Pilates for back and glutes'],
   ['Puentes, patadas y extensiones para una espalda fuerte y unos glúteos activos.', 'Ponts, puntades i extensions per a una esquena forta i uns glutis actius.', 'Bridges, kicks and extensions for a strong back and active glutes.'],
   ['Los ejercicios de pilates llevan la etiqueta «Pilates». En la lista de cada bloque, «Pilates» (arriba) enseña solo esos.', 'Els exercicis de pilates porten l’etiqueta «Pilates». A la llista de cada bloc, «Pilates» (a dalt) ensenya només aquests.', 'Pilates exercises have the «Pilates» tag. In each block’s list, «Pilates» (at the top) shows only those.'],

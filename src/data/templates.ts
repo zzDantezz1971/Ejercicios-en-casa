@@ -109,10 +109,10 @@ export const TEMPLATES: readonly TableTemplate[] = [
   },
   {
     id: 'pilates-core', name: 'Pilates core', icon: 'bolt',
-    desc: 'Los clásicos de pilates para el abdomen: el cien, roll up, tijeras…',
+    desc: 'Los clásicos de pilates para el abdomen: el cien, enrollarse, tijeras…',
     routine: {
       calentamiento: [['marcha-en-el-sitio', 30], ['circulos-de-cadera', 30], ['giros-de-tronco', 30]],
-      abdominales: [['el-cien', 45], ['enrollarse-roll-up', 40], ['estiramiento-de-una-pierna', 40], ['estiramiento-de-dos-piernas', 40], ['tijeras', 40],
+      abdominales: [['el-cien', 45], ['enrollarse', 40], ['estiramiento-de-una-pierna', 40], ['estiramiento-de-dos-piernas', 40], ['tijeras', 40],
         ['circulos-de-pierna-tumbado', 40], ['rodar-como-una-pelota', 30], ['abdominal-en-v', 30], ['plancha-lateral', 30], ['bicicleta', 40]],
       estiramientos: [['estiramiento-de-columna-sentado', 40], ['cobra', 30], ['postura-del-nino', 40]],
     },
