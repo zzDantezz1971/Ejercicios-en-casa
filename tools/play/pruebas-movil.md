@@ -17,6 +17,7 @@ Marca cada punto al probarlo. Si algo falla, haz una captura y cuéntamelo.
 - [ ] Pilates: en una taula, Abdominals o Estiraments › «Pilates» (a dalt): només surten els de pilates, amb l’etiqueta «Pilates». Mirar els 9 nous (el cent, roll up, rodar com una pilota, cercles de cama…) i la seva animació. «+ Taula» › Taules fetes: les tres de pilates. «Crea-la per mi» i Pla setmanal: objectiu «Pilates» (no pregunta la zona).
 - [ ] Taules fetes, «Crea-la per mi» i un dia del Pla setmanal (abans de crear-lo): targetes per blocs amb l’asa ≡; arrossegar un bloc canvia l’ordre i es desa en guardar la taula; en tocar un bloc s’obren els seus exercicis (canviar, treure, afegir, arrossegar).
 - [ ] Crear un Pla setmanal nou un dia que ja hagis entrenat abans aquesta setmana: cap dia surt marcat com a fet.
+- [ ] Pla setmanal amb algun dia fet aquesta setmana › «Canvia el pla»: surt l’avís que els dies fets deixaran de sortir com a fets (Cancel·la no canvia res). Sense dies fets, no surt cap avís.
 
 ## 0d. Para probar en el build 19
 - [ ] Recordatoris: ya no está la tarjeta «Pla setmanal». En «Entrenament», con un plan en uso, sale «Segueix el pla setmanal»: encendido, los días son los del plan (fijos) y la notificación dice «Pla setmanal: … / Avui toca: …»; apagado, eliges los días y dice «Hora d’entrenar».

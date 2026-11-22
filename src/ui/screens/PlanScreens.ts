@@ -333,7 +333,11 @@ export class PlanScreen implements Screen {
         h('input', { type: 'checkbox', id: 'plan-renew', class: 'switch', checked: plan.renew, onchange: (e: Event) => app.store.setPlan({ ...plan, renew: (e.target as HTMLInputElement).checked }) })),
       h('div', { class: 'maker-actions' },
         h('button', { class: 'btn ghost block', onclick: () => void this.rename() }, icon('edit'), 'Cambiar el nombre'),
-        h('button', { class: 'btn ghost block', onclick: () => app.replace(new PlanWizardScreen(app, plan.id), 'forward') }, icon('swap'), 'Cambiar el plan'),
+        h('button', { class: 'btn ghost block', onclick: async () => {
+          // los días ya hechos esta semana no pasan al plan cambiado: avisar antes
+          if (hits && !(await confirmDialog(tr('Si cambias el plan, los días ya hechos esta semana dejarán de salir como hechos. ¿Quieres cambiarlo?'), tr('Cambiar el plan'), tr('Cancelar')))) return;
+          app.replace(new PlanWizardScreen(app, plan.id), 'forward');
+        } }, icon('swap'), 'Cambiar el plan'),
         h('button', { class: 'btn ghost block danger-text', onclick: () => void this.remove() }, icon('trash'), 'Borrar el plan')));
   }
 

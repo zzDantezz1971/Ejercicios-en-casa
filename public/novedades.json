@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-22T08:39:00Z",
+    "es": "Plan de la semana: al tocar «Cambiar el plan» con días ya hechos esta semana, un aviso recuerda que dejarán de salir como hechos.",
+    "ca": "Pla setmanal: en tocar «Canvia el pla» amb dies ja fets aquesta setmana, un avís recorda que deixaran de sortir com a fets.",
+    "en": "Weekly plan: tapping «Change the plan» with days already done this week shows a warning that they will no longer show as done."
+  },
+  {
     "fecha": "2026-11-22T08:30:04Z",
     "es": "Tablas hechas, «Créala por mí» y los días del plan de la semana se ven por bloques, como al editar una tabla: los bloques se ordenan arrastrándolos y al tocar uno se cambian sus ejercicios. Un plan de la semana recién creado ya no marca como hechos los días anteriores.",
     "ca": "Taules fetes, «Crea-la per mi» i els dies del Pla setmanal es veuen per blocs, com en editar una taula: els blocs s’ordenen arrossegant-los i en tocar-ne un se’n canvien els exercicis. Un Pla setmanal acabat de crear ja no marca com a fets els dies anteriors.",
