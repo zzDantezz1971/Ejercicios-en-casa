@@ -1786,6 +1786,13 @@ button.plan-row { cursor: pointer; }
 .group-body .table-card .pills { display: none; }
 .group-body .table-card .btn.small { padding: 8px 8px; font-size: .86rem; gap: 6px; white-space: nowrap; }
 .group-body .table-card .btn.small .ico { width: 16px; height: 16px; }
+/* lista de planes de la semana: tarjetas iguales que las de las tablas dentro de un grupo */
+.plans-list { display: flex; flex-direction: column; gap: 12px; }
+.plans-list .table-card { padding: 12px 14px; gap: 10px; }
+.plans-list .table-card h2 { font-size: 1.15rem; }
+.plans-list .table-card .pills { display: none; }
+.plans-list .table-card .btn.small { padding: 8px 8px; font-size: .86rem; gap: 6px; white-space: nowrap; }
+.plans-list .table-card .btn.small .ico { width: 16px; height: 16px; }
 
 /* borrar un grupo: textos algo más grandes */
 .grp-del .dialog-title { font-size: 1.2rem; }

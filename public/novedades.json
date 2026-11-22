@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-22T19:34:43Z",
+    "es": "La lista de planes de la semana tiene las tarjetas iguales que las de las tablas: mismo tamaño de letra, sin las pastillas de colores y con los botones en una sola línea.",
+    "ca": "La llista de plans setmanals té les targetes iguals que les de les taules: la mateixa mida de lletra, sense les pastilles de colors i amb els botons en una sola línia.",
+    "en": "The Weekly plans list now has the same cards as the routines: same font size, no coloured pills and the buttons on a single line."
+  },
+  {
     "fecha": "2026-11-22T11:32:27Z",
     "es": "Mis tablas: la tarjeta del plan de la semana es como la de un grupo (icono, nombre y el plan en uso). Al tocarla se ven los planes; en los tres puntos, «Ver los planes» y «Nuevo plan».",
     "ca": "Les meves taules: la targeta del Pla setmanal és com la d’un grup (icona, nom i el pla en ús). En tocar-la es veuen els plans; als tres punts, «Mostra els plans» i «Nou pla».",

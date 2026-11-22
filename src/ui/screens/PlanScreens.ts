@@ -431,7 +431,8 @@ export class PlansScreen implements Screen {
     this.el.append(header(app, app.store.plans.length > 1 ? 'Planes de la semana' : 'Plan de la semana'));
     const body = h('div', { class: 'maker-body' });
     this.el.append(body);
-    for (const p of app.store.plans) body.append(planTableCard(app, p, { after: () => this.render() }));
+    // las tarjetas de los planes, como las de las tablas dentro de un grupo
+    body.append(h('div', { class: 'plans-list' }, ...app.store.plans.map((p) => planTableCard(app, p, { after: () => this.render() }))));
     body.append(h('button', { class: 'maker-add', onclick: () => newPlan(app) }, icon('plus'), 'Nuevo plan de la semana'));
   }
 }
