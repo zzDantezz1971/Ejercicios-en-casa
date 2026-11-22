@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-22T08:49:20Z",
+    "es": "Las barras de colores de las tablas y los planes tienen un contorno fino en cada bloque, para distinguir mejor los colores.",
+    "ca": "Les barres de colors de les taules i els plans tenen un contorn fi a cada bloc, per distingir millor els colors.",
+    "en": "The colour bars on routines and plans have a thin outline on each block, so the colours are easier to tell apart."
+  },
+  {
     "fecha": "2026-11-22T08:39:00Z",
     "es": "Plan de la semana: al tocar «Cambiar el plan» con días ya hechos esta semana, un aviso recuerda que dejarán de salir como hechos.",
     "ca": "Pla setmanal: en tocar «Canvia el pla» amb dies ja fets aquesta setmana, un avís recorda que deixaran de sortir com a fets.",

@@ -355,7 +355,9 @@ button:focus-visible, input:focus-visible, label:focus-within { outline: 2px sol
 .meta-line { display: flex; align-items: center; gap: 7px; }
 .meta-line .ico { width: 16px; height: 16px; }
 .pills { display: flex; flex-wrap: wrap; gap: 6px; }
-.mix { display: flex; height: 6px; border-radius: 999px; overflow: hidden; gap: 2px; }
+.mix { display: flex; height: 8px; gap: 3px; padding: 1px; }
+/* cada tramo con un contorno fino (para distinguir bien los colores) */
+.mix > span { border-radius: 999px; box-shadow: 0 0 0 1px color-mix(in srgb, var(--fg) 55%, transparent); }
 .table-actions { display: grid; grid-template-columns: 1fr 1fr auto; gap: 8px; }
 .more-btn { width: 46px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface-2); color: var(--fg); cursor: pointer; display: flex; align-items: center; justify-content: center; }
 
