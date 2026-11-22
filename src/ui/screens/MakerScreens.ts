@@ -7,10 +7,11 @@ import {
 import { clampRounds, MAX_ROUNDS, WorkoutPlan } from '../../domain/WorkoutPlan';
 import { MAX_SECONDS, MIN_SECONDS, STEP_SECONDS } from '../../domain/RoutineEditor';
 import { emptyRoutine, SECTION_IDS, sectionOrder, SECTION_TITLES, usesWeight, weightUnit, type ExerciseDef, type RoutineItem, type SectionId } from '../../domain/types';
-import { LOCALE, tr } from '../../i18n';
+import { tr } from '../../i18n';
 import type { App, Screen } from '../App';
 import { clear, confirmDialog, h, humanDuration, kg, plural, promptDialog, weightDialog } from '../dom';
 import { sortableList, type SortableRow } from '../components/sortable';
+import { groupedList, listGrouping } from '../listGrouping';
 import { icon, SECTION_STYLE, type IconName } from '../icons';
 import { DetailScreen } from './DetailScreen';
 import { RoutineScreen } from './RoutineScreen';
@@ -598,20 +599,12 @@ class PickExerciseScreen implements Screen {
       .filter((e) => !q || fold(`${e.name} ${tr(e.name)} ${e.zone} ${e.group ? tr(e.group) : ''}`).includes(q));
     clear(this.list);
     this.shown = [];
-    const rest = exs;
-    // agrupados según el orden elegido (en A-Z, sin grupos)
-    const key = (e: ExerciseDef): string => this.sort === 'musculo' ? tr(e.zone)
-      : this.sort === 'material' ? (e.equip?.[0]?.[0] ? tr(EQUIP_INFO[e.equip[0][0]].name) : tr('Sin material'))
-      : this.sort === 'az' ? '' : (e.group ?? '');
-    const sorted = this.sort === 'zona' ? rest
-      : [...rest].sort((a, b) => (this.sort === 'material' && !a.equip?.length !== !b.equip?.length ? (a.equip?.length ? 1 : -1) : 0)
-        || key(a).localeCompare(key(b), LOCALE) || tr(a.name).localeCompare(tr(b.name), LOCALE));
-    let group: string | undefined;
-    for (const ex of sorted) {
-      const g = key(ex);
-      if (g && g !== group) this.list.append(h('h2', { class: 'maker-sec pick-group' }, g));
-      group = g;
-      this.row(ex);
+    // agrupados según el orden elegido, igual que en la lista de crear una tabla (en A-Z, sin grupos)
+    const all = app.sections.find((x) => x.id === this.s)?.exercises ?? [];
+    const gr = listGrouping(all, this.sort);
+    for (const { key, items } of groupedList(exs, all, this.sort)) {
+      if (key) this.list.append(h('h2', { class: 'maker-sec pick-group zone-title' }, gr.icon(key), gr.title(key)));
+      for (const ex of items) this.row(ex);
     }
     if (!exs.length) this.list.append(h('p', { class: 'muted' }, 'No hay más ejercicios para añadir.'));
     if (this.multi) this.paintFoot();

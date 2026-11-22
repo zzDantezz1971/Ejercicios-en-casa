@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-22T00:01:14Z",
+    "es": ["Añadir ejercicios al editar una tabla: los órdenes «Por músculo», «Por material» y «Zona» agrupan igual que en la lista de crear una tabla (por ejemplo, por músculo: hombros, pecho, espalda…), con su icono."],
+    "ca": ["Afegir exercicis en editar una taula: els ordres «Per múscul», «Per material» i «Zona» agrupen igual que a la llista de crear una taula (per exemple, per múscul: espatlles, pit, esquena…), amb la seva icona."],
+    "en": ["Adding exercises while editing a routine: “By muscle”, “By equipment” and “Area” now group the same way as the list for creating a routine (e.g. by muscle: shoulders, chest, back…), with their icon."]
+  },
+  {
     "fecha": "2026-11-21T23:17:50Z",
     "es": ["Editar tabla, más clara: una tarjeta por bloque como en Inicio, con «x2» si se repite, que se ordenan arrastrándolas por su asa. Al tocar un bloque se abren sus ejercicios para cambiarlos."],
     "ca": ["Edita la taula, més clara: una targeta per bloc com a Inici, amb «x2» si es repeteix, que s’ordenen arrossegant-les per la nansa. En tocar un bloc s’obren els seus exercicis per canviar-los."],
