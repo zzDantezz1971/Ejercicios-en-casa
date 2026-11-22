@@ -45,16 +45,23 @@ export class TablesScreen implements Screen {
       const n = store.plans.length;
       const inUse = planIds.has(store.active.id);
       const open = () => openPlan(this.app);
-      this.body.append(h('article', { class: 'card table-card plan-card plan-group' + (inUse ? ' active' : ''), role: 'button', tabindex: 0, onclick: open },
-        h('div', { class: 'table-head' },
-          h('div', { class: 'plan-card-title' }, h('span', { class: 'plan-icon' }, icon('calendar')), h('h2', {}, n > 1 ? 'Planes de la semana' : 'Plan de la semana')),
-          inUse ? h('span', { class: 'active-pill' }, 'En uso') : null),
-        h('div', { class: 'table-meta' },
-          h('span', { class: 'meta-line' }, icon('tables'), plural(n, 'plan', 'planes')),
-          h('span', { class: 'meta-line' }, icon('check'), `${tr(inUse ? 'En uso' : 'Último usado')}: ${planTitle(plan)}`)),
-        h('div', { class: 'table-actions' },
-          h('button', { class: 'btn small primary', onclick: (e: Event) => { e.stopPropagation(); open(); } }, icon('tables'), n > 1 ? 'Ver los planes' : 'Ver el plan'),
-          h('button', { class: 'btn small ghost', onclick: (e: Event) => { e.stopPropagation(); newPlan(this.app); } }, icon('plus'), 'Nuevo plan'))));
+      // igual que la tarjeta de un grupo: al tocarla se ven los planes; en los tres puntos, ver los planes o crear otro
+      const more = async () => {
+        const choice = await actionSheet(tr(n > 1 ? 'Planes de la semana' : 'Plan de la semana'), [
+          { id: 'open', label: n > 1 ? 'Ver los planes' : 'Ver el plan' },
+          { id: 'new', label: 'Nuevo plan' },
+        ]);
+        if (choice === 'open') open();
+        else if (choice === 'new') newPlan(this.app);
+      };
+      this.body.append(h('section', { class: 'card group-card plan-group' + (inUse ? ' active' : '') },
+        h('div', { class: 'group-head' },
+          h('button', { class: 'group-main', onclick: open },
+            h('span', { class: 'group-icon' }, icon('calendar')),
+            h('span', { class: 'group-text' }, h('strong', {}, n > 1 ? 'Planes de la semana' : 'Plan de la semana'),
+              h('span', { class: 'muted small' }, plural(n, 'plan', 'planes'), ' · ', inUse ? h('span', { class: 'group-inuse' }, 'En uso') : tr('Último usado'), ': ', h('span', { 'data-no-tr': '' }, planTitle(plan)))),
+            icon('chevron', 'ico chev')),
+          h('button', { class: 'more-btn', 'aria-label': tr('Más opciones'), onclick: () => void more() }, icon('more')))));
     }
     // grupos (plegados; al tocarlos se ven sus tablas) y después las tablas que no están en ningún grupo
     const loose = store.routines.filter((t) => !planIds.has(t.id));

@@ -1271,6 +1271,7 @@ const ROWS: Row[] = [
   ['Los ejercicios de pilates llevan la etiqueta «Pilates». En la lista de cada bloque, «Pilates» (arriba) enseña solo esos.', 'Els exercicis de pilates porten l’etiqueta «Pilates». A la llista de cada bloc, «Pilates» (a dalt) ensenya només aquests.', 'Pilates exercises have the «Pilates» tag. In each block’s list, «Pilates» (at the top) shows only those.'],
   ['Para una sesión de pilates: en «Tablas hechas» hay tres (para empezar, core, y espalda y glúteos), y en «Créala por mí» o en el plan de la semana puedes elegir el objetivo «Pilates».', 'Per a una sessió de pilates: a «Taules fetes» n’hi ha tres (per començar, core, i esquena i glutis), i a «Crea-la per mi» o al Pla setmanal pots triar l’objectiu «Pilates».', 'For a Pilates session: «Ready-made routines» has three (beginners, core, and back and glutes), and in «Make it for me» or the Weekly plan you can choose the «Pilates» goal.'],
   ['Si cambias el plan, los días ya hechos esta semana dejarán de salir como hechos. ¿Quieres cambiarlo?', 'Si canvies el pla, els dies ja fets aquesta setmana deixaran de sortir com a fets. Vols canviar-lo?', 'If you change the plan, the days already done this week will no longer show as done. Change it?'],
+  ['Más opciones', 'Més opcions', 'More options'],
 ];
 
 export const UI_CA: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[1]]));
