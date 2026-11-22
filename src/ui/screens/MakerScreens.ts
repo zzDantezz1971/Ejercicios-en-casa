@@ -121,6 +121,8 @@ export interface PreviewEdit {
   openSection?: (s: SectionId) => void;
   /** Solo este bloque, abierto (la pantalla de un bloque). */
   section?: SectionId;
+  /** Cambiar las vueltas del bloque (en tablas que aún no se han guardado). */
+  rounds?: boolean;
 }
 
 /** Añadir ejercicios a un apartado: abre la lista, se eligen los que se quieran y se ponen al final. */
@@ -225,9 +227,9 @@ export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement
     if (!items.length && !edit) continue;
     const st = SECTION_STYLE[s];
     const nr = clampRounds(r.rounds[s]);
-    const setRounds = (v: number) => edit!.set({ routine: r.routine, rounds: { ...r.rounds, [s]: clampRounds(v) } });
+    const setRounds = (v: number) => edit!.set({ ...r, rounds: { ...r.rounds, [s]: clampRounds(v) } });
     const head = h('h2', { class: 'maker-sec' }, icon(st.icon), SECTION_TITLES[s],
-      edit?.full && items.length ? h('span', { class: 'maker-rounds-ctl' }, h('span', {}, 'Vueltas'),
+      (edit?.full || edit?.rounds) && items.length ? h('span', { class: 'maker-rounds-ctl' }, h('span', {}, 'Vueltas'),
         h('span', { class: 'stepper inline maker-time' },
           h('button', { 'aria-label': 'Menos vueltas', disabled: nr <= 1, onclick: () => setRounds(nr - 1) }, '−'),
           h('span', { class: 'secs' }, `x${nr}`),
@@ -539,7 +541,7 @@ export class DraftBlockScreen implements Screen {
     const y = this.el.isConnected ? window.scrollY : -1;
     clear(this.el);
     this.el.append(header(app, SECTION_TITLES[this.section], this.title),
-      h('div', { class: 'maker-body' }, preview(app, this.get(), { set: (r) => { this.put(r); this.render(); }, ask: this.ask, section: this.section })));
+      h('div', { class: 'maker-body' }, preview(app, this.get(), { set: (r) => { this.put(r); this.render(); }, ask: this.ask, section: this.section, rounds: true })));
     if (y >= 0) window.scrollTo({ top: y });
   }
 }
