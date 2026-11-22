@@ -132,6 +132,7 @@ export const RAW_SECTIONS: RawSection[] = [
  {n:'Zancadas hacia delante con mancuernas',z:'Piernas y glúteos',db:'both',f:[
    [{},150,800],[{x:47,thR:15,snR:95,thL:115,snL:175,ftL:40},250,800],
    [{},150,800],[{x:47,thL:15,snL:95,thR:115,snR:175,ftR:40},250,800]]},
+ {g:'Core y zona lumbar'},
  {n:'Bird-dog (perro de caza)',z:'Lumbar y core',mat:1,b:['lumbar'],handsDown:true,f:[
    [QUAD,200,900],[{...QUAD,uaL:-5,faL:-5,thR:182,snR:182},1200,900],
    [QUAD,200,900],[{...QUAD,uaR:-5,faR:-5,thL:182,snL:182},1200,900]]},
