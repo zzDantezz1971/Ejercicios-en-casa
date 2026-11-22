@@ -86,6 +86,10 @@ const SPLIT_L = { thL: 60, snL: 98, thR: 118, snR: 128, ftR: 40 };
 // zancada larga con el tronco inclinado (el mejor estiramiento del mundo): la pierna de atrás casi estirada
 const WGS = { thR: 8, snR: 92, thL: 140, snL: 160, ftL: 40, tl: -28, tu: -20, hd: -20 };
 
+// puente de hombros: hombros, brazos y cabeza apoyados en la esterilla (barbilla un poco hacia el pecho)
+const SHB = { tl: 140, tu: 165, hd: 200, ua: 9, fa: 9 };
+const BALL_ARMS = { zKL: -6, zKR: 6, zAL: -4, zAR: 4, zEL: -13, zER: 13, zHL: -1, zHR: 1 };
+
 export const EXTRA_MOTIONS: Record<string, M> = {
   // ── Nuevos (noviembre de 2026) ──
   // abrazar una rodilla contra el pecho, una y otra, caminando en el sitio (sin ir hacia atrás)
@@ -294,8 +298,8 @@ export const EXTRA_MOTIONS: Record<string, M> = {
     [{ ...HIPS, thR: -24, snR: 92, ftR: 0 }, 100, 650]] },
   'patada-de-gluteo-en-cuadrupedia': { mat: 1, handsDown: true, f: [[QUAD, 200, 700], [{ ...QUAD, thR: 186, snR: 272, ftR: 180 }, 300, 700]] },
   'abduccion-de-cadera-tumbado-de-lado': { v: 'front', mat: 1, f: [
-    [{ tl: 180, hd: 186, th: 0, sn: 0, ft: -60, uaL: 182, faL: 250, uaR: 20, faR: 20 }, 200, 900],
-    [{ tl: 180, hd: 186, thL: 0, snL: 0, thR: -40, snR: -40, ft: -60, uaL: 182, faL: 250, uaR: 20, faR: 20 }, 350, 900]] },
+    [{ tl: 180, hd: 186, th: 0, sn: 0, ft: -60, uaL: 182, faL: 182, uaR: 20, faR: 20 }, 200, 900],
+    [{ tl: 180, hd: 186, thL: 0, snL: 0, thR: -40, snR: -40, ft: -60, uaL: 182, faL: 182, uaR: 20, faR: 20 }, 350, 900]] },
   // manos juntas delante del pecho
   'sentadilla-sumo-sin-peso': { v: 'front', f: [[{ ...SUMO, ...SUMO_CHEST }, 200, 1000], [{ ...SUMO_DOWN, ...SUMO_CHEST }, 300, 1000]] },
   'peso-muerto-a-una-pierna-sin-peso': { plant: 'anR', f: [
@@ -637,10 +641,11 @@ export const EXTRA_MOTIONS: Record<string, M> = {
     const a = t * Math.PI * 2;
     return { tl: 180, ua: 0, fa: 0, thL: 0, snL: 0, thR: -88 + 12 * Math.cos(a), snR: -88 + 12 * Math.cos(a), zKR: 9 * Math.sin(a), zAR: 18 * Math.sin(a) };
   } },
+  // rodar como una pelota (las manos cogen las espinillas por fuera: rodillas algo separadas y codos abiertos)
   // rodar como una pelota: en equilibrio con las rodillas al pecho y rodar atrás hasta los omóplatos (la forma no cambia)
   'rodar-como-una-pelota': { mat: 1, f: [
-    [{ tl: -112, tu: -122, hd: -78, th: -52, sn: 145, ua: 15, fa: 70 }, 350, 700],
-    [{ tl: -187, tu: -197, hd: -153, th: -127, sn: 70, ua: -60, fa: -5 }, 120, 700]] },
+    [{ tl: -112, tu: -122, hd: -78, th: -52, sn: 145, ua: 15, fa: 70, ...BALL_ARMS }, 350, 700],
+    [{ tl: -187, tu: -197, hd: -153, th: -127, sn: 70, ua: -60, fa: -5, ...BALL_ARMS }, 120, 700]] },
   'estiramiento-de-columna-sentado': { mat: 1, f: [
     [{ th: -6, sn: 4, ft: -90, ua: 0, fa: 0 }, 400, 1300],
     [{ tl: -55, tu: -10, hd: 25, th: -6, sn: 4, ft: -90, ua: 10, fa: 15 }, 900, 1300]] },
@@ -654,10 +659,10 @@ export const EXTRA_MOTIONS: Record<string, M> = {
     [{ ...PRONE, tl: -4, tu: -35, hd: -40, ua: 80, fa: 0, snR: 320 }, 0, 200]] },
   // puente de hombros: con la cadera arriba, la pierna de cerca sube estirada al techo y baja hasta la altura de la rodilla
   'puente-de-hombros-con-patada': { mat: 1, feetDown: true, f: [
-    [{ ...SUP, tl: 140, tu: 165, th: -18, sn: 76.5 }, 300, 900],
-    [{ ...SUP, tl: 140, tu: 165, thL: -18, snL: 76.5, thR: -88, snR: -88 }, 250, 800],
-    [{ ...SUP, tl: 140, tu: 165, thL: -18, snL: 76.5, thR: -22, snR: -22 }, 250, 800],
-    [{ ...SUP, tl: 140, tu: 165, thL: -18, snL: 76.5, thR: -88, snR: -88 }, 250, 800]] },
+    [{ ...SUP, ...SHB, th: -18, sn: 76.5 }, 300, 900],
+    [{ ...SUP, ...SHB, thL: -18, snL: 76.5, thR: -88, snR: -88 }, 250, 800],
+    [{ ...SUP, ...SHB, thL: -18, snL: 76.5, thR: -22, snR: -22 }, 250, 800],
+    [{ ...SUP, ...SHB, thL: -18, snL: 76.5, thR: -88, snR: -88 }, 250, 800]] },
 };
 
 /** Ejercicios de antes (rawExercises.ts) con movimiento nuevo: sustituyen al de allí. */
