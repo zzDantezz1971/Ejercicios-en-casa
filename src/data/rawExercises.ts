@@ -132,6 +132,20 @@ export const RAW_SECTIONS: RawSection[] = [
  {n:'Zancadas hacia delante con mancuernas',z:'Piernas y glúteos',db:'both',f:[
    [{},150,800],[{x:47,thR:15,snR:95,thL:115,snL:175,ftL:40},250,800],
    [{},150,800],[{x:47,thL:15,snL:95,thR:115,snR:175,ftR:40},250,800]]},
+ {n:'Bird-dog (perro de caza)',z:'Lumbar y core',mat:1,b:['lumbar'],handsDown:true,f:[
+   [QUAD,200,900],[{...QUAD,uaL:-5,faL:-5,thR:182,snR:182},1200,900],
+   [QUAD,200,900],[{...QUAD,uaR:-5,faR:-5,thL:182,snL:182},1200,900]]},
+ {n:'Puente de glúteos',feetDown:true,z:'Glúteos y lumbar',mat:1,b:['lumbar'],f:[
+   [{...SUP,...KNEES},300,1000],[{...SUP,tl:140,tu:165,th:-18,sn:76.5},900,1000]]},
+ {n:'Puente a una pierna',feetDown:true,z:'Glúteos y lumbar',mat:1,b:['lumbar'],f:[
+   [{...SUP,thL:-60,snL:60,thR:-22,snR:-22},300,1000],[{...SUP,tl:150,tu:158,hd:180,thL:-18,snL:76.5,thR:-27,snR:-27},900,1000]]},
+ {n:'Nadador suave (superman alterno)',anchor:{j:'pel',y:-13.1},z:'Lumbar y espalda',mat:1,b:['lumbar','gentle'],f:[
+   [{...PRONE,ua:0,fa:0},200,900],[{...PRONE,ua:0,fa:0,tu:-6,hd:-10,uaL:-12,faL:-12,thR:190,snR:192},900,900],
+   [{...PRONE,ua:0,fa:0},200,900],[{...PRONE,ua:0,fa:0,tu:-6,hd:-10,uaR:-12,faR:-12,thL:190,snL:192},900,900]]},
+ {n:'Retroversión pélvica',feetDown:true,anchor:{j:'pel',y:-13.1},z:'Lumbar',mat:1,b:['lumbar'],mark:['pel'],f:[
+   [{...SUP,...KNEES},500,900],[{...SUP,...KNEES,tl:177,thL:-63,thR:-59},1200,900]]},
+ {n:'Elevación de brazos en Y boca abajo',anchor:{j:'pel',y:-13.1},z:'Espalda alta y postura',mat:1,b:['lumbar'],f:[
+   [{...PRONE,ua:0,fa:0},300,900],[{...PRONE,tu:-5,hd:-10,ua:-14,fa:-14},1100,900]]},
 ]},
 
 {id:'abdominales',title:'Abdominales',note:'Ordenados por zona, de arriba abajo.',groups:true,items:[
@@ -180,7 +194,7 @@ export const RAW_SECTIONS: RawSection[] = [
    [{...PLH,tl:-7,thR:42,snR:195,ftR:200,thL:155,snL:155},150,130],[{...PLH,tl:-7,thL:42,snL:195,ftL:200,thR:155,snR:155},150,130]]},
 ]},
 
-{id:'estiramientos',title:'Estiramientos',note:'Te propongo 26: estiramientos de todo el cuerpo y, al final, 6 ejercicios suaves para fortalecer la zona lumbar.',groups:true,items:[
+{id:'estiramientos',title:'Estiramientos',note:'Estiramientos de todo el cuerpo.',groups:true,items:[
  {g:'Cuello'},
  {n:'Inclinación lateral de cuello',split:true,z:'Cuello',v:'front',f:[[{},300,900],[{hd:-138},1200,900],[{},300,900],[{hd:-42},1200,900]]},
  {n:'Barbilla al pecho',z:'Cuello',f:[[{},300,900],[{hd:-40},1400,900]]},
@@ -297,20 +311,5 @@ export const RAW_SECTIONS: RawSection[] = [
    [{},200,900],[{thL:95,snL:250,uaL:110,faL:100,uaR:-10,faR:-10},1500,900]]},
  {n:'Gemelos contra la pared',z:'Gemelos',az:-20,plant:'anL',f:[
    [{tl:-82,ua:126,fa:64,zE:22,thR:66,snR:66,ftR:-42,thL:112,snL:112,ftL:0},1300,1000],[{tl:-62,ua:150,fa:86,zE:22,thR:66,snR:66,ftR:-42,thL:112,snL:112,ftL:0},1300,1000]]},
- {g:'Fortalecer zona lumbar (espalda sana)'},
- {n:'Bird-dog (perro de caza)',z:'Lumbar y core',mat:1,b:['lumbar'],handsDown:true,f:[
-   [QUAD,200,900],[{...QUAD,uaL:-5,faL:-5,thR:182,snR:182},1200,900],
-   [QUAD,200,900],[{...QUAD,uaR:-5,faR:-5,thL:182,snL:182},1200,900]]},
- {n:'Puente de glúteos',feetDown:true,z:'Glúteos y lumbar',mat:1,b:['lumbar'],f:[
-   [{...SUP,...KNEES},300,1000],[{...SUP,tl:140,tu:165,th:-18,sn:76.5},900,1000]]},
- {n:'Puente a una pierna',feetDown:true,z:'Glúteos y lumbar',mat:1,b:['lumbar'],f:[
-   [{...SUP,thL:-60,snL:60,thR:-22,snR:-22},300,1000],[{...SUP,tl:150,tu:158,hd:180,thL:-18,snL:76.5,thR:-27,snR:-27},900,1000]]},
- {n:'Nadador suave (superman alterno)',anchor:{j:'pel',y:-13.1},z:'Lumbar y espalda',mat:1,b:['lumbar','gentle'],f:[
-   [{...PRONE,ua:0,fa:0},200,900],[{...PRONE,ua:0,fa:0,tu:-6,hd:-10,uaL:-12,faL:-12,thR:190,snR:192},900,900],
-   [{...PRONE,ua:0,fa:0},200,900],[{...PRONE,ua:0,fa:0,tu:-6,hd:-10,uaR:-12,faR:-12,thL:190,snL:192},900,900]]},
- {n:'Retroversión pélvica',feetDown:true,anchor:{j:'pel',y:-13.1},z:'Lumbar',mat:1,b:['lumbar'],mark:['pel'],f:[
-   [{...SUP,...KNEES},500,900],[{...SUP,...KNEES,tl:177,thL:-63,thR:-59},1200,900]]},
- {n:'Elevación de brazos en Y boca abajo',anchor:{j:'pel',y:-13.1},z:'Espalda alta y postura',mat:1,b:['lumbar'],f:[
-   [{...PRONE,ua:0,fa:0},300,900],[{...PRONE,tu:-5,hd:-10,ua:-14,fa:-14},1100,900]]},
 ]},
 ];

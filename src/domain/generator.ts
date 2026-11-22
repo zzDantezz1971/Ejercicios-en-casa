@@ -83,7 +83,7 @@ const SHARE: Record<Goal, Record<SectionId, number>> = {
   fuerza: { calentamiento: 0.13, pesas: 0.6, abdominales: 0.14, estiramientos: 0.13 },
   flexibilidad: { calentamiento: 0.22, pesas: 0, abdominales: 0, estiramientos: 0.78 },
   espalda: { calentamiento: 0.2, pesas: 0.18, abdominales: 0.27, estiramientos: 0.35 },
-  pilates: { calentamiento: 0.15, pesas: 0, abdominales: 0.55, estiramientos: 0.3 },
+  pilates: { calentamiento: 0.15, pesas: 0.25, abdominales: 0.42, estiramientos: 0.18 },
 };
 
 /** Segundos de cada ejercicio según el nivel. */

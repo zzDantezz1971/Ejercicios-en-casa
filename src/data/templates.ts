@@ -30,9 +30,9 @@ export const TEMPLATES: readonly TableTemplate[] = [
     desc: 'Suave: movilidad, core y estiramientos para cuidar la espalda.',
     routine: {
       calentamiento: [['circulos-de-cadera', 30], ['giros-de-tronco', 30], ['inclinaciones-laterales-de-tronco', 30], ['circulos-de-brazos', 30]],
+      pesas: [['bird-dog-perro-de-caza', 40], ['puente-de-gluteos', 40], ['nadador-suave-superman-alterno', 40]],
       abdominales: [['dead-bug-bicho-muerto', 40], ['plancha-frontal', 30], ['plancha-lateral', 30]],
-      estiramientos: [['gato-camello', 40], ['bird-dog-perro-de-caza', 40], ['puente-de-gluteos', 40], ['nadador-suave-superman-alterno', 40],
-        ['postura-del-nino', 40], ['rodillas-al-pecho-tumbado', 40], ['torsion-lumbar-tumbado', 40], ['esfinge', 30]],
+      estiramientos: [['gato-camello', 40], ['postura-del-nino', 40], ['rodillas-al-pecho-tumbado', 40], ['torsion-lumbar-tumbado', 40], ['esfinge', 30]],
     },
   },
   {
@@ -102,8 +102,9 @@ export const TEMPLATES: readonly TableTemplate[] = [
     desc: 'Pilates suave en la esterilla: respiración, core y espalda.',
     routine: {
       calentamiento: [['circulos-de-cadera', 30], ['giros-de-tronco', 30], ['circulos-de-brazos', 30]],
+      pesas: [['puente-de-gluteos', 40], ['nadador-suave-superman-alterno', 40]],
       abdominales: [['estiramiento-de-una-pierna', 40], ['dead-bug-bicho-muerto', 40], ['circulos-de-pierna-tumbado', 40], ['barquita-hollow-hold', 30], ['plancha-frontal', 30]],
-      estiramientos: [['puente-de-gluteos', 40], ['nadador-suave-superman-alterno', 40], ['gato-camello', 40], ['estiramiento-de-columna-sentado', 40], ['postura-del-nino', 40]],
+      estiramientos: [['gato-camello', 40], ['estiramiento-de-columna-sentado', 40], ['postura-del-nino', 40]],
     },
     rounds: { abdominales: 2 },
   },
@@ -123,10 +124,9 @@ export const TEMPLATES: readonly TableTemplate[] = [
     desc: 'Puentes, patadas y extensiones para una espalda fuerte y unos glúteos activos.',
     routine: {
       calentamiento: [['circulos-de-cadera', 30], ['inclinaciones-laterales-de-tronco', 30], ['circulos-de-brazos', 30]],
-      pesas: [['abduccion-de-cadera-tumbado-de-lado', 40]],
+      pesas: [['abduccion-de-cadera-tumbado-de-lado', 40], ['puente-de-hombros-con-patada', 40], ['puente-a-una-pierna', 40], ['patada-de-una-pierna-boca-abajo', 40], ['bird-dog-perro-de-caza', 40], ['nadador-suave-superman-alterno', 40]],
       abdominales: [['plancha-frontal', 40], ['dead-bug-bicho-muerto', 40]],
-      estiramientos: [['puente-de-hombros-con-patada', 40], ['puente-a-una-pierna', 40], ['patada-de-una-pierna-boca-abajo', 40], ['bird-dog-perro-de-caza', 40],
-        ['nadador-suave-superman-alterno', 40], ['cobra', 30], ['gato-camello', 40], ['postura-del-nino', 40]],
+      estiramientos: [['cobra', 30], ['gato-camello', 40], ['postura-del-nino', 40]],
     },
     rounds: { abdominales: 2, estiramientos: 2 },
   },
