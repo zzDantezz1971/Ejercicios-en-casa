@@ -65,8 +65,8 @@ async function saveTable(app: App, defName: string, r: GenResult, fillActive: bo
   if (!app.access.premium) { app.showPremium(); return; }
   const name = await promptDialog('Nombre de la tabla', defName, 'Guardar');
   if (!name) return;
-  if (fillActive) app.store.fillActive(name, r.routine, r.rounds);
-  else app.store.createRoutineFrom(name, r.routine, r.rounds);
+  if (fillActive) app.store.fillActive(name, r.routine, r.rounds, r.order);
+  else app.store.createRoutineFrom(name, r.routine, r.rounds, r.order);
   app.haptics.tap();
   app.openTab('inicio');
 }
@@ -450,6 +450,7 @@ export class GeneratorScreen implements Screen {
         preview(this.app, this.result, {
           set: (r) => { this.result = r; this.keepRender(); },
           ask: this.ask,
+          openSection: (s) => this.app.push(new DraftBlockScreen(this.app, tr('Tu tabla'), s, () => this.result!, (r) => { this.result = r; this.keepRender(); }, this.ask)),
         }),
         h('div', { class: 'maker-actions' },
           h('button', { class: 'btn ghost block', onclick: () => { this.result = generate(o, this.ctx()); this.ask = { remove: true }; this.render(); window.scrollTo({ top: 0 }); } }, icon('swap'), 'Otra propuesta'),
@@ -515,9 +516,30 @@ class TemplateScreen implements Screen {
         preview(app, this.r, {
           set: (r) => { this.r = r; this.render(); },
           ask: this.ask,
+          openSection: (s) => app.push(new DraftBlockScreen(app, tr(t.name), s, () => this.r, (r) => { this.r = r; this.render(); }, this.ask)),
         }),
         h('div', { class: 'maker-actions' },
           ...saveButton(app, this.r, 'Usar esta tabla', () => void saveTable(app, tr(t.name), this.r, this.fillActive)))));
+    if (y >= 0) window.scrollTo({ top: y });
+  }
+}
+
+/** Un bloque de una tabla que aún no se ha guardado (Créala por mí, tabla hecha, día del plan): sus ejercicios, que se
+ *  pueden cambiar, quitar, añadir y ordenar arrastrándolos. Los cambios vuelven a la pantalla de la tabla. */
+export class DraftBlockScreen implements Screen {
+  readonly el = h('main', { class: 'screen maker-screen' });
+
+  constructor(private readonly app: App, private readonly title: string, private readonly section: SectionId,
+    private readonly get: () => GenResult, private readonly put: (r: GenResult) => void, private readonly ask: { remove: boolean }) {
+    this.render();
+  }
+
+  private render(): void {
+    const { app } = this;
+    const y = this.el.isConnected ? window.scrollY : -1;
+    clear(this.el);
+    this.el.append(header(app, SECTION_TITLES[this.section], this.title),
+      h('div', { class: 'maker-body' }, preview(app, this.get(), { set: (r) => { this.put(r); this.render(); }, ask: this.ask, section: this.section })));
     if (y >= 0) window.scrollTo({ top: y });
   }
 }

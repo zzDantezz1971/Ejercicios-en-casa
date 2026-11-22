@@ -13,7 +13,7 @@ import { formatDate } from './HomeScreen';
 import { SECTION_IDS, SECTION_TITLES, type SectionId } from '../../domain/types';
 import { icon, SECTION_STYLE, type IconName } from '../icons';
 import { startWorkout } from '../components/startWorkout';
-import { header, isEmptyResult, preview } from './MakerScreens';
+import { DraftBlockScreen, header, isEmptyResult, preview } from './MakerScreens';
 import { TableBlockScreen } from './TableEditScreen';
 
 /*
@@ -244,7 +244,7 @@ export class PlanWizardScreen implements Screen {
       for (const d of WEEK_ORDER) {
         const x = this.result.find((y) => y.day === d);
         if (!x) { list.append(h('div', { class: 'plan-row rest' }, h('span', { class: 'plan-dname' }, dayName(d)), h('span', { class: 'muted' }, 'Descanso'))); continue; }
-        const p = WorkoutPlan.build(x.r.routine, app.catalog, app.store.settings, x.r.rounds);
+        const p = WorkoutPlan.build(x.r.routine, app.catalog, app.store.settings, x.r.rounds, x.r.order);
         // al tocar un día se ven sus ejercicios y se pueden cambiar antes de crear el plan
         list.append(h('button', { class: 'plan-row', onclick: () => app.push(new DraftDayScreen(app, x, dayOptions(o, x.kind), tr(kindLabel(o, x.kind)))) },
           h('span', { class: 'plan-dname' }, dayName(d)),
@@ -267,7 +267,7 @@ export class PlanWizardScreen implements Screen {
     // «Cambiar el plan»: sustituye a ese plan (y a sus tablas), con el mismo nombre
     const old = this.replaceId ? app.store.planById(this.replaceId) : undefined;
     if (old) app.store.deletePlan(old.id, true);
-    const days: PlanDay[] = this.result.map((x) => ({ day: x.day, kind: x.kind, routineId: app.store.addRoutine(tableName(o, x.day, x.kind), x.r.routine, x.r.rounds).id }));
+    const days: PlanDay[] = this.result.map((x) => ({ day: x.day, kind: x.kind, routineId: app.store.addRoutine(tableName(o, x.day, x.kind), x.r.routine, x.r.rounds, x.r.order).id }));
     const id = old?.id ?? `plan-${Date.now()}`;
     app.store.setPlan({ id, ...(old?.name ? { name: old.name } : {}), ...o, days, renew: old?.renew ?? true, week: mondayOf(new Date()), createdAt: new Date().toISOString() });
     app.haptics.tap();
@@ -304,7 +304,9 @@ export class PlanScreen implements Screen {
       ? h('p', { class: 'plan-inuse' }, h('span', { class: 'active-pill' }, 'En uso'))
       : h('button', { class: 'btn primary block', onclick: () => { usePlan(app, plan.id); app.haptics.tap(); this.render(); } }, icon('play'), 'Usar el plan'));
     const now = new Date();
-    const done = trainedDates(app.store.history);
+    // solo cuentan los entrenamientos hechos desde que existe el plan (uno recién creado no tiene días hechos)
+    const since = Date.parse(plan.createdAt) || 0;
+    const done = trainedDates(app.store.history.filter((e) => Date.parse(e.date) >= since));
     const monday = mondayOf(now);
     const hits = plan.days.filter((d) => done.has(ymd(dateInWeek(monday, d.day)))).length;
     body.append(h('p', { class: 'muted maker-summary' }, summary({ ...plan, n: plan.days.length })),
@@ -401,7 +403,7 @@ class DraftDayScreen implements Screen {
     const set = (next: GenResult) => { x.r = next; this.render(); };
     this.el.append(header(app, this.title, dayName(x.day)),
       h('div', { class: 'maker-body' },
-        preview(app, x.r, { set, ask: this.ask }),
+        preview(app, x.r, { set, ask: this.ask, openSection: (s) => app.push(new DraftBlockScreen(app, `${dayName(x.day)} · ${tr(this.title)}`, s, () => x.r, set, this.ask)) }),
         h('div', { class: 'maker-actions' },
           h('button', { class: 'btn ghost block', onclick: () => { this.ask.remove = true; set(generate(o, genCtx(app))); window.scrollTo({ top: 0 }); } }, icon('swap'), 'Otra propuesta'),
           h('button', { class: 'btn primary block big', disabled: isEmptyResult(x.r), onclick: () => app.back() }, icon('check'), 'Listo'))));

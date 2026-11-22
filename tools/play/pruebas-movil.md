@@ -15,6 +15,8 @@ Marca cada punto al probarlo. Si algo falla, haz una captura y cuéntamelo.
 - [ ] Configuració › al final: «Versió 20» con «2026.11.xx-20» y la fecha; al tocarla, «Novetats de la versió 20» con solo lo hecho desde el build 19 (agrupado por día).
 - [ ] Configuració › Recordatoris (al abrir el grupo): una fila por recordatorio (Entrenament y Pes) con días y hora o «Desactivat»; con «Segueix el pla setmanal», pone «Pla setmanal · días · hora». Tocar cualquiera abre la pantalla de recordatorios.
 - [ ] Pilates: en una taula, Abdominals o Estiraments › «Pilates» (a dalt): només surten els de pilates, amb l’etiqueta «Pilates». Mirar els 9 nous (el cent, roll up, rodar com una pilota, cercles de cama…) i la seva animació. «+ Taula» › Taules fetes: les tres de pilates. «Crea-la per mi» i Pla setmanal: objectiu «Pilates» (no pregunta la zona).
+- [ ] Taules fetes, «Crea-la per mi» i un dia del Pla setmanal (abans de crear-lo): targetes per blocs amb l’asa ≡; arrossegar un bloc canvia l’ordre i es desa en guardar la taula; en tocar un bloc s’obren els seus exercicis (canviar, treure, afegir, arrossegar).
+- [ ] Crear un Pla setmanal nou un dia que ja hagis entrenat abans aquesta setmana: cap dia surt marcat com a fet.
 
 ## 0d. Para probar en el build 19
 - [ ] Recordatoris: ya no está la tarjeta «Pla setmanal». En «Entrenament», con un plan en uso, sale «Segueix el pla setmanal»: encendido, los días son los del plan (fijos) y la notificación dice «Pla setmanal: … / Avui toca: …»; apagado, eliges los días y dice «Hora d’entrenar».
