@@ -88,6 +88,8 @@ const WGS = { thR: 8, snR: 92, thL: 140, snL: 160, ftL: 40, tl: -28, tu: -20, hd
 
 // puente de hombros: hombros, brazos y cabeza apoyados en la esterilla (barbilla un poco hacia el pecho)
 const SHB = { tl: 140, tu: 165, hd: 200, ua: 9, fa: 9 };
+// plancha invertida: cuerpo recto boca arriba, manos detrás bajo los hombros y talones en el suelo
+const LPB = { tl: -166, tu: -168, hd: -175, ua: 95, fa: 90, sa: 0.9, th: 14, sn: 14, ft: -20 };
 const BALL_ARMS = { zKL: -6, zKR: 6, zAL: -4, zAR: 4, zEL: -13, zER: 13, zHL: -1, zHR: 1 };
 
 export const EXTRA_MOTIONS: Record<string, M> = {
@@ -644,8 +646,8 @@ export const EXTRA_MOTIONS: Record<string, M> = {
   // rodar como una pelota (las manos cogen las espinillas por fuera: rodillas algo separadas y codos abiertos)
   // rodar como una pelota: en equilibrio con las rodillas al pecho y rodar atrás hasta los omóplatos (la forma no cambia)
   'rodar-como-una-pelota': { mat: 1, f: [
-    [{ tl: -112, tu: -122, hd: -78, th: -52, sn: 145, ua: 15, fa: 70, ...BALL_ARMS }, 350, 700],
-    [{ tl: -187, tu: -197, hd: -153, th: -127, sn: 70, ua: -60, fa: -5, ...BALL_ARMS }, 120, 700]] },
+    [{ tl: -116, tu: -124, hd: -80, th: -68, sn: 84, ua: 20, fa: 76, ...BALL_ARMS }, 350, 700],
+    [{ tl: -191, tu: -199, hd: -155, th: -143, sn: 9, ua: -55, fa: 1, ...BALL_ARMS }, 120, 700]] },
   'estiramiento-de-columna-sentado': { mat: 1, f: [
     [{ th: -6, sn: 4, ft: -90, ua: 0, fa: 0 }, 400, 1300],
     [{ tl: -55, tu: -10, hd: 25, th: -6, sn: 4, ft: -90, ua: 10, fa: 15 }, 900, 1300]] },
@@ -657,6 +659,27 @@ export const EXTRA_MOTIONS: Record<string, M> = {
     [{ ...PRONE, tl: -4, tu: -35, hd: -40, ua: 80, fa: 0 }, 150, 350],
     [{ ...PRONE, tl: -4, tu: -35, hd: -40, ua: 80, fa: 0, snR: 300 }, 0, 260],
     [{ ...PRONE, tl: -4, tu: -35, hd: -40, ua: 80, fa: 0, snR: 320 }, 0, 200]] },
+  // ── Pilates (fuerza) ──
+  // natación: boca abajo con brazos y piernas despegados, aleteo alterno corto y rápido
+  'natacion-swimming': { mat: 1, anchor: { j: 'pel', y: -13.1 }, f: [
+    [{ ...PRONE, tu: -14, hd: -20, uaR: -18, faR: -18, uaL: -4, faL: -4, thL: 192, snL: 192, thR: 183, snR: 183 }, 0, 320],
+    [{ ...PRONE, tu: -14, hd: -20, uaL: -18, faL: -18, uaR: -4, faR: -4, thR: 192, snR: 192, thL: 183, snL: 183 }, 0, 320]] },
+  // plancha invertida (leg pull back): cuerpo recto boca arriba sobre manos y talones; una pierna sube estirada y baja
+  'plancha-invertida-con-patada': { mat: 1, plant: 'haR', f: [
+    [{ ...LPB }, 250, 800], [{ ...LPB, thR: -40, snR: -40 }, 200, 800],
+    [{ ...LPB }, 250, 800], [{ ...LPB, thL: -40, snL: -40 }, 200, 800]] },
+  // flexión de pilates: de pie, enrollarse hasta el suelo, plancha, flexión y volver
+  'flexion-de-pilates': { mat: 1, f: [
+    [{}, 300, 700], [{ tl: 82, tu: 90, hd: 100, ua: 90, fa: 90 }, 100, 700],
+    [{ ...PLH }, 100, 600], [{ ...PUSH_DEEP_AT(DEEP) }, 100, 700], [{ ...PLH }, 100, 600],
+    [{ tl: 82, tu: 90, hd: 100, ua: 90, fa: 90 }, 100, 700]] },
+  // cisne: boca abajo, manos junto a los hombros; levanta el pecho estirando la espalda alta y baja
+  'cisne-swan': { mat: 1, anchor: { j: 'pel', y: -13.1 }, f: [
+    [{ ...PRONE, ua: 172, fa: 12 }, 300, 1100], [{ ...PRONE, tl: -5, tu: -48, hd: -54, ua: 163, fa: 28 }, 600, 1100]] },
+  // las dos piernas juntas suben de lado
+  'elevacion-de-dos-piernas-de-lado': { v: 'front', mat: 1, f: [
+    [{ tl: 180, hd: 186, th: 0, sn: 0, ft: -60, uaL: 182, faL: 182, uaR: 20, faR: 20 }, 200, 900],
+    [{ tl: 180, hd: 186, th: -22, sn: -22, ft: -60, uaL: 182, faL: 182, uaR: 20, faR: 20 }, 350, 900]] },
   // puente de hombros: con la cadera arriba, la pierna de cerca sube estirada al techo y baja hasta la altura de la rodilla
   'puente-de-hombros-con-patada': { mat: 1, feetDown: true, f: [
     [{ ...SUP, ...SHB, th: -18, sn: 76.5 }, 300, 900],
