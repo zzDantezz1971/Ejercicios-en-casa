@@ -527,10 +527,10 @@ export class SettingsScreen implements Screen {
     const other = LANG === 'gl' || LANG === 'eu';
     return h('div', { class: 'voice-missing' },
       h('p', { class: 'small' }, h('strong', {}, `${IS_NATIVE ? 'Tu móvil' : 'Este navegador'} no tiene voz en ${name}.`), ' ', 'Los avisos se dicen en castellano.'),
-      !IS_NATIVE
-        ? h('p', { class: 'muted small' }, 'En la app de Android, si instalas la voz en el móvil, los avisos se dirán en tu idioma.')
-        : other
-          ? h('p', { class: 'muted small' }, 'Google no tiene esta voz. Instala gratis la app AhoTTS desde Google Play, ábrela y descarga el idioma. Kasa Fit la usará sola, sin cambiar nada más del móvil.')
+      other ? h('p', { class: 'muted small' }, 'Google no tiene esta voz, pero la app gratuita AhoTTS sí:') : null,
+      other ? ahoSteps()
+        : !IS_NATIVE
+          ? h('p', { class: 'muted small' }, 'En la app de Android, si instalas la voz en el móvil, los avisos se dirán en tu idioma.')
           : h('p', { class: 'muted small' }, 'Para instalarla: ajustes del móvil › Idioma › Salida de texto a voz › Motor de voz de Google › Instalar datos de voz.'),
       IS_NATIVE ? h('button', { class: 'btn small', onclick: () => { void KasaNative.openVoiceInstall(other ? { store: 'AhoTTS' } : undefined).catch(() => undefined); } }, icon('download'), other ? 'Buscar AhoTTS en Google Play' : 'Instalar la voz') : null,
       h('p', { class: 'muted small' }, 'Mientras, puedes elegir otra voz aquí debajo.'));
@@ -565,6 +565,13 @@ export class SettingsScreen implements Screen {
         h('span', { class: 'set-icon' }, icon('voice')),
         h('span', { class: 'set-text' }, h('strong', {}, 'Voz'), h('span', { class: 'muted block small' }, 'Escucha las voces de tu móvil con ▶ y elige la que más te guste (de hombre o de mujer).'))),
       this.app.voice.missingOwn ? this.voiceMissing() : null,
+      // web en gallego o euskera: Chrome con Google dice tener la voz y luego lee en castellano; los pasos, por si acaso
+      !IS_NATIVE && !this.app.voice.missingOwn && (LANG === 'gl' || LANG === 'eu')
+        ? h('details', { class: 'voice-missing voice-help' },
+          h('summary', { class: 'small' }, h('strong', {}, `¿No habla en ${{ gl: 'galego', eu: 'euskaraz' }[LANG]}?`)),
+          h('p', { class: 'muted small' }, 'Google no tiene esta voz, pero la app gratuita AhoTTS sí:'),
+          ahoSteps())
+        : null,
       this.app.voice.engine ? h('p', { class: 'muted small voice-engine' }, `Motor de voz: ${this.app.voice.engine.label}.`) : null,
       list);
     const sample = { es: 'Hola, así sonarán los avisos.', ca: 'Hola, així sonaran els avisos.', en: 'Hi, this is how the alerts will sound.', gl: 'Ola, así soarán os avisos.', eu: 'Kaixo, horrela entzungo dira abisuak.' }[this.app.voice.lang];
@@ -662,3 +669,14 @@ const GROUP_ICON: Record<string, IconName> = {
   'Suscripción': 'star', 'Prémium': 'star', 'Idioma': 'globe', 'Pantalla': 'sun', 'Muñeco': 'user', 'Tiempos de los ejercicios': 'clock',
   'Avisos': 'volume', 'Motivación': 'bolt', 'Recordatorios': 'bell', 'Smartwatch': 'heart', 'Copia de seguridad': 'copy',
 };
+
+/** Gallego y euskera: pasos para tener la voz con AhoTTS (en la web, además, hay que ponerlo de motor preferido). */
+function ahoSteps(): HTMLElement {
+  return h('ol', { class: 'voice-steps muted small' },
+    h('li', {}, IS_NATIVE ? 'Instala AhoTTS desde Google Play (botón de abajo).' : 'En un móvil Android, instala AhoTTS desde Google Play.'),
+    h('li', {}, h('strong', {}, 'Abre AhoTTS e instala las voces que quieras'), ' ', '(galego, euskara…).'),
+    IS_NATIVE
+      ? h('li', {}, 'Vuelve a Kasa Fit: usará esa voz sola, sin cambiar nada más del móvil.')
+      : h('li', {}, 'En los ajustes del móvil, pon AhoTTS como motor de voz preferido (Idioma › Salida de texto a voz).'),
+    IS_NATIVE ? null : h('li', {}, 'Cierra el navegador del todo y vuelve a abrir Kasa Fit.'));
+}

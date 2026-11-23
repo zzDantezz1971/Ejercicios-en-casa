@@ -1902,3 +1902,4 @@ button.plan-row { cursor: pointer; }
 .tables-empty-icon .ico { width: 28px; height: 28px; }
 .tables-empty h2 { font-size: 1.4rem; text-transform: uppercase; }
 .voice-report { margin-top: 10px; align-self: stretch; } .voice-report summary { cursor: pointer; } .voice-report p { margin: 4px 0 0; word-break: break-all; }
+.voice-steps { margin: 0; padding-left: 1.3em; display: flex; flex-direction: column; gap: 4px; }

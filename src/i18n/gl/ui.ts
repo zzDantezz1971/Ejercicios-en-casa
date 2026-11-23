@@ -1263,4 +1263,13 @@ export const UI_GL: Record<string, string> = {
   "Buscar AhoTTS en Google Play": "Buscar AhoTTS en Google Play",
   "Motor de voz: {x}.": "Motor de voz: {x}.",
   "Detalles técnicos": "Detalles técnicos",
+  "Google no tiene esta voz, pero la app gratuita AhoTTS sí:": "Google non ten esta voz, pero a app de balde AhoTTS si:",
+  "Instala AhoTTS desde Google Play (botón de abajo).": "Instala AhoTTS desde Google Play (botón de abaixo).",
+  "En un móvil Android, instala AhoTTS desde Google Play.": "Nun móbil Android, instala AhoTTS desde Google Play.",
+  "Abre AhoTTS e instala las voces que quieras": "Abre AhoTTS e instala as voces que queiras",
+  "(galego, euskara…).": "(galego, euskara…).",
+  "Vuelve a Kasa Fit: usará esa voz sola, sin cambiar nada más del móvil.": "Volve a Kasa Fit: usará esa voz soa, sen cambiar nada máis do móbil.",
+  "En los ajustes del móvil, pon AhoTTS como motor de voz preferido (Idioma › Salida de texto a voz).": "Nos axustes do móbil, pon AhoTTS como motor de voz preferido (Idioma › Saída de texto a voz).",
+  "Cierra el navegador del todo y vuelve a abrir Kasa Fit.": "Pecha o navegador do todo e volve abrir Kasa Fit.",
+  "¿No habla en {x}?": "Non fala en {x}?",
 };

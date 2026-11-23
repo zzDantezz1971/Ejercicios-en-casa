@@ -1263,4 +1263,13 @@ export const UI_EU: Record<string, string> = {
   "Buscar AhoTTS en Google Play": "Bilatu AhoTTS Google Playn",
   "Motor de voz: {x}.": "Ahots-motorra: {x}.",
   "Detalles técnicos": "Xehetasun teknikoak",
+  "Google no tiene esta voz, pero la app gratuita AhoTTS sí:": "Google-k ez du ahots hau, baina AhoTTS doako aplikazioak bai:",
+  "Instala AhoTTS desde Google Play (botón de abajo).": "Instalatu AhoTTS Google Playtik (beheko botoia).",
+  "En un móvil Android, instala AhoTTS desde Google Play.": "Android mugikor batean, instalatu AhoTTS Google Playtik.",
+  "Abre AhoTTS e instala las voces que quieras": "Ireki AhoTTS eta instalatu nahi dituzun ahotsak",
+  "(galego, euskara…).": "(galego, euskara…).",
+  "Vuelve a Kasa Fit: usará esa voz sola, sin cambiar nada más del móvil.": "Itzuli Kasa Fitera: ahots hori berak erabiliko du, mugikorrean beste ezer aldatu gabe.",
+  "En los ajustes del móvil, pon AhoTTS como motor de voz preferido (Idioma › Salida de texto a voz).": "Mugikorraren ezarpenetan, jarri AhoTTS ahots-motor gogokoena gisa (Hizkuntza › Testua ahots bihurtzeko irteera).",
+  "Cierra el navegador del todo y vuelve a abrir Kasa Fit.": "Itxi nabigatzailea guztiz eta ireki berriro Kasa Fit.",
+  "¿No habla en {x}?": "Ez du {x} hitz egiten?",
 };

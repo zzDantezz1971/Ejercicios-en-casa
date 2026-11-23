@@ -1320,6 +1320,15 @@ const ROWS: Row[] = [
   ['Buscar AhoTTS en Google Play', 'Cerca AhoTTS a Google Play', 'Find AhoTTS on Google Play'],
   ['Motor de voz: {x}.', 'Motor de veu: {x}.', 'Voice engine: {x}.'],
   ['Detalles técnicos', 'Detalls tècnics', 'Technical details'],
+  ['Google no tiene esta voz, pero la app gratuita AhoTTS sí:', 'Google no té aquesta veu, però l’app gratuïta AhoTTS sí:', 'Google doesn’t have this voice, but the free AhoTTS app does:'],
+  ['Instala AhoTTS desde Google Play (botón de abajo).', 'Instal·la AhoTTS des de Google Play (botó de sota).', 'Install AhoTTS from Google Play (button below).'],
+  ['En un móvil Android, instala AhoTTS desde Google Play.', 'En un mòbil Android, instal·la AhoTTS des de Google Play.', 'On an Android phone, install AhoTTS from Google Play.'],
+  ['Abre AhoTTS e instala las voces que quieras', 'Obre AhoTTS i instal·la les veus que vulguis', 'Open AhoTTS and install the voices you want'],
+  ['(galego, euskara…).', '(galego, euskara…).', '(galego, euskara…).'],
+  ['Vuelve a Kasa Fit: usará esa voz sola, sin cambiar nada más del móvil.', 'Torna a Kasa Fit: farà servir aquesta veu sola, sense canviar res més del mòbil.', 'Come back to Kasa Fit: it will use that voice on its own, without changing anything else on your phone.'],
+  ['En los ajustes del móvil, pon AhoTTS como motor de voz preferido (Idioma › Salida de texto a voz).', 'Als ajustos del mòbil, posa AhoTTS com a motor de veu preferit (Idioma › Sortida de text a veu).', 'In your phone settings, set AhoTTS as the preferred voice engine (Language › Text-to-speech output).'],
+  ['Cierra el navegador del todo y vuelve a abrir Kasa Fit.', 'Tanca el navegador del tot i torna a obrir Kasa Fit.', 'Close the browser completely and open Kasa Fit again.'],
+  ['¿No habla en {x}?', 'No parla en {x}?', 'Not speaking {x}?'],
 ];
 
 export const UI_CA: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[1]]));

@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-23T21:16:07Z",
+    "es": "Voz en gallego y euskera: Ajustes › Avisos explica paso a paso cómo tenerla con AhoTTS, también que después de instalarla hay que abrirla e instalar las voces que quieras. En la web, si habla en castellano, «¿No habla en…?» lo explica.",
+    "ca": "Veu en gallec i basc: Ajustos › Avisos explica pas a pas com tenir-la amb AhoTTS, també que després d’instal·lar-la cal obrir-la i instal·lar les veus que vulguis. Al web, si parla en castellà, «No parla en…?» ho explica.",
+    "en": "Galician and Basque voice: Settings › Alerts explains step by step how to get it with AhoTTS, including that after installing it you must open it and install the voices you want. On the web, if it speaks Spanish, “Not speaking…?” explains it."
+  },
+  {
     "fecha": "2026-11-23T20:56:46Z",
     "es": "Ajustes › Avisos › Voz (web): la lista de voces espera a que el navegador las tenga (en Android tarda, y a veces salía «solo una voz»). Y «Detalles técnicos» enseña las voces que da el navegador.",
     "ca": "Ajustos › Avisos › Veu (web): la llista de veus espera que el navegador les tingui (a Android triga, i de vegades sortia «només una veu»). I «Detalls tècnics» ensenya les veus que dona el navegador.",
