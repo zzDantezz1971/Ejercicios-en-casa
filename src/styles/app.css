@@ -1872,8 +1872,8 @@ button.plan-row { cursor: pointer; }
 .pick-foot .pick-group-btn { margin-top: 8px; background: var(--surface); }
 /* serie: el asa para moverla va dentro de su recuadro (arriba a la izquierda), sin columna vacía al lado */
 .free-list > .sortable > .sort-row:has(.free-group) { position: relative; }
-.free-list > .sortable > .sort-row:has(.free-group) > .drag-handle { position: absolute; left: 10px; top: 12px; z-index: 2; }
-.free-list > .sortable > .sort-row:has(.free-group) .free-group-top { padding-left: 34px; }
+.free-list > .sortable > .sort-row:has(.free-group) > .drag-handle { position: absolute; left: 8px; top: 10px; height: 36px; width: 36px; z-index: 2; }
+.free-list > .sortable > .sort-row:has(.free-group) .free-group-top { padding-left: 38px; min-height: 36px; }
 .free-group { padding: 8px; }
 .free-group .sortable > .sort-row { padding: 6px; }
 .free-group .maker-acts .icon-btn.small { width: 36px; height: 36px; }

@@ -209,7 +209,7 @@ export class FreeTableScreen implements Screen {
     // arriba «Serie · N ejercicios» y ⋯; debajo, las vueltas (− xN +)
     return h('div', { class: 'free-group-head' },
       h('div', { class: 'free-group-top' },
-        h('span', { class: 'free-group-title' }, icon('swap'), h('strong', {}, 'Serie'), h('span', { class: 'muted small' }, '· ', plural(n, 'ejercicio', 'ejercicios'))),
+        h('span', { class: 'free-group-title' }, h('strong', {}, 'Serie'), h('span', { class: 'muted small' }, '· ', plural(n, 'ejercicio', 'ejercicios'))),
         readOnly ? h('span', { class: 'sec-rounds' }, `x${g.rounds}`) : h('button', { class: 'icon-btn small', 'aria-label': 'Más opciones de la serie', onclick: () => void this.groupMenu(i, free) }, icon('more'))),
       readOnly ? null : h('span', { class: 'maker-rounds-ctl free-rounds' }, h('span', {}, 'Vueltas'),
         h('span', { class: 'stepper inline maker-time' },

@@ -64,7 +64,7 @@ export class TableViewScreen implements Screen {
       for (const n of table.free) {
         if (n.kind !== 'group') { const r = exRow(n); if (r) list.append(r); continue; }
         const box = h('div', { class: 'free-group' },
-          h('div', { class: 'free-group-head' }, h('div', { class: 'free-group-top' }, h('span', { class: 'free-group-title' }, icon('swap'), h('strong', {}, 'Serie')), h('span', { class: 'sec-rounds' }, `x${n.rounds}`))));
+          h('div', { class: 'free-group-head' }, h('div', { class: 'free-group-top' }, h('span', { class: 'free-group-title' }, h('strong', {}, 'Serie')), h('span', { class: 'sec-rounds' }, `x${n.rounds}`))));
         for (const e of n.items) { const r = exRow(e); if (r) box.append(r); }
         list.append(box);
       }

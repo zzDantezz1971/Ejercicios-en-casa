@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-23T15:14:06Z",
+    "es": "Tabla libre: la cabecera de la serie, sin el icono de flechas y con el asa para moverla alineada con «Serie».",
+    "ca": "Taula lliure: la capçalera de la sèrie, sense la icona de fletxes i amb l’ansa per moure-la alineada amb «Sèrie».",
+    "en": "Free routine: the set header no longer has the arrows icon and its move handle lines up with «Set»."
+  },
+  {
     "fecha": "2026-11-23T15:10:10Z",
     "es": "Tabla libre: el asa para mover una serie va dentro de su recuadro (arriba a la izquierda) y la serie ocupa todo el ancho.",
     "ca": "Taula lliure: l’ansa per moure una sèrie va dins del seu requadre (a dalt a l’esquerra) i la sèrie ocupa tota l’amplada.",
