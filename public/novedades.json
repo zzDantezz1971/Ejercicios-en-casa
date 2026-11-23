@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-23T20:17:34Z",
+    "es": "Voz en gallego y euskera (app Android): si tienes instalado otro motor de voz con el idioma, como AhoTTS, los avisos lo usan solos, sin cambiar el motor de voz del móvil. Si no lo tienes, Ajustes › Avisos te lleva a buscarlo en Google Play.",
+    "ca": "Veu en gallec i basc (app Android): si tens instal·lat un altre motor de veu amb l’idioma, com AhoTTS, els avisos el fan servir sols, sense canviar el motor de veu del mòbil. Si no el tens, Ajustos › Avisos et porta a cercar-lo a Google Play.",
+    "en": "Galician and Basque voice (Android app): if you have another voice engine with the language installed, such as AhoTTS, alerts use it on their own without changing your phone’s voice engine. If not, Settings › Alerts takes you to find it on Google Play."
+  },
+  {
     "fecha": "2026-11-23T16:31:29Z",
     "es": "Ajustes › Idioma: con cinco idiomas, los botones van en dos filas (tres arriba y dos abajo) y ya no se corta ninguno.",
     "ca": "Ajustos › Idioma: amb cinc idiomes, els botons van en dues files (tres a dalt i dos a baix) i ja no se’n talla cap.",

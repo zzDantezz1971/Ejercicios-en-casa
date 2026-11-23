@@ -6,7 +6,9 @@ export interface KasaNative {
    *  si no, solo baja. */
   duck(o?: { pause?: boolean }): Promise<void>;
   /** Dice la frase con el motor de voz del móvil, pero más fuerte (amplificada). Se cumple al acabar de hablar. */
-  speakLoud(o: { text: string; lang: string; rate: number; voice?: string; queue?: boolean }): Promise<void>;
+  speakLoud(o: { text: string; lang: string; rate: number; voice?: string; queue?: boolean; engine?: string; loud?: boolean }): Promise<void>;
+  /** Busca un motor de voz instalado que tenga el idioma (sin cambiar el del móvil); vacío si no hay ninguno. */
+  findEngine(o: { lang: string }): Promise<{ engine?: string; label?: string; voices?: Array<{ name: string; lang: string }> }>;
   /** Corta la voz amplificada (y lo que tuviera en cola). */
   stopLoud(): Promise<void>;
   /** Devuelve el foco: la música vuelve a su volumen. */
@@ -20,7 +22,7 @@ export interface KasaNative {
   /** Abre Spotify o, si no está, la app de música del móvil. */
   openMusic(): Promise<{ opened: boolean }>;
   /** Abre la pantalla del móvil para instalar voces (o los ajustes de texto a voz). */
-  openVoiceInstall(): Promise<{ opened: boolean }>;
+  openVoiceInstall(o?: { store?: string }): Promise<{ opened: boolean }>;
 }
 
 export const KasaNative = registerPlugin<KasaNative>('KasaNative');

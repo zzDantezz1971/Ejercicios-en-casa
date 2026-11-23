@@ -4,6 +4,7 @@ Recordatorio: **cuando instales la app de prueba** (el APK de GitHub o la prueba
 Marca cada punto al probarlo. Si algo falla, haz una captura y cuéntamelo.
 
 ## 0e. Para probar en el build 20
+- [ ] (Build 21) Veu amb AhoTTS: deixa Google com a motor de veu del mòbil i tingues AhoTTS instal·lat amb el gallec i el basc. Posa l’app en Galego: Ajustos › Avisos ha de dir «Motor de voz: AhoTTS» (sense l’avís de veu que falta), «Probar son e voz» i un entrenament han de parlar en gallec, i la resta del mòbil ha de continuar amb la veu de Google. El mateix en Euskara. Sense AhoTTS: l’avís i el botó «Buscar AhoTTS en Google Play». Amb la música abaixada, la veu ha de sonar més forta igualment.
 - [ ] Veu que falta: posa l’app en un idioma sense veu al mòbil (p. ex. gallec al build 21, o català si no tens la veu). Ajustos › Avisos ha de dir «El teu mòbil no té veu en…», el botó «Instal·la la veu» obre la pantalla d’instal·lar veus del mòbil i, en tornar a l’app amb la veu instal·lada, els avisos surten en aquell idioma.
 - [ ] (Build 21) Gallec i basc: Ajustos › Idioma › Galego / Euskara. Revisa les dates (Inici, Historial, Pes), noms i explicacions dels exercicis, grups de músculs, frases d’ànim de l’inici i la veu. Al build 20 no han de sortir a la llista d’idiomes.
 - [ ] Sense cap taula, pestanya Taules: «Encara no tens cap taula» i el botó «Ves a Inici».

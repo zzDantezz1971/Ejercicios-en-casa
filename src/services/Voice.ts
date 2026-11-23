@@ -59,6 +59,11 @@ export class Voice {
   private nativeIndex: number | undefined;
   /** App Android: nombre de esa voz (para la voz amplificada, que la busca por nombre). */
   private nativeName: string | undefined;
+  /**
+   * App Android: otro motor de voz para el idioma de la app, cuando el del móvil no lo tiene (p. ej., gallego o
+   * euskera, que Google no tiene). Se usa solo para los avisos de Kasa Fit; el motor del móvil no se cambia.
+   */
+  engine: { id: string; label: string; voices: Array<{ name: string; lang: string }> } | null = null;
   /** Web: todas las voces del navegador para el idioma. */
   private webVoices: SpeechSynthesisVoice[] = [];
 
@@ -89,9 +94,19 @@ export class Voice {
     try {
       const { languages } = await TextToSpeech.getSupportedLanguages();
       const has = (code: string) => languages.some((l) => l.replace('_', '-').toLowerCase() === code.toLowerCase() || l.toLowerCase().startsWith(code.slice(0, 2).toLowerCase()));
+      this.engine = null;
       if (!languages.length || has(want)) {
         this.nativeLang = want;
         this.lang = LANG;
+        return;
+      }
+      // el motor del móvil no tiene el idioma: ¿lo tiene otro motor instalado?
+      const found = await KasaNative.findEngine({ lang: want }).catch(() => ({} as { engine?: string; label?: string; voices?: Array<{ name: string; lang: string }> }));
+      if (found.engine) {
+        this.engine = { id: found.engine, label: found.label || found.engine, voices: found.voices ?? [] };
+        this.nativeLang = want;
+        this.lang = LANG;
+        if (this.chosenId) void this.useVoice(this.chosenId);
       } else {
         this.nativeLang = 'es-ES';
         this.lang = 'es';
@@ -104,6 +119,7 @@ export class Voice {
   /** Voces del móvil (o del navegador) para el idioma en que habla la app: identificador y nombre. */
   async voices(): Promise<Array<{ id: string; name: string }>> {
     if (IS_NATIVE) {
+      if (this.engine) return pickFew(this.engine.voices.map((v) => ({ id: v.name, name: v.name, lang: v.lang })));
       try {
         const { voices } = await TextToSpeech.getSupportedVoices();
         return nativeVoiceList(voices, this.lang);
@@ -121,6 +137,10 @@ export class Voice {
       this.nativeIndex = undefined;
       this.nativeName = undefined;
       if (!this.chosenId) return;
+      if (this.engine) {
+        this.nativeName = this.engine.voices.some((v) => v.name === this.chosenId) ? this.chosenId : undefined;
+        return;
+      }
       try {
         const { voices } = await TextToSpeech.getSupportedVoices();
         const i = voices.findIndex((v) => (v.voiceURI || v.name) === this.chosenId);
@@ -161,6 +181,12 @@ export class Voice {
       // la música de otras apps se pausa o baja mientras habla (la promesa se cumple al acabar la frase)
       const lang = this.nativeLang || 'es-ES';
       const rate = queue ? 1.15 : 1.02;
+      if (this.engine) {
+        // otro motor de voz: siempre por el camino propio (el del complemento usa el motor del móvil)
+        const speech = KasaNative.speakLoud({ text, lang, rate, queue, engine: this.engine.id, loud: loudVoice(), ...(this.nativeName ? { voice: this.nativeName } : {}) });
+        void duckWhile(speech).catch(() => undefined);
+        return;
+      }
       const plain = () => TextToSpeech.speak({ text, lang, rate, queueStrategy: queue ? 1 : 0, ...(this.nativeIndex !== undefined ? { voice: this.nativeIndex } : {}) });
       // con la música bajada (no pausada), la voz va amplificada; si eso falla, la normal
       const speech = loudVoice()

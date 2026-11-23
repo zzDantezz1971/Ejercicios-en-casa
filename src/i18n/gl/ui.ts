@@ -1259,4 +1259,7 @@ export const UI_GL: Record<string, string> = {
   "En la app de Android, si instalas la voz en el móvil, los avisos se dirán en tu idioma.": "Na app de Android, se instalas a voz no móbil, os avisos diranse no teu idioma.",
   "Instalar la voz": "Instalar a voz",
   "Mientras, puedes elegir otra voz aquí debajo.": "Mentres, podes escoller outra voz aquí debaixo.",
+  "Google no tiene esta voz. Instala gratis la app AhoTTS desde Google Play, ábrela y descarga el idioma. Kasa Fit la usará sola, sin cambiar nada más del móvil.": "Google non ten esta voz. Instala de balde a app AhoTTS desde Google Play, ábrea e descarga o idioma. Kasa Fit usaraa soa, sen cambiar nada máis do móbil.",
+  "Buscar AhoTTS en Google Play": "Buscar AhoTTS en Google Play",
+  "Motor de voz: {x}.": "Motor de voz: {x}.",
 };

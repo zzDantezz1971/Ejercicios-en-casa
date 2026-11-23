@@ -4,6 +4,8 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.net.Uri;
 import android.graphics.Color;
 import android.media.AudioAttributes;
 import android.media.AudioFocusRequest;
@@ -21,6 +23,7 @@ import android.view.Window;
 import androidx.annotation.RequiresApi;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
+import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
@@ -28,6 +31,8 @@ import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import java.io.File;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -175,6 +180,20 @@ public class KasaNativePlugin extends Plugin {
         JSObject r = new JSObject();
         Context ctx = getContext();
         boolean ok = false;
+        // con «store»: busca esa app en Google Play (p. ej., un motor de voz con el idioma que falta)
+        String store = call.getString("store", null);
+        if (store != null) {
+            for (String url : new String[] { "market://search?q=" + Uri.encode(store) + "&c=apps", "https://play.google.com/store/search?q=" + Uri.encode(store) + "&c=apps" }) {
+                try {
+                    Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    ctx.startActivity(i);
+                    r.put("opened", true);
+                    call.resolve(r);
+                    return;
+                } catch (ActivityNotFoundException e) { /* la siguiente */ }
+            }
+        }
         for (String action : new String[] { TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA, "com.android.settings.TTS_SETTINGS" }) {
             try {
                 Intent i = new Intent(action);
@@ -188,6 +207,80 @@ public class KasaNativePlugin extends Plugin {
         call.resolve(r);
     }
 
+    // ---------- otro motor de voz para el idioma ----------
+
+    /**
+     * Busca, entre los motores de voz instalados, uno que tenga el idioma (p. ej., gallego o euskera, que el de Google
+     * no tiene). Se prueban uno a uno: se arranca cada motor, se le pregunta por el idioma y se apaga. Devuelve el
+     * paquete del motor, su nombre y sus voces de ese idioma; o nada si ninguno lo tiene. No cambia el motor del móvil.
+     */
+    @PluginMethod
+    public void findEngine(PluginCall call) {
+        final Locale loc = Locale.forLanguageTag(call.getString("lang", "es-ES"));
+        List<ResolveInfo> found = getContext().getPackageManager().queryIntentServices(new Intent(TextToSpeech.Engine.INTENT_ACTION_TTS_SERVICE), 0);
+        final List<String[]> engines = new ArrayList<>();
+        for (ResolveInfo ri : found) {
+            if (ri.serviceInfo == null) continue;
+            CharSequence label = ri.loadLabel(getContext().getPackageManager());
+            engines.add(new String[] { ri.serviceInfo.packageName, label == null ? ri.serviceInfo.packageName : label.toString() });
+        }
+        main.post(() -> probe(engines, 0, loc, call));
+    }
+
+    private void probe(List<String[]> engines, int i, Locale loc, PluginCall call) {
+        if (i >= engines.size()) { call.resolve(new JSObject()); return; }
+        final String pkg = engines.get(i)[0], label = engines.get(i)[1];
+        final TextToSpeech[] holder = new TextToSpeech[1];
+        final boolean[] done = { false };
+        // si un motor no contesta en 4 s, el siguiente
+        final Runnable timeout = () -> {
+            if (done[0]) return;
+            done[0] = true;
+            try { if (holder[0] != null) holder[0].shutdown(); } catch (RuntimeException ignored) { }
+            probe(engines, i + 1, loc, call);
+        };
+        main.postDelayed(timeout, 4000);
+        holder[0] = new TextToSpeech(getContext(), (status) -> main.post(() -> {
+            if (done[0]) return;
+            done[0] = true;
+            main.removeCallbacks(timeout);
+            TextToSpeech t = holder[0];
+            JSObject r = null;
+            try {
+                if (status == TextToSpeech.SUCCESS && t != null) {
+                    JSArray voices = new JSArray();
+                    try {
+                        for (Voice v : t.getVoices()) {
+                            Locale vl = v.getLocale();
+                            if (vl != null && sameLang(vl, loc)) {
+                                JSObject o = new JSObject();
+                                o.put("name", v.getName());
+                                o.put("lang", vl.toLanguageTag());
+                                voices.put(o);
+                            }
+                        }
+                    } catch (RuntimeException ignored) { }
+                    int a = t.isLanguageAvailable(loc);
+                    if (a < TextToSpeech.LANG_AVAILABLE) a = t.isLanguageAvailable(new Locale(loc.getLanguage()));
+                    if (a >= TextToSpeech.LANG_AVAILABLE || voices.length() > 0) {
+                        r = new JSObject();
+                        r.put("engine", pkg);
+                        r.put("label", label);
+                        r.put("voices", voices);
+                    }
+                }
+            } catch (RuntimeException ignored) { }
+            try { if (t != null) t.shutdown(); } catch (RuntimeException ignored) { }
+            if (r != null) call.resolve(r); else probe(engines, i + 1, loc, call);
+        }), pkg);
+    }
+
+    /** ¿Mismo idioma? (gl = glg, eu = eus: algunos motores usan el código de tres letras) */
+    private static boolean sameLang(Locale a, Locale b) {
+        if (a.getLanguage().equalsIgnoreCase(b.getLanguage())) return true;
+        try { return a.getISO3Language().equalsIgnoreCase(b.getISO3Language()); } catch (RuntimeException e) { return false; }
+    }
+
     // ---------- voz amplificada ----------
 
     /** Refuerzo de volumen de la voz, en milésimas de decibelio (+10 dB). El efecto ya limita para que no sature. */
@@ -196,15 +289,18 @@ public class KasaNativePlugin extends Plugin {
     private static class Phrase {
         final String text, lang, voice;
         final float rate;
+        final boolean loud;
         final PluginCall call;
         File file;
-        Phrase(String text, String lang, String voice, float rate, PluginCall call) {
-            this.text = text; this.lang = lang; this.voice = voice; this.rate = rate; this.call = call;
+        Phrase(String text, String lang, String voice, float rate, boolean loud, PluginCall call) {
+            this.text = text; this.lang = lang; this.voice = voice; this.rate = rate; this.loud = loud; this.call = call;
         }
     }
 
     private final Handler main = new Handler(Looper.getMainLooper());
     private TextToSpeech tts;
+    /** Motor con que se ha arrancado tts (null = el del móvil). */
+    private String ttsEngine;
     /** 0 = arrancando, 1 = listo, -1 = no hay motor de voz. */
     private int ttsState = 0;
     private final ArrayDeque<Phrase> phrases = new ArrayDeque<>();
@@ -215,7 +311,7 @@ public class KasaNativePlugin extends Plugin {
 
     private void startTts() {
         if (tts != null) return;
-        tts = new TextToSpeech(getContext(), (status) -> main.post(() -> {
+        TextToSpeech.OnInitListener onInit = (status) -> main.post(() -> {
             ttsState = status == TextToSpeech.SUCCESS ? 1 : -1;
             if (ttsState == 1) {
                 tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
@@ -226,17 +322,30 @@ public class KasaNativePlugin extends Plugin {
                 });
             }
             next();
-        }));
+        });
+        tts = ttsEngine == null ? new TextToSpeech(getContext(), onInit) : new TextToSpeech(getContext(), onInit, ttsEngine);
+    }
+
+    /** Cambia de motor de voz (null = el del móvil): se apaga el que había y se arrancará el nuevo. */
+    private void useEngine(String engine) {
+        if (engine == null ? ttsEngine == null : engine.equals(ttsEngine)) return;
+        stopAll();
+        if (tts != null) { try { tts.shutdown(); } catch (RuntimeException ignored) { } tts = null; }
+        ttsState = 0;
+        ttsEngine = engine;
     }
 
     @PluginMethod
     public void speakLoud(PluginCall call) {
         String text = call.getString("text", "");
         Float rate = call.getFloat("rate", 1.0f);
+        // loud = false: el mismo camino (para usar otro motor de voz), pero sin el refuerzo de volumen
         Phrase p = new Phrase(text == null ? "" : text, call.getString("lang", "es-ES"), call.getString("voice", null),
-            rate == null ? 1.0f : rate, call);
+            rate == null ? 1.0f : rate, !Boolean.FALSE.equals(call.getBoolean("loud", true)), call);
         boolean queue = Boolean.TRUE.equals(call.getBoolean("queue", false));
+        String engine = call.getString("engine", null);
         main.post(() -> {
+            useEngine(engine);
             if (!queue) stopAll();
             phrases.add(p);
             startTts();
@@ -290,12 +399,14 @@ public class KasaNativePlugin extends Plugin {
             mp.setDataSource(current.file.getPath());
             mp.prepare();
             player = mp;
-            try {
-                enhancer = new LoudnessEnhancer(mp.getAudioSessionId());
-                enhancer.setTargetGain(LOUD_GAIN_MB);
-                enhancer.setEnabled(true);
-            } catch (RuntimeException e) {
-                enhancer = null; // este móvil no tiene el efecto: suena al volumen normal
+            if (current.loud) {
+                try {
+                    enhancer = new LoudnessEnhancer(mp.getAudioSessionId());
+                    enhancer.setTargetGain(LOUD_GAIN_MB);
+                    enhancer.setEnabled(true);
+                } catch (RuntimeException e) {
+                    enhancer = null; // este móvil no tiene el efecto: suena al volumen normal
+                }
             }
             mp.setOnCompletionListener((m) -> finish(true));
             mp.setOnErrorListener((m, what, extra) -> { finish(false); return true; });

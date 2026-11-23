@@ -1259,4 +1259,7 @@ export const UI_EU: Record<string, string> = {
   "En la app de Android, si instalas la voz en el móvil, los avisos se dirán en tu idioma.": "Android-eko aplikazioan, mugikorrean ahotsa instalatzen baduzu, abisuak zure hizkuntzan esango dira.",
   "Instalar la voz": "Instalatu ahotsa",
   "Mientras, puedes elegir otra voz aquí debajo.": "Bitartean, beste ahots bat aukera dezakezu hemen behean.",
+  "Google no tiene esta voz. Instala gratis la app AhoTTS desde Google Play, ábrela y descarga el idioma. Kasa Fit la usará sola, sin cambiar nada más del móvil.": "Google-k ez du ahots hau. Instalatu doan AhoTTS aplikazioa Google Playtik, ireki eta deskargatu hizkuntza. Kasa Fitek berak erabiliko du, mugikorrean beste ezer aldatu gabe.",
+  "Buscar AhoTTS en Google Play": "Bilatu AhoTTS Google Playn",
+  "Motor de voz: {x}.": "Ahots-motorra: {x}.",
 };

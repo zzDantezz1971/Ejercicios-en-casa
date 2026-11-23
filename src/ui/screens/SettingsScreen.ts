@@ -522,12 +522,16 @@ export class SettingsScreen implements Screen {
   private voiceMissing(): HTMLElement {
     // el idioma tal como va dentro de la frase: «no ten voz en galego», «ez du euskarazko ahotsik»
     const name = { es: 'castellano', ca: 'català', en: 'English', gl: 'galego', eu: 'euskarazko' }[LANG];
+    // Google no tiene voz gallega ni vasca: hay que instalar otro motor de voz (AhoTTS las tiene, gratis)
+    const other = LANG === 'gl' || LANG === 'eu';
     return h('div', { class: 'voice-missing' },
       h('p', { class: 'small' }, h('strong', {}, `${IS_NATIVE ? 'Tu móvil' : 'Este navegador'} no tiene voz en ${name}.`), ' ', 'Los avisos se dicen en castellano.'),
-      IS_NATIVE
-        ? h('p', { class: 'muted small' }, 'Para instalarla: ajustes del móvil › Idioma › Salida de texto a voz › Motor de voz de Google › Instalar datos de voz.')
-        : h('p', { class: 'muted small' }, 'En la app de Android, si instalas la voz en el móvil, los avisos se dirán en tu idioma.'),
-      IS_NATIVE ? h('button', { class: 'btn small', onclick: () => { void KasaNative.openVoiceInstall().catch(() => undefined); } }, icon('download'), 'Instalar la voz') : null,
+      !IS_NATIVE
+        ? h('p', { class: 'muted small' }, 'En la app de Android, si instalas la voz en el móvil, los avisos se dirán en tu idioma.')
+        : other
+          ? h('p', { class: 'muted small' }, 'Google no tiene esta voz. Instala gratis la app AhoTTS desde Google Play, ábrela y descarga el idioma. Kasa Fit la usará sola, sin cambiar nada más del móvil.')
+          : h('p', { class: 'muted small' }, 'Para instalarla: ajustes del móvil › Idioma › Salida de texto a voz › Motor de voz de Google › Instalar datos de voz.'),
+      IS_NATIVE ? h('button', { class: 'btn small', onclick: () => { void KasaNative.openVoiceInstall(other ? { store: 'AhoTTS' } : undefined).catch(() => undefined); } }, icon('download'), other ? 'Buscar AhoTTS en Google Play' : 'Instalar la voz') : null,
       h('p', { class: 'muted small' }, 'Mientras, puedes elegir otra voz aquí debajo.'));
   }
 
@@ -538,6 +542,7 @@ export class SettingsScreen implements Screen {
         h('span', { class: 'set-icon' }, icon('voice')),
         h('span', { class: 'set-text' }, h('strong', {}, 'Voz'), h('span', { class: 'muted block small' }, 'Escucha las voces de tu móvil con ▶ y elige la que más te guste (de hombre o de mujer).'))),
       this.app.voice.missingOwn ? this.voiceMissing() : null,
+      this.app.voice.engine ? h('p', { class: 'muted small voice-engine' }, `Motor de voz: ${this.app.voice.engine.label}.`) : null,
       list);
     const sample = { es: 'Hola, así sonarán los avisos.', ca: 'Hola, així sonaran els avisos.', en: 'Hi, this is how the alerts will sound.', gl: 'Ola, así soarán os avisos.', eu: 'Kaixo, horrela entzungo dira abisuak.' }[this.app.voice.lang];
     void this.app.voice.voices().then((voices) => {
@@ -550,6 +555,8 @@ export class SettingsScreen implements Screen {
       clear(list);
       // con una sola voz (o ninguna) no hay nada que elegir: «Automática» sería la misma
       if (voices.length < 2) {
+        // con otro motor de voz (p. ej., para gallego o euskera) no se habla de instalar voces de Google
+        if (this.app.voice.engine) return;
         list.append(h('p', { class: 'muted small voice-one' }, IS_NATIVE
           ? 'Este móvil solo tiene una voz para este idioma. Puedes instalar otras en los ajustes del móvil (Texto a voz › Motor de voz de Google › Instalar datos de voz).'
           : 'El navegador solo ofrece una voz para este idioma. En la app de Android podrás elegir entre las voces que tenga instaladas el móvil.'));

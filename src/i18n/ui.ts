@@ -1316,6 +1316,9 @@ const ROWS: Row[] = [
   ['En la app de Android, si instalas la voz en el móvil, los avisos se dirán en tu idioma.', 'A l’app d’Android, si instal·les la veu al mòbil, els avisos es diran en el teu idioma.', 'In the Android app, if you install the voice on your phone, alerts will be spoken in your language.'],
   ['Instalar la voz', 'Instal·la la veu', 'Install the voice'],
   ['Mientras, puedes elegir otra voz aquí debajo.', 'Mentrestant, pots triar una altra veu aquí sota.', 'Meanwhile, you can pick another voice below.'],
+  ['Google no tiene esta voz. Instala gratis la app AhoTTS desde Google Play, ábrela y descarga el idioma. Kasa Fit la usará sola, sin cambiar nada más del móvil.', 'Google no té aquesta veu. Instal·la gratis l’app AhoTTS des de Google Play, obre-la i descarrega l’idioma. Kasa Fit la farà servir sola, sense canviar res més del mòbil.', 'Google doesn’t have this voice. Install the free AhoTTS app from Google Play, open it and download the language. Kasa Fit will use it on its own, without changing anything else on your phone.'],
+  ['Buscar AhoTTS en Google Play', 'Cerca AhoTTS a Google Play', 'Find AhoTTS on Google Play'],
+  ['Motor de voz: {x}.', 'Motor de veu: {x}.', 'Voice engine: {x}.'],
 ];
 
 export const UI_CA: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[1]]));
