@@ -2,11 +2,12 @@ import { WorkoutPlan, MAX_ROUNDS } from '../../domain/WorkoutPlan';
 import { MAX_SECONDS, MIN_SECONDS, STEP_SECONDS } from '../../domain/RoutineEditor';
 import { freeToRoutine, routineToFree, type ExerciseDef, type FreeEntry, type FreeNode } from '../../domain/types';
 import type { App, Screen } from '../App';
-import { actionSheet, clear, confirmDialog, h, humanDuration, plural, promptDialog, holdScroll } from '../dom';
+import { actionSheet, clear, confirmDialog, h, plural, promptDialog, holdScroll } from '../dom';
 import { sortableList, type SortableRow } from '../components/sortable';
 import { icon } from '../icons';
 import { DetailScreen } from './DetailScreen';
 import { blockTag, header, PickExerciseScreen } from './MakerScreens';
+import { planText } from '../planText';
 
 /*
  * Tabla libre: una sola lista, sin bloques. Ejercicios de cualquier tipo en el orden que se quiera, descansos donde se
@@ -79,7 +80,7 @@ export class FreeTableScreen implements Screen {
     const shown = free.flatMap((n) => (n.kind === 'group' ? n.items : [n])).map((e) => (e.kind === 'ex' ? app.catalog.get(e.exerciseId) : undefined)).filter((e): e is ExerciseDef => !!e);
     const body = h('div', { class: 'maker-body' });
     this.el.append(header(app, t.name, 'Tabla libre'), body);
-    body.append(h('p', { class: 'maker-total' }, icon('clock'), plan.isEmpty ? 'Sin ejercicios' : `${humanDuration(plan.estimatedSeconds)} · ${plural(plan.exerciseCount, 'ejercicio', 'ejercicios')}`));
+    body.append(h('p', { class: 'maker-total' }, icon('clock'), planText(plan)));
 
     if (this.picking) {
       const n = this.picking.size;

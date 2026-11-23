@@ -2,13 +2,14 @@ import { tr } from '../../i18n';
 import { WorkoutPlan } from '../../domain/WorkoutPlan';
 import { SECTION_IDS, sectionOrder, SECTION_TITLES, type SavedRoutine } from '../../domain/types';
 import type { App, Screen } from '../App';
-import { actionSheet, clear, confirmDialog, h, humanDuration, plural, promptDialog } from '../dom';
+import { actionSheet, clear, confirmDialog, h, plural, promptDialog } from '../dom';
 import { icon, SECTION_STYLE } from '../icons';
 import { formatDate } from './HomeScreen';
 import { editTable } from './TableEditScreen';
 import { convertToFree } from './FreeTableScreen';
 import { openNewTable } from './MakerScreens';
 import { newPlan, planTableCard, planTitle } from './PlanScreens';
+import { planText } from '../planText';
 
 /** Clave de la tarjeta de los planes en la lista de grupos abiertos. */
 const PLANS_KEY = '__plans';
@@ -173,7 +174,7 @@ export class TablesScreen implements Screen {
     return h('article', { class: 'card table-card' + (active ? ' active' : '') },
       h('div', { class: 'table-head' }, h('h2', {}, t.name), active ? h('span', { class: 'active-pill' }, 'En uso') : null),
       h('div', { class: 'table-meta' },
-        h('span', { class: 'meta-line' }, icon('clock'), plan.isEmpty ? 'Sin ejercicios' : `${humanDuration(plan.estimatedSeconds)} · ${plural(plan.exerciseCount, 'ejercicio', 'ejercicios')}`,
+        h('span', { class: 'meta-line' }, icon('clock'), planText(plan),
           t.free ? h('span', { class: 'free-pill' }, 'Libre') : null),
         pills.length ? h('span', { class: 'pills' }, ...pills) : null,
         h('span', { class: 'meta-line' }, icon('calendar'), t.lastUsed ? `Última vez: ${formatDate(t.lastUsed)}` : 'Aún no la has usado')),

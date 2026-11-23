@@ -167,8 +167,20 @@ export class WorkoutPlan {
     return this.steps.length === 0;
   }
 
+  /** Ejercicios que se hacen en total (con las vueltas y las series, cada vez cuenta). */
   get exerciseCount(): number {
     return this.steps.filter((s) => s.kind === 'exercise').length;
+  }
+
+  /** Ejercicios distintos (cada uno una vez, aunque se repita). */
+  get distinctCount(): number {
+    return new Set(this.steps.flatMap((s) => (s.kind === 'exercise' ? [s.exercise.id] : []))).size;
+  }
+
+  /** El plan de un solo bloque de la tabla (con sus vueltas y series). */
+  static forSection(routine: Routine, section: SectionId, catalog: Catalog, settings: Settings, rounds: Partial<Record<SectionId, number>> = {}): WorkoutPlan {
+    const only = { calentamiento: [], pesas: [], abdominales: [], estiramientos: [], [section]: routine[section] } as Routine;
+    return WorkoutPlan.build(only, catalog, settings, { [section]: rounds[section] });
   }
 
   /** Duración estimada en segundos (sin contar las esperas entre apartados). */

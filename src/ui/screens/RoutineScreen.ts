@@ -1,9 +1,9 @@
 import { tr } from '../../i18n';
 import { RoutineEditor, STEP_SECONDS } from '../../domain/RoutineEditor';
-import { clampRounds, MAX_ROUNDS } from '../../domain/WorkoutPlan';
-import { blockSeconds, SECTION_IDS, SECTION_TITLES, usesWeight, weightUnit, type ExerciseDef, type SectionId } from '../../domain/types';
+import { clampRounds, MAX_ROUNDS, WorkoutPlan } from '../../domain/WorkoutPlan';
+import { SECTION_IDS, SECTION_TITLES, usesWeight, weightUnit, type ExerciseDef, type SectionId } from '../../domain/types';
 import type { App, Screen } from '../App';
-import { actionSheet, append, clear, h, humanDuration, kg, plural, promptDialog, weightDialog } from '../dom';
+import { actionSheet, append, clear, h, kg, plural, promptDialog, weightDialog } from '../dom';
 import { icon, SECTION_STYLE } from '../icons';
 import { badgeList, equipMarks } from '../components/badges';
 import { canDo } from '../../domain/equipment';
@@ -11,6 +11,7 @@ import { sortableList, type SortableRow } from '../components/sortable';
 import { moveItem } from '../../domain/ordering';
 import { DetailScreen } from './DetailScreen';
 import { byName, listGrouping, type Grouping } from '../listGrouping';
+import { planText } from '../planText';
 
 export type ListSort = 'zona' | 'musculo' | 'material' | 'az' | 'personalizada';
 const SORT_LABELS: Record<ListSort, string> = { zona: 'Zona del cuerpo', musculo: 'Por músculo (de cabeza a pies)', material: 'Por material', az: 'Alfabético (A-Z)', personalizada: 'Personalizada' };
@@ -503,7 +504,7 @@ export class RoutineScreen implements Screen {
     const r = this.editor.value;
     const count = SECTION_IDS.reduce((n, s) => n + r[s].length, 0);
     const rounds = this.app.store.active.rounds ?? {};
-    const secs = SECTION_IDS.reduce((n, s) => n + blockSeconds(r[s]) * clampRounds(rounds[s]), 0);
+    const plan = WorkoutPlan.build(r, this.app.catalog, this.app.store.settings, rounds, this.app.store.active.order);
     const inSection = r[this.section].length;
     if (this.mode === 'sorting') {
       this.footer.hidden = true;
@@ -512,7 +513,7 @@ export class RoutineScreen implements Screen {
     this.footer.hidden = false;
     append(this.footer,
       h('div', { class: 'footer-info' },
-        h('strong', {}, count ? `${plural(count, 'ejercicio', 'ejercicios')} · ${humanDuration(secs)}` : 'Ningún ejercicio elegido'),
+        h('strong', {}, count ? planText(plan) : 'Ningún ejercicio elegido'),
         h('span', { class: 'muted' }, inSection ? `${inSection} en este bloque` : 'Nada en este bloque')),
       inSection ? h('button', { class: 'btn ghost small', onclick: () => { this.editor.clearSection(this.section); this.save(); this.refresh(); } }, 'Quitar todos') : null,
       h('button', { class: 'btn primary small', onclick: () => this.app.back() }, icon('check'), 'Hecho'),

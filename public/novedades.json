@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-23T23:57:06Z",
+    "es": "El resumen de tablas y bloques es igual en toda la app: los ejercicios distintos, cuántos se hacen en total si algo se repite (vueltas o series) y el tiempo real de principio a fin, con descansos. Por ejemplo: «3 ejercicios · se hacen 14 · 11 min».",
+    "ca": "El resum de taules i blocs és igual a tota l’app: els exercicis diferents, quants se’n fan en total si alguna cosa es repeteix (voltes o sèries) i el temps real de principi a fi, amb descansos. Per exemple: «3 exercicis · se’n fan 14 · 11 min».",
+    "en": "The summary of routines and blocks is the same everywhere: the different exercises, how many you do in total if anything repeats (rounds or sets) and the real time from start to finish, with rests. For example: “3 exercises · 14 in total · 11 min”."
+  },
+  {
     "fecha": "2026-11-23T23:47:28Z",
     "es": "Ajustes: «Muñeco» ya no se despliega; al tocarlo, va directo a personalizar el muñeco.",
     "ca": "Configuració: «Ninot» ja no es desplega; en tocar-lo, va directe a personalitzar el ninot.",

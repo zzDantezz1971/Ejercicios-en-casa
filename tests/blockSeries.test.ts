@@ -32,3 +32,15 @@ describe('Serie dentro de un bloque', () => {
     expect(free.map((n) => (n.kind === 'group' ? `serie x${n.rounds}: ${n.items.length}` : n.kind === 'ex' ? n.exerciseId : 'rest'))).toEqual(['marcha-en-el-sitio', 'serie x3: 2', 'cobra']);
   });
 });
+
+describe('Resumen de una tabla o un bloque', () => {
+  it('ejercicios distintos, los que se hacen en total y el tiempo real', () => {
+    const A = { id: 'a', rounds: 3 };
+    const r = { ...emptyRoutine(), pesas: [it2('flexiones'), it2('flexiones-diamante', A), it2('cobra', A)] };
+    const plan = WorkoutPlan.forSection(r, 'pesas', CATALOG, S, { pesas: 2 });
+    expect(plan.distinctCount).toBe(3);
+    expect(plan.exerciseCount).toBe((1 + 2 * 3) * 2);
+    // con los descansos entre ejercicios
+    expect(plan.estimatedSeconds).toBeGreaterThan(14 * 30);
+  });
+});

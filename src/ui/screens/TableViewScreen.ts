@@ -1,12 +1,13 @@
 import { WorkoutPlan, clampRounds } from '../../domain/WorkoutPlan';
-import { blockSeconds, blockRuns, sectionOrder, SECTION_TITLES, type ExerciseDef, type FreeEntry, type SectionId } from '../../domain/types';
+import { blockRuns, sectionOrder, SECTION_TITLES, type ExerciseDef, type FreeEntry, type SectionId } from '../../domain/types';
 import type { App, Screen } from '../App';
-import { h, humanDuration, kg, plural } from '../dom';
+import { h, humanDuration, kg } from '../dom';
 import { icon, SECTION_STYLE, type IconName } from '../icons';
 import { DetailScreen } from './DetailScreen';
 import { neededEquip } from './MakerScreens';
 import { EQUIP_INFO } from '../../domain/equipment';
 import { blockNav } from '../components/blockNav';
+import { countText, planText } from '../planText';
 
 /**
  * Ver la tabla en uso, solo para mirar: los ejercicios del apartado elegido (o todos), en el orden en que se harán,
@@ -76,11 +77,11 @@ export class TableViewScreen implements Screen {
       if (!items.length) continue;
       const st = SECTION_STYLE[s];
       const R = clampRounds(table.rounds?.[s]);
-      const secs = blockSeconds(items) * R;
+      const bp = WorkoutPlan.forSection(table.routine, s, app.catalog, app.store.settings, table.rounds ?? {});
       // título del apartado como en Editar (grande, con su color), con el resumen al lado
       const head = h('div', { class: 'tv-head' },
         h('h2', { class: 'maker-sec' }, icon(st.icon), SECTION_TITLES[s]),
-        h('span', { class: 'muted small tv-meta' }, `${plural(items.length, 'ejercicio', 'ejercicios')}${R > 1 ? ` · x${R} vueltas` : ''} · ${humanDuration(secs)}`));
+        h('span', { class: 'muted small tv-meta' }, `${R > 1 ? `x${R} vueltas · ` : ''}${planText(bp)}`));
       head.style.setProperty('--sec', st.color);
       const need = neededEquip(app, { routine: table.routine, rounds: table.rounds ?? {} }, [s]);
       const needEl = need.length ? h('div', { class: 'sec-need small', style: `--sec: ${st.color}` }, h('span', {}, 'Necesitas:'),
@@ -125,7 +126,7 @@ export class TableViewScreen implements Screen {
       h('section', { class: 'detail-body tv-body' },
         this.focus ? null : h('div', { class: 'chips tv-chips' },
           h('span', { class: 'chip' }, icon('clock'), plan.isEmpty ? '—' : humanDuration(plan.estimatedSeconds)),
-          h('span', { class: 'chip' }, icon('bolt'), plural(plan.exerciseCount, 'ejercicio', 'ejercicios'))),
+          h('span', { class: 'chip' }, icon('bolt'), countText(plan))),
         h('p', { class: 'muted small' }, 'Toca un ejercicio para ver cómo se hace.'),
         ...blocks,
         // viendo un bloque: al final, botones al bloque anterior y al siguiente (de los que tienen ejercicios)

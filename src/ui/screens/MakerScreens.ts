@@ -6,7 +6,7 @@ import {
 } from '../../domain/generator';
 import { clampRounds, MAX_ROUNDS, WorkoutPlan } from '../../domain/WorkoutPlan';
 import { MAX_SECONDS, MIN_SECONDS, STEP_SECONDS } from '../../domain/RoutineEditor';
-import { blockRuns, blockSeconds, emptyRoutine, newSeriesId, SECTION_IDS, sectionOrder, SECTION_TITLES, usesWeight, weightUnit, type ExerciseDef, type RoutineItem, type SectionId } from '../../domain/types';
+import { blockRuns, emptyRoutine, newSeriesId, SECTION_IDS, sectionOrder, SECTION_TITLES, usesWeight, weightUnit, type ExerciseDef, type RoutineItem, type SectionId } from '../../domain/types';
 import { tr } from '../../i18n';
 import type { App, Screen } from '../App';
 import { actionSheet, clear, confirmDialog, h, humanDuration, kg, plural, promptDialog, weightDialog, holdScroll } from '../dom';
@@ -17,6 +17,7 @@ import { DetailScreen } from './DetailScreen';
 import { RoutineScreen } from './RoutineScreen';
 import { newPlan } from './PlanScreens';
 import { newFreeTable } from './FreeTableScreen';
+import { planText } from '../planText';
 
 /*
  * Crear tablas: menú «Nueva tabla» (asistente, tablas hechas o vacía), el asistente «Crea-la per mi»
@@ -198,10 +199,8 @@ export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement
   const box = h('div', { class: 'maker-preview' },
     // en la pantalla de un bloque, el tiempo y los ejercicios de ese bloque; si no, los de toda la tabla
     h('p', { class: 'maker-total' }, icon('clock'), ...(() => {
-      if (!edit?.section) return [plan.isEmpty ? 'Sin ejercicios' : `${humanDuration(plan.estimatedSeconds)} · ${plural(plan.exerciseCount, 'ejercicio', 'ejercicios')}`];
-      const its = r.routine[edit.section].filter((i) => app.catalog.has(i.exerciseId));
-      const secs = blockSeconds(r.routine[edit.section], (id) => app.catalog.has(id)) * clampRounds(r.rounds[edit.section]);
-      return [its.length ? `${humanDuration(secs)} · ${plural(its.length, 'ejercicio', 'ejercicios')}` : 'Sin ejercicios'];
+      if (!edit?.section) return [planText(plan)];
+      return [planText(WorkoutPlan.forSection(r.routine, edit.section, app.catalog, app.store.settings, r.rounds))];
     })()));
   // leyenda de los botones de cada ejercicio
   // leyenda: solo el asa para mover (los botones de cambiar y quitar ya se entienden por su icono)
@@ -218,13 +217,13 @@ export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement
     const cards: SortableRow[] = sectionOrder(r.order).map((s) => {
       const items = r.routine[s].filter((i) => app.catalog.has(i.exerciseId));
       const R = clampRounds(r.rounds[s]);
-      const secs = blockSeconds(r.routine[s], (id) => app.catalog.has(id)) * R;
+      const bp = WorkoutPlan.forSection(r.routine, s, app.catalog, app.store.settings, r.rounds);
       const st = SECTION_STYLE[s];
       const row = h('button', { class: 'sec-row' + (items.length ? '' : ' empty'), onclick: () => open(s) },
         h('span', { class: 'sec-icon' }, icon(st.icon)),
         h('span', { class: 'sec-text' },
           h('strong', {}, h('span', {}, SECTION_TITLES[s]), items.length && R > 1 ? h('span', { class: 'sec-rounds' }, `x${R}`) : null),
-          h('span', { class: 'muted small' }, items.length ? `${plural(items.length, 'ejercicio', 'ejercicios')} · ${humanDuration(secs)}` : 'Sin ejercicios · toca para añadir')),
+          h('span', { class: 'muted small' }, items.length ? planText(bp) : 'Sin ejercicios · toca para añadir')),
         icon('chevron', 'ico chev'));
       row.style.setProperty('--sec', st.color);
       return { content: row, label: SECTION_TITLES[s] };

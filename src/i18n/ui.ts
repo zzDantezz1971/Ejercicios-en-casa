@@ -1339,6 +1339,7 @@ const ROWS: Row[] = [
   ['Sin banda', 'Sense cinta', 'No headband'],
   ['De deporte', 'D’esport', 'Sports'],
   ['Japonesa', 'Japonesa', 'Japanese'],
+  ['se hacen {a}', 'se’n fan {a}', '{a} in total'],
 ];
 
 export const UI_CA: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[1]]));

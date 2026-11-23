@@ -1282,4 +1282,5 @@ export const UI_EU: Record<string, string> = {
   "Sin banda": "Zintarik gabe",
   "De deporte": "Kirolekoa",
   "Japonesa": "Japoniarra",
+  "se hacen {a}": "{a} guztira",
 };

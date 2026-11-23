@@ -1,6 +1,6 @@
 import { tr } from '../../i18n';
 import { WorkoutPlan, clampRounds } from '../../domain/WorkoutPlan';
-import { blockSeconds, SECTION_IDS, sectionOrder, SECTION_TITLES, type SectionId } from '../../domain/types';
+import { SECTION_IDS, sectionOrder, SECTION_TITLES, type SectionId } from '../../domain/types';
 import type { App, Screen } from '../App';
 import { addDays, dayKey, greeting, startOfWeek, streak, trainedDays, WEEKDAY_LETTERS } from '../dates';
 import { clear, h, humanDuration, plural } from '../dom';
@@ -19,6 +19,7 @@ import { editTable } from './TableEditScreen';
 import { dayName, newPlan, planDayOf, refreshPlan } from './PlanScreens';
 import { kindLabel } from '../../domain/weekPlan';
 import { dateText, timeText } from '../../i18n/fmtDate';
+import { countText, planText } from '../planText';
 
 export class HomeScreen implements Screen {
   readonly el = h('main', { class: 'screen home' });
@@ -96,7 +97,7 @@ export class HomeScreen implements Screen {
           h('h2', { class: 'hero-title' + (heroTitle.length > 22 ? ' longer' : heroTitle.length > 14 ? ' long' : '') }, heroTitle),
           h('div', { class: 'chips' },
             h('span', { class: 'chip' }, icon('clock'), plan.isEmpty ? '—' : humanDuration(plan.estimatedSeconds)),
-            h('span', { class: 'chip' }, icon('bolt'), plural(plan.exerciseCount, 'ejercicio', 'ejercicios'))),
+            h('span', { class: 'chip' }, icon('bolt'), countText(plan))),
           plan.isEmpty
             // tabla vacía: las mismas formas de crearla que en Tablas › Nueva
             ? h('div', { class: 'hero-empty hero-opts' },
@@ -118,7 +119,7 @@ export class HomeScreen implements Screen {
       const row = h('button', { class: 'sec-row free-row', onclick: () => this.app.push(new TableViewScreen(this.app)) },
         h('span', { class: 'sec-icon' }, icon('swap')),
         h('span', { class: 'sec-text' }, h('strong', {}, 'Tabla libre'),
-          h('span', { class: 'muted small' }, `${plural(plan.exerciseCount, 'ejercicio', 'ejercicios')} · ${humanDuration(plan.estimatedSeconds)}`)),
+          h('span', { class: 'muted small' }, planText(plan))),
         icon('chevron', 'ico chev'));
       this.el.append(h('section', { class: 'sections' }, h('h3', { class: 'block-title' }, 'Contenido de la tabla'), row));
     } else if (withEx.length) {
@@ -207,13 +208,13 @@ export class HomeScreen implements Screen {
   private sectionRow(s: SectionId): HTMLElement {
     const items = this.app.store.routine[s].filter((i) => this.app.catalog.has(i.exerciseId));
     const R = clampRounds(this.app.store.active.rounds?.[s]);
-    const secs = blockSeconds(this.app.store.routine[s], (id) => this.app.catalog.has(id)) * R;
+    const bp = WorkoutPlan.forSection(this.app.store.routine, s, this.app.catalog, this.app.store.settings, this.app.store.active.rounds);
     const st = SECTION_STYLE[s];
     const row = h('button', { class: 'sec-row' + (items.length ? '' : ' empty'), onclick: () => this.app.push(items.length ? new TableViewScreen(this.app, s) : new RoutineScreen(this.app, s)) },
       h('span', { class: 'sec-icon' }, icon(st.icon)),
       h('span', { class: 'sec-text' },
-        h('strong', {}, SECTION_TITLES[s]),
-        h('span', { class: 'muted small' }, items.length ? `${plural(items.length, 'ejercicio', 'ejercicios')}${R > 1 ? ` x${R} vueltas` : ''} · ${humanDuration(secs)}` : 'Sin ejercicios · toca para añadir')),
+        h('strong', {}, h('span', {}, SECTION_TITLES[s]), items.length && R > 1 ? h('span', { class: 'sec-rounds' }, `x${R}`) : null),
+        h('span', { class: 'muted small' }, items.length ? planText(bp) : 'Sin ejercicios · toca para añadir')),
       icon('chevron', 'ico chev'));
     row.style.setProperty('--sec', st.color);
     return row;

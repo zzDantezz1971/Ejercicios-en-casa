@@ -16,6 +16,7 @@ import { startWorkout } from '../components/startWorkout';
 import { DraftBlockScreen, header, isEmptyResult, preview } from './MakerScreens';
 import { TableBlockScreen } from './TableEditScreen';
 import { dateText } from '../../i18n/fmtDate';
+import { planText } from '../planText';
 
 /*
  * Plan de la semana (Prémium): asistente (objetivo, días, minutos y nivel), pantalla «Mi plan» con la semana de
@@ -249,7 +250,7 @@ export class PlanWizardScreen implements Screen {
         // al tocar un día se ven sus ejercicios y se pueden cambiar antes de crear el plan
         list.append(h('button', { class: 'plan-row', onclick: () => app.push(new DraftDayScreen(app, x, dayOptions(o, x.kind), tr(kindLabel(o, x.kind)))) },
           h('span', { class: 'plan-dname' }, dayName(d)),
-          h('span', { class: 'plan-dtext' }, h('strong', {}, tr(kindLabel(o, x.kind))), h('span', { class: 'muted small' }, `${humanDuration(p.estimatedSeconds)} · ${tr(plural(p.exerciseCount, 'ejercicio', 'ejercicios'))}`)),
+          h('span', { class: 'plan-dtext' }, h('strong', {}, tr(kindLabel(o, x.kind))), h('span', { class: 'muted small' }, planText(p))),
           icon('chevron', 'ico chev')));
       }
       body.append(h('h2', { class: 'maker-q' }, 'Tu semana'),
