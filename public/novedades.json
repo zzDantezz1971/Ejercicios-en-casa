@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-23T15:00:28Z",
+    "es": "Tabla libre: al añadir ejercicios, cada uno lleva al lado de qué bloque es, y los elegidos se pueden añadir juntos como una serie que se repite («Añadirlos como serie»).",
+    "ca": "Taula lliure: en afegir exercicis, cada un porta al costat de quin bloc és, i els triats es poden afegir junts com una sèrie que es repeteix («Afegeix-los com a sèrie»).",
+    "en": "Free routine: when adding exercises, each one shows which block it belongs to, and the chosen ones can be added together as a repeating set («Add them as a set»)."
+  },
+  {
     "fecha": "2026-11-23T14:41:05Z",
     "es": "Nueva «Tabla libre» (también en la versión gratis): una sola lista sin bloques, con ejercicios de cualquier tipo en el orden que quieras, descansos donde quieras y series que se repiten las vueltas que elijas. Al añadir ejercicios salen todos, ordenados por bloques. Una tabla por bloques se puede pasar a libre desde sus tres puntos.",
     "ca": "Nova «Taula lliure» (també a la versió gratuïta): una sola llista sense blocs, amb exercicis de qualsevol tipus en l’ordre que vulguis, descansos on vulguis i sèries que es repeteixen les voltes que triïs. En afegir exercicis hi surten tots, ordenats per blocs. Una taula per blocs es pot passar a lliure des dels seus tres punts.",

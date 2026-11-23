@@ -560,6 +560,14 @@ const fold = (t: string) => t.normalize('NFD').replace(/[\u0300-\u036f]/g, '').t
 type PickSort = 'bloques' | 'zona' | 'musculo' | 'material' | 'az';
 const PICK_SORTS: Record<PickSort, string> = { bloques: 'Por bloques', zona: 'Zona del cuerpo', musculo: 'Por músculo', material: 'Por material', az: 'Alfabético (A-Z)' };
 
+/** Etiqueta pequeña con el bloque de un ejercicio (con su color). */
+export function blockTag(ex: ExerciseDef): HTMLElement {
+  const st = SECTION_STYLE[ex.section];
+  const tag = h('span', { class: 'free-tag' }, icon(st.icon), SECTION_TITLES[ex.section]);
+  tag.style.setProperty('--sec', st.color);
+  return tag;
+}
+
 /** Con `s` = null, todos los ejercicios de la app (tabla libre), ordenados por bloques de entrada. */
 export class PickExerciseScreen implements Screen {
   readonly el = h('main', { class: 'screen maker-screen' });
@@ -578,7 +586,9 @@ export class PickExerciseScreen implements Screen {
    */
   constructor(private readonly app: App, private readonly s: SectionId | null, private readonly have: ReadonlySet<string>,
     private readonly pick: (ids: string[], items: RoutineItem[]) => void, sub = 'Añadir un ejercicio', private readonly multi = false,
-    private readonly defSecs = app.store.settings.defaultSeconds) {
+    private readonly defSecs = app.store.settings.defaultSeconds,
+    /** Tabla libre: también se pueden añadir los elegidos juntos, como una serie que se repite. */
+    private readonly pickGroup?: (items: RoutineItem[]) => void) {
     this.sort = s ? 'zona' : 'bloques';
     const search = h('input', { class: 'search-input', type: 'search', placeholder: 'Buscar ejercicio o zona', 'aria-label': 'Buscar', oninput: () => { this.q = search.value; this.paint(); } });
     // ordenar la lista (empieza siempre por zona; no se guarda)
@@ -603,20 +613,23 @@ export class PickExerciseScreen implements Screen {
   }
 
   /** Añade los marcados (se vacía antes: al volver atrás se vuelve a pasar por onBack). */
-  private done(): void {
+  private done(asGroup = false): void {
     const ids = this.chosen;
     this.chosen = [];
     const items: RoutineItem[] = ids.map((id) => {
       const o = this.opts.get(id);
       return { exerciseId: id, seconds: o?.seconds ?? this.defSecs, ...(o?.weight ? { weight: o.weight } : {}) };
     });
-    this.pick(ids, items);
+    if (asGroup && this.pickGroup) this.pickGroup(items);
+    else this.pick(ids, items);
   }
 
   private paintFoot(): void {
     const n = this.chosen.length;
     this.foot.replaceChildren(h('button', { class: 'btn primary block big', disabled: !n, onclick: () => this.done() },
-      icon('plus'), n ? `Añadir ${plural(n, 'ejercicio', 'ejercicios')}` : 'Elige los que quieras'));
+      icon('plus'), n ? `Añadir ${plural(n, 'ejercicio', 'ejercicios')}` : 'Elige los que quieras'),
+      // tabla libre: los elegidos, juntos en una serie (que se repite las vueltas que se elijan)
+      this.pickGroup ? h('button', { class: 'btn ghost block pick-group-btn', disabled: n < 1, onclick: () => this.done(true) }, icon('swap'), n ? `Añadirlos como serie (${n})` : 'Añadirlos como serie') : '');
   }
 
   private paint(): void {
@@ -696,7 +709,9 @@ export class PickExerciseScreen implements Screen {
       h('div', { class: 'pick-top' },
         h('button', { class: 'maker-open', 'aria-label': `Cómo se hace: ${ex.name}`, onclick: () => app.push(new DetailScreen(app, ex, shown)) },
           img,
-          h('span', { class: 'maker-name' }, h('span', {}, ex.name), h('span', { class: 'maker-secs muted small' }, ex.zone),
+          h('span', { class: 'maker-name' }, h('span', {}, ex.name),
+            // con todos los ejercicios (tabla libre), al lado de la zona, de qué bloque es cada uno
+            this.s ? h('span', { class: 'maker-secs muted small' }, ex.zone) : h('span', { class: 'free-sub' }, blockTag(ex), h('span', { class: 'maker-secs muted small' }, ex.zone)),
             ex.oneSided ? h('span', { class: 'by-sides small' }, icon('sides'), 'por lados') : '')),
         sel),
       ctrls);

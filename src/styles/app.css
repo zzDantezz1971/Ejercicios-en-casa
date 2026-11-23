@@ -1869,3 +1869,4 @@ button.plan-row { cursor: pointer; }
 .free-group-top { display: flex; align-items: center; gap: 8px; }
 .free-rounds { align-self: flex-start; }
 .free-group .sortable > .sort-row { background: var(--surface); }
+.pick-foot .pick-group-btn { margin-top: 8px; background: var(--surface); }

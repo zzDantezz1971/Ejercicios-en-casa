@@ -1,12 +1,12 @@
 import { WorkoutPlan, MAX_ROUNDS } from '../../domain/WorkoutPlan';
 import { MAX_SECONDS, MIN_SECONDS, STEP_SECONDS } from '../../domain/RoutineEditor';
-import { freeToRoutine, routineToFree, SECTION_TITLES, type ExerciseDef, type FreeEntry, type FreeNode } from '../../domain/types';
+import { freeToRoutine, routineToFree, type ExerciseDef, type FreeEntry, type FreeNode } from '../../domain/types';
 import type { App, Screen } from '../App';
 import { actionSheet, clear, confirmDialog, h, humanDuration, plural, promptDialog } from '../dom';
 import { sortableList, type SortableRow } from '../components/sortable';
-import { icon, SECTION_STYLE } from '../icons';
+import { icon } from '../icons';
 import { DetailScreen } from './DetailScreen';
-import { header, PickExerciseScreen } from './MakerScreens';
+import { blockTag, header, PickExerciseScreen } from './MakerScreens';
 
 /*
  * Tabla libre: una sola lista, sin bloques. Ejercicios de cualquier tipo en el orden que se quiera, descansos donde se
@@ -157,9 +157,7 @@ export class FreeTableScreen implements Screen {
     const img = h('img', { class: 'maker-thumb', alt: '' });
     void app.thumbs.get(ex).then((url) => (img.src = url));
     const open = () => app.push(new DetailScreen(app, ex, shown));
-    const st = SECTION_STYLE[ex.section];
-    const tag = h('span', { class: 'free-tag' }, icon(st.icon), SECTION_TITLES[ex.section]);
-    tag.style.setProperty('--sec', st.color);
+    const tag = blockTag(ex);
     return h('div', { class: 'maker-row' },
       h('button', { class: 'maker-open', 'aria-label': `Cómo se hace: ${ex.name}`, onclick: open }, img),
       h('div', { class: 'maker-name' },
@@ -276,7 +274,14 @@ export class FreeTableScreen implements Screen {
       else (free[group] as Extract<FreeNode, { kind: 'group' }>).items.push(...add);
       saveFree(app, this.id, free);
       app.back();
-    }, 'Añadir ejercicios', true));
+    }, 'Añadir ejercicios', true, undefined,
+    // al final de la lista: también juntos como una serie (2 vueltas para empezar)
+    group === null ? (items) => {
+      const free = this.free;
+      free.push({ kind: 'group', rounds: 2, items: items.map((it) => ({ kind: 'ex', exerciseId: it.exerciseId, seconds: it.seconds, ...(it.weight ? { weight: it.weight } : {}) })) });
+      saveFree(app, this.id, free);
+      app.back();
+    } : undefined));
   }
 
   /** Añadir un descanso (pregunta cuántos segundos) al final de la lista o de una serie. */
