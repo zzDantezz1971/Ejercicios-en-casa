@@ -4,7 +4,7 @@ import { App as NativeApp } from '@capacitor/app';
 import { IS_NATIVE } from '../platform/native';
 import { setAngleStore } from '../figure/angles';
 import { setMusicMode } from '../services/MusicDuck';
-import { applyColor, setColorGate } from '../platform/theme';
+import { applyColor, applyFontSize, setColorGate } from '../platform/theme';
 import { rescheduleReminders } from '../services/Reminders';
 import { KasaNative } from '../platform/kasaNative';
 import { setFigureStyle } from '../figure/skinAsset';
@@ -147,6 +147,7 @@ export class App {
     // tema de color (los de pago, solo con Prémium)
     setColorGate(() => this.access.premium);
     applyColor(this.store.settings.colorTheme);
+    applyFontSize(this.store.settings.fontSize);
     this.haptics.enabled = this.store.settings.sound;
   }
 

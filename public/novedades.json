@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-23T21:31:13Z",
+    "es": "Ajustes › Pantalla: nuevo «Tamaño de la letra», Normal o Grande (los textos de toda la app más grandes). Y fuera los «Detalles técnicos» de la voz.",
+    "ca": "Configuració › Pantalla: nova «Mida de la lletra», Normal o Gran (els textos de tota l’app més grans). I fora els «Detalls tècnics» de la veu.",
+    "en": "Settings › Display: new “Text size”, Normal or Large (bigger text throughout the app). And the voice “Technical details” are gone."
+  },
+  {
     "fecha": "2026-11-23T21:16:07Z",
     "es": "Voz en gallego y euskera: Ajustes › Avisos explica paso a paso cómo tenerla con AhoTTS, también que después de instalarla hay que abrirla e instalar las voces que quieras. En la web, si habla en castellano, «¿No habla en…?» lo explica.",
     "ca": "Veu en gallec i basc: Ajustos › Avisos explica pas a pas com tenir-la amb AhoTTS, també que després d’instal·lar-la cal obrir-la i instal·lar les veus que vulguis. Al web, si parla en castellà, «No parla en…?» ho explica.",

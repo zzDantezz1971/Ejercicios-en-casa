@@ -1272,4 +1272,7 @@ export const UI_GL: Record<string, string> = {
   "En los ajustes del móvil, pon AhoTTS como motor de voz preferido (Idioma › Salida de texto a voz).": "Nos axustes do móbil, pon AhoTTS como motor de voz preferido (Idioma › Saída de texto a voz).",
   "Cierra el navegador del todo y vuelve a abrir Kasa Fit.": "Pecha o navegador do todo e volve abrir Kasa Fit.",
   "¿No habla en {x}?": "Non fala en {x}?",
+  "Tamaño de la letra": "Tamaño da letra",
+  "Grande hace más grandes los textos de toda la app.": "Grande fai máis grandes os textos de toda a app.",
+  "Grande": "Grande",
 };

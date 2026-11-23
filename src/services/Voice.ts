@@ -96,14 +96,6 @@ export class Voice {
     this.synth.addEventListener?.('voiceschanged', pick);
   }
 
-  /** Web: todas las voces que da el navegador (para la línea de detalles de Ajustes). */
-  webAll(): Array<{ name: string; lang: string; local: boolean }> {
-    return this.synth ? this.synth.getVoices().map((v) => ({ name: v.name, lang: v.lang, local: v.localService })) : [];
-  }
-
-  /** Lo que ha contestado cada motor de voz del móvil (para la línea de detalles de Ajustes). */
-  report: EngineStatus[] = [];
-
   /**
    * App Android: ¿quién dice los avisos? El motor del móvil si tiene una voz de verdad para el idioma; si no, otro
    * motor instalado que la tenga (p. ej., AhoTTS para gallego o euskera); si ninguno, en castellano.
@@ -114,7 +106,6 @@ export class Voice {
     const want = VOICE_CODE[LANG];
     const st = await KasaNative.voiceStatus({ lang: want }).catch(() => null);
     if (st && st.engines.length) {
-      this.report = st.engines;
       const def = st.engines.find((e) => e.isDefault) ?? st.engines.find((e) => e.engine === st.default);
       const pick = chooseEngine(st.engines, def?.engine);
       if (pick === 'default') {

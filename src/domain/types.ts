@@ -211,6 +211,8 @@ export interface Settings {
   lang: 'ca' | 'es' | 'en' | 'gl' | 'eu';
   /** Tema de la interfaz. */
   theme: 'dark' | 'light' | 'auto';
+  /** Tamaño de la letra: el de siempre o más grande. */
+  fontSize: 'normal' | 'large';
   /** Tema de color (Configuración › Pantalla): «blau» es el de siempre. */
   colorTheme?: string;
   /** Guardar los entrenamientos y el peso en Health Connect (app de Android). */
@@ -263,6 +265,7 @@ export const DEFAULT_SETTINGS: Settings = {
   profile: { age: null, height: null, sex: 'h' },
   lang: 'ca',
   theme: 'dark',
+  fontSize: 'normal',
   figureStyle: 'pieces',
   equipment: [],
   weekGoals: { minutes: 150, kcal: null },

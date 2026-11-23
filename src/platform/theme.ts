@@ -66,8 +66,16 @@ export function applySavedTheme(): void {
     const t = s?.theme;
     pref = t === 'light' || t === 'auto' ? t : 'dark';
     applyColor(s?.colorTheme);
+    applyFontSize(s?.fontSize);
   } catch {
     pref = 'dark';
     applyColor('blau');
   }
+}
+
+/** Tamaño de la letra: «normal» (el de siempre) o «large» (un 12,5 % más grande; app.css, :root[data-font]). */
+export type FontSize = 'normal' | 'large';
+export function applyFontSize(f: string | undefined): void {
+  if (f === 'large') document.documentElement.dataset.font = 'large';
+  else delete document.documentElement.dataset.font;
 }

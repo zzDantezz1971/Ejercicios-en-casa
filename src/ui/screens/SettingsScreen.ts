@@ -1,11 +1,10 @@
 import { LANG, LANGS } from '../../i18n';
-import { applyColor, applyTheme, COLOR_INFO, COLOR_THEMES, FREE_COLORS, type ColorTheme } from '../../platform/theme';
+import { applyColor, applyFontSize, applyTheme, COLOR_INFO, COLOR_THEMES, FREE_COLORS, type ColorTheme } from '../../platform/theme';
 import { flushDurable } from '../../platform/durable';
 import { showUpdateDialog, showVersionNews } from '../components/updateDialog';
 import { APP_BUILD, APP_VERSION, BUILD_TIME, checkForUpdate, updateReady } from '../../services/Updates';
 import { IS_NATIVE } from '../../platform/native';
 import { KasaNative } from '../../platform/kasaNative';
-import { VOICE_CODE } from '../../services/Voice';
 import { healthStatus, installHealth, requestHealth } from '../../services/Health';
 import { remindersOf, type ReminderKind } from '../../domain/reminders';
 import { dayName, EVERY, RemindersScreen, WEEK } from './RemindersScreen';
@@ -111,6 +110,17 @@ export class SettingsScreen implements Screen {
         h('span', { class: 'set-icon' }, icon('user')),
         h('div', { class: 'set-text' }, h('strong', {}, 'Personaliza el muñeco'), h('p', { class: 'muted small' }, 'Colores de piel, pelo y ropa, peinado, gafas y barba.')),
         icon('chevron')));
+  }
+
+  /** Tamaño de la letra: el de siempre o más grande (toda la app). */
+  private fontCard(s: Settings): HTMLElement {
+    const opt = (f: Settings['fontSize'], label: string, cls: string) =>
+      h('button', { class: `seg ${cls}` + (s.fontSize === f ? ' on' : ''), 'aria-pressed': String(s.fontSize === f), onclick: () => { applyFontSize(f); this.update({ fontSize: f }); } }, label);
+    return h('section', { class: 'card setting rest-card lang-card' },
+      h('div', { class: 'rest-head' },
+        h('span', { class: 'set-icon' }, icon('text')),
+        h('div', { class: 'set-text' }, h('strong', {}, 'Tamaño de la letra'), h('p', { class: 'muted small' }, 'Grande hace más grandes los textos de toda la app.'))),
+      h('div', { class: 'segmented lang-segs' }, opt('normal', 'Normal', 'font-n'), opt('large', 'Grande', 'font-l')));
   }
 
   private themeCard(s: Settings): HTMLElement {
@@ -454,7 +464,7 @@ export class SettingsScreen implements Screen {
           icon('chevron'))),
       h('h3', { class: 'block-title' }, IS_NATIVE ? 'Suscripción' : 'Prémium'), this.accessCard(),
       h('h3', { class: 'block-title' }, 'Idioma'), this.langCard(),
-      h('h3', { class: 'block-title' }, 'Pantalla'), this.themeCard(s), this.colorCard(s),
+      h('h3', { class: 'block-title' }, 'Pantalla'), this.themeCard(s), this.fontCard(s), this.colorCard(s),
       h('h3', { class: 'block-title' }, 'Muñeco'), this.lookCard(),
       h('h3', { class: 'block-title' }, 'Tiempos de los ejercicios'), this.restCard(s));
     // cuenta atrás y duración inicial: en una sola tarjeta, con el título y el contador en la misma fila
@@ -536,28 +546,6 @@ export class SettingsScreen implements Screen {
       h('p', { class: 'muted small' }, 'Mientras, puedes elegir otra voz aquí debajo.'));
   }
 
-  /** Detalles técnicos: qué contesta cada motor de voz del móvil sobre el idioma (para saber por qué habla como habla). */
-  private voiceReport(): HTMLElement | null {
-    if (!IS_NATIVE) {
-      // web: las voces que da el navegador (en Android, las del motor de voz principal del móvil)
-      const all = this.app.voice.webAll();
-      if (!all.length) return null;
-      const two = (l: string) => l.slice(0, 2).toLowerCase();
-      const mine = all.filter((v) => two(v.lang) === two(VOICE_CODE[this.app.voice.lang]));
-      return h('details', { class: 'voice-report muted small' },
-        h('summary', {}, 'Detalles técnicos'),
-        h('p', { 'data-no-tr': '' }, `${all.length} · ${this.app.voice.lang}: ${mine.length}`),
-        ...mine.map((v) => h('p', { 'data-no-tr': '' }, `${v.name} · ${v.lang}${v.local ? '' : ' · net'}`)));
-    }
-    const r = this.app.voice.report;
-    if (!r.length) return null;
-    const what = (a: number) => (a >= 0 ? '✓' : a === -1 ? '↓' : a === -9 ? '?' : '✗');
-    return h('details', { class: 'voice-report muted small' },
-      h('summary', {}, 'Detalles técnicos'),
-      ...r.map((e) => h('p', { 'data-no-tr': '' },
-        `${e.isDefault ? '★ ' : ''}${e.label} · ${LANG}: ${what(e.avail)} (${e.avail}) · ${(e.voices ?? []).filter((v) => v.installed).length}/${(e.voices ?? []).length}`)));
-  }
-
   private voiceCard(): HTMLElement {
     const list = h('div', { class: 'voice-list' }, h('p', { class: 'muted small' }, 'Buscando las voces del móvil…'));
     const card = h('section', { class: 'card setting voice-card' },
@@ -576,9 +564,6 @@ export class SettingsScreen implements Screen {
       list);
     const sample = { es: 'Hola, así sonarán los avisos.', ca: 'Hola, així sonaran els avisos.', en: 'Hi, this is how the alerts will sound.', gl: 'Ola, así soarán os avisos.', eu: 'Kaixo, horrela entzungo dira abisuak.' }[this.app.voice.lang];
     void this.app.voice.voices().then((voices) => {
-      // detalles técnicos al final de la tarjeta, cuando ya se sabe qué voces hay
-      const rep = this.voiceReport();
-      if (rep) card.append(rep);
       let cur = this.app.store.settings.voiceId ?? '';
       // los nombres técnicos de Android (es-es-x-eed-local…) no dicen nada: «Voz 1, 2, 3…»; los del navegador sí
       const readable = (n: string) => !/^[a-z]{2,3}[-_][a-z]{2,3}[-_]x[-_]/i.test(n) && !/#/.test(n);

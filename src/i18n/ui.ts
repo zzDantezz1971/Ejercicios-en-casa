@@ -1329,6 +1329,9 @@ const ROWS: Row[] = [
   ['En los ajustes del móvil, pon AhoTTS como motor de voz preferido (Idioma › Salida de texto a voz).', 'Als ajustos del mòbil, posa AhoTTS com a motor de veu preferit (Idioma › Sortida de text a veu).', 'In your phone settings, set AhoTTS as the preferred voice engine (Language › Text-to-speech output).'],
   ['Cierra el navegador del todo y vuelve a abrir Kasa Fit.', 'Tanca el navegador del tot i torna a obrir Kasa Fit.', 'Close the browser completely and open Kasa Fit again.'],
   ['¿No habla en {x}?', 'No parla en {x}?', 'Not speaking {x}?'],
+  ['Tamaño de la letra', 'Mida de la lletra', 'Text size'],
+  ['Grande hace más grandes los textos de toda la app.', 'Gran fa més grans els textos de tota l’app.', 'Large makes the text bigger throughout the app.'],
+  ['Grande', 'Gran', 'Large'],
 ];
 
 export const UI_CA: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[1]]));

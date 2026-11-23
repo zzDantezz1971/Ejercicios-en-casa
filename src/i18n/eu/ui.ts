@@ -1272,4 +1272,7 @@ export const UI_EU: Record<string, string> = {
   "En los ajustes del móvil, pon AhoTTS como motor de voz preferido (Idioma › Salida de texto a voz).": "Mugikorraren ezarpenetan, jarri AhoTTS ahots-motor gogokoena gisa (Hizkuntza › Testua ahots bihurtzeko irteera).",
   "Cierra el navegador del todo y vuelve a abrir Kasa Fit.": "Itxi nabigatzailea guztiz eta ireki berriro Kasa Fit.",
   "¿No habla en {x}?": "Ez du {x} hitz egiten?",
+  "Tamaño de la letra": "Letra-tamaina",
+  "Grande hace más grandes los textos de toda la app.": "Handiak aplikazio osoko testuak handiagotzen ditu.",
+  "Grande": "Handia",
 };

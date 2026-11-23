@@ -42,7 +42,7 @@
 * { box-sizing: border-box; }
 html, body { margin: 0; background: var(--bg); color: var(--fg); }
 body {
-  font: 16px/1.45 var(--body);
+  font: 1rem/1.45 var(--body);
   -webkit-tap-highlight-color: transparent;
   padding-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px));
   padding-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));
@@ -1901,5 +1901,7 @@ button.plan-row { cursor: pointer; }
 .tables-empty-icon { width: 56px; height: 56px; border-radius: 16px; display: grid; place-items: center; background: color-mix(in srgb, var(--accent) 18%, transparent); color: var(--accent); }
 .tables-empty-icon .ico { width: 28px; height: 28px; }
 .tables-empty h2 { font-size: 1.4rem; text-transform: uppercase; }
-.voice-report { margin-top: 10px; align-self: stretch; } .voice-report summary { cursor: pointer; } .voice-report p { margin: 4px 0 0; word-break: break-all; }
 .voice-steps { margin: 0; padding-left: 1.3em; display: flex; flex-direction: column; gap: 4px; }
+/* Tamaño de la letra: «Grande» sube toda la app (casi todo va en rem) */
+html[data-font="large"] { font-size: 112.5%; }
+.font-l { font-size: 1.12em; }
