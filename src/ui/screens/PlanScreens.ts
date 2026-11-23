@@ -118,14 +118,14 @@ export function useTodaysTable(app: App, force: boolean, now = new Date()): void
 /** Duración de una tabla guardada. */
 function routineSeconds(app: App, id: string): number {
   const r = app.store.routineById(id);
-  return r ? WorkoutPlan.build(r.routine, app.catalog, app.store.settings, r.rounds, r.order).estimatedSeconds : 0;
+  return r ? WorkoutPlan.forTable(r, app.catalog, app.store.settings).estimatedSeconds : 0;
 }
 
 /** Empieza el entrenamiento de un día del plan. */
 function startDay(app: App, planId: string, d: PlanDay): void {
   const r = app.store.routineById(d.routineId);
   if (!r) return;
-  const plan = WorkoutPlan.build(r.routine, app.catalog, app.store.settings, r.rounds, r.order);
+  const plan = WorkoutPlan.forTable(r, app.catalog, app.store.settings);
   if (plan.isEmpty) { app.push(new PlanDayScreen(app, planId, d.day)); return; }
   void startWorkout(app, plan, r);
 }
@@ -446,7 +446,7 @@ export function planTableCard(app: App, plan: WeekPlan, opts: { eyebrow?: string
   const routines = plan.days.map((d) => app.store.routineById(d.routineId)).filter((r): r is NonNullable<typeof r> => !!r);
   const counts = Object.fromEntries(SECTION_IDS.map((sec) => [sec, routines.reduce((n, r) => n + r.routine[sec].length, 0)])) as Record<SectionId, number>;
   const total = Math.max(1, SECTION_IDS.reduce((n, sec) => n + counts[sec], 0));
-  const secs = routines.map((r) => WorkoutPlan.build(r.routine, app.catalog, app.store.settings, r.rounds, r.order).estimatedSeconds);
+  const secs = routines.map((r) => WorkoutPlan.forTable(r, app.catalog, app.store.settings).estimatedSeconds);
   const perDay = secs.length ? secs.reduce((a, b) => a + b, 0) / secs.length : 0;
   const last = routines.map((r) => r.lastUsed).filter((x): x is string => !!x).sort().pop();
   const withEx = SECTION_IDS.filter((sec) => counts[sec]);

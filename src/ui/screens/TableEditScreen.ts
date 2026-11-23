@@ -6,11 +6,14 @@ import { icon } from '../icons';
 import { preview } from './MakerScreens';
 import { RoutineScreen } from './RoutineScreen';
 import { PlanDayScreen, planDayOf } from './PlanScreens';
+import { FreeTableScreen } from './FreeTableScreen';
 
 /** «Editar» una tabla: la de un día del plan, en su pantalla (con «Otra propuesta»); las demás, aquí. */
 export function editTable(app: App, id: string): void {
   const p = planDayOf(app, id);
-  app.push(p ? new PlanDayScreen(app, p.plan.id, p.day.day) : new TableEditScreen(app, id));
+  if (p) { app.push(new PlanDayScreen(app, p.plan.id, p.day.day)); return; }
+  // tabla libre: su propia pantalla (una sola lista)
+  app.push(app.store.routineById(id)?.free ? new FreeTableScreen(app, id) : new TableEditScreen(app, id));
 }
 
 /**

@@ -335,6 +335,46 @@ export interface SavedRoutine {
   group?: string;
   /** Orden de los bloques (si no está, el de siempre: calentamiento, fuerza, abdominales, estiramientos). */
   order?: SectionId[];
+  /**
+   * Tabla libre: una sola lista sin bloques (ejercicios de cualquier tipo, descansos y series que se repiten).
+   * Si está, el entrenamiento sale de aquí; `routine` es solo un reflejo por tipos (para contar y dibujar la barra).
+   */
+  free?: FreeNode[];
+}
+
+/** Un ejercicio o un descanso de una tabla libre. */
+export type FreeEntry = { kind: 'ex'; exerciseId: string; seconds: number; weight?: number } | { kind: 'rest'; seconds: number };
+/** Serie de una tabla libre: unos ejercicios (y descansos) que se repiten `rounds` veces seguidas. */
+export interface FreeGroup { kind: 'group'; rounds: number; items: FreeEntry[] }
+export type FreeNode = FreeEntry | FreeGroup;
+
+/** Todos los ejercicios y descansos de una tabla libre, en orden (las series, una sola vez). */
+export function freeEntries(free: readonly FreeNode[]): FreeEntry[] {
+  return free.flatMap((n) => (n.kind === 'group' ? n.items : [n]));
+}
+
+/** Reflejo por tipos de una tabla libre (cada ejercicio en su apartado), para contar y para la barra de colores. */
+export function freeToRoutine(free: readonly FreeNode[], sectionOf: (id: string) => SectionId | undefined): Routine {
+  const r = emptyRoutine();
+  for (const e of freeEntries(free)) {
+    if (e.kind !== 'ex') continue;
+    const s = sectionOf(e.exerciseId);
+    if (s) r[s].push({ exerciseId: e.exerciseId, seconds: e.seconds, ...(e.weight ? { weight: e.weight } : {}) });
+  }
+  return r;
+}
+
+/** Pasa una tabla por bloques a libre: los bloques en su orden; uno con vueltas, como una serie. */
+export function routineToFree(routine: Routine, rounds: Partial<Record<SectionId, number>> = {}, order?: readonly SectionId[]): FreeNode[] {
+  const out: FreeNode[] = [];
+  for (const s of sectionOrder(order)) {
+    const items: FreeEntry[] = routine[s].map((i) => ({ kind: 'ex', exerciseId: i.exerciseId, seconds: i.seconds, ...(i.weight ? { weight: i.weight } : {}) }));
+    if (!items.length) continue;
+    const R = Math.round(rounds[s] ?? 1);
+    if (R > 1) out.push({ kind: 'group', rounds: R, items });
+    else out.push(...items);
+  }
+  return out;
 }
 
 /** Grupo de tablas en «Mis tablas». */

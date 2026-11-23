@@ -16,6 +16,7 @@ import { icon, SECTION_STYLE, type IconName } from '../icons';
 import { DetailScreen } from './DetailScreen';
 import { RoutineScreen } from './RoutineScreen';
 import { newPlan } from './PlanScreens';
+import { newFreeTable } from './FreeTableScreen';
 
 /*
  * Crear tablas: menú «Nueva tabla» (asistente, tablas hechas o vacía), el asistente «Crea-la per mi»
@@ -37,6 +38,8 @@ export function openNewTable(app: App): void {
     h('div', { class: 'sheet maker-sheet', role: 'dialog', 'aria-modal': 'true', 'aria-label': 'Nueva tabla' },
       h('p', { class: 'sheet-title' }, 'Nueva tabla'),
       opt('edit', 'Tabla vacía', 'Elige tú los ejercicios', () => void emptyTable(app), free && !canAddFreeTable(app)),
+      // tabla libre: una sola lista con cualquier ejercicio, descansos y series (también en la versión gratis)
+      opt('swap', 'Tabla libre', 'Cualquier ejercicio, en el orden que quieras', () => void newFreeTable(app, free && app.store.routines.length === 1), free && !canAddFreeTable(app)),
       opt('bolt', 'Créala por mí', 'Elige objetivo, zona y tiempo', () => app.push(new GeneratorScreen(app)), free),
       opt('tables', 'Tablas hechas', 'Listas para usar', () => app.push(new TemplatesScreen(app)), free),
       // plan de la semana: una tabla para cada día de entrenamiento
@@ -554,15 +557,16 @@ export function isEmptyResult(r: GenResult | null): boolean {
 const fold = (t: string) => t.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
 
 /** Elegir un ejercicio para añadirlo a un apartado de la tabla nueva (con tu material; con buscador). */
-type PickSort = 'zona' | 'musculo' | 'material' | 'az';
-const PICK_SORTS: Record<PickSort, string> = { zona: 'Zona del cuerpo', musculo: 'Por músculo', material: 'Por material', az: 'Alfabético (A-Z)' };
+type PickSort = 'bloques' | 'zona' | 'musculo' | 'material' | 'az';
+const PICK_SORTS: Record<PickSort, string> = { bloques: 'Por bloques', zona: 'Zona del cuerpo', musculo: 'Por músculo', material: 'Por material', az: 'Alfabético (A-Z)' };
 
-class PickExerciseScreen implements Screen {
+/** Con `s` = null, todos los ejercicios de la app (tabla libre), ordenados por bloques de entrada. */
+export class PickExerciseScreen implements Screen {
   readonly el = h('main', { class: 'screen maker-screen' });
   private readonly list = h('div', { class: 'maker-preview' });
   private readonly foot = h('div', { class: 'pick-foot' });
   private q = '';
-  private sort: PickSort = 'zona';
+  private sort: PickSort;
   /** Elegidos (en el orden en que se han tocado), si se pueden elegir varios. */
   private chosen: string[] = [];
   /** Tiempo y peso de cada elegido (se cambian en la misma lista, antes de añadirlos). */
@@ -572,17 +576,18 @@ class PickExerciseScreen implements Screen {
    * Lista de ejercicios de un apartado. Con `multi`, se tocan los que se quieran (se marcan) y se añaden todos
    * con el botón de abajo (o al volver atrás); sin `multi` (cambiar uno), al tocarlo ya está.
    */
-  constructor(private readonly app: App, private readonly s: SectionId, private readonly have: ReadonlySet<string>,
+  constructor(private readonly app: App, private readonly s: SectionId | null, private readonly have: ReadonlySet<string>,
     private readonly pick: (ids: string[], items: RoutineItem[]) => void, sub = 'Añadir un ejercicio', private readonly multi = false,
     private readonly defSecs = app.store.settings.defaultSeconds) {
+    this.sort = s ? 'zona' : 'bloques';
     const search = h('input', { class: 'search-input', type: 'search', placeholder: 'Buscar ejercicio o zona', 'aria-label': 'Buscar', oninput: () => { this.q = search.value; this.paint(); } });
     // ordenar la lista (empieza siempre por zona; no se guarda)
     const sort = h('select', { class: 'sort-select', 'aria-label': 'Ordenar por', onchange: (e: Event) => {
       this.sort = (e.target as HTMLSelectElement).value as PickSort;
       (e.target as HTMLSelectElement).blur();
       this.paint();
-    } }, ...(Object.entries(PICK_SORTS) as Array<[PickSort, string]>).map(([v, label]) => h('option', { value: v, selected: v === this.sort }, label)));
-    this.el.append(header(app, SECTION_TITLES[s], sub), h('div', { class: 'maker-body' },
+    } }, ...(Object.entries(PICK_SORTS) as Array<[PickSort, string]>).filter(([v]) => (s ? v !== 'bloques' : v !== 'zona')).map(([v, label]) => h('option', { value: v, selected: v === this.sort }, label)));
+    this.el.append(header(app, s ? SECTION_TITLES[s] : 'Todos los ejercicios', sub), h('div', { class: 'maker-body' },
       h('div', { class: 'pick-tools' },
         h('label', { class: 'search pick-search' }, icon('search'), search),
         h('label', { class: 'pick-sort' }, icon('tables'), h('span', { class: 'muted small' }, 'Ordenar:'), sort)),
@@ -618,17 +623,34 @@ class PickExerciseScreen implements Screen {
     const { app } = this;
     const owned = new Set<string>(app.store.settings.equipment);
     const q = fold(this.q.trim());
-    const exs = (app.sections.find((x) => x.id === this.s)?.exercises ?? [])
-      .filter((e) => !this.have.has(e.id) && !e.pending && canDo(e.equip, owned))
-      .filter((e) => !q || fold(`${e.name} ${tr(e.name)} ${e.zone} ${e.group ? tr(e.group) : ''}`).includes(q));
+    const keep = (e: ExerciseDef) => !this.have.has(e.id) && !e.pending && canDo(e.equip, owned)
+      && (!q || fold(`${e.name} ${tr(e.name)} ${e.zone} ${e.group ? tr(e.group) : ''}`).includes(q));
+    const all = this.s ? app.sections.find((x) => x.id === this.s)?.exercises ?? [] : app.sections.flatMap((x) => x.exercises);
+    const exs = all.filter(keep);
     clear(this.list);
     this.shown = [];
-    // agrupados según el orden elegido, igual que en la lista de crear una tabla (en A-Z, sin grupos)
-    const all = app.sections.find((x) => x.id === this.s)?.exercises ?? [];
-    const gr = listGrouping(all, this.sort);
-    for (const { key, items } of groupedList(exs, all, this.sort)) {
-      if (key) this.list.append(h('h2', { class: 'maker-sec pick-group zone-title' }, gr.icon(key), gr.title(key)));
-      for (const ex of items) this.row(ex);
+    if (this.sort === 'bloques') {
+      // por bloques (Calentamiento, Fuerza…) y, dentro de cada uno, por zonas de arriba abajo, como en las listas de siempre
+      for (const sec of app.sections) {
+        const mine = sec.exercises.filter(keep);
+        if (!mine.length) continue;
+        const st = SECTION_STYLE[sec.id];
+        const head = h('h2', { class: 'maker-sec pick-block' }, icon(st.icon), SECTION_TITLES[sec.id]);
+        head.style.setProperty('--sec', st.color);
+        this.list.append(head);
+        const gr = listGrouping(sec.exercises, 'zona');
+        for (const { key, items } of groupedList(mine, sec.exercises, 'zona')) {
+          if (key) this.list.append(h('h3', { class: 'maker-sec pick-group zone-title' }, gr.icon(key), gr.title(key)));
+          for (const ex of items) this.row(ex);
+        }
+      }
+    } else {
+      // agrupados según el orden elegido, igual que en la lista de crear una tabla (en A-Z, sin grupos)
+      const gr = listGrouping(all, this.sort);
+      for (const { key, items } of groupedList(exs, all, this.sort)) {
+        if (key) this.list.append(h('h2', { class: 'maker-sec pick-group zone-title' }, gr.icon(key), gr.title(key)));
+        for (const ex of items) this.row(ex);
+      }
     }
     if (!exs.length) this.list.append(h('p', { class: 'muted' }, 'No hay más ejercicios para añadir.'));
     if (this.multi) this.paintFoot();

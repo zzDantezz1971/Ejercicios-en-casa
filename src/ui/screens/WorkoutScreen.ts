@@ -24,7 +24,7 @@ export class WorkoutScreen implements Screen {
   private shownExercise: string | null = null;
   private timer = 0;
   private started = false;
-  private dotsFor: SectionId | null = null;
+  private dotsFor: SectionId | 'free' | null = null;
   private fadeTimer = 0;
   private pulsedAt = 0;
   /** Se está mostrando la cuenta atrás del cambio de lado. */
@@ -199,7 +199,10 @@ export class WorkoutScreen implements Screen {
     this.el.style.setProperty('--sec', st.color);
     this.ui.secChip.replaceChildren(icon(st.icon), SECTION_TITLES[section]);
     // si el bloque se repite, «x2», «x3»… al lado de su nombre
-    const first = this.session.plan.steps.find((x) => x.kind === 'exercise' && x.section === section);
+    // tabla libre: las vueltas de la serie del ejercicio actual (o del siguiente)
+    const first = this.session.plan.free
+      ? this.session.plan.steps.slice(this.session.currentIndex).find((x) => x.kind === 'exercise')
+      : this.session.plan.steps.find((x) => x.kind === 'exercise' && x.section === section);
     const R = first && first.kind === 'exercise' ? first.rounds : 1;
     this.ui.rounds.textContent = `x${R}`;
     this.ui.rounds.hidden = R <= 1;
@@ -209,9 +212,12 @@ export class WorkoutScreen implements Screen {
   /** Un punto por ejercicio del apartado: hechos, actual y pendientes. */
   private renderDots(section: SectionId, currentIndex: number): void {
     const steps = this.session.plan.steps;
-    const idx = steps.map((s, i) => ({ s, i })).filter(({ s }) => s.kind === 'exercise' && s.section === section);
-    if (this.dotsFor !== section || this.ui.dots.childElementCount !== idx.length) {
-      this.dotsFor = section;
+    // tabla libre: un punto por cada ejercicio de toda la tabla
+    const free = this.session.plan.free;
+    const idx = steps.map((s, i) => ({ s, i })).filter(({ s }) => s.kind === 'exercise' && (free || s.section === section));
+    const key = free ? 'free' : section;
+    if (this.dotsFor !== key || this.ui.dots.childElementCount !== idx.length) {
+      this.dotsFor = key;
       this.ui.dots.replaceChildren(...idx.map(() => h('span', { class: 'dot' })));
     }
     idx.forEach(({ i }, k) => {

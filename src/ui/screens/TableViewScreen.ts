@@ -1,5 +1,5 @@
 import { WorkoutPlan, clampRounds } from '../../domain/WorkoutPlan';
-import { sectionOrder, SECTION_TITLES, type ExerciseDef, type SectionId } from '../../domain/types';
+import { sectionOrder, SECTION_TITLES, type ExerciseDef, type FreeEntry, type SectionId } from '../../domain/types';
 import type { App, Screen } from '../App';
 import { h, humanDuration, kg, plural } from '../dom';
 import { icon, SECTION_STYLE, type IconName } from '../icons';
@@ -29,7 +29,7 @@ export class TableViewScreen implements Screen {
   private render(): void {
     const { app } = this;
     const table = app.store.active;
-    const plan = WorkoutPlan.build(table.routine, app.catalog, app.store.settings, table.rounds, table.order);
+    const plan = WorkoutPlan.forTable(table, app.catalog, app.store.settings);
     const blocks: HTMLElement[] = [];
     // todos los ejercicios que se ven, en orden: desde la ficha se pasa de uno a otro deslizando el dedo
     const shown: ExerciseDef[] = [];
@@ -37,7 +37,40 @@ export class TableViewScreen implements Screen {
     const order = sectionOrder(table.order);
     let n = order.slice(0, this.focus ? order.indexOf(this.focus) : 0)
       .reduce((t, s) => t + table.routine[s].filter((i) => app.catalog.has(i.exerciseId)).length, 0);
-    for (const s of order) {
+    // tabla libre: la lista tal cual (ejercicios, descansos y series), numerada
+    if (table.free) {
+      const list = h('div', { class: 'tv-list' });
+      let k = 0;
+      const exRow = (e: FreeEntry) => {
+        if (e.kind === 'rest') return h('div', { class: 'maker-row tv-row free-rest' }, h('span', { class: 'tv-n' }, ''), h('span', { class: 'free-rest-ico' }, icon('hourglass')),
+          h('span', { class: 'maker-name' }, h('span', { class: 'maker-title' }, 'Descanso'), h('span', { class: 'muted small tv-sub' }, h('span', { class: 'tv-secs' }, icon('clock'), `${e.seconds} s`))));
+        const ex = app.catalog.get(e.exerciseId);
+        if (!ex) return null;
+        shown.push(ex);
+        k++;
+        const st = SECTION_STYLE[ex.section];
+        const img = h('img', { alt: '', class: 'maker-thumb' });
+        void app.thumbs.get(ex).then((url) => (img.src = url));
+        const row = h('button', { class: 'maker-row tv-row', 'aria-label': `Cómo se hace: ${ex.name}`, onclick: () => app.push(new DetailScreen(app, ex, shown)) },
+          h('span', { class: 'tv-n' }, String(k)), img,
+          h('span', { class: 'maker-name' }, h('span', { class: 'maker-title' }, ex.name),
+            h('span', { class: 'muted small tv-sub' }, h('span', { class: 'tv-secs' }, icon('clock'), `${e.seconds} s`),
+              ex.oneSided ? h('span', { class: 'by-sides' }, icon('sides'), 'por lados') : null),
+            h('span', { class: 'muted small' }, SECTION_TITLES[ex.section], ' · ', ex.zone)),
+          icon('chevron', 'ico chev'));
+        row.style.setProperty('--sec', st.color);
+        return row;
+      };
+      for (const n of table.free) {
+        if (n.kind !== 'group') { const r = exRow(n); if (r) list.append(r); continue; }
+        const box = h('div', { class: 'free-group' },
+          h('div', { class: 'free-group-head' }, h('div', { class: 'free-group-top' }, h('span', { class: 'free-group-title' }, icon('swap'), h('strong', {}, 'Serie')), h('span', { class: 'sec-rounds' }, `x${n.rounds}`))));
+        for (const e of n.items) { const r = exRow(e); if (r) box.append(r); }
+        list.append(box);
+      }
+      blocks.push(list);
+    }
+    for (const s of table.free ? [] : order) {
       if (this.focus && s !== this.focus) continue;
       const items = table.routine[s].filter((i) => app.catalog.has(i.exerciseId));
       if (!items.length) continue;

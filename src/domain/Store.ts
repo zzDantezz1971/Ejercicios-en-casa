@@ -6,6 +6,8 @@ import {
   sectionOrder,
   SEXES,
   emptyRoutine,
+  type FreeEntry,
+  type FreeNode,
   type HistoryEntry,
   type Routine,
   type SavedRoutine,
@@ -126,6 +128,38 @@ function sanitizeRoutine(input: unknown): Routine {
   return out;
 }
 
+/** Comprueba la lista de una tabla libre (de una copia o de una versión anterior). */
+export function sanitizeFree(input: unknown): FreeNode[] | undefined {
+  if (!Array.isArray(input)) return undefined;
+  const secs = (v: unknown, max: number) => (Number.isFinite(v) ? Math.min(max, Math.max(1, Math.round(v as number))) : undefined);
+  const entry = (x: unknown): FreeEntry | null => {
+    const e = x as Partial<Record<string, unknown>> | null;
+    if (!e) return null;
+    if (e.kind === 'rest') { const t = secs(e.seconds, 900); return t ? { kind: 'rest', seconds: t } : null; }
+    if (e.kind === 'ex' && typeof e.exerciseId === 'string') {
+      const t = secs(e.seconds, 900);
+      if (!t) return null;
+      const w = Number.isFinite(e.weight) && (e.weight as number) > 0 ? { weight: e.weight as number } : {};
+      return { kind: 'ex', exerciseId: e.exerciseId, seconds: t, ...w };
+    }
+    return null;
+  };
+  const out: FreeNode[] = [];
+  for (const x of input) {
+    const g = x as Partial<Record<string, unknown>> | null;
+    if (g && g.kind === 'group' && Array.isArray(g.items)) {
+      const items = g.items.map(entry).filter((e): e is FreeEntry => !!e);
+      if (items.length) out.push({ kind: 'group', rounds: Math.min(10, Math.max(1, Math.round(Number(g.rounds) || 1))), items });
+    } else {
+      const e = entry(x);
+      if (e) out.push(e);
+    }
+  }
+  return out;
+}
+
+const cloneFree = (free: readonly FreeNode[]): FreeNode[] => JSON.parse(JSON.stringify(free)) as FreeNode[];
+
 /**
  * Guarda y carga los datos con número de versión. Si cambia el formato, se añade un paso
  * en `migrate` y los datos antiguos se convierten sin perderse.
@@ -171,6 +205,7 @@ export class Store {
   /** Guarda los ejercicios de la tabla activa. */
   saveRoutine(routine: Routine): void {
     this.active.routine = routine;
+    delete this.active.free;
     this.persist();
   }
 
@@ -206,6 +241,7 @@ export class Store {
     const a = this.active;
     a.name = cleanName(name);
     a.routine = structuredCloneRoutine(routine);
+    delete a.free;
     if (Object.keys(rounds).length) a.rounds = { ...rounds };
     else delete a.rounds;
     if (order) a.order = sectionOrder(order);
@@ -228,9 +264,35 @@ export class Store {
     const r = this.data.routines.find((x) => x.id === id);
     if (!r) return;
     r.routine = structuredCloneRoutine(routine);
+    delete r.free;
     if (Object.keys(rounds).length) r.rounds = { ...rounds };
     else delete r.rounds;
     if (order) setOrderOf(r, order);
+    this.persist();
+  }
+
+  /** Crea una tabla libre vacía y la deja activa. */
+  createFreeRoutine(name: string): SavedRoutine {
+    const r = newRoutine(name);
+    r.free = [];
+    this.data.routines.push(r);
+    this.data.activeId = r.id;
+    this.persist();
+    return r;
+  }
+
+  /**
+   * Cambia la lista de una tabla libre (o pasa a libre una tabla por bloques). `routine`: el reflejo por tipos.
+   * Una tabla libre no tiene vueltas por bloque ni orden de bloques (las series van en la lista).
+   */
+  setFreeContent(id: string, free: readonly FreeNode[], routine: Routine, name?: string): void {
+    const r = this.data.routines.find((x) => x.id === id);
+    if (!r) return;
+    r.free = cloneFree(free);
+    r.routine = structuredCloneRoutine(routine);
+    delete r.rounds;
+    delete r.order;
+    if (name) r.name = cleanName(name);
     this.persist();
   }
 
@@ -324,6 +386,7 @@ export class Store {
     const copy = newRoutine(`${src.name} (copia)`, structuredCloneRoutine(src.routine));
     if (src.rounds) copy.rounds = { ...src.rounds };
     if (src.order) copy.order = [...src.order];
+    if (src.free) copy.free = cloneFree(src.free);
     this.data.routines.splice(i + 1, 0, copy);
     this.persist();
     return copy;
@@ -787,6 +850,7 @@ export class Store {
           lastUsed: typeof r.lastUsed === 'string' ? r.lastUsed : undefined,
           rounds: sanitizeRounds(r.rounds),
           ...(typeof r.group === 'string' ? { group: r.group } : {}),
+          ...(Array.isArray(r.free) ? { free: sanitizeFree(r.free)! } : {}),
           ...(Array.isArray(r.order) && sectionOrder(r.order).join() === r.order.join() && r.order.join() !== SECTION_IDS.join() ? { order: [...r.order] } : {}),
         }));
     } else if (input.routine) {

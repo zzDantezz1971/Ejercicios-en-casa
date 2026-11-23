@@ -33,7 +33,7 @@ export class HomeScreen implements Screen {
     // plan de la semana: ejercicios nuevos si empieza otra semana
     refreshPlan(app);
     const table = app.store.active;
-    const plan = WorkoutPlan.build(table.routine, app.catalog, app.store.settings, table.rounds, table.order);
+    const plan = WorkoutPlan.forTable(table, app.catalog, app.store.settings);
     const now = new Date();
     clear(this.el);
 
@@ -109,7 +109,15 @@ export class HomeScreen implements Screen {
 
     // Apartados de la tabla (solo los que tienen ejercicios), justo debajo de la tabla en uso
     const withEx = sectionOrder(this.app.store.active.order).filter((sec) => this.app.store.routine[sec].some((i) => this.app.catalog.has(i.exerciseId)));
-    if (withEx.length) {
+    if (table.free && !plan.isEmpty) {
+      // tabla libre: una sola fila (sin bloques) que abre la lista
+      const row = h('button', { class: 'sec-row free-row', onclick: () => this.app.push(new TableViewScreen(this.app)) },
+        h('span', { class: 'sec-icon' }, icon('swap')),
+        h('span', { class: 'sec-text' }, h('strong', {}, 'Tabla libre'),
+          h('span', { class: 'muted small' }, `${plural(plan.exerciseCount, 'ejercicio', 'ejercicios')} · ${humanDuration(plan.estimatedSeconds)}`)),
+        icon('chevron', 'ico chev'));
+      this.el.append(h('section', { class: 'sections' }, h('h3', { class: 'block-title' }, 'Contenido de la tabla'), row));
+    } else if (withEx.length) {
       this.el.append(
         h('section', { class: 'sections' },
           h('h3', { class: 'block-title' }, 'Contenido de la tabla'),

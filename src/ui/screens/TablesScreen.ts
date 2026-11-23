@@ -6,6 +6,7 @@ import { actionSheet, clear, confirmDialog, h, humanDuration, plural, promptDial
 import { icon, SECTION_STYLE } from '../icons';
 import { formatDate } from './HomeScreen';
 import { editTable } from './TableEditScreen';
+import { convertToFree } from './FreeTableScreen';
 import { openNewTable } from './MakerScreens';
 import { newPlan, planTableCard, planTitle } from './PlanScreens';
 
@@ -144,7 +145,7 @@ export class TablesScreen implements Screen {
   }
 
   private card(t: SavedRoutine, active: boolean): HTMLElement {
-    const plan = WorkoutPlan.build(t.routine, this.app.catalog, this.app.store.settings, t.rounds, t.order);
+    const plan = WorkoutPlan.forTable(t, this.app.catalog, this.app.store.settings);
     const total = Math.max(1, SECTION_IDS.reduce((n, s) => n + t.routine[s].length, 0));
     const order = sectionOrder(t.order);
     const mix = h('div', { class: 'mix' }, ...order.filter((s) => t.routine[s].length).map((s) => {
@@ -162,7 +163,8 @@ export class TablesScreen implements Screen {
     return h('article', { class: 'card table-card' + (active ? ' active' : '') },
       h('div', { class: 'table-head' }, h('h2', {}, t.name), active ? h('span', { class: 'active-pill' }, 'En uso') : null),
       h('div', { class: 'table-meta' },
-        h('span', { class: 'meta-line' }, icon('clock'), plan.isEmpty ? 'Sin ejercicios' : `${humanDuration(plan.estimatedSeconds)} · ${plural(plan.exerciseCount, 'ejercicio', 'ejercicios')}`),
+        h('span', { class: 'meta-line' }, icon('clock'), plan.isEmpty ? 'Sin ejercicios' : `${humanDuration(plan.estimatedSeconds)} · ${plural(plan.exerciseCount, 'ejercicio', 'ejercicios')}`,
+          t.free ? h('span', { class: 'free-pill' }, 'Libre') : null),
         pills.length ? h('span', { class: 'pills' }, ...pills) : null,
         h('span', { class: 'meta-line' }, icon('calendar'), t.lastUsed ? `Última vez: ${formatDate(t.lastUsed)}` : 'Aún no la has usado')),
       pills.length ? mix : null,
@@ -195,9 +197,12 @@ export class TablesScreen implements Screen {
       { id: 'move', label: t.group ? 'Mover a otro grupo' : 'Mover a un grupo' },
       ...(t.group ? [{ id: 'out', label: 'Sacar del grupo' }] : []),
       { id: 'duplicate', label: 'Duplicar' },
+      // una tabla por bloques se puede pasar a libre (las de un plan, no)
+      ...(!t.free && !this.app.store.isPlanRoutine(t.id) ? [{ id: 'free', label: 'Pasar a tabla libre' }] : []),
       { id: 'delete', label: 'Borrar', danger: true },
     ]);
     const { store } = this.app;
+    if (choice === 'free') { if (await convertToFree(this.app, t.id)) editTable(this.app, t.id); else this.render(); return; }
     if (choice === 'rename') {
       const name = await promptDialog('Nuevo nombre', t.name, 'Guardar');
       if (name) store.renameRoutine(t.id, name);

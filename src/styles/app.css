@@ -1830,3 +1830,42 @@ button.plan-row { cursor: pointer; }
 .blocks-sort .sec-row .sec-icon .ico { width: 24px; height: 24px; color: var(--sec); }
 .blocks-sort .sec-row .chev { width: 20px; height: 20px; }
 .sec-rounds { display: inline-flex; align-items: center; margin-left: 8px; font: 700 .9rem var(--display); letter-spacing: .06em; text-transform: uppercase; color: var(--sec); background: color-mix(in srgb, var(--sec) 15%, transparent); border-radius: 999px; padding: 2px 9px; vertical-align: 2px; }
+
+/* Tabla libre: una sola lista con ejercicios de cualquier tipo, descansos y series */
+.free-list { display: flex; flex-direction: column; gap: 10px; }
+.free-list > .sortable { display: flex; flex-direction: column; gap: 10px; }
+.free-tag { display: inline-flex; align-items: center; gap: 4px; font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--sec); }
+.free-tag .ico { width: 13px; height: 13px; }
+.free-sub { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.free-rest .free-rest-ico { flex: none; width: 52px; height: 52px; border-radius: 12px; display: flex; align-items: center; justify-content: center; background: var(--surface-2); color: var(--muted); }
+.free-rest .free-rest-ico .ico { width: 24px; height: 24px; }
+.free-group { border: 2px solid var(--accent); border-radius: 18px; padding: 10px; display: flex; flex-direction: column; gap: 8px; background: color-mix(in srgb, var(--accent) 7%, transparent); }
+.free-group.picking-off { opacity: .55; }
+.free-group-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.free-group-title { display: inline-flex; align-items: center; gap: 6px; flex: 1; min-width: 0; color: var(--accent); }
+.free-group-title .ico { width: 18px; height: 18px; }
+.free-group-title .muted { color: var(--muted); }
+.free-group-adds { display: flex; gap: 8px; }
+.free-group-adds .btn { flex: 1; }
+.free-adds { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+.free-empty { margin: 8px 0 4px; }
+.free-pill { margin-left: 8px; padding: 2px 8px; border-radius: 999px; font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; background: color-mix(in srgb, var(--accent) 18%, transparent); color: var(--accent); }
+.free-pick-bar { display: flex; flex-direction: column; gap: 8px; padding: 12px 14px; }
+.free-pick-btns { display: flex; gap: 8px; }
+.free-pick-btns .btn { flex: 1; }
+.free-pickrow { display: flex; align-items: center; gap: 10px; width: 100%; padding: 0; border: 0; background: none; color: inherit; text-align: left; font: inherit; cursor: pointer; }
+.free-pickrow > .maker-row { flex: 1; }
+.free-check { flex: none; width: 28px; height: 28px; border-radius: 8px; border: 2px solid var(--line); display: flex; align-items: center; justify-content: center; }
+.free-pickrow.on .free-check { background: var(--accent); border-color: var(--accent); color: #fff; }
+.free-pickrow.on > .maker-row { border-color: var(--accent); }
+.pick-block { color: var(--sec); margin-top: 18px; font-size: 1.5rem; }
+.pick-block .ico { width: 26px; height: 26px; }
+.free-row { --sec: var(--accent); }
+.free-group { --sec: var(--accent); }
+/* la fila de una serie no lleva marco propio (el marco es el de la serie) */
+.free-list > .sortable > .sort-row:has(.free-group) { background: none; border: 0; padding: 0; box-shadow: none; }
+.free-list > .sortable > .sort-row:has(.free-group) > .sort-content { flex: 1; min-width: 0; }
+.free-group-head { flex-direction: column; align-items: stretch; gap: 6px; }
+.free-group-top { display: flex; align-items: center; gap: 8px; }
+.free-rounds { align-self: flex-start; }
+.free-group .sortable > .sort-row { background: var(--surface); }

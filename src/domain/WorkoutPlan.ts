@@ -1,4 +1,4 @@
-import { sectionOrder, type ExerciseDef, type Routine, type SectionId, type Settings } from './types';
+import { freeEntries, sectionOrder, type ExerciseDef, type FreeEntry, type FreeNode, type Routine, type SavedRoutine, type SectionId, type Settings } from './types';
 
 /** Cambio de lado en los ejercicios por lados: con el tiempo parado, primero se anuncia
     («Cambio de lado») y luego hay una cuenta atrás de 3 s. */
@@ -40,9 +40,12 @@ export function clampRounds(n: number | undefined): number {
 /** Convierte la rutina en la lista ordenada de pasos. */
 export class WorkoutPlan {
   readonly steps: readonly Step[];
+  /** De una tabla libre (sin bloques). */
+  readonly free: boolean;
 
-  private constructor(steps: Step[]) {
+  private constructor(steps: Step[], free = false) {
     this.steps = steps;
+    this.free = free;
   }
 
   /** `order`: orden de los bloques de la tabla (sin él, el de siempre). */
@@ -85,6 +88,63 @@ export class WorkoutPlan {
       previous = section;
     }
     return new WorkoutPlan(steps);
+  }
+
+  /** El plan de una tabla guardada (libre o por bloques). */
+  static forTable(t: Pick<SavedRoutine, 'routine' | 'rounds' | 'order' | 'free'>, catalog: Catalog, settings: Settings): WorkoutPlan {
+    return t.free ? WorkoutPlan.buildFree(t.free, catalog, settings) : WorkoutPlan.build(t.routine, catalog, settings, t.rounds ?? {}, t.order);
+  }
+
+  /**
+   * Tabla libre: los ejercicios en el orden de la lista, sin bloques. Las series se repiten sus vueltas seguidas.
+   * Entre dos ejercicios, la pausa corta de Ajustes (la del tipo del siguiente); donde hay un descanso, ese descanso.
+   */
+  static buildFree(free: readonly FreeNode[], catalog: Catalog, settings: Settings): WorkoutPlan {
+    type Ex = { kind: 'ex'; item: Extract<FreeEntry, { kind: 'ex' }>; ex: ExerciseDef; position: number; round: number; rounds: number };
+    type Rest = { kind: 'rest'; seconds: number };
+    const ok = (e: FreeEntry): boolean => (e.kind === 'ex' ? !!catalog.get(e.exerciseId) && e.seconds > 0 : e.seconds > 0);
+    // posición de cada ejercicio en la lista (las vueltas de una serie repiten la misma)
+    const total = freeEntries(free).filter((e) => e.kind === 'ex' && ok(e)).length;
+    let pos = 0;
+    const seq: Array<Ex | Rest> = [];
+    for (const n of free) {
+      const items = n.kind === 'group' ? n.items.filter(ok) : ok(n) ? [n] : [];
+      // una serie sin ejercicios no se hace (un descanso suelto, sí)
+      if (n.kind === 'group' && !items.some((e) => e.kind === 'ex')) continue;
+      const R = n.kind === 'group' ? clampRounds(n.rounds) : 1;
+      const first = pos;
+      for (let r = 1; r <= R; r++) {
+        pos = first;
+        for (const e of items) {
+          if (e.kind === 'rest') { seq.push({ kind: 'rest', seconds: e.seconds }); continue; }
+          pos++;
+          seq.push({ kind: 'ex', item: e, ex: catalog.get(e.exerciseId)!, position: pos, round: r, rounds: R });
+        }
+      }
+    }
+    const steps: Step[] = [];
+    const exs = seq.filter((x): x is Ex => x.kind === 'ex');
+    if (!exs.length) return new WorkoutPlan(steps, true);
+    if (settings.sectionCountdown > 0) steps.push({ kind: 'countdown', section: exs[0].ex.section, seconds: settings.sectionCountdown, next: exs[0].ex });
+    const nextEx = (i: number): Ex | undefined => seq.slice(i + 1).find((x): x is Ex => x.kind === 'ex');
+    seq.forEach((x, i) => {
+      const next = nextEx(i);
+      if (x.kind === 'rest') {
+        // un descanso al final (sin nada después) no se hace
+        if (next) steps.push({ kind: 'rest', section: next.ex.section, seconds: x.seconds, next: next.ex });
+        return;
+      }
+      steps.push({
+        kind: 'exercise', section: x.ex.section, exercise: x.ex, seconds: x.item.seconds,
+        switchAt: x.ex.oneSided ? Math.round(x.item.seconds / 2) : undefined,
+        position: x.position, totalInSection: total, weight: x.item.weight, round: x.round, rounds: x.rounds,
+      });
+      // pausa corta hasta el siguiente ejercicio (si no viene un descanso)
+      const after = seq[i + 1];
+      const gap = settings.rest[next?.ex.section ?? x.ex.section] ?? 0;
+      if (next && after?.kind === 'ex' && gap > 0) steps.push({ kind: 'rest', section: next.ex.section, seconds: gap, next: next.ex });
+    });
+    return new WorkoutPlan(steps, true);
   }
 
   get isEmpty(): boolean {
