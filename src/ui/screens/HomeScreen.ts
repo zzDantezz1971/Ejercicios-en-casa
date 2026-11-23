@@ -1,4 +1,4 @@
-import { LOCALE, tr } from '../../i18n';
+import { tr } from '../../i18n';
 import { WorkoutPlan, clampRounds } from '../../domain/WorkoutPlan';
 import { SECTION_IDS, sectionOrder, SECTION_TITLES, type SectionId } from '../../domain/types';
 import type { App, Screen } from '../App';
@@ -18,6 +18,7 @@ import { openDay } from './HistoryScreen';
 import { editTable } from './TableEditScreen';
 import { dayName, newPlan, planDayOf, refreshPlan } from './PlanScreens';
 import { kindLabel } from '../../domain/weekPlan';
+import { dateText, timeText } from '../../i18n/fmtDate';
 
 export class HomeScreen implements Screen {
   readonly el = h('main', { class: 'screen home' });
@@ -39,7 +40,7 @@ export class HomeScreen implements Screen {
     clear(this.el);
 
     // Cabecera
-    const date = now.toLocaleDateString(LOCALE, { weekday: 'long', day: 'numeric', month: 'long' });
+    const date = dateText(now, { weekday: 'long', day: 'numeric', month: 'long' });
     this.el.append(
       h('header', { class: 'home-head' },
         h('p', { class: 'eyebrow' }, date),
@@ -54,7 +55,7 @@ export class HomeScreen implements Screen {
     // los resúmenes son de Prémium: en la versión gratis no se avisa
     const premium = app.access.premium;
     if (premium && hadPrev && app.store.summarySeen !== prevKey) {
-      const name = prevMonth.toLocaleDateString(LOCALE, { month: 'long' });
+      const name = dateText(prevMonth, { month: 'long' });
       const card: HTMLElement = h('section', { class: 'card month-banner' },
         icon('calendar'),
         h('div', { class: 'mb-text' }, h('strong', {}, `Ya tienes el resumen de ${name}`), h('span', { class: 'muted small' }, 'Días, tiempo, calorías, peso y récords del mes.')),
@@ -145,7 +146,7 @@ export class HomeScreen implements Screen {
             const d = addDays(monday, i), k = dayKey(d);
             const cls = 'wd' + (days.has(k) ? ' done' : '') + (k === todayKey ? ' today' : '') + (d > now ? ' future' : '');
             return h(days.has(k) ? 'button' : 'div', days.has(k)
-              ? { class: cls, 'aria-label': `Ver el entrenamiento del ${d.toLocaleDateString(LOCALE)}`, onclick: () => openDay(app, app.store.history, k, monday) }
+              ? { class: cls, 'aria-label': `Ver el entrenamiento del ${dateText(d)}`, onclick: () => openDay(app, app.store.history, k, monday) }
               : { class: cls },
               h('span', { class: 'wd-letter' }, l),
               h('span', { class: 'wd-dot' }, days.has(k) ? icon('check') : String(d.getDate())));
@@ -280,8 +281,8 @@ export function formatDate(iso: string): string {
   const today = new Date();
   const yesterday = new Date(Date.now() - 864e5);
   const same = (a: Date, b: Date) => a.toDateString() === b.toDateString();
-  const time = d.toLocaleTimeString(LOCALE, { hour: '2-digit', minute: '2-digit' });
+  const time = timeText(d, { hour: '2-digit', minute: '2-digit' });
   if (same(d, today)) return `hoy a las ${time}`;
   if (same(d, yesterday)) return `ayer a las ${time}`;
-  return d.toLocaleDateString(LOCALE, { weekday: 'long', day: 'numeric', month: 'long' });
+  return dateText(d, { weekday: 'long', day: 'numeric', month: 'long' });
 }

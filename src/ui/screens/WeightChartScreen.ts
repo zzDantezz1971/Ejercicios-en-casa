@@ -1,8 +1,9 @@
-import { DEC, LOCALE } from '../../i18n';
+import { DEC } from '../../i18n';
 import type { App, Screen } from '../App';
 import { h } from '../dom';
 import { icon } from '../icons';
 import { fmtDiff, fmtKg, smoothPath } from '../components/weightCard';
+import { dateText } from '../../i18n/fmtDate';
 
 const NS = 'http://www.w3.org/2000/svg';
 type Range = 30 | 180 | 0;
@@ -168,7 +169,7 @@ function bigChart(points: ReadonlyArray<{ date: string; kg: number }>, goal: num
     const tx = x(t);
     if (tx < pad.l + 12 || tx > W - pad.r - 12) continue;
     el('line', { x1: tx, x2: tx, y1: pad.t, y2: H - pad.b, class: 'grid v' });
-    el('text', { x: tx, y: H - 8, class: 'axis', 'text-anchor': 'middle' }, new Date(t).toLocaleDateString(LOCALE, fmt));
+    el('text', { x: tx, y: H - 8, class: 'axis', 'text-anchor': 'middle' }, dateText(new Date(t), fmt));
   }
   if (goal) {
     el('line', { x1: pad.l, x2: W - pad.r, y1: y(goal), y2: y(goal), class: 'w-goal' });
@@ -196,7 +197,7 @@ function bigChart(points: ReadonlyArray<{ date: string; kg: number }>, goal: num
   // al tocar un punto: su fecha (corta) en una etiqueta pequeña, debajo del punto
   const tip = document.createElementNS(NS, 'g');
   tip.setAttribute('class', 'w-tip');
-  const show = (i: number) => showAt(P[i][0], P[i][1], new Date(points[i].date).toLocaleDateString(LOCALE, { day: 'numeric', month: 'short' }));
+  const show = (i: number) => showAt(P[i][0], P[i][1], dateText(new Date(points[i].date), { day: 'numeric', month: 'short' }));
   const showAt = (px: number, py: number, text: string) => {
     const w = text.length * 6.6 + 14, bx = Math.min(W - pad.r - w, Math.max(pad.l, px - w / 2));
     const by = py + 30 > H - pad.b ? py - 50 : py + 10;
@@ -220,7 +221,7 @@ function bigChart(points: ReadonlyArray<{ date: string; kg: number }>, goal: num
     el('text', { x: tx, y: ty - 9, class: 'w-val', 'text-anchor': 'end' }, kg.toFixed(1).replace('.', DEC));
     el('circle', { cx: tx, cy: ty, r: 16, class: 'w-hit' }).addEventListener('click', (e) => {
       e.stopPropagation();
-      showAt(tx, ty, new Date().toLocaleDateString(LOCALE, { day: 'numeric', month: 'short' }));
+      showAt(tx, ty, dateText(new Date(), { day: 'numeric', month: 'short' }));
     });
   }
   return svg;

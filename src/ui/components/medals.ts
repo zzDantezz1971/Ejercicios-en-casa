@@ -1,8 +1,9 @@
-import { LANG, LOCALE } from '../../i18n';
+import { LANG } from '../../i18n';
 import { MEDALS, MEDAL_GROUPS, type Medal } from '../../domain/medals';
 import type { App } from '../App';
 import { h } from '../dom';
 import { icon } from '../icons';
+import { dateText } from '../../i18n/fmtDate';
 
 const TIER_NAME = { bronce: 'Bronce', plata: 'Plata', oro: 'Oro' } as const;
 
@@ -78,7 +79,7 @@ export function medalDialog(app: App, m: Medal): void {
     when
       ? h('div', { class: 'md-facts' },
           h('div', { class: 'md-fact' }, icon('calendar'), h('div', {},
-            h('strong', {}, new Date(when).toLocaleDateString(LOCALE, { day: 'numeric', month: 'long', year: 'numeric' })),
+            h('strong', {}, dateText(new Date(when), { day: 'numeric', month: 'long', year: 'numeric' })),
             h('span', { class: 'muted small' }, ago))),
           h('div', { class: 'md-fact' }, icon('trophy'), h('div', {},
             h('strong', {}, LANG === 'en' ? `${got} of ${MEDALS.length}` : LANG === 'eu' ? `${got} / ${MEDALS.length}` : `${got} de ${MEDALS.length}`),

@@ -1,10 +1,11 @@
-import { LOCALE, DEC } from '../../i18n';
+import { DEC } from '../../i18n';
 import { SECTION_IDS, SECTION_TITLES, type SectionId, type ExerciseDef, type HeartSummary, type HistoryEntry } from '../../domain/types';
 import type { App, Screen } from '../App';
 import { confirmDialog, h, humanDuration, kg, mmss, plural } from '../dom';
 import { icon, SECTION_STYLE } from '../icons';
 import { DetailScreen } from './DetailScreen';
 import { blockNav } from '../components/blockNav';
+import { dateText, timeText } from '../../i18n/fmtDate';
 
 /** Detalle de un entrenamiento del historial: qué se hizo, cuánto tiempo y repetirlo. */
 export class HistoryDetailScreen implements Screen {
@@ -15,7 +16,7 @@ export class HistoryDetailScreen implements Screen {
     const e = entry;
     const d = new Date(e.date);
     const end = new Date(d.getTime() + (e.durationSec + (e.pausedSec ?? 0)) * 1000);
-    const hm = (x: Date) => x.toLocaleTimeString(LOCALE, { hour: '2-digit', minute: '2-digit' });
+    const hm = (x: Date) => timeText(x, { hour: '2-digit', minute: '2-digit' });
     const items = e.items ?? [];
     const activeSec = items.reduce((n, i) => n + i.seconds, 0);
     const cal = app.store.caloriesFor(e);
@@ -49,7 +50,7 @@ export class HistoryDetailScreen implements Screen {
     const pos = all.findIndex((x) => x === e || x.date === e.date);
     const older = pos > 0 ? all[pos - 1] : null;
     const newer = pos >= 0 && pos < all.length - 1 ? all[pos + 1] : null;
-    const short = (x: HistoryEntry) => new Date(x.date).toLocaleDateString(LOCALE, { day: 'numeric', month: 'short' });
+    const short = (x: HistoryEntry) => dateText(new Date(x.date), { day: 'numeric', month: 'short' });
     this.older = older;
     this.newer = newer;
     this.el.append(
@@ -58,7 +59,7 @@ export class HistoryDetailScreen implements Screen {
         h('span', { class: 'bar-title' }, 'Entrenamiento')),
       h('section', { class: 'detail-body hd-body' },
         e.routineName ? h('span', { class: 'h-name' }, e.routineName) : null,
-        h('h2', { class: 'hd-date' }, d.toLocaleDateString(LOCALE, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })),
+        h('h2', { class: 'hd-date' }, dateText(d, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })),
         h('p', { class: 'muted' }, `De ${hm(d)} a ${hm(end)}`),
         older || newer
           ? h('nav', { class: 'hd-nav', 'aria-label': 'Otros entrenamientos' },
@@ -174,7 +175,7 @@ class HistoryBlockScreen implements Screen {
     const its = (entry.items ?? []).filter((i) => i.section === sec);
     const st = SECTION_STYLE[sec];
     const shown = its.map((i) => app.catalog.get(i.exerciseId)).filter((x): x is ExerciseDef => !!x);
-    const date = new Date(entry.date).toLocaleDateString(LOCALE, { weekday: 'long', day: 'numeric', month: 'long' });
+    const date = dateText(new Date(entry.date), { weekday: 'long', day: 'numeric', month: 'long' });
     const head = h('div', { class: 'tv-head' },
       h('h2', { class: 'maker-sec' }, icon(st.icon), SECTION_TITLES[sec]),
       h('span', { class: 'muted small tv-meta' }, `${plural(its.length, 'ejercicio', 'ejercicios')} · ${humanDuration(its.reduce((n, i) => n + i.seconds, 0))}`));

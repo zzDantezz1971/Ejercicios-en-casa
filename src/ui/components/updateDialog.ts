@@ -2,7 +2,7 @@ import { LANG } from '../../i18n';
 import { APP_BUILD, applyUpdate, BUILD_TIME, PREV_BUILD, previousBuild } from '../../services/Updates';
 import { IS_NATIVE } from '../../platform/native';
 import { h } from '../dom';
-import { LOCALE } from '../../i18n';
+import { dateText } from '../../i18n/fmtDate';
 
 export interface Entry { fecha: string; es: string[]; ca: string[]; en: string[]; gl?: string[]; eu?: string[] }
 
@@ -55,7 +55,7 @@ export async function showVersionNews(): Promise<void> {
   } catch {
     /* sin novedades */
   }
-  const day = (iso: string) => new Date(iso).toLocaleDateString(LOCALE, { day: 'numeric', month: 'long' });
+  const day = (iso: string) => dateText(new Date(iso), { day: 'numeric', month: 'long' });
   const days = [...new Set(entries.map((e) => day(e.fecha)))];
   const wrap = h('div', { class: 'dialog-wrap', onclick: (e: Event) => e.target === wrap && wrap.remove() },
     h('div', { class: 'dialog update-dialog', role: 'dialog', 'aria-modal': 'true' },

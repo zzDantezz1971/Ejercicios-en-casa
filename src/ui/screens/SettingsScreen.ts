@@ -1,4 +1,4 @@
-import { LANG, LANGS, LOCALE } from '../../i18n';
+import { LANG, LANGS } from '../../i18n';
 import { applyColor, applyTheme, COLOR_INFO, COLOR_THEMES, FREE_COLORS, type ColorTheme } from '../../platform/theme';
 import { flushDurable } from '../../platform/durable';
 import { showUpdateDialog, showVersionNews } from '../components/updateDialog';
@@ -17,6 +17,7 @@ import { LookScreen } from './LookScreen';
 import { GuideScreen } from './GuideScreen';
 import { append, clear, confirmDialog, h, plural } from '../dom';
 import { icon, SECTION_STYLE, type IconName } from '../icons';
+import { dateText, timeText } from '../../i18n/fmtDate';
 
 interface NumField {
   key: 'defaultSeconds' | 'sectionCountdown';
@@ -62,7 +63,7 @@ export class SettingsScreen implements Screen {
   /** Fecha y hora de la versión instalada y botón para buscar una nueva. */
   private versionSection(): HTMLElement {
     const d = new Date(BUILD_TIME);
-    const when = `${d.toLocaleDateString(LOCALE, { day: 'numeric', month: 'long', year: 'numeric' })}, ${d.toLocaleTimeString(LOCALE, { hour: '2-digit', minute: '2-digit' })}`;
+    const when = `${dateText(d, { day: 'numeric', month: 'long', year: 'numeric' })}, ${timeText(d, { hour: '2-digit', minute: '2-digit' })}`;
     if (IS_NATIVE) {
       // en la app Android las versiones nuevas llegan por Google Play
       // al tocarla: qué hay de nuevo en esta versión
@@ -319,7 +320,7 @@ export class SettingsScreen implements Screen {
     const msg = h('div', { class: `backup-last${old ? ' old' : ''}`, 'aria-live': 'polite' },
       icon(old ? 'info' : 'check'),
       last
-        ? h('div', {}, h('strong', {}, `Última copia: ${new Date(last).toLocaleDateString(LOCALE, { day: 'numeric', month: 'long', year: 'numeric' })}, ${new Date(last).toLocaleTimeString(LOCALE, { hour: '2-digit', minute: '2-digit' })}`),
+        ? h('div', {}, h('strong', {}, `Última copia: ${dateText(new Date(last), { day: 'numeric', month: 'long', year: 'numeric' })}, ${timeText(new Date(last), { hour: '2-digit', minute: '2-digit' })}`),
           h('span', { class: 'small' }, old ? `${ago}. Conviene hacer otra.` : ago))
         : h('strong', {}, 'Aún no has guardado ninguna copia.'));
     // guardar y restaurar copias es de Prémium (la copia automática de Google funciona igual)
@@ -338,7 +339,7 @@ export class SettingsScreen implements Screen {
         await confirmDialog((e as Error).message, 'Vale', '');
         return;
       }
-      const when = info.exportedAt ? ` del ${new Date(info.exportedAt).toLocaleDateString(LOCALE, { day: 'numeric', month: 'long', year: 'numeric' })}` : '';
+      const when = info.exportedAt ? ` del ${dateText(new Date(info.exportedAt), { day: 'numeric', month: 'long', year: 'numeric' })}` : '';
       const ok = await confirmDialog(
         `¿Restaurar la copia${when}? Tiene ${plural(info.routines, 'tabla', 'tablas')} y ${plural(info.history, 'entrenamiento', 'entrenamientos')}. Se borrará todo lo que hay ahora en la app (tablas, planes, historial, peso, medallas y ajustes) y se sustituirá por la copia. No se puede deshacer.`,
         'Borrar y restaurar', 'Cancelar', true);

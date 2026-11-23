@@ -1,8 +1,8 @@
-import { LOCALE } from '../i18n';
 import { SECTION_IDS, type HistoryEntry, type WeightEntry, type WeightKind } from './types';
 import { bestStreak } from './stats';
 import { weekKey } from './monthSummary';
 import { fullPlanWeek } from './weekPlan';
+import { numText } from '../i18n/fmtDate';
 
 export type Tier = 'bronce' | 'plata' | 'oro';
 export type MedalIcon = 'trophy' | 'flame' | 'clock' | 'bolt' | 'calendar' | 'target' | 'dumbbell' | 'kettlebell' | 'barbell' | 'heart' | 'check';
@@ -164,7 +164,7 @@ export const MEDALS: Medal[] = [
     ...([[300, 'plata', 'A tope'], [500, 'oro', 'Al rojo vivo']] as Array<[number, Tier, string]>)
       .map(([n, tier, title]): M => ({ id: `kcal-sesion-${n}`, tier, title, desc: `${n} kcal o más en un solo entrenamiento.`, earned: (c) => c.history.some((e) => (e.kcal ?? 0) >= n) })),
     ...([[2500, 'bronce', 'Calentando motores'], [10000, 'plata', 'Diez mil'], [25000, 'oro', 'Horno encendido'], [50000, 'oro', 'Volcán'], [100000, 'oro', 'Cien mil']] as Array<[number, Tier, string]>)
-      .map(([n, tier, title]): M => ({ id: `kcal-${n}`, tier, title, desc: `${n.toLocaleString(LOCALE)} kcal quemadas en total.`, earned: (c) => c.kcal >= n })),
+      .map(([n, tier, title]): M => ({ id: `kcal-${n}`, tier, title, desc: `${numText(n)} kcal quemadas en total.`, earned: (c) => c.kcal >= n })),
   ]),
   // Peso corporal
   ...g('peso', 'target', [

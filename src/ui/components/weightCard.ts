@@ -1,10 +1,11 @@
-import { LOCALE, DEC } from '../../i18n';
+import { DEC } from '../../i18n';
 import type { App } from '../App';
 import { actionSheet, bodyWeightDialog, h } from '../dom';
 import { icon } from '../icons';
 import { bmi, bmiCategory } from '../../domain/calories';
 import { goalProgress } from '../../domain/goal';
 import { checkAndCelebrate } from './medals';
+import { dateText } from '../../i18n/fmtDate';
 
 const NS = 'http://www.w3.org/2000/svg';
 
@@ -88,7 +89,7 @@ export function weightChart(points: ReadonlyArray<{ date: string; kg: number }>,
     el('line', { x1: pad.l, x2: W - pad.r, y1: y(goal), y2: y(goal), class: 'w-goal' });
     el('text', { x: W - pad.r - 2, y: y(goal) - 4, class: 'w-goal-label', 'text-anchor': 'end' }, `Objetivo ${String(goal).replace('.', DEC)}`);
   }
-  const short = (d: string) => new Date(d).toLocaleDateString(LOCALE, { day: 'numeric', month: 'short' });
+  const short = (d: string) => dateText(new Date(d), { day: 'numeric', month: 'short' });
   el('text', { x: x(points[0].date), y: H - 4, class: 'axis', 'text-anchor': points.length > 1 || toToday ? 'start' : 'middle' }, short(points[0].date));
   if (points.length > 1 || toToday) el('text', { x: W - pad.r, y: H - 4, class: 'axis', 'text-anchor': 'end' }, short(new Date(t1).toISOString()));
   const last = points[points.length - 1];
@@ -151,7 +152,7 @@ export function weightCards(app: App, onChange: () => void, onOpen: () => void, 
       h('div', { class: 'wa-hero' }, h('p', { class: 'muted small' }, 'Anota tu peso para ver cómo evoluciona y calcular las calorías de cada entrenamiento.'), add), objetivo)
     : (() => {
       const diff = last.kg - first.kg;
-      const when = new Date(last.date).toLocaleDateString(LOCALE, { day: 'numeric', month: 'short' });
+      const when = dateText(new Date(last.date), { day: 'numeric', month: 'short' });
       const chip = ws.length > 1 ? h('span', { class: 'wv-diff' + (diff < 0 ? ' down' : diff > 0 ? ' up' : '') }, `${diff < 0 ? '↓ ' : diff > 0 ? '↑ ' : ''}${fmtDiff(diff).replace(/^[−+]/, '')} desde el inicio`) : null;
       return h('section', { class: 'card weight-card' },
         h('div', { class: 'card-head' }, h('h3', {}, 'Peso'), h('button', { class: 'link-btn', onclick: onOpen }, 'Ver todo', icon('chevron'))),

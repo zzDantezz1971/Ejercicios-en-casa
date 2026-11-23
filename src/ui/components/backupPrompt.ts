@@ -1,9 +1,9 @@
-import { LOCALE } from '../../i18n';
 import { HAS_BACKUP, saveBackupFile } from '../../services/Backup';
 import type { App } from '../App';
 import { confirmDialog, h } from '../dom';
 import { icon } from '../icons';
 import { reminderDue, remindersOf } from '../../domain/reminders';
+import { dateText, timeText } from '../../i18n/fmtDate';
 
 export const BACKUP_EVERY_DAYS = 7;
 
@@ -37,7 +37,7 @@ export function backupDue(app: App): boolean {
 export function backupCard(app: App): HTMLElement {
   const d = app.store.daysSinceBackup();
   const last = app.store.lastBackup;
-  const when = last ? `${new Date(last).toLocaleDateString(LOCALE, { day: 'numeric', month: 'long' })}, ${new Date(last).toLocaleTimeString(LOCALE, { hour: '2-digit', minute: '2-digit' })}` : null;
+  const when = last ? `${dateText(new Date(last), { day: 'numeric', month: 'long' })}, ${timeText(new Date(last), { hour: '2-digit', minute: '2-digit' })}` : null;
   const card: HTMLElement = h('section', { class: 'card backup-prompt', role: 'region', 'aria-label': 'Copia de seguridad' },
     h('div', { class: 'bp-head' },
       h('span', { class: 'bp-icon' }, icon('copy')),

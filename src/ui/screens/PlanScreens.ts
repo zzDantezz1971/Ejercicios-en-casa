@@ -5,7 +5,7 @@ import {
   dateInWeek, dayOptions, kindLabel, MAX_DAYS, MIN_DAYS, mondayOf, nextPlanDay, planDayOn, sortDays, splitFor, trainedDates, WEEK_ORDER, ymd,
   type DayKind, type PlanDay, type WeekPlan,
 } from '../../domain/weekPlan';
-import { LOCALE, tr } from '../../i18n';
+import { tr } from '../../i18n';
 import { askNotificationPermission, REMINDERS_AVAILABLE } from '../../services/Reminders';
 import type { App, Screen } from '../App';
 import { actionSheet, clear, confirmDialog, h, humanDuration, plural, promptDialog } from '../dom';
@@ -15,6 +15,7 @@ import { icon, SECTION_STYLE, type IconName } from '../icons';
 import { startWorkout } from '../components/startWorkout';
 import { DraftBlockScreen, header, isEmptyResult, preview } from './MakerScreens';
 import { TableBlockScreen } from './TableEditScreen';
+import { dateText } from '../../i18n/fmtDate';
 
 /*
  * Plan de la semana (Prémium): asistente (objetivo, días, minutos y nivel), pantalla «Mi plan» con la semana de
@@ -27,7 +28,7 @@ const PLAN_MINUTES = [15, 20, 30, 45];
 
 /** «Lunes», «Dilluns», «Monday»… (0 = domingo). */
 export function dayName(day: number, style: 'long' | 'short' = 'long'): string {
-  const s = new Date(2024, 0, 7 + day).toLocaleDateString(LOCALE, { weekday: style });
+  const s = dateText(new Date(2024, 0, 7 + day), { weekday: style });
   return s.charAt(0).toUpperCase() + s.slice(1);
 }
 

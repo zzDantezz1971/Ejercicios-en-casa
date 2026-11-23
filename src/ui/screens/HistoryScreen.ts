@@ -1,4 +1,3 @@
-import { LOCALE } from '../../i18n';
 import { bestStreak } from '../../domain/stats';
 import { MonthScreen } from './MonthScreen';
 import type { Store } from '../../domain/Store';
@@ -10,6 +9,7 @@ import { icon, SECTION_STYLE, type IconName } from '../icons';
 import { HistoryDetailScreen } from './HistoryDetailScreen';
 import { backupCard, backupDue } from '../components/backupPrompt';
 import { HAS_BACKUP } from '../../services/Backup';
+import { dateText, timeText } from '../../i18n/fmtDate';
 
 /** Historial: récords, calendario y botones de los resúmenes semanal y mensual. */
 export class HistoryScreen implements Screen {
@@ -80,7 +80,7 @@ export class HistoryScreen implements Screen {
   private records(list: readonly HistoryEntry[]): HTMLElement {
     const { app } = this;
     const now = new Date();
-    const short = (d: Date) => d.toLocaleDateString(LOCALE, { day: 'numeric', month: 'short' });
+    const short = (d: Date) => dateText(d, { day: 'numeric', month: 'short' });
     const run = streak(list, now), best = bestStreak(list);
 
     let longest: HistoryEntry | null = null;
@@ -113,7 +113,7 @@ export class HistoryScreen implements Screen {
       h('div', { class: 'rec-row' + (topKcal ? '' : ' two') },
         longest ? tile('clock', humanDuration(longest.durationSec), 'Entreno más largo', short(new Date(longest.date))) : null,
         topKcal ? tile('flame', `${topKcal.kcal} kcal`, 'Récord de calorías', short(new Date(topKcal.e.date))) : null,
-        bm ? tile('calendar', plural(bm.days.size, 'día', 'días'), 'Mejor mes', bm.start.toLocaleDateString(LOCALE, { month: 'short', year: 'numeric' }),
+        bm ? tile('calendar', plural(bm.days.size, 'día', 'días'), 'Mejor mes', dateText(bm.start, { month: 'short', year: 'numeric' }),
           humanDuration(bm.sec)) : null));
   }
 
@@ -122,7 +122,7 @@ export class HistoryScreen implements Screen {
     const m = this.month;
     const first = startOfWeek(m);
     const today = dayKey(new Date());
-    const title = m.toLocaleDateString(LOCALE, { month: 'long', year: 'numeric' });
+    const title = dateText(m, { month: 'long', year: 'numeric' });
     const cells: HTMLElement[] = WEEKDAY_LETTERS.map((l) => h('span', { class: 'cal-wd' }, l));
     for (let i = 0; i < 42; i++) {
       const d = addDays(first, i);
@@ -130,7 +130,7 @@ export class HistoryScreen implements Screen {
       const k = dayKey(d);
       const cls = 'cal-day' + (d.getMonth() !== m.getMonth() ? ' out' : '') + (days.has(k) ? ' done' : '') + (k === today ? ' today' : '');
       cells.push(days.has(k)
-        ? h('button', { class: cls, 'aria-label': `Ver el entrenamiento del ${d.toLocaleDateString(LOCALE)}`, onclick: () => openDay(this.app, list, k) }, String(d.getDate()))
+        ? h('button', { class: cls, 'aria-label': `Ver el entrenamiento del ${dateText(d)}`, onclick: () => openDay(this.app, list, k) }, String(d.getDate()))
         : h('span', { class: cls }, String(d.getDate())));
     }
     const go = (delta: number) => {
@@ -155,10 +155,10 @@ function kcalTag(e: HistoryEntry, store: Store): HTMLElement | null {
 
 function row(e: HistoryEntry, store: Store, onOpen: () => void): HTMLElement {
   const d = new Date(e.date);
-  return h('button', { class: 'card history-row', 'aria-label': `Ver el entrenamiento del ${d.toLocaleDateString(LOCALE)}`, onclick: onOpen },
+  return h('button', { class: 'card history-row', 'aria-label': `Ver el entrenamiento del ${dateText(d)}`, onclick: onOpen },
     h('div', { class: 'h-date' },
-      h('span', { class: 'h-day' }, d.toLocaleDateString(LOCALE, { day: 'numeric' })),
-      h('span', { class: 'h-wd' }, d.toLocaleDateString(LOCALE, { weekday: 'short' }))),
+      h('span', { class: 'h-day' }, dateText(d, { day: 'numeric' })),
+      h('span', { class: 'h-wd' }, dateText(d, { weekday: 'short' }))),
     h('div', { class: 'h-main' },
       e.routineName ? h('span', { class: 'h-name' }, e.routineName) : null,
       h('strong', {}, `${humanDuration(e.durationSec)} · ${plural(e.exercisesDone, 'ejercicio', 'ejercicios')}`),
@@ -171,7 +171,7 @@ function row(e: HistoryEntry, store: Store, onOpen: () => void): HTMLElement {
         e.heart ? h('span', { class: 'h-hr' }, icon('heart'), `${e.heart.avg} ppm`) : null,
         kcalTag(e, store)),
       !e.completed ? h('span', { class: 'badge warn' }, 'Terminado antes') : null),
-    h('span', { class: 'h-time muted small' }, d.toLocaleTimeString(LOCALE, { hour: '2-digit', minute: '2-digit' })),
+    h('span', { class: 'h-time muted small' }, timeText(d, { hour: '2-digit', minute: '2-digit' })),
   );
 }
 
@@ -184,7 +184,7 @@ export function openDay(app: App, list: readonly HistoryEntry[], k: string, sinc
   const d = new Date(es[0].date);
   const wrap = h('div', { class: 'dialog-wrap', onclick: (ev: Event) => ev.target === wrap && close() },
     h('div', { class: 'dialog day-pick', role: 'dialog', 'aria-modal': 'true' },
-      h('p', { class: 'dialog-title' }, d.toLocaleDateString(LOCALE, { weekday: 'long', day: 'numeric', month: 'long' })),
+      h('p', { class: 'dialog-title' }, dateText(d, { weekday: 'long', day: 'numeric', month: 'long' })),
       ...es.map((e) => row(e, app.store, () => { close(); app.push(new HistoryDetailScreen(app, e, since)); })),
       h('div', { class: 'dialog-actions' }, h('button', { class: 'btn ghost', onclick: close }, 'Cerrar'))));
   document.body.append(wrap);

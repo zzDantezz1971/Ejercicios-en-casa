@@ -1,4 +1,3 @@
-import { LOCALE } from '../../i18n';
 import { remindersOf, type ReminderKind, type ReminderSettings } from '../../domain/reminders';
 import { allowExact, askNotificationPermission, exactAllowed, REMINDERS_AVAILABLE } from '../../services/Reminders';
 import { HAS_BACKUP } from '../../services/Backup';
@@ -6,11 +5,12 @@ import type { App, Screen } from '../App';
 import { clear, confirmDialog, h, keepScroll } from '../dom';
 import { icon, type IconName } from '../icons';
 import { planTitle } from './PlanScreens';
+import { dateText } from '../../i18n/fmtDate';
 
 /** Días de la semana empezando por el lunes (0 = domingo). */
 export const WEEK = [1, 2, 3, 4, 5, 6, 0];
 /** Nombre corto del día en el idioma de la app («dl.», «lun», «Mon»…). */
-export const dayName = (d: number) => new Date(2024, 0, d === 0 ? 7 : d).toLocaleDateString(LOCALE, { weekday: 'short' }).replace('.', '');
+export const dayName = (d: number) => dateText(new Date(2024, 0, d === 0 ? 7 : d), { weekday: 'short' }).replace('.', '');
 
 /** Cada cuántas semanas (peso y copia de seguridad). */
 export const EVERY: Array<[number, string]> = [[1, 'Cada semana'], [2, 'Cada 2 semanas'], [3, 'Cada 3 semanas'], [4, 'Cada 4 semanas']];

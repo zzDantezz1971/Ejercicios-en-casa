@@ -1,4 +1,3 @@
-import { LOCALE } from '../../i18n';
 import { mapWeights, muscleLoad } from '../../domain/muscleLoad';
 import { addMonths, addWeeks, monthKey, monthStart, monthStats, weekKey, weekStart, weekStats, type MonthStats } from '../../domain/monthSummary';
 import { MUSCLES } from '../../figure/anatomy';
@@ -9,6 +8,7 @@ import { totalBySection } from '../../domain/stats';
 import { SECTION_IDS, SECTION_TITLES, type HistoryEntry } from '../../domain/types';
 import { append, clear, h, humanDuration, kg } from '../dom';
 import { icon, SECTION_STYLE, type IconName } from '../icons';
+import { dateText } from '../../i18n/fmtDate';
 
 /** Resumen de una semana (de lunes a domingo) o de un mes, comparado con el periodo anterior. */
 export class MonthScreen implements Screen {
@@ -68,12 +68,12 @@ export class MonthScreen implements Screen {
     if (W) {
       const end = addWeeks(this.week, 1);
       end.setDate(end.getDate() - 1);
-      const f = (d: Date, o: Intl.DateTimeFormatOptions) => d.toLocaleDateString(LOCALE, o);
+      const f = (d: Date, o: Intl.DateTimeFormatOptions) => dateText(d, o);
       title = this.week.getMonth() === end.getMonth()
         ? `Del ${this.week.getDate()} al ${f(end, { day: 'numeric', month: 'long' })}`
         : `Del ${f(this.week, { day: 'numeric', month: 'short' })} al ${f(end, { day: 'numeric', month: 'short' })}`;
     } else {
-      const t0 = this.month.toLocaleDateString(LOCALE, { month: 'long', year: 'numeric' });
+      const t0 = dateText(this.month, { month: 'long', year: 'numeric' });
       title = t0.charAt(0).toUpperCase() + t0.slice(1);
     }
     const go = (d: number) => {
@@ -95,7 +95,7 @@ export class MonthScreen implements Screen {
       this.body.append(h('div', { class: 'empty-state' }, icon('calendar', 'ico big'), h('p', {}, W ? 'No hay entrenamientos en esta semana.' : 'No hay entrenamientos en este mes.')));
       return;
     }
-    const prevName = W ? 'la semana anterior' : addMonths(this.month, -1).toLocaleDateString(LOCALE, { month: 'long' });
+    const prevName = W ? 'la semana anterior' : dateText(addMonths(this.month, -1), { month: 'long' });
     const cmp = (a: number, b: number, unit: (n: number) => string): HTMLElement | null => {
       if (!prev.sessions) return null;
       const d = a - b;
