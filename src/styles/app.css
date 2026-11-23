@@ -992,6 +992,10 @@ body:has(.screen.workout) .update-banner { display: none; }
 /* Idioma */
 .lang-segs { display: flex; width: 100%; margin-top: 10px; }
 .lang-segs .seg { flex: 1; padding: 9px 6px; }
+.lang-pick { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; }
+.lang-pick .seg { grid-column: span 2; padding: 10px 4px; text-align: center; white-space: nowrap; }
+/* 5 idiomas: 3 arriba y 2 abajo, centrados */
+.lang-pick .seg:nth-child(4):nth-last-child(2) { grid-column: 2 / span 2; }
 
 /* Tu semana: metas */
 .rings-card { cursor: pointer; }

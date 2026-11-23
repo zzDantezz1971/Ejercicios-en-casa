@@ -165,7 +165,7 @@ export class SettingsScreen implements Screen {
       h('div', { class: 'rest-head' },
         h('span', { class: 'set-icon' }, icon('globe')),
         h('div', { class: 'set-text' }, h('strong', {}, 'Idioma'))),
-      h('div', { class: 'segmented lang-segs', 'data-no-tr': '' },
+      h('div', { class: 'segmented lang-segs lang-pick', 'data-no-tr': '' },
         ...LANGS.map((l) => h('button', { class: 'seg' + (l.id === LANG ? ' on' : ''), 'aria-pressed': String(l.id === LANG), lang: l.id, onclick: () => void pick(l.id) }, l.name))));
   }
 
