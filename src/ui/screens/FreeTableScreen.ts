@@ -2,7 +2,7 @@ import { WorkoutPlan, MAX_ROUNDS } from '../../domain/WorkoutPlan';
 import { MAX_SECONDS, MIN_SECONDS, STEP_SECONDS } from '../../domain/RoutineEditor';
 import { freeToRoutine, routineToFree, type ExerciseDef, type FreeEntry, type FreeNode } from '../../domain/types';
 import type { App, Screen } from '../App';
-import { actionSheet, clear, confirmDialog, h, humanDuration, plural, promptDialog } from '../dom';
+import { actionSheet, clear, confirmDialog, h, humanDuration, plural, promptDialog, holdScroll } from '../dom';
 import { sortableList, type SortableRow } from '../components/sortable';
 import { icon } from '../icons';
 import { DetailScreen } from './DetailScreen';
@@ -71,7 +71,7 @@ export class FreeTableScreen implements Screen {
   private render(): void {
     const { app } = this;
     const t = app.store.routineById(this.id);
-    const y = this.el.isConnected ? window.scrollY : -1;
+    const restore = holdScroll(this.el);
     clear(this.el);
     if (!t) { this.el.append(header(app, 'Tabla libre')); return; }
     const free = this.free;
@@ -120,7 +120,7 @@ export class FreeTableScreen implements Screen {
         h('button', { class: 'maker-add', onclick: () => void this.addRest(null) }, icon('hourglass'), 'Añadir un descanso'),
         free.filter((n) => n.kind !== 'group').length ? h('button', { class: 'maker-add', onclick: () => { this.picking = new Set(); this.render(); } }, icon('swap'), 'Repetir unos ejercicios (serie)') : null));
     }
-    if (y >= 0) window.scrollTo({ top: y });
+    restore();
   }
 
   /** Fila de un ejercicio o de un descanso: tiempo (− +) y ⋯. `at`: dónde está ([i] fuera, [i, j] dentro de una serie). */

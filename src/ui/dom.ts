@@ -224,3 +224,44 @@ export function keepScroll(body: HTMLElement, paint: () => void): void {
     window.removeEventListener('wheel', stop);
   }, 650);
 }
+
+/** El último elemento tocado (para holdScroll). */
+let lastTap: { el: Element; at: number } | null = null;
+if (typeof document !== 'undefined') document.addEventListener('pointerdown', (e) => { if (e.target instanceof Element) lastTap = { el: e.target, at: Date.now() }; }, true);
+
+/**
+ * Antes de volver a pintar una pantalla entera (al tocar + o − del tiempo, etc.): guarda dónde estaba y devuelve la
+ * función que lo deja todo igual después de pintar. Mientras se pinta, la pantalla conserva su alto: si no, la página
+ * se queda vacía un momento, el móvil cree que has subido arriba del todo (y en Chrome sale la barra de la dirección)
+ * y, al volver, todo queda un poco más arriba cada vez. Además, el botón tocado vuelve a quedar justo donde estaba.
+ */
+export function holdScroll(el: HTMLElement): () => void {
+  if (!el.isConnected) return () => undefined;
+  const y = window.scrollY;
+  // lo último que se ha tocado (el móvil no siempre le da el foco a un botón al tocarlo)
+  const tapped = lastTap && Date.now() - lastTap.at < 2000 ? lastTap.el.closest('button, [role="button"], input, select') : null;
+  const act = tapped ?? document.activeElement;
+  let path: number[] | null = null;
+  let top = 0;
+  let text: string | null = null;
+  if (act && act !== el && el.contains(act)) {
+    path = [];
+    for (let n: Element = act; n !== el && n.parentElement; n = n.parentElement) path.unshift(Array.prototype.indexOf.call(n.parentElement.children, n));
+    top = act.getBoundingClientRect().top;
+    text = act.textContent;
+  }
+  el.style.minHeight = `${el.offsetHeight}px`;
+  return () => {
+    window.scrollTo({ top: y });
+    if (path) {
+      let n: Element | undefined = el;
+      for (const i of path) n = n?.children[i];
+      // el mismo botón (mismo tipo, clase y texto; el nombre aún puede estar sin traducir): se corrige lo que se haya movido
+      if (n && n.tagName === act!.tagName && n.className === act!.className && n.textContent === text) {
+        const d = n.getBoundingClientRect().top - top;
+        if (Math.abs(d) >= 1) window.scrollBy(0, d);
+      }
+    }
+    requestAnimationFrame(() => { el.style.minHeight = ''; });
+  };
+}

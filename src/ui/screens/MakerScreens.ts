@@ -9,7 +9,7 @@ import { MAX_SECONDS, MIN_SECONDS, STEP_SECONDS } from '../../domain/RoutineEdit
 import { blockRuns, blockSeconds, emptyRoutine, newSeriesId, SECTION_IDS, sectionOrder, SECTION_TITLES, usesWeight, weightUnit, type ExerciseDef, type RoutineItem, type SectionId } from '../../domain/types';
 import { tr } from '../../i18n';
 import type { App, Screen } from '../App';
-import { actionSheet, clear, confirmDialog, h, humanDuration, kg, plural, promptDialog, weightDialog } from '../dom';
+import { actionSheet, clear, confirmDialog, h, humanDuration, kg, plural, promptDialog, weightDialog, holdScroll } from '../dom';
 import { sortableList, type SortableRow } from '../components/sortable';
 import { groupedList, listGrouping } from '../listGrouping';
 import { icon, SECTION_STYLE, type IconName } from '../icons';
@@ -506,9 +506,9 @@ export class GeneratorScreen implements Screen {
 
   /** Vuelve a pintar sin mover la pantalla (al cambiar la tabla propuesta). */
   private keepRender(): void {
-    const y = window.scrollY;
+    const restore = holdScroll(this.el);
     this.render();
-    window.scrollTo({ top: y });
+    restore();
   }
 
   private render(): void {
@@ -607,7 +607,7 @@ class TemplateScreen implements Screen {
 
   private render(): void {
     const { app, t } = this;
-    const y = this.el.isConnected ? window.scrollY : -1;
+    const restore = holdScroll(this.el);
     clear(this.el);
     this.el.append(header(app, t.name),
       h('div', { class: 'maker-body' },
@@ -619,7 +619,7 @@ class TemplateScreen implements Screen {
         }),
         h('div', { class: 'maker-actions' },
           ...saveButton(app, this.r, 'Usar esta tabla', () => void saveTable(app, tr(t.name), this.r, this.fillActive)))));
-    if (y >= 0) window.scrollTo({ top: y });
+    restore();
   }
 }
 
@@ -635,11 +635,11 @@ export class DraftBlockScreen implements Screen {
 
   private render(): void {
     const { app } = this;
-    const y = this.el.isConnected ? window.scrollY : -1;
+    const restore = holdScroll(this.el);
     clear(this.el);
     this.el.append(header(app, SECTION_TITLES[this.section], this.title),
       h('div', { class: 'maker-body' }, preview(app, this.get(), { set: (r) => { this.put(r); this.render(); }, ask: this.ask, section: this.section, rounds: true })));
-    if (y >= 0) window.scrollTo({ top: y });
+    restore();
   }
 }
 

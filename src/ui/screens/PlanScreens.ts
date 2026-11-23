@@ -8,7 +8,7 @@ import {
 import { tr } from '../../i18n';
 import { askNotificationPermission, REMINDERS_AVAILABLE } from '../../services/Reminders';
 import type { App, Screen } from '../App';
-import { actionSheet, clear, confirmDialog, h, humanDuration, plural, promptDialog } from '../dom';
+import { actionSheet, clear, confirmDialog, h, humanDuration, plural, promptDialog, holdScroll } from '../dom';
 import { formatDate } from './HomeScreen';
 import { SECTION_IDS, SECTION_TITLES, type SectionId } from '../../domain/types';
 import { icon, SECTION_STYLE, type IconName } from '../icons';
@@ -376,7 +376,7 @@ export class PlanDayScreen implements Screen {
     const plan = app.store.planById(this.planId);
     const pd = this.pd;
     const t = pd && app.store.routineById(pd.routineId);
-    const y = this.el.isConnected ? window.scrollY : -1;
+    const restore = holdScroll(this.el);
     clear(this.el);
     if (!plan || !pd || !t) { this.el.append(header(app, 'Plan de la semana')); return; }
     const r: GenResult = { routine: t.routine, rounds: { ...(t.rounds ?? {}) }, ...(t.order ? { order: t.order } : {}) };
@@ -388,7 +388,7 @@ export class PlanDayScreen implements Screen {
         h('div', { class: 'maker-actions' },
           h('button', { class: 'btn ghost block', onclick: () => { const g = generate(o, genCtx(app)); this.ask.remove = true; set(g); window.scrollTo({ top: 0 }); } }, icon('swap'), 'Otra propuesta'),
           h('button', { class: 'btn primary block big', disabled: isEmptyResult(r), onclick: () => startDay(app, plan.id, pd) }, icon('play'), 'Empezar'))));
-    if (y >= 0) window.scrollTo({ top: y });
+    restore();
   }
 }
 
@@ -403,7 +403,7 @@ class DraftDayScreen implements Screen {
 
   private render(): void {
     const { app, x, o } = this;
-    const y = this.el.isConnected ? window.scrollY : -1;
+    const restore = holdScroll(this.el);
     clear(this.el);
     const set = (next: GenResult) => { x.r = next; this.render(); };
     this.el.append(header(app, this.title, dayName(x.day)),
@@ -412,7 +412,7 @@ class DraftDayScreen implements Screen {
         h('div', { class: 'maker-actions' },
           h('button', { class: 'btn ghost block', onclick: () => { this.ask.remove = true; set(generate(o, genCtx(app))); window.scrollTo({ top: 0 }); } }, icon('swap'), 'Otra propuesta'),
           h('button', { class: 'btn primary block big', disabled: isEmptyResult(x.r), onclick: () => app.back() }, icon('check'), 'Listo'))));
-    if (y >= 0) window.scrollTo({ top: y });
+    restore();
   }
 }
 

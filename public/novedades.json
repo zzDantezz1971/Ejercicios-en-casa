@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-23T23:29:46Z",
+    "es": "Editar tabla: al tocar + o − del tiempo (o las vueltas), la pantalla ya no se va moviendo hacia arriba; el botón se queda donde estaba.",
+    "ca": "Edita la taula: en tocar + o − del temps (o les voltes), la pantalla ja no es va movent cap amunt; el botó es queda on era.",
+    "en": "Edit routine: tapping + or − on the time (or rounds) no longer makes the screen creep upwards; the button stays where it was."
+  },
+  {
     "fecha": "2026-11-23T23:13:51Z",
     "es": "Editar tabla: los botones de cambiar y quitar ejercicio son más pequeños y van alineados, y la leyenda de arriba explica los tres (mover, cambiar por otro y quitar). En la tabla libre, también el ⋯.",
     "ca": "Edita la taula: els botons de canviar i treure exercici són més petits i van alineats, i la llegenda de dalt explica els tres (moure, canviar per un altre i treure). A la taula lliure, també el ⋯.",

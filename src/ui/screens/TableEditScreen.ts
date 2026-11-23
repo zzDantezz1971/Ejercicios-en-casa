@@ -1,7 +1,7 @@
 import type { GenResult } from '../../domain/generator';
 import { SECTION_TITLES, type SectionId } from '../../domain/types';
 import type { App, Screen } from '../App';
-import { clear, h, promptDialog } from '../dom';
+import { clear, h, promptDialog, holdScroll } from '../dom';
 import { icon } from '../icons';
 import { preview } from './MakerScreens';
 import { RoutineScreen } from './RoutineScreen';
@@ -33,7 +33,7 @@ export class TableEditScreen implements Screen {
   private render(): void {
     const { app } = this;
     const t = app.store.routineById(this.id);
-    const y = this.el.isConnected ? window.scrollY : -1;
+    const restore = holdScroll(this.el);
     clear(this.el);
     const back = h('button', { class: 'icon-btn', 'aria-label': 'Volver', onclick: () => app.back() }, icon('back'));
     if (!t) { this.el.append(h('header', { class: 'bar sticky' }, back)); return; }
@@ -48,7 +48,7 @@ export class TableEditScreen implements Screen {
         } }, icon('edit'))),
       // una tarjeta por bloque (se ordenan arrastrándolas); al tocar una, se abre el bloque
       h('div', { class: 'maker-body' }, preview(app, r, { set, ask: this.ask, full: true, tableId: t.id, openSection: (s) => app.push(new TableBlockScreen(app, t.id, s)) })));
-    if (y >= 0) window.scrollTo({ top: y });
+    restore();
   }
 }
 
@@ -66,7 +66,7 @@ export class TableBlockScreen implements Screen {
   private render(): void {
     const { app } = this;
     const t = app.store.routineById(this.id);
-    const y = this.el.isConnected ? window.scrollY : -1;
+    const restore = holdScroll(this.el);
     clear(this.el);
     const back = h('button', { class: 'icon-btn', 'aria-label': 'Volver', onclick: () => app.back() }, icon('back'));
     if (!t) { this.el.append(h('header', { class: 'bar sticky' }, back)); return; }
@@ -80,6 +80,6 @@ export class TableBlockScreen implements Screen {
         if (app.store.active.id !== t.id) app.store.setActive(t.id);
         app.push(new RoutineScreen(app, sec));
       } })));
-    if (y >= 0) window.scrollTo({ top: y });
+    restore();
   }
 }
