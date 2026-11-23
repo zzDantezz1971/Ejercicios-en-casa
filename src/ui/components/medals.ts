@@ -81,7 +81,7 @@ export function medalDialog(app: App, m: Medal): void {
             h('strong', {}, new Date(when).toLocaleDateString(LOCALE, { day: 'numeric', month: 'long', year: 'numeric' })),
             h('span', { class: 'muted small' }, ago))),
           h('div', { class: 'md-fact' }, icon('trophy'), h('div', {},
-            h('strong', {}, LANG === 'en' ? `${got} of ${MEDALS.length}` : `${got} de ${MEDALS.length}`),
+            h('strong', {}, LANG === 'en' ? `${got} of ${MEDALS.length}` : LANG === 'eu' ? `${got} / ${MEDALS.length}` : `${got} de ${MEDALS.length}`),
             h('span', { class: 'muted small' }, 'medallas conseguidas'))))
       : h('p', { class: 'muted small' }, 'Sigue entrenando: cuando lo consigas, la medalla se desbloqueará sola.'),
     h('button', { class: 'btn primary block', onclick: close }, when ? (app.store.settings.profile.name ? `¡Genial, ${app.store.settings.profile.name}!` : '¡Genial!') : 'Vale'));
@@ -96,7 +96,7 @@ export function medalsCard(app: App): HTMLElement {
   const got = MEDALS.filter((m) => have[m.id]).length;
   const info = h('p', { class: 'medal-info muted small', 'aria-live': 'polite' }, 'Toca una medalla para ver su ficha.');
   return h('section', { class: 'card medals-card' },
-    h('div', { class: 'card-head' }, h('h3', {}, 'Medallas'), h('span', { class: 'muted small' }, LANG === 'en' ? `${got} of ${MEDALS.length}` : `${got} de ${MEDALS.length}`)),
+    h('div', { class: 'card-head' }, h('h3', {}, 'Medallas'), h('span', { class: 'muted small' }, LANG === 'en' ? `${got} of ${MEDALS.length}` : LANG === 'eu' ? `${got} / ${MEDALS.length}` : `${got} de ${MEDALS.length}`)),
     h('div', { class: 'medal-grid' }, ...MEDALS.map((m) => {
       const when = have[m.id];
       return h('button', {
@@ -121,7 +121,7 @@ export function medalsBoard(app: App): HTMLElement[] {
   };
   const summary = h('section', { class: 'card medals-summary' },
     h('div', { class: 'mb-top' },
-      h('div', {}, h('strong', { class: 'mb-big' }, String(got.length)), h('span', { class: 'muted' }, LANG === 'en' ? ` of ${MEDALS.length}` : ` de ${MEDALS.length}`)),
+      h('div', {}, h('strong', { class: 'mb-big' }, String(got.length)), h('span', { class: 'muted' }, LANG === 'en' ? ` of ${MEDALS.length}` : LANG === 'eu' ? ` / ${MEDALS.length}` : ` de ${MEDALS.length}`)),
       h('span', { class: 'mb-pct' }, `${pct} %`)),
     h('span', { class: 'mb-bar' }, bar),
     h('div', { class: 'mb-tiers' }, tierCount('oro'), tierCount('plata'), tierCount('bronce')),

@@ -801,7 +801,7 @@ export class Store {
     if (!SEXES.includes(settings.profile.sex)) settings.profile.sex = DEFAULT_SETTINGS.profile.sex;
     // antes eran frases propias; ahora solo se elige si se muestran
     settings.phrases = typeof known.phrases === 'boolean' ? known.phrases : true;
-    if (!['ca', 'es', 'en'].includes(settings.lang)) settings.lang = 'ca';
+    if (!['ca', 'es', 'en', 'gl', 'eu'].includes(settings.lang)) settings.lang = 'ca';
     if (!['dark', 'light', 'auto'].includes(settings.theme)) settings.theme = 'dark';
     // antes solo había «bajar la música» (sí / no); quien lo tenía apagado sigue sin tocarla
     if (!['pause', 'duck', 'off'].includes(known.musicMode as string)) settings.musicMode = known.duckMusic === false ? 'off' : 'duck';

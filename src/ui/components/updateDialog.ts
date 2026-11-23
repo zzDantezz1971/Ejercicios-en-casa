@@ -4,7 +4,7 @@ import { IS_NATIVE } from '../../platform/native';
 import { h } from '../dom';
 import { LOCALE } from '../../i18n';
 
-export interface Entry { fecha: string; es: string[]; ca: string[]; en: string[] }
+export interface Entry { fecha: string; es: string[]; ca: string[]; en: string[]; gl?: string[]; eu?: string[] }
 
 /** Lee las novedades de la versión nueva (siempre del servidor, nunca de la copia guardada). */
 async function loadNews(): Promise<string[]> {

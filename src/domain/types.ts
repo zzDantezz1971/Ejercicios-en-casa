@@ -208,7 +208,7 @@ export interface Settings {
   listSort?: 'zona' | 'musculo' | 'material' | 'az' | 'personalizada';
   profile: Profile;
   /** Idioma de la app. */
-  lang: 'ca' | 'es' | 'en';
+  lang: 'ca' | 'es' | 'en' | 'gl' | 'eu';
   /** Tema de la interfaz. */
   theme: 'dark' | 'light' | 'auto';
   /** Tema de color (Configuración › Pantalla): «blau» es el de siempre. */

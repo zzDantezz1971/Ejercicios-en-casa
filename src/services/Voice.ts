@@ -4,7 +4,9 @@ import { IS_NATIVE } from '../platform/native';
 import { KasaNative } from '../platform/kasaNative';
 import { duckWhile, loudVoice, stopSpeechDuck } from './MusicDuck';
 
-const CODE: Record<Lang, string> = { ca: 'ca', es: 'es', en: 'en' };
+const CODE: Record<Lang, string> = { ca: 'ca', es: 'es', en: 'en', gl: 'gl', eu: 'eu' };
+/** Código de cada idioma para el motor de voz. */
+export const VOICE_CODE: Record<Lang, string> = { ca: 'ca-ES', es: 'es-ES', en: 'en-GB', gl: 'gl-ES', eu: 'eu-ES' };
 
 /** Como mucho, tantas voces por idioma en la lista para elegir. */
 const MAX_VOICES = 3;
@@ -81,7 +83,7 @@ export class Voice {
 
   /** En la app Android se usa el motor de voz del sistema (el WebView no tiene síntesis de voz). */
   private async pickNative(): Promise<void> {
-    const want = ({ ca: 'ca-ES', es: 'es-ES', en: 'en-GB' } as const)[LANG];
+    const want = VOICE_CODE[LANG];
     try {
       const { languages } = await TextToSpeech.getSupportedLanguages();
       const has = (code: string) => languages.some((l) => l.replace('_', '-').toLowerCase() === code.toLowerCase() || l.toLowerCase().startsWith(code.slice(0, 2).toLowerCase()));
@@ -163,7 +165,7 @@ export class Voice {
     if (!this.synth) return;
     if (!queue) this.synth.cancel();
     const u = new SpeechSynthesisUtterance(text);
-    u.lang = this.voice?.lang ?? ({ ca: 'ca-ES', es: 'es-ES', en: 'en-GB' } as const)[this.lang];
+    u.lang = this.voice?.lang ?? VOICE_CODE[this.lang];
     if (this.voice) u.voice = this.voice;
     u.rate = queue ? 1.15 : 1.02;
     this.synth.speak(u);

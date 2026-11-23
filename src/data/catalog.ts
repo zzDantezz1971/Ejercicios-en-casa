@@ -60,7 +60,7 @@ const ONE_SIDED = new Set([
  * Nombres sin la parte en inglés entre paréntesis (la voz en castellano o catalán la pronunciaba mal).
  * El identificador sigue saliendo del nombre original, así las tablas y el historial guardados no cambian.
  */
-const PLAIN_NAMES: Record<string, { es: string; ca: string; en?: string }> = {
+const PLAIN_NAMES: Record<string, { es: string; ca: string; en?: string; gl?: string; eu?: string }> = {
   'saltos-de-tijera-jumping-jacks': { es: 'Saltos de tijera', ca: 'Salts de tisora' },
   'dead-bug-bicho-muerto': { es: 'Bicho muerto', ca: 'Insecte mort' },
   'bird-dog-perro-de-caza': { es: 'Perro de caza', ca: 'Gos de caça' },

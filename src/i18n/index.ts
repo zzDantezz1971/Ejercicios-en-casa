@@ -1,4 +1,4 @@
-/* Idiomas de la app: catalán (por defecto), castellano e inglés.
+/* Idiomas de la app: catalán (por defecto), castellano, inglés, gallego y euskera.
    La app está escrita en castellano; aquí se traduce al idioma elegido. */
 import { EX1, type ExT } from './ex1';
 import { EX2 } from './ex2';
@@ -6,13 +6,25 @@ import { EX3 } from './ex3';
 import { EX4, GROUPS } from './ex4';
 import { UI_CA, UI_EN } from './ui';
 import { EXTRA_GROUPS, EXTRA_T } from '../data/extra';
+import { UI_GL } from './gl/ui';
+import { UI_EU } from './eu/ui';
+import { EX_GL, GROUPS_GL } from './gl/ex';
+import { EX_EU, GROUPS_EU } from './eu/ex';
+import { IS_NATIVE } from '../platform/native';
 
-export type Lang = 'ca' | 'es' | 'en';
+export type Lang = 'ca' | 'es' | 'en' | 'gl' | 'eu';
+
+/**
+ * Gallego y euskera: en la web, ya; en la app de Android, desde la versión 21 (el build 20 se publica sin ellos).
+ */
+const BUILD = typeof __APP_BUILD__ !== 'undefined' ? Number(__APP_BUILD__) || 0 : 0;
+export const NEW_LANGS = typeof window === 'undefined' || !IS_NATIVE || BUILD >= 21;
 
 export const LANGS: Array<{ id: Lang; name: string }> = [
   { id: 'ca', name: 'Català' },
   { id: 'es', name: 'Castellano' },
   { id: 'en', name: 'English' },
+  ...(NEW_LANGS ? [{ id: 'gl' as const, name: 'Galego' }, { id: 'eu' as const, name: 'Euskara' }] : []),
 ];
 
 function readLang(): Lang {
@@ -20,6 +32,7 @@ function readLang(): Lang {
   try {
     const l = JSON.parse(localStorage.getItem('ejercicios-en-casa') ?? '{}')?.settings?.lang;
     if (l === 'ca' || l === 'es' || l === 'en') return l;
+    if ((l === 'gl' || l === 'eu') && NEW_LANGS) return l;
   } catch {
     /* sin datos: idioma por defecto */
   }
@@ -29,22 +42,28 @@ function readLang(): Lang {
 /** Idioma en uso (se fija al abrir la app; al cambiarlo, la app se recarga). */
 export const LANG: Lang = readLang();
 /** Formato de fechas y números del idioma. */
-export const LOCALE = ({ ca: 'ca-ES', es: 'es-ES', en: 'en-GB' } as const)[LANG];
+export const LOCALE = ({ ca: 'ca-ES', es: 'es-ES', en: 'en-GB', gl: 'gl-ES', eu: 'eu-ES' } as const)[LANG];
 /** Separador decimal (7,5 kg / 7.5 kg). */
 export const DEC = LANG === 'en' ? '.' : ',';
 /** Código de idioma para la voz. */
 export const VOICE_LANG = LOCALE;
 
 const EX: Record<string, { ca: ExT; en: ExT }> = { ...EX1, ...EX2, ...EX3, ...EX4, ...EXTRA_T };
+const EX_NEW: Record<'gl' | 'eu', Record<string, ExT>> = { gl: EX_GL, eu: EX_EU };
+
+/** Textos de un ejercicio en un idioma (sin castellano). */
+function exIn(id: string, lang: Exclude<Lang, 'es'>): ExT | undefined {
+  return lang === 'gl' || lang === 'eu' ? EX_NEW[lang][id] : EX[id]?.[lang];
+}
 
 /** Textos de un ejercicio en el idioma en uso (o undefined en castellano). */
 export function exerciseText(id: string): ExT | undefined {
   if (LANG === 'es') return undefined;
-  return EX[id]?.[LANG];
+  return exIn(id, LANG);
 }
 
-export function hasExerciseText(id: string, lang: 'ca' | 'en'): boolean {
-  return !!EX[id]?.[lang];
+export function hasExerciseText(id: string, lang: Exclude<Lang, 'es'>): boolean {
+  return !!exIn(id, lang);
 }
 
 /* ── Diccionario de la interfaz: texto en castellano → traducción ── */
@@ -55,8 +74,12 @@ const patterns: Array<{ re: RegExp; keys: string[]; out: string }> = [];
 
 function load(lang: Lang): void {
   if (lang === 'es') return;
-  const ui = lang === 'ca' ? UI_CA : UI_EN;
-  for (const [es, tr] of Object.entries({ ...GROUPS, ...EXTRA_GROUPS })) exact[es] = tr[lang];
+  const ui = { ca: UI_CA, en: UI_EN, gl: UI_GL, eu: UI_EU }[lang];
+  const groups = { ...GROUPS, ...EXTRA_GROUPS };
+  if (lang === 'gl' || lang === 'eu') {
+    const g = lang === 'gl' ? GROUPS_GL : GROUPS_EU;
+    for (const es of Object.keys(groups)) if (g[es]) exact[es] = g[es];
+  } else for (const [es, tr] of Object.entries(groups)) exact[es] = tr[lang];
   for (const [es, t] of Object.entries(ui)) {
     if (/\{\w+\}/.test(es)) {
       const keys: string[] = [];
@@ -84,7 +107,7 @@ const missing = new Set<string>();
 const known = new Set<string>();
 if (LANG !== 'es') {
   Object.values(exact).forEach((v) => known.add(v));
-  Object.values(EX).forEach((e) => e[LANG].forEach((t) => t && known.add(t)));
+  Object.keys(EX).forEach((id) => exIn(id, LANG as Exclude<Lang, 'es'>)?.forEach((t) => t && known.add(t)));
 }
 
 /** Traduce un texto en castellano al idioma en uso. Si no se conoce, se deja como está. */

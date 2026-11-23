@@ -1,3 +1,5 @@
+import { PHRASES_GL } from '../i18n/gl/phrases';
+import { PHRASES_EU } from '../i18n/eu/phrases';
 /* Frases motivadoras. {n} se sustituye por el nombre (o desaparece si no hay). */
 import { LANG } from '../i18n';
 
@@ -460,7 +462,9 @@ const PHRASES_EN: string[] = [
 ];
 
 /** Frases de la app en el idioma en uso. */
-export const PHRASES: string[] = LANG === 'ca' ? PHRASES_CA : LANG === 'en' ? PHRASES_EN : PHRASES_ES;
+// gallego y euskera: sus frases (mientras no estén, las de castellano)
+const pick = (l: string[]) => (l.length ? l : PHRASES_ES);
+export const PHRASES: string[] = LANG === 'ca' ? PHRASES_CA : LANG === 'en' ? PHRASES_EN : LANG === 'gl' ? pick(PHRASES_GL) : LANG === 'eu' ? pick(PHRASES_EU) : PHRASES_ES;
 
 
 /** Sustituye {n} / {, n} por el nombre. */

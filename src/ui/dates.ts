@@ -63,4 +63,6 @@ export const WEEKDAY_LETTERS = {
   es: ['L', 'M', 'X', 'J', 'V', 'S', 'D'],
   ca: ['Dl', 'Dt', 'Dc', 'Dj', 'Dv', 'Ds', 'Dg'],
   en: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
+  gl: ['L', 'M', 'Mé', 'X', 'V', 'S', 'D'],
+  eu: ['Al', 'Ar', 'Az', 'Og', 'Or', 'Lr', 'Ig'],
 }[LANG];

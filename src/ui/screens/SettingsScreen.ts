@@ -490,6 +490,8 @@ export class SettingsScreen implements Screen {
             es: 'Así sonarán los avisos. Siguiente: curl de bíceps.',
             ca: 'Així sonaran els avisos. Següent: curl de bíceps.',
             en: 'This is how the alerts will sound. Next up: bicep curl.',
+            gl: 'Así soarán os avisos. Seguinte: curl de bíceps.',
+            eu: 'Horrela entzungo dira abisuak. Hurrengoa: bizeps curla.',
           }[this.app.voice.lang]);
         },
       }, icon('volume'), 'Probar sonido y voz'),
@@ -521,7 +523,7 @@ export class SettingsScreen implements Screen {
         h('span', { class: 'set-icon' }, icon('voice')),
         h('span', { class: 'set-text' }, h('strong', {}, 'Voz'), h('span', { class: 'muted block small' }, 'Escucha las voces de tu móvil con ▶ y elige la que más te guste (de hombre o de mujer).'))),
       list);
-    const sample = { es: 'Hola, así sonarán los avisos.', ca: 'Hola, així sonaran els avisos.', en: 'Hi, this is how the alerts will sound.' }[this.app.voice.lang];
+    const sample = { es: 'Hola, así sonarán los avisos.', ca: 'Hola, així sonaran els avisos.', en: 'Hi, this is how the alerts will sound.', gl: 'Ola, así soarán os avisos.', eu: 'Kaixo, horrela entzungo dira abisuak.' }[this.app.voice.lang];
     void this.app.voice.voices().then((voices) => {
       let cur = this.app.store.settings.voiceId ?? '';
       // los nombres técnicos de Android (es-es-x-eed-local…) no dicen nada: «Voz 1, 2, 3…»; los del navegador sí

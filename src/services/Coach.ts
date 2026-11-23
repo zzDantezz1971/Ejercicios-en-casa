@@ -5,7 +5,7 @@ import type { Haptics } from './Haptics';
 import type { Sounds } from './Sounds';
 import type { Voice } from './Voice';
 
-type VoiceLang = 'es' | 'ca' | 'en';
+type VoiceLang = 'es' | 'ca' | 'en' | 'gl' | 'eu';
 
 /** Frases que dice la voz, en cada idioma. */
 const VT: Record<VoiceLang, {
@@ -17,6 +17,10 @@ const VT: Record<VoiceLang, {
     secDone: '{a}: fet. Toca la pantalla per continuar amb {b}', sw: 'Canvi de costat', done: 'Bona feina{n}! Entrenament acabat.', doneEarly: 'Ben fet{n}! Entrenament acabat.', time: 'Temps d’exercici: {t}.', min: '{m} minuts', min1: 'un minut', sec: '{m} segons', sec1: 'un segon', hr: '{m} hores', hr1: 'una hora', kcal: ' S’han cremat aproximadament {k} calories.',  count: ['', 'un', 'dos', 'tres'] },
   en: { prepare: '{s}. Get ready. First exercise: {x}', round: 'Round {a} of {b}. ', half: '. Switch sides halfway', rest: 'Rest. Next up: {x}',
     secDone: '{a} done. Tap the screen to continue with {b}', sw: 'Switch sides', done: 'Great job{n}! Workout complete.', doneEarly: 'Well done{n}! Workout complete.', time: 'Exercise time: {t}.', min: '{m} minutes', min1: 'one minute', sec: '{m} seconds', sec1: 'one second', hr: '{m} hours', hr1: 'one hour', kcal: ' About {k} calories burned.',  count: ['', 'one', 'two', 'three'] },
+  gl: { prepare: '{s}. Prepárate. Primeiro exercicio: {x}', round: 'Volta {a} de {b}. ', half: '. Á metade, cambio de lado', rest: 'Descanso. Seguinte: {x}',
+    secDone: '{a} rematado. Toca a pantalla para continuar con {b}', sw: 'Cambio de lado', done: 'Bo traballo{n}! Adestramento rematado.', doneEarly: 'Ben feito{n}! Adestramento rematado.', time: 'Tempo de exercicio: {t}.', min: '{m} minutos', min1: 'un minuto', sec: '{m} segundos', sec1: 'un segundo', hr: '{m} horas', hr1: 'unha hora', kcal: ' Queimáronse arredor de {k} calorías.', count: ['', 'un', 'dous', 'tres'] },
+  eu: { prepare: '{s}. Prest egon. Lehen ariketa: {x}', round: '{a}. itzulia, guztira {b}. ', half: '. Erdian, aldatu aldea', rest: 'Atsedena. Hurrengoa: {x}',
+    secDone: '{a}: eginda. Ukitu pantaila jarraitzeko. Hurrengoa: {b}', sw: 'Aldatu aldea', done: 'Lan bikaina{n}! Entrenamendua amaitu da.', doneEarly: 'Ondo egina{n}! Entrenamendua amaitu da.', time: 'Ariketa denbora: {t}.', min: '{m} minutu', min1: 'minutu bat', sec: '{m} segundo', sec1: 'segundo bat', hr: '{m} ordu', hr1: 'ordu bat', kcal: ' Gutxi gorabehera {k} kaloria erre dira.', count: ['', 'bat', 'bi', 'hiru'] },
 };
 
 function fill(t: string, v: Record<string, string | number>): string {
@@ -113,6 +117,8 @@ export function speakKg(w: number, lang: VoiceLang = 'es'): string {
     es: { half0: 'medio kilo', one: 'un kilo', many: (n: number) => `${n} kilos`, andHalf: (b: string) => `${b} y medio` },
     ca: { half0: 'mig quilo', one: 'un quilo', many: (n: number) => `${n} quilos`, andHalf: (b: string) => `${b} i mig` },
     en: { half0: 'half a kilo', one: 'one kilo', many: (n: number) => `${n} kilos`, andHalf: (_b: string) => `${whole} and a half kilos` },
+    gl: { half0: 'medio quilo', one: 'un quilo', many: (n: number) => `${n} quilos`, andHalf: (b: string) => `${b} e medio` },
+    eu: { half0: 'kilo erdi', one: 'kilo bat', many: (n: number) => `${n} kilo`, andHalf: (_b: string) => `${whole} kilo eta erdi` },
   }[lang];
   if (whole === 0) return W.half0;
   const base = whole === 1 ? W.one : W.many(whole);
@@ -124,6 +130,8 @@ function speakSeconds(s: number, lang: VoiceLang = 'es'): string {
     es: { sec: 'segundos', min1: 'un minuto', mins: 'minutos', and: 'y' },
     ca: { sec: 'segons', min1: 'un minut', mins: 'minuts', and: 'i' },
     en: { sec: 'seconds', min1: 'one minute', mins: 'minutes', and: 'and' },
+    gl: { sec: 'segundos', min1: 'un minuto', mins: 'minutos', and: 'e' },
+    eu: { sec: 'segundo', min1: 'minutu bat', mins: 'minutu', and: 'eta' },
   }[lang];
   if (s < 60) return `${s} ${W.sec}`;
   const m = Math.floor(s / 60);
