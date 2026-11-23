@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-23T15:39:53Z",
+    "es": "Mis tablas sin ninguna tabla: el aviso solo dice que vayas a Inicio para crear tu primera tabla.",
+    "ca": "Les meves taules sense cap taula: l’avís només diu que vagis a Inici per crear la teva primera taula.",
+    "en": "My routines with no routines: the notice just tells you to go to Home to create your first routine."
+  },
+  {
     "fecha": "2026-11-23T15:36:20Z",
     "es": "Mis tablas sin ninguna tabla: un aviso «Todavía no tienes ninguna tabla» con el botón «Ir a Inicio» para crear la primera.",
     "ca": "Les meves taules sense cap taula: un avís «Encara no tens cap taula» amb el botó «Ves a Inici» per crear la primera.",

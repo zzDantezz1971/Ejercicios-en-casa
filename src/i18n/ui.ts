@@ -1307,7 +1307,7 @@ const ROWS: Row[] = [
   ['Elige una ya preparada (espalda, pilates, fuerza…) y empieza', 'Tria’n una ja preparada (esquena, pilates, força…) i comença', 'Pick a ready-made one (back, Pilates, strength…) and start'],
   ['Tablas ya preparadas por objetivo. Toca una para ver sus ejercicios y su tiempo; si quieres, cambia lo que no te guste y pulsa «Usar esta tabla»: se guarda en tus tablas y ya puedes empezar.', 'Taules ja preparades per objectiu. Toca’n una per veure’n els exercicis i el temps; si vols, canvia el que no t’agradi i prem «Fes servir aquesta taula»: es desa a les teves taules i ja pots començar.', 'Ready-made routines by goal. Tap one to see its exercises and time; change anything you don’t like and tap «Use this routine»: it’s saved to your routines and you can start.'],
   ['Todavía no tienes ninguna tabla', 'Encara no tens cap taula', 'You don’t have any routines yet'],
-  ['Ve a Inicio para crear la primera: vacía, libre o, con Prémium, hecha por la app.', 'Ves a Inici per crear la primera: buida, lliure o, amb Prémium, feta per l’app.', 'Go to Home to create your first one: empty, free or, with Premium, made by the app.'],
+  ['Ve a Inicio para crear tu primera tabla.', 'Ves a Inici per crear la teva primera taula.', 'Go to Home to create your first routine.'],
   ['Ir a Inicio', 'Ves a Inici', 'Go to Home'],
 ];
 

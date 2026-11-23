@@ -76,7 +76,7 @@ export class TablesScreen implements Screen {
       this.body.append(h('section', { class: 'card tables-empty' },
         h('span', { class: 'tables-empty-icon' }, icon('tables')),
         h('h2', {}, 'Todavía no tienes ninguna tabla'),
-        h('p', { class: 'muted' }, 'Ve a Inicio para crear la primera: vacía, libre o, con Prémium, hecha por la app.'),
+        h('p', { class: 'muted' }, 'Ve a Inicio para crear tu primera tabla.'),
         h('button', { class: 'btn primary block', onclick: () => this.app.openTab('inicio') }, icon('home'), 'Ir a Inicio')));
       return;
     }
