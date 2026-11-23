@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-23T20:26:32Z",
+    "es": "Voz en gallego y euskera (app Android): ahora se comprueba qué motor de voz tiene de verdad una voz instalada en el idioma (Google dice que los tiene, pero lee en castellano), y se usa ese, como AhoTTS. En Ajustes › Avisos › Voz, «Detalles técnicos» enseña qué contesta cada motor.",
+    "ca": "Veu en gallec i basc (app Android): ara es comprova quin motor de veu té de debò una veu instal·lada en l’idioma (Google diu que els té, però llegeix en castellà), i es fa servir aquest, com AhoTTS. A Ajustos › Avisos › Veu, «Detalls tècnics» ensenya què contesta cada motor.",
+    "en": "Galician and Basque voice (Android app): the app now checks which voice engine really has a voice installed for the language (Google claims to, but reads in Spanish) and uses that one, such as AhoTTS. In Settings › Alerts › Voice, “Technical details” shows what each engine reports."
+  },
+  {
     "fecha": "2026-11-23T20:17:34Z",
     "es": "Voz en gallego y euskera (app Android): si tienes instalado otro motor de voz con el idioma, como AhoTTS, los avisos lo usan solos, sin cambiar el motor de voz del móvil. Si no lo tienes, Ajustes › Avisos te lleva a buscarlo en Google Play.",
     "ca": "Veu en gallec i basc (app Android): si tens instal·lat un altre motor de veu amb l’idioma, com AhoTTS, els avisos el fan servir sols, sense canviar el motor de veu del mòbil. Si no el tens, Ajustos › Avisos et porta a cercar-lo a Google Play.",

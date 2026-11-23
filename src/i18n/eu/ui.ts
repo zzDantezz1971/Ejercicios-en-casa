@@ -1262,4 +1262,5 @@ export const UI_EU: Record<string, string> = {
   "Google no tiene esta voz. Instala gratis la app AhoTTS desde Google Play, ábrela y descarga el idioma. Kasa Fit la usará sola, sin cambiar nada más del móvil.": "Google-k ez du ahots hau. Instalatu doan AhoTTS aplikazioa Google Playtik, ireki eta deskargatu hizkuntza. Kasa Fitek berak erabiliko du, mugikorrean beste ezer aldatu gabe.",
   "Buscar AhoTTS en Google Play": "Bilatu AhoTTS Google Playn",
   "Motor de voz: {x}.": "Ahots-motorra: {x}.",
+  "Detalles técnicos": "Xehetasun teknikoak",
 };

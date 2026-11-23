@@ -1,7 +1,7 @@
 import { TextToSpeech } from '@capacitor-community/text-to-speech';
 import { LANG, type Lang } from '../i18n';
 import { IS_NATIVE } from '../platform/native';
-import { KasaNative } from '../platform/kasaNative';
+import { KasaNative, type EngineStatus } from '../platform/kasaNative';
 import { duckWhile, loudVoice, stopSpeechDuck } from './MusicDuck';
 
 const CODE: Record<Lang, string> = { ca: 'ca', es: 'es', en: 'en', gl: 'gl', eu: 'eu' };
@@ -88,29 +88,45 @@ export class Voice {
     this.synth.addEventListener?.('voiceschanged', pick);
   }
 
-  /** En la app Android se usa el motor de voz del sistema (el WebView no tiene síntesis de voz). */
+  /** Lo que ha contestado cada motor de voz del móvil (para la línea de detalles de Ajustes). */
+  report: EngineStatus[] = [];
+
+  /**
+   * App Android: ¿quién dice los avisos? El motor del móvil si tiene una voz de verdad para el idioma; si no, otro
+   * motor instalado que la tenga (p. ej., AhoTTS para gallego o euskera); si ninguno, en castellano.
+   * Ojo: Google contesta que «tiene» idiomas que solo puede descargar o usar por internet (y luego lee con su voz
+   * castellana), así que no basta con su lista de idiomas: hace falta una voz instalada.
+   */
   private async pickNative(): Promise<void> {
     const want = VOICE_CODE[LANG];
+    const st = await KasaNative.voiceStatus({ lang: want }).catch(() => null);
+    if (st && st.engines.length) {
+      this.report = st.engines;
+      const def = st.engines.find((e) => e.isDefault) ?? st.engines.find((e) => e.engine === st.default);
+      const pick = chooseEngine(st.engines, def?.engine);
+      if (pick === 'default') {
+        this.engine = null;
+        this.nativeLang = want;
+        this.lang = LANG;
+      } else if (pick) {
+        this.engine = { id: pick.engine, label: pick.label, voices: (pick.voices ?? []).filter((v) => v.installed) };
+        this.nativeLang = pick.locale || want;
+        this.lang = LANG;
+      } else {
+        this.engine = null;
+        this.nativeLang = 'es-ES';
+        this.lang = 'es';
+      }
+      if (this.chosenId) void this.useVoice(this.chosenId);
+      return;
+    }
+    // sin la función nueva (o sin respuesta): como antes, con la lista de idiomas del motor del móvil
     try {
       const { languages } = await TextToSpeech.getSupportedLanguages();
       const has = (code: string) => languages.some((l) => l.replace('_', '-').toLowerCase() === code.toLowerCase() || l.toLowerCase().startsWith(code.slice(0, 2).toLowerCase()));
       this.engine = null;
-      if (!languages.length || has(want)) {
-        this.nativeLang = want;
-        this.lang = LANG;
-        return;
-      }
-      // el motor del móvil no tiene el idioma: ¿lo tiene otro motor instalado?
-      const found = await KasaNative.findEngine({ lang: want }).catch(() => ({} as { engine?: string; label?: string; voices?: Array<{ name: string; lang: string }> }));
-      if (found.engine) {
-        this.engine = { id: found.engine, label: found.label || found.engine, voices: found.voices ?? [] };
-        this.nativeLang = want;
-        this.lang = LANG;
-        if (this.chosenId) void this.useVoice(this.chosenId);
-      } else {
-        this.nativeLang = 'es-ES';
-        this.lang = 'es';
-      }
+      this.nativeLang = !languages.length || has(want) ? want : 'es-ES';
+      this.lang = this.nativeLang === want ? LANG : 'es';
     } catch {
       this.nativeLang = want;
     }
@@ -221,4 +237,18 @@ export class Voice {
     }
     this.synth?.cancel();
   }
+}
+
+/** ¿El motor tiene de verdad el idioma? Lo dice que sí y, si da la lista de voces, alguna está instalada en el móvil. */
+export function engineHas(e: EngineStatus): boolean {
+  if (e.avail < 0) return false;
+  const v = e.voices ?? [];
+  return v.length === 0 || v.some((x) => x.installed);
+}
+
+/** 'default' = el motor del móvil; un motor = ese otro; null = ninguno tiene el idioma (se habla en castellano). */
+export function chooseEngine(engines: EngineStatus[], defEngine: string | undefined): EngineStatus | 'default' | null {
+  const def = engines.find((e) => e.engine === defEngine);
+  if (def && engineHas(def)) return 'default';
+  return engines.find((e) => e.engine !== defEngine && engineHas(e)) ?? (def ? null : 'default');
 }

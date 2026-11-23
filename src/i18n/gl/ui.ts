@@ -1262,4 +1262,5 @@ export const UI_GL: Record<string, string> = {
   "Google no tiene esta voz. Instala gratis la app AhoTTS desde Google Play, ábrela y descarga el idioma. Kasa Fit la usará sola, sin cambiar nada más del móvil.": "Google non ten esta voz. Instala de balde a app AhoTTS desde Google Play, ábrea e descarga o idioma. Kasa Fit usaraa soa, sen cambiar nada máis do móbil.",
   "Buscar AhoTTS en Google Play": "Buscar AhoTTS en Google Play",
   "Motor de voz: {x}.": "Motor de voz: {x}.",
+  "Detalles técnicos": "Detalles técnicos",
 };

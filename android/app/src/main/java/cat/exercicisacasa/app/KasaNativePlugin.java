@@ -207,71 +207,96 @@ public class KasaNativePlugin extends Plugin {
         call.resolve(r);
     }
 
-    // ---------- otro motor de voz para el idioma ----------
+    // ---------- motores de voz para el idioma ----------
 
     /**
-     * Busca, entre los motores de voz instalados, uno que tenga el idioma (p. ej., gallego o euskera, que el de Google
-     * no tiene). Se prueban uno a uno: se arranca cada motor, se le pregunta por el idioma y se apaga. Devuelve el
-     * paquete del motor, su nombre y sus voces de ese idioma; o nada si ninguno lo tiene. No cambia el motor del móvil.
+     * Pregunta a cada motor de voz instalado (Google, AhoTTS…) si tiene el idioma: se arranca cada motor, se le
+     * pregunta y se apaga. Devuelve, por motor: paquete, nombre, si es el del móvil, la respuesta a «¿tienes este
+     * idioma?» (isLanguageAvailable: 0, 1 o 2 = sí; -1 = faltan los datos; -2 = no), el idioma con que hay que
+     * pedírselo y sus voces de ese idioma (instalada o no, y si necesita internet). No cambia el motor del móvil.
      */
     @PluginMethod
-    public void findEngine(PluginCall call) {
+    public void voiceStatus(PluginCall call) {
         final Locale loc = Locale.forLanguageTag(call.getString("lang", "es-ES"));
-        List<ResolveInfo> found = getContext().getPackageManager().queryIntentServices(new Intent(TextToSpeech.Engine.INTENT_ACTION_TTS_SERVICE), 0);
+        PackageManager pm = getContext().getPackageManager();
+        List<ResolveInfo> found = pm.queryIntentServices(new Intent(TextToSpeech.Engine.INTENT_ACTION_TTS_SERVICE), 0);
         final List<String[]> engines = new ArrayList<>();
         for (ResolveInfo ri : found) {
             if (ri.serviceInfo == null) continue;
-            CharSequence label = ri.loadLabel(getContext().getPackageManager());
+            CharSequence label = ri.loadLabel(pm);
             engines.add(new String[] { ri.serviceInfo.packageName, label == null ? ri.serviceInfo.packageName : label.toString() });
         }
-        main.post(() -> probe(engines, 0, loc, call));
+        String def = null;
+        try { def = android.provider.Settings.Secure.getString(getContext().getContentResolver(), "tts_default_synth"); } catch (RuntimeException ignored) { }
+        final String defEngine = def;
+        final JSArray out = new JSArray();
+        main.post(() -> probe(engines, 0, loc, defEngine, out, call));
     }
 
-    private void probe(List<String[]> engines, int i, Locale loc, PluginCall call) {
-        if (i >= engines.size()) { call.resolve(new JSObject()); return; }
+    private void probe(List<String[]> engines, int i, Locale loc, String defEngine, JSArray out, PluginCall call) {
+        if (i >= engines.size()) {
+            JSObject r = new JSObject();
+            r.put("engines", out);
+            r.put("default", defEngine == null ? "" : defEngine);
+            call.resolve(r);
+            return;
+        }
         final String pkg = engines.get(i)[0], label = engines.get(i)[1];
         final TextToSpeech[] holder = new TextToSpeech[1];
         final boolean[] done = { false };
-        // si un motor no contesta en 4 s, el siguiente
+        final JSObject e = new JSObject();
+        e.put("engine", pkg);
+        e.put("label", label);
+        e.put("isDefault", pkg.equals(defEngine));
+        // si un motor no contesta en 5 s, el siguiente
         final Runnable timeout = () -> {
             if (done[0]) return;
             done[0] = true;
             try { if (holder[0] != null) holder[0].shutdown(); } catch (RuntimeException ignored) { }
-            probe(engines, i + 1, loc, call);
+            e.put("avail", -9);
+            out.put(e);
+            probe(engines, i + 1, loc, defEngine, out, call);
         };
-        main.postDelayed(timeout, 4000);
+        main.postDelayed(timeout, 5000);
         holder[0] = new TextToSpeech(getContext(), (status) -> main.post(() -> {
             if (done[0]) return;
             done[0] = true;
             main.removeCallbacks(timeout);
             TextToSpeech t = holder[0];
-            JSObject r = null;
+            int avail = -9;
+            String useTag = loc.toLanguageTag();
+            JSArray voices = new JSArray();
             try {
                 if (status == TextToSpeech.SUCCESS && t != null) {
-                    JSArray voices = new JSArray();
+                    avail = t.isLanguageAvailable(loc);
+                    if (avail < TextToSpeech.LANG_AVAILABLE) {
+                        Locale only = new Locale(loc.getLanguage());
+                        int a2 = t.isLanguageAvailable(only);
+                        if (a2 > avail) { avail = a2; useTag = only.toLanguageTag(); }
+                    }
                     try {
-                        for (Voice v : t.getVoices()) {
+                        java.util.Set<Voice> vs = t.getVoices();
+                        if (vs != null) for (Voice v : vs) {
                             Locale vl = v.getLocale();
-                            if (vl != null && sameLang(vl, loc)) {
-                                JSObject o = new JSObject();
-                                o.put("name", v.getName());
-                                o.put("lang", vl.toLanguageTag());
-                                voices.put(o);
-                            }
+                            if (vl == null || !sameLang(vl, loc)) continue;
+                            JSObject o = new JSObject();
+                            o.put("name", v.getName());
+                            o.put("lang", vl.toLanguageTag());
+                            java.util.Set<String> f = v.getFeatures();
+                            o.put("installed", f == null || !f.contains(TextToSpeech.Engine.KEY_FEATURE_NOT_INSTALLED));
+                            o.put("network", v.isNetworkConnectionRequired());
+                            voices.put(o);
+                            if (avail < TextToSpeech.LANG_AVAILABLE) useTag = vl.toLanguageTag();
                         }
                     } catch (RuntimeException ignored) { }
-                    int a = t.isLanguageAvailable(loc);
-                    if (a < TextToSpeech.LANG_AVAILABLE) a = t.isLanguageAvailable(new Locale(loc.getLanguage()));
-                    if (a >= TextToSpeech.LANG_AVAILABLE || voices.length() > 0) {
-                        r = new JSObject();
-                        r.put("engine", pkg);
-                        r.put("label", label);
-                        r.put("voices", voices);
-                    }
                 }
             } catch (RuntimeException ignored) { }
             try { if (t != null) t.shutdown(); } catch (RuntimeException ignored) { }
-            if (r != null) call.resolve(r); else probe(engines, i + 1, loc, call);
+            e.put("avail", avail);
+            e.put("locale", useTag);
+            e.put("voices", voices);
+            out.put(e);
+            probe(engines, i + 1, loc, defEngine, out, call);
         }), pkg);
     }
 
@@ -371,7 +396,7 @@ public class KasaNativePlugin extends Plugin {
         current = p;
         try {
             Locale loc = Locale.forLanguageTag(p.lang);
-            tts.setLanguage(loc);
+            if (tts.setLanguage(loc) < TextToSpeech.LANG_AVAILABLE) tts.setLanguage(new Locale(loc.getLanguage()));
             if (p.voice != null) {
                 for (Voice v : tts.getVoices()) {
                     if (p.voice.equals(v.getName())) { tts.setVoice(v); break; }

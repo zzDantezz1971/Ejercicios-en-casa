@@ -535,6 +535,17 @@ export class SettingsScreen implements Screen {
       h('p', { class: 'muted small' }, 'Mientras, puedes elegir otra voz aquí debajo.'));
   }
 
+  /** Detalles técnicos: qué contesta cada motor de voz del móvil sobre el idioma (para saber por qué habla como habla). */
+  private voiceReport(): HTMLElement | null {
+    const r = this.app.voice.report;
+    if (!IS_NATIVE || !r.length) return null;
+    const what = (a: number) => (a >= 0 ? '✓' : a === -1 ? '↓' : a === -9 ? '?' : '✗');
+    return h('details', { class: 'voice-report muted small' },
+      h('summary', {}, 'Detalles técnicos'),
+      ...r.map((e) => h('p', { 'data-no-tr': '' },
+        `${e.isDefault ? '★ ' : ''}${e.label} · ${LANG}: ${what(e.avail)} (${e.avail}) · ${(e.voices ?? []).filter((v) => v.installed).length}/${(e.voices ?? []).length}`)));
+  }
+
   private voiceCard(): HTMLElement {
     const list = h('div', { class: 'voice-list' }, h('p', { class: 'muted small' }, 'Buscando las voces del móvil…'));
     const card = h('section', { class: 'card setting voice-card' },
@@ -543,6 +554,7 @@ export class SettingsScreen implements Screen {
         h('span', { class: 'set-text' }, h('strong', {}, 'Voz'), h('span', { class: 'muted block small' }, 'Escucha las voces de tu móvil con ▶ y elige la que más te guste (de hombre o de mujer).'))),
       this.app.voice.missingOwn ? this.voiceMissing() : null,
       this.app.voice.engine ? h('p', { class: 'muted small voice-engine' }, `Motor de voz: ${this.app.voice.engine.label}.`) : null,
+      this.voiceReport(),
       list);
     const sample = { es: 'Hola, así sonarán los avisos.', ca: 'Hola, així sonaran els avisos.', en: 'Hi, this is how the alerts will sound.', gl: 'Ola, así soarán os avisos.', eu: 'Kaixo, horrela entzungo dira abisuak.' }[this.app.voice.lang];
     void this.app.voice.voices().then((voices) => {
