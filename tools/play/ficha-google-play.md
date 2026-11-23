@@ -8,6 +8,8 @@ quien tenga el móvil en castellano (o en otro idioma sin ficha) verá la ficha 
 en catalán, castellano e inglés. Si funciona con quien busca en catalán, más adelante se añade la traducción al
 castellano (el texto ya está preparado abajo, en «Castellano», pero **no se sube todavía**).
 
+**Versión 21:** se añaden las fichas en **gallego (gl-ES)** y **euskera (eu-ES)** (abajo; las revisan los amigos gallegos y de Bilbao antes de subirlas). Ese día, en las demás fichas, la última línea pasa a «En català, castellà, anglès, gallec i basc» / «In Catalan, Spanish, English, Galician and Basque».
+
 - Política de privacidad: https://zzdantezz1971.github.io/kasa-fit-privacidad/privacidad.html (repositorio aparte, público, para que siga funcionando cuando el de la app pase a privado)
 - Correo de contacto: exercicisacasa.app@gmail.com
 - Categoría: Salud y forma física · Sin anuncios · Gratis con compras dentro de la app (suscripción Prémium mensual o anual; el precio lo muestra Google Play)
@@ -90,6 +92,84 @@ GRATIS Y PRÉMIUM
 Gratis: todos los ejercicios, una tabla y el historial de la semana. Con Prémium (mensual o anual) lo tienes todo: «Créala por mí», tablas hechas, plan semanal, resúmenes, objetivo de peso, temas y más. Se paga y se cancela en Google Play.
 
 En catalán, castellano e inglés.
+
+---
+
+## Galego (gl-ES) — para a versión 21, NON subir antes
+
+**Nome da app** (máx. 30)
+Kasa Fit: Exercicios na casa
+
+**Descrición breve** (máx. 80)
+Adestra na casa, acceso en segundos e sen rexistros. Sinxelo e sen anuncios.
+
+**Descrición completa**
+Adestra na casa con rutinas feitas á túa medida: quecemento, pesas, abdominais e estiramentos.
+
+COMEZA EN SEGUNDOS
+Nada de rexistros nin de formularios interminables. Abres a app, escolles o idioma e a adestrar: en poucos segundos xa estás dentro. Só che pedimos uns poucos datos para calcular as calorías, e mesmo eses son opcionais.
+
+Cada exercicio explícache como se fai e márcache en vermello os músculos que traballas e en turquesa os que estiras.
+
+QUE PODES FACER
+• Crear as túas táboas con máis de 200 exercicios e escoller canto dura cada un e o peso (mancuernas, pesa rusa ou barra).
+• Que a app che faga a táboa, escoller unha xa feita ou seguir un plan semanal con lembretes.
+• Adestrar con conta atrás, avisos por voz e vibración, e a pantalla sempre acesa.
+• Conectar un reloxo ou un pulsómetro por Bluetooth e ver o teu pulso mentres adestras.
+• Consultar o teu historial no calendario, os minutos de cada semana e o resumo de cada mes.
+• Anotar o teu peso, fixarte un obxectivo e ver a súa evolución e o teu IMC.
+• Gañar medallas pola constancia, o tempo, as calorías e moito máis.
+• Poñerte obxectivos semanais de minutos e calorías.
+
+OS TEUS DATOS SON TEUS
+• Non fai falta crear ningunha conta.
+• Todo se garda só no teu móbil, e entra na copia automática de Android.
+• Sen anuncios e sen seguimento.
+• Podes facer e recuperar copias de seguranza cando queiras.
+
+GRATIS E PRÉMIUM
+Gratis: todos os exercicios, unha táboa e o historial da semana. Con Prémium (mensual ou anual) tes todo: «Faima por min», táboas feitas, plan semanal, resumos, obxectivo de peso, temas e máis. Págase e cancélase en Google Play.
+
+En galego, euskara, catalán, castelán e inglés.
+
+---
+
+## Euskara (eu-ES) — 21. bertsiorako, EZ igo lehenago
+
+**Aplikazioaren izena** (gehienez 30)
+Kasa Fit: Ariketak etxean
+
+**Deskribapen laburra** (gehienez 80)
+Entrenatu etxean, erregistrorik gabe eta segundotan. Erraza, iragarkirik gabe.
+
+**Deskribapen osoa**
+Entrenatu etxean zuretzat egindako errutinekin: beroketa, pisuak, abdominalak eta luzaketak.
+
+HASI SEGUNDO GUTXITAN
+Ez dago erregistrorik ezta formulario amaigaberik ere. Ireki aplikazioa, aukeratu hizkuntza eta entrenatzera: segundo gutxitan barruan zaude. Kaloriak kalkulatzeko datu gutxi batzuk baino ez dizkizugu eskatzen, eta horiek ere aukerakoak dira.
+
+Ariketa bakoitzak nola egiten den azaltzen dizu, eta gorriz markatzen ditu lantzen dituzun giharrak eta turkesaz luzatzen dituzunak.
+
+ZER EGIN DEZAKEZU
+• Zure taulak sortu 200 ariketa baino gehiagorekin, eta aukeratu bakoitzak zenbat irauten duen eta pisua (mankuernak, kettlebella edo barra).
+• Aplikazioak taula egitea, prest dagoen taula bat aukeratzea edo asteko plan bat jarraitzea oroigarriekin.
+• Atzerako kontaketarekin, ahots-abisuekin eta bibrazioarekin entrenatu, pantaila beti piztuta dagoela.
+• Erloju bat edo pultsu-neurgailu bat Bluetooth bidez konektatu eta entrenatzen duzun bitartean pultsua ikusi.
+• Zure historia egutegian kontsultatu, aste bakoitzeko minutuak eta hilabete bakoitzeko laburpena.
+• Zure pisua idatzi, helburu bat jarri eta haren bilakaera eta zure GMI ikusi.
+• Dominak irabazi iraunkortasunagatik, denboragatik, kaloriengatik eta askoz gehiagogatik.
+• Asteko helburuak jarri minututan eta kaloriatan.
+
+ZURE DATUAK ZUREAK DIRA
+• Ez da konturik sortu behar.
+• Dena zure mugikorrean bakarrik gordetzen da, eta Androiden babeskopia automatikoan sartzen da.
+• Iragarkirik eta jarraipenik gabe.
+• Babeskopiak egin eta berreskura ditzakezu nahi duzunean.
+
+DOAN ETA PREMIUM
+Doan: ariketa guztiak, taula bat eta asteko historia. Premiumekin (hilekoa edo urtekoa) dena duzu: «Egin niretzat», taula eginak, asteko plana, laburpenak, pisu-helburua, gaiak eta gehiago. Google Playn ordaintzen eta bertan behera uzten da.
+
+Galegoz, euskaraz, katalanez, gaztelaniaz eta ingelesez.
 
 ---
 
