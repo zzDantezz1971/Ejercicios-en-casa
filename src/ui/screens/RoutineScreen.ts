@@ -1,7 +1,7 @@
 import { tr } from '../../i18n';
 import { RoutineEditor, STEP_SECONDS } from '../../domain/RoutineEditor';
 import { clampRounds, MAX_ROUNDS } from '../../domain/WorkoutPlan';
-import { SECTION_IDS, SECTION_TITLES, usesWeight, weightUnit, type ExerciseDef, type SectionId } from '../../domain/types';
+import { blockSeconds, SECTION_IDS, SECTION_TITLES, usesWeight, weightUnit, type ExerciseDef, type SectionId } from '../../domain/types';
 import type { App, Screen } from '../App';
 import { actionSheet, append, clear, h, humanDuration, kg, plural, promptDialog, weightDialog } from '../dom';
 import { icon, SECTION_STYLE } from '../icons';
@@ -503,7 +503,7 @@ export class RoutineScreen implements Screen {
     const r = this.editor.value;
     const count = SECTION_IDS.reduce((n, s) => n + r[s].length, 0);
     const rounds = this.app.store.active.rounds ?? {};
-    const secs = SECTION_IDS.reduce((n, s) => n + r[s].reduce((m, i) => m + i.seconds, 0) * clampRounds(rounds[s]), 0);
+    const secs = SECTION_IDS.reduce((n, s) => n + blockSeconds(r[s]) * clampRounds(rounds[s]), 0);
     const inSection = r[this.section].length;
     if (this.mode === 'sorting') {
       this.footer.hidden = true;

@@ -143,6 +143,32 @@ export interface RoutineItem {
   seconds: number;
   /** Peso por mancuerna (kg), solo en ejercicios con mancuerna. */
   weight?: number;
+  /**
+   * Serie dentro del bloque: los ejercicios seguidos con el mismo `id` se repiten `rounds` veces antes de pasar al
+   * siguiente (todos llevan las mismas vueltas). Sin esto, el ejercicio se hace una vez por vuelta del bloque.
+   */
+  series?: { id: string; rounds: number };
+}
+
+/** Tramos de un bloque: cada ejercicio suelto, o los de una serie juntos (índices `start`..`end`, ambos incluidos). */
+export function blockRuns(items: readonly RoutineItem[]): Array<{ start: number; end: number; rounds: number; id?: string }> {
+  const runs: Array<{ start: number; end: number; rounds: number; id?: string }> = [];
+  items.forEach((it, i) => {
+    const last = runs[runs.length - 1];
+    if (it.series && last?.id === it.series.id && last.end === i - 1) last.end = i;
+    else runs.push({ start: i, end: i, rounds: it.series ? Math.min(10, Math.max(1, Math.round(it.series.rounds))) : 1, ...(it.series ? { id: it.series.id } : {}) });
+  });
+  return runs;
+}
+
+/** Segundos de ejercicio de un bloque en una vuelta (las series cuentan sus vueltas). */
+export function blockSeconds(items: readonly RoutineItem[], has: (id: string) => boolean = () => true): number {
+  return blockRuns(items).reduce((n, r) => n + items.slice(r.start, r.end + 1).filter((i) => has(i.exerciseId)).reduce((m, i) => m + i.seconds, 0) * r.rounds, 0);
+}
+
+/** Identificador nuevo para una serie. */
+export function newSeriesId(): string {
+  return 's' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
 }
 
 /** Ejercicios en los que se pide el peso (los que usan mancuerna). */
@@ -370,12 +396,22 @@ export function freeToRoutine(free: readonly FreeNode[], sectionOf: (id: string)
 /** Pasa una tabla por bloques a libre: los bloques en su orden; uno con vueltas, como una serie. */
 export function routineToFree(routine: Routine, rounds: Partial<Record<SectionId, number>> = {}, order?: readonly SectionId[]): FreeNode[] {
   const out: FreeNode[] = [];
+  const entry = (i: RoutineItem): FreeEntry => ({ kind: 'ex', exerciseId: i.exerciseId, seconds: i.seconds, ...(i.weight ? { weight: i.weight } : {}) });
   for (const s of sectionOrder(order)) {
-    const items: FreeEntry[] = routine[s].map((i) => ({ kind: 'ex', exerciseId: i.exerciseId, seconds: i.seconds, ...(i.weight ? { weight: i.weight } : {}) }));
-    if (!items.length) continue;
+    const its = routine[s];
+    if (!its.length) continue;
     const R = Math.round(rounds[s] ?? 1);
-    if (R > 1) out.push({ kind: 'group', rounds: R, items });
-    else out.push(...items);
+    const runs = blockRuns(its);
+    if (R > 1) {
+      // el bloque entero es una serie; sus series de dentro, con los ejercicios repetidos (no hay series dentro de series)
+      out.push({ kind: 'group', rounds: R, items: runs.flatMap((r) => Array.from({ length: r.rounds }, () => its.slice(r.start, r.end + 1).map(entry)).flat()) });
+    } else {
+      for (const r of runs) {
+        const part = its.slice(r.start, r.end + 1).map(entry);
+        if (r.id && r.rounds > 1) out.push({ kind: 'group', rounds: r.rounds, items: part });
+        else out.push(...part);
+      }
+    }
   }
   return out;
 }

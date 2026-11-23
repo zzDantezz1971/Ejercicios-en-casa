@@ -1905,3 +1905,10 @@ button.plan-row { cursor: pointer; }
 /* Tamaño de la letra: «Grande» sube toda la app (casi todo va en rem) */
 html[data-font="large"] { font-size: 112.5%; }
 .font-l { font-size: 1.12em; }
+/* Serie dentro de un bloque (tablas por bloques): el mismo recuadro que en la tabla libre */
+.block-list > .sortable > .sort-row:has(.free-group) { background: none; border: 0; padding: 0; box-shadow: none; position: relative; }
+.block-list > .sortable > .sort-row:has(.free-group) > .sort-content { flex: 1; min-width: 0; }
+.block-list > .sortable > .sort-row:has(.free-group) > .drag-handle { position: absolute; left: 8px; top: 10px; height: 36px; width: 36px; z-index: 2; }
+.block-list > .sortable > .sort-row:has(.free-group) .free-group-top { padding-left: 38px; min-height: 36px; }
+.block-series-rows { display: flex; flex-direction: column; gap: 8px; }
+.tv-list .free-group { margin: 4px 0; }

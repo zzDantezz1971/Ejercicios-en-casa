@@ -1332,6 +1332,8 @@ const ROWS: Row[] = [
   ['Tamaño de la letra', 'Mida de la lletra', 'Text size'],
   ['Grande hace más grandes los textos de toda la app.', 'Gran fa més grans els textos de tota l’app.', 'Large makes the text bigger throughout the app.'],
   ['Grande', 'Gran', 'Large'],
+  ['Ejercicio {a} de {b} · Serie {c} de {d}', 'Exercici {a} de {b} · Sèrie {c} de {d}', 'Exercise {a} of {b} · Set {c} of {d}'],
+  ['Ejercicio {a} de {b} · Vuelta {c} de {d} · Serie {e} de {f}', 'Exercici {a} de {b} · Volta {c} de {d} · Sèrie {e} de {f}', 'Exercise {a} of {b} · Round {c} of {d} · Set {e} of {f}'],
 ];
 
 export const UI_CA: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[1]]));

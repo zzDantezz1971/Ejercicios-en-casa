@@ -1,6 +1,6 @@
 import { tr } from '../../i18n';
 import { WorkoutPlan, clampRounds } from '../../domain/WorkoutPlan';
-import { SECTION_IDS, sectionOrder, SECTION_TITLES, type SectionId } from '../../domain/types';
+import { blockSeconds, SECTION_IDS, sectionOrder, SECTION_TITLES, type SectionId } from '../../domain/types';
 import type { App, Screen } from '../App';
 import { addDays, dayKey, greeting, startOfWeek, streak, trainedDays, WEEKDAY_LETTERS } from '../dates';
 import { clear, h, humanDuration, plural } from '../dom';
@@ -207,7 +207,7 @@ export class HomeScreen implements Screen {
   private sectionRow(s: SectionId): HTMLElement {
     const items = this.app.store.routine[s].filter((i) => this.app.catalog.has(i.exerciseId));
     const R = clampRounds(this.app.store.active.rounds?.[s]);
-    const secs = items.reduce((n, i) => n + i.seconds, 0) * R;
+    const secs = blockSeconds(this.app.store.routine[s], (id) => this.app.catalog.has(id)) * R;
     const st = SECTION_STYLE[s];
     const row = h('button', { class: 'sec-row' + (items.length ? '' : ' empty'), onclick: () => this.app.push(items.length ? new TableViewScreen(this.app, s) : new RoutineScreen(this.app, s)) },
       h('span', { class: 'sec-icon' }, icon(st.icon)),

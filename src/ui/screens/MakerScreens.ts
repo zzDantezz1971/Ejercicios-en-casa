@@ -6,10 +6,10 @@ import {
 } from '../../domain/generator';
 import { clampRounds, MAX_ROUNDS, WorkoutPlan } from '../../domain/WorkoutPlan';
 import { MAX_SECONDS, MIN_SECONDS, STEP_SECONDS } from '../../domain/RoutineEditor';
-import { emptyRoutine, SECTION_IDS, sectionOrder, SECTION_TITLES, usesWeight, weightUnit, type ExerciseDef, type RoutineItem, type SectionId } from '../../domain/types';
+import { blockRuns, blockSeconds, emptyRoutine, newSeriesId, SECTION_IDS, sectionOrder, SECTION_TITLES, usesWeight, weightUnit, type ExerciseDef, type RoutineItem, type SectionId } from '../../domain/types';
 import { tr } from '../../i18n';
 import type { App, Screen } from '../App';
-import { clear, confirmDialog, h, humanDuration, kg, plural, promptDialog, weightDialog } from '../dom';
+import { actionSheet, clear, confirmDialog, h, humanDuration, kg, plural, promptDialog, weightDialog } from '../dom';
 import { sortableList, type SortableRow } from '../components/sortable';
 import { groupedList, listGrouping } from '../listGrouping';
 import { icon, SECTION_STYLE, type IconName } from '../icons';
@@ -137,7 +137,12 @@ function addTo(app: App, r: GenResult, s: SectionId, edit: PreviewEdit): void {
   app.push(new PickExerciseScreen(app, s, have, (_ids, picked) => {
     edit.set(withSection(r, s, [...items, ...picked]));
     app.back();
-  }, 'Añadir ejercicios', true, secs));
+  }, 'Añadir ejercicios', true, secs, (picked) => {
+    // los elegidos, juntos en una serie al final del bloque (2 vueltas para empezar)
+    const series = { id: newSeriesId(), rounds: 2 };
+    edit.set(withSection(r, s, [...items, ...picked.map((p) => ({ ...p, series }))]));
+    app.back();
+  }));
 }
 
 /** Portapapeles de la app: los ejercicios de un apartado copiados para pegarlos en otra tabla (mientras la app está abierta). */
@@ -192,7 +197,7 @@ export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement
     h('p', { class: 'maker-total' }, icon('clock'), ...(() => {
       if (!edit?.section) return [plan.isEmpty ? 'Sin ejercicios' : `${humanDuration(plan.estimatedSeconds)} · ${plural(plan.exerciseCount, 'ejercicio', 'ejercicios')}`];
       const its = r.routine[edit.section].filter((i) => app.catalog.has(i.exerciseId));
-      const secs = its.reduce((n, i) => n + i.seconds, 0) * clampRounds(r.rounds[edit.section]);
+      const secs = blockSeconds(r.routine[edit.section], (id) => app.catalog.has(id)) * clampRounds(r.rounds[edit.section]);
       return [its.length ? `${humanDuration(secs)} · ${plural(its.length, 'ejercicio', 'ejercicios')}` : 'Sin ejercicios'];
     })()));
   // leyenda de los botones de cada ejercicio
@@ -205,7 +210,7 @@ export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement
     const cards: SortableRow[] = sectionOrder(r.order).map((s) => {
       const items = r.routine[s].filter((i) => app.catalog.has(i.exerciseId));
       const R = clampRounds(r.rounds[s]);
-      const secs = items.reduce((n, i) => n + i.seconds, 0) * R;
+      const secs = blockSeconds(r.routine[s], (id) => app.catalog.has(id)) * R;
       const st = SECTION_STYLE[s];
       const row = h('button', { class: 'sec-row' + (items.length ? '' : ' empty'), onclick: () => open(s) },
         h('span', { class: 'sec-icon' }, icon(st.icon)),
@@ -269,7 +274,8 @@ export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement
     const need = neededEquip(app, r, [s]);
     if (need.length) sbody.append(h('div', { class: 'sec-need small', style: `--sec: ${st.color}` }, h('span', {}, 'Necesitas:'),
       h('div', { class: 'sec-need-items' }, ...need.map(({ e, missing }) => h('span', { class: 'miss-item' + (missing ? ' missing' : '') }, icon(EQUIP_INFO[e].icon as IconName), tr(EQUIP_INFO[e].name), missing ? h('span', { class: 'miss-flag' }, '(no está en tu material)') : '')))));
-    const rows: SortableRow[] = [];
+    // la fila de cada ejercicio (por su posición en el bloque); luego se juntan las de cada serie
+    const rowAt: Array<SortableRow | undefined> = [];
     items.forEach((it, i) => {
       const ex = app.catalog.get(it.exerciseId);
       if (!ex) return;
@@ -286,7 +292,7 @@ export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement
           const have = new Set(SECTION_IDS.flatMap((x) => r.routine[x].map((y) => y.exerciseId)));
           app.push(new PickExerciseScreen(app, s, have, ([id]) => {
             const next = items.slice();
-            next[i] = { exerciseId: id, seconds: it.seconds };
+            next[i] = { exerciseId: id, seconds: it.seconds, ...(it.series ? { series: it.series } : {}) };
             edit.set(withSection(r, s, next));
             app.back();
           }, `Cambiar ${ex.name}`));
@@ -328,16 +334,51 @@ export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement
           } }, icon('dumbbell'), it.weight ? kg(it.weight) : 'Sin peso') : ''),
         // cambiar y quitar: a la derecha, más grandes y centrados en la fila
         edit ? h('div', { class: 'maker-acts' }, swapBtn, removeBtn) : '');
-      rows.push({ content, label: ex.name });
+      rowAt[i] = { content, label: ex.name };
     });
-    // se ordena arrastrando con el asa (sin flechas)
-    if (edit) sbody.append(sortableList(rows, (from, to) => {
-      const next = items.slice();
-      const [moved] = next.splice(from, 1);
-      next.splice(to, 0, moved);
-      edit.set(withSection(r, s, next));
-    }, { arrows: false, handleFirst: true }));
-    else for (const row of rows) sbody.append(row.content);
+    // tramos del bloque: cada ejercicio suelto, o una serie (sus ejercicios juntos, en un recuadro con sus vueltas)
+    const runs = blockRuns(items).filter((run) => rowAt.slice(run.start, run.end + 1).some(Boolean));
+    const seriesBox = (run: (typeof runs)[number]): HTMLElement => {
+      const idx = Array.from({ length: run.end - run.start + 1 }, (_, k) => run.start + k).filter((k) => rowAt[k]);
+      const setRounds = (v: number) => edit!.set(withSection(r, s, items.map((x) => (x.series?.id === run.id ? { ...x, series: { id: run.id!, rounds: clampRounds(v) } } : x))));
+      const menu = async () => {
+        const op = await actionSheet('Serie', [
+          { id: 'undo', label: 'Deshacer la serie (los ejercicios se quedan)' },
+          { id: 'del', label: 'Borrar la serie y sus ejercicios', danger: true },
+        ]);
+        if (op === 'undo') edit!.set(withSection(r, s, items.map((x) => { if (x.series?.id !== run.id) return x; const { series: _s, ...rest } = x; return rest; })));
+        if (op === 'del') edit!.set(withSection(r, s, items.filter((x) => x.series?.id !== run.id)));
+      };
+      const head = h('div', { class: 'free-group-head' },
+        h('div', { class: 'free-group-top' },
+          h('span', { class: 'free-group-title' }, h('strong', {}, 'Serie'), h('span', { class: 'muted small' }, '· ', plural(idx.length, 'ejercicio', 'ejercicios'))),
+          edit ? h('button', { class: 'icon-btn small', 'aria-label': 'Más opciones de la serie', onclick: () => void menu() }, icon('more')) : h('span', { class: 'sec-rounds' }, `x${run.rounds}`)),
+        edit ? h('span', { class: 'maker-rounds-ctl free-rounds' }, h('span', {}, 'Vueltas'),
+          h('span', { class: 'stepper inline maker-time' },
+            h('button', { 'aria-label': 'Menos vueltas', disabled: run.rounds <= 1, onclick: () => setRounds(run.rounds - 1) }, '−'),
+            h('span', { class: 'secs' }, `x${run.rounds}`),
+            h('button', { 'aria-label': 'Más vueltas', disabled: run.rounds >= MAX_ROUNDS, onclick: () => setRounds(run.rounds + 1) }, '+'))) : null);
+      const inner = idx.map((k) => rowAt[k]!);
+      return h('div', { class: 'free-group block-series' }, head,
+        // dentro de la serie también se ordena arrastrando
+        edit ? sortableList(inner, (from, to) => {
+          const next = items.slice();
+          const part = idx.map((k) => next[k]);
+          const [moved] = part.splice(from, 1);
+          part.splice(to, 0, moved);
+          idx.forEach((k, j) => { next[k] = part[j]; });
+          edit.set(withSection(r, s, next));
+        }, { arrows: false, handleFirst: true }) : h('div', { class: 'block-series-rows' }, ...inner.map((x) => x.content)));
+    };
+    const outer: SortableRow[] = runs.map((run) => (run.id ? { content: seriesBox(run), label: 'Serie' } : rowAt[run.start]!));
+    // se ordena arrastrando con el asa (sin flechas); una serie se mueve entera
+    if (edit) sbody.append(h('div', { class: 'block-list' }, sortableList(outer, (from, to) => {
+      const parts = runs.map((run) => items.slice(run.start, run.end + 1));
+      const [moved] = parts.splice(from, 1);
+      parts.splice(to, 0, moved);
+      edit.set(withSection(r, s, parts.flat()));
+    }, { arrows: false, handleFirst: true })));
+    else for (const row of outer) sbody.append(row.content);
     if (edit) sbody.append(h('button', { class: 'maker-add', onclick: () => (!items.length && edit.addEmpty ? edit.addEmpty(s) : addTo(app, r, s, edit)) }, icon('plus'), 'Añadir un ejercicio'));
     // copiar todo el apartado y pegarlo en otra tabla (en el mismo apartado)
     if (edit?.full) {

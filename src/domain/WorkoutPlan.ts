@@ -1,4 +1,4 @@
-import { freeEntries, sectionOrder, type ExerciseDef, type FreeEntry, type FreeNode, type Routine, type SavedRoutine, type SectionId, type Settings } from './types';
+import { blockRuns, freeEntries, sectionOrder, type ExerciseDef, type FreeEntry, type FreeNode, type Routine, type SavedRoutine, type SectionId, type Settings } from './types';
 
 /** Cambio de lado en los ejercicios por lados: con el tiempo parado, primero se anuncia
     («Cambio de lado») y luego hay una cuenta atrás de 3 s. */
@@ -25,6 +25,10 @@ export type Step =
       /** Vuelta actual y total de vueltas del apartado. */
       round: number;
       rounds: number;
+      /** Serie dentro del bloque: vuelta de la serie, total, y si es su primer ejercicio. */
+      set?: number;
+      sets?: number;
+      setStart?: boolean;
     }
   | { kind: 'rest'; section: SectionId; seconds: number; next: ExerciseDef }
   | { kind: 'sectionBreak'; finished: SectionId; next: SectionId };
@@ -65,21 +69,33 @@ export class WorkoutPlan {
       }
       const R = clampRounds(rounds[section]);
       const rest = settings.rest[section] ?? 0;
+      // una vuelta del bloque: los ejercicios sueltos una vez y las series, sus vueltas seguidas
+      type One = { item: (typeof items)[number]['item']; ex: ExerciseDef; position: number; set?: number; sets?: number; setStart?: boolean };
+      const seq: One[] = [];
+      const kept = items.map((x) => x.item);
+      for (const run of blockRuns(kept)) {
+        const part = items.slice(run.start, run.end + 1);
+        for (let k = 1; k <= run.rounds; k++) {
+          part.forEach(({ item, ex }, j) => seq.push({ item, ex, position: run.start + j + 1,
+            ...(run.id && run.rounds > 1 ? { set: k, sets: run.rounds, setStart: j === 0 } : {}) }));
+        }
+      }
       for (let r = 1; r <= R; r++) {
-        items.forEach(({ item, ex }, i) => {
+        seq.forEach(({ item, ex, position, set, sets, setStart }, i) => {
           steps.push({
             kind: 'exercise',
             section,
             exercise: ex,
             seconds: item.seconds,
             switchAt: ex.oneSided ? Math.round(item.seconds / 2) : undefined,
-            position: i + 1,
+            position,
             totalInSection: items.length,
             weight: item.weight,
             round: r,
             rounds: R,
+            ...(sets ? { set, sets, setStart } : {}),
           });
-          const following = items[i + 1] ?? (r < R ? items[0] : undefined);
+          const following = seq[i + 1] ?? (r < R ? seq[0] : undefined);
           if (following && rest > 0) {
             steps.push({ kind: 'rest', section, seconds: rest, next: following.ex });
           }

@@ -251,7 +251,7 @@ export class WorkoutScreen implements Screen {
       case 'exercise':
         this.setSection(step.section);
         this.renderDots(step.section, index);
-        u.position.textContent = `Ejercicio ${step.position} de ${step.totalInSection}` + (step.rounds > 1 ? ` · Vuelta ${step.round} de ${step.rounds}` : '');
+        u.position.textContent = `Ejercicio ${step.position} de ${step.totalInSection}` + (step.rounds > 1 ? ` · Vuelta ${step.round} de ${step.rounds}` : '') + (step.sets ? ` · Serie ${step.set} de ${step.sets}` : '');
         u.phase.replaceChildren();
         u.name.replaceChildren(step.exercise.name, step.weight ? h('span', { class: 'w-weight' }, icon('dumbbell'), kg(step.weight)) : '');
         if (step.switchAt !== undefined) this.setSide(1);

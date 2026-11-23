@@ -1275,4 +1275,6 @@ export const UI_GL: Record<string, string> = {
   "Tamaño de la letra": "Tamaño da letra",
   "Grande hace más grandes los textos de toda la app.": "Grande fai máis grandes os textos de toda a app.",
   "Grande": "Grande",
+  "Ejercicio {a} de {b} · Serie {c} de {d}": "Exercicio {a} de {b} · Serie {c} de {d}",
+  "Ejercicio {a} de {b} · Vuelta {c} de {d} · Serie {e} de {f}": "Exercicio {a} de {b} · Volta {c} de {d} · Serie {e} de {f}",
 };

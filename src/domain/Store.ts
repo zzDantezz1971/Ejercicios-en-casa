@@ -122,7 +122,12 @@ function sanitizeRoutine(input: unknown): Routine {
     if (Array.isArray(items)) {
       out[s] = items
         .filter((i) => i && typeof i.exerciseId === 'string' && Number.isFinite(i.seconds))
-        .map((i) => (Number.isFinite(i.weight) && i.weight > 0 ? { exerciseId: i.exerciseId, seconds: i.seconds, weight: i.weight } : { exerciseId: i.exerciseId, seconds: i.seconds }));
+        .map((i) => ({
+          exerciseId: i.exerciseId, seconds: i.seconds,
+          ...(Number.isFinite(i.weight) && i.weight > 0 ? { weight: i.weight } : {}),
+          // serie dentro del bloque (los seguidos con el mismo id se repiten sus vueltas)
+          ...(i.series && typeof i.series.id === 'string' && Number.isFinite(i.series.rounds) ? { series: { id: i.series.id, rounds: Math.min(10, Math.max(1, Math.round(i.series.rounds))) } } : {}),
+        }));
     }
   }
   return out;

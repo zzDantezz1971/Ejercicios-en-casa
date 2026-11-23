@@ -1,5 +1,5 @@
 import { WorkoutPlan, clampRounds } from '../../domain/WorkoutPlan';
-import { sectionOrder, SECTION_TITLES, type ExerciseDef, type FreeEntry, type SectionId } from '../../domain/types';
+import { blockSeconds, blockRuns, sectionOrder, SECTION_TITLES, type ExerciseDef, type FreeEntry, type SectionId } from '../../domain/types';
 import type { App, Screen } from '../App';
 import { h, humanDuration, kg, plural } from '../dom';
 import { icon, SECTION_STYLE, type IconName } from '../icons';
@@ -76,7 +76,7 @@ export class TableViewScreen implements Screen {
       if (!items.length) continue;
       const st = SECTION_STYLE[s];
       const R = clampRounds(table.rounds?.[s]);
-      const secs = items.reduce((t, i) => t + i.seconds, 0) * R;
+      const secs = blockSeconds(items) * R;
       // título del apartado como en Editar (grande, con su color), con el resumen al lado
       const head = h('div', { class: 'tv-head' },
         h('h2', { class: 'maker-sec' }, icon(st.icon), SECTION_TITLES[s]),
@@ -86,7 +86,17 @@ export class TableViewScreen implements Screen {
       const needEl = need.length ? h('div', { class: 'sec-need small', style: `--sec: ${st.color}` }, h('span', {}, 'Necesitas:'),
         h('div', { class: 'sec-need-items' }, ...need.map(({ e, missing }) => h('span', { class: 'miss-item' + (missing ? ' missing' : '') }, icon(EQUIP_INFO[e].icon as IconName), EQUIP_INFO[e].name)))) : null;
       const list = h('div', { class: 'tv-list' });
-      for (const it of items) {
+      // las series del bloque, en un recuadro con sus vueltas
+      const runs = blockRuns(items);
+      let box: HTMLElement | null = null;
+      items.forEach((it, k) => {
+        const run = runs.find((x) => k >= x.start && k <= x.end)!;
+        if (run.id && k === run.start) {
+          box = h('div', { class: 'free-group' },
+            h('div', { class: 'free-group-head' }, h('div', { class: 'free-group-top' }, h('span', { class: 'free-group-title' }, h('strong', {}, 'Serie')), h('span', { class: 'sec-rounds' }, `x${run.rounds}`))));
+          list.append(box);
+        }
+        const into: HTMLElement = run.id && box ? box : list;
         const ex = app.catalog.get(it.exerciseId)!;
         shown.push(ex);
         n++;
@@ -103,8 +113,8 @@ export class TableViewScreen implements Screen {
             h('span', { class: 'muted small' }, ex.zone)),
           icon('chevron', 'ico chev'));
         row.style.setProperty('--sec', st.color);
-        list.append(row);
-      }
+        into.append(row);
+      });
       blocks.push(head, ...(needEl ? [needEl] : []), list);
     }
 
