@@ -1877,3 +1877,16 @@ button.plan-row { cursor: pointer; }
 .free-group { padding: 8px; }
 .free-group .sortable > .sort-row { padding: 6px; }
 .free-group .maker-acts .icon-btn.small { width: 36px; height: 36px; }
+/* Inicio sin tabla: «Crea tu primera tabla» */
+.hero-start .hero-lead { margin: 2px 0 12px; opacity: .85; }
+.hero-row { display: flex; align-items: center; gap: 12px; width: 100%; padding: 10px 12px; border-radius: 16px; border: 1px solid rgb(255 255 255 / .22); background: rgb(255 255 255 / .12); color: #fff; font: inherit; text-align: left; cursor: pointer; }
+.hero-row.main { background: #fff; color: #10142A; border-color: #fff; }
+.hero-row.main .hero-opt-icon { background: color-mix(in srgb, var(--accent) 18%, #fff); color: var(--accent); }
+.hero-row.main .small { color: #4A5070; }
+.hero-row.locked { opacity: .8; }
+.hero-row-text { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+.hero-row-text strong { font-size: 1.02rem; }
+.hero-row .ico.hero-row-chev, .hero-row .ico.hero-row-lock { flex: none; width: 18px; height: 18px; }
+.hero-row .hero-row-lock { color: #FFC24B; }
+.hero-sub { display: inline-flex; align-items: center; gap: 6px; margin-top: 8px; font-size: .78rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; opacity: .85; }
+.hero-sub .ico { width: 14px; height: 14px; color: #FFC24B; }

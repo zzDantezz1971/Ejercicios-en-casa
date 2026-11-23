@@ -7,6 +7,7 @@ import { clear, h, humanDuration, plural } from '../dom';
 import { icon, SECTION_STYLE, type IconName } from '../icons';
 import { RoutineScreen } from './RoutineScreen';
 import { activeIsEmpty, GeneratorScreen, TemplatesScreen } from './MakerScreens';
+import { newFreeTable } from './FreeTableScreen';
 import { TableViewScreen } from './TableViewScreen';
 import { startWorkout } from '../components/startWorkout';
 import { MonthScreen } from './MonthScreen';
@@ -84,7 +85,9 @@ export class HomeScreen implements Screen {
     const LETTER = { calentamiento: 'c', pesas: 'p', abdominales: 'a', estiramientos: 'e' } as const;
     const combo = SECTION_IDS.filter((sec) => table.routine[sec].some((i) => app.catalog.has(i.exerciseId))).map((sec) => LETTER[sec]).join('');
     if (combo) art.src = `${import.meta.env.BASE_URL}tablas/combo_${combo}.svg`;
-    this.el.append(
+    // tabla vacía (al empezar o si se ha borrado todo): una tarjeta para crear la primera tabla
+    if (plan.isEmpty && !pinfo) this.el.append(this.emptyHero());
+    else this.el.append(
       h('section', { class: 'hero' },
         art,
         h('div', { class: 'hero-body' },
@@ -98,7 +101,7 @@ export class HomeScreen implements Screen {
             ? h('div', { class: 'hero-empty hero-opts' },
               this.opt('edit', 'Tabla vacía', 'Elige tú los ejercicios', () => app.push(new RoutineScreen(app))),
               this.opt('bolt', 'Créala por mí', 'Objetivo, zona y tiempo', () => (app.access.premium ? app.push(new GeneratorScreen(app, activeIsEmpty(app))) : app.showPremium()), !app.access.premium),
-              this.opt('tables', 'Tablas hechas', 'Listas para usar', () => (app.access.premium ? app.push(new TemplatesScreen(app, activeIsEmpty(app))) : app.showPremium()), !app.access.premium),
+              this.opt('tables', 'Tablas hechas', 'Elige una ya preparada (espalda, pilates, fuerza…) y empieza', () => (app.access.premium ? app.push(new TemplatesScreen(app, activeIsEmpty(app))) : app.showPremium()), !app.access.premium),
               this.opt('calendar', 'Plan de la semana', 'Una tabla para cada día', () => newPlan(app), !app.access.premium))
             : h('button', { class: 'btn light block big', onclick: () => this.start(plan) }, icon('play'), 'Empezar'),
           // con la tabla vacía, solo las formas de crearla (ni Editar ni Cambiar tabla)
@@ -213,6 +216,48 @@ export class HomeScreen implements Screen {
       icon('chevron', 'ico chev'));
     row.style.setProperty('--sec', st.color);
     return row;
+  }
+
+  /**
+   * Inicio sin ejercicios: «Crea tu primera tabla» y las formas de crearla. Primero las gratuitas (vacía y libre) y
+   * después las de Prémium (con candado en la versión gratis).
+   */
+  private emptyHero(): HTMLElement {
+    const { app } = this;
+    const premium = app.access.premium;
+    const first = app.store.routines.length <= 1;
+    const title = first ? 'Crea tu primera tabla' : 'Esta tabla está vacía';
+    const go = {
+      empty: () => app.push(new RoutineScreen(app)),
+      free: () => void newFreeTable(app, activeIsEmpty(app)),
+      gen: () => (premium ? app.push(new GeneratorScreen(app, activeIsEmpty(app))) : app.showPremium()),
+      tpl: () => (premium ? app.push(new TemplatesScreen(app, activeIsEmpty(app))) : app.showPremium()),
+      plan: () => newPlan(app),
+    };
+    const FREE: Array<[IconName, string, string, () => void]> = [
+      ['edit', 'Tabla vacía', 'Elige los ejercicios de cada bloque', go.empty],
+      ['swap', 'Tabla libre', 'Cualquier ejercicio, en el orden que quieras', go.free],
+    ];
+    const PREM: Array<[IconName, string, string, () => void]> = [
+      ['bolt', 'Créala por mí', 'Objetivo, zona y tiempo', go.gen],
+      ['tables', 'Tablas hechas', 'Elige una ya preparada (espalda, pilates, fuerza…) y empieza', go.tpl],
+      ['calendar', 'Plan de la semana', 'Una tabla para cada día', go.plan],
+    ];
+    const row = (ic: IconName, t: string, help: string, fn: () => void, cls: string, locked = false) =>
+      h('button', { class: 'hero-row ' + cls, onclick: fn },
+        h('span', { class: 'hero-opt-icon' }, icon(ic)),
+        h('span', { class: 'hero-row-text' }, h('strong', {}, t), h('span', { class: 'small' }, help)),
+        locked ? icon('lock', 'ico hero-row-lock') : icon('chevron', 'ico hero-row-chev'));
+    const opts = h('div', { class: 'hero-empty' },
+      ...FREE.map(([ic, t, help, fn]) => row(ic, t, help, fn, 'main')),
+      premium ? null : h('span', { class: 'hero-sub' }, icon('lock'), 'Prémium'),
+      ...PREM.map(([ic, t, help, fn]) => row(ic, t, help, fn, premium ? 'main' : 'locked', !premium)));
+    return h('section', { class: 'hero hero-start' },
+      h('div', { class: 'hero-body' },
+        h('span', { class: 'hero-label' }, 'Empecemos'),
+        h('h2', { class: 'hero-title long' }, title),
+        h('p', { class: 'hero-lead' }, 'Elige cómo quieres empezar.'),
+        opts));
   }
 
   /** Una forma de crear la tabla (en Inicio, con la tabla vacía). */

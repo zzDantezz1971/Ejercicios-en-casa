@@ -4,6 +4,7 @@ Recordatorio: **cuando instales la app de prueba** (el APK de GitHub o la prueba
 Marca cada punto al probarlo. Si algo falla, haz una captura y cuéntamelo.
 
 ## 0e. Para probar en el build 20
+- [ ] Inici sense cap taula (instal·lació nova o tot esborrat): «Comencem · Crea la teva primera taula», Taula buida i Taula lliure en blanc i, a sota, «Prémium» amb les altres tres (amb cadenat a la versió gratuïta).
 - [ ] Taula lliure: «+ Taula» › Taula lliure › nom. Afegeix exercicis (surten tots, «Per blocs»), un descans (pregunta els segons), una sèrie (marca 2 exercicis › voltes x3). Arrossega per moure; ⋯ per duplicar, posar a la sèrie o treure. Comença: l’ordre de la llista, la sèrie amb «Volta 1 de 3» i el descans on l’has posat. Una taula normal › ⋯ › «Passa-la a taula lliure». A la versió gratuïta també es pot fer. Al buscador, cada exercici porta l’etiqueta del bloc; amb uns quants triats, «Afegeix-los com a sèrie» els posa en una sèrie x2.
 - [ ] Les meves taules amb un Pla setmanal: la targeta dels plans és com un grup (icona del calendari, «2 plans · En ús: …»). En tocar-la es desplega amb les targetes dels plans (iguals que les taules d’un grup) i «Nou pla setmanal»; als tres punts, «Nou pla».
 - [ ] Edita › un bloc › Afegeix un exercici › Ordena «Per múscul»: grups per múscul principal (Trapezi, Espatlles, Pit, Esquena…) com a la llista de crear una taula, no un grup per cada zona. També «Per material» i «Zona».

@@ -1299,6 +1299,13 @@ const ROWS: Row[] = [
   ['Una tabla por bloques se puede pasar a libre en sus tres puntos › «Pasar a tabla libre».', 'Una taula per blocs es pot passar a lliure als seus tres punts › «Passa-la a taula lliure».', 'A routine with blocks can be turned into a free one from its three dots › «Turn into a free routine».'],
   ['Añadirlos como serie ({n})', 'Afegeix-los com a sèrie ({n})', 'Add them as a set ({n})'],
   ['Añadirlos como serie', 'Afegeix-los com a sèrie', 'Add them as a set'],
+  ['Empecemos', 'Comencem', 'Let’s start'],
+  ['Crea tu primera tabla', 'Crea la teva primera taula', 'Create your first routine'],
+  ['Esta tabla está vacía', 'Aquesta taula és buida', 'This routine is empty'],
+  ['Elige cómo quieres empezar.', 'Tria com vols començar.', 'Choose how you want to start.'],
+  ['Elige los ejercicios de cada bloque', 'Tria els exercicis de cada bloc', 'Pick the exercises for each block'],
+  ['Elige una ya preparada (espalda, pilates, fuerza…) y empieza', 'Tria’n una ja preparada (esquena, pilates, força…) i comença', 'Pick a ready-made one (back, Pilates, strength…) and start'],
+  ['Tablas ya preparadas por objetivo. Toca una para ver sus ejercicios y su tiempo; si quieres, cambia lo que no te guste y pulsa «Usar esta tabla»: se guarda en tus tablas y ya puedes empezar.', 'Taules ja preparades per objectiu. Toca’n una per veure’n els exercicis i el temps; si vols, canvia el que no t’agradi i prem «Fes servir aquesta taula»: es desa a les teves taules i ja pots començar.', 'Ready-made routines by goal. Tap one to see its exercises and time; change anything you don’t like and tap «Use this routine»: it’s saved to your routines and you can start.'],
 ];
 
 export const UI_CA: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[1]]));

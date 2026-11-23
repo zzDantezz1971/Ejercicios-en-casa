@@ -41,7 +41,7 @@ export function openNewTable(app: App): void {
       // tabla libre: una sola lista con cualquier ejercicio, descansos y series (también en la versión gratis)
       opt('swap', 'Tabla libre', 'Cualquier ejercicio, en el orden que quieras', () => void newFreeTable(app, free && app.store.routines.length === 1), free && !canAddFreeTable(app)),
       opt('bolt', 'Créala por mí', 'Elige objetivo, zona y tiempo', () => app.push(new GeneratorScreen(app)), free),
-      opt('tables', 'Tablas hechas', 'Listas para usar', () => app.push(new TemplatesScreen(app)), free),
+      opt('tables', 'Tablas hechas', 'Elige una ya preparada (espalda, pilates, fuerza…) y empieza', () => app.push(new TemplatesScreen(app)), free),
       // plan de la semana: una tabla para cada día de entrenamiento
       opt('calendar', 'Plan de la semana', 'Una tabla para cada día que entrenas', () => newPlan(app), free),
       h('button', { class: 'sheet-btn cancel', onclick: close }, 'Cancelar')));
@@ -479,7 +479,7 @@ export class TemplatesScreen implements Screen {
     this.el.append(header(app, 'Tablas hechas'));
     const body = h('div', { class: 'maker-body' });
     this.el.append(body);
-    body.append(h('p', { class: 'muted maker-intro' }, 'Tablas listas para usar. Al elegir una, se copia a tus tablas y la puedes cambiar como quieras.'));
+    body.append(h('p', { class: 'muted maker-intro' }, 'Tablas ya preparadas por objetivo. Toca una para ver sus ejercicios y su tiempo; si quieres, cambia lo que no te guste y pulsa «Usar esta tabla»: se guarda en tus tablas y ya puedes empezar.'));
     for (const t of TEMPLATES) {
       const r = fromTemplate(t);
       const miss = missingEquip(app, r);
