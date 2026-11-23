@@ -4,6 +4,7 @@ import { flushDurable } from '../../platform/durable';
 import { showUpdateDialog, showVersionNews } from '../components/updateDialog';
 import { APP_BUILD, APP_VERSION, BUILD_TIME, checkForUpdate, updateReady } from '../../services/Updates';
 import { IS_NATIVE } from '../../platform/native';
+import { KasaNative } from '../../platform/kasaNative';
 import { healthStatus, installHealth, requestHealth } from '../../services/Health';
 import { remindersOf, type ReminderKind } from '../../domain/reminders';
 import { dayName, EVERY, RemindersScreen, WEEK } from './RemindersScreen';
@@ -516,12 +517,26 @@ export class SettingsScreen implements Screen {
    * Elegir la voz de los avisos entre las del móvil para el idioma de la app (Android no dice si son de hombre o de
    * mujer: cada una tiene ▶ para escucharla). «Automática» es la de siempre del sistema.
    */
+  /** El móvil no tiene voz en el idioma de la app: cómo instalarla y, mientras, se elige una de las de castellano. */
+  private voiceMissing(): HTMLElement {
+    // el idioma tal como va dentro de la frase: «no ten voz en galego», «ez du euskarazko ahotsik»
+    const name = { es: 'castellano', ca: 'català', en: 'English', gl: 'galego', eu: 'euskarazko' }[LANG];
+    return h('div', { class: 'voice-missing' },
+      h('p', { class: 'small' }, h('strong', {}, `${IS_NATIVE ? 'Tu móvil' : 'Este navegador'} no tiene voz en ${name}.`), ' ', 'Los avisos se dicen en castellano.'),
+      IS_NATIVE
+        ? h('p', { class: 'muted small' }, 'Para instalarla: ajustes del móvil › Idioma › Salida de texto a voz › Motor de voz de Google › Instalar datos de voz.')
+        : h('p', { class: 'muted small' }, 'En la app de Android, si instalas la voz en el móvil, los avisos se dirán en tu idioma.'),
+      IS_NATIVE ? h('button', { class: 'btn small', onclick: () => { void KasaNative.openVoiceInstall().catch(() => undefined); } }, icon('download'), 'Instalar la voz') : null,
+      h('p', { class: 'muted small' }, 'Mientras, puedes elegir otra voz aquí debajo.'));
+  }
+
   private voiceCard(): HTMLElement {
     const list = h('div', { class: 'voice-list' }, h('p', { class: 'muted small' }, 'Buscando las voces del móvil…'));
     const card = h('section', { class: 'card setting voice-card' },
       h('div', { class: 'set-head-row' },
         h('span', { class: 'set-icon' }, icon('voice')),
         h('span', { class: 'set-text' }, h('strong', {}, 'Voz'), h('span', { class: 'muted block small' }, 'Escucha las voces de tu móvil con ▶ y elige la que más te guste (de hombre o de mujer).'))),
+      this.app.voice.missingOwn ? this.voiceMissing() : null,
       list);
     const sample = { es: 'Hola, así sonarán los avisos.', ca: 'Hola, així sonaran els avisos.', en: 'Hi, this is how the alerts will sound.', gl: 'Ola, así soarán os avisos.', eu: 'Kaixo, horrela entzungo dira abisuak.' }[this.app.voice.lang];
     void this.app.voice.voices().then((voices) => {

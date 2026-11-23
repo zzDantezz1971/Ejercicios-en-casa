@@ -19,6 +19,8 @@ export interface KasaNative {
   closeApp(): Promise<void>;
   /** Abre Spotify o, si no está, la app de música del móvil. */
   openMusic(): Promise<{ opened: boolean }>;
+  /** Abre la pantalla del móvil para instalar voces (o los ajustes de texto a voz). */
+  openVoiceInstall(): Promise<{ opened: boolean }>;
 }
 
 export const KasaNative = registerPlugin<KasaNative>('KasaNative');

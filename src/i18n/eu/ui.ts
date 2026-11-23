@@ -1252,4 +1252,11 @@ export const UI_EU: Record<string, string> = {
   "Todavía no tienes ninguna tabla": "Oraindik ez duzu taularik",
   "Ve a Inicio para crear tu primera tabla.": "Joan Hasierara zure lehen taula sortzeko.",
   "Ir a Inicio": "Joan Hasierara",
+  "Tu móvil no tiene voz en {x}.": "Zure mugikorrak ez du {x} ahotsik.",
+  "Este navegador no tiene voz en {x}.": "Nabigatzaile honek ez du {x} ahotsik.",
+  "Los avisos se dicen en castellano.": "Abisuak gaztelaniaz esaten dira.",
+  "Para instalarla: ajustes del móvil › Idioma › Salida de texto a voz › Motor de voz de Google › Instalar datos de voz.": "Instalatzeko: mugikorraren ezarpenak › Hizkuntza › Testua ahots bihurtzeko irteera › Google-ren ahots-motorra › Instalatu ahots-datuak.",
+  "En la app de Android, si instalas la voz en el móvil, los avisos se dirán en tu idioma.": "Android-eko aplikazioan, mugikorrean ahotsa instalatzen baduzu, abisuak zure hizkuntzan esango dira.",
+  "Instalar la voz": "Instalatu ahotsa",
+  "Mientras, puedes elegir otra voz aquí debajo.": "Bitartean, beste ahots bat aukera dezakezu hemen behean.",
 };

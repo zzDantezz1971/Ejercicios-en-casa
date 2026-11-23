@@ -65,6 +65,8 @@ export class Voice {
   constructor() {
     if (IS_NATIVE) {
       void this.pickNative();
+      // al volver de instalar una voz en los ajustes del móvil, se vuelve a mirar si ya está
+      document.addEventListener?.('visibilitychange', () => { if (document.visibilityState === 'visible') void this.pickNative(); });
       return;
     }
     if (!this.synth) return;
@@ -141,6 +143,11 @@ export class Voice {
     this.say(text);
     this.enabled = was;
     await this.useVoice(keep || undefined);
+  }
+
+  /** ¿Falta la voz del idioma de la app (y por eso los avisos se dicen en castellano)? */
+  get missingOwn(): boolean {
+    return this.lang !== LANG;
   }
 
   get available(): boolean {

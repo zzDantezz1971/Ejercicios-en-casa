@@ -169,6 +169,25 @@ public class KasaNativePlugin extends Plugin {
         call.resolve(r);
     }
 
+    /** Abre la pantalla del móvil para instalar voces (datos de voz del motor); si no la hay, los ajustes de texto a voz. */
+    @PluginMethod
+    public void openVoiceInstall(PluginCall call) {
+        JSObject r = new JSObject();
+        Context ctx = getContext();
+        boolean ok = false;
+        for (String action : new String[] { TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA, "com.android.settings.TTS_SETTINGS" }) {
+            try {
+                Intent i = new Intent(action);
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                ctx.startActivity(i);
+                ok = true;
+                break;
+            } catch (ActivityNotFoundException e) { /* la siguiente */ }
+        }
+        r.put("opened", ok);
+        call.resolve(r);
+    }
+
     // ---------- voz amplificada ----------
 
     /** Refuerzo de volumen de la voz, en milésimas de decibelio (+10 dB). El efecto ya limita para que no sature. */

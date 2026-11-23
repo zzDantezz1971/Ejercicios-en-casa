@@ -1309,6 +1309,13 @@ const ROWS: Row[] = [
   ['Todavía no tienes ninguna tabla', 'Encara no tens cap taula', 'You don’t have any routines yet'],
   ['Ve a Inicio para crear tu primera tabla.', 'Ves a Inici per crear la teva primera taula.', 'Go to Home to create your first routine.'],
   ['Ir a Inicio', 'Ves a Inici', 'Go to Home'],
+  ['Tu móvil no tiene voz en {x}.', 'El teu mòbil no té veu en {x}.', 'Your phone has no {x} voice.'],
+  ['Este navegador no tiene voz en {x}.', 'Aquest navegador no té veu en {x}.', 'This browser has no {x} voice.'],
+  ['Los avisos se dicen en castellano.', 'Els avisos es diuen en castellà.', 'Alerts are spoken in Spanish.'],
+  ['Para instalarla: ajustes del móvil › Idioma › Salida de texto a voz › Motor de voz de Google › Instalar datos de voz.', 'Per instal·lar-la: ajustos del mòbil › Idioma › Sortida de text a veu › Motor de veu de Google › Instal·la dades de veu.', 'To install it: phone settings › Language › Text-to-speech output › Speech Services by Google › Install voice data.'],
+  ['En la app de Android, si instalas la voz en el móvil, los avisos se dirán en tu idioma.', 'A l’app d’Android, si instal·les la veu al mòbil, els avisos es diran en el teu idioma.', 'In the Android app, if you install the voice on your phone, alerts will be spoken in your language.'],
+  ['Instalar la voz', 'Instal·la la veu', 'Install the voice'],
+  ['Mientras, puedes elegir otra voz aquí debajo.', 'Mentrestant, pots triar una altra veu aquí sota.', 'Meanwhile, you can pick another voice below.'],
 ];
 
 export const UI_CA: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[1]]));

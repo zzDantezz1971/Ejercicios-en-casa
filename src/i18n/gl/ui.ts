@@ -1252,4 +1252,11 @@ export const UI_GL: Record<string, string> = {
   "Todavía no tienes ninguna tabla": "Aínda non tes ningunha táboa",
   "Ve a Inicio para crear tu primera tabla.": "Vai a Inicio para crear a túa primeira táboa.",
   "Ir a Inicio": "Ir a Inicio",
+  "Tu móvil no tiene voz en {x}.": "O teu móbil non ten voz en {x}.",
+  "Este navegador no tiene voz en {x}.": "Este navegador non ten voz en {x}.",
+  "Los avisos se dicen en castellano.": "Os avisos dinse en castelán.",
+  "Para instalarla: ajustes del móvil › Idioma › Salida de texto a voz › Motor de voz de Google › Instalar datos de voz.": "Para instalala: axustes do móbil › Idioma › Saída de texto a voz › Motor de voz de Google › Instalar datos de voz.",
+  "En la app de Android, si instalas la voz en el móvil, los avisos se dirán en tu idioma.": "Na app de Android, se instalas a voz no móbil, os avisos diranse no teu idioma.",
+  "Instalar la voz": "Instalar a voz",
+  "Mientras, puedes elegir otra voz aquí debajo.": "Mentres, podes escoller outra voz aquí debaixo.",
 };

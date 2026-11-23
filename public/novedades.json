@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-23T16:26:02Z",
+    "es": "Voz: si el móvil no tiene voz en el idioma de la app, Ajustes › Avisos lo dice, explica cómo instalarla (con un botón que lleva a los ajustes del móvil) y deja elegir otra voz mientras.",
+    "ca": "Veu: si el mòbil no té veu en l’idioma de l’app, Ajustos › Avisos ho diu, explica com instal·lar-la (amb un botó que porta als ajustos del mòbil) i deixa triar una altra veu mentrestant.",
+    "en": "Voice: if your phone has no voice in the app’s language, Settings › Alerts says so, explains how to install it (with a button that opens the phone settings) and lets you pick another voice meanwhile."
+  },
+  {
     "fecha": "2026-11-23T16:21:38Z",
     "es": "Gallego y euskera (en la web, de prueba): ya están traducidos también todos los ejercicios, los grupos de músculos y las frases de ánimo.",
     "ca": "Gallec i basc (al web, de prova): ja estan traduïts també tots els exercicis, els grups de músculs i les frases d’ànim.",

@@ -4,6 +4,7 @@ Recordatorio: **cuando instales la app de prueba** (el APK de GitHub o la prueba
 Marca cada punto al probarlo. Si algo falla, haz una captura y cuéntamelo.
 
 ## 0e. Para probar en el build 20
+- [ ] Veu que falta: posa l’app en un idioma sense veu al mòbil (p. ex. gallec al build 21, o català si no tens la veu). Ajustos › Avisos ha de dir «El teu mòbil no té veu en…», el botó «Instal·la la veu» obre la pantalla d’instal·lar veus del mòbil i, en tornar a l’app amb la veu instal·lada, els avisos surten en aquell idioma.
 - [ ] (Build 21) Gallec i basc: Ajustos › Idioma › Galego / Euskara. Revisa noms i explicacions dels exercicis, grups de músculs, frases d’ànim de l’inici i la veu. Al build 20 no han de sortir a la llista d’idiomes.
 - [ ] Sense cap taula, pestanya Taules: «Encara no tens cap taula» i el botó «Ves a Inici».
 - [ ] Inici sense cap taula (instal·lació nova o tot esborrat): «Comencem · Crea la teva primera taula», Taula buida i Taula lliure en blanc i, a sota, «Prémium» amb les altres tres (amb cadenat a la versió gratuïta).
