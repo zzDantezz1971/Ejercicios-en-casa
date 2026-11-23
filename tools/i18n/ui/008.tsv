@@ -1,0 +1,152 @@
+1100	Quentando motores	Motorrak berotzen
+1101	Volcán	Sumendia
+1102	Cen mil	Ehun mila
+1103	Dous quilos	Bi kilo
+1104	Quince quilos	Hamabost kilo
+1105	Forxado	Forjatua
+1106	Aceiro puro	Altzairu hutsa
+1107	{n} adestramentos de forza.	{n} indar-entrenamendu.
+1108	Cada vez máis forte	Gero eta indartsuago
+1109	Progreso sen fin	Aurrerapen amaigabea
+1110	Subiches o peso {n} veces.	Pisua {n} aldiz igo duzu.
+1111	Titán	Titana
+1112	Hércules	Herkules
+1113	Un exercicio con {n} kg ou máis por mancuerna.	Ariketa bat mankuerna bakoitzeko {n} kg edo gehiagorekin.
+1114	{n} adestramentos completos cos catro bloques.	{n} entrenamendu oso lau blokeekin.
+1115	Completista	Osozalea
+1116	{n} adestramentos con quecemento.	{n} entrenamendu beroketarekin.
+1117	Motor en marcha	Motorra martxan
+1118	{n} adestramentos con abdominais.	{n} entrenamendu abdominalekin.
+1119	Abdome de pedra	Harrizko sabela
+1120	{n} adestramentos con estiramentos.	{n} entrenamendu luzaketekin.
+1121	Coma un xunco	Ihia bezala
+1122	{n} adestramentos antes das 8 da mañá.	{n} entrenamendu goizeko 8ak baino lehen.
+1123	{n} adestramentos despois das 10 da noite.	{n} entrenamendu gaueko 10ak eta gero.
+1124	Adestrar o sábado e o domingo en {n} semanas distintas.	Larunbatean eta igandean entrenatzea {n} aste desberdinetan.
+1125	Todo o ano	Urte osoa
+1126	Polo menos un adestramento cada mes durante 12 meses seguidos.	Gutxienez entrenamendu bat hilero 12 hilabete jarraian.
+1127	Equilibrio	Oreka
+1128	Os catro bloques nunha mesma semana.	Lau blokeak aste berean.
+1129	Explorador	Esploratzailea
+1130	Trotamundos	Munduz mundu
+1131	Fixeches {n} exercicios distintos.	{n} ariketa desberdin egin dituzu.
+1132	Toca unha medalla para ver a súa ficha. Contan os adestramentos de 10 minutos ou máis.	Ukitu domina bat bere fitxa ikusteko. 10 minutuko edo gehiagoko entrenamenduak zenbatzen dira.
+1133	Versión gratuíta: ves os adestramentos desta semana.	Doako bertsioa: aste honetako entrenamenduak ikusten dituzu.
+1134	{n} adestramento anterior gardado.	{n} aurreko entrenamendu gordeta.
+1135	{n} adestramentos anteriores gardados.	{n} aurreko entrenamendu gordeta.
+1136	Contido do adestramento	Entrenamenduaren edukia
+1137	Bloque anterior	Aurreko blokea
+1138	Bloque seguinte	Hurrengo blokea
+1139	Outros bloques	Beste bloke batzuk
+1140	Grupo	Taldea
+1141	Crear un grupo	Sortu talde bat
+1142	Nome do grupo	Taldearen izena
+1143	Sen táboas	Taularik gabe
+1144	Para meter unha táboa aquí, toca os seus tres puntos e «Mover a un grupo».	Taula bat hemen sartzeko, ukitu bere hiru puntuak eta «Mugitu talde batera».
+1145	Borrar o grupo	Ezabatu taldea
+1146	Mover a un grupo	Mugitu talde batera
+1147	Mover a outro grupo	Mugitu beste talde batera
+1148	+ Novo grupo	+ Talde berria
+1149	Sacar do grupo	Atera taldetik
+1150	Con «+ Grupo» podes crear cartafoles para ordenar as túas táboas: nos tres puntos dunha táboa, «Mover a un grupo». Toca un grupo para abrilo ou pechalo.	«+ Taldea» aukerarekin karpetak sor ditzakezu zure taulak antolatzeko: taula baten hiru puntuetan, «Mugitu talde batera». Ukitu talde bat irekitzeko edo ixteko.
+1151	Táboa	Taula
+1152	Borrar o grupo "{x}"?	"{x}" taldea ezabatu?
+1153	Se non marcas a caixa, as súas táboas non se borran: volven á lista.	Laukia markatzen ez baduzu, bere taulak ez dira ezabatzen: zerrendara itzultzen dira.
+1154	Borrar as táboas tamén	Ezabatu taulak ere
+1155	Borraranse o grupo "{x}" e {y} que ten. Non se pode desfacer.	"{x}" taldea eta dituen {y} ezabatuko dira. Ezin da desegin.
+1156	Borrar todo	Ezabatu dena
+1157	Crea tantas táboas como queiras con «+ Táboa»: «Fáima por min» (obxectivo, zona, tempo e nivel, co teu material), unha das «Táboas feitas» ou baleira, escollendo ti os exercicios.	Sortu nahi adina taula «+ Taula» aukerarekin: «Egin niretzat» (helburua, gunea, denbora eta maila, zure materialarekin), «Taula eginak» atalekoren bat edo hutsik, zuk ariketak aukeratuz.
+1158	Con «+ Grupo» creas cartafoles para ordenalas. Nos tres puntos dunha táboa podes movela a un grupo, cambiarlle o nome, duplicala ou borrala.	«+ Taldea» aukerarekin karpetak sortzen dituzu antolatzeko. Taula baten hiru puntuetan talde batera mugitu, izena aldatu, bikoiztu edo ezabatu dezakezu.
+1159	En cada exercicio: o tempo (− +), o peso se usa mancuernas, cambialo por outro, quitalo ou movelo arrastrando pola asa. Toca a imaxe ou o nome para ver como se fai.	Ariketa bakoitzean: denbora (− +), pisua mankuernak erabiltzen baditu, beste batekin aldatu, kendu edo heldulekutik arrastatuz mugitu. Ukitu irudia edo izena nola egiten den ikusteko.
+1160	En «Engadir un exercicio» marca co + os que queiras, axusta o seu tempo (e o peso) e engádeos todos co botón de abaixo. Debaixo de cada bloque ves o material que necesita (en laranxa, o que non tes).	«Gehitu ariketa bat» atalean markatu + ikurrarekin nahi dituzunak, doitu haien denbora (eta pisua) eta gehitu denak beheko botoiarekin. Bloke bakoitzaren azpian behar duen materiala ikusten duzu (laranjaz, ez duzuna).
+1161	Para pasar un bloque enteiro a outra táboa: «Copiar o bloque» e, no mesmo bloque da outra táboa, «Pegar».	Bloke oso bat beste taula batera pasatzeko: «Kopiatu blokea» eta, beste taulako bloke berean, «Itsatsi».
+1162	Editar unha táboa	Taula bat editatu
+1163	Os exercicios	Ariketak
+1164	Calendario cos días adestrados; toca un para ver os seus bloques e exercicios (esvara para pasar ao adestramento anterior ou ao seguinte).	Entrenatutako egunen egutegia; ukitu bat bere blokeak eta ariketak ikusteko (irristatu aurreko edo hurrengo entrenamendura pasatzeko).
+1165	Os teus récords: racha actual e mellor racha, o adestramento máis longo, o de máis calorías e o mellor mes.	Zure errekorrak: uneko segida eta segidarik onena, entrenamendurik luzeena, kaloria gehien dituena eta hilabeterik onena.
+1166	pesa rusa	kettlebella
+1167	barra con discos (total)	barra diskoekin (guztira)
+1168	Para velos, engade ese material en Os meus datos › O meu material.	Ikusteko, gehitu material hori Nire datuak › Nire materiala atalean.
+1169	Bóla de ferro	Burdinazko bola
+1170	Pesa de campión	Txapeldunaren pisua
+1171	Tsar da pesa rusa	Kettlebellaren tsarra
+1172	Un exercicio cunha pesa rusa de {n} kg ou máis.	Ariketa bat {n} kg edo gehiagoko kettlebell batekin.
+1173	Barra cargada	Barra kargatua
+1174	Levantador	Altxatzailea
+1175	Rei da barra	Barraren erregea
+1176	Un exercicio coa barra cargada a {n} kg ou máis (en total).	Ariketa bat barra {n} kg edo gehiagorekin kargatuta (guztira).
+1177	Adestramentos de forza	Indar-entrenamenduak
+1178	Subir de peso	Pisua igo
+1179	Esta versión da app non pode comprobar códigos.	Aplikazioaren bertsio honek ezin ditu kodeak egiaztatu.
+1180	Música mentres fala a app	Musika aplikazioak hitz egiten duenean
+1181	Páusase	Pausatu egiten da
+1182	Báixase	Jaitsi egiten da
+1183	Non cambia	Ez da aldatzen
+1184	Se escoitas música (Spotify, a radio...), párase un momento cando fala a app e despois segue soa.	Musika entzuten baduzu (Spotify, irratia...), une batez gelditzen da aplikazioak hitz egiten duenean eta gero berez jarraitzen du.
+1185	A música baixa durante a voz e os pitidos, e a voz soa máis alta para que se oia ben.	Musika jaitsi egiten da ahotsean eta bip-etan, eta ahotsa ozenago entzuten da ondo entzun dadin.
+1186	A música segue igual mentres fala a app.	Musikak berdin jarraitzen du aplikazioak hitz egiten duen bitartean.
+1187	Na app de Android, a música baixa mentres a app fala ou pita, e a voz soa máis alta. En Configuración › Avisos podes escoller que se pare un momento ou que non cambie.	Android aplikazioan, musika jaitsi egiten da aplikazioak hitz egiten duen edo bip egiten duen bitartean, eta ahotsa ozenago entzuten da. Ezarpenak › Abisuak atalean aukera dezakezu une batez gelditzea edo ez aldatzea.
+1188	Avisos á hora exacta	Abisuak ordu zehatzean
+1189	Android non deixa que os avisos cheguen á hora xusta e poden chegar tarde. Permite «Alarmas e recordatorios» para Kasa Fit.	Androidek ez du uzten abisuak ordu zehatzean iristen eta berandu iris daitezke. Baimendu «Alarmak eta oroigarriak» Kasa Fit-entzat.
+1190	Permitir	Baimendu
+1191	En «+ Táboa» › Plan da semana escolles obxectivo, días (de 2 a 6), minutos e nivel, e a app crea unha táboa para cada día, repartindo as zonas para que descansen entre sesións. Antes de crealo, toca un día para ver os seus exercicios e o tempo de cada un e cambiar o que queiras. Ao final pregúntache se queres que che avise eses días (o recordatorio de adestrar segue o plan en uso).	«+ Taula» › Asteko plana atalean helburua, egunak (2tik 6ra), minutuak eta maila aukeratzen dituzu, eta aplikazioak taula bat sortzen du egun bakoitzerako, guneak banatuz saioen artean atseden har dezaten. Sortu aurretik, ukitu egun bat bere ariketak eta bakoitzaren denbora ikusteko eta nahi duzuna aldatzeko. Amaieran egun horietan abisatzea nahi duzun galdetzen dizu (entrenatzeko oroigarriak erabiltzen ari den planari jarraitzen dio).
+1192	Cun plan da semana en uso, o recordatorio de adestrar pode seguilo («Seguir o plan da semana»): avísate os días do plan e dite que toca. Se o apagas, escolles ti os días.	Asteko plan bat erabiltzen ari bazara, entrenatzeko oroigarriak hari jarrai diezaioke («Jarraitu asteko planari»): planaren egunetan abisatzen dizu eta zer dagokion esaten dizu. Itzaltzen baduzu, zuk aukeratzen dituzu egunak.
+1193	Seguir o plan da semana	Jarraitu asteko planari
+1194	Avísate os seus días e dite que toca.	Bere egunetan abisatzen dizu eta zer dagokion esaten dizu.
+1195	Desactivado	Desaktibatuta
+1196	Versión {n}	{n}. bertsioa
+1197	Novidades da versión {n}	{n}. bertsioaren berritasunak
+1198	Últimas novidades	Azken berritasunak
+1199	Toca para ver que hai de novo.	Ukitu zer berri dagoen ikusteko.
+1200	A táboa vese por bloques, como en Inicio (con «x2» se o bloque se repite): toca un para ver e cambiar os seus exercicios.	Taula blokeka ikusten da, Hasieran bezala («x2» blokea errepikatzen bada): ukitu bat bere ariketak ikusteko eta aldatzeko.
+1201	Os bloques ordénanse arrastrándoos pola súa asa ≡ (á esquerda): por exemplo, abdominais antes que forza. O adestramento, Inicio e o historial seguen esa orde.	Blokeak beren ≡ heldulekutik arrastatuz ordenatzen dira (ezkerrean): adibidez, abdominalak indarraren aurretik. Entrenamenduak, Hasierak eta historialak ordena horri jarraitzen diote.
+1202	Pilates	Pilates
+1203	Exercicios de pilates deste bloque. Preme Seleccionar para engadilo á táboa.	Bloke honetako pilates ariketak. Sakatu Hautatu taulara gehitzeko.
+1204	Exercicios de pilates na esteira: core, control e estiramentos.	Pilates ariketak esterillan: core-a, kontrola eta luzaketak.
+1205	Pilates para comezar	Pilates hasteko
+1206	Pilates suave na esteira: respiración, core e costas.	Pilates leuna esterillan: arnasketa, core-a eta bizkarra.
+1207	Pilates core	Pilates core
+1208	Os clásicos de pilates para o abdome: o cen, enrolarse, tesoiras…	Sabelerako pilates klasikoak: ehuna, kiribiltzea, guraizeak…
+1209	Pilates de costas e glúteos	Bizkarrerako eta ipurmasailetarako pilates
+1210	Pontes, patadas e extensións para unhas costas fortes e uns glúteos activos.	Zubiak, ostikoak eta luzapenak bizkar indartsu eta ipurmasail aktiboetarako.
+1211	Os exercicios de pilates levan a etiqueta «Pilates». Na lista de cada bloque, «Pilates» (arriba) amosa só eses.	Pilates ariketek «Pilates» etiketa daramate. Bloke bakoitzeko zerrendan, «Pilates» (goian) aukerak horiek bakarrik erakusten ditu.
+1212	Para unha sesión de pilates: en «Táboas feitas» hai tres (para comezar, core, e costas e glúteos), e en «Fáima por min» ou no plan da semana podes escoller o obxectivo «Pilates».	Pilates saio baterako: «Taula eginak» atalean hiru daude (hasteko, core-a, eta bizkarra eta ipurmasailak), eta «Egin niretzat» atalean edo asteko planean «Pilates» helburua aukera dezakezu.
+1213	Se cambias o plan, os días xa feitos esta semana deixarán de saír como feitos. Queres cambialo?	Plana aldatzen baduzu, aste honetan egindako egunak ez dira eginda bezala agertuko. Aldatu nahi duzu?
+1214	Máis opcións	Aukera gehiago
+1215	Táboa libre	Taula librea
+1216	Calquera exercicio, na orde que queiras	Edozein ariketa, nahi duzun ordenan
+1217	Todos os exercicios	Ariketa guztiak
+1218	Por bloques	Blokeka
+1219	Marca os exercicios que queres repetir seguidos (unha serie).	Markatu jarraian errepikatu nahi dituzun ariketak (serie bat).
+1220	Crear a serie ({n})	Sortu seriea ({n})
+1221	Crear a serie	Sortu seriea
+1222	Engade os exercicios que queiras, de calquera tipo, e ordénaos á túa maneira. Podes poñer descansos e series que se repiten.	Gehitu nahi dituzun ariketak, edozein motatakoak, eta ordenatu zure erara. Atsedenak eta errepikatzen diren serieak jar ditzakezu.
+1223	Serie	Seriea
+1224	Engadir un descanso	Gehitu atseden bat
+1225	Repetir uns exercicios (serie)	Errepikatu ariketa batzuk (seriea)
+1226	Meter na serie de arriba	Sartu goiko seriean
+1227	Meter na serie de abaixo	Sartu beheko seriean
+1228	Sacar da serie	Atera serietik
+1229	Máis opcións da serie	Seriearen aukera gehiago
+1230	Desfacer a serie (os exercicios quedan)	Desegin seriea (ariketak geratzen dira)
+1231	Borrar a serie e os seus exercicios	Ezabatu seriea eta bere ariketak
+1232	Cantos segundos de descanso?	Zenbat segundo atseden?
+1233	Pasar a libre	Pasatu librera
+1234	Pasar a táboa libre	Pasatu taula librera
+1235	Libre	Librea
+1236	A táboa pasará a ser unha soa lista, sen bloques: os mesmos exercicios na mesma orde, e os bloques con voltas como series. Queres pasala a táboa libre?	Taula zerrenda bakarra izango da, blokerik gabe: ariketa berak ordena berean, eta itzuliak dituzten blokeak serie gisa. Taula librera pasatu nahi duzu?
+1237	En «+ Táboa» › Táboa libre fas unha táboa sen bloques: unha soa lista con exercicios de calquera tipo (en «Engadir exercicios» saen todos, ordenados por bloques), na orde que queiras. Arrastra pola asa para movelos.	«+ Taula» › Taula librea atalean blokerik gabeko taula bat egiten duzu: zerrenda bakar bat edozein motatako ariketekin («Gehitu ariketak» atalean denak agertzen dira, blokeka ordenatuta), nahi duzun ordenan. Arrastatu heldulekutik mugitzeko.
+1238	Pon descansos onde queiras (cos segundos que queiras) e series: marca uns exercicios en «Repetir uns exercicios (serie)» e escolle cantas voltas. O de fóra das series faise unha vez.	Jarri atsedenak nahi duzun lekuan (nahi dituzun segundoekin) eta serieak: markatu ariketa batzuk «Errepikatu ariketa batzuk (seriea)» atalean eta aukeratu zenbat itzuli. Serietik kanpokoa behin egiten da.
+1239	Unha táboa por bloques pódese pasar a libre nos seus tres puntos › «Pasar a táboa libre».	Blokeka egindako taula bat librera pasa daiteke bere hiru puntuetan › «Pasatu taula librera».
+1240	Engadilos como serie ({n})	Gehitu serie gisa ({n})
+1241	Engadilos como serie	Gehitu serie gisa
+1242	Comecemos	Has gaitezen
+1243	Crea a túa primeira táboa	Sortu zure lehen taula
+1244	Esta táboa está baleira	Taula hau hutsik dago
+1245	Escolle como queres comezar.	Aukeratu nola hasi nahi duzun.
+1246	Escolle os exercicios de cada bloque	Aukeratu bloke bakoitzeko ariketak
+1247	Escolle unha xa preparada (costas, pilates, forza…) e comeza	Aukeratu prestatutako bat (bizkarra, pilates, indarra…) eta hasi
+1248	Táboas xa preparadas por obxectivo. Toca unha para ver os seus exercicios e o seu tempo; se queres, cambia o que non che guste e preme «Usar esta táboa»: gárdase nas túas táboas e xa podes comezar.	Helburuaren arabera prestatutako taulak. Ukitu bat bere ariketak eta denbora ikusteko; nahi baduzu, aldatu gustatzen ez zaizuna eta sakatu «Erabili taula hau»: zure tauletan gordetzen da eta has zaitezke.
+1249	Aínda non tes ningunha táboa	Oraindik ez duzu taularik
+1250	Vai a Inicio para crear a túa primeira táboa.	Joan Hasierara zure lehen taula sortzeko.
+1251	Ir a Inicio	Joan Hasierara

@@ -1,0 +1,140 @@
+260	Poñer {a} na miña táboa	Jarri {a} nire taulan
+261	Na táboa (n.º {p}) · Quitar	Taulan ({p}. zk.) · Kendu
+262	Engadir á táboa	Gehitu taulara
+263	Eliminar exercicio	Ezabatu ariketa
+264	Eliminar "{x}"? Desaparecerá para sempre da lista e de todas as túas táboas, e non se poderá recuperar.	"{x}" ezabatu? Betiko desagertuko da zerrendatik eta zure taula guztietatik, eta ezingo da berreskuratu.
+265	{x} (suave)	{x} (leuna)
+266	Traballa:	Lantzen du:
+267	Estira:	Luzatzen du:
+268	Menos peso	Pisu gutxiago
+269	Máis peso	Pisu gehiago
+270	Peso para {x}	Pisua: {x}
+271	Con canto peso?	Zenbat pisurekin?
+272	{x} · por mancuerna	{x} · mankuerna bakoitzeko
+273	Sen peso	Pisurik gabe
+274	Un quilo menos	Kilo bat gutxiago
+275	Cen gramos menos	Ehun gramo gutxiago
+276	Cen gramos máis	Ehun gramo gehiago
+277	Un quilo máis	Kilo bat gehiago
+278	Pausar	Pausatu
+279	Rematar	Amaitu
+280	Saltar	Saltatu
+281	Seguir	Jarraitu
+282	Rematar o adestramento? Gardarase no historial o que fixeses.	Entrenamendua amaitu? Egin duzuna historialean gordeko da.
+283	Lado {a} de 2	{a}. aldea (2tik)
+284	Cambio de lado	Alde aldaketa
+285	Prepárate	Prest egon
+286	Primeiro exercicio do bloque	Blokeko lehen ariketa
+287	Exercicio {a} de {b}	{a}. ariketa ({b}tik)
+288	Exercicio {a} de {b} · Volta {c} de {d}	{a}. ariketa ({b}tik) · {c}. itzulia ({d}tik)
+289	Descanso	Atsedena
+290	Prepárate para o seguinte	Prestatu hurrengorako
+291	Seguinte bloque	Hurrengo blokea
+292	{s} completado	{s}: eginda
+293	Toca a pantalla para continuar	Ukitu pantaila jarraitzeko
+294	Pausa	Etenaldia
+295	Retomar	Berrekin
+296	{n} pulsacións por minuto	{n} taupada minutuko
+297	Agardando o pulso…	Pultsuaren zain…
+298	Reloxo conectado, agardando o pulso	Erlojua konektatuta, pultsuaren zain
+299	Reconectando…	Berriro konektatzen…
+300	Conectando co reloxo	Erlojuarekin konektatzen
+301	Conectar o reloxo para ver as pulsacións	Konektatu erlojua taupadak ikusteko
+302	Non se puido conectar co reloxo. Comproba que ten activada a difusión da frecuencia cardíaca e o Bluetooth do móbil acendido. ({e})	Ezin izan da erlojuarekin konektatu. Egiaztatu bihotz-maiztasunaren hedapena aktibatuta duela eta mugikorraren Bluetootha piztuta dagoela. ({e})
+303	Rutina baleira	Errutina hutsa
+304	Seguinte: {x}	Hurrengoa: {x}
+305	Despois: {x}	Ondoren: {x}
+306	Último exercicio	Azken ariketa
+307	Reloxo	Erlojua
+308	Conectar reloxo	Konektatu erlojua
+309	Comezar sen pulsacións	Hasi taupadarik gabe
+310	Conectado! {n} ppm	Konektatuta! {n} tpm
+311	Conectado, agardando o pulso…	Konektatuta, pultsuaren zain…
+312	Conectando…	Konektatzen…
+313	Escolle o teu reloxo na lista…	Aukeratu zure erlojua zerrendan…
+314	Non se escolleu ningún reloxo. Se non aparecía na lista, comproba que a opción está activada no reloxo e volve premer "Conectar reloxo".	Ez da erlojurik aukeratu. Zerrendan agertzen ez bazen, egiaztatu aukera erlojuan aktibatuta dagoela eta sakatu berriro "Konektatu erlojua".
+315	Non se puido conectar ({e}). Volve intentalo.	Ezin izan da konektatu ({e}). Saiatu berriro.
+316	Pulsacións do reloxo	Erlojuaren taupadak
+317	No reloxo, activa	Erlojuan, aktibatu
+318	Difundir frecuencia cardíaca	Bihotz-maiztasuna hedatu
+319	(adoita estar en Axustes › Axustes de adestramento).	(normalean Ezarpenak › Entrenamenduaren ezarpenak atalean dago).
+320	Preme	Sakatu
+321	e escólleo na lista.	eta aukeratu zerrendan.
+322	Cando chegue o teu pulso, o adestramento comezará só.	Zure pultsua iristen denean, entrenamendua berez hasiko da.
+323	Se o reloxo non aparece na lista, inicia un adestramento no reloxo e volve intentalo.	Erlojua zerrendan agertzen ez bada, hasi entrenamendu bat erlojuan eta saiatu berriro.
+324	Non volver preguntar (pódese cambiar en Axustes)	Ez galdetu berriro (Ezarpenetan alda daiteke)
+325	Este navegador non pode usar Bluetooth. Usa Chrome en Android.	Nabigatzaile honek ezin du Bluetootha erabili. Erabili Chrome Androiden.
+326	Bo traballo!	Lan bikaina!
+327	Bo traballo, {n}!	Lan bikaina, {n}!
+328	Ben feito!	Ondo egina!
+329	Ben feito, {n}!	Ondo egina, {n}!
+330	Sen exercicios completados	Ariketarik osatu gabe
+331	Adestramento finalizado	Entrenamendua amaituta
+332	Adestramento finalizado antes de tempo	Entrenamendua garaia baino lehen amaituta
+333	Adestramento rematado	Entrenamendua amaitu da
+334	Tempo	Denbora
+335	Exercicios	Ariketak
+336	Bloque	Blokea
+337	Bloques	Blokeak
+338	Pulso medio {a} · máximo {b} ppm	Batez besteko pultsua {a} · gehienez {b} tpm
+339	Gardado no historial.	Historialean gordeta.
+340	Volver ao inicio	Itzuli hasierara
+341	co teu pulso	zure pultsuarekin
+342	estimadas	kalkulatuak
+343	Anotas o teu peso de hoxe?	Gaurko pisua idatzi nahi duzu?
+344	Aínda non anotaches o teu peso	Oraindik ez duzu zure pisua idatzi
+345	Para levar un mellor control da túa evolución e das calorías, deberías pesarte.	Zure bilakaera eta kaloriak hobeto kontrolatzeko, pisatu beharko zenuke.
+346	Aínda non fixeches ningunha copia de seguridade	Oraindik ez duzu segurtasun-kopiarik egin
+347	Para non perder as túas táboas e o teu historial se cambias de móbil ou se borran os datos, deberías facela.	Mugikorrez aldatzen baduzu edo datuak ezabatzen badira zure taulak eta historiala ez galtzeko, egin beharko zenuke.
+348	Última copia: {d}.	Azken kopia: {d}.
+349	Facer copia agora	Egin kopia orain
+350	Faina para non perder as túas táboas e o historial.	Egin ezazu zure taulak eta historiala ez galtzeko.
+351	Facer copia	Egin kopia
+352	Feita	Eginda
+353	Así verás a túa evolución no Historial e calcularanse as calorías.	Horrela zure bilakaera ikusiko duzu Historialean eta kaloriak kalkulatuko dira.
+354	A última vez foi hai {d} días ({w}).	Azkena duela {d} egun izan zen ({w}).
+355	Peso anotado: {w}	Idatzitako pisua: {w}
+356	Copia gardada en Descargas. Podes subila ao teu Drive desde a app de Drive.	Kopia Deskargak karpetan gorde da. Zure Drivera igo dezakezu Driveren aplikaziotik.
+357	Aínda non gardaches ningunha copia das túas táboas e historial.	Oraindik ez duzu zure taulen eta historialaren kopiarik gorde.
+358	Hai {d} días que non gardas copia das túas táboas e historial.	Duela {d} egun ez duzula zure taulen eta historialaren kopiarik gordetzen.
+359	Copia de seguridade	Segurtasun-kopia
+360	Gardar copia de seguridade?	Segurtasun-kopia gorde?
+361	Copia de seguridade pendente	Segurtasun-kopia egiteke
+362	Copia gardada	Kopia gordeta
+363	Gardar en Drive	Gorde Driven
+364	O arquivo non é unha copia de Kasa Fit.	Fitxategia ez da Kasa Fit-en kopia bat.
+365	Aínda non hai adestramentos. Cando remates o primeiro aparecerá aquí.	Oraindik ez dago entrenamendurik. Lehena amaitzen duzunean hemen agertuko da.
+366	día seguido	egun jarraian
+367	días seguidos	egun jarraian
+368	récord de racha	segida-errekorra
+369	Racha actual	Uneko segida
+370	Mellor racha	Segida onena
+371	Adestramento máis longo	Entrenamendurik luzeena
+372	Récord de calorías	Kaloria-errekorra
+373	Mellor mes	Hilabeterik onena
+374	días este mes	egun hilabete honetan
+375	Resumo semanal	Asteko laburpena
+376	Resumo do mes	Hileko laburpena
+377	Adestramentos	Entrenamenduak
+378	Toca un adestramento para ver o detalle, repetilo ou borralo.	Ukitu entrenamendu bat xehetasunak ikusteko, errepikatzeko edo ezabatzeko.
+379	Borrar todo o historial? Non se pode desfacer.	Historial osoa ezabatu? Ezin da desegin.
+380	Borrar todo o historial	Ezabatu historial osoa
+381	Borrar todo o historial? Non se pode desfacer. Só poderás recuperalo se tes unha copia de seguridade (Configuración → Copia de seguridade).	Historial osoa ezabatu? Ezin da desegin. Segurtasun-kopia bat baduzu bakarrik berreskuratu ahal izango duzu (Ezarpenak → Segurtasun-kopia).
+382	Seguro? Borraranse {x}, cos teus récords, rachas e resumos. Esta é a última confirmación.	Ziur? {x} ezabatuko dira, zure errekor, segida eta laburpenekin. Hau da azken berrespena.
+383	Si, borrar todo	Bai, ezabatu dena
+384	Músculos de costas	Giharrak atzetik
+385	Músculos de fronte	Giharrak aurretik
+386	Detrás	Atzean
+387	Diante	Aurrean
+388	Músculos	Giharrak
+389	Semana	Astea
+390	Mes	Hilabetea
+391	Os adestramentos deste período son dunha versión anterior e non gardan o detalle de cada exercicio.	Aldi honetako entrenamenduak aurreko bertsio batekoak dira eta ez dute ariketa bakoitzaren xehetasunik gordetzen.
+392	Aínda non adestraches neste período.	Oraindik ez duzu entrenatu aldi honetan.
+393	Máis traballados:	Landuenak:
+394	Máis estirados:	Luzatuenak:
+395	Menos traballados:	Gutxien landuak:
+396	Menos estirados:	Gutxien luzatuak:
+397	Só estirados:	Luzatuak bakarrik:
+398	Sen traballar:	Landu gabe:
+399	Tempo por bloque	Denbora blokeka

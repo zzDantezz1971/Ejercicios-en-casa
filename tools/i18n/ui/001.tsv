@@ -1,0 +1,130 @@
+130	Un exercicio con 10 kg ou máis por mancuerna.	Ariketa bat mankuerna bakoitzeko 10 kg edo gehiagorekin.
+131	Sempre a punto	Beti prest
+132	10 adestramentos con quecemento.	10 entrenamendu beroketarekin.
+133	Core de aceiro	Altzairuzko core-a
+134	10 adestramentos con abdominais.	10 entrenamendu abdominalekin.
+135	Flexible	Malgua
+136	10 adestramentos con estiramentos.	10 entrenamendu luzaketekin.
+137	Fin de semana activo	Asteburu aktiboa
+138	Adestrar o sábado e o domingo dunha mesma semana.	Aste bereko larunbatean eta igandean entrenatzea.
+139	Bo para a lumbar	Gerrialdearentzat ona
+140	Ollo coa lumbar	Kontuz gerrialdearekin
+141	Faino suave	Egin leun
+142	Faise por lados	Aldeka egiten da
+143	Peito	Bularra
+144	Oblicuos	Zeharkakoak
+145	Zona lumbar	Gerrialdea
+146	Costas (dorsais)	Bizkarra (dortsalak)
+147	Trapecio	Trapezioa
+148	Glúteos	Ipurmasailak
+149	Ombreiros	Sorbaldak
+150	Bíceps	Bizepsak
+151	Tríceps	Trizepsak
+152	Antebrazos	Besaurreak
+153	Cuádriceps	Kuadrizepsak
+154	Isquiotibiais	Iskiotibialak
+155	Adutores	Aduktoreak
+156	Xemelgos	Bikiak
+157	Pescozo	Lepoa
+158	Bos días	Egun on
+159	Boas tardes	Arratsalde on
+160	Boas noites	Gabon
+161	{g}, {name}	{g}, {name}
+162	Xa tes o resumo de {m}	Prest duzu laburpena: {m}
+163	Días, tempo, calorías, peso e récords do mes.	Hileko egunak, denbora, kaloriak, pisua eta errekorrak.
+164	Xa tes o resumo da semana pasada	Prest duzu joan den asteko laburpena
+165	Días, tempo, calorías, peso e músculos.	Egunak, denbora, kaloriak, pisua eta giharrak.
+166	Táboa en uso	Erabiltzen ari zaren taula
+167	Escoller exercicios	Aukeratu ariketak
+168	Comezar	Hasi
+169	Cambiar de táboa	Aldatu taula
+170	Esta semana	Aste honetan
+171	día adestrado	egun entrenatuta
+172	días adestrados	egun entrenatuta
+173	Contido da táboa	Taularen edukia
+174	Ver a gráfica grande	Ikusi grafikoa handian
+175	Toca a gráfica para vela en grande	Ukitu grafikoa handian ikusteko
+176	1 mes	Hilabete 1
+177	3 meses	3 hilabete
+178	6 meses	6 hilabete
+179	1 ano	Urte 1
+180	Todo	Dena
+181	Non hai pesos anotados neste período.	Ez dago pisurik idatzita aldi honetan.
+182	Toca un exercicio para ver como se fai.	Ukitu ariketa bat nola egiten den ikusteko.
+183	Días	Egunak
+184	{a} de 7	{a} / 7
+185	Minutos	Minutuak
+186	{a} de 150	{a} / 150
+187	Calorías	Kaloriak
+188	{a} de {b} kcal	{a} / {b} kcal
+189	Meta: o da semana pasada	Helburua: joan den astekoa
+190	A túa semana	Zure astea
+191	Sen exercicios · toca para engadir	Ariketarik gabe · ukitu gehitzeko
+192	hoxe ás {t}	gaur, {t}etan
+193	onte ás {t}	atzo, {t}etan
+194	Hoxe	Gaur
+195	As miñas táboas	Nire taulak
+196	Nova	Berria
+197	En uso	Erabiltzen
+198	Sen exercicios	Ariketarik gabe
+199	Última vez: {d}	Azken aldia: {d}
+200	Aínda non a usaches	Oraindik ez duzu erabili
+201	Usar	Erabili
+202	Máis opcións de {t}	Aukera gehiago: {t}
+203	Nome da nova táboa	Taula berriaren izena
+204	Cambiar o nome	Aldatu izena
+205	Duplicar	Bikoiztu
+206	Novo nome	Izen berria
+207	Borrar "{t}"? É a túa única táboa: quedará unha táboa baleira.	"{t}" ezabatu? Zure taula bakarra da: taula huts bat geratuko da.
+208	Borrar a táboa "{t}"? Non se pode desfacer.	"{t}" taula ezabatu? Ezin da desegin.
+209	Editar táboa	Editatu taula
+210	Buscar exercicio ou zona	Bilatu ariketa edo gunea
+211	Ordenando {t}	Ordenatzen: {t}
+212	Restablecer	Berrezarri
+213	Arrastra cada exercicio pola asa	Arrastatu ariketa bakoitza heldulekutik
+214	ou usa as frechas para colocalo onde queiras. Esta orde é a da lista, igual para todas as túas táboas.	edo erabili geziak nahi duzun lekuan jartzeko. Ordena hau zerrendarena da, berdina zure taula guztietan.
+215	Todos	Denak
+216	Favoritos	Gogokoak
+217	Escollidos ({n})	Aukeratuak ({n})
+218	Ordenar lista	Ordenatu zerrenda
+219	Os teus exercicios favoritos deste bloque. Toca un para engadilo á táboa.	Bloke honetako zure ariketa gogokoak. Ukitu bat taulara gehitzeko.
+220	Aínda non tes favoritos neste bloque. Abre un exercicio con	Oraindik ez duzu gogokorik bloke honetan. Ireki ariketa bat honekin:
+221	e preme a estrela	eta sakatu izarra
+222	Esta é a orde na que se farán. Arrastra pola asa	Hau da egingo diren ordena. Arrastatu heldulekutik
+223	ou usa as frechas para cambiala.	edo erabili geziak aldatzeko.
+224	Aínda non escolliches exercicios neste bloque. Márcaos en "Todos".	Oraindik ez duzu ariketarik aukeratu bloke honetan. Markatu "Denak" atalean.
+225	Toca un exercicio para engadilo ao final da táboa. Preme	Ukitu ariketa bat taularen amaieran gehitzeko. Sakatu
+226	para ver como se fai.	nola egiten den ikusteko.
+227	Voltas	Itzuliak
+228	Menos voltas	Itzuli gutxiago
+229	Máis voltas	Itzuli gehiago
+230	Menos tempo	Denbora gutxiago
+231	Máis tempo	Denbora gehiago
+232	Quitar {x} da táboa	Kendu taulatik: {x}
+233	Non hai exercicios que coincidan con "{q}".	Ez dago "{q}" bilaketarekin bat datorren ariketarik.
+234	Eliminácheo da lista: {e}.	Zerrendatik kendu zenuen: {e}.
+235	Como se fai: {x}	Nola egiten den: {x}
+236	Peso de {x}: {w} por mancuerna. Cambiar	Pisua ({x}): {w} mankuerna bakoitzeko. Aldatu
+237	Peso de {x}: sen peso. Cambiar	Pisua ({x}): pisurik gabe. Aldatu
+238	Ningún exercicio escollido	Ez da ariketarik aukeratu
+239	{n} neste bloque	{n} bloke honetan
+240	Nada neste bloque	Ezer ez bloke honetan
+241	Quitar todos	Kendu denak
+242	Subir {x}	Igo: {x}
+243	Baixar {x}	Jaitsi: {x}
+244	Quitar de favoritos	Kendu gogokoetatik
+245	Engadir a favoritos	Gehitu gogokoetara
+246	Arrastra para xirar	Arrastatu biratzeko
+247	Faise por lados: á metade do tempo o reloxo párase, avísase do cambio de lado e hai unha conta atrás de 3 segundos.	Aldeka egiten da: denboraren erdian erlojua gelditu egiten da, alde aldaketa iragartzen da eta 3 segundoko atzerako kontaketa dago.
+248	Posición inicial	Hasierako jarrera
+249	Movemento	Mugimendua
+250	Consello	Aholkua
+251	Erros comúns	Akats ohikoak
+252	Versión fácil	Bertsio erraza
+253	Descrición en preparación.	Deskribapena prestatzen.
+254	Os teus pesos	Zure pisuak
+255	por mancuerna	mankuerna bakoitzeko
+256	Último: {a}	Azkena: {a}
+257	Máximo: {a}	Gehienezkoa: {a}
+258	{n} sesión	{n} saio
+259	{n} sesións	{n} saio

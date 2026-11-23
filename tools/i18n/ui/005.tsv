@@ -1,0 +1,140 @@
+680	Sen conexión: non se pode comprobar agora.	Konexiorik gabe: ezin da orain egiaztatu.
+681	Versión da app	Aplikazioaren bertsioa
+682	Do {d}	{d}
+683	Pausa entre exercicios	Ariketen arteko etenaldia
+684	Tempo para prepararte antes do seguinte exercicio, en cada bloque.	Hurrengo ariketaren aurretik prestatzeko denbora, bloke bakoitzean.
+685	Menos pausa en {s}	Etenaldi laburragoa: {s}
+686	Máis pausa en {s}	Etenaldi luzeagoa: {s}
+687	Calorías e IMC	Kaloriak eta GMI
+688	Só se gardan no teu móbil. Co peso xa se estiman as calorías; coa idade e o reloxo conectado, calcúlanse coas túas pulsacións. Cada adestramento garda as súas calorías co peso dese día. A altura serve para o IMC.	Zure mugikorrean bakarrik gordetzen dira. Pisuarekin kaloriak kalkulatzen dira jada; adinarekin eta erlojua konektatuta, zure taupadekin kalkulatzen dira. Entrenamendu bakoitzak egun horretako pisuarekin gordetzen ditu bere kaloriak. Altuera GMIrako da.
+689	Nome ou alcume	Izena edo ezizena
+690	Como queres que che chame	Nola deitzea nahi duzu
+691	Idade	Adina
+692	Altura	Altuera
+693	Menos idade	Adin gutxiago
+694	Máis idade	Adin gehiago
+695	Menos altura	Altuera gutxiago
+696	Máis altura	Altuera gehiago
+697	{n} anos	{n} urte
+698	Último anotado: {w}	Azken idatzia: {w}
+699	Sen anotar	Idatzi gabe
+700	Obxectivo de peso	Pisu-helburua
+701	Sen obxectivo	Helbururik gabe
+702	Peso ao que queres chegar	Iritsi nahi duzun pisua
+703	Fixar obxectivo	Ezarri helburua
+704	Ver histórico de peso	Ikusi pisuaren historiala
+705	Sexo	Sexua
+706	Home	Gizona
+707	Muller	Emakumea
+708	Escribe a túa frase	Idatzi zure esaldia
+709	Nova frase	Esaldi berria
+710	Frases motivadoras	Esaldi motibagarriak
+711	Cada día, Inicio mostra unha frase. Podes engadir as túas; mestúranse coas da app. Escribe {n} onde queiras que apareza o teu nome.	Egunero, Hasierak esaldi bat erakusten du. Zureak gehi ditzakezu; aplikazioarenekin nahasten dira. Idatzi {n} zure izena agertzea nahi duzun lekuan.
+712	Borrar a frase {t}	Ezabatu esaldia: {t}
+713	Só as miñas frases	Nire esaldiak bakarrik
+714	{d}: {n} ppm	{d}: {n} tpm
+715	{d}: conectado, agardando o pulso…	{d}: konektatuta, pultsuaren zain…
+716	Conexión perdida, reintentando…	Konexioa galduta, berriro saiatzen…
+717	Sen conectar	Konektatu gabe
+718	Probar a conexión	Probatu konexioa
+719	Desconectar	Deskonektatu
+720	Non se puido conectar: {e}	Ezin izan da konektatu: {e}
+721	Este navegador non pode usar Bluetooth. Abre a app con Chrome en Android para conectar o reloxo.	Nabigatzaile honek ezin du Bluetootha erabili. Ireki aplikazioa Chromerekin Androiden erlojua konektatzeko.
+722	No reloxo, activa "Difundir frecuencia cardíaca" (adoita estar en Axustes › Axustes de adestramento). Despois, ao comezar un adestramento, toca "Conectar reloxo" enriba do boneco e escolle o teu reloxo. Se non aparece, inicia un adestramento no reloxo e volve intentalo.	Erlojuan, aktibatu "Bihotz-maiztasuna hedatu" (normalean Ezarpenak › Entrenamenduaren ezarpenak atalean dago). Gero, entrenamendu bat hastean, ukitu "Konektatu erlojua" panpinaren gainean eta aukeratu zure erlojua. Agertzen ez bada, hasi entrenamendu bat erlojuan eta saiatu berriro.
+723	Preguntar ao comezar	Galdetu hastean
+724	Antes de cada adestramento, pantalla para conectar o reloxo.	Entrenamendu bakoitzaren aurretik, erlojua konektatzeko pantaila.
+725	Última copia: {d}	Azken kopia: {d}
+726	Aínda non gardaches ningunha copia.	Oraindik ez duzu kopiarik gorde.
+727	Prémium	Premium
+728	Próbao gratis {d} días. Despois, escolle como seguir.	Probatu doan {d} egunez. Gero, aukeratu nola jarraitu.
+729	Escolle un plan para telo todo.	Aukeratu plan bat dena izateko.
+730	Sen anuncios e sen límites	Iragarkirik eta mugarik gabe
+731	Vista previa: na versión web non se pode pagar. A subscrición só funciona na app de Google Play.	Aurrebista: web bertsioan ezin da ordaindu. Harpidetzak Google Playko aplikazioan bakarrik funtzionatzen du.
+732	Vista previa da versión gratuíta	Doako bertsioaren aurrebista
+733	Todo desbloqueado	Dena desblokeatuta
+734	Versión gratuíta	Doako bertsioa
+735	Ver a pantalla de Prémium	Ikusi Premium pantaila
+736	Todos os exercicios, unha táboa e o historial da semana en curso. Faite prémium para telo todo.	Ariketa guztiak, taula bat eta uneko asteko historiala. Egin zaitez premium dena izateko.
+737	Faite prémium	Egin zaitez premium
+738	Gratis	Doan
+739	E moito máis 😃	Eta askoz gehiago 😃
+740	Resumo de cada semana e de cada mes	Aste eta hilabete bakoitzaren laburpena
+741	Menos de 1 € ao mes co plan anual	Hilean 1 € baino gutxiago urteko planarekin
+742	Un só pagamento desbloquea toda a app	Ordainketa bakar batek aplikazio osoa desblokeatzen du
+743	Cancela cando queiras desde Google Play	Utzi nahi duzunean Google Playtik
+744	Cantas veces seguidas se repiten todos os exercicios deste bloque. Con x2, por exemplo, faise a lista enteira dúas veces.	Bloke honetako ariketa guztiak zenbat aldiz errepikatzen diren jarraian. x2-rekin, adibidez, zerrenda osoa bi aldiz egiten da.
+745	Un pagamento ao ano, renóvase cada ano	Urtean ordainketa bat, urtero berritzen da
+746	Un pagamento ao mes, renóvase cada mes	Hilean ordainketa bat, hilero berritzen da
+747	Os primeiros {d} días son gratis. Se non cancelas antes, Google Play cobra o plan escollido co método de pagamento da túa conta de Google e renóvao cada mes ou cada ano ata que o canceles. Se cancelas durante a proba, non pagas nada. Cancélase en Google Play › Pagamentos e subscricións.	Lehen {d} egunak doakoak dira. Lehenago uzten ez baduzu, Google Playk aukeratutako plana kobratzen du zure Google kontuko ordainketa-metodoarekin eta hilero edo urtero berritzen du utzi arte. Proban uzten baduzu, ez duzu ezer ordaintzen. Google Play › Ordainketak eta harpidetzak atalean uzten da.
+748	Google Play cobra o plan escollido co método de pagamento da túa conta de Google e renóvao cada mes ou cada ano ata que o canceles. Cancélase en Google Play › Pagamentos e subscricións.	Google Playk aukeratutako plana kobratzen du zure Google kontuko ordainketa-metodoarekin eta hilero edo urtero berritzen du utzi arte. Google Play › Ordainketak eta harpidetzak atalean uzten da.
+749	Primeiro día de racha	Segidaren lehen eguna
+750	Racha de {n} días seguidos	{n} egun jarraian
+751	Esvara para cambiar de día	Irristatu eguna aldatzeko
+752	Esvara para cambiar de exercicio	Irristatu ariketa aldatzeko
+753	Outros adestramentos	Beste entrenamendu batzuk
+754	Adestramento anterior	Aurreko entrenamendua
+755	Adestramento seguinte	Hurrengo entrenamendua
+756	{d} días gratis e despois {p}	{d} egun doan eta gero {p}
+757	Anual	Urtekoa
+758	Mensual	Hilekoa
+759	/ano	/urte
+760	/mes	/hil
+761	Aforras 2 meses	2 hilabete aurrezten dituzu
+762	Código de acceso	Sarbide-kodea
+763	Este código non é válido.	Kode hau ez da baliozkoa.
+764	Kasa Fit	Kasa Fit
+765	Próbaa gratis {d} días. Despois, escolle como seguir.	Probatu doan {d} egunez. Gero, aukeratu nola jarraitu.
+766	Escolle un plan para comezar a adestrar.	Aukeratu plan bat entrenatzen hasteko.
+767	Táboas á túa medida, con voz e pitidos	Zure neurrira egindako taulak, ahotsarekin eta bip-ekin
+768	Historial, medallas e seguimento do peso	Historiala, dominak eta pisuaren jarraipena
+769	Cargando prezos…	Prezioak kargatzen…
+770	Non se puideron cargar os prezos de Google Play. Comproba a conexión e volve intentalo.	Ezin izan dira Google Playko prezioak kargatu. Egiaztatu konexioa eta saiatu berriro.
+771	Reintentar	Saiatu berriro
+772	A subscrición renóvase soa e págase coa túa conta de Google Play. Durante a proba non se cobra nada e podes cancelar cando queiras. Cancélase en Google Play › Pagamentos e subscricións.	Harpidetza berez berritzen da eta zure Google Play kontuarekin ordaintzen da. Proban ez da ezer kobratzen eta nahi duzunean utz dezakezu. Google Play › Ordainketak eta harpidetzak atalean uzten da.
+773	A subscrición renóvase soa e págase coa túa conta de Google Play. Podes cancelar cando queiras. Cancélase en Google Play › Pagamentos e subscricións.	Harpidetza berez berritzen da eta zure Google Play kontuarekin ordaintzen da. Nahi duzunean utz dezakezu. Google Play › Ordainketak eta harpidetzak atalean uzten da.
+774	Xa estou subscrito	Harpidetuta nago dagoeneko
+775	Teño un código	Kode bat daukat
+776	Validar	Balioztatu
+777	Non atopamos ningunha subscrición activa nesta conta de Google.	Ez dugu harpidetza aktiborik aurkitu Google kontu honetan.
+778	Subscrición	Harpidetza
+779	Subscrición activa	Harpidetza aktiboa
+780	Acceso con código	Sarbidea kodearekin
+781	Sen subscrición	Harpidetzarik gabe
+782	Podes cambiar de plan ou cancelala en Google Play.	Plana alda dezakezu edo utzi Google Playn.
+783	Código: {n}. Non se che cobra nada.	Kodea: {n}. Ez zaizu ezer kobratzen.
+784	Xestionar en Google Play	Kudeatu Google Playn
+785	Gardouse a copia?	Kopia gorde da?
+786	Si, gardada	Bai, gordeta
+787	Non	Ez
+788	{a}. Convén facer outra.	{a}. Komeni da beste bat egitea.
+789	Restaurar a copia do {d}? Ten {a} e {b}. Borrarase todo o que hai agora na app (táboas, plans, historial, peso, medallas e axustes) e substituirase pola copia. Non se pode desfacer.	{d} eguneko kopia leheneratu? {a} eta {b} ditu. Orain aplikazioan dagoen guztia ezabatuko da (taulak, planak, historiala, pisua, dominak eta ezarpenak) eta kopiarekin ordezkatuko da. Ezin da desegin.
+790	Restaurar a copia? Ten {a} e {b}. Borrarase todo o que hai agora na app (táboas, plans, historial, peso, medallas e axustes) e substituirase pola copia. Non se pode desfacer.	Kopia leheneratu? {a} eta {b} ditu. Orain aplikazioan dagoen guztia ezabatuko da (taulak, planak, historiala, pisua, dominak eta ezarpenak) eta kopiarekin ordezkatuko da. Ezin da desegin.
+791	Restaurar	Leheneratu
+792	Táboas, historial e axustes	Taulak, historiala eta ezarpenak
+793	Ao gardar ábrese o menú de compartir: escolle Drive para ter a copia a salvo. Para recuperala, preme Restaurar e escolle o arquivo.	Gordetzean partekatzeko menua irekitzen da: aukeratu Drive kopia salbu izateko. Berreskuratzeko, sakatu Leheneratu eta aukeratu fitxategia.
+794	Gardar copia	Gorde kopia
+795	Restaurar copia	Leheneratu kopia
+796	Avisos	Abisuak
+797	Pitidos e vibración	Bip-ak eta bibrazioa
+798	Ao comezar e acabar cada exercicio, e nos últimos 3 segundos.	Ariketa bakoitzaren hasieran eta amaieran, eta azken 3 segundoetan.
+799	Avisos por voz	Ahots bidezko abisuak
+800	Di o nome do exercicio, o seguinte e cando cambiar de lado.	Ariketaren izena, hurrengoa eta noiz aldatu aldea esaten du.
+801	Conta atrás por voz	Atzerako kontaketa ahotsez
+802	Di "tres, dous, un" ao final de cada exercicio, descanso e conta atrás.	"Hiru, bi, bat" esaten du ariketa, atseden eta atzerako kontaketa bakoitzaren amaieran.
+803	Probar son e voz	Probatu soinua eta ahotsa
+804	Os meus datos	Nire datuak
+805	Este navegador non ten voz dispoñible.	Nabigatzaile honek ez du ahotsik eskuragarri.
+806	Cambiar obxectivo	Aldatu helburua
+807	Quitar obxectivo	Kendu helburua
+808	Fixar	Ezarri
+809	Peso obxectivo	Helburu-pisua
+810	Aparencia	Itxura
+811	Modo da pantalla	Pantailaren modua
+812	Automático usa o mesmo modo que o teu móbil.	Automatikoak zure mugikorraren modu bera erabiltzen du.
+813	Escuro	Iluna
+814	Claro	Argia
+815	Automático	Automatikoa
+816	Só se usa para calcular mellor as calorías cando adestras co reloxo conectado.	Erlojua konektatuta entrenatzen duzunean kaloriak hobeto kalkulatzeko bakarrik erabiltzen da.
+817	Pon a túa altura arriba para calcular o teu IMC.	Jarri zure altuera goian zure GMI kalkulatzeko.
+818	Mancuernas	Mankuernak
+819	Pesa rusa	Kettlebella

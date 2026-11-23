@@ -62,7 +62,7 @@ const GUIDE: Array<{ icon: IconName; title: string; sub: string; points: Array<s
       'Anota tu peso cuando quieras y mira su evolución en el gráfico, con tu objetivo de peso.',
       'Mi material: marca lo que tienes; los ejercicios sin material se ven siempre.'] },
   { icon: 'settings', title: 'Menú Ajustes', sub: HAS_BACKUP ? 'Personaliza la app, recordatorios, reloj, copia de seguridad y prémium.' : 'Personaliza la app, recordatorios, reloj y prémium.', points: [
-      'Idioma (català, castellano o English), modo oscuro, claro o el del móvil, y tema de color: azul y verde gratis; terracota, oro, lila, rosa y grafito con Prémium.',
+      'Idioma (català, castellano, English, galego o euskara), modo oscuro, claro o el del móvil, y tema de color: azul y verde gratis; terracota, oro, lila, rosa y grafito con Prémium.',
       'Los ajustes están por grupos: toca uno para abrirlo o cerrarlo. Con el botón atrás se cierran todos.',
       'Personaliza el muñeco: color de piel, pelo y ropa; con prémium, también peinado, ropa, gafas, barba y cuerpo de mujer. Toca el muñeco para verlo en grande.',
       'Tiempos de los ejercicios, pitidos, voz y frases motivadoras.',

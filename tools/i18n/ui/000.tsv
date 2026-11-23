@@ -1,0 +1,130 @@
+0	Inicio	Hasiera
+1	Táboas	Taulak
+2	Historial	Historiala
+3	Axustes	Ezarpenak
+4	Seccións	Atalak
+5	Quecemento	Beroketa
+6	Pesas	Pisuak
+7	Abdominais	Abdominalak
+8	Estiramentos	Luzaketak
+9	Cancelar	Utzi
+10	Aceptar	Ados
+11	Vale	Ados
+12	Gardar	Gorde
+13	Borrar	Ezabatu
+14	Eliminar	Ezabatu
+15	Quitar	Kendu
+16	Cambiar	Aldatu
+17	Engadir	Gehitu
+18	Crear	Sortu
+19	Editar	Editatu
+20	Ver	Ikusi
+21	Ver todo	Ikusi dena
+22	Volver	Itzuli
+23	Seguinte	Hurrengoa
+24	Anterior	Aurrekoa
+25	Listo	Prest
+26	Feito	Eginda
+27	Menos	Gutxiago
+28	Máis	Gehiago
+29	Máis tarde	Geroago
+30	Agora non	Orain ez
+31	Nova versión dispoñible	Bertsio berria eskuragarri
+32	Actualizar	Eguneratu
+33	Ver novidades	Ikusi berritasunak
+34	Novidades	Berritasunak
+35	Melloras e arranxos.	Hobekuntzak eta konponketak.
+36	Pechar aviso	Itxi oharra
+37	{a} · {b}	{a} · {b}
+38	{a}: {b}	{a}: {b}
+39	{n} exercicio	{n} ariketa
+40	{n} exercicios	{n} ariketa
+41	{n} adestramento	{n} entrenamendu
+42	{n} adestramentos	{n} entrenamendu
+43	{n} táboa	{n} taula
+44	{n} táboas	{n} taula
+45	{n} día	{n} egun
+46	{n} días	{n} egun
+47	{n} días seguidos	{n} egun jarraian
+48	{a} × {r} voltas	{a} × {r} itzuli
+49	{a} x{r} voltas	{a} x{r} itzuli
+50	A miña rutina	Nire errutina
+51	{x} (copia)	{x} (kopia)
+52	De fronte	Aurretik
+53	Vista desde arriba	Goitik ikusita
+54	de fronte	aurretik
+55	vista desde arriba	goitik ikusita
+56	· Volta {a} de {b}	· {a}/{b} itzulia
+57	· co teu pulso	· zure pultsuarekin
+58	· estimadas	· kalkulatuak
+59	· calculadas co teu pulso	· zure pultsuarekin kalkulatuak
+60	· estimadas por tipo de exercicio e tempo	· ariketa motaren eta denboraren arabera kalkulatuak
+61	· con {w}	· {w}
+62	· {w} por mancuerna	· {w} mankuerna bakoitzeko
+63	· de fronte	· aurretik
+64	· vista desde arriba	· goitik ikusita
+65	{n} día adestrado	{n} egun entrenatuta
+66	{n} días adestrados	{n} egun entrenatuta
+67	150 min á semana é o recomendado	Astean 150 min da gomendatutakoa
+68	por lados	aldeka
+69	duración	iraupena
+70	calorías	kaloriak
+71	Calorías calculadas co teu pulso	Zure pultsuarekin kalkulatutako kaloriak
+72	Calorías estimadas por tipo de exercicio e tempo	Ariketa motaren eta denboraren arabera kalkulatutako kaloriak
+73	en exercicio	ariketan
+74	feitos	eginak
+75	saltados	saltatuak
+76	inicio	hasiera
+77	en total	guztira
+78	adestramento	entrenamendua
+79	adestramentos	entrenamenduak
+80	· {x}	· {x}
+81	{a} de {b} min	{a} / {b} min
+82	A túa semana: ver e cambiar metas	Zure astea: ikusi eta aldatu helburuak
+83	Os aneis énchense de luns a domingo a medida que adestras.	Eraztunak astelehenetik igandera betetzen dira entrenatu ahala.
+84	Días da semana nos que adestraches.	Entrenatu duzun asteko egunak.
+85	Tempo adestrado esta semana. A OMS recomenda polo menos 150 minutos á semana.	Aste honetan entrenatutako denbora. OMEk astean gutxienez 150 minutu gomendatzen ditu.
+86	Calorías aproximadas dos teus adestramentos desta semana.	Aste honetako zure entrenamenduen gutxi gorabeherako kaloriak.
+87	Meta	Helburua
+88	Automática	Automatikoa
+89	Fixa	Finkoa
+90	O que queimaches a semana pasada (mínimo 300): agora {n} kcal.	Joan den astean erre zenuena (gutxienez 300): orain {n} kcal.
+91	Menos minutos	Minutu gutxiago
+92	Máis minutos	Minutu gehiago
+93	Menos calorías	Kaloria gutxiago
+94	Máis calorías	Kaloria gehiago
+95	{n} min	{n} min
+96	Pechar	Itxi
+97	Onte	Atzo
+98	Hai {n} días	Duela {n} egun
+99	Medalla de bronce	Brontzezko domina
+100	Medalla de prata	Zilarrezko domina
+101	Medalla de ouro	Urrezko domina
+102	Por conseguir	Lortzeko
+103	medallas conseguidas	domina lortuta
+104	Segue adestrando: cando o consigas, a medalla desbloquearase soa.	Jarraitu entrenatzen: lortzen duzunean, domina berez desblokeatuko da.
+105	Toca unha medalla para ver a súa ficha.	Ukitu domina bat bere fitxa ikusteko.
+106	Copiar a outro día	Kopiatu beste egun batera
+107	Créase un adestramento igual a este (exercicios, tempo, calorías e pulso) no día e á hora que elixas.	Honen berdina den entrenamendu bat sortzen da (ariketak, denbora, kaloriak eta pultsua) aukeratzen duzun egun eta orduan.
+108	Día	Eguna
+109	Hora de inicio	Hasiera-ordua
+110	Copiar	Kopiatu
+111	Toca un día marcado para ver o seu adestramento.	Ukitu markatutako egun bat bere entrenamendua ikusteko.
+112	Constancia	Iraunkortasuna
+113	Tempo adestrado	Entrenatutako denbora
+114	Peso corporal	Gorputz-pisua
+115	Forza	Indarra
+116	Especiais	Bereziak
+117	Lenda	Kondaira
+118	Semana completa	Aste osoa
+119	Os 7 días dunha mesma semana adestrados.	Aste bereko 7 egunak entrenatuta.
+120	Hábito	Ohitura
+121	4 semanas seguidas adestrando polo menos 3 días.	4 aste jarraian, gutxienez 3 egun entrenatuz.
+122	Sesión longa	Saio luzea
+123	Un adestramento de 45 minutos ou máis.	45 minutuko edo gehiagoko entrenamendu bat.
+124	Cincuenta horas	Berrogeita hamar ordu
+125	A tope	Gogotik
+126	300 kcal ou máis nun só adestramento.	300 kcal edo gehiago entrenamendu bakar batean.
+127	Construtor	Eraikitzailea
+128	10 adestramentos con pesas.	10 entrenamendu pisuekin.
+129	Peso pesado	Pisu astuna

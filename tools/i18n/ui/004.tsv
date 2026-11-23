@@ -1,0 +1,140 @@
+540	Anota o teu peso en Os meus datos para ver como avanzas.	Idatzi zure pisua Nire datuak atalean nola zoazen ikusteko.
+541	Fai unha copia de seguridade	Egin segurtasun-kopia bat
+542	Hai días que non gardas unha copia das túas táboas e o teu historial.	Egun batzuk daramatzazu zure taulen eta historialaren kopiarik gorde gabe.
+543	Por músculo (da cabeza aos pés)	Giharraren arabera (burutik oinetara)
+544	Por material	Materialaren arabera
+545	Alfabética (A-Z)	Alfabetikoa (A-Z)
+546	Outros	Besteak
+547	Nome	Izena
+548	Corpo e pelo	Gorputza eta ilea
+549	Corpo	Gorputza
+550	Peiteado	Orrazkera
+551	Sen pelo	Ilerik gabe
+552	Media melena	Ile erdi luzea
+553	Melena	Ile luzea
+554	Coleta	Isatsa
+555	Moño	Mototsa
+556	Roupa	Arropa
+557	Manga curta	Mahuka laburra
+558	Sen mangas	Mahukarik gabe
+559	Manga longa	Mahuka luzea
+560	Mallas longas	Mallak luzeak
+561	Curto	Laburra
+562	Pantalóns	Galtzak
+563	Cores de pel, pelo e roupa, peiteado, lentes e barba.	Azalaren, ilearen eta arroparen koloreak, orrazkera, betaurrekoak eta bizarra.
+564	É o teu primeiro peso anotado: a partir de agora verás como cambia.	Idatzitako zure lehen pisua da: hemendik aurrera nola aldatzen den ikusiko duzu.
+565	Non anotaches o peso esta semana. O último: {w} ({d}).	Ez duzu pisua idatzi aste honetan. Azkena: {w} ({d}).
+566	Non anotaches o peso este mes. O último: {w} ({d}).	Ez duzu pisua idatzi hilabete honetan. Azkena: {w} ({d}).
+567	Anota o teu peso para ver aquí como cambia cada semana e cada mes.	Idatzi zure pisua hemen astero eta hilero nola aldatzen den ikusteko.
+568	igual que {p}	{p} bezala
+569	↑ {a} máis que {p}	↑ {a} gehiago ({p})
+570	↓ {a} menos que {p}	↓ {a} gutxiago ({p})
+571	{a} esta semana	{a} aste honetan
+572	{a} este mes	{a} hilabete honetan
+573	Comezaches a semana con {w}.	Astea {w}-rekin hasi zenuen.
+574	Comezaches o mes con {w}.	Hilabetea {w}-rekin hasi zenuen.
+575	Músculos da semana	Asteko giharrak
+576	Músculos do mes	Hileko giharrak
+577	Récords de peso	Pisu-errekorrak
+578	Mellor racha:	Segida onena:
+579	Táboa máis usada:	Gehien erabilitako taula:
+580	{t} ({n} vez)	{t} ({n} aldiz)
+581	{t} ({n} veces)	{t} ({n} aldiz)
+582	IMC	GMI
+583	IMC {x}	GMI {x}
+584	Baixo peso	Pisu baxua
+585	Peso normal	Pisu normala
+586	Sobrepeso	Gainpisua
+587	Obesidade	Obesitatea
+588	{a} desde o inicio	{a} hasieratik
+589	O teu peso de hoxe	Zure gaurko pisua
+590	Obxectivo {x}	Helburua {x}
+591	Peso de {a} a {b}	Pisua {a}-{b}
+592	Anotar peso	Idatzi pisua
+593	Peso	Pisua
+594	Anota o teu peso para ver como evoluciona e calcular as calorías de cada adestramento.	Idatzi zure pisua nola aldatzen den ikusteko eta entrenamendu bakoitzeko kaloriak kalkulatzeko.
+595	{a} desde o {d}	{a} {d}-tik
+596	Primeira anotación	Lehen idazpena
+597	Pon a túa altura en Os meus datos para ver o teu IMC.	Jarri zure altuera Nire datuak atalean zure GMI ikusteko.
+598	Obxectivo conseguido!	Helburua lortuta!
+599	Chegaches a {w}. Podes fixar un novo.	{w}-ra iritsi zara. Berri bat ezar dezakezu.
+600	Anotado o {d}	Idatzita: {d}
+601	Ao comezar	Hastean
+602	Cambio	Aldaketa
+603	Evolución	Bilakaera
+604	Obxectivo	Helburua
+605	Pon a túa altura arriba	Jarri zure altuera goian
+606	Fixa un peso ao que queiras chegar e verás canto che falta.	Ezarri iritsi nahi duzun pisu bat eta zenbat falta zaizun ikusiko duzu.
+607	Fáltanche {w}	{w} falta zaizkizu
+608	Obxectivo {w} · {p} %	Helburua {w} · % {p}
+609	Anotar o peso de hoxe	Idatzi gaurko pisua
+610	Aínda non anotaches o teu peso.	Oraindik ez duzu zure pisua idatzi.
+611	Cambiar o peso	Aldatu pisua
+612	Borrar esta anotación	Ezabatu idazpen hau
+613	Peso do {d}	Pisua: {d}
+614	Borrar a anotación do {d}?	{d} eguneko idazpena ezabatu?
+615	Medallas	Dominak
+616	Bronce	Brontzea
+617	Prata	Zilarra
+618	Ouro	Urrea
+619	Nova medalla	Domina berria
+620	Nova medalla · {a} de {b}	Domina berria · {a} / {b}
+621	Xenial!	Bikain!
+622	Xenial, {n}!	Bikain, {n}!
+623	Toca unha medalla para ver como se consegue.	Ukitu domina bat nola lortzen den ikusteko.
+624	{a} de {b} medallas	{a} / {b} domina
+625	{t}, conseguida	{t}, lortuta
+626	{t}, por conseguir	{t}, lortzeko
+627	Conseguida o {d}.	Lortua: {d}.
+628	Aínda por conseguir.	Oraindik lortzeko.
+629	Primeiro paso	Lehen urratsa
+630	O teu primeiro adestramento.	Zure lehen entrenamendua.
+631	Dez de dez	Hamar hamarretik
+632	Constante	Iraunkorra
+633	Medio cento	Berrogeita hamar
+634	Centenario	Ehun
+635	{n} adestramentos feitos.	{n} entrenamendu eginda.
+636	En racha	Bolada onean
+637	Semana perfecta	Aste perfektua
+638	Imparable	Geldiezina
+639	Un mes sen parar	Hilabete bat gelditu gabe
+640	{n} días seguidos adestrando.	{n} egun jarraian entrenatzen.
+641	Boa semana	Aste ona
+642	3 días adestrados nunha mesma semana.	3 egun entrenatuta aste berean.
+643	Semana de ferro	Burdinazko astea
+644	5 días adestrados nunha mesma semana.	5 egun entrenatuta aste berean.
+645	Cinco horas	Bost ordu
+646	Dez horas	Hamar ordu
+647	Vinte e cinco horas	Hogeita bost ordu
+648	{n} horas de adestramento en total.	{n} ordu entrenamendu guztira.
+649	Mil calorías	Mila kaloria
+650	Forno aceso	Labea piztuta
+651	Dez mil	Hamar mila
+652	{n} kcal queimadas en total.	{n} kcal erreta guztira.
+653	Primeiro quilo	Lehen kiloa
+654	Tres quilos	Hiru kilo
+655	Cinco quilos	Bost kilo
+656	Dez quilos	Hamar kilo
+657	{n} kg menos desde o teu primeiro peso anotado.	{n} kg gutxiago idatzitako zure lehen pisutik.
+658	Obxectivo cumprido	Helburua beteta
+659	Chegaches ao teu obxectivo de peso.	Zure pisu-helburura iritsi zara.
+660	Máis forte	Indartsuago
+661	Subiches o peso nun exercicio.	Pisua igo duzu ariketa batean.
+662	Táboa completa	Taula osoa
+663	Un adestramento completo cos catro bloques.	Entrenamendu oso bat lau blokeekin.
+664	Madrugador	Goiztiarra
+665	Un adestramento antes das 8 da mañá.	Entrenamendu bat goizeko 8ak baino lehen.
+666	Moucho	Hontza
+667	Un adestramento despois das 10 da noite.	Entrenamendu bat gaueko 10ak eta gero.
+668	Idioma	Hizkuntza
+669	Tempos	Denborak
+670	Conta atrás de cada bloque	Bloke bakoitzeko atzerako kontaketa
+671	Antes do primeiro exercicio de cada bloque.	Bloke bakoitzeko lehen ariketaren aurretik.
+672	Duración inicial de cada exercicio	Ariketa bakoitzaren hasierako iraupena
+673	A que se pon ao marcar un exercicio. Despois podes cambiala.	Ariketa bat markatzean jartzen dena. Gero alda dezakezu.
+674	Hai unha versión nova lista.	Bertsio berri bat prest dago.
+675	Actualizar agora	Eguneratu orain
+676	Buscar actualización	Bilatu eguneraketa
+677	As actualizacións chegan desde Google Play.	Eguneraketak Google Playtik iristen dira.
+678	Buscando…	Bilatzen…
+679	Xa tes a última versión.	Azken bertsioa duzu dagoeneko.

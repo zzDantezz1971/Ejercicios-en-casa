@@ -1,0 +1,140 @@
+400	Minutos adestrados por semana nas últimas 8 semanas	Astean entrenatutako minutuak azken 8 asteetan
+401	Esta	Hau
+402	Minutos por semana	Minutuak astean
+403	Últimas 8 semanas	Azken 8 asteak
+404	Mes anterior	Aurreko hilabetea
+405	Mes seguinte	Hurrengo hilabetea
+406	Ver o adestramento do {d}	Ikusi entrenamendua: {d}
+407	Rematado antes	Lehenago amaituta
+408	Exercicio eliminado	Ariketa ezabatuta
+409	Saltado á metade	Erdian saltatuta
+410	Saltado	Saltatuta
+411	{w} por mancuerna	{w} mankuerna bakoitzeko
+412	Adestramento	Entrenamendua
+413	De {a} a {b}	{a}-{b}
+414	Rematouse antes de acabar a táboa.	Taula bukatu aurretik amaitu zen.
+415	Este adestramento é dunha versión anterior da app e non garda o detalle de cada exercicio.	Entrenamendu hau aplikazioaren aurreko bertsio batekoa da eta ez du ariketa bakoitzaren xehetasunik gordetzen.
+416	Repetir este adestramento	Errepikatu entrenamendu hau
+417	Borrar este adestramento	Ezabatu entrenamendu hau
+418	Adestramento repetido	Entrenamendua errepikatuta
+419	Borrar este adestramento do historial? Non se pode desfacer.	Entrenamendu hau historialetik ezabatu? Ezin da desegin.
+420	Anota o teu peso en Os meus datos para ver as calorías.	Idatzi zure pisua Nire datuak atalean kaloriak ikusteko.
+421	Unha frase distinta cada día en Inicio.	Egunero esaldi desberdin bat Hasieran.
+422	Unhas {n} kcal	{n} kcal inguru
+423	calculadas co teu pulso	zure pultsuarekin kalkulatuak
+424	estimadas por tipo de exercicio e tempo	ariketa motaren eta denboraren arabera kalkulatuak
+425	con {w}	{w}
+426	Pulso durante o adestramento: de {a} a {b} pulsacións por minuto	Pultsua entrenamenduan: {a}-{b} taupada minutuko
+427	Pulsacións	Taupadak
+428	{n} ppm	{n} tpm
+429	Resumo	Laburpena
+430	Do {a} ao {b}	{a} - {b}
+431	Semana anterior	Aurreko astea
+432	Semana seguinte	Hurrengo astea
+433	Semana en curso: complétase a medida que adestras.	Uneko astea: entrenatu ahala osatzen da.
+434	Mes en curso: complétase a medida que adestras.	Uneko hilabetea: entrenatu ahala osatzen da.
+435	Non hai adestramentos nesta semana.	Ez dago entrenamendurik aste honetan.
+436	Non hai adestramentos neste mes.	Ez dago entrenamendurik hilabete honetan.
+437	a semana anterior	aurreko astea
+438	Non hai datos da semana anterior para comparar.	Ez dago aurreko asteko daturik alderatzeko.
+439	Non hai datos do mes anterior para comparar.	Ez dago aurreko hileko daturik alderatzeko.
+440	Anota o teu peso	Idatzi zure pisua
+441	ppm de media	tpm batez beste
+442	Conecta o reloxo	Konektatu erlojua
+443	Personaliza o boneco	Pertsonalizatu panpina
+444	Cores de pel e roupa, lentes e barba.	Azalaren eta arroparen koloreak, betaurrekoak eta bizarra.
+445	Cores	Koloreak
+446	Pel	Azala
+447	Camiseta	Kamiseta
+448	Pantalón	Galtzak
+449	Zapatillas	Zapatilak
+450	Complementos	Osagarriak
+451	Lentes	Betaurrekoak
+452	Sen lentes	Betaurrekorik gabe
+453	Graduadas	Graduatuak
+454	De sol	Eguzkitakoak
+455	Barba	Bizarra
+456	Sen barba	Bizarrik gabe
+457	De poucos días	Egun batzuetakoa
+458	Poboada	Sarria
+459	Volver ao boneco de sempre	Itzuli betiko panpinara
+460	Pelo, cellas e barba	Ilea, bekainak eta bizarra
+461	Pantalla	Pantaila
+462	Boneco	Panpina
+463	Motivación	Motibazioa
+464	Ordenar:	Ordenatu:
+465	Ordenar por	Ordenatu honen arabera
+466	Zona do corpo	Gorputz-gunea
+467	Personalizada	Pertsonalizatua
+468	Xira o boneco co dedo para velo desde outro ángulo: queda así para ese exercicio, tamén ao adestrar e na lista.	Biratu panpina hatzarekin beste angelu batetik ikusteko: horrela geratzen da ariketa horretarako, baita entrenatzean eta zerrendan ere.
+469	Adestramento e peso, os días e á hora que elixas.	Entrenamendua eta pisua, aukeratzen dituzun egun eta orduetan.
+470	Personaliza a app, recordatorios, reloxo e prémium.	Pertsonalizatu aplikazioa, oroigarriak, erlojua eta premium.
+471	Para adestrar coas túas táboas e pesarte, os días e á hora que elixas. Chegan como notificación, aínda que a app estea pechada.	Zure taulekin entrenatzeko eta pisatzeko, aukeratzen dituzun egun eta orduetan. Jakinarazpen gisa iristen dira, aplikazioa itxita egon arren.
+472	Menú Inicio	Hasiera menua
+473	A túa táboa, a túa semana e o adestramento.	Zure taula, zure astea eta entrenamendua.
+474	Menú Táboas	Taulak menua
+475	Menú Medallas	Dominak menua
+476	Menú Historial	Historiala menua
+477	Menú Os meus datos	Nire datuak menua
+478	Menú Axustes	Ezarpenak menua
+479	Personaliza a app, recordatorios, reloxo, copia de seguridade e prémium.	Pertsonalizatu aplikazioa, oroigarriak, erlojua, segurtasun-kopia eta premium.
+480	Todo o que podes facer con Kasa Fit. Toca un apartado para velo.	Kasa Fit-ekin egin dezakezun guztia. Ukitu atal bat ikusteko.
+481	Entendido	Ulertuta
+482	Guía da app	Aplikazioaren gida
+483	Todo o que pode facer Kasa Fit, explicado paso a paso.	Kasa Fit-ek egin dezakeen guztia, urratsez urrats azalduta.
+484	Primeiros pasos	Lehen urratsak
+485	Comeza a adestrar en tres pasos.	Hasi entrenatzen hiru urratsetan.
+486	En Os meus datos, marca o material que tes na casa: verás os exercicios que podes facer.	Nire datuak atalean, markatu etxean duzun materiala: egin ditzakezun ariketak ikusiko dituzu.
+487	En Táboas, crea unha táboa e escolle os exercicios de cada bloque: Quecemento, Forza, Abdominais e Estiramentos.	Taulak atalean, sortu taula bat eta aukeratu bloke bakoitzeko ariketak: Beroketa, Indarra, Abdominalak eta Luzaketak.
+488	En Inicio, preme Comezar e segue o boneco.	Hasieran, sakatu Hasi eta jarraitu panpinari.
+489	A táboa que vas facer, co seu contido e o botón para comezar. Podes cambiar de táboa desde aquí.	Egingo duzun taula, bere edukiarekin eta hasteko botoiarekin. Hemendik alda dezakezu taula.
+490	A túa semana: minutos e calorías, cunhas metas que podes cambiar.	Zure astea: minutuak eta kaloriak, alda ditzakezun helburu batzuekin.
+491	Unha frase motivadora distinta cada día (pódese quitar en Axustes).	Egunero esaldi motibagarri desberdin bat (Ezarpenetan ken daiteke).
+492	Máis de 200 exercicios para montar as túas táboas.	200 ariketa baino gehiago zure taulak osatzeko.
+493	Crea tantas táboas como queiras, cámbialles o nome, duplícaas ou bórraas.	Sortu nahi adina taula, aldatu izena, bikoiztu edo ezabatu.
+494	Catro bloques: Quecemento, Forza, Abdominais e Estiramentos.	Lau bloke: Beroketa, Indarra, Abdominalak eta Luzaketak.
+495	Toca un exercicio para ver o boneco facéndoo, como se fai paso a paso e os músculos que traballa (en vermello) ou estira (en turquesa) nun corpo de fronte e de costas. Esvara para pasar ao seguinte.	Ukitu ariketa bat panpina egiten ikusteko, nola egiten den urratsez urrats eta lantzen dituen (gorriz) edo luzatzen dituen (turkesaz) giharrak, gorputz bat aurretik eta atzetik. Irristatu hurrengora pasatzeko.
+496	Busca por nome ou zona, marca favoritos coa estrela e ordena a lista por zona, músculo, material ou nome, ou á túa maneira con «Personalizada».	Bilatu izenaren edo gunearen arabera, markatu gogokoak izarrarekin eta ordenatu zerrenda gunearen, giharraren, materialaren edo izenaren arabera, edo zure erara «Pertsonalizatua» aukerarekin.
+497	Nos exercicios escollidos podes cambiar os segundos, a orde e, se usan pesas, anotar o peso.	Aukeratutako ariketetan segundoak eta ordena alda ditzakezu eta, pisuak erabiltzen badituzte, pisua idatzi.
+498	Voltas: repite todos os exercicios dun bloque 2, 3 ou máis veces seguidas.	Itzuliak: errepikatu bloke bateko ariketa guztiak 2, 3 edo gehiagotan jarraian.
+499	Adestrar	Entrenatu
+500	Cada exercicio co boneco animado e unha conta atrás.	Ariketa bakoitza panpina animatuarekin eta atzerako kontaketarekin.
+501	Pitidos, vibración e voz avísante do seguinte exercicio, do cambio de lado e dos últimos segundos.	Bip-ek, bibrazioak eta ahotsak hurrengo ariketaz, alde aldaketaz eta azken segundoez ohartarazten dizute.
+502	Podes pausar, saltar un exercicio, volver ao anterior ou rematar antes: o que fixeses gárdase no historial.	Pausatu, ariketa bat saltatu, aurrekora itzuli edo lehenago amaitu dezakezu: egindakoa historialean gordetzen da.
+503	A pausa entre exercicios e a conta atrás de cada bloque cámbianse en Axustes.	Ariketen arteko etenaldia eta bloke bakoitzeko atzerako kontaketa Ezarpenetan aldatzen dira.
+504	Conecta un reloxo ou unha pulseira que difunda a frecuencia cardíaca por Bluetooth: verás as túas pulsacións durante o adestramento e as calorías calcularanse co teu pulso.	Konektatu bihotz-maiztasuna Bluetooth bidez hedatzen duen erloju edo eskumuturreko bat: entrenamenduan zure taupadak ikusiko dituzu eta kaloriak zure pultsuarekin kalkulatuko dira.
+505	En Axustes › Smartwatch tes os pasos para conectalo.	Ezarpenak › Smartwatch atalean dituzu konektatzeko urratsak.
+506	Todo o que adestraches, día a día.	Entrenatu duzun guztia, egunez egun.
+507	Calendario cos días adestrados; toca un para ver o detalle dese adestramento.	Entrenatutako egunen egutegia; ukitu bat entrenamendu horren xehetasunak ikusteko.
+508	Resumo semanal e mensual: tempo, calorías, pulsacións medias, tempo por bloque, récords e o mapa dos músculos traballados.	Asteko eta hileko laburpena: denbora, kaloriak, batez besteko taupadak, denbora blokeka, errekorrak eta landutako giharren mapa.
+509	Podes repetir un adestramento, copialo a outro día ou borralo.	Entrenamendu bat errepikatu, beste egun batera kopiatu edo ezabatu dezakezu.
+510	Para calcular calorías e IMC e seguir o teu peso.	Kaloriak eta GMI kalkulatzeko eta zure pisuaren jarraipena egiteko.
+511	Nome, idade, altura e sexo: úsanse para calcular as calorías e o IMC.	Izena, adina, altuera eta sexua: kaloriak eta GMI kalkulatzeko erabiltzen dira.
+512	Anota o teu peso cando queiras e mira a súa evolución no gráfico, co teu obxectivo de peso.	Idatzi zure pisua nahi duzunean eta ikusi bere bilakaera grafikoan, zure pisu-helburuarekin.
+513	O meu material: marca o que tes; os exercicios sen material vense sempre.	Nire materiala: markatu duzuna; materialik gabeko ariketak beti ikusten dira.
+514	Premios pola túa constancia.	Sariak zure iraunkortasunagatik.
+515	Gaña medallas por adestramentos, constancia, tempo adestrado, calorías, peso, forza e bloques, e algunha especial. Contan os adestramentos de 10 minutos ou máis.	Irabazi dominak entrenamenduengatik, iraunkortasunagatik, entrenatutako denboragatik, kaloriengatik, pisuagatik, indarragatik eta blokeengatik, eta berezi batzuk. 10 minutuko edo gehiagoko entrenamenduak zenbatzen dira.
+516	Idioma (català, castellano, English, galego ou euskara) e modo escuro, claro ou o do móbil.	Hizkuntza (català, castellano, English, galego edo euskara) eta modu iluna, argia edo mugikorrarena.
+517	Personaliza o boneco: cor de pel, pelo e roupa; con prémium, tamén peiteado, roupa, lentes, barba e corpo de muller. Toca o boneco para velo en grande.	Pertsonalizatu panpina: azalaren, ilearen eta arroparen kolorea; premiumarekin, baita orrazkera, arropa, betaurrekoak, bizarra eta emakume-gorputza ere. Ukitu panpina handian ikusteko.
+518	Tempos dos exercicios, pitidos, voz e frases motivadoras.	Ariketen denborak, bip-ak, ahotsa eta esaldi motibagarriak.
+519	Para adestrar coas túas táboas, pesarte e facer a copia de seguridade, os días e á hora que elixas. Chegan como notificación na app de Android, aínda que estea pechada.	Zure taulekin entrenatzeko, pisatzeko eta segurtasun-kopia egiteko, aukeratzen dituzun egun eta orduetan. Jakinarazpen gisa iristen dira Android aplikazioan, itxita egon arren.
+520	Garda as túas táboas, historial e axustes nun arquivo (por exemplo, en Drive) e restáurao se cambias de móbil.	Gorde zure taulak, historiala eta ezarpenak fitxategi batean (adibidez, Driven) eta leheneratu mugikorrez aldatzen baduzu.
+521	Gratis e prémium	Doan eta premium
+522	Frecuencia	Maiztasuna
+523	Cada semana	Astero
+524	Cada 2 semanas	2 astean behin
+525	Cada 3 semanas	3 astean behin
+526	Cada 4 semanas	4 astean behin
+527	Se ese día xa adestraches, non te avisa.	Egun horretan entrenatu baduzu, ez dizu abisatzen.
+528	Para anotar o teu peso. Se ese día xa te pesaches, non te avisa.	Zure pisua idazteko. Egun horretan pisatu bazara, ez dizu abisatzen.
+529	Para gardar as túas táboas e historial. Se ese día xa a fixeches, non te avisa.	Zure taulak eta historiala gordetzeko. Egun horretan egin baduzu, ez dizu abisatzen.
+530	Escolle que queres que che lembre e, para cada un, os días e a hora. Chegan como notificación aínda que a app estea pechada.	Aukeratu zer gogoratzea nahi duzun eta, bakoitzerako, egunak eta ordua. Jakinarazpen gisa iristen dira aplikazioa itxita egon arren.
+531	Os recordatorios chegan como notificación na app de Android, aínda que estea pechada. Aquí podes ver como se configuran.	Oroigarriak jakinarazpen gisa iristen dira Android aplikazioan, itxita egon arren. Hemen ikus dezakezu nola konfiguratzen diren.
+532	Marca polo menos un día.	Markatu gutxienez egun bat.
+533	Adestramento, peso e copia de seguridade, os días e á hora que elixas.	Entrenamendua, pisua eta segurtasun-kopia, aukeratzen dituzun egun eta orduetan.
+534	Recordatorios	Oroigarriak
+535	Para recibir recordatorios, permite as notificacións de Kasa Fit nos axustes do móbil.	Oroigarriak jasotzeko, baimendu Kasa Fit-en jakinarazpenak mugikorraren ezarpenetan.
+536	Hora	Ordua
+537	Hora de adestrar	Entrenatzeko ordua
+538	A túa táboa agárdate. Imos!	Zure taula zain duzu. Goazen!
+539	Toca pesarse	Pisatzeko garaia
