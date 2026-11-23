@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-23T15:10:10Z",
+    "es": "Tabla libre: el asa para mover una serie va dentro de su recuadro (arriba a la izquierda) y la serie ocupa todo el ancho.",
+    "ca": "Taula lliure: l’ansa per moure una sèrie va dins del seu requadre (a dalt a l’esquerra) i la sèrie ocupa tota l’amplada.",
+    "en": "Free routine: the handle to move a set is now inside its box (top left) and the set takes the full width."
+  },
+  {
     "fecha": "2026-11-23T15:00:28Z",
     "es": "Tabla libre: al añadir ejercicios, cada uno lleva al lado de qué bloque es, y los elegidos se pueden añadir juntos como una serie que se repite («Añadirlos como serie»).",
     "ca": "Taula lliure: en afegir exercicis, cada un porta al costat de quin bloc és, i els triats es poden afegir junts com una sèrie que es repeteix («Afegeix-los com a sèrie»).",
