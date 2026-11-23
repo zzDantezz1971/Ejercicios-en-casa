@@ -405,6 +405,17 @@ export class MannequinScene {
       }
       P.glassBridge = this.add(G.box, frame, false);
     }
+    // banda en la frente (prémium): de deporte, del color de la camiseta; japonesa, blanca con el sol rojo y el nudo atrás
+    if (look.headband !== 'none') {
+      const jp = look.headband === 'japan';
+      const bandM = this.mat(jp ? '#F4F3EE' : look.shirt, 0.85);
+      P.band = this.add(G.tap, bandM, false);
+      if (jp) {
+        P.bandSun = this.add(G.cyl, this.mat('#D21F3C', 0.6), false);
+        P.bandKnot = this.add(G.sph, bandM, false);
+        for (const s of ['L', 'R']) P['bandTail' + s] = this.add(G.box, bandM, false);
+      }
+    }
     if (look.beard !== 'none') {
       const beardM = this.mat(lookHair(look), 0.95);
       if (look.beard === 'stubble') { beardM.transparent = true; beardM.opacity = 0.45; }
@@ -827,6 +838,22 @@ export class MannequinScene {
         this.oriented(P['glassArm' + s], arm0.clone().lerp(arm1, 0.5), arm1.clone().sub(arm0), up, arm0.distanceTo(arm1), 0.45, 0.45);
       }
       this.oriented(P.glassBridge, head.clone().addScaledVector(face, 9.7).addScaledVector(up, 1.8), lat, up, 1.6, 0.45, 0.45);
+    }
+    // banda: un aro algo más estrecho por arriba que rodea la cabeza por la frente (por encima de las cejas)
+    if (P.band) {
+      this.oriented(P.band, head.clone().addScaledVector(up, 5.6), up, lat, 2.7, 8.15, 8.7);
+      if (P.bandSun) {
+        // el sol rojo, en el centro de la frente
+        this.oriented(P.bandSun, head.clone().addScaledVector(up, 5.5).addScaledVector(face, 8.05), face.clone().addScaledVector(up, 0.25), lat, 0.2, 1.2, 1.2);
+        // el nudo detrás y las dos puntas colgando
+        const knot = head.clone().addScaledVector(up, 5.4).addScaledVector(face, -7.9);
+        this.ball(P.bandKnot, knot, 1.25);
+        for (const s of ['L', 'R']) {
+          const sg = s === 'L' ? -1 : 1;
+          const along = up.clone().multiplyScalar(-1).addScaledVector(face, -0.35).addScaledVector(lat, 0.28 * sg).normalize();
+          this.oriented(P['bandTail' + s], knot.clone().addScaledVector(along, 3.6), along, lat, 6.2, 1.5, 0.3);
+        }
+      }
     }
     // barba: por la mandíbula y la barbilla, y bigote
     if (P.beard) {

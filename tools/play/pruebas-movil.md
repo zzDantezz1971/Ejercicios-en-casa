@@ -4,6 +4,7 @@ Recordatorio: **cuando instales la app de prueba** (el APK de GitHub o la prueba
 Marca cada punto al probarlo. Si algo falla, haz una captura y cuéntamelo.
 
 ## 0e. Para probar en el build 20
+- [ ] Ninot › Complements › Cinta al front: «D’esport» (del color de la samarreta) i «Japonesa» (blanca, sol vermell al front, nus i puntes darrere). Gira el ninot per veure-la per darrere, prova-la amb cada pentinat i mira que surti als exercicis. Sense prèmium, no es veu.
 - [ ] Edita una taula amb molts exercicis, baixa fins a la meitat i toca + i − del temps 10 vegades seguides: la pantalla no s’ha de moure gens (també a la taula lliure, Crea-la per mi i els dies del pla).
 - [ ] Sèrie dins d’un bloc: Taules › Edita › Força › «Afegeix un exercici», marca’n 2 › «Afegeix-los com a sèrie». També amb els que ja hi són: «Repeteix uns exercicis (sèrie)», marca’n 2 › «Crea la sèrie» (es posa al lloc del primer). Surt el requadre «Sèrie» amb voltes (− x2 +) i ⋯ (desfer o esborrar). Arrossega dins i fora de la sèrie. Entrena: els de la sèrie es repeteixen seguits («Sèrie 1 de 2», i la veu diu «Sèrie, volta 1 de 2») i després la resta del bloc. Prova-ho també a Crea-la per mi, Taules fetes i un dia del pla setmanal, i passant la taula a taula lliure (la sèrie es manté).
 - [ ] Mida de la lletra: Configuració › Pantalla › Gran. Tota l’app es veu més gran (Inici, Taules, entrenament, Historial, Configuració) sense que res surti de la pantalla ni es talli; en tancar i tornar a obrir l’app, continua en Gran. Torna a Normal.

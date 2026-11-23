@@ -1,5 +1,5 @@
 import { FigureView } from '../../figure/FigureView';
-import { DEFAULT_LOOK, HAIR_COLORS, lookHair, setLook, SHIRT_COLORS, SHOE_COLORS, SHORTS_COLORS, SKIN_TONES, type Beard, type Body, type Bottom, type Glasses, type Hair, type Look, type Top } from '../../figure/look';
+import { DEFAULT_LOOK, HAIR_COLORS, lookHair, setLook, SHIRT_COLORS, SHOE_COLORS, SHORTS_COLORS, SKIN_TONES, type Beard, type Body, type Bottom, type Glasses, type Headband, type Hair, type Look, type Top } from '../../figure/look';
 import type { ExerciseDef } from '../../domain/types';
 import type { App, Screen } from '../App';
 import { clear, h, keepScroll } from '../dom';
@@ -11,7 +11,7 @@ const PREVIEW: ExerciseDef = {
   motion: { v: 'front', az: 18, el: 10, f: [[{ uaL: 98, faL: 95, uaR: 82, faR: 85 }, 1600, 1400], [{ uaL: 100, faL: 96, uaR: 80, faR: 84, hd: -88 }, 1600, 1400]] },
 };
 
-/** Personaliza el muñeco: colores de piel y ropa (gratis); gafas y barba (prémium). */
+/** Personaliza el muñeco: colores de piel y ropa (gratis); gafas, barba y banda (prémium). */
 export class LookScreen implements Screen {
   readonly el = h('main', { class: 'screen look-screen' });
   private canvas = h('canvas', { class: 'stage-canvas' });
@@ -133,7 +133,7 @@ export class LookScreen implements Screen {
             return b;
           })));
     // opciones prémium: sin prémium se ven, pero al tocarlas lleva a hacerse prémium
-    const chips = <K extends 'glasses' | 'beard' | 'hair' | 'top' | 'bottom' | 'body'>(title: string, key: K, opts: Array<[Look[K], string]>) => {
+    const chips = <K extends 'glasses' | 'beard' | 'hair' | 'top' | 'bottom' | 'body' | 'headband'>(title: string, key: K, opts: Array<[Look[K], string]>) => {
       const cur = premium ? l[key] : DEFAULT_LOOK[key];
       return h('div', { class: 'look-row' },
         h('strong', {}, title),
@@ -165,6 +165,7 @@ export class LookScreen implements Screen {
         h('div', { class: 'card-head' }, h('h3', {}, 'Complementos'), lock?.cloneNode(true) ?? null),
         chips<'glasses'>('Gafas', 'glasses', [['none', 'Sin gafas'], ['normal', 'Graduadas'], ['sun', 'De sol']] as Array<[Glasses, string]>),
         chips<'beard'>('Barba', 'beard', [['none', 'Sin barba'], ['stubble', 'De unos días'], ['full', 'Poblada']] as Array<[Beard, string]>),
+        chips<'headband'>('Banda en la frente', 'headband', [['none', 'Sin banda'], ['sport', 'De deporte'], ['japan', 'Japonesa']] as Array<[Headband, string]>),
         premium ? null : h('button', { class: 'btn primary block', onclick: () => this.app.showPremium() }, icon('star'), 'Hazte prémium')),
       h('button', { class: 'btn ghost block', onclick: () => this.set({ ...DEFAULT_LOOK, hairColor: undefined }) }, 'Volver al muñeco de siempre'),
       // los cambios ya se guardan al momento; el botón da la sensación de aceptar y vuelve atrás

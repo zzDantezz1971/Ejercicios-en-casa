@@ -1278,4 +1278,8 @@ export const UI_EU: Record<string, string> = {
   "Ejercicio {a} de {b} · Serie {c} de {d}": "{a}. ariketa ({b}tik) · {c}. seriea ({d}tik)",
   "Ejercicio {a} de {b} · Vuelta {c} de {d} · Serie {e} de {f}": "{a}. ariketa ({b}tik) · {c}. itzulia ({d}tik) · {e}. seriea ({f}tik)",
   "Cambiar por otro": "Beste batengatik aldatu",
+  "Banda en la frente": "Bekoko zinta",
+  "Sin banda": "Zintarik gabe",
+  "De deporte": "Kirolekoa",
+  "Japonesa": "Japoniarra",
 };

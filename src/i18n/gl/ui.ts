@@ -1278,4 +1278,8 @@ export const UI_GL: Record<string, string> = {
   "Ejercicio {a} de {b} · Serie {c} de {d}": "Exercicio {a} de {b} · Serie {c} de {d}",
   "Ejercicio {a} de {b} · Vuelta {c} de {d} · Serie {e} de {f}": "Exercicio {a} de {b} · Volta {c} de {d} · Serie {e} de {f}",
   "Cambiar por otro": "Cambiar por outro",
+  "Banda en la frente": "Cinta na fronte",
+  "Sin banda": "Sen cinta",
+  "De deporte": "De deporte",
+  "Japonesa": "Xaponesa",
 };

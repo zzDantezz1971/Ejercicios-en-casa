@@ -1,4 +1,4 @@
-/* Aspecto del muñeco elegido en Configuración: colores de piel y ropa (gratis); gafas y barba (prémium). */
+/* Aspecto del muñeco elegido en Configuración: colores de piel y ropa (gratis); gafas, barba y banda (prémium). */
 
 export type Glasses = 'none' | 'normal' | 'sun';
 export type Beard = 'none' | 'stubble' | 'full';
@@ -6,6 +6,8 @@ export type Hair = 'none' | 'short' | 'bob' | 'long' | 'ponytail' | 'bun';
 export type Top = 'tee' | 'tank' | 'long';
 export type Bottom = 'shorts' | 'leggings';
 export type Body = 'man' | 'woman';
+/** Banda en la frente: de deporte (del color de la camiseta) o japonesa (hachimaki: blanca, con el sol rojo y el nudo atrás). */
+export type Headband = 'none' | 'sport' | 'japan';
 
 export interface Look {
   skin: string;
@@ -20,15 +22,16 @@ export interface Look {
   top: Top;
   bottom: Bottom;
   body: Body;
+  headband: Headband;
 }
 
 export const DEFAULT_LOOK: Look = {
   skin: '#E2A983', shirt: '#2F5BEA', shorts: '#1E2633', shoe: '#F2A516',
-  glasses: 'none', beard: 'none', hair: 'none', top: 'tee', bottom: 'shorts', body: 'man',
+  glasses: 'none', beard: 'none', hair: 'none', top: 'tee', bottom: 'shorts', body: 'man', headband: 'none',
 };
 
 /** Lo que solo se ve con prémium (sin él, el muñeco de siempre). */
-const PREMIUM_PARTS = { glasses: 'none', beard: 'none', hair: 'none', top: 'tee', bottom: 'shorts', body: 'man' } as const;
+const PREMIUM_PARTS = { glasses: 'none', beard: 'none', hair: 'none', top: 'tee', bottom: 'shorts', body: 'man', headband: 'none' } as const;
 
 /** Colores que se pueden elegir. */
 export const SKIN_TONES = ['#F6D3BC', '#EBBE9B', '#E2A983', '#C68B62', '#9C6644', '#6B4430', '#47291C'];
@@ -58,7 +61,7 @@ export function setLook(l: Partial<Look> | undefined, isPremium: () => boolean):
 /** Cambia cada vez que cambia el aspecto (para no reutilizar miniaturas dibujadas con el anterior). */
 export function lookKey(): string {
   const l = getLook();
-  return `${version}${l.glasses}${l.beard}${l.hair}${l.top}${l.bottom}${l.body}`;
+  return `${version}${l.glasses}${l.beard}${l.hair}${l.top}${l.bottom}${l.body}${l.headband}`;
 }
 
 /** Color del pelo, las cejas y la barba: el elegido o, si no, a juego con la piel. */
