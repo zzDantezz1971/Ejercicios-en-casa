@@ -1912,3 +1912,4 @@ html[data-font="large"] { font-size: 112.5%; }
 .block-list > .sortable > .sort-row:has(.free-group) .free-group-top { padding-left: 38px; min-height: 36px; }
 .block-series-rows { display: flex; flex-direction: column; gap: 8px; }
 .tv-list .free-group { margin: 4px 0; }
+.free-pickrow.picking-off { opacity: .5; cursor: default; }

@@ -148,6 +148,9 @@ function addTo(app: App, r: GenResult, s: SectionId, edit: PreviewEdit): void {
 /** Portapapeles de la app: los ejercicios de un apartado copiados para pegarlos en otra tabla (mientras la app está abierta). */
 let CLIPBOARD: { section: SectionId; items: RoutineItem[]; rounds: number; from?: string } | null = null;
 
+/** Juntar en una serie ejercicios que ya están en el bloque: el bloque que se está marcando y los marcados (por lista). */
+const PICKING = new WeakMap<object, { section: SectionId; chosen: Set<number> }>();
+
 /** Apartados plegados de cada lista (todos al entrar; se recuerda mientras estás en la pantalla, aunque se vuelva a pintar). */
 const FOLDED = new WeakMap<object, Set<SectionId>>();
 const NO_EDIT = {};
@@ -371,6 +374,46 @@ export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement
         }, { arrows: false, handleFirst: true }) : h('div', { class: 'block-series-rows' }, ...inner.map((x) => x.content)));
     };
     const outer: SortableRow[] = runs.map((run) => (run.id ? { content: seriesBox(run), label: 'Serie' } : rowAt[run.start]!));
+    // marcando ejercicios del bloque para juntarlos en una serie: filas con casilla (las de las series, apagadas)
+    const pick = edit ? PICKING.get(edit.ask) : undefined;
+    if (edit && pick?.section === s) {
+      const redraw = () => edit.set({ ...r });
+      const n = pick.chosen.size;
+      sbody.append(h('div', { class: 'card free-pick-bar' },
+        h('p', { class: 'small' }, 'Marca los ejercicios que quieres repetir seguidos (una serie).'),
+        h('div', { class: 'free-pick-btns' },
+          h('button', { class: 'btn ghost small', onclick: () => { PICKING.delete(edit.ask); redraw(); } }, 'Cancelar'),
+          h('button', { class: 'btn primary small', disabled: !n, onclick: () => {
+            const idx = [...pick.chosen].sort((a, b) => a - b);
+            PICKING.delete(edit.ask);
+            const series = { id: newSeriesId(), rounds: 2 };
+            const group = idx.map((k) => ({ ...items[k], series }));
+            // la serie, en el sitio del primero marcado
+            const next: RoutineItem[] = [];
+            items.forEach((it, k) => {
+              if (k === idx[0]) next.push(...group);
+              if (!pick.chosen.has(k)) next.push(it);
+            });
+            app.haptics.tap();
+            edit.set(withSection(r, s, next));
+          } }, icon('swap'), n ? `Crear la serie (${n})` : 'Crear la serie'))));
+      const list = h('div', { class: 'free-list' });
+      items.forEach((it, k) => {
+        const ex = app.catalog.get(it.exerciseId);
+        if (!ex) return;
+        const img = h('img', { class: 'maker-thumb', alt: '' });
+        void app.thumbs.get(ex).then((url) => (img.src = url));
+        const inSeries = !!it.series;
+        const on = pick.chosen.has(k);
+        list.append(h('button', { class: 'free-pickrow' + (on ? ' on' : '') + (inSeries ? ' picking-off' : ''), disabled: inSeries, 'aria-pressed': String(on), onclick: () => {
+          if (on) pick.chosen.delete(k); else pick.chosen.add(k);
+          redraw();
+        } }, h('span', { class: 'free-check' }, on ? icon('check') : ''),
+          h('div', { class: 'maker-row' }, img, h('div', { class: 'maker-name' }, h('span', { class: 'maker-title' }, ex.name), h('span', { class: 'muted small' }, inSeries ? 'Ya está en una serie' : `${it.seconds} s`)))));
+      });
+      sbody.append(list);
+      continue;
+    }
     // se ordena arrastrando con el asa (sin flechas); una serie se mueve entera
     if (edit) sbody.append(h('div', { class: 'block-list' }, sortableList(outer, (from, to) => {
       const parts = runs.map((run) => items.slice(run.start, run.end + 1));
@@ -380,6 +423,11 @@ export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement
     }, { arrows: false, handleFirst: true })));
     else for (const row of outer) sbody.append(row.content);
     if (edit) sbody.append(h('button', { class: 'maker-add', onclick: () => (!items.length && edit.addEmpty ? edit.addEmpty(s) : addTo(app, r, s, edit)) }, icon('plus'), 'Añadir un ejercicio'));
+    // juntar en una serie ejercicios que ya están en el bloque (si hay al menos dos fuera de series)
+    if (edit && items.filter((x) => !x.series && app.catalog.has(x.exerciseId)).length >= 2) sbody.append(h('button', { class: 'maker-add', onclick: () => {
+      PICKING.set(edit.ask, { section: s, chosen: new Set() });
+      edit.set({ ...r });
+    } }, icon('swap'), 'Repetir unos ejercicios (serie)'));
     // copiar todo el apartado y pegarlo en otra tabla (en el mismo apartado)
     if (edit?.full) {
       // pegar: solo en el mismo apartado y en otra tabla (no en la tabla de la que se copió)
