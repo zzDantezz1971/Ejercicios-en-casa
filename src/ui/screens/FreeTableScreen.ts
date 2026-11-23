@@ -89,7 +89,7 @@ export class FreeTableScreen implements Screen {
           h('button', { class: 'btn ghost small', onclick: () => { this.picking = null; this.render(); } }, 'Cancelar'),
           h('button', { class: 'btn primary small', disabled: !n, onclick: () => this.makeGroup() }, icon('swap'), n ? `Crear la serie (${n})` : 'Crear la serie'))));
     } else if (free.length) {
-      body.append(h('div', { class: 'maker-legend' }, h('span', {}, icon('tables'), 'Arrastra para mover')));
+      body.append(h('div', { class: 'maker-legend' }, h('span', {}, icon('tables'), 'Arrastra para mover'), h('span', {}, icon('more'), 'Más opciones')));
     }
 
     if (!free.length) body.append(h('p', { class: 'muted free-empty' }, 'Añade los ejercicios que quieras, de cualquier tipo, y ordénalos a tu manera. Puedes poner descansos y series que se repiten.'));

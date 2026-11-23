@@ -1334,6 +1334,7 @@ const ROWS: Row[] = [
   ['Grande', 'Gran', 'Large'],
   ['Ejercicio {a} de {b} · Serie {c} de {d}', 'Exercici {a} de {b} · Sèrie {c} de {d}', 'Exercise {a} of {b} · Set {c} of {d}'],
   ['Ejercicio {a} de {b} · Vuelta {c} de {d} · Serie {e} de {f}', 'Exercici {a} de {b} · Volta {c} de {d} · Sèrie {e} de {f}', 'Exercise {a} of {b} · Round {c} of {d} · Set {e} of {f}'],
+  ['Cambiar por otro', 'Canvia per un altre', 'Swap for another'],
 ];
 
 export const UI_CA: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[1]]));

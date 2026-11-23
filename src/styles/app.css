@@ -1807,9 +1807,9 @@ button.plan-row { cursor: pointer; }
 .grp-del .rm-stop input { width: 22px; height: 22px; }
 
 /* Editar tabla: cambiar y quitar a la derecha, centrados en vertical; asa para arrastrar más grande */
-.maker-acts { display: flex; align-items: center; gap: 8px; flex: none; align-self: center; }
-.maker-acts .icon-btn.small { width: 44px; height: 44px; border-radius: 13px; }
-.maker-acts .icon-btn.small .ico { width: 20px; height: 20px; }
+.maker-acts { display: flex; align-items: center; gap: 6px; flex: none; align-self: center; }
+.maker-acts .icon-btn.small { width: 34px; height: 34px; border-radius: 10px; }
+.maker-acts .icon-btn.small .ico { width: 17px; height: 17px; }
 .maker-acts .maker-remove { margin-left: 0; }
 .maker-acts .maker-remove::before { display: none; }
 .sort-row.handle-first .drag-handle { width: 36px; align-self: stretch; height: auto; }
@@ -1882,7 +1882,7 @@ button.plan-row { cursor: pointer; }
 .free-list > .sortable > .sort-row:has(.free-group) .free-group-top { padding-left: 38px; min-height: 36px; }
 .free-group { padding: 8px; }
 .free-group .sortable > .sort-row { padding: 6px; }
-.free-group .maker-acts .icon-btn.small { width: 36px; height: 36px; }
+.free-group .maker-acts .icon-btn.small { width: 34px; height: 34px; }
 /* Inicio sin tabla: «Crea tu primera tabla» */
 .hero-start .hero-lead { margin: 2px 0 12px; opacity: .85; }
 .hero-row { display: flex; align-items: center; gap: 12px; width: 100%; padding: 10px 12px; border-radius: 16px; border: 1px solid rgb(255 255 255 / .22); background: rgb(255 255 255 / .12); color: #fff; font: inherit; text-align: left; cursor: pointer; }

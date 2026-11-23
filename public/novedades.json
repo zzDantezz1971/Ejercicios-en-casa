@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-23T23:13:51Z",
+    "es": "Editar tabla: los botones de cambiar y quitar ejercicio son más pequeños y van alineados, y la leyenda de arriba explica los tres (mover, cambiar por otro y quitar). En la tabla libre, también el ⋯.",
+    "ca": "Edita la taula: els botons de canviar i treure exercici són més petits i van alineats, i la llegenda de dalt explica els tres (moure, canviar per un altre i treure). A la taula lliure, també el ⋯.",
+    "en": "Edit routine: the swap and remove buttons are smaller and aligned, and the legend at the top explains all three (move, swap for another and remove). In free routines, the ⋯ too."
+  },
+  {
     "fecha": "2026-11-23T23:05:17Z",
     "es": "Series dentro de los bloques: también con los ejercicios que ya están en el bloque. «Repetir unos ejercicios (serie)», marca los que quieras y «Crear la serie».",
     "ca": "Sèries dins dels blocs: també amb els exercicis que ja són al bloc. «Repeteix uns exercicis (sèrie)», marca els que vulguis i «Crea la sèrie».",

@@ -205,7 +205,12 @@ export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement
     })()));
   // leyenda de los botones de cada ejercicio
   // leyenda: solo el asa para mover (los botones de cambiar y quitar ya se entienden por su icono)
-  if (edit) box.append(h('div', { class: 'maker-legend' },
+  // leyenda de los botones de cada fila: mover, cambiar por otro y quitar
+  if (edit && !edit.openSection) box.append(h('div', { class: 'maker-legend' },
+    h('span', {}, icon('tables'), 'Arrastra para mover'),
+    h('span', {}, icon('swap'), 'Cambiar por otro'),
+    h('span', {}, icon('trash', 'ico danger'), 'Quitar')));
+  else if (edit) box.append(h('div', { class: 'maker-legend' },
     h('span', {}, icon('tables'), 'Arrastra para mover')));
   // vista general (Editar tabla): una tarjeta por bloque como en Inicio, con las vueltas, que se ordenan arrastrándolas
   if (edit?.openSection) {
