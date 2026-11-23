@@ -5,6 +5,7 @@ import { showUpdateDialog, showVersionNews } from '../components/updateDialog';
 import { APP_BUILD, APP_VERSION, BUILD_TIME, checkForUpdate, updateReady } from '../../services/Updates';
 import { IS_NATIVE } from '../../platform/native';
 import { KasaNative } from '../../platform/kasaNative';
+import { VOICE_CODE } from '../../services/Voice';
 import { healthStatus, installHealth, requestHealth } from '../../services/Health';
 import { remindersOf, type ReminderKind } from '../../domain/reminders';
 import { dayName, EVERY, RemindersScreen, WEEK } from './RemindersScreen';
@@ -537,8 +538,19 @@ export class SettingsScreen implements Screen {
 
   /** Detalles técnicos: qué contesta cada motor de voz del móvil sobre el idioma (para saber por qué habla como habla). */
   private voiceReport(): HTMLElement | null {
+    if (!IS_NATIVE) {
+      // web: las voces que da el navegador (en Android, las del motor de voz principal del móvil)
+      const all = this.app.voice.webAll();
+      if (!all.length) return null;
+      const two = (l: string) => l.slice(0, 2).toLowerCase();
+      const mine = all.filter((v) => two(v.lang) === two(VOICE_CODE[this.app.voice.lang]));
+      return h('details', { class: 'voice-report muted small' },
+        h('summary', {}, 'Detalles técnicos'),
+        h('p', { 'data-no-tr': '' }, `${all.length} · ${this.app.voice.lang}: ${mine.length}`),
+        ...mine.map((v) => h('p', { 'data-no-tr': '' }, `${v.name} · ${v.lang}${v.local ? '' : ' · net'}`)));
+    }
     const r = this.app.voice.report;
-    if (!IS_NATIVE || !r.length) return null;
+    if (!r.length) return null;
     const what = (a: number) => (a >= 0 ? '✓' : a === -1 ? '↓' : a === -9 ? '?' : '✗');
     return h('details', { class: 'voice-report muted small' },
       h('summary', {}, 'Detalles técnicos'),
@@ -554,10 +566,12 @@ export class SettingsScreen implements Screen {
         h('span', { class: 'set-text' }, h('strong', {}, 'Voz'), h('span', { class: 'muted block small' }, 'Escucha las voces de tu móvil con ▶ y elige la que más te guste (de hombre o de mujer).'))),
       this.app.voice.missingOwn ? this.voiceMissing() : null,
       this.app.voice.engine ? h('p', { class: 'muted small voice-engine' }, `Motor de voz: ${this.app.voice.engine.label}.`) : null,
-      this.voiceReport(),
       list);
     const sample = { es: 'Hola, así sonarán los avisos.', ca: 'Hola, així sonaran els avisos.', en: 'Hi, this is how the alerts will sound.', gl: 'Ola, así soarán os avisos.', eu: 'Kaixo, horrela entzungo dira abisuak.' }[this.app.voice.lang];
     void this.app.voice.voices().then((voices) => {
+      // detalles técnicos al final de la tarjeta, cuando ya se sabe qué voces hay
+      const rep = this.voiceReport();
+      if (rep) card.append(rep);
       let cur = this.app.store.settings.voiceId ?? '';
       // los nombres técnicos de Android (es-es-x-eed-local…) no dicen nada: «Voz 1, 2, 3…»; los del navegador sí
       const readable = (n: string) => !/^[a-z]{2,3}[-_][a-z]{2,3}[-_]x[-_]/i.test(n) && !/#/.test(n);

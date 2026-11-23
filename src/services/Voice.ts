@@ -66,6 +66,11 @@ export class Voice {
   engine: { id: string; label: string; voices: Array<{ name: string; lang: string }> } | null = null;
   /** Web: todas las voces del navegador para el idioma. */
   private webVoices: SpeechSynthesisVoice[] = [];
+  /**
+   * Web: se cumple cuando el navegador ya ha dado su lista de voces (o a los 3 s). En Chrome para Android la lista
+   * llega tarde (y más después de cambiar el motor de voz del móvil): si se pide antes, sale vacía.
+   */
+  private webLoaded: Promise<void> = Promise.resolve();
 
   constructor() {
     if (IS_NATIVE) {
@@ -75,8 +80,11 @@ export class Voice {
       return;
     }
     if (!this.synth) return;
+    let loaded = () => {};
+    this.webLoaded = new Promise<void>((res) => { loaded = res; setTimeout(res, 3000); });
     const pick = () => {
       const voices = this.synth!.getVoices();
+      if (voices.length) loaded();
       const find = (l: Lang) => voices.find((v) => v.lang.replace('_', '-').toLowerCase().startsWith(CODE[l] + '-') || v.lang.toLowerCase() === CODE[l]);
       const own = find(LANG);
       const es = voices.find((v) => v.lang === 'es-ES') ?? find('es');
@@ -86,6 +94,11 @@ export class Voice {
     };
     pick();
     this.synth.addEventListener?.('voiceschanged', pick);
+  }
+
+  /** Web: todas las voces que da el navegador (para la línea de detalles de Ajustes). */
+  webAll(): Array<{ name: string; lang: string; local: boolean }> {
+    return this.synth ? this.synth.getVoices().map((v) => ({ name: v.name, lang: v.lang, local: v.localService })) : [];
   }
 
   /** Lo que ha contestado cada motor de voz del móvil (para la línea de detalles de Ajustes). */
@@ -143,6 +156,7 @@ export class Voice {
         return [];
       }
     }
+    await this.webLoaded;
     return pickFew(this.webVoices.map((v) => ({ id: v.voiceURI, name: v.name, lang: v.lang })));
   }
 

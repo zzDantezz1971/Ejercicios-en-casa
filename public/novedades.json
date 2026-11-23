@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-23T20:56:46Z",
+    "es": "Ajustes › Avisos › Voz (web): la lista de voces espera a que el navegador las tenga (en Android tarda, y a veces salía «solo una voz»). Y «Detalles técnicos» enseña las voces que da el navegador.",
+    "ca": "Ajustos › Avisos › Veu (web): la llista de veus espera que el navegador les tingui (a Android triga, i de vegades sortia «només una veu»). I «Detalls tècnics» ensenya les veus que dona el navegador.",
+    "en": "Settings › Alerts › Voice (web): the voice list now waits until the browser has them (on Android they arrive late, and it sometimes said “only one voice”). “Technical details” shows the voices the browser offers."
+  },
+  {
     "fecha": "2026-11-23T20:35:42Z",
     "es": "Voz: con algunos motores de voz (como AhoTTS, para gallego y euskera) los avisos se cortaban en los dos puntos («Siguiente: …» no decía el ejercicio). Ahora se dicen enteros.",
     "ca": "Veu: amb alguns motors de veu (com AhoTTS, per al gallec i el basc) els avisos es tallaven als dos punts («Següent: …» no deia l’exercici). Ara es diuen sencers.",

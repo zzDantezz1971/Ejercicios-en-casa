@@ -1901,3 +1901,4 @@ button.plan-row { cursor: pointer; }
 .tables-empty-icon { width: 56px; height: 56px; border-radius: 16px; display: grid; place-items: center; background: color-mix(in srgb, var(--accent) 18%, transparent); color: var(--accent); }
 .tables-empty-icon .ico { width: 28px; height: 28px; }
 .tables-empty h2 { font-size: 1.4rem; text-transform: uppercase; }
+.voice-report { margin-top: 10px; align-self: stretch; } .voice-report summary { cursor: pointer; } .voice-report p { margin: 4px 0 0; word-break: break-all; }
