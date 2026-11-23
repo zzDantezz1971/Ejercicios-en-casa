@@ -15,7 +15,7 @@ Cada idea: de dónde sale, qué sería y qué hay que tener en cuenta.
   propio de cada tabla (flechas y arrastrar); orden alfabético según el idioma y materiales combinados en su sitio;
   sin sugerencias de subir de peso; **Pilates** (25 ejercicios con etiqueta y filtro, 9 nuevos, 3 tablas hechas y objetivo
   «Pilates» en Créala por mí y el plan semanal; decidido el 21 nov 2026). Lista de pruebas: `pruebas-movil.md` › «Para probar en el build 20».
-- **Versión 21 (después de la prueba):** **polea de pesas** como material nuevo (ver abajo). Antes, preguntar a los
+- **Versión 21 (después de la prueba):** **gallego y euskera** (ver abajo) y **polea de pesas** como material nuevo (ver abajo). Antes, preguntar a los
   probadores qué material tienen en casa (polea, gomas, TRX…).
 
 ## Ejercicios y planes
@@ -34,6 +34,18 @@ Cada idea: de dónde sale, qué sería y qué hay que tener en cuenta.
 - **De dónde:** idea anterior (ver `pendiente-android.md`).
 - **Qué:** un plan semanal de espalda bien trabajado dentro de Kasa Fit. Se puede hacer junto con el modo suave.
   Si funciona, más adelante pensar en una app aparte (con su propia prueba cerrada).
+
+## Idiomas: gallego y euskera — para la versión 21
+- **Decidido el 23 nov 2026** (David): la app en **gallego** y **euskera**, además de catalán, castellano e inglés, para
+  posicionarla en cada zona con su lengua propia.
+- **Qué hay que traducir:** la interfaz (~1.230 frases de `src/i18n/ui.ts`, incluida la guía), los ~300 ejercicios
+  (nombre, zona y los 5 textos), las frases motivadoras, los avisos y los textos de la voz, y las novedades nuevas.
+  Tests que avisen si falta alguna frase en algún idioma.
+- **Revisión:** Claude traduce; la revisan amigos de David nativos (gallegos y de Bilbao para el euskera) antes de publicar.
+- **Voz:** si el móvil tiene la voz del idioma, se usa. Si no, un texto corto de cómo instalarla (Ajustes del móvil ›
+  Idioma › Salida de texto a voz › Google › instalar datos de voz) y la opción de elegir otra voz.
+- **Google Play:** la ficha también en gallego (gl-ES) y euskera (eu-ES).
+- **Orden:** primero el gallego, después el euskera.
 
 ## Material nuevo
 
