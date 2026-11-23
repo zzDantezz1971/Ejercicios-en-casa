@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { chooseEngine, nativeVoiceList, pickFew } from '../src/services/Voice';
+import { chooseEngine, nativeVoiceList, pickFew, speakable } from '../src/services/Voice';
 
 describe('pickFew (voces para elegir)', () => {
   it('una de cada voz (la local), como mucho 3', () => {
@@ -45,5 +45,13 @@ describe('qué motor de voz dice los avisos', () => {
   });
   it('ninguno: en castellano', () => {
     expect(chooseEngine([google(-1, [])], 'com.google.android.tts')).toBeNull();
+  });
+});
+
+describe('texto para el motor de voz', () => {
+  it('los dos puntos van como coma (AhoTTS deja de leer en «:»)', () => {
+    expect(speakable('Así soarán os avisos. Seguinte: curl de bíceps.')).toBe('Así soarán os avisos. Seguinte, curl de bíceps.');
+    expect(speakable('Abdominalak: eginda. Ukitu pantaila')).toBe('Abdominalak, eginda. Ukitu pantaila');
+    expect(speakable('Son las 16:05')).toBe('Son las 16:05');
   });
 });

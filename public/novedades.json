@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-23T20:35:42Z",
+    "es": "Voz: con algunos motores de voz (como AhoTTS, para gallego y euskera) los avisos se cortaban en los dos puntos («Siguiente: …» no decía el ejercicio). Ahora se dicen enteros.",
+    "ca": "Veu: amb alguns motors de veu (com AhoTTS, per al gallec i el basc) els avisos es tallaven als dos punts («Següent: …» no deia l’exercici). Ara es diuen sencers.",
+    "en": "Voice: with some voice engines (like AhoTTS, for Galician and Basque) alerts stopped at the colon (“Next up: …” left out the exercise). Now they are read in full."
+  },
+  {
     "fecha": "2026-11-23T20:26:32Z",
     "es": "Voz en gallego y euskera (app Android): ahora se comprueba qué motor de voz tiene de verdad una voz instalada en el idioma (Google dice que los tiene, pero lee en castellano), y se usa ese, como AhoTTS. En Ajustes › Avisos › Voz, «Detalles técnicos» enseña qué contesta cada motor.",
     "ca": "Veu en gallec i basc (app Android): ara es comprova quin motor de veu té de debò una veu instal·lada en l’idioma (Google diu que els té, però llegeix en castellà), i es fa servir aquest, com AhoTTS. A Ajustos › Avisos › Veu, «Detalls tècnics» ensenya què contesta cada motor.",

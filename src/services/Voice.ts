@@ -193,6 +193,7 @@ export class Voice {
   /** Dice el texto; corta lo que estuviera diciendo antes (o lo pone a la cola con queue). */
   say(text: string, queue = false): void {
     if (!this.enabled) return;
+    text = speakable(text);
     if (IS_NATIVE) {
       // la música de otras apps se pausa o baja mientras habla (la promesa se cumple al acabar la frase)
       const lang = this.nativeLang || 'es-ES';
@@ -251,4 +252,12 @@ export function chooseEngine(engines: EngineStatus[], defEngine: string | undefi
   const def = engines.find((e) => e.engine === defEngine);
   if (def && engineHas(def)) return 'default';
   return engines.find((e) => e.engine !== defEngine && engineHas(e)) ?? (def ? null : 'default');
+}
+
+/**
+ * El texto tal como se manda al motor de voz. Los dos puntos van como una coma: algunos motores (AhoTTS) dejan de
+ * leer al llegar a «:» («Seguinte: curl de bíceps» se quedaba en «Seguinte»); con la coma la pausa suena igual.
+ */
+export function speakable(text: string): string {
+  return text.replace(/\s*:(?=\s|$)/g, ',');
 }
