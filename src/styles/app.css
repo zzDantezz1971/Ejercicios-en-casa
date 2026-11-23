@@ -1890,3 +1890,8 @@ button.plan-row { cursor: pointer; }
 .hero-row .hero-row-lock { color: #FFC24B; }
 .hero-sub { display: inline-flex; align-items: center; gap: 6px; margin-top: 8px; font-size: .78rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; opacity: .85; }
 .hero-sub .ico { width: 14px; height: 14px; color: #FFC24B; }
+/* Mis tablas sin ninguna tabla */
+.tables-empty { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px; padding: 26px 18px; }
+.tables-empty-icon { width: 56px; height: 56px; border-radius: 16px; display: grid; place-items: center; background: color-mix(in srgb, var(--accent) 18%, transparent); color: var(--accent); }
+.tables-empty-icon .ico { width: 28px; height: 28px; }
+.tables-empty h2 { font-size: 1.4rem; text-transform: uppercase; }

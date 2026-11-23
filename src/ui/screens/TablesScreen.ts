@@ -70,6 +70,16 @@ export class TablesScreen implements Screen {
           ...store.plans.map((p) => planTableCard(this.app, p, { after: () => this.render() })),
           h('button', { class: 'maker-add', onclick: () => newPlan(this.app) }, icon('plus'), 'Nuevo plan de la semana')) : ''));
     }
+    // sin ninguna tabla con ejercicios (al empezar o si se ha borrado todo): aviso y a Inicio para crearla
+    const only = store.routines.length === 1 ? store.routines[0] : undefined;
+    if (!plan && !store.groups.length && only && WorkoutPlan.forTable(only, this.app.catalog, store.settings).isEmpty) {
+      this.body.append(h('section', { class: 'card tables-empty' },
+        h('span', { class: 'tables-empty-icon' }, icon('tables')),
+        h('h2', {}, 'Todavía no tienes ninguna tabla'),
+        h('p', { class: 'muted' }, 'Ve a Inicio para crear la primera: vacía, libre o, con Prémium, hecha por la app.'),
+        h('button', { class: 'btn primary block', onclick: () => this.app.openTab('inicio') }, icon('home'), 'Ir a Inicio')));
+      return;
+    }
     // grupos (plegados; al tocarlos se ven sus tablas) y después las tablas que no están en ningún grupo
     const loose = store.routines.filter((t) => !planIds.has(t.id));
     for (const g of store.groups) this.body.append(this.groupCard(g.id, g.name, loose.filter((t) => t.group === g.id)));

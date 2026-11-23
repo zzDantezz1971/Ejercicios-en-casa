@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-23T15:36:20Z",
+    "es": "Mis tablas sin ninguna tabla: un aviso «Todavía no tienes ninguna tabla» con el botón «Ir a Inicio» para crear la primera.",
+    "ca": "Les meves taules sense cap taula: un avís «Encara no tens cap taula» amb el botó «Ves a Inici» per crear la primera.",
+    "en": "My routines with no routines: a «You don’t have any routines yet» notice with a «Go to Home» button to create the first one."
+  },
+  {
     "fecha": "2026-11-23T15:25:57Z",
     "es": "Inicio sin tabla: «Crea tu primera tabla» con las formas de empezar en filas; primero las gratuitas (tabla vacía y tabla libre) y después las de Prémium. Tablas hechas explica mejor qué hacer.",
     "ca": "Inici sense taula: «Crea la teva primera taula» amb les maneres de començar en files; primer les gratuïtes (taula buida i taula lliure) i després les Prémium. Taules fetes explica millor què cal fer.",
