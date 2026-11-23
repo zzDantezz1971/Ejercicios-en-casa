@@ -104,14 +104,6 @@ export class SettingsScreen implements Screen {
   /** Idioma de la app: al cambiarlo se recarga para pintarlo todo de nuevo. */
   /** Modo oscuro, claro o el del sistema. */
   /** Personaliza el muñeco: abre su pantalla. */
-  private lookCard(): HTMLElement {
-    return h('button', { class: 'card setting rest-card look-open', onclick: () => this.app.push(new LookScreen(this.app)) },
-      h('div', { class: 'rest-head' },
-        h('span', { class: 'set-icon' }, icon('user')),
-        h('div', { class: 'set-text' }, h('strong', {}, 'Personaliza el muñeco'), h('p', { class: 'muted small' }, 'Colores de piel, pelo y ropa, peinado, gafas y barba.')),
-        icon('chevron')));
-  }
-
   /** Tamaño de la letra: el de siempre o más grande (toda la app). */
   private fontCard(s: Settings): HTMLElement {
     const opt = (f: Settings['fontSize'], label: string, cls: string) =>
@@ -465,7 +457,8 @@ export class SettingsScreen implements Screen {
       h('h3', { class: 'block-title' }, IS_NATIVE ? 'Suscripción' : 'Prémium'), this.accessCard(),
       h('h3', { class: 'block-title' }, 'Idioma'), this.langCard(),
       h('h3', { class: 'block-title' }, 'Pantalla'), this.themeCard(s), this.fontCard(s), this.colorCard(s),
-      h('h3', { class: 'block-title' }, 'Muñeco'), this.lookCard(),
+      // el muñeco no se despliega: va directo a su pantalla
+      h('h3', { class: 'block-title', 'data-go': 'look' }, 'Muñeco'),
       h('h3', { class: 'block-title' }, 'Tiempos de los ejercicios'), this.restCard(s));
     // cuenta atrás y duración inicial: en una sola tarjeta, con el título y el contador en la misma fila
     this.body.append(h('section', { class: 'card setting-list' },
@@ -624,7 +617,16 @@ export class SettingsScreen implements Screen {
     const kids = [...this.body.children] as HTMLElement[];
     let content: HTMLElement | null = null;
     for (const el of kids) {
-      if (el.matches('h3.block-title')) {
+      if (el.matches('h3.block-title[data-go]')) {
+        // un apartado que abre directamente su pantalla (con la flecha hacia la derecha)
+        const key = el.textContent ?? '';
+        el.replaceWith(h('section', { class: 'card set-group' },
+          h('button', { class: 'set-group-head set-group-go', onclick: () => this.app.push(new LookScreen(this.app)) },
+            h('span', { class: 'set-icon' }, icon(GROUP_ICON[key] ?? 'settings')),
+            h('span', { class: 'set-group-title' }, key),
+            icon('chevron', 'ico set-group-chev'))));
+        content = null;
+      } else if (el.matches('h3.block-title')) {
         const key = el.textContent ?? '';
         const isOpen = this.open.has(key);
         const box = h('div', { class: 'set-group-body', hidden: !isOpen });
