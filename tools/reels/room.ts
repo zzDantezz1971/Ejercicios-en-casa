@@ -163,7 +163,11 @@ const BLOB = canvasTex(128, 128, (g) => {
 const PLASTER_UP = plaster(C.wallUp), PLASTER_LOW = plaster(C.wallLow);
 
 /** Lo que cambia de un vídeo a otro: la frase del póster (líneas separadas por «|»). */
-export interface RoomOpts { poster?: string }
+export interface RoomOpts {
+  poster?: string;
+  /** zonas de la pantalla que el muñeco no debe tapar (en coordenadas de -1 a 1: x hacia la derecha, y hacia arriba) */
+  avoid?: Array<{ x0: number; x1: number; y0: number; y1: number }>;
+}
 
 export function addRoom(ms: MannequinScene, opts: RoomOpts = {}): void {
   const S = ms.scene, cam = ms.camera;
@@ -202,11 +206,14 @@ export function addRoom(ms: MannequinScene, opts: RoomOpts = {}): void {
   };
   const fits = () => {
     const p = new THREE.Vector3();
+    let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
     for (let k = 0; k < 8; k++) {
       p.set(k & 1 ? box.max.x : box.min.x, k & 2 ? box.max.y : box.min.y, k & 4 ? box.max.z : box.min.z).project(cam);
       if (Math.abs(p.x) > EYE.side || p.y < EYE.bottom || p.y > 0.9) return false;
+      x0 = Math.min(x0, p.x); x1 = Math.max(x1, p.x); y0 = Math.min(y0, p.y); y1 = Math.max(y1, p.y);
     }
-    return true;
+    // ni encima de los textos (p. ej., el nombre del ejercicio: si es largo, el muñeco se queda más atrás)
+    return !(opts.avoid ?? []).some((a) => x0 < a.x1 && x1 > a.x0 && y0 < a.y1 && y1 > a.y0);
   };
   let near = EYE.near;
   for (; near > 0; near -= 5) { place(near); if (fits()) break; }

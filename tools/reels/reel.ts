@@ -47,7 +47,13 @@ function sceneFor(i: number, clip: Clip): MannequinScene {
   s.setAspect(540 / 960);
   if (clip.az !== undefined) s.angleOffset = clip.az;
   s.mood = 'happy';
-  addRoom(s, { poster: reel.poster });
+  // el muñeco no debe tapar el nombre del ejercicio: se mide con el nombre de este clip ya puesto
+  exname.hidden = false;
+  exname.textContent = nameOf(clip);
+  const st = document.getElementById('stage')!.getBoundingClientRect(), r = exname.getBoundingClientRect(), M = 8;
+  const ndc = (px: number, py: number) => [((px - st.left) / st.width) * 2 - 1, 1 - ((py - st.top) / st.height) * 2];
+  const [ax0, ay1] = ndc(r.left - M, r.top - M), [ax1, ay0] = ndc(r.right + M, r.bottom + M);
+  addRoom(s, { poster: reel.poster, avoid: [{ x0: ax0, x1: ax1, y0: ay0, y1: ay1 }] });
   // ?vacia=1: solo la habitación, sin el muñeco ni su material
   if (new URLSearchParams(location.search).get('vacia')) {
     const room = s.scene.children.find((o) => o.userData.room);
@@ -59,9 +65,11 @@ function sceneFor(i: number, clip: Clip): MannequinScene {
 
 const l1 = document.getElementById('l1')!, l2 = document.getElementById('l2')!, cap = document.getElementById('cap')!;
 const exname = document.getElementById('exname')!;
-if (qs.get('ex') === 'barra') document.getElementById('stage')!.classList.add('ex-bar');
+if (qs.get('ex') === 'arriba') document.getElementById('stage')!.classList.add('ex-top');
 /** Nombre en catalán del ejercicio (sin el nombre en inglés entre paréntesis). */
 const EXCA: Record<string, { ca: string[] }> = { ...EX1, ...EX2, ...EX3, ...EX4, ...EXTRA_T };
+// ?largo=1: probar con un nombre muy largo
+const nameOf = (clip: Clip) => (qs.get('largo') ? 'Estirament de quàdriceps dempeus amb suport a la paret' : clip.name ?? exName(clip.ex));
 const exName = (id: string) => (EXCA[id]?.ca[0] ?? id).replace(/\s*\([^)]*\)\s*$/, '');
 const end = document.getElementById('end')!, brand = document.getElementById('brand')!;
 const total = reel.clips.reduce((n, c) => n + c.ms, 0) + reel.endMs;
@@ -79,7 +87,7 @@ function render(ms: number): void {
   const s = sceneFor(i, clip);
   s.update(t + (clip.start ?? 0), t);
   renderer.render(s.scene, s.camera);
-  exname.textContent = clip.name ?? exName(clip.ex);
+  exname.textContent = nameOf(clip);
   l1.textContent = clip.l1; l2.textContent = clip.l2 ?? ''; l2.hidden = !clip.l2;
   // el texto entra deslizándose un poco al empezar cada clip
   const k = Math.min(1, t / 300);
@@ -88,4 +96,5 @@ function render(ms: number): void {
 }
 
 (window as unknown as { __reel: unknown }).__reel = { total, render, ready: document.fonts.ready };
-render(0);
+// la primera imagen, con las letras ya cargadas (el nombre del ejercicio se mide para colocar al muñeco)
+void document.fonts.ready.then(() => render(0));
