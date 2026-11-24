@@ -34,6 +34,20 @@ const VIDEOS: Record<string, Video> = {
       { ms: 3300, shots: ['hist'], k: 'Historial', h: 'Cada dia<br /><em>compta</em>', p: 'Ratxes, temps i calories de cada entrenament.' },
     ],
   },
+  // un entrenamiento por dentro
+  entreno: {
+    intro: 'Un entrenament<br /><em>per dins</em>', play: 'Gratis a Google Play',
+    screens: [
+      { ms: 4500, shots: ['e-musica'], k: 'Abans de començar', h: 'Posa la teva<br /><em>música</em>', p: 'Obre la teva app de música i torna: l’entrenament t’espera.' },
+      { ms: 4500, shots: ['e-prepara'], k: 'Prepara’t', h: 'Uns segons<br /><em>per col·locar-te</em>', p: 'Compte enrere i l’exercici que toca, abans de començar.' },
+      { ms: 4500, shots: ['e-ex'], k: 'Exercici guiat', h: 'Mira-ho<br /><em>i fes-ho</em>', p: 'L’exercici en 3D i el temps que queda. La veu t’avisa en català.' },
+      { ms: 4500, shots: ['e-pes'], k: 'Força', h: 'Amb el teu<br /><em>pes</em>', p: 'Cada exercici amb els quilos que fas servir i el que ve després.' },
+      { ms: 4500, shots: ['e-rest'], k: 'Descans', h: 'Respira<br /><em>i continua</em>', p: 'Descansos curts entre exercicis, amb l’avís del següent.' },
+      { ms: 4500, shots: ['e-reps'], k: 'Per repeticions', h: 'Fes-ne 12<br /><em>i prem «Fet»</em>', p: 'Si un exercici va per repeticions, l’app t’espera.' },
+      { ms: 4500, shots: ['e-break'], k: 'Bloc acabat', h: 'Un bloc<br /><em>darrere l’altre</em>', p: 'Escalfament, força, abdominals i estiraments, en ordre.' },
+      { ms: 4500, shots: ['e-end'], k: 'Entrenament acabat', h: 'Bona feina!<br /><em>I queda desat</em>', p: 'Temps, exercicis, calories i ratxa: tot va a l’historial.' },
+    ],
+  },
   // los tipos de tablas
   taules: {
     intro: 'Com vols<br /><em>la teva taula?</em>', play: 'Gratis a Google Play',
