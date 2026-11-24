@@ -1,10 +1,12 @@
 /** Guiones de los reels: cada clip, un ejercicio del muñeco con su texto. ms = duración del clip. */
 export interface Clip { ex: string; ms: number; l1: string; l2?: string; start?: number; span?: number; az?: number }
-export interface Reel { clips: Clip[]; endMs: number }
+/** poster: la frase motivadora del cuadro de la habitación (líneas separadas por «|»; la última, en azul). */
+export interface Reel { clips: Clip[]; endMs: number; poster?: string }
 
 export const REELS: Record<string, Reel> = {
   // Reel 1 · Presentació
   presentacio: {
+    poster: 'Cada dia,|una mica|més',
     clips: [
       { ex: 'saltos-de-tijera-jumping-jacks', ms: 3200, l1: 'Entrena a casa', l2: 'en català' },
       { ex: 'sentadillas-sin-peso', ms: 3200, l1: '+200 exercicis', l2: 'explicats pas a pas' },

@@ -37,7 +37,7 @@ function sceneFor(i: number, clip: Clip): MannequinScene {
   s.setAspect(540 / 960);
   if (clip.az !== undefined) s.angleOffset = clip.az;
   s.mood = 'happy';
-  addRoom(s);
+  addRoom(s, { poster: reel.poster });
   // ?vacia=1: solo la habitación, sin el muñeco ni su material
   if (new URLSearchParams(location.search).get('vacia')) {
     const room = s.scene.children.find((o) => o.userData.room);

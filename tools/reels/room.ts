@@ -1,6 +1,6 @@
 /*
  * La habitación de los reels: siempre igual vista desde la cámara (sea cual sea el ejercicio). Pared en dos tonos con
- * friso, ventana grande con cortina y estor, póster, estanterías, luz del sol en el suelo, plantas y material
+ * friso, ventana grande con estor, póster, estanterías, luz del sol en el suelo, plantas y material
  * de fitness fijo (esterilla, kettlebells, rodillo, mancuernas en su soporte, fitball).
  */
 import * as THREE from 'three';
@@ -98,19 +98,32 @@ const VIEW = canvasTex(256, 320, (g) => {
   g.fillStyle = '#86B37A'; g.fillRect(0, 290, 256, 30);
 });
 
-/** Póster: una montaña con el sol y «Cada dia, una mica més» (se repinta cuando han cargado las letras). */
-function posterTex(): THREE.CanvasTexture {
+/**
+ * Póster con una frase motivadora (distinta en cada vídeo). Las líneas van separadas por «|»; la última, en azul.
+ * Se repinta cuando han cargado las letras.
+ */
+function posterTex(text: string): THREE.CanvasTexture {
+  const W = 300, H = 420;
   const draw = (g: CanvasRenderingContext2D) => {
-    g.fillStyle = '#F6EFE3'; g.fillRect(0, 0, 300, 420);
-    g.fillStyle = C.orange; g.beginPath(); g.arc(150, 150, 70, 0, Math.PI * 2); g.fill();
-    g.fillStyle = C.blue; g.beginPath(); g.moveTo(20, 280); g.lineTo(110, 140); g.lineTo(160, 210); g.lineTo(200, 160); g.lineTo(280, 280); g.fill();
-    g.fillStyle = '#1E2633'; g.beginPath(); g.moveTo(20, 280); g.lineTo(80, 210); g.lineTo(130, 260); g.lineTo(170, 230); g.lineTo(280, 280); g.fill();
-    g.fillStyle = '#1E2633'; g.textAlign = 'center';
-    g.font = '700 40px "Barlow Condensed", sans-serif'; g.fillText('CADA DIA,', 150, 334);
-    g.fillText('UNA MICA MÉS', 150, 376);
-    g.fillStyle = C.red; g.fillRect(120, 392, 60, 5);
+    g.fillStyle = '#F6EFE3'; g.fillRect(0, 0, W, H);
+    g.strokeStyle = 'rgba(30,38,51,.18)'; g.lineWidth = 2; g.strokeRect(16, 16, W - 32, H - 32);
+    const lines = text.toUpperCase().split('|').map((l) => l.trim());
+    // el tamaño más grande con el que cabe la línea más larga (y todas a lo alto)
+    let size = 78;
+    const fit = () => { g.font = `700 ${size}px "Barlow Condensed", sans-serif`; return Math.max(...lines.map((l) => g.measureText(l).width)); };
+    while (size > 20 && (fit() > W - 64 || lines.length * size * 1.02 > H - 150)) size -= 2;
+    const lh = size * 1.02, top = (H - lines.length * lh) / 2 + size * 0.78 - 10;
+    // comillas naranjas arriba
+    g.fillStyle = C.orange; g.font = `700 110px "Barlow Condensed", sans-serif`; g.textAlign = 'center';
+    g.fillText('“', W / 2, top - size + 40);
+    g.font = `700 ${size}px "Barlow Condensed", sans-serif`;
+    lines.forEach((l, i) => { g.fillStyle = i === lines.length - 1 ? C.blue : '#1E2633'; g.fillText(l, W / 2, top + i * lh); });
+    const yEnd = top + (lines.length - 1) * lh + 22;
+    g.fillStyle = C.red; g.fillRect(W / 2 - 28, yEnd, 56, 5);
+    g.fillStyle = 'rgba(30,38,51,.45)'; g.font = '600 15px "Barlow", sans-serif';
+    g.fillText('KASA FIT', W / 2, H - 34);
   };
-  const t = canvasTex(300, 420, draw);
+  const t = canvasTex(W, H, draw);
   void document.fonts.ready.then(() => { draw((t.image as HTMLCanvasElement).getContext('2d')!); t.needsUpdate = true; });
   return t;
 }
@@ -142,7 +155,10 @@ const BLOB = canvasTex(128, 128, (g) => {
 
 const PLASTER_UP = plaster(C.wallUp), PLASTER_LOW = plaster(C.wallLow);
 
-export function addRoom(ms: MannequinScene): void {
+/** Lo que cambia de un vídeo a otro: la frase del póster (líneas separadas por «|»). */
+export interface RoomOpts { poster?: string }
+
+export function addRoom(ms: MannequinScene, opts: RoomOpts = {}): void {
   const S = ms.scene, cam = ms.camera;
   const box = new THREE.Box3().setFromObject(S);
   const c = box.getCenter(new THREE.Vector3()).setY(0);
@@ -203,23 +219,48 @@ export function addRoom(ms: MannequinScene): void {
   }
   add(plane(1400, 30, new THREE.MeshBasicMaterial({ map: AO, transparent: true, depthWrite: false })), 0, 15, BACK + 3, false).rotation.x = -0.35;
 
-  // ── ventana grande con marco, alféizar, estor y cortina ────────────────────
+  // ── ventana grande con marco, alféizar y estor ────────────────────
   const WX = -86, WY = 190, WW = 92, WH = 132;
   add(plane(WW, WH, new THREE.MeshBasicMaterial({ map: VIEW })), WX, WY, BACK + 0.6, false);
   const frameM = std(C.frame, 0.45);
   for (const [w, h, x, y] of [[WW + 12, 7, 0, WH / 2 + 2], [WW + 12, 7, 0, -WH / 2 - 2], [7, WH + 10, -WW / 2 - 2, 0], [7, WH + 10, WW / 2 + 2, 0], [WW, 3.5, 0, 0], [3.5, WH, 0, 0]] as const)
     add(boxM(w, h, 5, frameM), WX + x, WY + y, BACK + 2, false);
   add(boxM(WW + 22, 4, 14, frameM), WX, WY - WH / 2 - 7, BACK + 6, true);
-  // estor de lino medio bajado
-  add(boxM(WW + 6, 30, 2, std(C.linen, 0.95)), WX, WY + WH / 2 - 15, BACK + 5, false);
-  add(boxM(WW + 8, 2.5, 3, std(C.woodDark, 0.6)), WX, WY + WH / 2 - 30, BACK + 5.5, false);
-  // cortina recogida a la izquierda (pliegues)
-  const curtain = std(C.linen, 0.95, 0, { side: THREE.DoubleSide });
-  for (let k = 0; k < 6; k++) {
-    const f = add(new THREE.Mesh(new THREE.CylinderGeometry(3.4, 4.2, 220, 14), curtain), WX - WW / 2 - 10 - k * 5.2, 160, BACK + 9 + (k % 2) * 2.5, true);
-    f.scale.z = 0.55;
+  // estor plegable de lino, medio recogido: cajón de madera atornillado a la pared con dos soportes, la tela lisa
+  // arriba y abajo los pliegues (cada uno sobresale un poco más), con el cordón y su bola a la derecha
+  const linen = std(C.linen, 0.95);
+  const railY = WY + WH / 2 + 11, railW = WW + 18;
+  add(boxM(railW, 6, 7, std(C.wood, 0.55)), WX, railY, BACK + 6.5, false);
+  // dos escuadras metálicas atornilladas a la pared, por encima del cajón
+  const metal = std('#CDD2D9', 0.45, 0.1), screw = std('#8E959E', 0.4, 0.2);
+  for (const sx of [-1, 1]) {
+    const bx = WX + sx * (railW / 2 - 16);
+    add(boxM(6, 13, 0.8, metal), bx, railY + 6, BACK + 0.9, false);
+    add(boxM(6, 0.8, 8, metal), bx, railY + 3.4, BACK + 4.5, false);
+    for (const dy of [3, 9]) {
+      const sc = add(new THREE.Mesh(new THREE.CylinderGeometry(0.9, 0.9, 0.6, 10), screw), bx, railY + dy, BACK + 1.5, false);
+      sc.rotation.x = Math.PI / 2;
+    }
   }
-  add(new THREE.Mesh(new THREE.CylinderGeometry(1.2, 1.2, 150, 10), std(C.woodDark, 0.5)), WX - 20, 272, BACK + 10, false).rotation.z = Math.PI / 2;
+  const blindW = WW + 10, flatH = 14, blindTop = railY - 3;
+  add(boxM(blindW, flatH, 1.6, linen), WX, blindTop - flatH / 2, BACK + 6, false);
+  const pleats = 4, pr = 3.4;
+  for (let k = 0; k < pleats; k++) {
+    const y = blindTop - flatH - pr - k * pr * 1.75;
+    const fold = add(new THREE.Mesh(new THREE.CylinderGeometry(pr, pr, blindW, 20, 1, false, -Math.PI / 2, Math.PI), linen), WX, y, BACK + 6.2 + k * 0.7, false);
+    fold.rotation.set(0, 0, Math.PI / 2);
+    fold.scale.set(1, 1, 1.25 + k * 0.12);
+    // la sombra entre pliegue y pliegue
+    add(boxM(blindW - 0.5, 0.8, 0.6, std('#B9AC95', 1)), WX, y - pr * 0.9, BACK + 6.6 + k * 0.7, false);
+  }
+  const blindBottom = blindTop - flatH - pr * 1.75 * pleats - 1;
+  // la tela de detrás de los pliegues (para que no se vea el cielo entre ellos)
+  add(boxM(blindW, blindTop - flatH - blindBottom, 1, std('#DCD0BC', 1)), WX, (blindTop - flatH + blindBottom) / 2, BACK + 5.4, false);
+  add(boxM(blindW, 2.2, 3, std(C.woodDark, 0.6)), WX, blindBottom, BACK + 8, false);
+  const cordX = WX + blindW / 2 - 3;
+  const cordLen = blindTop - 2 - 150;
+  add(new THREE.Mesh(new THREE.CylinderGeometry(0.35, 0.35, cordLen, 6), std('#F3F0EA', 0.8)), cordX, blindTop - 2 - cordLen / 2, BACK + 10.5, false);
+  add(new THREE.Mesh(new THREE.SphereGeometry(1.8, 14, 10), std(C.woodDark, 0.5)), cordX, 150, BACK + 10.5, false);
   // planta pequeña en el alféizar
   const sillPot = add(new THREE.Mesh(new THREE.CylinderGeometry(5, 4, 8, 18), std('#C8643B', 0.7)), WX + 28, WY - WH / 2 - 1, BACK + 7);
   for (let k = 0; k < 6; k++) {
@@ -229,7 +270,7 @@ export function addRoom(ms: MannequinScene): void {
 
   // ── póster enmarcado ───────────────────────────────────────────────────────
   add(boxM(46, 64, 2.5, std(C.black, 0.5)), 18, 226, BACK + 1.5, false);
-  add(plane(41, 58, std('#ffffff', 0.9, 0, { map: posterTex() })), 18, 226, BACK + 2.9, false);
+  add(plane(41, 58, std('#ffffff', 0.9, 0, { map: posterTex(opts.poster ?? 'Cada dia,|una mica|més') })), 18, 226, BACK + 2.9, false);
 
   // ── estanterías flotantes con libros, trofeo, altavoz, foto y plantas ──────
   const shelfM = std(C.wood, 0.55);
@@ -360,6 +401,7 @@ export function addRoom(ms: MannequinScene): void {
   blob(-118, BACK + 22, 80, 26); blob(66, BACK + 34, 96, 50); blob(98, BACK + 80, 62, 46);
   blob(142, BACK + 20, 46, 46); blob(0, BACK + 4, 1400, 14, 0.7);
   wallBlob(92, 143, 80, 14); wallBlob(92, 198, 80, 14); wallBlob(WX, WY - WH / 2 - 14, WW + 30, 14, 0.4);
+  wallBlob(WX, WY + WH / 2 + 4, WW + 34, 12, 0.35);
   wallBlob(18, 222, 54, 74, 0.25); wallBlob(92, 259, 34, 34, 0.25);
 
   // ── luces: cálida desde la ventana y un poco de luz de techo ───────────────
