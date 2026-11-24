@@ -2011,3 +2011,5 @@ button.plan-row { cursor: pointer; }
 .tv-sub { row-gap: 2px; column-gap: 10px; }
 /* elegir ejercicios: tiempo o repeticiones y peso en una línea, alineados a la derecha */
 .pick-ctrls.mr-ctrls { padding-left: 0; justify-content: flex-end; flex-wrap: nowrap; gap: 6px; }
+/* solo por tiempo: «Tiempo» fijo (no es un botón) */
+.amount-mode.only .seg { cursor: default; }

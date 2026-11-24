@@ -30,7 +30,9 @@ export function amountCtrl(ex: ExerciseDef, a: Amount, change: (next: Amount) =>
       h('button', { 'aria-label': 'Menos tiempo', disabled: a.seconds <= MIN_SECONDS, onclick: () => set({ ...a, seconds: Math.max(MIN_SECONDS, a.seconds - STEP_SECONDS) }) }, '−'),
       h('span', { class: 'secs' }, `${a.seconds} s`),
       h('button', { 'aria-label': 'Más tiempo', disabled: a.seconds >= MAX_SECONDS, onclick: () => set({ ...a, seconds: Math.min(MAX_SECONDS, a.seconds + STEP_SECONDS) }) }, '+'));
-  if (!canReps) return stepper;
+  // solo por tiempo (estiramientos y los que se aguantan quietos): «Tiempo» igualmente, sin poder cambiarlo
+  if (!canReps) return h('div', { class: 'amount-ctrl' },
+    h('div', { class: 'segmented small amount-mode only', role: 'group', 'aria-label': 'Solo por tiempo' }, h('span', { class: 'seg on' }, 'Tiempo')), stepper);
   const mode = h('div', { class: 'segmented small amount-mode', role: 'group', 'aria-label': 'Por tiempo o por repeticiones' },
     // al cambiar, se guarda lo del otro modo: los segundos siempre; las repeticiones, en repsSaved
     h('button', { class: 'seg' + (reps ? '' : ' on'), 'aria-pressed': String(!reps), onclick: () => reps && set({ seconds: a.seconds, repsSaved: a.reps }) }, 'Tiempo'),
