@@ -6,6 +6,7 @@ import { icon, SECTION_STYLE } from '../icons';
 import { DetailScreen } from './DetailScreen';
 import { blockNav } from '../components/blockNav';
 import { dateText, timeText } from '../../i18n/fmtDate';
+import { HeartChartScreen } from './HeartChartScreen';
 
 /** Detalle de un entrenamiento del historial: qué se hizo, cuánto tiempo y repetirlo. */
 export class HistoryDetailScreen implements Screen {
@@ -74,7 +75,7 @@ export class HistoryDetailScreen implements Screen {
           items.length ? stat('bolt', humanDuration(activeSec), 'en ejercicio') : null),
         kcalNote(e, cal),
         !e.completed ? h('p', { class: 'note' }, icon('info'), 'Se terminó antes de acabar la tabla.') : null,
-        e.heart ? heartCard(e.heart) : null,
+        e.heart ? heartCard(e.heart, () => this.app.push(new HeartChartScreen(this.app, e))) : null,
         ...(items.length
           ? list
           : [h('p', { class: 'muted' }, 'Este entrenamiento es de una versión anterior de la app y no guarda el detalle de cada ejercicio.')]),
@@ -130,7 +131,7 @@ function kcalNote(e: HistoryEntry, c: ReturnType<App['store']['caloriesFor']>): 
 }
 
 /** Pulso medio, máximo y mínimo, con la gráfica de la sesión. */
-function heartCard(hr: HeartSummary): HTMLElement {
+function heartCard(hr: HeartSummary, open: () => void): HTMLElement {
   const NS = 'http://www.w3.org/2000/svg';
   const W = 320, H = 90, pad = 6;
   const s = hr.samples;
@@ -159,7 +160,9 @@ function heartCard(hr: HeartSummary): HTMLElement {
       h('div', {}, h('strong', {}, String(hr.avg)), h('span', { class: 'muted small' }, 'media')),
       h('div', {}, h('strong', {}, String(hr.max)), h('span', { class: 'muted small' }, 'máxima')),
       h('div', {}, h('strong', {}, String(hr.min)), h('span', { class: 'muted small' }, 'mínima'))),
-    s.length > 1 ? (svg as unknown as HTMLElement) : null);
+    // tocar la gráfica la abre en grande (en horizontal, con las horas y los cambios de bloque)
+    s.length > 1 ? h('button', { class: 'wf-open hr-open', 'aria-label': 'Ver la gráfica del pulso en grande', onclick: open }, svg as unknown as HTMLElement,
+      h('span', { class: 'muted small hr-open-hint' }, icon('search'), 'Toca la gráfica para verla en grande')) : null);
 }
 
 function stat(ic: Parameters<typeof icon>[0], value: string, label: string): HTMLElement {

@@ -49,7 +49,12 @@ export class WorkoutScreen implements Screen {
   };
   /** Pulso cada 5 s mientras el entrenamiento está en marcha. */
   private hrSamples: number[] = [];
+  /** Segundo de cada muestra desde el inicio (reloj real). */
+  private hrTimes: number[] = [];
   private hrLast = 0;
+  /** Inicio del entrenamiento (reloj real) y cuándo empezó cada bloque. */
+  private startMs = 0;
+  private blocks: Array<{ section: SectionId; at: number }> = [];
   private hrOff: (() => void) | null = null;
 
   /** Abre Spotify (o la app de música del móvil). El entrenamiento se pausa para que no avance mientras se elige
@@ -248,6 +253,11 @@ export class WorkoutScreen implements Screen {
   }
 
   private onStep(step: Step): void {
+    // el inicio y cada cambio de bloque (para la gráfica del pulso; en la tabla libre no hay bloques)
+    if (!this.startMs) this.startMs = Date.now();
+    if (!this.session.plan.free && step.kind !== 'sectionBreak' && this.blocks[this.blocks.length - 1]?.section !== step.section) {
+      this.blocks.push({ section: step.section, at: Math.round((Date.now() - this.startMs) / 1000) });
+    }
     const u = this.ui;
     u.breakPanel.hidden = step.kind !== 'sectionBreak';
     this.el.dataset.phase = step.kind;
@@ -389,6 +399,7 @@ export class WorkoutScreen implements Screen {
     const bpm = this.app.heart.current;
     if (bpm) {
       this.hrSamples.push(bpm);
+      this.hrTimes.push(Math.round((now - (this.startMs || now)) / 1000));
       this.hrLast = now;
     }
     this.paintHeart();
@@ -396,7 +407,7 @@ export class WorkoutScreen implements Screen {
 
   private onFinished(s: SessionSummary): void {
     window.clearInterval(this.timer);
-    const heart = summarizeHeart(this.hrSamples);
+    const heart = summarizeHeart(this.hrSamples, this.hrTimes);
     // se guarda a partir de 5 min de entrenamiento (sin contar las pausas), haya hecho los ejercicios que haya hecho;
     // y siempre que se acabe la tabla entera, aunque dure menos (una tabla corta hecha de principio a fin cuenta);
     // entera de verdad: todos los ejercicios hechos (llegar al final saltándolos con «Saltar» no cuenta)
@@ -415,6 +426,7 @@ export class WorkoutScreen implements Screen {
         routineId: this.table.id,
         items: s.items,
         ...(heart ? { heart } : {}),
+        ...(this.blocks.length > 1 ? { blocks: this.blocks } : {}),
       };
       // las calorías se guardan con el peso de hoy: no cambian si luego cambia el peso
       const weight = this.app.store.currentWeight;

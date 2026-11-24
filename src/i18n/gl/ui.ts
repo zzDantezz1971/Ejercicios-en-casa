@@ -1298,4 +1298,9 @@ export const UI_GL: Record<string, string> = {
   "Aún no llevas 5 min de entrenamiento (llevas {a}). Para que se guarde en el historial, hay que entrenar como mínimo 5 min o acabar la tabla entera. ¿Terminar sin guardar?": "Aínda non levas 5 min de adestramento (levas {a}). Para que se garde no historial, hai que adestrar como mínimo 5 min ou rematar a táboa enteira. Rematar sen gardar?",
   "Terminar sin guardar": "Rematar sen gardar",
   "No se ha guardado en el historial: hay que entrenar como mínimo 5 min.": "Non se gardou no historial: hai que adestrar como mínimo 5 min.",
+  "Media {a}": "Media {a}",
+  "Máx. {a}": "Máx. {a}",
+  "Mín. {a}": "Mín. {a}",
+  "Ver la gráfica del pulso en grande": "Ver a gráfica do pulso en grande",
+  "{a} · {b} ppm": "{a} · {b} ppm",
 };

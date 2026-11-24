@@ -1930,3 +1930,21 @@ html[data-font="large"] { font-size: 112.5%; }
 .saved-note .ico { width: 18px; height: 18px; flex: none; color: var(--sec-stretch, #22A06B); }
 .saved-note.warn { color: var(--fg); background: color-mix(in srgb, var(--sec-warm, #F2A516) 14%, transparent); border-radius: 12px; padding: 10px 12px; text-align: left; }
 .saved-note.warn .ico { color: var(--sec-warm, #F2A516); }
+/* Gráfica del pulso grande (Historial › entrenamiento) */
+.hr-open { display: flex; flex-direction: column; align-items: stretch; gap: 6px; }
+.hr-open-hint { display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+.hr-open-hint .ico { width: 14px; height: 14px; }
+.hc-range { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.hc-range .ico { width: 16px; height: 16px; color: var(--muted); }
+.hc-stats { gap: 12px; color: var(--muted); font-size: .9rem; }
+.heart-chart { touch-action: none; }
+.heart-chart .hr-line { fill: none; stroke: #FF4D6A; stroke-width: 2.4; stroke-linejoin: round; stroke-linecap: round; }
+.heart-chart .hr-area { fill: rgb(255 77 106 / .14); }
+.heart-chart .hr-avg { stroke: #FF4D6A; stroke-dasharray: 4 5; opacity: .55; }
+.heart-chart .hc-end { font-weight: 800; fill: var(--fg); }
+.hc-block-line { stroke-width: 2; stroke-dasharray: 6 4; opacity: .9; }
+.hc-block { font: 800 11px var(--body); text-transform: uppercase; letter-spacing: .04em; }
+.hc-cursor-line { stroke: var(--fg); stroke-width: 1; opacity: .5; }
+.hc-dot { fill: #FF4D6A; stroke: var(--bg); stroke-width: 2; }
+.hc-tip { fill: var(--surface-2, #232a3a); stroke: var(--line); }
+.hc-tip-text { fill: var(--fg); font: 700 12px var(--body); font-variant-numeric: tabular-nums; }

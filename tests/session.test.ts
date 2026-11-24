@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { WorkoutPlan, type Catalog } from '../src/domain/WorkoutPlan';
 import { MIN_HISTORY_SEC, WorkoutSession, type Cue, type SessionSummary } from '../src/domain/WorkoutSession';
-import { DEFAULT_SETTINGS, emptyRoutine, type ExerciseDef, type Settings } from '../src/domain/types';
+import { DEFAULT_SETTINGS, emptyRoutine, summarizeHeart, type ExerciseDef, type Settings } from '../src/domain/types';
 
 const ex = (id: string, section: ExerciseDef['section'], oneSided = false): ExerciseDef => ({
   id, name: id, section, zone: '', oneSided, motion: {},
@@ -278,5 +278,14 @@ describe('Tiempo para guardar en el historial (5 min)', () => {
     s.on('finished', (x) => (summary = x));
     s.stop();
     expect(summary!.durationSec).toBe(320);
+  });
+});
+
+describe('Pulso con la hora de cada muestra', () => {
+  it('summarizeHeart descarta las lecturas imposibles y mantiene la hora de las buenas', () => {
+    const r = summarizeHeart([100, 0, 120, 250, 140], [0, 5, 10, 15, 20])!;
+    expect(r.samples).toEqual([100, 120, 140]);
+    expect(r.times).toEqual([0, 10, 20]);
+    expect(r.avg).toBe(120);
   });
 });

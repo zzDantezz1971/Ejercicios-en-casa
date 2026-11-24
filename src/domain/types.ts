@@ -324,6 +324,8 @@ export interface HistoryEntry {
   weightKg?: number;
   /** Pulsaciones del reloj (si estaba conectado): media, máxima y una muestra cada 5 s. */
   heart?: HeartSummary;
+  /** Cuándo empezó cada bloque (segundos desde el inicio, reloj real): para marcarlo en la gráfica del pulso. */
+  blocks?: Array<{ section: SectionId; at: number }>;
   /** Detalle por ejercicio (solo en entrenamientos guardados desde esta versión). */
   items?: Array<{ exerciseId: string; section: SectionId; planned: number; seconds: number; completed: boolean; weight?: number }>;
 }
@@ -341,17 +343,21 @@ export interface HeartSummary {
   min: number;
   /** Pulso cada 5 s durante el entrenamiento. */
   samples: number[];
+  /** Segundo de cada muestra desde el inicio (reloj real, con las pausas). Sin esto (entrenamientos antiguos), cada 5 s. */
+  times?: number[];
 }
 
 /** Resumen de pulsaciones a partir de las muestras (null si no hay). */
-export function summarizeHeart(samples: readonly number[]): HeartSummary | null {
-  const ok = samples.filter((b) => b > 30 && b < 230);
+export function summarizeHeart(samples: readonly number[], times?: readonly number[]): HeartSummary | null {
+  const keep = samples.map((_b, i) => i).filter((i) => samples[i] > 30 && samples[i] < 230).slice(0, 1500);
+  const ok = keep.map((i) => samples[i]);
   if (!ok.length) return null;
   return {
     avg: Math.round(ok.reduce((a, b) => a + b, 0) / ok.length),
     max: Math.max(...ok),
     min: Math.min(...ok),
-    samples: ok.slice(0, 1500),
+    samples: ok,
+    ...(times && times.length === samples.length ? { times: keep.map((i) => times[i]) } : {}),
   };
 }
 

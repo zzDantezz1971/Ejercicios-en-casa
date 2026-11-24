@@ -1355,6 +1355,11 @@ const ROWS: Row[] = [
   ['Aún no llevas 5 min de entrenamiento (llevas {a}). Para que se guarde en el historial, hay que entrenar como mínimo 5 min o acabar la tabla entera. ¿Terminar sin guardar?', 'Encara no portes 5 min d’entrenament (en portes {a}). Perquè es desi a l’historial, cal entrenar com a mínim 5 min o acabar la taula sencera. Vols acabar sense desar?', 'You haven’t trained for 5 min yet (you’re at {a}). To save it in your history, you need at least 5 min or to finish the whole routine. End without saving?'],
   ['Terminar sin guardar', 'Acaba sense desar', 'End without saving'],
   ['No se ha guardado en el historial: hay que entrenar como mínimo 5 min.', 'No s’ha desat a l’historial: cal entrenar com a mínim 5 min.', 'Not saved in your history: you need to train for at least 5 min.'],
+  ['Media {a}', 'Mitjana {a}', 'Avg {a}'],
+  ['Máx. {a}', 'Màx. {a}', 'Max {a}'],
+  ['Mín. {a}', 'Mín. {a}', 'Min {a}'],
+  ['Ver la gráfica del pulso en grande', 'Veure la gràfica del pols en gran', 'See the heart rate chart full size'],
+  ['{a} · {b} ppm', '{a} · {b} ppm', '{a} · {b} bpm'],
 ];
 
 export const UI_CA: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[1]]));

@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-24T11:40:11Z",
+    "es": "Historial › entrenamiento: al tocar la gráfica del pulso se abre en grande y en horizontal, con la hora de inicio y de fin, las horas a lo largo, y una línea en cada cambio de bloque con su nombre. Tocando o arrastrando el dedo se ve la hora y las pulsaciones de cada momento. Las horas exactas y los cambios de bloque se guardan a partir de ahora.",
+    "ca": "Historial › entrenament: en tocar la gràfica del pols s’obre en gran i en horitzontal, amb l’hora d’inici i de fi, les hores al llarg, i una línia a cada canvi de bloc amb el seu nom. Tocant o arrossegant el dit es veu l’hora i les pulsacions de cada moment. Les hores exactes i els canvis de bloc es desen a partir d’ara.",
+    "en": "History › workout: tapping the heart rate chart opens it full size in landscape, with the start and end time, times along the way, and a line at each block change with its name. Tap or drag your finger to see the time and heart rate at each moment. Exact times and block changes are saved from now on."
+  },
+  {
     "fecha": "2026-11-24T10:03:07Z",
     "es": "Historial: una tabla acabada entera (todos sus ejercicios) se guarda siempre, aunque dure menos de 5 min. Si la dejas antes, hacen falta 5 min.",
     "ca": "Historial: una taula acabada sencera (tots els exercicis) es desa sempre, encara que duri menys de 5 min. Si la deixes abans, calen 5 min.",
