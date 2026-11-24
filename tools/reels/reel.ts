@@ -95,6 +95,8 @@ function render(ms: number): void {
   cap.style.transform = `translateY(${(1 - k) * 16}px)`;
 }
 
+// ?final=oro: la pantalla final dorada (si no, la azul)
+if (new URLSearchParams(location.search).get('final') === 'oro') document.getElementById('end')!.classList.remove('blue');
 (window as unknown as { __reel: unknown }).__reel = { total, render, ready: document.fonts.ready };
 // la primera imagen, con las letras ya cargadas (el nombre del ejercicio se mide para colocar al muñeco)
 void document.fonts.ready.then(() => render(0));

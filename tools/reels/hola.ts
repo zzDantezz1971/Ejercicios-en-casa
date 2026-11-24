@@ -247,5 +247,7 @@ function render(t: number): void {
   } else bubble.hidden = true;
 }
 
+// ?final=oro: la pantalla final dorada (si no, la azul)
+if (new URLSearchParams(location.search).get('final') === 'oro') document.getElementById('end')!.classList.remove('blue');
 (window as unknown as { __reel: unknown }).__reel = { total: T.end, render, ready: document.fonts.ready };
 void document.fonts.ready.then(() => render(0));
