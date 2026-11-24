@@ -85,3 +85,7 @@
 #stage.feed .ad-head h2 { font-size: 42px; }
 #stage.feed .ad-head p { font-size: 21px; margin-top: 14px; }
 #stage.feed .ad-head { width: 222px; } #stage.feed .ad-head p { max-width: 222px; }
+/* vídeos: el tema (en amarillo) grande, como en las imágenes del feed */
+#stage.ad2:not(.feed) .ad-head .k { font-size: 32px; letter-spacing: .08em; line-height: 1.05; margin-bottom: 14px; }
+#stage.ad2:not(.feed) .ad-head h2 { font-size: 52px; }
+#stage.ad2:not(.feed) .phone { top: 320px; }
