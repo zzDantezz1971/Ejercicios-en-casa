@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-24T14:32:39Z",
+    "es": "Contenido de la tabla e Historial: «por lados» va alineado con el tiempo y «Hecho 2 de 3» tiene el icono bien colocado.",
+    "ca": "Contingut de la taula i Historial: «per costats» va alineat amb el temps i «Fet 2 de 3» té la icona ben col·locada.",
+    "en": "Routine contents and History: “per side” lines up with the time and “Done 2 of 3” has its icon properly placed."
+  },
+  {
     "fecha": "2026-11-24T14:26:37Z",
     "es": "Historial › un bloque: los ejercicios repetidos ya no salen uno detrás de otro en una lista larguísima; se agrupan como en la tabla, con las vueltas del bloque (x2) al lado del nombre y las series en su recuadro (x3). Cada ejercicio sale una vez, con el tiempo de todas las veces y, si alguna se saltó, «Hecho 5 de 6».",
     "ca": "Historial › un bloc: els exercicis repetits ja no surten l’un darrere l’altre en una llista llarguíssima; s’agrupen com a la taula, amb les voltes del bloc (x2) al costat del nom i les sèries al seu requadre (x3). Cada exercici surt un cop, amb el temps de totes les vegades i, si alguna es va saltar, «Fet 5 de 6».",
