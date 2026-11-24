@@ -37,6 +37,9 @@ const VIDEOS: Record<string, Video> = {
     ],
   },
 };
+/** ?f=feed: imágenes 4:5 para el feed (más bajas: el móvil, más pequeño). */
+const FEED = new URLSearchParams(location.search).get('f') === 'feed';
+if (FEED) document.getElementById('stage')!.classList.add('feed');
 const VIDEO = VIDEOS[new URLSearchParams(location.search).get('v') ?? 'anunci'];
 const INTRO_MS = 2600;
 const SCREENS = VIDEO.screens;
@@ -88,8 +91,8 @@ function render(ms: number): void {
   // el móvil: inclinado en 3D, entra desde abajo al principio y se mueve muy despacio todo el rato
   const since = ms - INTRO_MS, up = smooth(since / 700);
   const sway = since / 1000;
-  const ry = -22 + 5 * Math.sin(sway * 0.35), rx = 10 + 2 * Math.sin(sway * 0.27 + 1), rz = 7 + 1.5 * Math.sin(sway * 0.3 + 2);
-  phone.style.transform = `translate(${50 + (1 - up) * 40}px, ${(1 - up) * 560}px) perspective(1300px) rotateY(${ry}deg) rotateX(${rx}deg) rotateZ(${rz}deg) scale(1.06)`;
+  const ry = (FEED ? -18 : -22) + 5 * Math.sin(sway * 0.35), rx = 10 + 2 * Math.sin(sway * 0.27 + 1), rz = 7 + 1.5 * Math.sin(sway * 0.3 + 2);
+  phone.style.transform = `translate(${(FEED ? -14 : 50) + (1 - up) * 40}px, ${(1 - up) * 560}px) perspective(1300px) rotateY(${ry}deg) rotateX(${rx}deg) rotateZ(${rz}deg) scale(${FEED ? 0.98 : 1.06})`;
   // las capturas: fundido de una a otra (la de antes queda debajo), con un desplazamiento lento hacia arriba
   const per = s.ms / s.shots.length;
   const cur = Math.min(s.shots.length - 1, Math.floor(t / per));

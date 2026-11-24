@@ -57,3 +57,18 @@
 .ad-intro img { width: 120px; height: 120px; border-radius: 28px; box-shadow: 0 14px 40px rgb(0 0 0 / .5); }
 .ad-intro h2 { margin: 0; font: 700 62px/1 "Barlow Condensed", sans-serif; text-transform: uppercase; }
 .ad-intro h2 em { font-style: normal; color: #6E93FF; }
+/* imágenes para el feed de Instagram (4:5, 1080 × 1350): ?f=feed. Textos a la izquierda y el móvil a la derecha */
+#stage.feed { height: 675px; }
+#stage.feed .ad-head { top: 150px; left: 30px; right: auto; width: 250px; }
+#stage.feed .ad-head .k { font-size: 16px; }
+#stage.feed .ad-head h2 { font-size: 40px; line-height: 1.02; }
+#stage.feed .ad-head p { font-size: 19px; max-width: 250px; }
+#stage.feed .phone { top: 39px; left: auto; right: 0; margin-left: 0; }
+#stage.feed .brand { right: auto; width: 260px; background: none; padding: 0 0 30px 30px; }
+#stage.feed .brand img { width: 46px; height: 46px; }
+#stage.feed .end { gap: 14px; }
+#stage.feed .end img { width: 130px; height: 130px; }
+#stage.feed .ad-head { width: 232px; }
+#stage.feed .ad-head p { max-width: 232px; }
+#stage.feed .cap .l1 { font-size: 26px; }
+#stage.feed .cap .l2 { font-size: 16px; white-space: nowrap; }
