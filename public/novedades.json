@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-24T13:32:58Z",
+    "es": "Editar tabla: cada ejercicio ocupa menos; arriba el nombre con cambiar y quitar, y debajo en una sola línea «Tiempo | Reps», el contador y los kg. Y las repeticiones se recuerdan aunque pases a tiempo y vuelvas a repeticiones.",
+    "ca": "Edita la taula: cada exercici ocupa menys; a dalt el nom amb canviar i treure, i a sota en una sola línia «Temps | Reps», el comptador i els kg. I les repeticions es recorden encara que passis a temps i tornis a repeticions.",
+    "en": "Edit routine: each exercise takes less space; the name with swap and remove on top, and below on one line “Time | Reps”, the counter and the kg. And reps are remembered even if you switch to time and back to reps."
+  },
+  {
     "fecha": "2026-11-24T12:01:33Z",
     "es": "Ejercicios por repeticiones: al editar una tabla, cada ejercicio puede ir por «Tiempo» o por «Reps» (12 reps, o 10 por lado en los que van por lados). Al entrenar no hay cuenta atrás: sale el número de repeticiones, un cronómetro con lo que llevas y el botón «Hecho» para pasar al siguiente (en los por lados, el primero cambia de lado). Los estiramientos y los que se aguantan quietos (planchas, sentadilla en la pared…) siguen solo por tiempo. Con repeticiones, el tiempo de la tabla es aproximado (≈).",
     "ca": "Exercicis per repeticions: en editar una taula, cada exercici pot anar per «Temps» o per «Reps» (12 reps, o 10 per costat en els que van per costats). En entrenar no hi ha compte enrere: surt el nombre de repeticions, un cronòmetre amb el que portes i el botó «Fet» per passar al següent (en els per costats, el primer canvia de costat). Els estiraments i els que s’aguanten quiets (planxes, esquat a la paret…) continuen només per temps. Amb repeticions, el temps de la taula és aproximat (≈).",

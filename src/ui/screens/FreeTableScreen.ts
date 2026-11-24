@@ -160,18 +160,20 @@ export class FreeTableScreen implements Screen {
     void app.thumbs.get(ex).then((url) => (img.src = url));
     const open = () => app.push(new DetailScreen(app, ex, shown));
     const tag = blockTag(ex);
-    return h('div', { class: 'maker-row' },
-      h('button', { class: 'maker-open', 'aria-label': `Cómo se hace: ${ex.name}`, onclick: open }, img),
-      h('div', { class: 'maker-name' },
+    // arriba el nombre y el tipo (con ⋯ al lado); debajo, en una línea, el tiempo o las repeticiones
+    return h('div', { class: 'maker-row mr-grid' },
+      h('button', { class: 'maker-open mr-img', 'aria-label': `Cómo se hace: ${ex.name}`, onclick: open }, img),
+      h('div', { class: 'maker-name mr-top' },
         h('button', { class: 'maker-open maker-title', onclick: open }, ex.name),
-        h('span', { class: 'free-sub' }, tag, ex.oneSided ? h('span', { class: 'by-sides small' }, icon('sides'), 'por lados') : null),
-        // tiempo o repeticiones (− +)
-        h('div', { class: 'maker-ctrls' }, where ? amountCtrl(ex, e, (a) => edit((x) => {
-          if (x.kind !== 'ex') return;
-          x.seconds = a.seconds;
-          if (a.reps) x.reps = a.reps; else delete x.reps;
-        })) : h('span', { class: 'maker-secs muted small' }, amountText(ex, e)))),
-      more ? h('div', { class: 'maker-acts' }, more) : null);
+        h('span', { class: 'free-sub' }, tag, ex.oneSided ? h('span', { class: 'by-sides small' }, icon('sides'), 'por lados') : null)),
+      more ? h('div', { class: 'maker-acts mr-acts' }, more) : '',
+      // tiempo o repeticiones (− +)
+      h('div', { class: 'maker-ctrls mr-ctrls' }, where ? amountCtrl(ex, e, (a) => edit((x) => {
+        if (x.kind !== 'ex') return;
+        x.seconds = a.seconds;
+        if (a.reps) x.reps = a.reps; else delete x.reps;
+        if (a.repsSaved) x.repsSaved = a.repsSaved; else delete x.repsSaved;
+      })) : h('span', { class: 'maker-secs muted small' }, amountText(ex, e))));
   }
 
   /** ⋯ de un ejercicio o descanso: duplicar, meterlo en una serie de al lado, sacarlo de la serie o quitarlo. */

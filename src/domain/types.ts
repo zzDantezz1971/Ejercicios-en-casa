@@ -148,6 +148,8 @@ export interface RoutineItem {
    * (en los ejercicios por lados, son por lado). `seconds` se conserva por si se vuelve a poner por tiempo.
    */
   reps?: number;
+  /** Por tiempo: las repeticiones que tenía, para recuperarlas si se vuelve a poner por repeticiones. */
+  repsSaved?: number;
   /**
    * Serie dentro del bloque: los ejercicios seguidos con el mismo `id` se repiten `rounds` veces antes de pasar al
    * siguiente (todos llevan las mismas vueltas). Sin esto, el ejercicio se hace una vez por vuelta del bloque.
@@ -388,7 +390,7 @@ export interface SavedRoutine {
 }
 
 /** Un ejercicio o un descanso de una tabla libre. */
-export type FreeEntry = { kind: 'ex'; exerciseId: string; seconds: number; weight?: number; reps?: number } | { kind: 'rest'; seconds: number };
+export type FreeEntry = { kind: 'ex'; exerciseId: string; seconds: number; weight?: number; reps?: number; repsSaved?: number } | { kind: 'rest'; seconds: number };
 /** Serie de una tabla libre: unos ejercicios (y descansos) que se repiten `rounds` veces seguidas. */
 export interface FreeGroup { kind: 'group'; rounds: number; items: FreeEntry[] }
 export type FreeNode = FreeEntry | FreeGroup;

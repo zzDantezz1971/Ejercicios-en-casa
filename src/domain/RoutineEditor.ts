@@ -60,13 +60,13 @@ export class RoutineEditor {
   }
 
   /** Tiempo o repeticiones de un ejercicio elegido (sin `reps`, por tiempo). */
-  setAmount(section: SectionId, exerciseId: string, a: { seconds: number; reps?: number }): void {
+  setAmount(section: SectionId, exerciseId: string, a: { seconds: number; reps?: number; repsSaved?: number }): void {
     this.routine = {
       ...this.routine,
       [section]: this.routine[section].map((i) => {
         if (i.exerciseId !== exerciseId) return i;
-        const { reps: _r, ...rest } = i;
-        return { ...rest, seconds: clamp(a.seconds), ...(a.reps ? { reps: Math.max(1, Math.min(100, Math.round(a.reps))) } : {}) };
+        const { reps: _r, repsSaved: _s, ...rest } = i;
+        return { ...rest, seconds: clamp(a.seconds), ...(a.reps ? { reps: Math.max(1, Math.min(100, Math.round(a.reps))) } : {}), ...(a.repsSaved ? { repsSaved: a.repsSaved } : {}) };
       }),
     };
   }

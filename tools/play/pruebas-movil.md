@@ -6,6 +6,7 @@ Marca cada punto al probarlo. Si algo falla, haz una captura y cuéntamelo.
 ## 0e. Para probar en el build 20
 - [ ] **Repeticions** (canvi gran, revisar-ho tot):
   - [ ] Edita una taula › un bloc: a cada exercici, «Temps | Reps». Passa’n un a «Reps» (surt 12 reps; − + d’un en un). En un per costats surt «12 x costat». Planxa frontal, planxa lateral, esquat a la paret, barqueta i tots els estiraments: només temps (sense el selector).
+  - [ ] Fila més baixa: nom amb canviar/treure a dalt; a sota, en una línia, «Temps | Reps», el comptador i els kg (sense sortir-se’n, també dins d’una sèrie). Posa 15 reps, passa a Temps i torna a Reps: han de seguir les 15.
   - [ ] El mateix a «Taula buida» (en triar exercicis), a la taula lliure, a Crea-la per mi, a Taules fetes i als dies del pla.
   - [ ] Resum de la taula/bloc amb «Total ≈ X min» quan hi ha repeticions.
   - [ ] Entrenant un exercici per repeticions: sense compte enrere; a l’anell el número i «REPS» (o «PER COSTAT»), a dalt el cronòmetre, i el botó verd «Fet». La veu diu «Flexions. 12 repeticions» (o «12 per costat»). En un per costats, el primer «Fet» diu «Canvi de costat» i el segon passa al següent.

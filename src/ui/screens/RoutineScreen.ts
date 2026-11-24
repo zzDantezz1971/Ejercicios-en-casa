@@ -439,7 +439,7 @@ export class RoutineScreen implements Screen {
         badgeList(ex.badges)),
       h('div', { class: 'ex-actions' },
         // elegido: tiempo o repeticiones (− +)
-        pos && secs !== undefined ? amountCtrl(ex, { seconds: secs, ...(this.editor.reps(ex.section, ex.id) ? { reps: this.editor.reps(ex.section, ex.id) } : {}) },
+        pos && secs !== undefined ? amountCtrl(ex, this.editor.value[ex.section].find((i) => i.exerciseId === ex.id)!,
           (a) => { this.editor.setAmount(ex.section, ex.id, a); this.save(); this.refresh(); }) : null,
         pos && usesWeight(ex) ? this.weightButton(ex, this.editor.weight(ex.section, ex.id)) : null,
         h('button', { class: 'select-btn' + (pos ? ' on' : ''), 'aria-pressed': String(!!pos), onclick: () => void this.toggle(ex) },

@@ -3,7 +3,7 @@ import { allowsReps, DEFAULT_REPS, MAX_REPS, MIN_REPS, type ExerciseDef } from '
 import { h } from '../dom';
 
 /** Lo que dura un ejercicio de una tabla: segundos o, por repeticiones, cuántas (conservando los segundos). */
-export interface Amount { seconds: number; reps?: number }
+export interface Amount { seconds: number; reps?: number; repsSaved?: number }
 
 /** «40 s», «12 reps» o «10 por lado» (para las listas que solo se miran). */
 export function amountText(ex: Pick<ExerciseDef, 'id' | 'section' | 'oneSided'> | undefined, a: Amount): string {
@@ -18,22 +18,21 @@ export function amountText(ex: Pick<ExerciseDef, 'id' | 'section' | 'oneSided'> 
 export function amountCtrl(ex: ExerciseDef, a: Amount, change: (next: Amount) => void): HTMLElement {
   const canReps = allowsReps(ex);
   const reps = canReps && !!a.reps;
-  const set = (next: Amount) => {
-    const { reps: _r, ...rest } = next;
-    change(next.reps ? next : rest);
-  };
+  // solo los tres campos de la cantidad (sin reps = por tiempo; repsSaved = las que tenía, para recuperarlas)
+  const set = (next: Amount) => change({ seconds: next.seconds, ...(next.reps ? { reps: next.reps } : {}), ...(next.repsSaved ? { repsSaved: next.repsSaved } : {}) });
   const stepper = reps
     ? h('div', { class: 'stepper inline maker-time' },
       h('button', { 'aria-label': 'Menos repeticiones', disabled: a.reps! <= MIN_REPS, onclick: () => set({ ...a, reps: Math.max(MIN_REPS, a.reps! - 1) }) }, '−'),
       h('span', { class: 'secs' }, ex.oneSided ? `${a.reps} x lado` : `${a.reps} reps`),
       h('button', { 'aria-label': 'Más repeticiones', disabled: a.reps! >= MAX_REPS, onclick: () => set({ ...a, reps: Math.min(MAX_REPS, a.reps! + 1) }) }, '+'))
     : h('div', { class: 'stepper inline maker-time' },
-      h('button', { 'aria-label': 'Menos tiempo', disabled: a.seconds <= MIN_SECONDS, onclick: () => set({ ...a, reps: undefined, seconds: Math.max(MIN_SECONDS, a.seconds - STEP_SECONDS) }) }, '−'),
+      h('button', { 'aria-label': 'Menos tiempo', disabled: a.seconds <= MIN_SECONDS, onclick: () => set({ ...a, seconds: Math.max(MIN_SECONDS, a.seconds - STEP_SECONDS) }) }, '−'),
       h('span', { class: 'secs' }, `${a.seconds} s`),
-      h('button', { 'aria-label': 'Más tiempo', disabled: a.seconds >= MAX_SECONDS, onclick: () => set({ ...a, reps: undefined, seconds: Math.min(MAX_SECONDS, a.seconds + STEP_SECONDS) }) }, '+'));
+      h('button', { 'aria-label': 'Más tiempo', disabled: a.seconds >= MAX_SECONDS, onclick: () => set({ ...a, seconds: Math.min(MAX_SECONDS, a.seconds + STEP_SECONDS) }) }, '+'));
   if (!canReps) return stepper;
   const mode = h('div', { class: 'segmented small amount-mode', role: 'group', 'aria-label': 'Por tiempo o por repeticiones' },
-    h('button', { class: 'seg' + (reps ? '' : ' on'), 'aria-pressed': String(!reps), onclick: () => reps && set({ seconds: a.seconds }) }, 'Tiempo'),
-    h('button', { class: 'seg' + (reps ? ' on' : ''), 'aria-pressed': String(reps), onclick: () => !reps && set({ seconds: a.seconds, reps: DEFAULT_REPS }) }, 'Reps'));
+    // al cambiar, se guarda lo del otro modo: los segundos siempre; las repeticiones, en repsSaved
+    h('button', { class: 'seg' + (reps ? '' : ' on'), 'aria-pressed': String(!reps), onclick: () => reps && set({ seconds: a.seconds, repsSaved: a.reps }) }, 'Tiempo'),
+    h('button', { class: 'seg' + (reps ? ' on' : ''), 'aria-pressed': String(reps), onclick: () => !reps && set({ seconds: a.seconds, reps: a.repsSaved ?? DEFAULT_REPS }) }, 'Reps'));
   return h('div', { class: 'amount-ctrl' }, mode, stepper);
 }

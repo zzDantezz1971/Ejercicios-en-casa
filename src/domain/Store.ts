@@ -126,6 +126,7 @@ function sanitizeRoutine(input: unknown): Routine {
           exerciseId: i.exerciseId, seconds: i.seconds,
           ...(Number.isFinite(i.weight) && i.weight > 0 ? { weight: i.weight } : {}),
           ...(Number.isFinite(i.reps) && i.reps >= 1 ? { reps: Math.min(100, Math.round(i.reps)) } : {}),
+          ...(Number.isFinite(i.repsSaved) && i.repsSaved >= 1 ? { repsSaved: Math.min(100, Math.round(i.repsSaved)) } : {}),
           // serie dentro del bloque (los seguidos con el mismo id se repiten sus vueltas)
           ...(i.series && typeof i.series.id === 'string' && Number.isFinite(i.series.rounds) ? { series: { id: i.series.id, rounds: Math.min(10, Math.max(1, Math.round(i.series.rounds))) } } : {}),
         }));
@@ -146,8 +147,8 @@ export function sanitizeFree(input: unknown): FreeNode[] | undefined {
       const t = secs(e.seconds, 900);
       if (!t) return null;
       const w = Number.isFinite(e.weight) && (e.weight as number) > 0 ? { weight: e.weight as number } : {};
-      const r = secs(e.reps, 100);
-      return { kind: 'ex', exerciseId: e.exerciseId, seconds: t, ...w, ...(r ? { reps: r } : {}) };
+      const r = secs(e.reps, 100), rs = secs(e.repsSaved, 100);
+      return { kind: 'ex', exerciseId: e.exerciseId, seconds: t, ...w, ...(r ? { reps: r } : {}), ...(rs ? { repsSaved: rs } : {}) };
     }
     return null;
   };

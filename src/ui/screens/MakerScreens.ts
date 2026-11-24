@@ -294,7 +294,7 @@ export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement
           const have = new Set(SECTION_IDS.flatMap((x) => r.routine[x].map((y) => y.exerciseId)));
           app.push(new PickExerciseScreen(app, s, have, ([id]) => {
             const next = items.slice();
-            next[i] = { exerciseId: id, seconds: it.seconds, ...(it.series ? { series: it.series } : {}) };
+            next[i] = { exerciseId: id, seconds: it.seconds, ...(it.series ? { series: it.series } : {}), ...(it.reps ? { reps: it.reps } : {}), ...(it.repsSaved ? { repsSaved: it.repsSaved } : {}) };
             edit.set(withSection(r, s, next));
             app.back();
           }, `Cambiar ${ex.name}`));
@@ -310,33 +310,32 @@ export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement
           next.splice(i, 1);
           edit.set(withSection(r, s, next));
         } }, icon('trash')) : '';
-      const content = h('div', { class: 'maker-row' },
+      // peso de la mancuerna (al editar una tabla guardada)
+      const weightBtn = edit?.full && usesWeight(ex) ? h('button', { class: 'weight-btn small' + (it.weight ? '' : ' none'), 'aria-label': `Peso de ${ex.name}: ${it.weight ? kg(it.weight) + ' por mancuerna' : 'sin peso'}. Cambiar`, onclick: async () => {
+        const w = await weightDialog(ex.name, it.weight ?? app.store.lastWeight(ex.id) ?? (/barra/.test(weightUnit(ex)) ? 20 : 5), weightUnit(ex));
+        if (w === null) return;
+        const next = items.slice();
+        const { weight: _old, ...rest } = it;
+        next[i] = w ? { ...rest, weight: w } : rest;
+        edit.set(withSection(r, s, next));
+      } }, icon('dumbbell'), it.weight ? kg(it.weight) : 'Sin peso') : null;
+      // tiempo o repeticiones (− +)
+      const amount = edit ? amountCtrl(ex, it, (a) => {
+        const next = items.slice();
+        const { reps: _r, repsSaved: _s, ...base } = it;
+        next[i] = { ...base, ...a };
+        edit.set(withSection(r, s, next));
+      }) : h('span', { class: 'maker-secs muted small' }, amountText(ex, it));
+      // arriba: el nombre (y «por lados») con cambiar y quitar al lado; debajo, en una línea: tiempo o repeticiones y el peso
+      const content = h('div', { class: 'maker-row mr-grid' },
         // tocar la miniatura o el nombre abre la ficha (cómo se hace)
-        h('button', { class: 'maker-open', 'aria-label': `Cómo se hace: ${ex.name}`, onclick: open }, img),
-        h('div', { class: 'maker-name' },
+        h('button', { class: 'maker-open mr-img', 'aria-label': `Cómo se hace: ${ex.name}`, onclick: open }, img),
+        h('div', { class: 'maker-name mr-top' },
           h('button', { class: 'maker-open maker-title', onclick: open }, ex.name),
           // se hace por lados (una vez con cada lado): que se vea al montar la tabla
-          ex.oneSided ? h('span', { class: 'by-sides small' }, icon('sides'), 'por lados') : '',
-          // tiempo (− +)
-          // tiempo o repeticiones (− +)
-          edit ? h('div', { class: 'maker-ctrls' }, amountCtrl(ex, it, (a) => {
-              const next = items.slice();
-              const { reps: _r, ...base } = it;
-              next[i] = { ...base, ...a };
-              edit.set(withSection(r, s, next));
-            }))
-            : h('span', { class: 'maker-secs muted small' }, amountText(ex, it)),
-          // peso de la mancuerna (al editar una tabla guardada)
-          edit?.full && usesWeight(ex) ? h('button', { class: 'weight-btn small' + (it.weight ? '' : ' none'), 'aria-label': `Peso de ${ex.name}: ${it.weight ? kg(it.weight) + ' por mancuerna' : 'sin peso'}. Cambiar`, onclick: async () => {
-            const w = await weightDialog(ex.name, it.weight ?? app.store.lastWeight(ex.id) ?? (/barra/.test(weightUnit(ex)) ? 20 : 5), weightUnit(ex));
-            if (w === null) return;
-            const next = items.slice();
-            const { weight: _old, ...rest } = it;
-            next[i] = w ? { ...rest, weight: w } : rest;
-            edit.set(withSection(r, s, next));
-          } }, icon('dumbbell'), it.weight ? kg(it.weight) : 'Sin peso') : ''),
-        // cambiar y quitar: a la derecha, más grandes y centrados en la fila
-        edit ? h('div', { class: 'maker-acts' }, swapBtn, removeBtn) : '');
+          ex.oneSided ? h('span', { class: 'by-sides small' }, icon('sides'), 'por lados') : ''),
+        edit ? h('div', { class: 'maker-acts mr-acts' }, swapBtn, removeBtn) : '',
+        h('div', { class: 'maker-ctrls mr-ctrls' }, amount, weightBtn));
       rowAt[i] = { content, label: ex.name };
     });
     // tramos del bloque: cada ejercicio suelto, o una serie (sus ejercicios juntos, en un recuadro con sus vueltas)

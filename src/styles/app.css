@@ -1960,3 +1960,23 @@ html[data-font="large"] { font-size: 112.5%; }
 .amount-mode .seg { padding: 4px 8px; font-size: .74rem; border-radius: 7px; }
 .row-amount { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
 .ex-actions .amount-ctrl { justify-content: center; }
+/* Fila de un ejercicio al editar: miniatura a la izquierda; arriba el nombre con cambiar y quitar; debajo, en una
+   sola línea, «Tiempo | Reps», el contador y el peso */
+.maker-row.mr-grid { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; grid-template-areas: "img top acts" "ctrls ctrls ctrls"; column-gap: 10px; row-gap: 8px; align-items: center; }
+.mr-grid > .mr-img { grid-area: img; align-self: center; }
+.mr-grid > .mr-top { grid-area: top; align-self: center; }
+.mr-grid > .mr-acts { grid-area: acts; align-self: start; }
+.mr-grid > .mr-ctrls { grid-area: ctrls; margin-top: 0; gap: 6px; flex-wrap: nowrap; }
+.mr-ctrls .amount-ctrl { flex-wrap: nowrap; gap: 6px; }
+.mr-ctrls .weight-btn.small { margin-top: 0; padding: 5px 8px; white-space: nowrap; }
+.mr-ctrls .stepper.inline button { width: 30px; height: 30px; }
+.mr-ctrls .stepper.inline .secs { min-width: 46px; font-size: .9rem; white-space: nowrap; }
+.mr-grid .maker-thumb { width: 46px; height: 46px; }
+.mr-ctrls { min-width: 0; }
+.mr-ctrls .amount-mode .seg { padding: 4px 7px; }
+.mr-ctrls { flex-wrap: wrap; row-gap: 6px; }
+.mr-ctrls .amount-mode .seg { padding: 3px 6px; font-size: .7rem; }
+.mr-ctrls .stepper.inline button { width: 28px; height: 28px; }
+.mr-ctrls .stepper.inline .secs { min-width: 40px; font-size: .85rem; }
+.mr-ctrls .weight-btn.small { padding: 4px 7px; gap: 4px; font-size: .82rem; }
+.mr-ctrls .weight-btn.small .ico { width: 14px; height: 14px; }
