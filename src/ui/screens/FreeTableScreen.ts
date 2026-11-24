@@ -1,8 +1,8 @@
 import { WorkoutPlan, MAX_ROUNDS } from '../../domain/WorkoutPlan';
 import { MAX_SECONDS, MIN_SECONDS, STEP_SECONDS } from '../../domain/RoutineEditor';
-import { freeToRoutine, routineToFree, type ExerciseDef, type FreeEntry, type FreeNode } from '../../domain/types';
+import { freeToRoutine, routineToFree, usesWeight, weightUnit, type ExerciseDef, type FreeEntry, type FreeNode } from '../../domain/types';
 import type { App, Screen } from '../App';
-import { actionSheet, clear, confirmDialog, h, plural, promptDialog, holdScroll } from '../dom';
+import { actionSheet, clear, confirmDialog, h, kg, plural, promptDialog, holdScroll, weightDialog } from '../dom';
 import { sortableList, type SortableRow } from '../components/sortable';
 import { icon } from '../icons';
 import { DetailScreen } from './DetailScreen';
@@ -167,13 +167,20 @@ export class FreeTableScreen implements Screen {
         h('button', { class: 'maker-open maker-title', onclick: open }, ex.name),
         h('span', { class: 'free-sub' }, tag, ex.oneSided ? h('span', { class: 'by-sides small' }, icon('sides'), 'por lados') : null)),
       more ? h('div', { class: 'maker-acts mr-acts' }, more) : '',
-      // tiempo o repeticiones (− +)
+      // tiempo o repeticiones (− +) y el peso
       h('div', { class: 'maker-ctrls mr-ctrls' }, where ? amountCtrl(ex, e, (a) => edit((x) => {
         if (x.kind !== 'ex') return;
         x.seconds = a.seconds;
         if (a.reps) x.reps = a.reps; else delete x.reps;
         if (a.repsSaved) x.repsSaved = a.repsSaved; else delete x.repsSaved;
-      })) : h('span', { class: 'maker-secs muted small' }, amountText(ex, e))));
+      })) : h('span', { class: 'maker-secs muted small' }, amountText(ex, e)),
+        usesWeight(ex) && e.kind === 'ex' ? (where
+          ? h('button', { class: 'weight-btn small' + (e.weight ? '' : ' none'), 'aria-label': `Peso de ${ex.name}: ${e.weight ? kg(e.weight) + ' por mancuerna' : 'sin peso'}. Cambiar`, onclick: async () => {
+            const w = await weightDialog(ex.name, e.weight ?? app.store.lastWeight(ex.id) ?? (/barra/.test(weightUnit(ex)) ? 20 : 5), weightUnit(ex));
+            if (w === null) return;
+            edit((x) => { if (x.kind !== 'ex') return; if (w) x.weight = w; else delete x.weight; });
+          } }, icon('dumbbell'), e.weight ? kg(e.weight) : 'Sin peso')
+          : e.weight ? h('span', { class: 'maker-secs muted small' }, kg(e.weight)) : null) : null));
   }
 
   /** ⋯ de un ejercicio o descanso: duplicar, meterlo en una serie de al lado, sacarlo de la serie o quitarlo. */

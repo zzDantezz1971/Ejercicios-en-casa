@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-24T16:10:04Z",
+    "es": "Tabla libre: los ejercicios con pesas enseñan el peso elegido (o «Sin peso») al lado del tiempo o las repeticiones, y se cambia tocándolo.",
+    "ca": "Taula lliure: els exercicis amb peses ensenyen el pes triat (o «Sense pes») al costat del temps o les repeticions, i es canvia tocant-lo.",
+    "en": "Free routine: exercises with weights show the chosen weight (or “No weight”) next to the time or reps, and you can change it by tapping."
+  },
+  {
     "fecha": "2026-11-24T16:06:36Z",
     "es": "Añadir ejercicios (también en la tabla libre): al marcar uno ya se puede elegir «Tiempo | Reps» con su contador y el peso; y las repeticiones se guardan al añadirlo.",
     "ca": "Afegir exercicis (també a la taula lliure): en marcar-ne un ja es pot triar «Temps | Reps» amb el seu comptador i el pes; i les repeticions es desen en afegir-lo.",
