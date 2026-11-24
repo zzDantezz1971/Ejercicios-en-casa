@@ -2,6 +2,8 @@ import type { WorkoutPlan } from '../../domain/WorkoutPlan';
 import type { SavedRoutine } from '../../domain/types';
 import type { App } from '../App';
 import { h } from '../dom';
+import { IS_NATIVE } from '../../platform/native';
+import { KasaNative } from '../../platform/kasaNative';
 import { icon } from '../icons';
 import { WorkoutScreen } from '../screens/WorkoutScreen';
 
@@ -17,6 +19,8 @@ export async function startWorkout(app: App, plan: WorkoutPlan, table: SavedRout
   if (app.heart.available && app.store.settings.askWatch && !app.heart.connected) {
     await watchDialog(app);
   }
+  // después del reloj, la música (si no se ha dicho que no se pregunte más)
+  if (app.store.settings.askMusic) await musicDialog(app);
   app.push(new WorkoutScreen(app, plan, table));
 }
 
@@ -87,5 +91,57 @@ function watchDialog(app: App): Promise<void> {
         h('label', { class: 'wd-never', for: 'watch-never' }, never, 'No volver a preguntar (se puede cambiar en Ajustes)')));
     document.body.append(wrap);
     connectBtn.focus();
+  });
+}
+
+/**
+ * «¿Quieres música?»: abre Spotify (o la app de música del móvil; en la web, Spotify en otra pestaña) y el
+ * entrenamiento no empieza hasta que vuelves a Kasa Fit; o se empieza sin música. Con la casilla, no se pregunta más.
+ */
+function musicDialog(app: App): Promise<void> {
+  return new Promise((resolve) => {
+    const never = h('input', { type: 'checkbox', id: 'music-never' });
+    let done = false;
+    const finish = () => {
+      if (done) return;
+      done = true;
+      if (never.checked) app.store.saveSettings({ ...app.store.settings, askMusic: false });
+      wrap.remove();
+      resolve();
+    };
+    const openBtn = h('button', { class: 'btn primary' }, icon('music'), 'Abrir la música');
+    // en la app: si está Spotify, el botón lo dice
+    if (IS_NATIVE) void KasaNative.musicApp().then(({ spotify }) => { if (spotify) openBtn.replaceChildren(icon('music'), 'Abrir Spotify'); }).catch(() => undefined);
+    openBtn.addEventListener('click', async () => {
+      app.haptics.tap();
+      // al volver a Kasa Fit (con la música ya puesta), empieza el entrenamiento
+      const back = () => {
+        if (document.visibilityState !== 'visible') return;
+        document.removeEventListener('visibilitychange', back);
+        finish();
+      };
+      document.addEventListener('visibilitychange', back);
+      let opened = false;
+      if (IS_NATIVE) opened = (await KasaNative.openMusic().catch(() => ({ opened: false }))).opened;
+      if (!opened) opened = !!window.open('https://open.spotify.com/', '_blank', 'noopener');
+      if (!opened) { document.removeEventListener('visibilitychange', back); finish(); return; }
+      status.hidden = false;
+    });
+    const skipBtn = h('button', { class: 'btn ghost', onclick: finish }, 'Empezar sin música');
+    const status = h('p', { class: 'muted small', hidden: true }, 'Pon la música y vuelve a Kasa Fit: el entrenamiento empezará entonces.');
+    const startNow = h('button', { class: 'btn ghost', onclick: finish }, icon('play'), 'Empezar ya');
+    const wrap = h('div', { class: 'dialog-wrap' },
+      h('div', { class: 'dialog watch-dialog', role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': 'music-title' },
+        h('div', { class: 'wd-head' },
+          h('span', { class: 'wd-heart wd-music' }, icon('music')),
+          h('h2', { id: 'music-title' }, '¿Quieres música?')),
+        h('p', { class: 'muted small' }, 'Pon tu música antes de empezar: así no tendrás que parar el entrenamiento para elegirla.'),
+        status,
+        h('div', { class: 'wd-actions' }, openBtn, skipBtn),
+        h('label', { class: 'wd-never', for: 'music-never' }, never, 'No volver a preguntar (se puede cambiar en Ajustes)')));
+    // si ya se ha abierto la música, «Empezar sin música» pasa a «Empezar ya»
+    openBtn.addEventListener('click', () => skipBtn.replaceWith(startNow));
+    document.body.append(wrap);
+    openBtn.focus();
   });
 }

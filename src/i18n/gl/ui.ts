@@ -1286,4 +1286,12 @@ export const UI_GL: Record<string, string> = {
   "{a}, con repeticiones {b}": "{a}, con repeticións {b}",
   "{a} - {b}": "{a} - {b}",
   "Total {a}": "Total {a}",
+  "¿Quieres música?": "Queres música?",
+  "Pon tu música antes de empezar: así no tendrás que parar el entrenamiento para elegirla.": "Pon a túa música antes de comezar: así non terás que parar o adestramento para escollela.",
+  "Abrir Spotify": "Abrir Spotify",
+  "Empezar sin música": "Comezar sen música",
+  "Empezar ya": "Comezar xa",
+  "Pon la música y vuelve a Kasa Fit: el entrenamiento empezará entonces.": "Pon a música e volve a Kasa Fit: o adestramento comezará entón.",
+  "Preguntar por la música": "Preguntar pola música",
+  "Antes de cada entrenamiento, «¿Quieres música?» para abrir Spotify o tu app de música.": "Antes de cada adestramento, «Queres música?» para abrir Spotify ou a túa app de música.",
 };

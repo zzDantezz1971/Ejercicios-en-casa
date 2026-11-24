@@ -4,6 +4,7 @@ Recordatorio: **cuando instales la app de prueba** (el APK de GitHub o la prueba
 Marca cada punto al probarlo. Si algo falla, haz una captura y cuéntamelo.
 
 ## 0e. Para probar en el build 20
+- [ ] «Vols música?» en començar (després del rellotge): «Obre Spotify» (si el tens) obre Spotify i l’entrenament no comença fins que tornes a Kasa Fit; «Comença sense música» comença de seguida. Amb «No ho tornis a preguntar» ja no surt; es torna a activar a Configuració › Avisos › «Preguntar per la música».
 - [ ] Resum igual a tot arreu: una taula amb un bloc x2 i una sèrie x3. A Inici, Taules, la vista de la taula, Edita i els plans ha de dir el mateix: «N exercicis, amb repeticions M - Total X min», i el temps de la taula = la suma dels blocs. Sense res repetit, només «N exercicis - Total X min». Sense l’etiqueta x2/x3 a la info dels blocs; però en obrir un bloc que es repeteix, a la dreta del nom ha de sortir l’etiqueta «X3», igual que la d’una sèrie.
 - [ ] Ninot › Complements › Cinta al front: «D’esport» (del color de la samarreta) i «Japonesa» (blanca, sol vermell al front, nus i puntes darrere). Gira el ninot per veure-la per darrere, prova-la amb cada pentinat i mira que surti als exercicis. Sense prèmium, no es veu.
 - [ ] Edita una taula amb molts exercicis, baixa fins a la meitat i toca + i − del temps 10 vegades seguides: la pantalla no s’ha de moure gens (també a la taula lliure, Crea-la per mi i els dies del pla).

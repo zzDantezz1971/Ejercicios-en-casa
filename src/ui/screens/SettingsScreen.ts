@@ -486,6 +486,9 @@ export class SettingsScreen implements Screen {
       s.voice ? toggle('voiceCount', 'hourglass', 'Cuenta atrás por voz', 'Dice "tres, dos, uno" al final de cada ejercicio, descanso y cuenta atrás.') : null,
       s.voice && this.app.voice.available ? this.voiceCard() : null,
       IS_NATIVE ? this.musicCard(s) : null,
+      h('section', { class: 'card setting' }, h('label', { class: 'switch-row', for: 'set-askMusic' },
+        h('span', { class: 'set-text' }, h('strong', {}, 'Preguntar por la música'), h('span', { class: 'muted block small' }, 'Antes de cada entrenamiento, «¿Quieres música?» para abrir Spotify o tu app de música.')),
+        h('input', { type: 'checkbox', id: 'set-askMusic', class: 'switch', checked: s.askMusic, onchange: (e: Event) => this.update({ askMusic: (e.target as HTMLInputElement).checked }) }))),
       h('button', {
         class: 'btn ghost block',
         onclick: () => {

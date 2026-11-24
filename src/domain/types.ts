@@ -227,6 +227,8 @@ export interface Settings {
   musicMode: MusicMode;
   /** Al empezar, preguntar por el reloj (pulsaciones) si no está conectado. */
   askWatch: boolean;
+  /** Al empezar, preguntar si quieres música (abrir Spotify o la app de música). */
+  askMusic: boolean;
   /** Datos personales para calcular las calorías. */
   /** Aspecto del muñeco (Configuración › Personaliza el muñeco). */
   look?: Partial<import('../figure/look').Look>;
@@ -288,6 +290,7 @@ export const DEFAULT_SETTINGS: Settings = {
   duckMusic: true,
   musicMode: 'duck',
   askWatch: true,
+  askMusic: true,
   profile: { age: null, height: null, sex: 'h' },
   lang: 'ca',
   theme: 'dark',
