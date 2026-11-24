@@ -6,3 +6,4 @@ tools/skin_*.json
 tools/comparativa-maniquis.html
 dist-android
 __pycache__/
+tools/reels/out/

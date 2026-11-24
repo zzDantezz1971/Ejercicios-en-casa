@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="ca">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=540" />
+<title>Reel Kasa Fit</title>
+<style>
+  html, body { margin: 0; background: #111; }
+  [hidden] { display: none !important; }
+  #stage { position: relative; width: 540px; height: 960px; overflow: hidden; background: #DDE3E0; font-family: "Barlow", system-ui, sans-serif; }
+  #stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .cap { position: absolute; left: 28px; right: 28px; top: 120px; display: flex; flex-direction: column; align-items: flex-start; gap: 10px; transition: none; }
+  .cap .l1 { font: 700 54px/1 "Barlow Condensed", sans-serif; text-transform: uppercase; color: #fff; background: #1B2130; padding: 10px 16px 8px; border-radius: 12px; letter-spacing: .01em; }
+  .cap .l2 { font: 700 34px/1.05 "Barlow Condensed", sans-serif; text-transform: uppercase; color: #1B2130; background: #F2A516; padding: 8px 14px 6px; border-radius: 10px; }
+  .brand { position: absolute; left: 0; right: 0; bottom: 0; padding: 18px 28px 26px; display: flex; align-items: center; gap: 12px; background: linear-gradient(transparent, rgb(27 33 48 / .85) 40%); color: #fff; }
+  .brand img { width: 52px; height: 52px; border-radius: 13px; }
+  .brand b { font: 700 30px/1 "Barlow Condensed", sans-serif; letter-spacing: .03em; text-transform: uppercase; display: block; }
+  .brand span { font: 500 17px/1.2 "Barlow", sans-serif; opacity: .9; }
+  .end { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; background: #2F5BEA; color: #fff; text-align: center; padding: 40px; box-sizing: border-box; }
+  .end img { width: 150px; height: 150px; border-radius: 34px; box-shadow: 0 12px 40px rgb(0 0 0 / .3); }
+  .end h1 { margin: 0; font: 700 64px/1 "Barlow Condensed", sans-serif; text-transform: uppercase; }
+  .end p { margin: 0; font: 600 28px/1.2 "Barlow", sans-serif; }
+  .end .play { margin-top: 10px; background: #fff; color: #1B2130; border-radius: 999px; padding: 14px 28px; font: 700 26px/1 "Barlow Condensed", sans-serif; text-transform: uppercase; letter-spacing: .03em; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <canvas id="c"></canvas>
+  <div class="cap" id="cap"><span class="l1" id="l1"></span><span class="l2" id="l2"></span></div>
+  <div class="brand" id="brand"><img src="/icon-192.png" alt="" /><div><b>Kasa Fit</b><span>Entrena a casa, en català</span></div></div>
+  <div class="end" id="end" hidden><img src="/icon-512.png" alt="" /><h1>Kasa Fit</h1><p id="endText">Entrena a casa, en català.<br />Sense anuncis.</p><span class="play">Gratis a Google Play</span></div>
+</div>
+<script type="module" src="./reel.ts"></script>
+</body>
+</html>
