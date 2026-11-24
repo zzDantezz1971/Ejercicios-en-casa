@@ -225,6 +225,39 @@ export function addRoom(ms: MannequinScene, opts: RoomOpts = {}): void {
   // todo se coloca en coordenadas de la habitación: x = a la derecha, y = arriba, z = hacia la cámara (0 = el muñeco)
   room.position.copy(roomC);
   room.rotation.y = Math.atan2(dir.x, dir.z);
+  fillRoom(room, opts);
+}
+
+/**
+ * La habitación para mover a Fit por ella (vídeo de presentación): devuelve `place(x, z, facing)`, que coloca la
+ * habitación y la cámara (siempre igual entre sí) de modo que Fit (en el origen de la escena, mirando hacia +z) quede en
+ * el punto (x, z) de la habitación, mirando hacia `facing` grados (0 = a la cámara, 90 = hacia la derecha).
+ */
+export function roomRig(ms: MannequinScene, opts: RoomOpts = {}): { place: (x: number, z: number, facing: number) => void; room: THREE.Group } {
+  const S = ms.scene, cam = ms.camera;
+  const room = new THREE.Group();
+  room.userData.room = true;
+  S.add(room);
+  fillRoom(room, opts);
+  const camLocal = new THREE.Vector3(0, EYE.target + EYE.dist * Math.sin(EYE.elev), EYE.dist * Math.cos(EYE.elev));
+  const lookLocal = new THREE.Vector3(0, EYE.target, 0);
+  const place = (x: number, z: number, facing: number) => {
+    const a = (-facing * Math.PI) / 180;
+    room.rotation.set(0, a, 0);
+    // el punto (x, 0, z) de la habitación tiene que caer en el origen
+    room.position.set(0, 0, 0);
+    room.updateMatrixWorld(true);
+    const p = room.localToWorld(new THREE.Vector3(x, 0, z));
+    room.position.sub(p);
+    room.updateMatrixWorld(true);
+    cam.position.copy(room.localToWorld(camLocal.clone()));
+    cam.lookAt(room.localToWorld(lookLocal.clone()));
+    cam.updateMatrixWorld(true);
+  };
+  return { place, room };
+}
+
+function fillRoom(room: THREE.Group, opts: RoomOpts): void {
   const BACK = -150;
 
   const std = (color: string, rough = 0.85, metal = 0, extra: THREE.MeshStandardMaterialParameters = {}) =>
