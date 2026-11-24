@@ -12,7 +12,7 @@ import '@fontsource/barlow-condensed/latin-700.css';
 // ── los guiones (?v=anunci, ?v=taules…) ──────────────────────────────────────────
 type Screen = { ms: number; shots: string[]; k: string; h: string; p: string };
 /** ad: versión para anuncios de pago (textos en la zona segura de Instagram, sin barra de abajo, más corto). */
-type Video = { intro: string; play: string; screens: Screen[]; ad?: boolean; introMs?: number; endMs?: number };
+type Video = { intro: string; introSub?: string; play: string; screens: Screen[]; ad?: boolean; introMs?: number; endMs?: number };
 const VIDEOS: Record<string, Video> = {
   // anuncio general
   anunci: {
@@ -36,7 +36,7 @@ const VIDEOS: Record<string, Video> = {
   },
   // un entrenamiento por dentro
   entreno: {
-    intro: 'Un entrenament<br /><em>per dins</em>', play: 'Gratis a Google Play',
+    intro: 'Un entrenament<br /><em>per dins</em>', introSub: 'Exercicis en català', play: 'Gratis a Google Play',
     screens: [
       { ms: 4500, shots: ['e-musica'], k: 'Abans de començar', h: 'Posa la teva<br /><em>música</em>', p: 'Obre la teva app de música i torna: l’entrenament t’espera.' },
       { ms: 4500, shots: ['e-prepara'], k: 'Prepara’t', h: 'Uns segons<br /><em>per col·locar-te</em>', p: 'Compte enrere i l’exercici que toca, abans de començar.' },
@@ -50,7 +50,7 @@ const VIDEOS: Record<string, Video> = {
   },
   // los tipos de tablas
   taules: {
-    intro: 'Com vols<br /><em>la teva taula?</em>', play: 'Gratis a Google Play',
+    intro: 'Crea la teva<br /><em>taula d’exercicis</em>', introSub: 'Exercicis en català', play: 'Gratis a Google Play',
     screens: [
       { ms: 4300, shots: ['t-sheet'], k: 'Nova taula', h: 'Tria com<br /><em>la vols fer</em>', p: 'Cinc maneres de crear una taula, segons el temps i les ganes que tinguis.' },
       { ms: 4800, shots: ['t-buida-pick'], k: '1 · Taula buida', h: 'Tria tu<br /><em>cada exercici</em>', p: 'Bloc a bloc: escalfament, força, abdominals i estiraments. Per temps o per repeticions.' },
@@ -71,6 +71,7 @@ const SCREENS = VIDEO.screens;
 const END_MS = VIDEO.endMs ?? 2800;
 const total = INTRO_MS + SCREENS.reduce((n, s) => n + s.ms, 0) + END_MS;
 document.querySelector('#intro h2')!.innerHTML = VIDEO.intro;
+if (VIDEO.introSub) document.querySelector('#intro img')!.insertAdjacentHTML('afterend', `<p class="intro-sub">${VIDEO.introSub}</p>`);
 document.querySelector('#end .play')!.textContent = VIDEO.play;
 
 // ── capturas de la app ─────────────────────────────────────────────────────────

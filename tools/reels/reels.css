@@ -98,3 +98,4 @@
 #stage.ad .ad-head p { display: none; }
 #stage.ad .phone { top: 245px; }
 #stage.ad .phone { top: 270px; }
+.ad-intro .intro-sub { margin: -6px 0 6px; font: 700 26px/1 "Barlow Condensed", sans-serif; letter-spacing: .1em; text-transform: uppercase; color: #F2B53E; }
