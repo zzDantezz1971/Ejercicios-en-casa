@@ -12,7 +12,9 @@ import type { MannequinScene } from '../../src/figure/Mannequin';
  * qué inclinación (radianes). `near`: cuánto se adelanta el muñeco hacia la cámara (la habitación se ve igual; el
  * muñeco, más grande).
  */
-export const EYE = { target: 82, dist: 760, elev: 0.1, near: 200 };
+export const EYE = { target: 82, dist: 760, elev: 0.1, near: 200,
+  /** hasta dónde puede llegar el muñeco en la pantalla (de -1 a 1): a los lados y por abajo (encima de la barra) */
+  side: 0.86, bottom: -0.74 };
 
 const C = {
   wallUp: '#FBFBF9', wallLow: '#BCD0E6', rail: '#C9A27A', base: '#F7F4EE',
@@ -186,12 +188,29 @@ export function addRoom(ms: MannequinScene, opts: RoomOpts = {}): void {
   cam.getWorldDirection(look);
   const dir = look.negate().setY(0).normalize();
   const right = new THREE.Vector3().crossVectors(new THREE.Vector3(0, 1, 0), dir).normalize();
-  // la cámara, siempre a la misma distancia, altura e inclinación respecto a la habitación
-  // el muñeco se adelanta `near` hacia la cámara: la habitación (y la cámara con ella) se echa atrás lo mismo
-  const roomC = c.clone().addScaledVector(dir, -EYE.near);
-  const target = roomC.clone().setY(EYE.target);
-  cam.position.copy(target).addScaledVector(dir, EYE.dist * Math.cos(EYE.elev)).add(new THREE.Vector3(0, EYE.dist * Math.sin(EYE.elev), 0));
-  cam.lookAt(target);
+  // la cámara, siempre a la misma distancia, altura e inclinación respecto a la habitación. El muñeco se adelanta
+  // hacia la cámara (la habitación, y la cámara con ella, se echa atrás lo mismo) todo lo que se pueda hasta EYE.near,
+  // pero sin que el muñeco ni su material se salgan por los lados ni bajen hasta la barra de los textos: de pie se ve
+  // grande, y tumbado en la esterilla (que ocupa más a lo ancho) un poco menos
+  const roomC = new THREE.Vector3(), target = new THREE.Vector3();
+  const place = (near: number) => {
+    roomC.copy(c).addScaledVector(dir, -near);
+    target.copy(roomC).setY(EYE.target);
+    cam.position.copy(target).addScaledVector(dir, EYE.dist * Math.cos(EYE.elev)).add(new THREE.Vector3(0, EYE.dist * Math.sin(EYE.elev), 0));
+    cam.lookAt(target);
+    cam.updateMatrixWorld(true);
+  };
+  const fits = () => {
+    const p = new THREE.Vector3();
+    for (let k = 0; k < 8; k++) {
+      p.set(k & 1 ? box.max.x : box.min.x, k & 2 ? box.max.y : box.min.y, k & 4 ? box.max.z : box.min.z).project(cam);
+      if (Math.abs(p.x) > EYE.side || p.y < EYE.bottom || p.y > 0.9) return false;
+    }
+    return true;
+  };
+  let near = EYE.near;
+  for (; near > 0; near -= 5) { place(near); if (fits()) break; }
+  place(Math.max(0, near));
 
   const room = new THREE.Group();
   room.userData.room = true;
