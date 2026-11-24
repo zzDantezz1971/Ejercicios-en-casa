@@ -1,6 +1,6 @@
 /*
  * La habitación de los reels: siempre igual vista desde la cámara (sea cual sea el ejercicio). Pared en dos tonos con
- * friso, ventana grande con cortina y estor, póster, estanterías, alfombra, luz del sol en el suelo, plantas y material
+ * friso, ventana grande con cortina y estor, póster, estanterías, luz del sol en el suelo, plantas y material
  * de fitness fijo (esterilla, kettlebells, rodillo, mancuernas en su soporte, fitball).
  */
 import * as THREE from 'three';
@@ -115,17 +115,6 @@ function posterTex(): THREE.CanvasTexture {
   return t;
 }
 
-/** Alfombra: crudo con rayas de colores en los bordes y textura de tejido. */
-const RUG = canvasTex(512, 340, (g) => {
-  g.fillStyle = '#E2D3BB'; g.fillRect(0, 0, 512, 340);
-  for (let y = 0; y < 340; y += 3) { g.fillStyle = `rgba(120,100,70,${0.03 + (y % 6 ? 0 : 0.03)})`; g.fillRect(0, y, 512, 1); }
-  const band = (y: number, h: number, col: string) => { g.fillStyle = col; g.fillRect(24, y, 464, h); };
-  for (const [y0, dir] of [[26, 1], [314, -1]] as const) {
-    band(y0, 10 * dir, '#C8643B'); band(y0 + 16 * dir, 5 * dir, '#2F5BEA'); band(y0 + 26 * dir, 5 * dir, '#E2A64A');
-  }
-  g.strokeStyle = 'rgba(120,90,60,.35)'; g.lineWidth = 3; g.strokeRect(12, 12, 488, 316);
-});
-
 /** Mancha de sol de la ventana en el suelo (cálida, con los bordes suaves). */
 const SUN = canvasTex(256, 256, (g) => {
   const gr = g.createRadialGradient(128, 128, 30, 128, 128, 128);
@@ -196,9 +185,8 @@ export function addRoom(ms: MannequinScene): void {
     m.renderOrder = 1;
   };
 
-  // ── suelo, alfombra y sol ─────────────────────────────────────────────────
+  // ── suelo y sol ─────────────────────────────────────────────────
   add(flat(plane(1400, 1400, std('#ffffff', 0.62, 0, { map: WOOD }))), 0, -0.3, 0, false);
-  add(flat(plane(215, 165, std('#ffffff', 1, 0, { map: RUG }))), 0, -0.15, 4, false);
   const sun = add(flat(plane(150, 150, new THREE.MeshBasicMaterial({ map: SUN, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending }))), -40, -0.1, -70, false);
   sun.scale.set(1, 0.7, 1); sun.rotation.z = -0.45;
 
@@ -240,8 +228,8 @@ export function addRoom(ms: MannequinScene): void {
   }
 
   // ── póster enmarcado ───────────────────────────────────────────────────────
-  add(boxM(58, 80, 2.5, std(C.black, 0.5)), 18, 224, BACK + 1.5, false);
-  add(plane(52, 73, std('#ffffff', 0.9, 0, { map: posterTex() })), 18, 224, BACK + 2.9, false);
+  add(boxM(46, 64, 2.5, std(C.black, 0.5)), 18, 226, BACK + 1.5, false);
+  add(plane(41, 58, std('#ffffff', 0.9, 0, { map: posterTex() })), 18, 226, BACK + 2.9, false);
 
   // ── estanterías flotantes con libros, trofeo, altavoz, foto y plantas ──────
   const shelfM = std(C.wood, 0.55);
@@ -251,8 +239,9 @@ export function addRoom(ms: MannequinScene): void {
     const b = add(boxM(5.5, h, 13, std(col, 0.75)), x, y + h / 2, BACK + 9, true);
     b.rotation.z = tilt;
   };
-  [[C.blue, 22], [C.orange, 25], [C.green, 21], [C.red, 24], ['#F3F5F8', 24]].forEach(([col, h], i) => book(64 + i * 6, 152, h as number, col as string));
-  book(97.4, 152, 22, '#1E2633', 0.38);
+  [[C.blue, 22], [C.orange, 25], [C.green, 21], [C.red, 24]].forEach(([col, h], i) => book(64 + i * 6, 152, h as number, col as string));
+  // apoyado en el rojo: la esquina de abajo en la balda y la de arriba contra el lomo del rojo
+  book(91.5, 152, 22, '#1E2633', 0.38);
   // planta colgante en la balda de abajo
   const hang = add(new THREE.Mesh(new THREE.CylinderGeometry(6, 4.6, 10, 18), std('#F4F1EC', 0.5)), 118, 157, BACK + 9);
   for (let k = 0; k < 14; k++) {
@@ -371,7 +360,7 @@ export function addRoom(ms: MannequinScene): void {
   blob(-118, BACK + 22, 80, 26); blob(66, BACK + 34, 96, 50); blob(98, BACK + 80, 62, 46);
   blob(142, BACK + 20, 46, 46); blob(0, BACK + 4, 1400, 14, 0.7);
   wallBlob(92, 143, 80, 14); wallBlob(92, 198, 80, 14); wallBlob(WX, WY - WH / 2 - 14, WW + 30, 14, 0.4);
-  wallBlob(18, 220, 66, 90, 0.25); wallBlob(92, 259, 34, 34, 0.25);
+  wallBlob(18, 222, 54, 74, 0.25); wallBlob(92, 259, 34, 34, 0.25);
 
   // ── luces: cálida desde la ventana y un poco de luz de techo ───────────────
   const win = new THREE.PointLight(0xffe7c4, 0.35, 700, 0);
