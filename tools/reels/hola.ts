@@ -146,11 +146,11 @@ function placeBiceps(t: number): void {
     // hacia donde se dobla el brazo (el lado del bíceps), sin la parte a lo largo del brazo
     const out = fore.clone().addScaledVector(along, -fore.dot(along)).normalize();
     const L = ua.scale.y;
-    m.position.copy(ua.position).addScaledVector(along, L * 0.08).addScaledVector(out, 3.3 * k);
+    m.position.copy(ua.position).addScaledVector(along, L * 0.08).addScaledVector(out, 2.4 * k);
     m.quaternion.setFromUnitVectors(Y, along);
     // un poco de «apretón» (crece y decrece un pelín con el movimiento)
     const pump = 1 + 0.06 * Math.sin((t / 600) * Math.PI * 2);
-    m.scale.set(4.3 * k * pump, L * 0.36 * (0.6 + 0.4 * k), 4.1 * k * pump);
+    m.scale.set(3.4 * k * pump, L * 0.3 * (0.6 + 0.4 * k), 3.3 * k * pump);
   }
 }
 
