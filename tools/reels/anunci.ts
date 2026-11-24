@@ -92,7 +92,7 @@ function render(ms: number): void {
   const since = ms - INTRO_MS, up = smooth(since / 700);
   const sway = since / 1000;
   const ry = (FEED ? -18 : -22) + 5 * Math.sin(sway * 0.35), rx = 10 + 2 * Math.sin(sway * 0.27 + 1), rz = 7 + 1.5 * Math.sin(sway * 0.3 + 2);
-  phone.style.transform = `translate(${(FEED ? -14 : 50) + (1 - up) * 40}px, ${(1 - up) * 560}px) perspective(1300px) rotateY(${ry}deg) rotateX(${rx}deg) rotateZ(${rz}deg) scale(${FEED ? 0.98 : 1.06})`;
+  phone.style.transform = `translate(${(FEED ? -14 : 50) + (1 - up) * 40}px, ${(1 - up) * 560}px) perspective(1300px) rotateY(${ry}deg) rotateX(${rx}deg) rotateZ(${rz}deg) scale(${FEED ? 0.88 : 1.06})`;
   // las capturas: fundido de una a otra (la de antes queda debajo), con un desplazamiento lento hacia arriba
   const per = s.ms / s.shots.length;
   const cur = Math.min(s.shots.length - 1, Math.floor(t / per));
@@ -102,7 +102,7 @@ function render(ms: number): void {
   imgs.forEach((im, n) => {
     im.style.opacity = String(n === s.shots[cur] ? k : n === prev ? 1 : 0);
     im.style.zIndex = n === s.shots[cur] ? '2' : '1';
-    im.style.transform = n === s.shots[cur] ? `translateY(${-14 * ((t - cur * per) / per)}px) scale(1.03)` : 'scale(1.03)';
+    im.style.transform = n === s.shots[cur] ? `translateY(${-6 * ((t - cur * per) / per)}px)` : "";
   });
   // los textos: entran al empezar cada pantalla y salen un poco antes de acabar
   const tin = smooth(t / 500), tout = smooth((t - (s.ms - 350)) / 350);

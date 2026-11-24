@@ -72,3 +72,9 @@
 #stage.feed .ad-head p { max-width: 232px; }
 #stage.feed .cap .l1 { font-size: 26px; }
 #stage.feed .cap .l2 { font-size: 16px; white-space: nowrap; }
+/* feed: el tema (en amarillo) más grande y el titular un poco más pequeño; el móvil entero, sin cortar por arriba */
+#stage.feed .ad-head .k { font-size: 25px; letter-spacing: .08em; line-height: 1.05; margin-bottom: 14px; }
+#stage.feed .ad-head h2 { font-size: 36px; }
+#stage.feed .phone { top: 78px; }
+/* la captura empieza por debajo de la cámara del móvil (si no, la parte de arriba de cada pantalla quedaba tapada) */
+.phone .scr img { top: 34px; height: calc(100% - 34px); }
