@@ -168,7 +168,7 @@ export class WorkoutScreen implements Screen {
 
   /**
    * Terminar antes de tiempo. Con 5 min o más de entrenamiento se guarda en el historial; con menos, se avisa de que
-   * no se guardará (hacen falta 5 min) y, si se termina igualmente, se vuelve atrás sin resumen.
+   * no se guardará (hacen falta 5 min, o acabar la tabla entera) y, si se termina igualmente, se vuelve atrás sin resumen.
    */
   private async askStop(goBack = true): Promise<void> {
     if (this.session.status === 'finished') return;
@@ -177,7 +177,7 @@ export class WorkoutScreen implements Screen {
     const enough = this.session.activeSeconds >= MIN_HISTORY_SEC;
     const ok = enough
       ? await confirmDialog('¿Terminar el entrenamiento? Se guardará en el historial lo que hayas hecho.', 'Terminar', 'Seguir')
-      : await confirmDialog(`Aún no llevas 5 min de entrenamiento (llevas ${humanDuration(this.session.activeSeconds)}). Para que se guarde en el historial, hay que entrenar como mínimo 5 min. ¿Terminar sin guardar?`, 'Terminar sin guardar', 'Seguir');
+      : await confirmDialog(`Aún no llevas 5 min de entrenamiento (llevas ${humanDuration(this.session.activeSeconds)}). Para que se guarde en el historial, hay que entrenar como mínimo 5 min o acabar la tabla entera. ¿Terminar sin guardar?`, 'Terminar sin guardar', 'Seguir');
     if (!ok) { if (wasRunning) this.session.resume(); return; }
     if (!enough) {
       this.leaving = true;
@@ -397,8 +397,11 @@ export class WorkoutScreen implements Screen {
   private onFinished(s: SessionSummary): void {
     window.clearInterval(this.timer);
     const heart = summarizeHeart(this.hrSamples);
-    // se guarda a partir de 5 min de entrenamiento (sin contar las pausas), haya hecho los ejercicios que haya hecho
-    const saved = s.durationSec >= MIN_HISTORY_SEC;
+    // se guarda a partir de 5 min de entrenamiento (sin contar las pausas), haya hecho los ejercicios que haya hecho;
+    // y siempre que se acabe la tabla entera, aunque dure menos (una tabla corta hecha de principio a fin cuenta);
+    // entera de verdad: todos los ejercicios hechos (llegar al final saltándolos con «Saltar» no cuenta)
+    const whole = s.completed && s.exercisesDone > 0 && s.exercisesDone >= s.exercisesPlanned;
+    const saved = whole || s.durationSec >= MIN_HISTORY_SEC;
     if (saved) {
       const entry: HistoryEntry = {
         date: s.startedAt.toISOString(),

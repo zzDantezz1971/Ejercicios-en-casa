@@ -1295,7 +1295,7 @@ export const UI_EU: Record<string, string> = {
   "Preguntar por la música": "Musikari buruz galdetu",
   "Antes de cada entrenamiento, «¿Quieres música?» para abrir Spotify o tu app de música.": "Entrenamendu bakoitzaren aurretik, «Musika nahi duzu?», Spotify edo zure musika-aplikazioa irekitzeko.",
   "Pon la música y, cuando vuelvas a Kasa Fit, toca «Empezar».": "Jarri musika eta, Kasa Fitera itzultzean, sakatu «Hasi».",
-  "Aún no llevas 5 min de entrenamiento (llevas {a}). Para que se guarde en el historial, hay que entrenar como mínimo 5 min. ¿Terminar sin guardar?": "Oraindik ez daramazu 5 min entrenatzen ({a} daramatzazu). Historian gordetzeko, gutxienez 5 min entrenatu behar da. Gorde gabe amaitu?",
+  "Aún no llevas 5 min de entrenamiento (llevas {a}). Para que se guarde en el historial, hay que entrenar como mínimo 5 min o acabar la tabla entera. ¿Terminar sin guardar?": "Oraindik ez daramazu 5 min entrenatzen ({a} daramatzazu). Historian gordetzeko, gutxienez 5 min entrenatu edo taula osoa amaitu behar da. Gorde gabe amaitu?",
   "Terminar sin guardar": "Amaitu gorde gabe",
   "No se ha guardado en el historial: hay que entrenar como mínimo 5 min.": "Ez da historian gorde: gutxienez 5 min entrenatu behar da.",
 };

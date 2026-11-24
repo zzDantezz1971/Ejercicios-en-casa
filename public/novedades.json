@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-24T10:03:07Z",
+    "es": "Historial: una tabla acabada entera (todos sus ejercicios) se guarda siempre, aunque dure menos de 5 min. Si la dejas antes, hacen falta 5 min.",
+    "ca": "Historial: una taula acabada sencera (tots els exercicis) es desa sempre, encara que duri menys de 5 min. Si la deixes abans, calen 5 min.",
+    "en": "History: a routine finished in full (all its exercises) is always saved, even if it lasts under 5 min. If you stop earlier, 5 min are needed."
+  },
+  {
     "fecha": "2026-11-24T09:55:41Z",
     "es": "Historial: un entrenamiento se guarda si llega a 5 min (sin contar las pausas), hagas los ejercicios que hagas. Al terminar antes, si no llegas a 5 min se avisa de que no se guardará; y en el resumen se dice si se ha guardado o no.",
     "ca": "Historial: un entrenament es desa si arriba a 5 min (sense comptar les pauses), facis els exercicis que facis. En acabar abans, si no arribes a 5 min s’avisa que no es desarà; i al resum es diu si s’ha desat o no.",

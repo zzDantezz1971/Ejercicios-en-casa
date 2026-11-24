@@ -1295,7 +1295,7 @@ export const UI_GL: Record<string, string> = {
   "Preguntar por la música": "Preguntar pola música",
   "Antes de cada entrenamiento, «¿Quieres música?» para abrir Spotify o tu app de música.": "Antes de cada adestramento, «Queres música?» para abrir Spotify ou a túa app de música.",
   "Pon la música y, cuando vuelvas a Kasa Fit, toca «Empezar».": "Pon a música e, cando volvas a Kasa Fit, toca «Comezar».",
-  "Aún no llevas 5 min de entrenamiento (llevas {a}). Para que se guarde en el historial, hay que entrenar como mínimo 5 min. ¿Terminar sin guardar?": "Aínda non levas 5 min de adestramento (levas {a}). Para que se garde no historial, hai que adestrar como mínimo 5 min. Rematar sen gardar?",
+  "Aún no llevas 5 min de entrenamiento (llevas {a}). Para que se guarde en el historial, hay que entrenar como mínimo 5 min o acabar la tabla entera. ¿Terminar sin guardar?": "Aínda non levas 5 min de adestramento (levas {a}). Para que se garde no historial, hai que adestrar como mínimo 5 min ou rematar a táboa enteira. Rematar sen gardar?",
   "Terminar sin guardar": "Rematar sen gardar",
   "No se ha guardado en el historial: hay que entrenar como mínimo 5 min.": "Non se gardou no historial: hai que adestrar como mínimo 5 min.",
 };
