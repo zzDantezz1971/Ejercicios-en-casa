@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { WorkoutPlan, type Catalog } from '../src/domain/WorkoutPlan';
-import { WorkoutSession, type Cue, type SessionSummary } from '../src/domain/WorkoutSession';
+import { MIN_HISTORY_SEC, WorkoutSession, type Cue, type SessionSummary } from '../src/domain/WorkoutSession';
 import { DEFAULT_SETTINGS, emptyRoutine, type ExerciseDef, type Settings } from '../src/domain/types';
 
 const ex = (id: string, section: ExerciseDef['section'], oneSided = false): ExerciseDef => ({
@@ -257,5 +257,26 @@ describe('Duración sin pausas', () => {
     s.stop();
     expect(sum!.pausedSec).toBe(100);
     expect(sum!.durationSec).toBe(14);
+  });
+});
+
+describe('Tiempo para guardar en el historial (5 min)', () => {
+  it('activeSeconds cuenta el tiempo entrenando, sin las pausas', () => {
+    const c = clock();
+    const r = emptyRoutine();
+    r.calentamiento = [{ exerciseId: 'a', seconds: 600 }];
+    const s = new WorkoutSession(WorkoutPlan.build(r, catalog, DEFAULT_SETTINGS), c.now);
+    s.start();
+    run(s, c, 200);
+    s.pause();
+    c.advance(500);
+    expect(s.activeSeconds).toBe(200);
+    s.resume();
+    run(s, c, 120);
+    expect(s.activeSeconds).toBeGreaterThanOrEqual(MIN_HISTORY_SEC);
+    let summary: SessionSummary | null = null;
+    s.on('finished', (x) => (summary = x));
+    s.stop();
+    expect(summary!.durationSec).toBe(320);
   });
 });

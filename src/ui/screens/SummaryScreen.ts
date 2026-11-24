@@ -12,7 +12,7 @@ import { streak } from '../dates';
 export class SummaryScreen implements Screen {
   readonly el = h('main', { class: 'screen summary' });
 
-  constructor(private readonly app: App, s: SessionSummary, tableName: string, heart?: HeartSummary | null) {
+  constructor(private readonly app: App, s: SessionSummary, tableName: string, heart?: HeartSummary | null, saved = true) {
     const win = s.completed;
     if (s.exercisesDone) {
       const c = this.calories(s, heart);
@@ -48,8 +48,11 @@ export class SummaryScreen implements Screen {
             }))
           : null,
         heart ? h('p', { class: 'hr-summary' }, icon('heart'), `Pulso medio ${heart.avg} · máximo ${heart.max} ppm`) : null,
-        this.streakLine(s),
-        s.exercisesDone ? h('p', { class: 'muted small' }, 'Guardado en el historial.') : null,
+        saved ? this.streakLine(s) : null,
+        // a partir de 5 min de entrenamiento se guarda; si no, se dice por qué
+        saved
+          ? h('p', { class: 'saved-note' }, icon('check'), 'Guardado en el historial.')
+          : h('p', { class: 'saved-note warn' }, icon('info'), 'No se ha guardado en el historial: hay que entrenar como mínimo 5 min.'),
         // los recordatorios (peso…) llegan solo como notificación del móvil: aquí ya no sale ninguna ventana
         h('button', { class: 'btn primary block big', onclick: () => {
           this.app.voice.stop();

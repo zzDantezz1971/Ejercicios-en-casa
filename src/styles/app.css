@@ -1925,3 +1925,8 @@ html[data-font="large"] { font-size: 112.5%; }
 .music-app { justify-content: flex-start; gap: 12px; }
 .music-app:not(.primary) { background: var(--surface); color: var(--fg); border: 1px solid var(--line); }
 .music-icon { width: 28px; height: 28px; border-radius: 7px; flex: none; }
+/* Resumen: si se ha guardado en el historial (o por qué no) */
+.saved-note { display: inline-flex; align-items: center; gap: 8px; margin: 4px auto 0; font-size: .9rem; color: var(--muted); }
+.saved-note .ico { width: 18px; height: 18px; flex: none; color: var(--sec-stretch, #22A06B); }
+.saved-note.warn { color: var(--fg); background: color-mix(in srgb, var(--sec-warm, #F2A516) 14%, transparent); border-radius: 12px; padding: 10px 12px; text-align: left; }
+.saved-note.warn .ico { color: var(--sec-warm, #F2A516); }

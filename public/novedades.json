@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-24T09:55:41Z",
+    "es": "Historial: un entrenamiento se guarda si llega a 5 min (sin contar las pausas), hagas los ejercicios que hagas. Al terminar antes, si no llegas a 5 min se avisa de que no se guardará; y en el resumen se dice si se ha guardado o no.",
+    "ca": "Historial: un entrenament es desa si arriba a 5 min (sense comptar les pauses), facis els exercicis que facis. En acabar abans, si no arribes a 5 min s’avisa que no es desarà; i al resum es diu si s’ha desat o no.",
+    "en": "History: a workout is saved if it reaches 5 min (not counting pauses), however many exercises you do. When ending early, if you haven’t reached 5 min you’re told it won’t be saved; and the summary says whether it was saved."
+  },
+  {
     "fecha": "2026-11-24T09:40:55Z",
     "es": "Entrenamiento: «¿Terminar el entrenamiento?» solo sale si ya has acabado algún ejercicio (entonces se guarda en el historial). Si aún no has acabado ninguno, la X (o atrás) sale directamente, sin preguntar.",
     "ca": "Entrenament: «Vols acabar l’entrenament?» només surt si ja has acabat algun exercici (llavors es desa a l’historial). Si encara no n’has acabat cap, la X (o enrere) surt directament, sense preguntar.",

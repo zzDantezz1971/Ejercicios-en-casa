@@ -91,9 +91,11 @@ export class WorkoutSession extends Emitter<Events> {
   get status(): SessionStatus {
     return this._status;
   }
-  /** Ejercicios acabados enteros hasta ahora (solo si hay alguno, el entrenamiento se guarda en el historial). */
-  get doneCount(): number {
-    return this.done.size;
+  /** Segundos de entrenamiento hasta ahora (desde que empezó, sin el tiempo en pausa). */
+  get activeSeconds(): number {
+    if (this._status === 'idle') return 0;
+    const pausedNow = this.pausedAt !== null ? this.now() - this.pausedAt : 0;
+    return Math.max(0, Math.round((this.now() - this.startedAtMs - this.pausedAll - pausedNow) / 1000));
   }
 
   get currentIndex(): number {
@@ -286,3 +288,6 @@ export class WorkoutSession extends Emitter<Events> {
     this.emit('status', s);
   }
 }
+
+/** Un entrenamiento se guarda en el historial a partir de este tiempo (s), sin contar las pausas. */
+export const MIN_HISTORY_SEC = 5 * 60;

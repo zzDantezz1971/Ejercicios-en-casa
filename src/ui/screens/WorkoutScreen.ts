@@ -1,13 +1,13 @@
 import type { Step, WorkoutPlan } from '../../domain/WorkoutPlan';
 import { IS_NATIVE } from '../../platform/native';
 import { KasaNative } from '../../platform/kasaNative';
-import { WorkoutSession, type SessionSummary } from '../../domain/WorkoutSession';
+import { WorkoutSession, type SessionSummary, MIN_HISTORY_SEC } from '../../domain/WorkoutSession';
 import { SECTION_TITLES, summarizeHeart, type ExerciseDef, type HistoryEntry, type SavedRoutine, type SectionId } from '../../domain/types';
 import { caloriesOf } from '../../domain/calories';
 import { FigureView } from '../../figure/FigureView';
 import { Coach } from '../../services/Coach';
 import type { App, Screen } from '../App';
-import { confirmDialog, h, kg, mmss, plural } from '../dom';
+import { confirmDialog, h, kg, mmss, plural, humanDuration } from '../dom';
 import { icon, SECTION_STYLE } from '../icons';
 import { SummaryScreen } from './SummaryScreen';
 
@@ -161,25 +161,31 @@ export class WorkoutScreen implements Screen {
 
   async onBack(): Promise<boolean> {
     if (this.session.status === 'finished') return false;
-    // sin ningún ejercicio acabado: se sale sin preguntar (no hay nada que guardar)
-    if (this.session.doneCount === 0) {
-      this.leaving = true;
-      this.session.stop();
-      return false;
-    }
-    await this.askStop();
-    return true;
+    await this.askStop(false);
+    // si se ha salido sin guardar, que atrás siga y vuelva a la pantalla anterior
+    return !this.leaving;
   }
 
-  private async askStop(): Promise<void> {
+  /**
+   * Terminar antes de tiempo. Con 5 min o más de entrenamiento se guarda en el historial; con menos, se avisa de que
+   * no se guardará (hacen falta 5 min) y, si se termina igualmente, se vuelve atrás sin resumen.
+   */
+  private async askStop(goBack = true): Promise<void> {
     if (this.session.status === 'finished') return;
-    // sin ningún ejercicio acabado no se guarda nada en el historial: se sale sin preguntar
-    if (this.session.doneCount === 0) { this.app.back(); return; }
     const wasRunning = this.session.status === 'running';
     this.session.pause();
-    const ok = await confirmDialog('¿Terminar el entrenamiento? Se guardará en el historial lo que hayas hecho.', 'Terminar', 'Seguir');
-    if (ok) this.session.stop();
-    else if (wasRunning) this.session.resume();
+    const enough = this.session.activeSeconds >= MIN_HISTORY_SEC;
+    const ok = enough
+      ? await confirmDialog('¿Terminar el entrenamiento? Se guardará en el historial lo que hayas hecho.', 'Terminar', 'Seguir')
+      : await confirmDialog(`Aún no llevas 5 min de entrenamiento (llevas ${humanDuration(this.session.activeSeconds)}). Para que se guarde en el historial, hay que entrenar como mínimo 5 min. ¿Terminar sin guardar?`, 'Terminar sin guardar', 'Seguir');
+    if (!ok) { if (wasRunning) this.session.resume(); return; }
+    if (!enough) {
+      this.leaving = true;
+      this.session.stop();
+      if (goBack) this.app.back();
+      return;
+    }
+    this.session.stop();
   }
 
   /** Muestra el ejercicio; en los que van por lados, solo el lado que toca. */
@@ -391,7 +397,9 @@ export class WorkoutScreen implements Screen {
   private onFinished(s: SessionSummary): void {
     window.clearInterval(this.timer);
     const heart = summarizeHeart(this.hrSamples);
-    if (s.exercisesDone > 0) {
+    // se guarda a partir de 5 min de entrenamiento (sin contar las pausas), haya hecho los ejercicios que haya hecho
+    const saved = s.durationSec >= MIN_HISTORY_SEC;
+    if (saved) {
       const entry: HistoryEntry = {
         date: s.startedAt.toISOString(),
         durationSec: s.durationSec,
@@ -414,7 +422,7 @@ export class WorkoutScreen implements Screen {
     }
     // terminado antes de acabar ningún ejercicio: no hay nada que resumir (ya se está volviendo atrás)
     if (this.leaving) return;
-    this.app.replace(new SummaryScreen(this.app, s, this.table.name, heart));
+    this.app.replace(new SummaryScreen(this.app, s, this.table.name, heart, saved));
   }
 }
 

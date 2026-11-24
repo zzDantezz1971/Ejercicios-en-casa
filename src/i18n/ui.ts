@@ -1352,6 +1352,9 @@ const ROWS: Row[] = [
   ['Preguntar por la música', 'Preguntar per la música', 'Ask about music'],
   ['Antes de cada entrenamiento, «¿Quieres música?» para abrir Spotify o tu app de música.', 'Abans de cada entrenament, «Vols música?» per obrir Spotify o la teva app de música.', 'Before each workout, “Want some music?” to open Spotify or your music app.'],
   ['Pon la música y, cuando vuelvas a Kasa Fit, toca «Empezar».', 'Posa la música i, quan tornis a Kasa Fit, toca «Comença».', 'Put the music on and, when you come back to Kasa Fit, tap “Start”.'],
+  ['Aún no llevas 5 min de entrenamiento (llevas {a}). Para que se guarde en el historial, hay que entrenar como mínimo 5 min. ¿Terminar sin guardar?', 'Encara no portes 5 min d’entrenament (en portes {a}). Perquè es desi a l’historial, cal entrenar com a mínim 5 min. Vols acabar sense desar?', 'You haven’t trained for 5 min yet (you’re at {a}). To save it in your history, you need at least 5 min. End without saving?'],
+  ['Terminar sin guardar', 'Acaba sense desar', 'End without saving'],
+  ['No se ha guardado en el historial: hay que entrenar como mínimo 5 min.', 'No s’ha desat a l’historial: cal entrenar com a mínim 5 min.', 'Not saved in your history: you need to train for at least 5 min.'],
 ];
 
 export const UI_CA: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[1]]));
