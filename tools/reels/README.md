@@ -1,5 +1,11 @@
 # Reels de Kasa Fit
 
+> **Decisión (24/11/2026): los vídeos se hacen SIN Fit.** Se enseña cómo funciona la app con capturas reales
+> (modo oscuro) en un móvil inclinado en 3D sobre el fondo azul noche, una pantalla cada ~4,5 s con su titular y una
+> frase que explica qué hace (`anunci.html` / `anunci.ts`). Las capturas se sacan con `tools/play/demo-data.ts`
+> (modo oscuro) y se guardan en `tools/reels/assets/`. La habitación y Fit (`reel.*`, `hola.*`, `room.ts`) quedan
+> como estaban, por si algún día se quieren usar.
+
 Vídeos verticales (1080 × 1920, 30 fps) con Fit, el muñeco de la app, en su habitación.
 
 - `scripts.ts`: los guiones (clips con ejercicio, textos y duración; frase del póster de cada reel).
