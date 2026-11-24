@@ -7,7 +7,12 @@ import * as THREE from 'three';
 import type { MannequinScene } from '../../src/figure/Mannequin';
 
 /** Cámara fija: a qué altura mira, a qué distancia y con qué inclinación (radianes). */
-export const EYE = { target: 82, dist: 760, elev: 0.1 };
+/**
+ * Cámara fija respecto a la habitación: a qué altura mira, a qué distancia (del sitio del muñeco de referencia) y con
+ * qué inclinación (radianes). `near`: cuánto se adelanta el muñeco hacia la cámara (la habitación se ve igual; el
+ * muñeco, más grande).
+ */
+export const EYE = { target: 82, dist: 760, elev: 0.1, near: 0 };
 
 const C = {
   wallUp: '#FBFBF9', wallLow: '#BCD0E6', rail: '#C9A27A', base: '#F7F4EE',
@@ -165,7 +170,9 @@ export function addRoom(ms: MannequinScene, opts: RoomOpts = {}): void {
   const dir = cam.position.clone().sub(c).setY(0).normalize();
   const right = new THREE.Vector3().crossVectors(new THREE.Vector3(0, 1, 0), dir).normalize();
   // la cámara, siempre a la misma distancia, altura e inclinación respecto a la habitación
-  const target = c.clone().setY(EYE.target);
+  // el muñeco se adelanta `near` hacia la cámara: la habitación (y la cámara con ella) se echa atrás lo mismo
+  const roomC = c.clone().addScaledVector(dir, -EYE.near);
+  const target = roomC.clone().setY(EYE.target);
   cam.position.copy(target).addScaledVector(dir, EYE.dist * Math.cos(EYE.elev)).add(new THREE.Vector3(0, EYE.dist * Math.sin(EYE.elev), 0));
   cam.lookAt(target);
 
@@ -173,7 +180,7 @@ export function addRoom(ms: MannequinScene, opts: RoomOpts = {}): void {
   room.userData.room = true;
   S.add(room);
   // todo se coloca en coordenadas de la habitación: x = a la derecha, y = arriba, z = hacia la cámara (0 = el muñeco)
-  room.position.copy(c);
+  room.position.copy(roomC);
   room.rotation.y = Math.atan2(dir.x, dir.z);
   const BACK = -150;
 

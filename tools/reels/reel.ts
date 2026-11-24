@@ -17,6 +17,7 @@ import { addRoom, EYE } from './room';
 const qs = new URLSearchParams(location.search);
 if (qs.get('dist')) EYE.dist = Number(qs.get('dist'));
 if (qs.get('alto')) EYE.target = Number(qs.get('alto'));
+if (qs.get('cerca')) EYE.near = Number(qs.get('cerca'));
 const reel = REELS[new URLSearchParams(location.search).get('r') ?? 'presentacio'];
 // muñeco de Kasa Fit: con pelo corto y la camiseta azul de la app
 // el muñeco de estos primeros vídeos (el mismo que lleva David en la app)
