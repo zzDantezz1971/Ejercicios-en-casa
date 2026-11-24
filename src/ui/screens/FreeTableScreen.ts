@@ -278,7 +278,7 @@ export class FreeTableScreen implements Screen {
     const { app } = this;
     app.push(new PickExerciseScreen(app, null, new Set(), (_ids, items) => {
       const free = this.free;
-      const add: FreeEntry[] = items.map((it) => ({ kind: 'ex', exerciseId: it.exerciseId, seconds: it.seconds, ...(it.weight ? { weight: it.weight } : {}) }));
+      const add: FreeEntry[] = items.map((it) => ({ kind: 'ex', exerciseId: it.exerciseId, seconds: it.seconds, ...(it.weight ? { weight: it.weight } : {}), ...(it.reps ? { reps: it.reps } : {}), ...(it.repsSaved ? { repsSaved: it.repsSaved } : {}) }));
       if (group === null) free.push(...add);
       else (free[group] as Extract<FreeNode, { kind: 'group' }>).items.push(...add);
       saveFree(app, this.id, free);
@@ -287,7 +287,7 @@ export class FreeTableScreen implements Screen {
     // al final de la lista: también juntos como una serie (2 vueltas para empezar)
     group === null ? (items) => {
       const free = this.free;
-      free.push({ kind: 'group', rounds: 2, items: items.map((it) => ({ kind: 'ex', exerciseId: it.exerciseId, seconds: it.seconds, ...(it.weight ? { weight: it.weight } : {}) })) });
+      free.push({ kind: 'group', rounds: 2, items: items.map((it) => ({ kind: 'ex', exerciseId: it.exerciseId, seconds: it.seconds, ...(it.weight ? { weight: it.weight } : {}), ...(it.reps ? { reps: it.reps } : {}), ...(it.repsSaved ? { repsSaved: it.repsSaved } : {}) })) });
       saveFree(app, this.id, free);
       app.back();
     } : undefined));

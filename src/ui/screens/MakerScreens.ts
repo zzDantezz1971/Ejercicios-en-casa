@@ -5,7 +5,6 @@ import {
   type GenContext, type GenOptions, type GenResult, type Goal,
 } from '../../domain/generator';
 import { clampRounds, MAX_ROUNDS, WorkoutPlan } from '../../domain/WorkoutPlan';
-import { MAX_SECONDS, MIN_SECONDS, STEP_SECONDS } from '../../domain/RoutineEditor';
 import { blockRuns, emptyRoutine, newSeriesId, SECTION_IDS, sectionOrder, SECTION_TITLES, usesWeight, weightUnit, type ExerciseDef, type RoutineItem, type SectionId } from '../../domain/types';
 import { tr } from '../../i18n';
 import type { App, Screen } from '../App';
@@ -666,7 +665,7 @@ export class PickExerciseScreen implements Screen {
   /** Elegidos (en el orden en que se han tocado), si se pueden elegir varios. */
   private chosen: string[] = [];
   /** Tiempo y peso de cada elegido (se cambian en la misma lista, antes de añadirlos). */
-  private opts = new Map<string, { seconds: number; weight?: number }>();
+  private opts = new Map<string, { seconds: number; weight?: number; reps?: number; repsSaved?: number }>();
 
   /**
    * Lista de ejercicios de un apartado. Con `multi`, se tocan los que se quieran (se marcan) y se añaden todos
@@ -706,7 +705,7 @@ export class PickExerciseScreen implements Screen {
     this.chosen = [];
     const items: RoutineItem[] = ids.map((id) => {
       const o = this.opts.get(id);
-      return { exerciseId: id, seconds: o?.seconds ?? this.defSecs, ...(o?.weight ? { weight: o.weight } : {}) };
+      return { exerciseId: id, seconds: o?.seconds ?? this.defSecs, ...(o?.weight ? { weight: o.weight } : {}), ...(o?.reps ? { reps: o.reps } : {}), ...(o?.repsSaved ? { repsSaved: o.repsSaved } : {}) };
     });
     if (asGroup && this.pickGroup) this.pickGroup(items);
     else this.pick(ids, items);
@@ -782,16 +781,15 @@ export class PickExerciseScreen implements Screen {
       this.paintFoot();
     } }, icon(on ? 'check' : 'plus'));
     const o = this.opts.get(ex.id) ?? { seconds: this.defSecs };
-    const set = (next: { seconds: number; weight?: number }) => { this.opts.set(ex.id, next); repaint(); };
-    const ctrls = this.multi && on ? h('div', { class: 'pick-ctrls' },
-      h('div', { class: 'stepper inline maker-time' },
-        h('button', { 'aria-label': 'Menos tiempo', disabled: o.seconds <= MIN_SECONDS, onclick: () => set({ ...o, seconds: Math.max(MIN_SECONDS, o.seconds - STEP_SECONDS) }) }, '−'),
-        h('span', { class: 'secs' }, `${o.seconds} s`),
-        h('button', { 'aria-label': 'Más tiempo', disabled: o.seconds >= MAX_SECONDS, onclick: () => set({ ...o, seconds: Math.min(MAX_SECONDS, o.seconds + STEP_SECONDS) }) }, '+')),
+    const set = (next: { seconds: number; weight?: number; reps?: number; repsSaved?: number }) => { this.opts.set(ex.id, next); repaint(); };
+    // tiempo o repeticiones (− +) y el peso, en una línea
+    const ctrls = this.multi && on ? h('div', { class: 'pick-ctrls mr-ctrls' },
+      amountCtrl(ex, o, (a) => set({ ...(o.weight ? { weight: o.weight } : {}), ...a })),
       usesWeight(ex) ? h('button', { class: 'weight-btn small' + (o.weight ? '' : ' none'), 'aria-label': `Peso de ${ex.name}: ${o.weight ? kg(o.weight) + ' por mancuerna' : 'sin peso'}. Cambiar`, onclick: async () => {
         const w = await weightDialog(ex.name, o.weight ?? app.store.lastWeight(ex.id) ?? (/barra/.test(weightUnit(ex)) ? 20 : 5), weightUnit(ex));
         if (w === null) return;
-        set({ seconds: o.seconds, ...(w ? { weight: w } : {}) });
+        const { weight: _w, ...rest } = o;
+        set({ ...rest, ...(w ? { weight: w } : {}) });
       } }, icon('dumbbell'), o.weight ? kg(o.weight) : 'Sin peso') : '') : '';
     const row: HTMLElement = h('div', { class: 'maker-row maker-pick' + (on ? ' on' : '') },
       h('div', { class: 'pick-top' },

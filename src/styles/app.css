@@ -2009,3 +2009,5 @@ button.plan-row { cursor: pointer; }
 .hd-status .ico { width: 14px; height: 14px; flex: none; }
 /* si «por lados» no cabe al lado del tiempo y baja de línea, pegado (sin el hueco entre líneas) */
 .tv-sub { row-gap: 2px; column-gap: 10px; }
+/* elegir ejercicios: tiempo o repeticiones y peso en una línea, alineados a la derecha */
+.pick-ctrls.mr-ctrls { padding-left: 0; justify-content: flex-end; flex-wrap: nowrap; gap: 6px; }

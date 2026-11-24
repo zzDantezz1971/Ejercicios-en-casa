@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-24T16:06:36Z",
+    "es": "Añadir ejercicios (también en la tabla libre): al marcar uno ya se puede elegir «Tiempo | Reps» con su contador y el peso; y las repeticiones se guardan al añadirlo.",
+    "ca": "Afegir exercicis (també a la taula lliure): en marcar-ne un ja es pot triar «Temps | Reps» amb el seu comptador i el pes; i les repeticions es desen en afegir-lo.",
+    "en": "Adding exercises (also in free routines): when you tick one you can now choose “Time | Reps” with its counter and the weight; and reps are kept when you add it."
+  },
+  {
     "fecha": "2026-11-24T14:38:06Z",
     "es": "Contenido de la tabla e Historial: si «por lados» no cabe al lado del tiempo, va justo debajo, sin hueco.",
     "ca": "Contingut de la taula i Historial: si «per costats» no cap al costat del temps, va just a sota, sense espai.",
