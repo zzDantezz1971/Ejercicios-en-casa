@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-24T14:38:06Z",
+    "es": "Contenido de la tabla e Historial: si «por lados» no cabe al lado del tiempo, va justo debajo, sin hueco.",
+    "ca": "Contingut de la taula i Historial: si «per costats» no cap al costat del temps, va just a sota, sense espai.",
+    "en": "Routine contents and History: if “per side” doesn’t fit next to the time, it goes right below, without a gap."
+  },
+  {
     "fecha": "2026-11-24T14:32:39Z",
     "es": "Contenido de la tabla e Historial: «por lados» va alineado con el tiempo y «Hecho 2 de 3» tiene el icono bien colocado.",
     "ca": "Contingut de la taula i Historial: «per costats» va alineat amb el temps i «Fet 2 de 3» té la icona ben col·locada.",
