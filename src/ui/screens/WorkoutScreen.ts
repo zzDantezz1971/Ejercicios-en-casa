@@ -42,6 +42,8 @@ export class WorkoutScreen implements Screen {
     side: h('span', { class: 'w-side' }),
     next: h('p', { class: 'w-next' }),
     time: document.createElementNS(NS, 'text'),
+    /** Debajo del número del anillo: «reps» o «por lado» en los ejercicios por repeticiones. */
+    ringSub: document.createElementNS(NS, 'text'),
     ringFg: document.createElementNS(NS, 'circle'),
     pause: h('button', { class: 'ctrl main', 'aria-label': 'Pausar' }),
     breakPanel: h('div', { class: 'w-break', hidden: true }),
@@ -78,7 +80,9 @@ export class WorkoutScreen implements Screen {
     const u = this.ui;
     u.pause.addEventListener('click', () => {
       app.haptics.tap();
-      this.session.togglePause();
+      // por repeticiones, el botón grande es «Hecho» (cambio de lado o siguiente ejercicio)
+      if (this.session.waitingReps) this.session.repDone();
+      else this.session.togglePause();
     });
     this.el.append(
       h('header', { class: 'w-top' },
@@ -109,6 +113,7 @@ export class WorkoutScreen implements Screen {
       if (c.type === 'switch' && step?.kind === 'exercise') {
         this.setSide(2);
         this.showFigure(step.exercise, 2);
+        if (step.reps) this.onStatus(this.session.status);
       }
     });
     this.session.on('finished', (s) => this.onFinished(s));
@@ -129,7 +134,9 @@ export class WorkoutScreen implements Screen {
     for (const [k, v] of Object.entries({ cx: '64', cy: '64', r: String(RING_R), class: 'ring-fg', 'stroke-dasharray': String(RING_LEN), 'stroke-dashoffset': String(RING_LEN), transform: 'rotate(-90 64 64)' })) fg.setAttribute(k, v);
     const t = this.ui.time;
     for (const [k, v] of Object.entries({ x: '64', y: '64', class: 'ring-time', 'text-anchor': 'middle', 'dominant-baseline': 'central' })) t.setAttribute(k, v);
-    svg.append(bg, fg, t);
+    const sub = this.ui.ringSub;
+    for (const [k, v] of Object.entries({ x: '64', y: '90', class: 'ring-sub', 'text-anchor': 'middle', 'dominant-baseline': 'central' })) sub.setAttribute(k, v);
+    svg.append(bg, fg, t, sub);
     return svg;
   }
 
@@ -268,6 +275,13 @@ export class WorkoutScreen implements Screen {
       this.view?.freeze(false);
     }
     const index = this.session.currentIndex;
+    // ejercicio por repeticiones: sin cuenta atrás, con «Hecho»
+    const reps = step.kind === 'exercise' && !!step.reps;
+    this.el.classList.toggle('reps', reps);
+    this.ui.ringSub.textContent = reps && step.kind === 'exercise' ? (step.exercise.oneSided ? 'por lado' : 'reps') : '';
+    // el número un poco más arriba, para que quepa «reps» debajo
+    this.ui.time.setAttribute('y', reps ? '58' : '64');
+    this.onStatus(this.session.status);
     switch (step.kind) {
       case 'countdown':
         this.setSection(step.section);
@@ -285,7 +299,7 @@ export class WorkoutScreen implements Screen {
         u.position.textContent = `Ejercicio ${step.position} de ${step.totalInSection}` + (step.rounds > 1 ? ` · Vuelta ${step.round} de ${step.rounds}` : '') + (step.sets ? ` · Serie ${step.set} de ${step.sets}` : '');
         u.phase.replaceChildren();
         u.name.replaceChildren(step.exercise.name, step.weight ? h('span', { class: 'w-weight' }, icon('dumbbell'), kg(step.weight)) : '');
-        if (step.switchAt !== undefined) this.setSide(1);
+        if (step.switchAt !== undefined || (step.reps && step.exercise.oneSided)) this.setSide(1);
         u.next.textContent = nextText(this.session.plan.steps, index);
         this.showFigure(step.exercise, 1);
         this.view?.setMood(step.section === 'pesas' || step.section === 'abdominales' ? 'effort' : 'neutral');
@@ -322,6 +336,14 @@ export class WorkoutScreen implements Screen {
   }
 
   private onTick(remaining: number, elapsed: number, duration: number, step: Step, switching?: number, announcing = false): void {
+    // por repeticiones: en el anillo, las repeticiones; arriba, lo que se lleva (cronómetro)
+    if (step.kind === 'exercise' && step.reps) {
+      this.ui.time.textContent = String(step.reps);
+      this.ui.ringFg.setAttribute('stroke-dashoffset', '0');
+      this.ui.phase.replaceChildren(icon('clock'), mmss(Math.floor(elapsed)));
+      this.el.classList.remove('last3');
+      return;
+    }
     // cambio de lado: el tiempo está parado; primero se anuncia y luego el anillo muestra la cuenta atrás de 3 s
     const sw = switching !== undefined;
     if (sw !== this.switchingShown) {
@@ -350,8 +372,18 @@ export class WorkoutScreen implements Screen {
 
   private onStatus(s: string): void {
     const paused = s === 'paused';
-    this.ui.pause.replaceChildren(icon(paused ? 'play' : 'pause'), h('span', {}, paused ? 'Seguir' : 'Pausa'));
-    this.ui.pause.setAttribute('aria-label', paused ? 'Reanudar' : 'Pausar');
+    if (this.session.waitingReps) {
+      // por repeticiones: «Hecho» (en los por lados, el primero cambia de lado)
+      const st = this.session.current;
+      const side1 = st?.kind === 'exercise' && st.exercise.oneSided && this.session.currentRepSide === 1;
+      this.ui.pause.replaceChildren(icon('check'), h('span', {}, side1 ? 'Hecho: cambio de lado' : 'Hecho'));
+      this.ui.pause.setAttribute('aria-label', 'Hecho');
+      this.ui.pause.classList.add('done-btn');
+    } else {
+      this.ui.pause.classList.remove('done-btn');
+      this.ui.pause.replaceChildren(icon(paused ? 'play' : 'pause'), h('span', {}, paused ? 'Seguir' : 'Pausa'));
+      this.ui.pause.setAttribute('aria-label', paused ? 'Reanudar' : 'Pausar');
+    }
     this.el.classList.toggle('paused', paused);
     this.view?.freeze(paused || this.switchingShown);
   }

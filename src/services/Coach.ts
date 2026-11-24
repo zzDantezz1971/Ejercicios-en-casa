@@ -9,17 +9,17 @@ type VoiceLang = 'es' | 'ca' | 'en' | 'gl' | 'eu';
 
 /** Frases que dice la voz, en cada idioma. */
 const VT: Record<VoiceLang, {
-  prepare: string; round: string; set: string; half: string; rest: string; secDone: string; sw: string; done: string; doneEarly: string; time: string; min: string; min1: string; sec: string; sec1: string; hr: string; hr1: string; kcal: string; count: string[];
+  prepare: string; round: string; set: string; reps: string; repsSide: string; half: string; rest: string; secDone: string; sw: string; done: string; doneEarly: string; time: string; min: string; min1: string; sec: string; sec1: string; hr: string; hr1: string; kcal: string; count: string[];
 }> = {
-  es: { set: 'Serie, vuelta {a} de {b}. ', prepare: '{s}. Prepárate. Primer ejercicio: {x}', round: 'Vuelta {a} de {b}. ', half: '. A mitad, cambio de lado', rest: 'Descanso. Siguiente: {x}',
+  es: { reps: '{n} repeticiones', repsSide: '{n} por lado', set: 'Serie, vuelta {a} de {b}. ', prepare: '{s}. Prepárate. Primer ejercicio: {x}', round: 'Vuelta {a} de {b}. ', half: '. A mitad, cambio de lado', rest: 'Descanso. Siguiente: {x}',
     secDone: '{a} terminado. Toca la pantalla para seguir con {b}', sw: 'Cambio de lado', done: '¡Buen trabajo{n}! Entrenamiento terminado.', doneEarly: '¡Bien hecho{n}! Entrenamiento terminado.', time: 'Tiempo de ejercicio: {t}.', min: '{m} minutos', min1: 'un minuto', sec: '{m} segundos', sec1: 'un segundo', hr: '{m} horas', hr1: 'una hora', kcal: ' Se han quemado {k} calorías aproximadamente.',  count: ['', 'uno', 'dos', 'tres'] },
-  ca: { set: 'Sèrie, volta {a} de {b}. ', prepare: '{s}. Prepara’t. Primer exercici: {x}', round: 'Volta {a} de {b}. ', half: '. A la meitat, canvi de costat', rest: 'Descans. Següent: {x}',
+  ca: { reps: '{n} repeticions', repsSide: '{n} per costat', set: 'Sèrie, volta {a} de {b}. ', prepare: '{s}. Prepara’t. Primer exercici: {x}', round: 'Volta {a} de {b}. ', half: '. A la meitat, canvi de costat', rest: 'Descans. Següent: {x}',
     secDone: '{a}: fet. Toca la pantalla per continuar amb {b}', sw: 'Canvi de costat', done: 'Bona feina{n}! Entrenament acabat.', doneEarly: 'Ben fet{n}! Entrenament acabat.', time: 'Temps d’exercici: {t}.', min: '{m} minuts', min1: 'un minut', sec: '{m} segons', sec1: 'un segon', hr: '{m} hores', hr1: 'una hora', kcal: ' S’han cremat aproximadament {k} calories.',  count: ['', 'un', 'dos', 'tres'] },
-  en: { set: 'Set, round {a} of {b}. ', prepare: '{s}. Get ready. First exercise: {x}', round: 'Round {a} of {b}. ', half: '. Switch sides halfway', rest: 'Rest. Next up: {x}',
+  en: { reps: '{n} reps', repsSide: '{n} each side', set: 'Set, round {a} of {b}. ', prepare: '{s}. Get ready. First exercise: {x}', round: 'Round {a} of {b}. ', half: '. Switch sides halfway', rest: 'Rest. Next up: {x}',
     secDone: '{a} done. Tap the screen to continue with {b}', sw: 'Switch sides', done: 'Great job{n}! Workout complete.', doneEarly: 'Well done{n}! Workout complete.', time: 'Exercise time: {t}.', min: '{m} minutes', min1: 'one minute', sec: '{m} seconds', sec1: 'one second', hr: '{m} hours', hr1: 'one hour', kcal: ' About {k} calories burned.',  count: ['', 'one', 'two', 'three'] },
-  gl: { set: 'Serie, volta {a} de {b}. ', prepare: '{s}. Prepárate. Primeiro exercicio: {x}', round: 'Volta {a} de {b}. ', half: '. Á metade, cambio de lado', rest: 'Descanso. Seguinte: {x}',
+  gl: { reps: '{n} repeticións', repsSide: '{n} por lado', set: 'Serie, volta {a} de {b}. ', prepare: '{s}. Prepárate. Primeiro exercicio: {x}', round: 'Volta {a} de {b}. ', half: '. Á metade, cambio de lado', rest: 'Descanso. Seguinte: {x}',
     secDone: '{a} rematado. Toca a pantalla para continuar con {b}', sw: 'Cambio de lado', done: 'Bo traballo{n}! Adestramento rematado.', doneEarly: 'Ben feito{n}! Adestramento rematado.', time: 'Tempo de exercicio: {t}.', min: '{m} minutos', min1: 'un minuto', sec: '{m} segundos', sec1: 'un segundo', hr: '{m} horas', hr1: 'unha hora', kcal: ' Queimáronse arredor de {k} calorías.', count: ['', 'un', 'dous', 'tres'] },
-  eu: { set: 'Seriea, {a}. itzulia, guztira {b}. ', prepare: '{s}. Prest egon. Lehen ariketa: {x}', round: '{a}. itzulia, guztira {b}. ', half: '. Erdian, aldatu aldea', rest: 'Atsedena. Hurrengoa: {x}',
+  eu: { reps: '{n} errepikapen', repsSide: '{n} alde bakoitzeko', set: 'Seriea, {a}. itzulia, guztira {b}. ', prepare: '{s}. Prest egon. Lehen ariketa: {x}', round: '{a}. itzulia, guztira {b}. ', half: '. Erdian, aldatu aldea', rest: 'Atsedena. Hurrengoa: {x}',
     secDone: '{a}: eginda. Ukitu pantaila jarraitzeko. Hurrengoa: {b}', sw: 'Aldatu aldea', done: 'Lan bikaina{n}! Entrenamendua amaitu da.', doneEarly: 'Ondo egina{n}! Entrenamendua amaitu da.', time: 'Ariketa denbora: {t}.', min: '{m} minutu', min1: 'minutu bat', sec: '{m} segundo', sec1: 'segundo bat', hr: '{m} ordu', hr1: 'ordu bat', kcal: ' Gutxi gorabehera {k} kaloria erre dira.', count: ['', 'bat', 'bi', 'hiru'] },
 };
 
@@ -83,7 +83,7 @@ export class Coach {
             voice.say(fill(T().prepare, { s: sec(step.section), x: step.next.name }));
             break;
           case 'exercise':
-            voice.say(`${step.rounds > 1 && step.position === 1 && (step.set ?? 1) === 1 ? fill(T().round, { a: step.round, b: step.rounds }) : ''}${step.sets && step.setStart ? fill(T().set, { a: step.set ?? 1, b: step.sets }) : ''}${step.exercise.name}${step.weight ? `, ${speakKg(step.weight, L())}` : ''}. ${speakSeconds(step.seconds, L())}${step.switchAt !== undefined ? T().half : ''}`);
+            voice.say(`${step.rounds > 1 && step.position === 1 && (step.set ?? 1) === 1 ? fill(T().round, { a: step.round, b: step.rounds }) : ''}${step.sets && step.setStart ? fill(T().set, { a: step.set ?? 1, b: step.sets }) : ''}${step.exercise.name}${step.weight ? `, ${speakKg(step.weight, L())}` : ''}. ${step.reps ? fill(step.exercise.oneSided ? T().repsSide : T().reps, { n: step.reps }) : speakSeconds(step.seconds, L())}${step.switchAt !== undefined ? T().half : ''}`);
             break;
           case 'rest':
             voice.say(fill(T().rest, { x: step.next.name }));

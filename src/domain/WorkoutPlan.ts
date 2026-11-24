@@ -1,4 +1,4 @@
-import { blockRuns, freeEntries, sectionOrder, type ExerciseDef, type FreeEntry, type FreeNode, type Routine, type SavedRoutine, type SectionId, type Settings } from './types';
+import { allowsReps, blockRuns, freeEntries, repsSeconds, sectionOrder, type ExerciseDef, type FreeEntry, type FreeNode, type Routine, type SavedRoutine, type SectionId, type Settings } from './types';
 
 /** Cambio de lado en los ejercicios por lados: con el tiempo parado, primero se anuncia
     («Cambio de lado») y luego hay una cuenta atrás de 3 s. */
@@ -25,6 +25,9 @@ export type Step =
       /** Vuelta actual y total de vueltas del apartado. */
       round: number;
       rounds: number;
+      /** Por repeticiones: cuántas (por lado en los por lados). Sin cuenta atrás: se pasa al tocar «Hecho».
+       *  `seconds` es entonces lo que se calcula que dura (para el tiempo estimado). */
+      reps?: number;
       /** Serie dentro del bloque: vuelta de la serie, total, y si es su primer ejercicio. */
       set?: number;
       sets?: number;
@@ -82,12 +85,14 @@ export class WorkoutPlan {
       }
       for (let r = 1; r <= R; r++) {
         seq.forEach(({ item, ex, position, set, sets, setStart }, i) => {
+          const reps = item.reps && allowsReps(ex) ? item.reps : undefined;
           steps.push({
             kind: 'exercise',
             section,
             exercise: ex,
-            seconds: item.seconds,
-            switchAt: ex.oneSided ? Math.round(item.seconds / 2) : undefined,
+            seconds: reps ? repsSeconds(reps, ex.oneSided) : item.seconds,
+            ...(reps ? { reps } : {}),
+            switchAt: ex.oneSided && !reps ? Math.round(item.seconds / 2) : undefined,
             position,
             totalInSection: items.length,
             weight: item.weight,
@@ -150,9 +155,11 @@ export class WorkoutPlan {
         if (next) steps.push({ kind: 'rest', section: next.ex.section, seconds: x.seconds, next: next.ex });
         return;
       }
+      const reps = x.item.reps && allowsReps(x.ex) ? x.item.reps : undefined;
       steps.push({
-        kind: 'exercise', section: x.ex.section, exercise: x.ex, seconds: x.item.seconds,
-        switchAt: x.ex.oneSided ? Math.round(x.item.seconds / 2) : undefined,
+        kind: 'exercise', section: x.ex.section, exercise: x.ex, seconds: reps ? repsSeconds(reps, x.ex.oneSided) : x.item.seconds,
+        ...(reps ? { reps } : {}),
+        switchAt: x.ex.oneSided && !reps ? Math.round(x.item.seconds / 2) : undefined,
         position: x.position, totalInSection: total, weight: x.item.weight, round: x.round, rounds: x.rounds,
       });
       // pausa corta hasta el siguiente ejercicio (si no viene un descanso)
@@ -168,6 +175,11 @@ export class WorkoutPlan {
   }
 
   /** Ejercicios que se hacen en total (con las vueltas y las series, cada vez cuenta). */
+  /** ¿Hay algún ejercicio por repeticiones? (entonces el tiempo es aproximado) */
+  get hasReps(): boolean {
+    return this.steps.some((s) => s.kind === 'exercise' && !!s.reps);
+  }
+
   get exerciseCount(): number {
     return this.steps.filter((s) => s.kind === 'exercise').length;
   }

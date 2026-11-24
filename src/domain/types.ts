@@ -144,6 +144,11 @@ export interface RoutineItem {
   /** Peso por mancuerna (kg), solo en ejercicios con mancuerna. */
   weight?: number;
   /**
+   * Por repeticiones (en vez de por tiempo): cuántas. Sin cuenta atrás: al entrenar se toca «Hecho» al acabarlas
+   * (en los ejercicios por lados, son por lado). `seconds` se conserva por si se vuelve a poner por tiempo.
+   */
+  reps?: number;
+  /**
    * Serie dentro del bloque: los ejercicios seguidos con el mismo `id` se repiten `rounds` veces antes de pasar al
    * siguiente (todos llevan las mismas vueltas). Sin esto, el ejercicio se hace una vez por vuelta del bloque.
    */
@@ -163,7 +168,7 @@ export function blockRuns(items: readonly RoutineItem[]): Array<{ start: number;
 
 /** Segundos de ejercicio de un bloque en una vuelta (las series cuentan sus vueltas). */
 export function blockSeconds(items: readonly RoutineItem[], has: (id: string) => boolean = () => true): number {
-  return blockRuns(items).reduce((n, r) => n + items.slice(r.start, r.end + 1).filter((i) => has(i.exerciseId)).reduce((m, i) => m + i.seconds, 0) * r.rounds, 0);
+  return blockRuns(items).reduce((n, r) => n + items.slice(r.start, r.end + 1).filter((i) => has(i.exerciseId)).reduce((m, i) => m + (i.reps ? repsSeconds(i.reps) : i.seconds), 0) * r.rounds, 0);
 }
 
 /** Identificador nuevo para una serie. */
@@ -327,7 +332,7 @@ export interface HistoryEntry {
   /** Cuándo empezó cada bloque (segundos desde el inicio, reloj real): para marcarlo en la gráfica del pulso. */
   blocks?: Array<{ section: SectionId; at: number }>;
   /** Detalle por ejercicio (solo en entrenamientos guardados desde esta versión). */
-  items?: Array<{ exerciseId: string; section: SectionId; planned: number; seconds: number; completed: boolean; weight?: number }>;
+  items?: Array<{ exerciseId: string; section: SectionId; planned: number; seconds: number; completed: boolean; weight?: number; reps?: number }>;
 }
 
 /** Una anotación del peso corporal. */
@@ -383,7 +388,7 @@ export interface SavedRoutine {
 }
 
 /** Un ejercicio o un descanso de una tabla libre. */
-export type FreeEntry = { kind: 'ex'; exerciseId: string; seconds: number; weight?: number } | { kind: 'rest'; seconds: number };
+export type FreeEntry = { kind: 'ex'; exerciseId: string; seconds: number; weight?: number; reps?: number } | { kind: 'rest'; seconds: number };
 /** Serie de una tabla libre: unos ejercicios (y descansos) que se repiten `rounds` veces seguidas. */
 export interface FreeGroup { kind: 'group'; rounds: number; items: FreeEntry[] }
 export type FreeNode = FreeEntry | FreeGroup;
@@ -399,7 +404,7 @@ export function freeToRoutine(free: readonly FreeNode[], sectionOf: (id: string)
   for (const e of freeEntries(free)) {
     if (e.kind !== 'ex') continue;
     const s = sectionOf(e.exerciseId);
-    if (s) r[s].push({ exerciseId: e.exerciseId, seconds: e.seconds, ...(e.weight ? { weight: e.weight } : {}) });
+    if (s) r[s].push({ exerciseId: e.exerciseId, seconds: e.seconds, ...(e.weight ? { weight: e.weight } : {}), ...(e.reps ? { reps: e.reps } : {}) });
   }
   return r;
 }
@@ -407,7 +412,7 @@ export function freeToRoutine(free: readonly FreeNode[], sectionOf: (id: string)
 /** Pasa una tabla por bloques a libre: los bloques en su orden; uno con vueltas, como una serie. */
 export function routineToFree(routine: Routine, rounds: Partial<Record<SectionId, number>> = {}, order?: readonly SectionId[]): FreeNode[] {
   const out: FreeNode[] = [];
-  const entry = (i: RoutineItem): FreeEntry => ({ kind: 'ex', exerciseId: i.exerciseId, seconds: i.seconds, ...(i.weight ? { weight: i.weight } : {}) });
+  const entry = (i: RoutineItem): FreeEntry => ({ kind: 'ex', exerciseId: i.exerciseId, seconds: i.seconds, ...(i.weight ? { weight: i.weight } : {}), ...(i.reps ? { reps: i.reps } : {}) });
   for (const s of sectionOrder(order)) {
     const its = routine[s];
     if (!its.length) continue;
@@ -435,4 +440,25 @@ export interface TableGroup {
 
 export function emptyRoutine(): Routine {
   return { calentamiento: [], pesas: [], abdominales: [], estiramientos: [] };
+}
+
+/** Repeticiones: lo que se propone al pasar un ejercicio a repeticiones, y los límites. */
+export const DEFAULT_REPS = 12;
+export const MIN_REPS = 1;
+export const MAX_REPS = 100;
+/** Segundos que se calculan por repetición para estimar lo que dura (por lado en los ejercicios por lados). */
+export const SECONDS_PER_REP = 3;
+
+/** Ejercicios que se aguantan quietos (isométricos): solo por tiempo. */
+const TIME_ONLY = new Set(['sentadilla-isometrica-en-la-pared', 'sentadilla-en-pared-con-fitball', 'plancha-lateral', 'plancha-frontal',
+  'barquita-hollow-hold', 'plancha-con-antebrazos-en-fitball']);
+
+/** ¿Se puede hacer por repeticiones? Los estiramientos y los que se aguantan quietos, solo por tiempo. */
+export function allowsReps(ex: Pick<ExerciseDef, 'id' | 'section'>): boolean {
+  return ex.section !== 'estiramientos' && !TIME_ONLY.has(ex.id);
+}
+
+/** Segundos estimados de un ejercicio por repeticiones. */
+export function repsSeconds(reps: number, oneSided = false): number {
+  return Math.round(reps * SECONDS_PER_REP * (oneSided ? 2 : 1));
 }

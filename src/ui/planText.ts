@@ -15,5 +15,6 @@ export function countText(plan: WorkoutPlan): string {
 
 /** «4 ejercicios, con repeticiones 10 - Total 14 min» (o «Sin ejercicios»). */
 export function planText(plan: WorkoutPlan, empty = 'Sin ejercicios'): string {
-  return plan.isEmpty ? empty : `${countText(plan)} - Total ${humanDuration(plan.estimatedSeconds)}`;
+  // con ejercicios por repeticiones, el tiempo es aproximado (≈)
+  return plan.isEmpty ? empty : `${countText(plan)} - Total ${plan.hasReps ? '≈ ' : ''}${humanDuration(plan.estimatedSeconds)}`;
 }

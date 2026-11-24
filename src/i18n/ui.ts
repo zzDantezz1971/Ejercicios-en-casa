@@ -1360,6 +1360,17 @@ const ROWS: Row[] = [
   ['Mín. {a}', 'Mín. {a}', 'Min {a}'],
   ['Ver la gráfica del pulso en grande', 'Veure la gràfica del pols en gran', 'See the heart rate chart full size'],
   ['{a} · {b} ppm', '{a} · {b} ppm', '{a} · {b} bpm'],
+  ['Reps', 'Reps', 'Reps'],
+  ['{a} reps', '{a} reps', '{a} reps'],
+  ['{a} x lado', '{a} x costat', '{a} per side'],
+  ['{a} por lado', '{a} per costat', '{a} per side'],
+  ['Por tiempo o por repeticiones', 'Per temps o per repeticions', 'By time or by reps'],
+  ['Menos repeticiones', 'Menys repeticions', 'Fewer reps'],
+  ['Más repeticiones', 'Més repeticions', 'More reps'],
+  ['Hecho: cambio de lado', 'Fet: canvi de costat', 'Done: switch sides'],
+  ['reps', 'reps', 'reps'],
+  ['por lado', 'per costat', 'per side'],
+  ['≈ {a}', '≈ {a}', '≈ {a}'],
 ];
 
 export const UI_CA: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[1]]));

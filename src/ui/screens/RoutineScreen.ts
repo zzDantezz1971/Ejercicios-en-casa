@@ -1,5 +1,5 @@
 import { tr } from '../../i18n';
-import { RoutineEditor, STEP_SECONDS } from '../../domain/RoutineEditor';
+import { RoutineEditor } from '../../domain/RoutineEditor';
 import { clampRounds, MAX_ROUNDS, WorkoutPlan } from '../../domain/WorkoutPlan';
 import { SECTION_IDS, SECTION_TITLES, usesWeight, weightUnit, type ExerciseDef, type SectionId } from '../../domain/types';
 import type { App, Screen } from '../App';
@@ -12,6 +12,7 @@ import { moveItem } from '../../domain/ordering';
 import { DetailScreen } from './DetailScreen';
 import { byName, listGrouping, type Grouping } from '../listGrouping';
 import { planText } from '../planText';
+import { amountCtrl } from '../components/amountCtrl';
 
 export type ListSort = 'zona' | 'musculo' | 'material' | 'az' | 'personalizada';
 const SORT_LABELS: Record<ListSort, string> = { zona: 'Zona del cuerpo', musculo: 'Por músculo (de cabeza a pies)', material: 'Por material', az: 'Alfabético (A-Z)', personalizada: 'Personalizada' };
@@ -268,10 +269,9 @@ export class RoutineScreen implements Screen {
         h('div', { class: 'row-text' },
           h('button', { class: 'row-open row-name', onclick: () => this.open(ex) }, h('strong', {}, ex.name)),
           ex.oneSided ? h('span', { class: 'by-sides' }, icon('sides'), 'por lados') : null,
-          h('div', { class: 'stepper inline' },
-            h('button', { 'aria-label': 'Menos tiempo', onclick: () => this.adjust(ex, -STEP_SECONDS) }, '−'),
-            h('span', { class: 'secs' }, `${it.seconds} s`),
-            h('button', { 'aria-label': 'Más tiempo', onclick: () => this.adjust(ex, STEP_SECONDS) }, '+'),
+          // tiempo o repeticiones (− +) y quitar
+          h('div', { class: 'row-amount' },
+            amountCtrl(ex, it, (a) => { this.editor.setAmount(ex.section, ex.id, a); this.save(); this.refresh(); }),
             h('button', { class: 'remove-btn', 'aria-label': `Quitar ${ex.name} de la tabla`, onclick: () => void this.toggle(ex) }, icon('close'))),
           usesWeight(ex) ? this.weightButton(ex, it.weight) : null));
       content.style.setProperty('--sec', SECTION_STYLE[ex.section].color);
@@ -438,10 +438,9 @@ export class RoutineScreen implements Screen {
         h('span', { class: 'ex-zone' }, h('span', {}, ex.zone), ex.oneSided ? h('span', { class: 'by-sides' }, icon('sides'), 'por lados') : null),
         badgeList(ex.badges)),
       h('div', { class: 'ex-actions' },
-        pos ? h('div', { class: 'stepper' },
-          h('button', { 'aria-label': 'Menos tiempo', onclick: () => this.adjust(ex, -STEP_SECONDS) }, '−'),
-          h('span', { class: 'secs' }, icon('clock'), `${secs} s`),
-          h('button', { 'aria-label': 'Más tiempo', onclick: () => this.adjust(ex, STEP_SECONDS) }, '+')) : null,
+        // elegido: tiempo o repeticiones (− +)
+        pos && secs !== undefined ? amountCtrl(ex, { seconds: secs, ...(this.editor.reps(ex.section, ex.id) ? { reps: this.editor.reps(ex.section, ex.id) } : {}) },
+          (a) => { this.editor.setAmount(ex.section, ex.id, a); this.save(); this.refresh(); }) : null,
         pos && usesWeight(ex) ? this.weightButton(ex, this.editor.weight(ex.section, ex.id)) : null,
         h('button', { class: 'select-btn' + (pos ? ' on' : ''), 'aria-pressed': String(!!pos), onclick: () => void this.toggle(ex) },
           ...(pos ? [icon('check'), h('span', {}, 'Seleccionado')] : [icon('plus'), h('span', {}, 'Seleccionar')]))),
@@ -481,12 +480,6 @@ export class RoutineScreen implements Screen {
     }
     this.editor.toggle(ex.section, ex.id, this.app.store.settings.defaultSeconds, weight);
     this.app.haptics.tap();
-    this.save();
-    this.refresh();
-  }
-
-  private adjust(ex: ExerciseDef, delta: number): void {
-    this.editor.adjust(ex.section, ex.id, delta);
     this.save();
     this.refresh();
   }

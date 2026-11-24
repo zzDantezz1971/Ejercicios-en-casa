@@ -196,7 +196,9 @@ class HistoryBlockScreen implements Screen {
         h('span', { class: 'maker-name' },
           h('span', { class: 'maker-title' }, ex?.name ?? 'Ejercicio eliminado'),
           h('span', { class: 'muted small tv-sub' },
-            h('span', { class: 'tv-secs' }, icon('clock'), mmss(it.seconds), it.seconds < it.planned ? ` / ${mmss(it.planned)}` : ''),
+            // por repeticiones: las repeticiones y lo que se tardó; por tiempo: lo hecho (y lo previsto, si no se acabó)
+            it.reps ? h('span', { class: 'tv-secs' }, icon('swap'), ex?.oneSided ? `${it.reps} por lado` : `${it.reps} reps`) : null,
+            h('span', { class: 'tv-secs' }, icon('clock'), mmss(it.seconds), !it.reps && it.seconds < it.planned ? ` / ${mmss(it.planned)}` : ''),
             it.weight ? h('span', { class: 'tv-secs' }, icon('dumbbell'), kg(it.weight)) : null,
             ex?.oneSided ? h('span', { class: 'by-sides' }, icon('sides'), 'por lados') : null),
           status ? h('span', { class: 'muted small hd-status' }, icon('next'), status) : ex ? h('span', { class: 'muted small' }, ex.zone) : null),

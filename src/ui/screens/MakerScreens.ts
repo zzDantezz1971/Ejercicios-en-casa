@@ -18,6 +18,7 @@ import { RoutineScreen } from './RoutineScreen';
 import { newPlan } from './PlanScreens';
 import { newFreeTable } from './FreeTableScreen';
 import { planText } from '../planText';
+import { amountCtrl, amountText } from '../components/amountCtrl';
 
 /*
  * Crear tablas: menú «Nueva tabla» (asistente, tablas hechas o vacía), el asistente «Crea-la per mi»
@@ -288,11 +289,6 @@ export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement
       const img = h('img', { class: 'maker-thumb', alt: '' });
       void app.thumbs.get(ex).then((url) => (img.src = url));
       const open = () => app.push(new DetailScreen(app, ex, shown));
-      const setSecs = (d: number) => {
-        const next = items.slice();
-        next[i] = { ...it, seconds: Math.min(MAX_SECONDS, Math.max(MIN_SECONDS, it.seconds + d)) };
-        edit!.set(withSection(r, s, next));
-      };
       const swapBtn = edit ? h('button', { class: 'icon-btn small', 'aria-label': `Cambiar ${ex.name} por otro`, onclick: () => {
           // la lista para elegir el que lo sustituye (sin los que ya están en la tabla); conserva el tiempo
           const have = new Set(SECTION_IDS.flatMap((x) => r.routine[x].map((y) => y.exerciseId)));
@@ -322,13 +318,14 @@ export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement
           // se hace por lados (una vez con cada lado): que se vea al montar la tabla
           ex.oneSided ? h('span', { class: 'by-sides small' }, icon('sides'), 'por lados') : '',
           // tiempo (− +)
-          edit ? h('div', { class: 'maker-ctrls' },
-            h('div', { class: 'stepper inline maker-time' },
-              h('button', { 'aria-label': 'Menos tiempo', disabled: it.seconds <= MIN_SECONDS, onclick: () => setSecs(-STEP_SECONDS) }, '−'),
-              h('span', { class: 'secs' }, `${it.seconds} s`),
-              h('button', { 'aria-label': 'Más tiempo', disabled: it.seconds >= MAX_SECONDS, onclick: () => setSecs(STEP_SECONDS) }, '+')),
-            )
-            : h('span', { class: 'maker-secs muted small' }, `${it.seconds} s`),
+          // tiempo o repeticiones (− +)
+          edit ? h('div', { class: 'maker-ctrls' }, amountCtrl(ex, it, (a) => {
+              const next = items.slice();
+              const { reps: _r, ...base } = it;
+              next[i] = { ...base, ...a };
+              edit.set(withSection(r, s, next));
+            }))
+            : h('span', { class: 'maker-secs muted small' }, amountText(ex, it)),
           // peso de la mancuerna (al editar una tabla guardada)
           edit?.full && usesWeight(ex) ? h('button', { class: 'weight-btn small' + (it.weight ? '' : ' none'), 'aria-label': `Peso de ${ex.name}: ${it.weight ? kg(it.weight) + ' por mancuerna' : 'sin peso'}. Cambiar`, onclick: async () => {
             const w = await weightDialog(ex.name, it.weight ?? app.store.lastWeight(ex.id) ?? (/barra/.test(weightUnit(ex)) ? 20 : 5), weightUnit(ex));

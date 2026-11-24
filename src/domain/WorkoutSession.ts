@@ -19,6 +19,8 @@ export interface ExerciseLog {
   planned: number;
   /** Tiempo realmente hecho (s). */
   seconds: number;
+  /** Por repeticiones: cuántas (por lado en los por lados). */
+  reps?: number;
   /** Se llegó al final de su tiempo. */
   completed: boolean;
   /** Peso por mancuerna (kg). */
@@ -48,6 +50,9 @@ export interface TickInfo {
   switching?: number;
   /** Durante el cambio de lado: aún se está anunciando, la cuenta atrás no ha empezado. */
   announcing?: boolean;
+  /** Ejercicio por repeticiones: no hay cuenta atrás (elapsed es lo que se lleva) y en los por lados, el lado (1 o 2). */
+  reps?: number;
+  repSide?: 1 | 2;
 }
 
 type Events = {
@@ -74,6 +79,8 @@ export class WorkoutSession extends Emitter<Events> {
   private switched = false;
   private sideCount = Infinity;
   private resumed = false;
+  /** Ejercicio por repeticiones y por lados: en qué lado se está. */
+  private repSide: 1 | 2 = 1;
   private startedAtMs = 0;
   private startedAt = new Date();
   private done = new Set<number>();
@@ -167,6 +174,11 @@ export class WorkoutSession extends Emitter<Events> {
     const step = this.current;
     if (!step || step.kind === 'sectionBreak') return;
     const raw = (this.now() - this.stepStart - this.pausedTotal) / 1000;
+    // por repeticiones: sin cuenta atrás; el tiempo cuenta hacia arriba hasta que se toca «Hecho»
+    if (step.kind === 'exercise' && step.reps) {
+      this.emit('tick', { step, elapsed: raw, remaining: Infinity, duration: step.seconds, reps: step.reps, ...(step.exercise.oneSided ? { repSide: this.repSide } : {}) });
+      return;
+    }
     const switchAt = step.kind === 'exercise' ? step.switchAt : undefined;
 
     // cambio de lado: a mitad de tiempo se para el reloj y hay una cuenta atrás de 3 s
@@ -211,6 +223,38 @@ export class WorkoutSession extends Emitter<Events> {
     }
   }
 
+  /** ¿El paso actual es un ejercicio por repeticiones? */
+  get waitingReps(): boolean {
+    const st = this.current;
+    return st?.kind === 'exercise' && !!st.reps && (this._status === 'running' || this._status === 'paused');
+  }
+
+  /** Lado en que se está de un ejercicio por repeticiones y por lados (1 o 2). */
+  get currentRepSide(): 1 | 2 {
+    return this.repSide;
+  }
+
+  /**
+   * «Hecho» en un ejercicio por repeticiones: si va por lados y es el primero, cambio de lado; si no, se da por
+   * hecho y se pasa al siguiente paso.
+   */
+  repDone(): void {
+    const step = this.current;
+    if (!step || step.kind !== 'exercise' || !step.reps) return;
+    if (this._status === 'paused') this.resume();
+    if (this._status !== 'running') return;
+    if (step.exercise.oneSided && this.repSide === 1) {
+      this.repSide = 2;
+      this.emit('cue', { type: 'switch' });
+      this.tick();
+      return;
+    }
+    this.recordCurrent();
+    this.done.add(this.index);
+    this.emit('cue', { type: 'end' });
+    this.goTo(this.index + 1);
+  }
+
   /** Tiempo del paso sin contar el cambio de lado (anuncio + cuenta atrás). */
   private effective(step: Step, raw: number): number {
     const at = step.kind === 'exercise' ? step.switchAt : undefined;
@@ -223,7 +267,9 @@ export class WorkoutSession extends Emitter<Events> {
     const step = this.current;
     if (!step || step.kind !== 'exercise' || this._status === 'idle') return;
     const pausedNow = this.pausedAt !== null ? this.now() - this.pausedAt : 0;
-    const elapsed = Math.min(step.seconds, Math.max(0, this.effective(step, (this.now() - this.stepStart - this.pausedTotal - pausedNow) / 1000)));
+    const raw = (this.now() - this.stepStart - this.pausedTotal - pausedNow) / 1000;
+    // por repeticiones, lo que se ha tardado (sin tope); por tiempo, como mucho su tiempo
+    const elapsed = step.reps ? Math.max(0, raw) : Math.min(step.seconds, Math.max(0, this.effective(step, raw)));
     this.worked.set(this.index, Math.max(this.worked.get(this.index) ?? 0, elapsed));
   }
 
@@ -239,6 +285,7 @@ export class WorkoutSession extends Emitter<Events> {
     this.switched = false;
     this.sideCount = Infinity;
     this.resumed = false;
+    this.repSide = 1;
     const step = this.plan.steps[this.index];
     this.setStatus(step.kind === 'sectionBreak' ? 'waiting' : 'running');
     this.emit('step', { index: this.index, step });
@@ -261,6 +308,7 @@ export class WorkoutSession extends Emitter<Events> {
         seconds: Math.round(this.worked.get(i) ?? 0),
         completed: this.done.has(i),
         ...(st.weight ? { weight: st.weight } : {}),
+        ...(st.reps ? { reps: st.reps } : {}),
       });
     });
     const sections = new Set<SectionId>();

@@ -21,6 +21,10 @@ export class RoutineEditor {
     return this.routine[section].find((i) => i.exerciseId === exerciseId)?.seconds;
   }
 
+  reps(section: SectionId, exerciseId: string): number | undefined {
+    return this.routine[section].find((i) => i.exerciseId === exerciseId)?.reps;
+  }
+
   weight(section: SectionId, exerciseId: string): number | undefined {
     return this.routine[section].find((i) => i.exerciseId === exerciseId)?.weight;
   }
@@ -52,6 +56,18 @@ export class RoutineEditor {
     this.routine = {
       ...this.routine,
       [section]: this.routine[section].map((i) => (i.exerciseId === exerciseId ? { ...i, seconds: clamp(seconds) } : i)),
+    };
+  }
+
+  /** Tiempo o repeticiones de un ejercicio elegido (sin `reps`, por tiempo). */
+  setAmount(section: SectionId, exerciseId: string, a: { seconds: number; reps?: number }): void {
+    this.routine = {
+      ...this.routine,
+      [section]: this.routine[section].map((i) => {
+        if (i.exerciseId !== exerciseId) return i;
+        const { reps: _r, ...rest } = i;
+        return { ...rest, seconds: clamp(a.seconds), ...(a.reps ? { reps: Math.max(1, Math.min(100, Math.round(a.reps))) } : {}) };
+      }),
     };
   }
 

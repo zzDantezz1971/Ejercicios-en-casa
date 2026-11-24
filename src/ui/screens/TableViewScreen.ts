@@ -8,6 +8,7 @@ import { neededEquip } from './MakerScreens';
 import { EQUIP_INFO } from '../../domain/equipment';
 import { blockNav } from '../components/blockNav';
 import { countText, planText } from '../planText';
+import { amountText } from '../components/amountCtrl';
 
 /**
  * Ver la tabla en uso, solo para mirar: los ejercicios del apartado elegido (o todos), en el orden en que se harán,
@@ -55,7 +56,7 @@ export class TableViewScreen implements Screen {
         const row = h('button', { class: 'maker-row tv-row', 'aria-label': `Cómo se hace: ${ex.name}`, onclick: () => app.push(new DetailScreen(app, ex, shown)) },
           h('span', { class: 'tv-n' }, String(k)), img,
           h('span', { class: 'maker-name' }, h('span', { class: 'maker-title' }, ex.name),
-            h('span', { class: 'muted small tv-sub' }, h('span', { class: 'tv-secs' }, icon('clock'), `${e.seconds} s`),
+            h('span', { class: 'muted small tv-sub' }, h('span', { class: 'tv-secs' }, icon(e.reps ? 'swap' : 'clock'), amountText(ex, e)),
               ex.oneSided ? h('span', { class: 'by-sides' }, icon('sides'), 'por lados') : null),
             h('span', { class: 'muted small' }, SECTION_TITLES[ex.section], ' · ', ex.zone)),
           icon('chevron', 'ico chev'));
@@ -109,7 +110,7 @@ export class TableViewScreen implements Screen {
           img,
           h('span', { class: 'maker-name' },
             h('span', { class: 'maker-title' }, ex.name),
-            h('span', { class: 'muted small tv-sub' }, h('span', { class: 'tv-secs' }, icon('clock'), `${it.seconds} s`),
+            h('span', { class: 'muted small tv-sub' }, h('span', { class: 'tv-secs' }, icon(it.reps ? 'swap' : 'clock'), amountText(ex, it)),
               it.weight ? h('span', { class: 'tv-secs' }, icon('dumbbell'), kg(it.weight)) : null,
               ex.oneSided ? h('span', { class: 'by-sides' }, icon('sides'), 'por lados') : null),
             h('span', { class: 'muted small' }, ex.zone)),

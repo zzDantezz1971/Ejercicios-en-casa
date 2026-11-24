@@ -1948,3 +1948,15 @@ html[data-font="large"] { font-size: 112.5%; }
 .hc-dot { fill: #FF4D6A; stroke: var(--bg); stroke-width: 2; }
 .hc-tip { fill: var(--surface-2, #232a3a); stroke: var(--line); }
 .hc-tip-text { fill: var(--fg); font: 700 12px var(--body); font-variant-numeric: tabular-nums; }
+/* Ejercicio por repeticiones: el número en el anillo, «reps» debajo y el botón grande «Hecho» */
+.ring-sub { font: 700 9px var(--body); fill: var(--muted); text-transform: uppercase; letter-spacing: .12em; }
+.workout.reps .ring-time { font-size: 40px; }
+.ctrl.main.done-btn { background: linear-gradient(135deg, #3BC47A, #1E8F55); color: #fff; }
+.ctrl.main.done-btn span { font-size: .92rem; }
+.workout.reps .w-phase { font-variant-numeric: tabular-nums; }
+/* Tiempo o repeticiones de un ejercicio (al editar): «Tiempo | Reps» y el contador */
+.amount-ctrl { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.amount-mode { padding: 2px; border-radius: 9px; }
+.amount-mode .seg { padding: 4px 8px; font-size: .74rem; border-radius: 7px; }
+.row-amount { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.ex-actions .amount-ctrl { justify-content: center; }

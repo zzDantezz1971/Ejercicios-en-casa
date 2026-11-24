@@ -8,6 +8,7 @@ import { icon } from '../icons';
 import { DetailScreen } from './DetailScreen';
 import { blockTag, header, PickExerciseScreen } from './MakerScreens';
 import { planText } from '../planText';
+import { amountCtrl, amountText } from '../components/amountCtrl';
 
 /*
  * Tabla libre: una sola lista, sin bloques. Ejercicios de cualquier tipo en el orden que se quiera, descansos donde se
@@ -164,7 +165,12 @@ export class FreeTableScreen implements Screen {
       h('div', { class: 'maker-name' },
         h('button', { class: 'maker-open maker-title', onclick: open }, ex.name),
         h('span', { class: 'free-sub' }, tag, ex.oneSided ? h('span', { class: 'by-sides small' }, icon('sides'), 'por lados') : null),
-        h('div', { class: 'maker-ctrls' }, time)),
+        // tiempo o repeticiones (− +)
+        h('div', { class: 'maker-ctrls' }, where ? amountCtrl(ex, e, (a) => edit((x) => {
+          if (x.kind !== 'ex') return;
+          x.seconds = a.seconds;
+          if (a.reps) x.reps = a.reps; else delete x.reps;
+        })) : h('span', { class: 'maker-secs muted small' }, amountText(ex, e)))),
       more ? h('div', { class: 'maker-acts' }, more) : null);
   }
 

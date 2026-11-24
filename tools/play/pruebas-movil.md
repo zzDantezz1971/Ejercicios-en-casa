@@ -4,6 +4,13 @@ Recordatorio: **cuando instales la app de prueba** (el APK de GitHub o la prueba
 Marca cada punto al probarlo. Si algo falla, haz una captura y cuéntamelo.
 
 ## 0e. Para probar en el build 20
+- [ ] **Repeticions** (canvi gran, revisar-ho tot):
+  - [ ] Edita una taula › un bloc: a cada exercici, «Temps | Reps». Passa’n un a «Reps» (surt 12 reps; − + d’un en un). En un per costats surt «12 x costat». Planxa frontal, planxa lateral, esquat a la paret, barqueta i tots els estiraments: només temps (sense el selector).
+  - [ ] El mateix a «Taula buida» (en triar exercicis), a la taula lliure, a Crea-la per mi, a Taules fetes i als dies del pla.
+  - [ ] Resum de la taula/bloc amb «Total ≈ X min» quan hi ha repeticions.
+  - [ ] Entrenant un exercici per repeticions: sense compte enrere; a l’anell el número i «REPS» (o «PER COSTAT»), a dalt el cronòmetre, i el botó verd «Fet». La veu diu «Flexions. 12 repeticions» (o «12 per costat»). En un per costats, el primer «Fet» diu «Canvi de costat» i el segon passa al següent.
+  - [ ] Amb sèries i voltes, els exercicis per repeticions es repeteixen bé. «Anterior», «Salta» i la X funcionen.
+  - [ ] A l’Historial, l’exercici surt amb «12 reps» i el temps que hi vas posar; les calories surten.
 - [ ] Gràfica del pols en gran: fes un entrenament amb el rellotge connectat (de més d’un bloc). A l’Historial, obre’l i toca la gràfica: s’obre en horitzontal (gira el mòbil o surt girada), amb l’hora d’inici i de fi, hores al llarg, línia de cada canvi de bloc amb el nom i, tocant/arrossegant, «10:32 · 128 ppm». Els canvis de bloc han de coincidir amb quan vas canviar.
 - [ ] Desar a l’historial a partir de 5 min (sense pauses): comença i toca la X (o enrere) abans de 5 min: ha de dir «Encara no portes 5 min… Vols acabar sense desar?»; amb «Acaba sense desar» torna a Inici i no hi ha res nou a l’Historial. Passats 5 min, la X pregunta «Vols acabar l’entrenament?» i, amb «Acaba», el resum diu «Desat a l’historial». Una taula curta (menys de 5 min) acabada sencera: es desa igualment (resum «Desat a l’historial» i ratxa). La mateixa taula arribant al final amb «Salta» a tots els exercicis: no es desa.
 - [ ] Taca blanca en tornar de la música: a la web (Chrome) surt un moment una taca blanca en tornar de Spotify (és de Chrome, per la pestanya que s’obre i es tanca). A l’app d’Android NO hauria de sortir: «Vols música?» › obre una app de música › torna a Kasa Fit i mira que no hi hagi cap taca, ni a la pantalla «Comença» ni sobre el ninot.

@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-24T12:01:33Z",
+    "es": "Ejercicios por repeticiones: al editar una tabla, cada ejercicio puede ir por «Tiempo» o por «Reps» (12 reps, o 10 por lado en los que van por lados). Al entrenar no hay cuenta atrás: sale el número de repeticiones, un cronómetro con lo que llevas y el botón «Hecho» para pasar al siguiente (en los por lados, el primero cambia de lado). Los estiramientos y los que se aguantan quietos (planchas, sentadilla en la pared…) siguen solo por tiempo. Con repeticiones, el tiempo de la tabla es aproximado (≈).",
+    "ca": "Exercicis per repeticions: en editar una taula, cada exercici pot anar per «Temps» o per «Reps» (12 reps, o 10 per costat en els que van per costats). En entrenar no hi ha compte enrere: surt el nombre de repeticions, un cronòmetre amb el que portes i el botó «Fet» per passar al següent (en els per costats, el primer canvia de costat). Els estiraments i els que s’aguanten quiets (planxes, esquat a la paret…) continuen només per temps. Amb repeticions, el temps de la taula és aproximat (≈).",
+    "en": "Exercises by reps: when editing a routine, each exercise can go by “Time” or “Reps” (12 reps, or 10 per side for one-sided ones). While training there’s no countdown: you see the number of reps, a stopwatch with your time and a “Done” button to move on (for one-sided ones, the first switches sides). Stretches and holds (planks, wall sit…) stay time-only. With reps, the routine time is approximate (≈)."
+  },
+  {
     "fecha": "2026-11-24T11:45:24Z",
     "es": "Gráfica del pulso en grande: en los entrenamientos anteriores la línea ya llega hasta la hora de fin (las horas de en medio son aproximadas; los cambios de bloque solo salen en los nuevos).",
     "ca": "Gràfica del pols en gran: als entrenaments anteriors la línia ja arriba fins a l’hora de fi (les hores del mig són aproximades; els canvis de bloc només surten als nous).",

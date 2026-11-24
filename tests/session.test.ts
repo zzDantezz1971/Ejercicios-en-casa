@@ -289,3 +289,49 @@ describe('Pulso con la hora de cada muestra', () => {
     expect(r.avg).toBe(120);
   });
 });
+
+describe('Ejercicios por repeticiones', () => {
+  const plan = (oneSided = false) => {
+    const cat: Catalog = new Map([ex('a', 'calentamiento'), ex('c', 'pesas', oneSided)].map((e) => [e.id, e]));
+    const r = emptyRoutine();
+    r.pesas = [{ exerciseId: 'c', seconds: 30, reps: 10 }, { exerciseId: 'a', seconds: 20 }];
+    return WorkoutPlan.build(r, cat, { ...DEFAULT_SETTINGS, sectionCountdown: 0, rest: { ...DEFAULT_SETTINGS.rest, pesas: 0 } });
+  };
+  it('no tiene cuenta atrás: espera a «Hecho» y guarda las repeticiones y lo que se ha tardado', () => {
+    const c = clock();
+    const s = new WorkoutSession(plan(), c.now);
+    s.start();
+    run(s, c, 200);
+    expect(s.current?.kind === 'exercise' && s.current.exercise.id).toBe('c');
+    expect(s.waitingReps).toBe(true);
+    s.repDone();
+    expect(s.current?.kind === 'exercise' && s.current.exercise.id).toBe('a');
+    let summary: SessionSummary | null = null;
+    s.on('finished', (x) => (summary = x));
+    run(s, c, 25);
+    const it = summary!.items[0];
+    expect(it.reps).toBe(10);
+    expect(it.completed).toBe(true);
+    expect(it.seconds).toBe(200);
+  });
+  it('por lados: el primer «Hecho» cambia de lado y el segundo pasa al siguiente', () => {
+    const c = clock();
+    const s = new WorkoutSession(plan(true), c.now);
+    const cues: Cue[] = [];
+    s.on('cue', (x) => cues.push(x));
+    s.start();
+    run(s, c, 5);
+    s.repDone();
+    expect(s.currentRepSide).toBe(2);
+    expect(cues.some((x) => x.type === 'switch')).toBe(true);
+    expect(s.current?.kind === 'exercise' && s.current.exercise.id).toBe('c');
+    s.repDone();
+    expect(s.current?.kind === 'exercise' && s.current.exercise.id).toBe('a');
+  });
+  it('el tiempo estimado cuenta unos segundos por repetición', () => {
+    const p = plan(true);
+    const step = p.steps.find((x) => x.kind === 'exercise' && x.reps);
+    expect(step && step.kind === 'exercise' && step.seconds).toBe(10 * 3 * 2);
+    expect(p.hasReps).toBe(true);
+  });
+});
