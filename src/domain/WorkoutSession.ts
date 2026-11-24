@@ -91,6 +91,11 @@ export class WorkoutSession extends Emitter<Events> {
   get status(): SessionStatus {
     return this._status;
   }
+  /** Ejercicios acabados enteros hasta ahora (solo si hay alguno, el entrenamiento se guarda en el historial). */
+  get doneCount(): number {
+    return this.done.size;
+  }
+
   get currentIndex(): number {
     return this.index;
   }

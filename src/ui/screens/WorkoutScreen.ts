@@ -156,13 +156,25 @@ export class WorkoutScreen implements Screen {
     this.view = null;
   }
 
+  /** Saliendo sin haber acabado ningún ejercicio (no se guarda nada ni hay resumen). */
+  private leaving = false;
+
   async onBack(): Promise<boolean> {
+    if (this.session.status === 'finished') return false;
+    // sin ningún ejercicio acabado: se sale sin preguntar (no hay nada que guardar)
+    if (this.session.doneCount === 0) {
+      this.leaving = true;
+      this.session.stop();
+      return false;
+    }
     await this.askStop();
     return true;
   }
 
   private async askStop(): Promise<void> {
     if (this.session.status === 'finished') return;
+    // sin ningún ejercicio acabado no se guarda nada en el historial: se sale sin preguntar
+    if (this.session.doneCount === 0) { this.app.back(); return; }
     const wasRunning = this.session.status === 'running';
     this.session.pause();
     const ok = await confirmDialog('¿Terminar el entrenamiento? Se guardará en el historial lo que hayas hecho.', 'Terminar', 'Seguir');
@@ -400,6 +412,8 @@ export class WorkoutScreen implements Screen {
       this.app.store.addHistory(entry);
       this.app.store.markUsed(this.table.id, s.startedAt);
     }
+    // terminado antes de acabar ningún ejercicio: no hay nada que resumir (ya se está volviendo atrás)
+    if (this.leaving) return;
     this.app.replace(new SummaryScreen(this.app, s, this.table.name, heart));
   }
 }

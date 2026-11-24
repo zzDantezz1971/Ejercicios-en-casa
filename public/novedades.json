@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-24T09:40:55Z",
+    "es": "Entrenamiento: «¿Terminar el entrenamiento?» solo sale si ya has acabado algún ejercicio (entonces se guarda en el historial). Si aún no has acabado ninguno, la X (o atrás) sale directamente, sin preguntar.",
+    "ca": "Entrenament: «Vols acabar l’entrenament?» només surt si ja has acabat algun exercici (llavors es desa a l’historial). Si encara no n’has acabat cap, la X (o enrere) surt directament, sense preguntar.",
+    "en": "Workout: “End the workout?” only appears if you have already finished an exercise (then it is saved in your history). If you haven’t finished any yet, the X (or back) leaves straight away, without asking."
+  },
+  {
     "fecha": "2026-11-24T09:15:40Z",
     "es": "«¿Quieres música?»: después de abrir la música, el entrenamiento ya no empieza solo (empezaba mientras elegías la música); espera a que vuelvas y toques «Empezar». Y al volver a la app ya no sale un momento una mancha blanca sobre el muñeco.",
     "ca": "«Vols música?»: després d’obrir la música, l’entrenament ja no comença sol (començava mentre triaves la música); espera que tornis i toquis «Comença». I en tornar a l’app ja no surt un moment una taca blanca sobre el ninot.",
