@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-24T13:57:46Z",
+    "es": "Editar tabla: el asa para arrastrar va al lado de la miniatura, y así «Tiempo | Reps», el contador y los kg caben en una sola línea también en móviles estrechos. El + y el − van pegados al número.",
+    "ca": "Edita la taula: la nansa per arrossegar va al costat de la miniatura, i així «Temps | Reps», el comptador i els kg caben en una sola línia també en mòbils estrets. El + i el − van enganxats al número.",
+    "en": "Edit routine: the drag handle sits next to the thumbnail, so “Time | Reps”, the counter and the kg fit on one line even on narrow phones. + and − sit right next to the number."
+  },
+  {
     "fecha": "2026-11-24T13:52:15Z",
     "es": "Editar tabla: el + y el − van pegados al número y los botones «Tiempo | Reps» son más grandes. Se quita la opción de letra grande de Ajustes (la app tiene un solo tamaño de letra).",
     "ca": "Edita la taula: el + i el − van enganxats al número i els botons «Temps | Reps» són més grans. Es treu l’opció de lletra gran de Configuració (l’app té una sola mida de lletra).",

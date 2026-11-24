@@ -1981,3 +1981,16 @@ button.plan-row { cursor: pointer; }
 .mr-ctrls .stepper.inline { gap: 2px; }
 .mr-ctrls .stepper.inline .secs { min-width: 34px; }
 .mr-ctrls .amount-mode .seg { padding: 5px 10px; font-size: .8rem; }
+/* (v2) fila del ejercicio al editar: + y − pegados al número; si no cabe, el peso baja a otra línea (nunca se sale) */
+.maker-row.mr-grid > .mr-ctrls { flex-wrap: wrap; row-gap: 6px; column-gap: 6px; }
+.mr-ctrls .stepper.inline.maker-time { gap: 0; }
+.mr-ctrls .stepper.inline.maker-time .secs { min-width: 0; padding: 0 5px; }
+.mr-ctrls .amount-ctrl { gap: 6px; }
+.mr-ctrls .amount-mode .seg { padding: 5px 9px; }
+/* (v3) fila del ejercicio al editar: el asa de arrastrar sube a la línea del nombre (al lado de la miniatura),
+   así la línea de abajo (Tiempo | Reps, − 40 s +, kg) usa todo el ancho de la tarjeta y cabe en una sola línea */
+.sort-row:has(> .sort-content > .mr-grid) { position: relative; }
+.sort-row.handle-first:has(> .sort-content > .mr-grid) > .drag-handle { position: absolute; left: 4px; top: 8px; width: 30px; height: 46px; align-self: auto; z-index: 1; }
+.sort-row:has(> .sort-content > .mr-grid) > .sort-content { flex: 1; min-width: 0; }
+.sort-row:has(> .sort-content > .mr-grid) .mr-img { margin-left: 30px; }
+.maker-row.mr-grid > .mr-ctrls { flex-wrap: nowrap; }
