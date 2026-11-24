@@ -68,7 +68,6 @@ function walk(ms: number, amount = 1): P {
     ...NEUTRAL,
     zKL: 13 * s, zAL: 17 * s, zKR: -13 * s, zAR: -17 * s,
     zHL: -13 * s, zEL: -5 * s, zHR: 13 * s, zER: 5 * s,
-    jy: 1.6 * Math.abs(Math.cos(ph)) * amount,
   };
 }
 /** Saludar con la mano derecha (la del lado derecho de la pantalla). */
@@ -154,6 +153,33 @@ function placeBiceps(t: number): void {
   }
 }
 
+// ── sombra de contacto bajo cada pie (para que al andar no parezca que flota) ──
+const footShadowTex = (() => {
+  const c = document.createElement('canvas'); c.width = c.height = 64;
+  const g = c.getContext('2d')!, gr = g.createRadialGradient(32, 32, 2, 32, 32, 32);
+  gr.addColorStop(0, 'rgba(25,18,10,.7)'); gr.addColorStop(1, 'rgba(25,18,10,0)');
+  g.fillStyle = gr; g.fillRect(0, 0, 64, 64);
+  return new THREE.CanvasTexture(c);
+})();
+const feetShadows = (['L', 'R'] as const).map((s) => {
+  const m = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshBasicMaterial({ map: footShadowTex, transparent: true, depthWrite: false }));
+  m.rotation.x = -Math.PI / 2;
+  m.renderOrder = 2;
+  ms.scene.add(m);
+  return { s, m };
+});
+function placeFeetShadows(): void {
+  const p = new THREE.Vector3();
+  for (const { s, m } of feetShadows) {
+    parts0['sole' + s].getWorldPosition(p);
+    // más clara cuanto más levantado está el pie
+    const lift = Math.max(0, p.y - 1.5);
+    (m.material as THREE.MeshBasicMaterial).opacity = Math.max(0.15, 1 - lift / 14);
+    m.position.set(p.x, 0.12, p.z);
+    m.scale.set(13 + lift * 0.4, 18 + lift * 0.4, 1);
+  }
+}
+
 const bubble = document.getElementById('bubble')!, end = document.getElementById('end')!, brand = document.getElementById('brand')!;
 const head = new THREE.Vector3();
 
@@ -172,6 +198,7 @@ function render(t: number): void {
   ms.mood = speaking && Math.floor(t / 110) % 2 === 0 ? 'effort' : 'happy';
   ms.update(t, t);
   placeBiceps(t);
+  placeFeetShadows();
   renderer.render(ms.scene, ms.camera);
   // bocadillo encima de la cabeza, con la punta hacia Fit
   if (b) {
