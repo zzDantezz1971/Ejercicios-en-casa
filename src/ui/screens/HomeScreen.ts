@@ -1,5 +1,5 @@
 import { tr } from '../../i18n';
-import { WorkoutPlan, clampRounds } from '../../domain/WorkoutPlan';
+import { WorkoutPlan } from '../../domain/WorkoutPlan';
 import { SECTION_IDS, sectionOrder, SECTION_TITLES, type SectionId } from '../../domain/types';
 import type { App, Screen } from '../App';
 import { addDays, dayKey, greeting, startOfWeek, streak, trainedDays, WEEKDAY_LETTERS } from '../dates';
@@ -207,13 +207,12 @@ export class HomeScreen implements Screen {
 
   private sectionRow(s: SectionId): HTMLElement {
     const items = this.app.store.routine[s].filter((i) => this.app.catalog.has(i.exerciseId));
-    const R = clampRounds(this.app.store.active.rounds?.[s]);
     const bp = WorkoutPlan.forSection(this.app.store.routine, s, this.app.catalog, this.app.store.settings, this.app.store.active.rounds);
     const st = SECTION_STYLE[s];
     const row = h('button', { class: 'sec-row' + (items.length ? '' : ' empty'), onclick: () => this.app.push(items.length ? new TableViewScreen(this.app, s) : new RoutineScreen(this.app, s)) },
       h('span', { class: 'sec-icon' }, icon(st.icon)),
       h('span', { class: 'sec-text' },
-        h('strong', {}, h('span', {}, SECTION_TITLES[s]), items.length && R > 1 ? h('span', { class: 'sec-rounds' }, `x${R}`) : null),
+        h('strong', {}, SECTION_TITLES[s]),
         h('span', { class: 'muted small' }, items.length ? planText(bp) : 'Sin ejercicios · toca para añadir')),
       icon('chevron', 'ico chev'));
     row.style.setProperty('--sec', st.color);

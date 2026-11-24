@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-24T00:10:20Z",
+    "es": "Resumen de tablas y bloques más claro: «22 ejercicios, con repeticiones 28 - Total 25 min» (sin repeticiones, «4 ejercicios - Total 3 min»). La etiqueta x2, x3… ya no sale en la información de los bloques.",
+    "ca": "Resum de taules i blocs més clar: «22 exercicis, amb repeticions 28 - Total 25 min» (sense repeticions, «4 exercicis - Total 3 min»). L’etiqueta x2, x3… ja no surt a la informació dels blocs.",
+    "en": "Clearer summary of routines and blocks: “22 exercises, with repetitions 28 - Total 25 min” (without repetitions, “4 exercises - Total 3 min”). The x2, x3… tag no longer appears in the block info."
+  },
+  {
     "fecha": "2026-11-23T23:57:06Z",
     "es": "El resumen de tablas y bloques es igual en toda la app: los ejercicios distintos, cuántos se hacen en total si algo se repite (vueltas o series) y el tiempo real de principio a fin, con descansos. Por ejemplo: «3 ejercicios · se hacen 14 · 11 min».",
     "ca": "El resum de taules i blocs és igual a tota l’app: els exercicis diferents, quants se’n fan en total si alguna cosa es repeteix (voltes o sèries) i el temps real de principi a fi, amb descansos. Per exemple: «3 exercicis · se’n fan 14 · 11 min».",

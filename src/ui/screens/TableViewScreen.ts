@@ -1,4 +1,4 @@
-import { WorkoutPlan, clampRounds } from '../../domain/WorkoutPlan';
+import { WorkoutPlan } from '../../domain/WorkoutPlan';
 import { blockRuns, sectionOrder, SECTION_TITLES, type ExerciseDef, type FreeEntry, type SectionId } from '../../domain/types';
 import type { App, Screen } from '../App';
 import { h, humanDuration, kg } from '../dom';
@@ -76,12 +76,11 @@ export class TableViewScreen implements Screen {
       const items = table.routine[s].filter((i) => app.catalog.has(i.exerciseId));
       if (!items.length) continue;
       const st = SECTION_STYLE[s];
-      const R = clampRounds(table.rounds?.[s]);
       const bp = WorkoutPlan.forSection(table.routine, s, app.catalog, app.store.settings, table.rounds ?? {});
       // título del apartado como en Editar (grande, con su color), con el resumen al lado
       const head = h('div', { class: 'tv-head' },
         h('h2', { class: 'maker-sec' }, icon(st.icon), SECTION_TITLES[s]),
-        h('span', { class: 'muted small tv-meta' }, `${R > 1 ? `x${R} vueltas · ` : ''}${planText(bp)}`));
+        h('span', { class: 'muted small tv-meta' }, planText(bp)));
       head.style.setProperty('--sec', st.color);
       const need = neededEquip(app, { routine: table.routine, rounds: table.rounds ?? {} }, [s]);
       const needEl = need.length ? h('div', { class: 'sec-need small', style: `--sec: ${st.color}` }, h('span', {}, 'Necesitas:'),

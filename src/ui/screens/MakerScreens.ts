@@ -216,13 +216,12 @@ export function preview(app: App, r: GenResult, edit?: PreviewEdit): HTMLElement
     const open = edit.openSection;
     const cards: SortableRow[] = sectionOrder(r.order).map((s) => {
       const items = r.routine[s].filter((i) => app.catalog.has(i.exerciseId));
-      const R = clampRounds(r.rounds[s]);
       const bp = WorkoutPlan.forSection(r.routine, s, app.catalog, app.store.settings, r.rounds);
       const st = SECTION_STYLE[s];
       const row = h('button', { class: 'sec-row' + (items.length ? '' : ' empty'), onclick: () => open(s) },
         h('span', { class: 'sec-icon' }, icon(st.icon)),
         h('span', { class: 'sec-text' },
-          h('strong', {}, h('span', {}, SECTION_TITLES[s]), items.length && R > 1 ? h('span', { class: 'sec-rounds' }, `x${R}`) : null),
+          h('strong', {}, SECTION_TITLES[s]),
           h('span', { class: 'muted small' }, items.length ? planText(bp) : 'Sin ejercicios · toca para añadir')),
         icon('chevron', 'ico chev'));
       row.style.setProperty('--sec', st.color);

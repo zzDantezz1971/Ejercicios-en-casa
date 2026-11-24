@@ -1283,4 +1283,7 @@ export const UI_EU: Record<string, string> = {
   "De deporte": "Kirolekoa",
   "Japonesa": "Japoniarra",
   "se hacen {a}": "{a} guztira",
+  "{a}, con repeticiones {b}": "{a}, errepikapenekin {b}",
+  "{a} - {b}": "{a} - {b}",
+  "Total {a}": "Guztira {a}",
 };

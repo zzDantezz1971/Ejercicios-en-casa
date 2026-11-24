@@ -1283,4 +1283,7 @@ export const UI_GL: Record<string, string> = {
   "De deporte": "De deporte",
   "Japonesa": "Xaponesa",
   "se hacen {a}": "fanse {a}",
+  "{a}, con repeticiones {b}": "{a}, con repeticións {b}",
+  "{a} - {b}": "{a} - {b}",
+  "Total {a}": "Total {a}",
 };

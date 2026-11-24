@@ -1340,6 +1340,9 @@ const ROWS: Row[] = [
   ['De deporte', 'D’esport', 'Sports'],
   ['Japonesa', 'Japonesa', 'Japanese'],
   ['se hacen {a}', 'se’n fan {a}', '{a} in total'],
+  ['{a}, con repeticiones {b}', '{a}, amb repeticions {b}', '{a}, with repetitions {b}'],
+  ['{a} - {b}', '{a} - {b}', '{a} - {b}'],
+  ['Total {a}', 'Total {a}', 'Total {a}'],
 ];
 
 export const UI_CA: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[1]]));
