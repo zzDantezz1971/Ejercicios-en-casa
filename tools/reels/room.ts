@@ -31,21 +31,30 @@ const WOOD = (() => {
   const t = canvasTex(1024, 1024, (g) => {
     const tones = ['#D2AE86', '#CBA67C', '#D6B48D', '#C79F75', '#D0AA80'];
     const W = 128;
+    // tablones de largos distintos y juntas desordenadas (cada columna empieza en otro sitio)
+    let seed = 7;
+    const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+    const plank = (x: number, y: number, h: number) => {
+      g.fillStyle = tones[Math.floor(rnd() * tones.length)];
+      g.fillRect(x, y, W, h);
+      g.strokeStyle = 'rgba(120,80,40,.09)'; g.lineWidth = 2;
+      for (let k = 0; k < 6; k++) { const o = rnd() * 6 - 3; g.beginPath(); g.moveTo(x + 10 + k * 19 + o, y); g.bezierCurveTo(x + 18 + k * 19, y + h / 3, x + 4 + k * 19, y + (2 * h) / 3, x + 12 + k * 19 + o, y + h); g.stroke(); }
+      g.strokeStyle = 'rgba(90,60,30,.28)'; g.lineWidth = 3; g.strokeRect(x, y, W, h);
+    };
     for (let x = 0; x < 1024; x += W) {
-      let y = -((x / W) % 3) * 170;
-      while (y < 1024) {
-        const h = 340;
-        g.fillStyle = tones[Math.floor(Math.abs(Math.sin(x * 7.3 + y * 1.7)) * tones.length)];
-        g.fillRect(x, y, W, h);
-        g.strokeStyle = 'rgba(120,80,40,.09)'; g.lineWidth = 2;
-        for (let k = 0; k < 6; k++) { g.beginPath(); g.moveTo(x + 10 + k * 19, y); g.bezierCurveTo(x + 18 + k * 19, y + h / 3, x + 4 + k * 19, y + (2 * h) / 3, x + 12 + k * 19, y + h); g.stroke(); }
-        g.strokeStyle = 'rgba(90,60,30,.28)'; g.lineWidth = 3; g.strokeRect(x, y, W, h);
+      const start = Math.floor(rnd() * 1024);
+      let y = start;
+      while (y < start + 1024) {
+        const h = Math.min(170 + Math.floor(rnd() * 300), start + 1024 - y);
+        // los que pasan del borde se pintan también arriba (la textura se repite)
+        plank(x, y % 1024, h);
+        if ((y % 1024) + h > 1024) plank(x, (y % 1024) - 1024, h);
         y += h;
       }
     }
   });
   t.wrapS = t.wrapT = THREE.RepeatWrapping;
-  t.repeat.set(5, 5);
+  t.repeat.set(6, 6);
   return t;
 })();
 
@@ -242,8 +251,8 @@ export function addRoom(ms: MannequinScene): void {
     const b = add(boxM(5.5, h, 13, std(col, 0.75)), x, y + h / 2, BACK + 9, true);
     b.rotation.z = tilt;
   };
-  [[C.blue, 22], [C.orange, 25], [C.green, 21], [C.red, 24], ['#F3F5F8', 20]].forEach(([col, h], i) => book(64 + i * 6, 152, h as number, col as string));
-  book(95, 151, 22, '#1E2633', 0.38);
+  [[C.blue, 22], [C.orange, 25], [C.green, 21], [C.red, 24], ['#F3F5F8', 24]].forEach(([col, h], i) => book(64 + i * 6, 152, h as number, col as string));
+  book(97.4, 152, 22, '#1E2633', 0.38);
   // planta colgante en la balda de abajo
   const hang = add(new THREE.Mesh(new THREE.CylinderGeometry(6, 4.6, 10, 18), std('#F4F1EC', 0.5)), 118, 157, BACK + 9);
   for (let k = 0; k < 14; k++) {
@@ -316,7 +325,7 @@ export function addRoom(ms: MannequinScene): void {
   for (const sx of [-26, 26]) {
     for (const [y, z] of [[13, 6], [29, -6]] as const) { const arm = boxM(2, 2, 18, steel); arm.position.set(sx, y, z); rack.add(arm); }
     const leg = boxM(2.4, 34, 2.4, steel); leg.position.set(sx, 17, -6); rack.add(leg);
-    const legF = boxM(2.4, 18, 2.4, steel); legF.position.set(sx, 9, 8); rack.add(legF);
+    const legF = boxM(2.4, 14, 2.4, steel); legF.position.set(sx, 7, 8); rack.add(legF);
   }
   for (const [y, z] of [[15, 6], [31, -6]] as const) {
     const bar = boxM(54, 1.5, 9, steel); bar.position.set(0, y - 1, z); rack.add(bar);
@@ -325,14 +334,14 @@ export function addRoom(ms: MannequinScene): void {
     const g = new THREE.Group(); g.position.set(x, y + r, z);
     const head = std(C.black, 0.6);
     for (const s of [-1, 1]) {
-      const h = new THREE.Mesh(new THREE.CylinderGeometry(r, r, 4, 6), head); h.rotation.z = Math.PI / 2; h.position.x = s * 6; g.add(h);
-      const band = new THREE.Mesh(new THREE.CylinderGeometry(r + 0.15, r + 0.15, 0.9, 6), std(col, 0.5)); band.rotation.z = Math.PI / 2; band.position.x = s * 5; g.add(band);
+      const h = new THREE.Mesh(new THREE.CylinderGeometry(r, r, 4, 6), head); h.rotation.z = Math.PI / 2; h.position.x = s * 5.5; g.add(h);
+      const band = new THREE.Mesh(new THREE.CylinderGeometry(r + 0.15, r + 0.15, 0.9, 6), std(col, 0.5)); band.rotation.z = Math.PI / 2; band.position.x = s * 4.6; g.add(band);
     }
-    const handle = new THREE.Mesh(new THREE.CylinderGeometry(1, 1, 9, 10), std(C.chrome, 0.25, 0.9)); handle.rotation.z = Math.PI / 2; g.add(handle);
+    const handle = new THREE.Mesh(new THREE.CylinderGeometry(1, 1, 8, 10), std(C.chrome, 0.25, 0.9)); handle.rotation.z = Math.PI / 2; g.add(handle);
     rack.add(g);
   };
-  [[-17, C.red, 3.2], [0, C.orange, 3.8], [17, C.blue, 4.4]].forEach(([x, col, r]) => {
-    dumb(x as number - 4, 15, 6, r as number, col as string); dumb(x as number + 4, 31, -6, r as number, col as string);
+  [[-16, C.red, 3.2], [0, C.orange, 3.8], [16, C.blue, 4.2]].forEach(([x, col, r]) => {
+    dumb(x as number, 15, 6, r as number, col as string); dumb(x as number, 31, -6, r as number, col as string);
   });
   rack.traverse((o) => { o.castShadow = false; o.receiveShadow = true; });
   // fitball
