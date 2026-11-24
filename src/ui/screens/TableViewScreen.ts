@@ -81,7 +81,7 @@ export class TableViewScreen implements Screen {
       // si el bloque entero se repite, sus vueltas al lado del nombre (las de una serie van en su recuadro)
       const R = clampRounds(table.rounds?.[s]);
       const head = h('div', { class: 'tv-head' },
-        h('h2', { class: 'maker-sec' }, icon(st.icon), SECTION_TITLES[s], R > 1 ? h('span', { class: 'tv-rounds' }, icon('swap'), `${R} vueltas`) : null),
+        h('h2', { class: 'maker-sec' }, icon(st.icon), SECTION_TITLES[s], R > 1 ? h('span', { class: 'sec-rounds tv-rounds', 'aria-label': `${R} vueltas` }, `x${R}`) : null),
         h('span', { class: 'muted small tv-meta' }, planText(bp)));
       head.style.setProperty('--sec', st.color);
       const need = neededEquip(app, { routine: table.routine, rounds: table.rounds ?? {} }, [s]);

@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-24T00:20:57Z",
+    "es": "Contenido de la tabla: las vueltas de un bloque entero se ven con la misma etiqueta que las de una serie («X3»), a la derecha del nombre.",
+    "ca": "Contingut de la taula: les voltes d’un bloc sencer es veuen amb la mateixa etiqueta que les d’una sèrie («X3»), a la dreta del nom.",
+    "en": "Routine contents: the rounds of a whole block show with the same tag as a set’s (“X3”), to the right of the name."
+  },
+  {
     "fecha": "2026-11-24T00:18:51Z",
     "es": "Contenido de la tabla: si un bloque entero se repite, sus vueltas («3 vueltas») salen al lado del nombre del bloque.",
     "ca": "Contingut de la taula: si un bloc sencer es repeteix, les seves voltes («3 voltes») surten al costat del nom del bloc.",
