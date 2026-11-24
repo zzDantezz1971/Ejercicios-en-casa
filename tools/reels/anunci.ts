@@ -110,5 +110,16 @@ function render(ms: number): void {
   head.style.transform = `translateX(${(1 - tin) * -24}px)`;
 }
 
-(window as unknown as { __reel: unknown }).__reel = { total, render, ready: Promise.all([document.fonts.ready, loaded]) };
+/** Un instante bueno de cada pantalla (para sacar las imágenes fijas): la entrada, cada captura y el final. */
+const stills: Array<{ name: string; ms: number }> = [{ name: '00-entrada', ms: 1300 }];
+{
+  let at = INTRO_MS, n = 1;
+  for (const s of SCREENS) {
+    const per = s.ms / s.shots.length;
+    s.shots.forEach((shot, k) => stills.push({ name: `${String(n++).padStart(2, '0')}-${shot}`, ms: at + k * per + Math.min(per * 0.7, per - 500) }));
+    at += s.ms;
+  }
+  stills.push({ name: `${String(n).padStart(2, '0')}-final`, ms: total - 100 });
+}
+(window as unknown as { __reel: unknown }).__reel = { total, stills, render, ready: Promise.all([document.fonts.ready, loaded]) };
 void Promise.all([document.fonts.ready, loaded]).then(() => render(0));
