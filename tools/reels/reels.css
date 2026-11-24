@@ -78,3 +78,10 @@
 #stage.feed .phone { top: 78px; }
 /* la captura empieza por debajo de la cámara del móvil (si no, la parte de arriba de cada pantalla quedaba tapada) */
 .phone .scr img { top: 34px; height: calc(100% - 34px); }
+/* feed: el móvil de arriba abajo; los textos más arriba y más grandes */
+#stage.feed .phone { top: 39px; }
+#stage.feed .ad-head { top: 56px; }
+#stage.feed .ad-head .k { font-size: 28px; }
+#stage.feed .ad-head h2 { font-size: 42px; }
+#stage.feed .ad-head p { font-size: 21px; margin-top: 14px; }
+#stage.feed .ad-head { width: 222px; } #stage.feed .ad-head p { max-width: 222px; }

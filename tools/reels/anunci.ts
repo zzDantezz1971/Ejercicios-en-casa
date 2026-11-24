@@ -92,7 +92,7 @@ function render(ms: number): void {
   const since = ms - INTRO_MS, up = smooth(since / 700);
   const sway = since / 1000;
   const ry = (FEED ? -18 : -22) + 5 * Math.sin(sway * 0.35), rx = 10 + 2 * Math.sin(sway * 0.27 + 1), rz = 7 + 1.5 * Math.sin(sway * 0.3 + 2);
-  phone.style.transform = `translate(${(FEED ? -14 : 50) + (1 - up) * 40}px, ${(1 - up) * 560}px) perspective(1300px) rotateY(${ry}deg) rotateX(${rx}deg) rotateZ(${rz}deg) scale(${FEED ? 0.88 : 1.06})`;
+  phone.style.transform = `translate(${(FEED ? -4 : 50) + (1 - up) * 40}px, ${(1 - up) * 560}px) perspective(1300px) rotateY(${ry}deg) rotateX(${rx}deg) rotateZ(${rz}deg) scale(${FEED ? 1.06 : 1.06})`;
   // las capturas: fundido de una a otra (la de antes queda debajo), con un desplazamiento lento hacia arriba
   const per = s.ms / s.shots.length;
   const cur = Math.min(s.shots.length - 1, Math.floor(t / per));
