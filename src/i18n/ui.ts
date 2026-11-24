@@ -1371,6 +1371,7 @@ const ROWS: Row[] = [
   ['reps', 'reps', 'reps'],
   ['por lado', 'per costat', 'per side'],
   ['≈ {a}', '≈ {a}', '≈ {a}'],
+  ['Hecho {a} de {b}', 'Fet {a} de {b}', 'Done {a} of {b}'],
 ];
 
 export const UI_CA: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[1]]));

@@ -1314,4 +1314,5 @@ export const UI_EU: Record<string, string> = {
   "reps": "errep.",
   "por lado": "alde bakoitzeko",
   "≈ {a}": "≈ {a}",
+  "Hecho {a} de {b}": "{a}/{b} eginda",
 };

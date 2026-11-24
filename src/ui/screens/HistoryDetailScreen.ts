@@ -7,6 +7,7 @@ import { DetailScreen } from './DetailScreen';
 import { blockNav } from '../components/blockNav';
 import { dateText, timeText } from '../../i18n/fmtDate';
 import { HeartChartScreen } from './HeartChartScreen';
+import { groupHistory } from '../../domain/historyGroups';
 
 /** Detalle de un entrenamiento del historial: qué se hizo, cuánto tiempo y repetirlo. */
 export class HistoryDetailScreen implements Screen {
@@ -36,7 +37,7 @@ export class HistoryDetailScreen implements Screen {
             h('span', { class: 'sec-icon' }, icon(st.icon)),
             h('span', { class: 'sec-text' },
               h('strong', {}, SECTION_TITLES[s]),
-              h('span', { class: 'muted small' }, `${plural(its.length, 'ejercicio', 'ejercicios')} · ${humanDuration(its.reduce((n, i) => n + i.seconds, 0))}`)),
+              h('span', { class: 'muted small' }, (() => { const d = new Set(its.map((i) => i.exerciseId)).size; return `${plural(d, 'ejercicio', 'ejercicios')}${its.length > d ? `, con repeticiones ${its.length}` : ''} - Total ${humanDuration(its.reduce((n, i) => n + i.seconds, 0))}`; })())),
             icon('chevron', 'ico chev'));
           row.style.setProperty('--sec', st.color);
           return row;
@@ -179,33 +180,49 @@ class HistoryBlockScreen implements Screen {
     const st = SECTION_STYLE[sec];
     const shown = its.map((i) => app.catalog.get(i.exerciseId)).filter((x): x is ExerciseDef => !!x);
     const date = dateText(new Date(entry.date), { weekday: 'long', day: 'numeric', month: 'long' });
+    // las repeticiones, agrupadas como en la tabla: las vueltas del bloque (xN al lado del nombre) y las series (recuadro xN)
+    const { rounds, groups } = groupHistory(its.map((i) => i.exerciseId));
+    const distinct = new Set(its.map((i) => i.exerciseId)).size;
     const head = h('div', { class: 'tv-head' },
-      h('h2', { class: 'maker-sec' }, icon(st.icon), SECTION_TITLES[sec]),
-      h('span', { class: 'muted small tv-meta' }, `${plural(its.length, 'ejercicio', 'ejercicios')} · ${humanDuration(its.reduce((n, i) => n + i.seconds, 0))}`));
+      h('h2', { class: 'maker-sec' }, icon(st.icon), SECTION_TITLES[sec], rounds > 1 ? h('span', { class: 'sec-rounds tv-rounds', 'aria-label': `${rounds} vueltas` }, `x${rounds}`) : null),
+      h('span', { class: 'muted small tv-meta' },
+        `${plural(distinct, 'ejercicio', 'ejercicios')}${its.length > distinct ? `, con repeticiones ${its.length}` : ''} - Total ${humanDuration(its.reduce((n, i) => n + i.seconds, 0))}`));
     head.style.setProperty('--sec', st.color);
     const list = h('div', { class: 'tv-list' });
-    its.forEach((it, k) => {
+    let n = 0;
+    // una fila por ejercicio: el tiempo sumado de todas las veces y, si alguna se saltó, cuántas se hicieron
+    const rowFor = (idx: number[]) => {
+      const it = its[idx[0]];
+      const all = idx.map((k) => its[k]);
+      const done = all.filter((x) => x.completed).length;
+      const secs = all.reduce((t, x) => t + x.seconds, 0);
       const ex = app.catalog.get(it.exerciseId);
-      const status = it.completed ? '' : it.seconds > 0 ? 'Saltado a medias' : 'Saltado';
+      const status = done === all.length ? '' : all.length > 1 ? `Hecho ${done} de ${all.length}` : secs > 0 ? 'Saltado a medias' : 'Saltado';
       const img = h('img', { alt: '', class: 'maker-thumb' });
       if (ex) void app.thumbs.get(ex).then((url) => (img.src = url));
-      const row = h(ex ? 'button' : 'div', { class: 'maker-row tv-row hd-tv' + (it.completed ? '' : ' skipped'),
+      const row = h(ex ? 'button' : 'div', { class: 'maker-row tv-row hd-tv' + (done ? '' : ' skipped'),
         ...(ex ? { 'aria-label': `Cómo se hace: ${ex.name}`, onclick: () => app.push(new DetailScreen(app, ex, shown)) } : {}) },
-        h('span', { class: 'tv-n' }, String(k + 1)),
+        h('span', { class: 'tv-n' }, String(++n)),
         img,
         h('span', { class: 'maker-name' },
           h('span', { class: 'maker-title' }, ex?.name ?? 'Ejercicio eliminado'),
           h('span', { class: 'muted small tv-sub' },
             // por repeticiones: las repeticiones y lo que se tardó; por tiempo: lo hecho (y lo previsto, si no se acabó)
             it.reps ? h('span', { class: 'tv-secs' }, icon('swap'), ex?.oneSided ? `${it.reps} por lado` : `${it.reps} reps`) : null,
-            h('span', { class: 'tv-secs' }, icon('clock'), mmss(it.seconds), !it.reps && it.seconds < it.planned ? ` / ${mmss(it.planned)}` : ''),
+            h('span', { class: 'tv-secs' }, icon('clock'), mmss(secs), all.length === 1 && !it.reps && it.seconds < it.planned ? ` / ${mmss(it.planned)}` : ''),
             it.weight ? h('span', { class: 'tv-secs' }, icon('dumbbell'), kg(it.weight)) : null,
             ex?.oneSided ? h('span', { class: 'by-sides' }, icon('sides'), 'por lados') : null),
           status ? h('span', { class: 'muted small hd-status' }, icon('next'), status) : ex ? h('span', { class: 'muted small' }, ex.zone) : null),
         ex ? icon('chevron', 'ico chev') : null);
       row.style.setProperty('--sec', st.color);
-      list.append(row);
-    });
+      return row;
+    };
+    for (const g of groups) {
+      if (g.times === 1) { list.append(rowFor(g.rows[0])); continue; }
+      list.append(h('div', { class: 'free-group' },
+        h('div', { class: 'free-group-head' }, h('div', { class: 'free-group-top' }, h('span', { class: 'free-group-title' }, h('strong', {}, 'Serie')), h('span', { class: 'sec-rounds' }, `x${g.times}`))),
+        ...g.rows.map(rowFor)));
+    }
     this.el.append(
       h('header', { class: 'bar sticky' },
         h('button', { class: 'icon-btn', 'aria-label': 'Volver', onclick: () => app.back() }, icon('back')),

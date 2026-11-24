@@ -4,6 +4,7 @@ Recordatorio: **cuando instales la app de prueba** (el APK de GitHub o la prueba
 Marca cada punto al probarlo. Si algo falla, haz una captura y cuéntamelo.
 
 ## 0e. Para probar en el build 20
+- [ ] Historial agrupat: fes una taula amb un bloc x2 i una sèrie x3 (salta’n algun). A l’Historial, obre l’entrenament i el bloc: «X2» al costat del nom, la sèrie al seu requadre «X3», cada exercici un sol cop amb el temps sumat i «Fet 5 de 6» al que vas saltar. La targeta del bloc diu «N exercicis, amb repeticions M - Total».
 - [ ] Mode clar per defecte: instal·lació nova (o esborrant dades) ha d’entrar en mode clar. En mode clar, al principi de l’entrenament, el botó «Connecta el rellotge» es llegeix bé.
 - [ ] Mida de lletra d’Android: posa la lletra del mòbil al màxim (Ajustos › Pantalla › Mida de la lletra) i obre l’app: s’ha de veure igual que amb la lletra normal (res més gran ni res que se surti, per exemple a Edita la taula).
 - [ ] **Repeticions** (canvi gran, revisar-ho tot):

@@ -1314,4 +1314,5 @@ export const UI_GL: Record<string, string> = {
   "reps": "reps",
   "por lado": "por lado",
   "≈ {a}": "≈ {a}",
+  "Hecho {a} de {b}": "Feito {a} de {b}",
 };
