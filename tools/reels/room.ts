@@ -12,7 +12,7 @@ import type { MannequinScene } from '../../src/figure/Mannequin';
  * qué inclinación (radianes). `near`: cuánto se adelanta el muñeco hacia la cámara (la habitación se ve igual; el
  * muñeco, más grande).
  */
-export const EYE = { target: 82, dist: 760, elev: 0.1, near: 0 };
+export const EYE = { target: 82, dist: 760, elev: 0.1, near: 200 };
 
 const C = {
   wallUp: '#FBFBF9', wallLow: '#BCD0E6', rail: '#C9A27A', base: '#F7F4EE',
@@ -165,9 +165,26 @@ export interface RoomOpts { poster?: string }
 
 export function addRoom(ms: MannequinScene, opts: RoomOpts = {}): void {
   const S = ms.scene, cam = ms.camera;
-  const box = new THREE.Box3().setFromObject(S);
+  // el sitio que ocupa el muñeco con su material a lo largo de todo el movimiento (sin el suelo de sombras): así
+  // queda siempre centrado en la pantalla, haga el ejercicio que haga
+  const box = new THREE.Box3(), part = new THREE.Box3(), size = new THREE.Vector3();
+  for (let t = 0; t <= 4000; t += 250) {
+    ms.update(t, t);
+    S.updateMatrixWorld(true);
+    S.traverse((o) => {
+      const m = o as THREE.Mesh & { isSkinnedMesh?: boolean; computeBoundingBox?: () => void };
+      if (!m.isMesh || !m.visible) return;
+      if (m.isSkinnedMesh) m.computeBoundingBox!();
+      part.makeEmpty().expandByObject(m);
+      if (part.isEmpty() || part.getSize(size).length() > 600) return;
+      box.union(part);
+    });
+  }
   const c = box.getCenter(new THREE.Vector3()).setY(0);
-  const dir = cam.position.clone().sub(c).setY(0).normalize();
+  // hacia dónde mira la cámara del ejercicio (de frente, de lado…): la habitación se pone detrás
+  const look = new THREE.Vector3();
+  cam.getWorldDirection(look);
+  const dir = look.negate().setY(0).normalize();
   const right = new THREE.Vector3().crossVectors(new THREE.Vector3(0, 1, 0), dir).normalize();
   // la cámara, siempre a la misma distancia, altura e inclinación respecto a la habitación
   // el muñeco se adelanta `near` hacia la cámara: la habitación (y la cámara con ella) se echa atrás lo mismo
