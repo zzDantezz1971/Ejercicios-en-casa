@@ -89,3 +89,11 @@
 #stage.ad2:not(.feed) .ad-head .k { font-size: 32px; letter-spacing: .08em; line-height: 1.05; margin-bottom: 14px; }
 #stage.ad2:not(.feed) .ad-head h2 { font-size: 52px; }
 #stage.ad2:not(.feed) .phone { top: 320px; }
+/* anuncio de pago (?v=publi): lo importante entre el 14 % de arriba y el 35 % de abajo (lo demás lo tapa Instagram) */
+#stage.ad .ad-head { top: 150px; left: 34px; }
+#stage.ad .phone { top: 345px; }
+#stage.ad .ad-intro { padding-bottom: 180px; }
+#stage.ad .end { padding-bottom: 230px; }
+#stage.ad .ad-head { top: 140px; }
+#stage.ad .ad-head p { display: none; }
+#stage.ad .phone { top: 245px; }

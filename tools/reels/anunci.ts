@@ -11,7 +11,8 @@ import '@fontsource/barlow-condensed/latin-700.css';
 
 // ── los guiones (?v=anunci, ?v=taules…) ──────────────────────────────────────────
 type Screen = { ms: number; shots: string[]; k: string; h: string; p: string };
-type Video = { intro: string; play: string; screens: Screen[] };
+/** ad: versión para anuncios de pago (textos en la zona segura de Instagram, sin barra de abajo, más corto). */
+type Video = { intro: string; play: string; screens: Screen[]; ad?: boolean; introMs?: number; endMs?: number };
 const VIDEOS: Record<string, Video> = {
   // anuncio general
   anunci: {
@@ -22,6 +23,15 @@ const VIDEOS: Record<string, Video> = {
       { ms: 4500, shots: ['forca'], k: '+200 exercicis', h: 'Amb o sense<br /><em>material</em>', p: 'Tria el que tens a casa: manuelles, pesa russa, bandes, fitball…' },
       { ms: 4500, shots: ['hist'], k: 'Historial', h: 'Cada dia<br /><em>compta</em>', p: 'Calendari, ratxes, temps i calories de cada entrenament.' },
       { ms: 4500, shots: ['med'], k: 'Medalles', h: 'Motivació<br /><em>per seguir</em>', p: '72 medalles per anar guanyant mentre et poses en forma.' },
+    ],
+  },
+  // anuncio de pago (15 s): lo importante dentro de la zona segura de los anuncios de Reels
+  publi: {
+    intro: 'Entrena a casa,<br /><em>en català</em>', play: 'Gratis a Google Play', ad: true, introMs: 1500, endMs: 2600,
+    screens: [
+      { ms: 3800, shots: ['w1', 'w3'], k: 'Entrenament guiat', h: 'Et diu què fer<br /><em>i quan</em>', p: 'Cada exercici en 3D, amb avisos per veu en català.' },
+      { ms: 3300, shots: ['forca'], k: '+200 exercicis', h: 'Amb o sense<br /><em>material</em>', p: 'Manuelles, pesa russa, bandes, fitball…' },
+      { ms: 3300, shots: ['hist'], k: 'Historial', h: 'Cada dia<br /><em>compta</em>', p: 'Ratxes, temps i calories de cada entrenament.' },
     ],
   },
   // los tipos de tablas
@@ -41,9 +51,10 @@ const VIDEOS: Record<string, Video> = {
 const FEED = new URLSearchParams(location.search).get('f') === 'feed';
 if (FEED) document.getElementById('stage')!.classList.add('feed');
 const VIDEO = VIDEOS[new URLSearchParams(location.search).get('v') ?? 'anunci'];
-const INTRO_MS = 2600;
+const INTRO_MS = VIDEO.introMs ?? 2600;
+if (VIDEO.ad) document.getElementById('stage')!.classList.add('ad');
 const SCREENS = VIDEO.screens;
-const END_MS = 2800;
+const END_MS = VIDEO.endMs ?? 2800;
 const total = INTRO_MS + SCREENS.reduce((n, s) => n + s.ms, 0) + END_MS;
 document.querySelector('#intro h2')!.innerHTML = VIDEO.intro;
 document.querySelector('#end .play')!.textContent = VIDEO.play;
@@ -67,7 +78,7 @@ const smooth = (k: number) => { const c = Math.min(1, Math.max(0, k)); return c 
 
 function render(ms: number): void {
   bg.hidden = false;
-  end.hidden = true; brand.hidden = false;
+  end.hidden = true; brand.hidden = !!VIDEO.ad;
   // entrada: logo y «Entrena a casa, en català»
   if (ms < INTRO_MS) {
     phone.hidden = true; head.hidden = true; intro.hidden = false;
@@ -92,7 +103,7 @@ function render(ms: number): void {
   const since = ms - INTRO_MS, up = smooth(since / 700);
   const sway = since / 1000;
   const ry = (FEED ? -18 : -22) + 5 * Math.sin(sway * 0.35), rx = 10 + 2 * Math.sin(sway * 0.27 + 1), rz = 7 + 1.5 * Math.sin(sway * 0.3 + 2);
-  phone.style.transform = `translate(${(FEED ? -4 : 50) + (1 - up) * 40}px, ${(1 - up) * 560}px) perspective(1300px) rotateY(${ry}deg) rotateX(${rx}deg) rotateZ(${rz}deg) scale(${FEED ? 1.06 : 1.06})`;
+  phone.style.transform = `translate(${(FEED ? -4 : 50) + (1 - up) * 40}px, ${(1 - up) * 560}px) perspective(1300px) rotateY(${ry}deg) rotateX(${rx}deg) rotateZ(${rz}deg) scale(${FEED ? 1.06 : VIDEO.ad ? 0.84 : 1.06})`;
   // las capturas: fundido de una a otra (la de antes queda debajo), con un desplazamiento lento hacia arriba
   const per = s.ms / s.shots.length;
   const cur = Math.min(s.shots.length - 1, Math.floor(t / per));
