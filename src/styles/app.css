@@ -41,6 +41,8 @@
 
 * { box-sizing: border-box; }
 html, body { margin: 0; background: var(--bg); color: var(--fg); }
+/* que el navegador no agrande el texto por su cuenta (en la app, el tamaño de letra de Android tampoco cambia nada) */
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 body {
   font: 1rem/1.45 var(--body);
   -webkit-tap-highlight-color: transparent;

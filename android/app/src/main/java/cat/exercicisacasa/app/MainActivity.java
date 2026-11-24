@@ -25,6 +25,9 @@ public class MainActivity extends BridgeActivity {
         registerPlugin(KasaHealthPlugin.class);
         super.onCreate(savedInstanceState);
 
+        // el tamaño de letra de Android no cambia la app: siempre al 100 % (las pantallas están pensadas para ese tamaño)
+        if (getBridge() != null && getBridge().getWebView() != null) getBridge().getWebView().getSettings().setTextZoom(100);
+
         WindowInsetsControllerCompat bars = WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
         bars.setAppearanceLightStatusBars(false);
         bars.setAppearanceLightNavigationBars(false);
