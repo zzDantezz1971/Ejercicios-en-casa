@@ -8,6 +8,8 @@ import '@fontsource/barlow/latin-600.css';
 import '@fontsource/barlow-condensed/latin-700.css';
 import * as THREE from 'three';
 import { MannequinScene } from '../../src/figure/Mannequin';
+import { Motion } from '../../src/figure/poses';
+import { CATALOG } from '../../src/data/catalog';
 import { setLook } from '../../src/figure/look';
 import type { MotionSpec } from '../../src/domain/types';
 import { roomRig } from './room';
@@ -25,24 +27,28 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 const T = {
   walkEnd: 2300, // entra caminando de perfil hasta casi el centro
   turnEnd: 3000, // se gira hacia la cámara
-  nearEnd: 4300, // se acerca a la cámara
-  waveEnd: 6900, // saluda
-  talkEnd: 12600, // habla
-  flexEnd: 15000, // saca bíceps
-  end: 17600, // pantalla final
+  nearEnd: 4700, // se acerca a la cámara (de pecho hacia arriba)
+  waveEnd: 7000, // saluda
+  talkEnd: 12300, // habla
+  backEnd: 13500, // da unos pasos atrás
+  jackEnd: 16100, // saltos de tijera
+  hiEnd: 18200, // «Som-hi?» sacando bíceps
+  end: 20800, // pantalla final
 };
-const START_X = -175, MID_X = -15, NEAR_Z = 380;
+const START_X = -175, MID_X = -15, NEAR_Z = 520, NEAR_X = 0, BACK_Z = 190;
 const BUBBLES: Array<{ from: number; to: number; text: string }> = [
-  { from: 4500, to: 6900, text: 'Hola! Sóc en Fit <span class="em">👋</span>' },
-  { from: 7000, to: 8900, text: 'A partir d’ara entrenarem junts' },
-  { from: 8950, to: 10750, text: 'A casa i en català' },
-  { from: 10800, to: 12600, text: 'Només uns minuts al dia' },
-  { from: 12700, to: 15000, text: 'Som-hi? <span class="em">💪</span>' },
+  { from: 4900, to: 7000, text: 'Hola! Sóc en Fit <span class="em">👋</span>' },
+  { from: 7100, to: 8800, text: 'A partir d’ara entrenarem junts' },
+  { from: 8850, to: 10550, text: 'A casa i en català' },
+  { from: 10600, to: 12300, text: 'Només uns minuts al dia' },
+  { from: 16200, to: 18200, text: 'Som-hi? <span class="em">💪</span>' },
 ];
 
 // ── posturas (vista de frente; ángulos como en la app: 90 = hacia abajo, -90 = hacia arriba) ──
 type P = Record<string, number>;
-const NEUTRAL: P = { uaL: 97, faL: 94, uaR: 83, faR: 86, zHL: 0, zHR: 0, zEL: 0, zER: 0, zKL: 0, zKR: 0, zAL: 0, zAR: 0, jy: 0, hd: -90, lean: 0 };
+/** La postura de pie de la app (con todos los valores), con los brazos relajados. */
+const BASE: P = new Motion({ v: 'front', f: [[{}]] } as MotionSpec).poseAt(0);
+const NEUTRAL: P = { ...BASE, uaL: 97, faL: 94, uaR: 83, faR: 86, zHL: 0, zHR: 0, zEL: 0, zER: 0, zKL: 0, zKR: 0, zAL: 0, zAR: 0, jy: 0, hd: -90, lean: 0 };
 const mix = (a: P, b: P, k: number): P => {
   const o: P = {};
   for (const key of new Set([...Object.keys(a), ...Object.keys(b)])) {
@@ -52,6 +58,8 @@ const mix = (a: P, b: P, k: number): P => {
   return o;
 };
 const smooth = (k: number) => { const c = Math.min(1, Math.max(0, k)); return c * c * (3 - 2 * c); };
+/** Los saltos de tijera de la app (el mismo movimiento que en el ejercicio). */
+const JACKS = new Motion(CATALOG.get('saltos-de-tijera-jumping-jacks')!.motion);
 
 /** Caminar (las piernas y los brazos van y vienen hacia delante y hacia atrás). */
 function walk(ms: number, amount = 1): P {
@@ -89,7 +97,13 @@ function poseAt(ms: number): P {
   if (ms < T.nearEnd) return walk(ms, 1 - smooth((ms - (T.nearEnd - 300)) / 300));
   if (ms < T.waveEnd) return mix(NEUTRAL, wave(ms), smooth((ms - T.nearEnd) / 350) * (1 - smooth((ms - (T.waveEnd - 300)) / 300)));
   if (ms < T.talkEnd) return mix(NEUTRAL, talk(ms), smooth((ms - T.waveEnd) / 350) * (1 - smooth((ms - (T.talkEnd - 250)) / 250)));
-  return mix(NEUTRAL, flex(ms), smooth((ms - T.talkEnd) / 400));
+  // pasos atrás (las piernas al revés que al avanzar)
+  if (ms < T.backEnd) return walk(-ms, smooth((ms - T.talkEnd) / 200) * (1 - smooth((ms - (T.backEnd - 250)) / 250)));
+  if (ms < T.jackEnd) {
+    const j = JACKS.poseAt(ms - T.backEnd);
+    return mix(NEUTRAL, j, smooth((ms - T.backEnd) / 250) * (1 - smooth((ms - (T.jackEnd - 250)) / 250)));
+  }
+  return mix(NEUTRAL, flex(ms), smooth((ms - T.jackEnd) / 350));
 }
 
 /** Dónde está Fit en la habitación (x, z) y hacia dónde mira (grados: 90 = a la derecha, 0 = a la cámara). */
@@ -100,8 +114,10 @@ function pathAt(ms: number): { x: number; z: number; facing: number } {
     // sigue avanzando un poquito mientras se gira
     return { x: MID_X + 15 * k, z: 0, facing: 90 * (1 - k) };
   }
-  if (ms < T.nearEnd) return { x: 0, z: NEAR_Z * smooth((ms - T.turnEnd) / (T.nearEnd - T.turnEnd)), facing: 0 };
-  return { x: 0, z: NEAR_Z, facing: 0 };
+  if (ms < T.nearEnd) { const k = smooth((ms - T.turnEnd) / (T.nearEnd - T.turnEnd)); return { x: NEAR_X * k, z: NEAR_Z * k, facing: 0 }; }
+  if (ms < T.talkEnd) return { x: NEAR_X, z: NEAR_Z, facing: 0 };
+  if (ms < T.backEnd) { const k = smooth((ms - T.talkEnd) / (T.backEnd - T.talkEnd)); return { x: NEAR_X * (1 - k), z: NEAR_Z + (BACK_Z - NEAR_Z) * k, facing: 0 }; }
+  return { x: 0, z: BACK_Z, facing: 0 };
 }
 
 // ── la escena ──────────────────────────────────────────────────────────────────
@@ -115,9 +131,9 @@ const bubble = document.getElementById('bubble')!, end = document.getElementById
 const head = new THREE.Vector3();
 
 function render(t: number): void {
-  if (t >= T.flexEnd) {
+  if (t >= T.hiEnd) {
     end.hidden = false; brand.hidden = true; bubble.hidden = true;
-    (end.firstElementChild as HTMLElement).style.transform = `scale(${0.9 + 0.1 * Math.min(1, (t - T.flexEnd) / 400)})`;
+    (end.firstElementChild as HTMLElement).style.transform = `scale(${0.9 + 0.1 * Math.min(1, (t - T.hiEnd) / 400)})`;
     return;
   }
   end.hidden = true; brand.hidden = false;
@@ -129,16 +145,26 @@ function render(t: number): void {
   ms.mood = speaking && Math.floor(t / 110) % 2 === 0 ? 'effort' : 'happy';
   ms.update(t, t);
   renderer.render(ms.scene, ms.camera);
-  // bocadillo al lado de la cabeza (a la izquierda, con la punta hacia ella)
+  // bocadillo encima de la cabeza, con la punta hacia Fit
   if (b) {
     bubble.hidden = false;
     if (bubble.dataset.text !== b.text) { bubble.innerHTML = b.text; bubble.dataset.text = b.text; }
-    head.set(0, 168, 0).project(ms.camera);
-    const hx = (head.x + 1) * 270, hy = (1 - head.y) * 480;
-    const w = bubble.offsetWidth, h = bubble.offsetHeight;
-    const left = Math.max(16, Math.min(540 - 16 - w, hx - w - 18));
+    const scr = (v: THREE.Vector3) => { v.project(ms.camera); return { x: (v.x + 1) * 270, y: (1 - v.y) * 480 }; };
+    // la cabeza del muñeco en la pantalla, donde esté en este instante
+    const parts = (ms as unknown as { parts: Record<string, THREE.Object3D> }).parts;
+    const hb = new THREE.Box3().setFromObject(parts.head);
+    let x0 = Infinity, x1 = -Infinity, top = Infinity;
+    for (let k = 0; k < 8; k++) {
+      const c = scr(head.set(k & 1 ? hb.max.x : hb.min.x, k & 2 ? hb.max.y : hb.min.y, k & 4 ? hb.max.z : hb.min.z));
+      x0 = Math.min(x0, c.x); x1 = Math.max(x1, c.x); top = Math.min(top, c.y);
+    }
+    const hx = (x0 + x1) / 2;
+    const w = bubble.offsetWidth, h = bubble.offsetHeight, TAIL = 26;
+    const left = Math.max(14, Math.min(540 - 14 - w, hx - w / 2));
     bubble.style.left = `${left}px`;
-    bubble.style.top = `${Math.max(16, hy - h - 34)}px`;
+    bubble.style.top = `${Math.max(14, top - h - TAIL - 8)}px`;
+    // la punta, apuntando a la cabeza
+    bubble.style.setProperty('--tx', `${Math.max(18, Math.min(w - 40, hx - left - 11))}px`);
     const k = smooth((t - b.from) / 220) * (1 - smooth((t - (b.to - 160)) / 160));
     bubble.style.opacity = String(k);
     bubble.style.transform = `scale(${0.7 + 0.3 * k})`;

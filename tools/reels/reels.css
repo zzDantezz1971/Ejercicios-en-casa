@@ -20,12 +20,10 @@
   #stage.ex-top .exname { bottom: auto; top: 14px; left: 50%; transform: translateX(-50%); }
 
 /* Vídeo de presentación (hola.html): bocadillo de cómic junto a la cabeza de Fit */
-.bubble { position: absolute; max-width: 250px; background: #fff; color: #1B2130; border: 3px solid #1B2130; border-radius: 22px; padding: 12px 16px 10px; font: 700 30px/1.05 "Barlow Condensed", sans-serif; text-transform: uppercase; letter-spacing: .01em; box-shadow: 0 8px 22px rgb(0 0 0 / .18); transform-origin: var(--ox, 100%) 100%; }
-.bubble::after, .bubble::before { content: ""; position: absolute; bottom: -22px; width: 0; height: 0; border: 12px solid transparent; }
-.bubble::before { right: 26px; border-top: 22px solid #1B2130; border-right-width: 0; }
-.bubble::after { right: 29px; bottom: -16px; border: 9px solid transparent; border-top: 17px solid #fff; border-right-width: 0; }
-.bubble.left::before { right: auto; left: 26px; border-right-width: 12px; border-left-width: 0; }
-.bubble.left::after { right: auto; left: 29px; border-right-width: 9px; border-left-width: 0; }
+.bubble { position: absolute; box-sizing: border-box; max-width: 230px; background: #fff; color: #1B2130; border: 3px solid #1B2130; border-radius: 22px; padding: 12px 16px 10px; font: 700 30px/1.05 "Barlow Condensed", sans-serif; text-transform: uppercase; letter-spacing: .01em; box-shadow: 0 8px 22px rgb(0 0 0 / .18); transform-origin: 50% 100%; }
+/* la punta sale por abajo y apunta a la cabeza de Fit (--tx = dónde, desde la izquierda) */
+.bubble::before, .bubble::after { content: ""; position: absolute; top: 100%; left: var(--tx, 50%); width: 26px; height: 26px; background: #1B2130; clip-path: polygon(0 0, 100% 0, 35% 100%); }
+.bubble::after { background: #fff; width: 18px; height: 17px; left: calc(var(--tx, 50%) + 4px); top: calc(100% - 3px); clip-path: polygon(0 0, 100% 0, 30% 100%); }
 .bubble .em { font-family: "Noto Color Emoji", sans-serif; text-transform: none; }
 .hola-name { position: absolute; left: 24px; bottom: 112px; font: 700 20px/1 "Barlow Condensed", sans-serif; text-transform: uppercase; letter-spacing: .03em; color: #fff; background: rgb(27 33 48 / .82); padding: 7px 14px 6px 12px; border-radius: 14px; }
 .hola-name::before { content: "▶"; color: #F2A516; font-size: 13px; margin-right: 7px; vertical-align: 2px; }
