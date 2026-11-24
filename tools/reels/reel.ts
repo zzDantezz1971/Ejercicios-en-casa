@@ -11,8 +11,12 @@ import { CATALOG } from '../../src/data/catalog';
 import { MannequinScene } from '../../src/figure/Mannequin';
 import { setLook } from '../../src/figure/look';
 import { REELS, type Clip } from './scripts';
-import { addRoom } from './room';
+import { addRoom, EYE } from './room';
 
+// ?dist=600&alto=80: probar otra distancia o altura de la cámara
+const qs = new URLSearchParams(location.search);
+if (qs.get('dist')) EYE.dist = Number(qs.get('dist'));
+if (qs.get('alto')) EYE.target = Number(qs.get('alto'));
 const reel = REELS[new URLSearchParams(location.search).get('r') ?? 'presentacio'];
 // muñeco de Kasa Fit: con pelo corto y la camiseta azul de la app
 // el muñeco de estos primeros vídeos (el mismo que lleva David en la app)
