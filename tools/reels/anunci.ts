@@ -1,5 +1,5 @@
 /*
- * Anuncio de Kasa Fit para Instagram (unos 28 s, vertical), sin Fit: una entrada con el logo y, después, un móvil
+ * Vídeos de Kasa Fit para Instagram (vertical), sin Fit (?v=anunci, ?v=taules…): una entrada con el logo y, después, un móvil
  * inclinado (en 3D, moviéndose despacio) con la app de verdad en modo oscuro. Cada pantalla tiene su titular y una
  * frase que explica qué hace. Acaba con la pantalla final azul «Gratis a Google Play».
  * Las capturas están en tools/reels/assets (app-*.jpg, hechas con tools/play/demo-data.ts en modo oscuro).
@@ -9,18 +9,41 @@ import '@fontsource/barlow/latin-500.css';
 import '@fontsource/barlow/latin-600.css';
 import '@fontsource/barlow-condensed/latin-700.css';
 
-// ── el guion ──────────────────────────────────────────────────────────────────
+// ── los guiones (?v=anunci, ?v=taules…) ──────────────────────────────────────────
 type Screen = { ms: number; shots: string[]; k: string; h: string; p: string };
+type Video = { intro: string; play: string; screens: Screen[] };
+const VIDEOS: Record<string, Video> = {
+  // anuncio general
+  anunci: {
+    intro: 'Entrena a casa,<br /><em>en català</em>', play: 'Gratis a Google Play',
+    screens: [
+      { ms: 4500, shots: ['home'], k: 'La teva taula', h: 'Tot a punt<br /><em>en un toc</em>', p: 'Obre l’app, prem «Comença» i a entrenar. Sense pensar què toca avui.' },
+      { ms: 5000, shots: ['w1', 'w3'], k: 'Entrenament guiat', h: 'Et diu què fer<br /><em>i quan</em>', p: 'Cada exercici en 3D, amb compte enrere i avisos per veu en català.' },
+      { ms: 4500, shots: ['forca'], k: '+200 exercicis', h: 'Amb o sense<br /><em>material</em>', p: 'Tria el que tens a casa: manuelles, pesa russa, bandes, fitball…' },
+      { ms: 4500, shots: ['hist'], k: 'Historial', h: 'Cada dia<br /><em>compta</em>', p: 'Calendari, ratxes, temps i calories de cada entrenament.' },
+      { ms: 4500, shots: ['med'], k: 'Medalles', h: 'Motivació<br /><em>per seguir</em>', p: '72 medalles per anar guanyant mentre et poses en forma.' },
+    ],
+  },
+  // los tipos de tablas
+  taules: {
+    intro: 'Com vols<br /><em>la teva taula?</em>', play: 'Gratis a Google Play',
+    screens: [
+      { ms: 4300, shots: ['t-sheet'], k: 'Nova taula', h: 'Tria com<br /><em>la vols fer</em>', p: 'Cinc maneres de crear una taula, segons el temps i les ganes que tinguis.' },
+      { ms: 4800, shots: ['t-buida-pick'], k: '1 · Taula buida', h: 'Tria tu<br /><em>cada exercici</em>', p: 'Bloc a bloc: escalfament, força, abdominals i estiraments. Per temps o per repeticions.' },
+      { ms: 5600, shots: ['t-lliure-pick', 't-lliure-res'], k: '2 · Taula lliure', h: 'Qualsevol exercici,<br /><em>en qualsevol ordre</em>', p: 'Sense blocs: barreja exercicis, fes sèries amb voltes i afegeix descansos.' },
+      { ms: 5600, shots: ['t-crea-q', 't-crea-res'], k: '3 · Crea-la per mi', h: 'Digues què vols<br /><em>i la fa l’app</em>', p: 'Objectiu, zona, temps i nivell. Si no t’agrada, demana una altra proposta.' },
+      { ms: 5600, shots: ['t-fetes-list', 't-fetes-one'], k: '4 · Taules fetes', h: 'Preparades<br /><em>per començar</em>', p: 'Esquena sana, pilates, cardio, força… Tria’n una i fes-la servir.' },
+      { ms: 5600, shots: ['t-pla-days', 't-pla-res'], k: '5 · Pla setmanal', h: 'Una taula<br /><em>per a cada dia</em>', p: 'Tria els dies que entrenes i l’app reparteix les zones perquè descansin.' },
+    ],
+  },
+};
+const VIDEO = VIDEOS[new URLSearchParams(location.search).get('v') ?? 'anunci'];
 const INTRO_MS = 2600;
-const SCREENS: Screen[] = [
-  { ms: 4500, shots: ['home'], k: 'La teva taula', h: 'Tot a punt<br /><em>en un toc</em>', p: 'Obre l’app, prem «Comença» i a entrenar. Sense pensar què toca avui.' },
-  { ms: 5000, shots: ['w1', 'w3'], k: 'Entrenament guiat', h: 'Et diu què fer<br /><em>i quan</em>', p: 'Cada exercici en 3D, amb compte enrere i avisos per veu en català.' },
-  { ms: 4500, shots: ['forca'], k: '+200 exercicis', h: 'Amb o sense<br /><em>material</em>', p: 'Tria el que tens a casa: manuelles, pesa russa, bandes, fitball…' },
-  { ms: 4500, shots: ['hist'], k: 'Historial', h: 'Cada dia<br /><em>compta</em>', p: 'Calendari, ratxes, temps i calories de cada entrenament.' },
-  { ms: 4500, shots: ['med'], k: 'Medalles', h: 'Motivació<br /><em>per seguir</em>', p: '72 medalles per anar guanyant mentre et poses en forma.' },
-];
+const SCREENS = VIDEO.screens;
 const END_MS = 2800;
 const total = INTRO_MS + SCREENS.reduce((n, s) => n + s.ms, 0) + END_MS;
+document.querySelector('#intro h2')!.innerHTML = VIDEO.intro;
+document.querySelector('#end .play')!.textContent = VIDEO.play;
 
 // ── capturas de la app ─────────────────────────────────────────────────────────
 const scr = document.getElementById('scr')!;
