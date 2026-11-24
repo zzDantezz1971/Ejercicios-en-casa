@@ -32,3 +32,19 @@
 .bubble .em { font-family: "Noto Color Emoji", sans-serif; text-transform: none; }
 .hola-name { position: absolute; left: 24px; bottom: 112px; font: 700 20px/1 "Barlow Condensed", sans-serif; text-transform: uppercase; letter-spacing: .03em; color: #fff; background: rgb(27 33 48 / .82); padding: 7px 14px 6px 12px; border-radius: 14px; }
 .hola-name::before { content: "▶"; color: #F2A516; font-size: 13px; margin-right: 7px; vertical-align: 2px; }
+
+/* Anuncio (anunci.html): fondo azul noche, móvil con capturas de la app y titulares grandes */
+.ad-bg { position: absolute; inset: 0; background: radial-gradient(circle at 76% 15%, rgb(40 62 150 / .55) 0%, rgb(40 62 150 / 0) 42%), linear-gradient(180deg, #1A285C 0%, #121C42 38%, #0A0F1E 62%, #080B12 100%); }
+.ad-head { position: absolute; left: 28px; right: 28px; top: 58px; text-align: center; color: #fff; }
+.ad-head .k { display: inline-block; font: 700 18px/1 "Barlow Condensed", sans-serif; letter-spacing: .14em; text-transform: uppercase; color: #F2B53E; margin-bottom: 12px; }
+.ad-head h2 { margin: 0; font: 700 50px/1 "Barlow Condensed", sans-serif; text-transform: uppercase; letter-spacing: .01em; }
+.ad-head h2 em { font-style: normal; color: #6E93FF; }
+.ad-head p { margin: 12px 0 0; font: 500 21px/1.25 "Barlow", sans-serif; color: #CDD5E6; }
+.phone { position: absolute; left: 50%; top: 238px; width: 276px; height: 597px; margin-left: -138px; border-radius: 44px; background: #05070C; padding: 11px; box-sizing: border-box; box-shadow: 0 0 0 2px #2A3554, 0 30px 70px rgb(0 0 0 / .6), 0 0 90px rgb(61 107 245 / .25); }
+.phone .scr { position: relative; width: 100%; height: 100%; border-radius: 34px; overflow: hidden; background: #0B0F19; }
+.phone .scr img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; }
+.phone::after { content: ""; position: absolute; top: 20px; left: 50%; width: 86px; height: 22px; margin-left: -43px; border-radius: 12px; background: #05070C; }
+.ad-hook { position: absolute; left: 24px; right: 24px; top: 70px; text-align: center; }
+.ad-hook span { display: inline-block; background: #0E1428; color: #fff; font: 700 46px/1.02 "Barlow Condensed", sans-serif; text-transform: uppercase; padding: 12px 18px 9px; border-radius: 14px; box-shadow: 0 10px 30px rgb(0 0 0 / .3); }
+.ad-hook span + span { margin-top: 8px; background: #3D6BF5; font-size: 30px; }
+.ad-tag { position: absolute; left: 50%; transform: translateX(-50%); bottom: 112px; white-space: nowrap; background: #F2B53E; color: #141414; font: 700 22px/1 "Barlow Condensed", sans-serif; text-transform: uppercase; letter-spacing: .03em; padding: 9px 16px 8px; border-radius: 999px; box-shadow: 0 8px 22px rgb(0 0 0 / .3); }

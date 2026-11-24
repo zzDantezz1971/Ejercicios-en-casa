@@ -11,7 +11,7 @@ const out = process.argv[3] || path.join(__dirname, 'out');
   const b = await chromium.launch({ args: ['--use-gl=swiftshader', '--enable-webgl', '--ignore-gpu-blocklist'] });
   const p = await b.newPage({ viewport: { width: 540, height: 960 }, deviceScaleFactor: 2 });
   p.on('pageerror', (e) => console.log('ERR', e.message));
-  await p.goto(name === 'hola' ? 'http://127.0.0.1:5174/tools/reels/hola.html' : `http://127.0.0.1:5174/tools/reels/reel.html?r=${name}`);
+  await p.goto(name === 'hola' || name === 'anunci' ? `http://127.0.0.1:5174/tools/reels/${name}.html` : `http://127.0.0.1:5174/tools/reels/reel.html?r=${name}`);
   await p.waitForFunction(() => window.__reel);
   await p.evaluate(() => window.__reel.ready);
   const total = await p.evaluate(() => window.__reel.total);
