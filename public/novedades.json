@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-24T14:16:17Z",
+    "es": "La app empieza en modo claro (quien ya había elegido oscuro lo mantiene; se cambia en Ajustes › Pantalla). Y en modo claro, el botón «Conectar reloj» del entrenamiento ya se lee bien.",
+    "ca": "L’app comença en mode clar (qui ja havia triat fosc el manté; es canvia a Configuració › Pantalla). I en mode clar, el botó «Connecta el rellotge» de l’entrenament ja es llegeix bé.",
+    "en": "The app now starts in light mode (anyone who chose dark keeps it; change it in Settings › Display). And in light mode, the workout’s “Connect watch” button is now easy to read."
+  },
+  {
     "fecha": "2026-11-24T14:02:44Z",
     "es": "Editar tabla: la línea de «Tiempo | Reps», el contador y los kg va alineada a la derecha, con kg o sin ellos.",
     "ca": "Edita la taula: la línia de «Temps | Reps», el comptador i els kg va alineada a la dreta, amb kg o sense.",

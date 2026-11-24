@@ -810,7 +810,7 @@ export class Store {
     // antes eran frases propias; ahora solo se elige si se muestran
     settings.phrases = typeof known.phrases === 'boolean' ? known.phrases : true;
     if (!['ca', 'es', 'en', 'gl', 'eu'].includes(settings.lang)) settings.lang = 'ca';
-    if (!['dark', 'light', 'auto'].includes(settings.theme)) settings.theme = 'dark';
+    if (!['dark', 'light', 'auto'].includes(settings.theme)) settings.theme = 'light';
     // el tamaño de la letra se quitó (solo hay uno)
     delete (settings as { fontSize?: unknown }).fontSize;
     if (typeof settings.askMusic !== 'boolean') settings.askMusic = true;

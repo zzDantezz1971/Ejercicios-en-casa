@@ -1998,3 +1998,7 @@ button.plan-row { cursor: pointer; }
 .maker-row.mr-grid > .mr-ctrls { flex-wrap: nowrap; }
 /* (v4) la línea de tiempo/reps y kg, alineada a la derecha (con kg o sin ellos) */
 .maker-row.mr-grid > .mr-ctrls { justify-content: flex-end; }
+/* modo claro: el botón del reloj (pulsaciones) sobre el muñeco, claro y legible */
+:root[data-theme="light"] .hr-chip { background: rgb(255 255 255 / .9); border-color: var(--line); color: var(--fg); box-shadow: 0 1px 4px rgb(16 24 40 / .12); }
+:root[data-theme="light"] .hr-chip.off, :root[data-theme="light"] .hr-chip.connecting, :root[data-theme="light"] .hr-chip.lost { opacity: 1; }
+:root[data-theme="light"] .hr-chip span { color: #4A5568; }

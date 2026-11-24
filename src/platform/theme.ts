@@ -21,7 +21,7 @@ export const COLOR_INFO: Record<ColorTheme, { name: string; swatch: [string, str
 /** Temas gratis; los demás, con Prémium (sin él se ve el azul). */
 export const FREE_COLORS: ReadonlySet<ColorTheme> = new Set<ColorTheme>(['blau', 'verd']);
 
-let pref: ThemePref = 'dark';
+let pref: ThemePref = 'light';
 let color: ColorTheme = 'blau';
 /** ¿Tiene Prémium? (lo conecta la app; al arrancar, antes de saberlo, se deja ver el tema guardado). */
 let premium: () => boolean = () => true;
@@ -64,10 +64,11 @@ export function applySavedTheme(): void {
   try {
     const s = JSON.parse(localStorage.getItem('ejercicios-en-casa') ?? '{}')?.settings;
     const t = s?.theme;
-    pref = t === 'light' || t === 'auto' ? t : 'dark';
+    // de entrada, claro (quien ya eligió oscuro lo tiene guardado)
+    pref = t === 'dark' || t === 'auto' ? t : 'light';
     applyColor(s?.colorTheme);
   } catch {
-    pref = 'dark';
+    pref = 'light';
     applyColor('blau');
   }
 }

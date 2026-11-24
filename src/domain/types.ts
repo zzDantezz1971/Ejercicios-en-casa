@@ -300,7 +300,7 @@ export const DEFAULT_SETTINGS: Settings = {
   askMusic: true,
   profile: { age: null, height: null, sex: 'h' },
   lang: 'ca',
-  theme: 'dark',
+  theme: 'light',
   figureStyle: 'pieces',
   equipment: [],
   weekGoals: { minutes: 150, kcal: null },

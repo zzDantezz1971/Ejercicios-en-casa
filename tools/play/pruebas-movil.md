@@ -4,6 +4,7 @@ Recordatorio: **cuando instales la app de prueba** (el APK de GitHub o la prueba
 Marca cada punto al probarlo. Si algo falla, haz una captura y cuéntamelo.
 
 ## 0e. Para probar en el build 20
+- [ ] Mode clar per defecte: instal·lació nova (o esborrant dades) ha d’entrar en mode clar. En mode clar, al principi de l’entrenament, el botó «Connecta el rellotge» es llegeix bé.
 - [ ] Mida de lletra d’Android: posa la lletra del mòbil al màxim (Ajustos › Pantalla › Mida de la lletra) i obre l’app: s’ha de veure igual que amb la lletra normal (res més gran ni res que se surti, per exemple a Edita la taula).
 - [ ] **Repeticions** (canvi gran, revisar-ho tot):
   - [ ] Edita una taula › un bloc: a cada exercici, «Temps | Reps». Passa’n un a «Reps» (surt 12 reps; − + d’un en un). En un per costats surt «12 x costat». Planxa frontal, planxa lateral, esquat a la paret, barqueta i tots els estiraments: només temps (sense el selector).
