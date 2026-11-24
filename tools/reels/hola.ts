@@ -1,6 +1,7 @@
 /*
- * Vídeo de presentación: Fit entra caminando por un lado de la habitación, se gira, se acerca a la cámara, saluda y
- * «habla» con bocadillos de cómic (sin voz). Acaba sacando bíceps y con la pantalla final.
+ * Vídeo de presentación: Fit, quieto en el centro de la habitación. La cámara empieza de cerca (de pecho para arriba):
+ * saluda y «habla» con bocadillos de cómic (sin voz) mientras la cámara se aleja hasta enseñar la habitación entera;
+ * entonces hace unos curls con mancuernas y acaba sacando bíceps: «Som-hi?».
  * Se graba igual que los otros: node tools/reels/record.cjs hola <carpeta>.
  */
 import '@fontsource/barlow/latin-500.css';
@@ -9,10 +10,9 @@ import '@fontsource/barlow-condensed/latin-700.css';
 import * as THREE from 'three';
 import { MannequinScene } from '../../src/figure/Mannequin';
 import { Motion } from '../../src/figure/poses';
-import { CATALOG } from '../../src/data/catalog';
 import { setLook } from '../../src/figure/look';
 import type { MotionSpec } from '../../src/domain/types';
-import { roomRig } from './room';
+import { EYE, roomRig } from './room';
 
 setLook({ skin: '#C68B62', shirt: '#2F5BEA', shorts: '#7A1F2B', shoe: '#E5484D', glasses: 'sun', beard: 'stubble', hair: 'none', top: 'tank', bottom: 'leggings' }, () => true);
 
@@ -25,30 +25,30 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
 // ── el guion (ms) ──────────────────────────────────────────────────────────────
 const T = {
-  walkEnd: 2300, // entra caminando de perfil hasta casi el centro
-  turnEnd: 3000, // se gira hacia la cámara
-  nearEnd: 4700, // se acerca a la cámara (de pecho hacia arriba)
-  waveEnd: 7000, // saluda
-  talkEnd: 12300, // habla
-  backEnd: 13500, // da unos pasos atrás
-  jackEnd: 16100, // saltos de tijera
-  hiEnd: 18200, // «Som-hi?» sacando bíceps
-  end: 20800, // pantalla final
+  waveEnd: 2600, // saluda (cámara de cerca)
+  dbOn: 3000, // ya con las manos fuera de la imagen: aparecen las mancuernas
+  zoomFrom: 2900, // la cámara empieza a alejarse…
+  zoomTo: 8000, // …hasta enseñar la habitación entera
+  curlFrom: 8200, // curls
+  curlTo: 11900,
+  hiEnd: 14200, // «Som-hi?» sacando bíceps
+  end: 16800, // pantalla final
 };
-const START_X = -175, MID_X = -15, NEAR_Z = 520, NEAR_X = 0, BACK_Z = 190;
+/** Dónde está Fit en la habitación (hacia la cámara desde el sitio de siempre): de cuerpo entero con la cámara lejos. */
+const FIG_Z = 190;
 const BUBBLES: Array<{ from: number; to: number; text: string }> = [
-  { from: 4900, to: 7000, text: 'Hola! Sóc en Fit <span class="em">👋</span>' },
-  { from: 7100, to: 8800, text: 'A partir d’ara entrenarem junts' },
-  { from: 8850, to: 10550, text: 'A casa i en català' },
-  { from: 10600, to: 12300, text: 'Només uns minuts al dia' },
-  { from: 16200, to: 18200, text: 'Som-hi? <span class="em">💪</span>' },
+  { from: 300, to: 2600, text: 'Hola! Sóc en Fit <span class="em">👋</span>' },
+  { from: 2750, to: 4450, text: 'A partir d’ara entrenarem junts' },
+  { from: 4500, to: 6200, text: 'A casa i en català' },
+  { from: 6250, to: 7950, text: 'Només uns minuts al dia' },
+  { from: 12050, to: 14200, text: 'Som-hi? <span class="em">💪</span>' },
 ];
 
 // ── posturas (vista de frente; ángulos como en la app: 90 = hacia abajo, -90 = hacia arriba) ──
 type P = Record<string, number>;
 /** La postura de pie de la app (con todos los valores), con los brazos relajados. */
 const BASE: P = new Motion({ v: 'front', f: [[{}]] } as MotionSpec).poseAt(0);
-const NEUTRAL: P = { ...BASE, uaL: 97, faL: 94, uaR: 83, faR: 86, zHL: 0, zHR: 0, zEL: 0, zER: 0, zKL: 0, zKR: 0, zAL: 0, zAR: 0, jy: 0, hd: -90, lean: 0 };
+const NEUTRAL: P = { ...BASE, uaL: 97, faL: 94, uaR: 83, faR: 86, sfL: 1, sfR: 1, zHL: 0, zHR: 0, zEL: 0, zER: 0, jy: 0, hd: -90, lean: 0 };
 const mix = (a: P, b: P, k: number): P => {
   const o: P = {};
   for (const key of new Set([...Object.keys(a), ...Object.keys(b)])) {
@@ -58,90 +58,69 @@ const mix = (a: P, b: P, k: number): P => {
   return o;
 };
 const smooth = (k: number) => { const c = Math.min(1, Math.max(0, k)); return c * c * (3 - 2 * c); };
-/** Los saltos de tijera de la app (el mismo movimiento que en el ejercicio). */
-const JACKS = new Motion(CATALOG.get('saltos-de-tijera-jumping-jacks')!.motion);
 
-/**
- * Caminar: cada pierna va adelante y atrás y, al pasar por delante (sin apoyar), dobla la rodilla y levanta el pie;
- * los brazos, al revés que las piernas. De frente, lo que va hacia delante es profundidad (hacia la cámara).
- */
-function walk(ms: number, amount = 1): P {
-  const ph = (ms / 900) * Math.PI * 2;
-  const TH = 34, SH = 33, rad = Math.PI / 180;
-  const depth = (scale: number, len: number) => len * Math.sqrt(Math.max(0, 1 - scale * scale));
-  const leg = (phase: number): P => {
-    const a = 24 * Math.sin(phase) * amount * rad; // muslo hacia delante (+) o hacia atrás (-)
-    // la rodilla se dobla sobre todo mientras la pierna pasa por delante sin apoyar; un poco al apoyar
-    const k = (8 + 52 * Math.pow(Math.max(0, Math.cos(phase)), 1.6)) * amount * rad;
-    const sTh = Math.cos(a), sSh = Math.cos(a - k);
-    const dk = depth(sTh, TH), ds = depth(sSh, SH);
-    const zK = TH * Math.sin(a) - dk;
-    const zA = TH * Math.sin(a) + SH * Math.sin(a - k) - dk - ds;
-    return { sTh, sSh, zK, zA };
-  };
-  const L = leg(ph), R = leg(ph + Math.PI), sw = Math.sin(ph) * amount;
-  return {
-    ...NEUTRAL,
-    sThL: L.sTh, sShL: L.sSh, zKL: L.zK, zAL: L.zA,
-    sThR: R.sTh, sShR: R.sSh, zKR: R.zK, zAR: R.zA,
-    zHL: -13 * sw, zEL: -5 * sw, zHR: 13 * sw, zER: 5 * sw,
-  };
-}
 /** Saludar con la mano derecha (la del lado derecho de la pantalla). */
 function wave(ms: number): P {
   return { ...NEUTRAL, uaR: -25, faR: -85 + 20 * Math.sin((ms / 520) * Math.PI * 2), zHR: 6 };
 }
-/** Hablar: las manos abiertas a los lados, un poco hacia delante, moviéndose como al explicar algo; la cabeza se inclina a ratos. */
-function talk(ms: number): P {
-  const a = (ms / 1100) * Math.PI * 2;
+/** De pie con las mancuernas, mientras habla: la cabeza se inclina un poco a ratos. */
+function stand(ms: number): P {
+  return { ...NEUTRAL, uaL: 95, faL: 92, uaR: 85, faR: 88, hd: -90 + 4 * Math.sin((ms / 1100) * Math.PI) };
+}
+/**
+ * Curl de bíceps visto de frente: el codo pegado al cuerpo y el antebrazo sube hacia delante (hacia la cámara) hasta
+ * arriba. Se hace con el antebrazo acortado en la pantalla (sf) y la profundidad que eso le da.
+ */
+function curl(ms: number): P {
+  const u = (ms % 1200) / 1200;
+  const b = (140 * (1 - Math.cos(u * Math.PI * 2))) / 2; // 0 abajo → 140° arriba → 0
+  const r = (b * Math.PI) / 180, c = Math.cos(r);
   return {
-    ...NEUTRAL,
-    uaL: 104, faL: 128 + 16 * Math.sin(a), zHL: 9 + 3 * Math.sin(a * 1.3), zEL: 2,
-    uaR: 76, faR: 52 - 16 * Math.sin(a + 1.6), zHR: 9 + 3 * Math.sin(a * 1.1 + 0.7), zER: 2,
-    hd: -90 + 4 * Math.sin(a * 0.5),
+    ...NEUTRAL, uaL: 95, uaR: 85,
+    faL: c >= 0 ? 92 : -92, sfL: Math.abs(c),
+    faR: c >= 0 ? 88 : -88, sfR: Math.abs(c),
   };
 }
 /** Sacar bíceps con los dos brazos (con un pequeño apretón). */
 function flex(ms: number): P {
   const q = 4 * Math.sin((ms / 600) * Math.PI * 2);
-  return { ...NEUTRAL, uaL: 188, faL: -78 + q, uaR: -8, faR: -102 - q, jy: 0 };
+  return { ...NEUTRAL, uaL: 188, faL: -78 + q, uaR: -8, faR: -102 - q };
 }
 
 /** La postura en cada instante del guion, con transiciones suaves entre partes. */
 function poseAt(ms: number): P {
-  if (ms < T.turnEnd) return walk(ms);
-  if (ms < T.nearEnd) return walk(ms, 1 - smooth((ms - (T.nearEnd - 300)) / 300));
-  if (ms < T.waveEnd) return mix(NEUTRAL, wave(ms), smooth((ms - T.nearEnd) / 350) * (1 - smooth((ms - (T.waveEnd - 300)) / 300)));
-  if (ms < T.talkEnd) return mix(NEUTRAL, talk(ms), smooth((ms - T.waveEnd) / 350) * (1 - smooth((ms - (T.talkEnd - 250)) / 250)));
-  // pasos atrás (las piernas al revés que al avanzar)
-  if (ms < T.backEnd) return walk(-ms, smooth((ms - T.talkEnd) / 200) * (1 - smooth((ms - (T.backEnd - 250)) / 250)));
-  if (ms < T.jackEnd) {
-    const j = JACKS.poseAt(ms - T.backEnd);
-    return mix(NEUTRAL, j, smooth((ms - T.backEnd) / 250) * (1 - smooth((ms - (T.jackEnd - 250)) / 250)));
-  }
-  return mix(NEUTRAL, flex(ms), smooth((ms - T.jackEnd) / 350));
-}
-
-/** Dónde está Fit en la habitación (x, z) y hacia dónde mira (grados: 90 = a la derecha, 0 = a la cámara). */
-function pathAt(ms: number): { x: number; z: number; facing: number } {
-  if (ms < T.walkEnd) return { x: START_X + (MID_X - START_X) * (ms / T.walkEnd), z: 0, facing: 90 };
-  if (ms < T.turnEnd) {
-    const k = smooth((ms - T.walkEnd) / (T.turnEnd - T.walkEnd));
-    // sigue avanzando un poquito mientras se gira
-    return { x: MID_X + 15 * k, z: 0, facing: 90 * (1 - k) };
-  }
-  if (ms < T.nearEnd) { const k = smooth((ms - T.turnEnd) / (T.nearEnd - T.turnEnd)); return { x: NEAR_X * k, z: NEAR_Z * k, facing: 0 }; }
-  if (ms < T.talkEnd) return { x: NEAR_X, z: NEAR_Z, facing: 0 };
-  if (ms < T.backEnd) { const k = smooth((ms - T.talkEnd) / (T.backEnd - T.talkEnd)); return { x: NEAR_X * (1 - k), z: NEAR_Z + (BACK_Z - NEAR_Z) * k, facing: 0 }; }
-  return { x: 0, z: BACK_Z, facing: 0 };
+  if (ms < T.waveEnd) return mix(NEUTRAL, wave(ms), smooth(ms / 300) * (1 - smooth((ms - (T.waveEnd - 350)) / 350)));
+  if (ms < T.curlFrom) return stand(ms);
+  if (ms < T.curlTo) return curl(ms - T.curlFrom);
+  return mix(NEUTRAL, flex(ms), smooth((ms - T.curlTo) / 350));
 }
 
 // ── la escena ──────────────────────────────────────────────────────────────────
-const spec: MotionSpec = { v: 'front', fn: (u: number) => poseAt(u * T.end), per: T.end } as MotionSpec;
+const spec: MotionSpec = { v: 'front', db: 'both', fn: (u: number) => poseAt(u * T.end), per: T.end } as MotionSpec;
 const ms = new MannequinScene(spec);
 ms.setAspect(540 / 960);
 ms.mood = 'happy';
 const rig = roomRig(ms, { poster: 'Benvinguts!' });
+rig.place(0, FIG_Z, 0);
+
+/** La cámara: de cerca (de pecho para arriba) al principio y, al alejarse, la de siempre (la habitación entera). */
+const CAM_NEAR = { pos: new THREE.Vector3(0, 148, FIG_Z + 235), look: new THREE.Vector3(0, 134, FIG_Z) };
+const CAM_FAR = { pos: new THREE.Vector3(0, EYE.target + EYE.dist * Math.sin(EYE.elev), EYE.dist * Math.cos(EYE.elev)), look: new THREE.Vector3(0, EYE.target, 0) };
+function placeCamera(t: number): void {
+  const k = smooth((t - T.zoomFrom) / (T.zoomTo - T.zoomFrom));
+  const pos = CAM_NEAR.pos.clone().lerp(CAM_FAR.pos, k), look = CAM_NEAR.look.clone().lerp(CAM_FAR.look, k);
+  ms.camera.position.copy(rig.room.localToWorld(pos));
+  ms.camera.lookAt(rig.room.localToWorld(look));
+  ms.camera.updateMatrixWorld(true);
+}
+
+/** Las mancuernas: escondidas mientras saluda; aparecen cuando las manos ya no se ven (y cierra los puños). */
+const msAny = ms as unknown as { dumbbells: Array<{ bar: THREE.Object3D; p1: THREE.Object3D; p2: THREE.Object3D }>; grips: boolean };
+function showDumbbells(t: number): void {
+  const on = t >= T.dbOn;
+  msAny.grips = on;
+  for (const d of msAny.dumbbells) d.bar.visible = d.p1.visible = d.p2.visible = on;
+}
 
 // ── bíceps: dos «bultos» de músculo que crecen cuando saca bíceps al final ──
 const parts0 = (ms as unknown as { parts: Record<string, THREE.Mesh> }).parts;
@@ -153,7 +132,7 @@ const biceps = (['L', 'R'] as const).map((s) => {
 });
 const Y = new THREE.Vector3(0, 1, 0);
 function placeBiceps(t: number): void {
-  const k = smooth((t - (T.jackEnd + 150)) / 450);
+  const k = smooth((t - (T.curlTo + 150)) / 450);
   for (const { s, m } of biceps) {
     m.visible = k > 0.01;
     if (!m.visible) continue;
@@ -170,7 +149,7 @@ function placeBiceps(t: number): void {
   }
 }
 
-// ── sombra de contacto bajo cada pie (para que al andar no parezca que flota) ──
+// ── sombra de contacto bajo cada pie ──
 const footShadowTex = (() => {
   const c = document.createElement('canvas'); c.width = c.height = 64;
   const g = c.getContext('2d')!, gr = g.createRadialGradient(32, 32, 2, 32, 32, 32);
@@ -207,13 +186,13 @@ function render(t: number): void {
     return;
   }
   end.hidden = true; brand.hidden = false;
-  const p = pathAt(t);
-  rig.place(p.x, p.z, p.facing);
+  showDumbbells(t);
   // «habla»: la boca se abre y se cierra mientras sale un bocadillo
   const b = BUBBLES.find((x) => t >= x.from && t < x.to);
   const speaking = b && t - b.from < Math.min(1400, (b.to - b.from) * 0.7);
   ms.mood = speaking && Math.floor(t / 110) % 2 === 0 ? 'effort' : 'happy';
   ms.update(t, t);
+  placeCamera(t);
   placeBiceps(t);
   placeFeetShadows();
   renderer.render(ms.scene, ms.camera);

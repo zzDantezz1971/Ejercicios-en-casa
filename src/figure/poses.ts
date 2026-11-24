@@ -70,7 +70,8 @@ export function joints(v: string, o: Pose): Joints {
     // shuL / shuR: sube un hombro solo (el del brazo que pasa por encima de la cabeza, encoger un hombro...)
     if (o['shu' + s]) J['sho' + s] = add(J['sho' + s], dir(o.tu), o['shu' + s]);
     J['el' + s] = add(J['sho' + s], dir(o['ua' + s]), LEN.ua * o['sa' + s]);
-    J['ha' + s] = add(J['el' + s], dir(o['fa' + s]), LEN.fa * o['sa' + s]);
+    // sfL / sfR: solo el antebrazo, acortado en 2D (apunta hacia la cámara: p. ej., un curl visto de frente)
+    J['ha' + s] = add(J['el' + s], dir(o['fa' + s]), LEN.fa * o['sa' + s] * (o['sf' + s] ?? 1));
     J['kn' + s] = add(J['hip' + s], dir(o['th' + s]), LEN.th * o['sTh' + s]);
     J['an' + s] = add(J['kn' + s], dir(o['sn' + s]), LEN.sh * o['sSh' + s]);
     J['ti' + s] = add(J['an' + s], dir(o['ft' + s]), fl);

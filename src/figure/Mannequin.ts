@@ -151,6 +151,9 @@ export function to3D(spec: MotionSpec, view: string, J: Joints, pose: Pose): Rec
       o['el' + s].z += sign * depth(sa, LEN.ua);
       o['ha' + s].z += sign * depth(sa, LEN.ua + LEN.fa);
     }
+    // solo el antebrazo hacia la cámara (de frente)
+    const sf = pose['sf' + s];
+    if (!side && sf != null && sf < 1) o['ha' + s].z += depth(sf, LEN.fa);
     const sTh = pose['sTh' + s], sSh = pose['sSh' + s];
     if (sTh < 1) {
       const dk = sign * depth(sTh, 34);
