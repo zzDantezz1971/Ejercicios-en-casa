@@ -18,7 +18,7 @@
   .end.blue { background: radial-gradient(circle at 76% 15%, rgb(40 62 150 / .55) 0%, rgb(40 62 150 / 0) 42%), linear-gradient(180deg, #1A285C 0%, #121C42 38%, #0A0F1E 62%, #080B12 100%); color: #fff; }
   .end.blue p { color: #CDD5E6; }
   .end.blue .play { background: #3D6BF5; color: #fff; box-shadow: 0 8px 22px rgb(61 107 245 / .35); }
-  .end.blue::before { border-color: #E3B23E; box-shadow: 0 10px 30px rgb(0 0 0 / .55), inset 0 6px 18px rgb(0 0 0 / .35); }
+  .end.blue::before { display: none; }
   /* nombre del ejercicio que hace Fit: encima de la barra, a la izquierda (o arriba en el centro con #stage.ex-top) */
   .exname { position: absolute; bottom: 112px; left: 24px; max-width: calc(100% - 48px); box-sizing: border-box; font: 700 20px/1 "Barlow Condensed", sans-serif; text-transform: uppercase; letter-spacing: .03em; color: #fff; background: rgb(27 33 48 / .82); padding: 7px 14px 6px 12px; border-radius: 14px; line-height: 1.1; box-shadow: 0 4px 14px rgb(0 0 0 / .18); }
   .exname::before { content: "▶"; color: #F2A516; font-size: 13px; margin-right: 7px; vertical-align: 2px; }
