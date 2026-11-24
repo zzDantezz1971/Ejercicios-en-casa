@@ -127,6 +127,33 @@ ms.setAspect(540 / 960);
 ms.mood = 'happy';
 const rig = roomRig(ms, { poster: 'Benvinguts!' });
 
+// ── bíceps: dos «bultos» de músculo que crecen cuando saca bíceps al final ──
+const parts0 = (ms as unknown as { parts: Record<string, THREE.Mesh> }).parts;
+const biceps = (['L', 'R'] as const).map((s) => {
+  const m = new THREE.Mesh(new THREE.SphereGeometry(1, 24, 16), parts0['ua' + s].material);
+  m.castShadow = true;
+  ms.scene.add(m);
+  return { s, m };
+});
+const Y = new THREE.Vector3(0, 1, 0);
+function placeBiceps(t: number): void {
+  const k = smooth((t - (T.jackEnd + 150)) / 450);
+  for (const { s, m } of biceps) {
+    m.visible = k > 0.01;
+    if (!m.visible) continue;
+    const ua = parts0['ua' + s], fa = parts0['fa' + s];
+    const along = Y.clone().applyQuaternion(ua.quaternion), fore = Y.clone().applyQuaternion(fa.quaternion);
+    // hacia donde se dobla el brazo (el lado del bíceps), sin la parte a lo largo del brazo
+    const out = fore.clone().addScaledVector(along, -fore.dot(along)).normalize();
+    const L = ua.scale.y;
+    m.position.copy(ua.position).addScaledVector(along, L * 0.08).addScaledVector(out, 3.3 * k);
+    m.quaternion.setFromUnitVectors(Y, along);
+    // un poco de «apretón» (crece y decrece un pelín con el movimiento)
+    const pump = 1 + 0.06 * Math.sin((t / 600) * Math.PI * 2);
+    m.scale.set(4.3 * k * pump, L * 0.36 * (0.6 + 0.4 * k), 4.1 * k * pump);
+  }
+}
+
 const bubble = document.getElementById('bubble')!, end = document.getElementById('end')!, brand = document.getElementById('brand')!;
 const head = new THREE.Vector3();
 
@@ -144,6 +171,7 @@ function render(t: number): void {
   const speaking = b && t - b.from < Math.min(1400, (b.to - b.from) * 0.7);
   ms.mood = speaking && Math.floor(t / 110) % 2 === 0 ? 'effort' : 'happy';
   ms.update(t, t);
+  placeBiceps(t);
   renderer.render(ms.scene, ms.camera);
   // bocadillo encima de la cabeza, con la punta hacia Fit
   if (b) {
