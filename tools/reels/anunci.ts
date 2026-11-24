@@ -1,60 +1,31 @@
 /*
- * Anuncio de Kasa Fit para Instagram (unos 22 s, vertical). Empieza con Fit en su habitación y una pregunta gancho;
- * después, un móvil con la app de verdad (modo oscuro) va enseñando lo que hace; vuelve Fit y acaba con la pantalla
- * final azul «Gratis a Google Play».
+ * Anuncio de Kasa Fit para Instagram (unos 28 s, vertical), sin Fit: una entrada con el logo y, después, un móvil
+ * inclinado (en 3D, moviéndose despacio) con la app de verdad en modo oscuro. Cada pantalla tiene su titular y una
+ * frase que explica qué hace. Acaba con la pantalla final azul «Gratis a Google Play».
  * Las capturas están en tools/reels/assets (app-*.jpg, hechas con tools/play/demo-data.ts en modo oscuro).
  * Se graba igual que los otros: node tools/reels/record.cjs anunci <carpeta>.
  */
 import '@fontsource/barlow/latin-500.css';
 import '@fontsource/barlow/latin-600.css';
 import '@fontsource/barlow-condensed/latin-700.css';
-import * as THREE from 'three';
-import { CATALOG } from '../../src/data/catalog';
-import { MannequinScene } from '../../src/figure/Mannequin';
-import { setLook } from '../../src/figure/look';
-import { addRoom } from './room';
-
-setLook({ skin: '#C68B62', shirt: '#2F5BEA', shorts: '#7A1F2B', shoe: '#E5484D', glasses: 'sun', beard: 'stubble', hair: 'none', top: 'tank', bottom: 'leggings' }, () => true);
-
-const canvas = document.getElementById('c') as HTMLCanvasElement;
-const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: true });
-renderer.setPixelRatio(2);
-renderer.setSize(540, 960, false);
-renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
 // ── el guion ──────────────────────────────────────────────────────────────────
-type Fit = { kind: 'fit'; ms: number; ex: string; hook: [string, string?]; tag?: string; poster: string };
-type Phone = { kind: 'phone'; ms: number; shots: string[]; k: string; h: string; p: string };
-const SCENES: Array<Fit | Phone> = [
-  { kind: 'fit', ms: 3000, ex: 'saltos-de-tijera-jumping-jacks', hook: ['Vols posar-te en forma', 'sense sortir de casa?'], poster: 'Cada dia,|una mica|més' },
-  { kind: 'phone', ms: 3600, shots: ['w1', 'w3'], k: 'Pas a pas', h: 'En <em>Fit</em> et fa<br />cada exercici', p: 'Amb avisos per veu en català' },
-  { kind: 'phone', ms: 3200, shots: ['forca'], k: '+200 exercicis', h: 'Amb o sense<br /><em>material</em>', p: 'Manuelles, pesa russa, bandes, fitball…' },
-  { kind: 'phone', ms: 3200, shots: ['home'], k: 'Les teves taules', h: 'Uns minuts<br /><em>al dia</em>', p: 'Fes-la tu o deixa que la faci l’app' },
-  { kind: 'phone', ms: 3400, shots: ['hist', 'med'], k: 'Motivació', h: 'Segueix el teu<br /><em>progrés</em>', p: 'Historial, calories i medalles' },
-  { kind: 'fit', ms: 3000, ex: 'curl-de-biceps', hook: ['Tot en català', 'i sense anuncis'], tag: 'Gratis a Google Play', poster: 'Som-hi!' },
+type Screen = { ms: number; shots: string[]; k: string; h: string; p: string };
+const INTRO_MS = 2600;
+const SCREENS: Screen[] = [
+  { ms: 4500, shots: ['home'], k: 'La teva taula', h: 'Tot a punt<br /><em>en un toc</em>', p: 'Obre l’app, prem «Comença» i a entrenar. Sense pensar què toca avui.' },
+  { ms: 5000, shots: ['w1', 'w3'], k: 'Entrenament guiat', h: 'Et diu què fer<br /><em>i quan</em>', p: 'Cada exercici en 3D, amb compte enrere i avisos per veu en català.' },
+  { ms: 4500, shots: ['forca'], k: '+200 exercicis', h: 'Amb o sense<br /><em>material</em>', p: 'Tria el que tens a casa: manuelles, pesa russa, bandes, fitball…' },
+  { ms: 4500, shots: ['hist'], k: 'Historial', h: 'Cada dia<br /><em>compta</em>', p: 'Calendari, ratxes, temps i calories de cada entrenament.' },
+  { ms: 4500, shots: ['med'], k: 'Medalles', h: 'Motivació<br /><em>per seguir</em>', p: '72 medalles per anar guanyant mentre et poses en forma.' },
 ];
 const END_MS = 2800;
-const total = SCENES.reduce((n, s) => n + s.ms, 0) + END_MS;
-
-// ── escenas de Fit (con la habitación de siempre) ──────────────────────────────
-const fitScenes = new Map<number, MannequinScene>();
-function fitScene(i: number, s: Fit): MannequinScene {
-  let m = fitScenes.get(i);
-  if (m) return m;
-  m = new MannequinScene(CATALOG.get(s.ex)!.motion);
-  m.setAspect(540 / 960);
-  m.mood = 'happy';
-  // que no tape el titular de arriba ni la barra de abajo
-  addRoom(m, { poster: s.poster, avoid: [{ x0: -1, x1: 1, y0: 0.55, y1: 1 }] });
-  fitScenes.set(i, m);
-  return m;
-}
+const total = INTRO_MS + SCREENS.reduce((n, s) => n + s.ms, 0) + END_MS;
 
 // ── capturas de la app ─────────────────────────────────────────────────────────
 const scr = document.getElementById('scr')!;
 const imgs = new Map<string, HTMLImageElement>();
-for (const s of SCENES) if (s.kind === 'phone') for (const n of s.shots) {
+for (const s of SCREENS) for (const n of s.shots) {
   if (imgs.has(n)) continue;
   const im = new Image();
   im.src = new URL(`./assets/app-${n}.jpg`, import.meta.url).href;
@@ -65,60 +36,55 @@ for (const s of SCENES) if (s.kind === 'phone') for (const n of s.shots) {
 const loaded = Promise.all([...imgs.values()].map((im) => im.decode().catch(() => undefined)));
 
 const $ = (id: string) => document.getElementById(id)!;
-const bg = $('bg'), phone = $('phone'), head = $('head'), hook = $('hook'), tag = $('tag'), end = $('end'), brand = $('brand');
+const bg = $('bg'), phone = $('phone'), head = $('head'), intro = $('intro'), end = $('end'), brand = $('brand');
 const smooth = (k: number) => { const c = Math.min(1, Math.max(0, k)); return c * c * (3 - 2 * c); };
 
 function render(ms: number): void {
-  let t = ms, i = 0;
-  while (i < SCENES.length && t >= SCENES[i].ms) { t -= SCENES[i].ms; i++; }
-  for (const el of [bg, phone, head, hook, tag]) el.hidden = true;
-  if (i >= SCENES.length) {
+  bg.hidden = false;
+  end.hidden = true; brand.hidden = false;
+  // entrada: logo y «Entrena a casa, en català»
+  if (ms < INTRO_MS) {
+    phone.hidden = true; head.hidden = true; intro.hidden = false;
+    const k = smooth(ms / 450), out = smooth((ms - (INTRO_MS - 350)) / 350);
+    intro.style.opacity = String(k * (1 - out));
+    intro.style.transform = `scale(${0.92 + 0.08 * k + 0.05 * out})`;
+    brand.hidden = true;
+    return;
+  }
+  intro.hidden = true;
+  let t = ms - INTRO_MS, i = 0;
+  while (i < SCREENS.length && t >= SCREENS[i].ms) { t -= SCREENS[i].ms; i++; }
+  if (i >= SCREENS.length) {
+    bg.hidden = true; phone.hidden = true; head.hidden = true;
     end.hidden = false; brand.hidden = true;
     (end.firstElementChild as HTMLElement).style.transform = `scale(${0.9 + 0.1 * Math.min(1, t / 400)})`;
     return;
   }
-  end.hidden = true; brand.hidden = false;
-  const s = SCENES[i];
-  const inK = smooth(t / 350);
-  if (s.kind === 'fit') {
-    const m = fitScene(i, s);
-    m.update(t, t);
-    renderer.render(m.scene, m.camera);
-    hook.hidden = false;
-    $('hook1').textContent = s.hook[0];
-    $('hook2').textContent = s.hook[1] ?? '';
-    $('hook2').hidden = !s.hook[1];
-    hook.style.opacity = String(inK);
-    hook.style.transform = `translateY(${(1 - inK) * -18}px) scale(${0.94 + 0.06 * inK})`;
-    if (s.tag) {
-      const k = smooth((t - 700) / 350);
-      tag.hidden = false; tag.textContent = s.tag;
-      tag.style.opacity = String(k);
-      tag.style.transform = `translateX(-50%) scale(${0.85 + 0.15 * k})`;
-    }
-    return;
-  }
-  bg.hidden = false; phone.hidden = false; head.hidden = false;
-  // el móvil sube desde abajo en la primera escena de móvil; luego se queda y solo cambia la pantalla
-  const first = SCENES[i - 1]?.kind !== 'phone';
-  const up = first ? smooth(t / 500) : 1;
-  phone.style.transform = `translateY(${(1 - up) * 520}px) rotate(${(1 - up) * 6}deg)`;
-  // las capturas: cada una un rato, con fundido; y un poco de desplazamiento hacia arriba (como si se moviera)
+  const s = SCREENS[i];
+  phone.hidden = false; head.hidden = false;
+  // el móvil: inclinado en 3D, entra desde abajo al principio y se mueve muy despacio todo el rato
+  const since = ms - INTRO_MS, up = smooth(since / 700);
+  const sway = since / 1000;
+  const ry = -22 + 5 * Math.sin(sway * 0.35), rx = 10 + 2 * Math.sin(sway * 0.27 + 1), rz = 7 + 1.5 * Math.sin(sway * 0.3 + 2);
+  phone.style.transform = `translate(${50 + (1 - up) * 40}px, ${(1 - up) * 560}px) perspective(1300px) rotateY(${ry}deg) rotateX(${rx}deg) rotateZ(${rz}deg) scale(1.06)`;
+  // las capturas: fundido de una a otra (la de antes queda debajo), con un desplazamiento lento hacia arriba
   const per = s.ms / s.shots.length;
   const cur = Math.min(s.shots.length - 1, Math.floor(t / per));
-  // debajo, la captura que se veía justo antes (la última de la escena anterior), para fundir de una a otra
-  const prev = s.shots[cur - 1] ?? (!first ? (SCENES[i - 1] as Phone).shots.slice(-1)[0] : undefined);
-  const k = smooth((t - cur * per) / 250);
+  const first = i === 0;
+  const prev = s.shots[cur - 1] ?? (!first ? SCREENS[i - 1].shots.slice(-1)[0] : undefined);
+  const k = first && cur === 0 ? 1 : smooth((t - cur * per) / 450);
   imgs.forEach((im, n) => {
-    const o = n === s.shots[cur] ? (first && cur === 0 ? 1 : k) : n === prev ? 1 : 0;
-    im.style.opacity = String(o);
+    im.style.opacity = String(n === s.shots[cur] ? k : n === prev ? 1 : 0);
     im.style.zIndex = n === s.shots[cur] ? '2' : '1';
+    im.style.transform = n === s.shots[cur] ? `translateY(${-14 * ((t - cur * per) / per)}px) scale(1.03)` : 'scale(1.03)';
   });
+  // los textos: entran al empezar cada pantalla y salen un poco antes de acabar
+  const tin = smooth(t / 500), tout = smooth((t - (s.ms - 350)) / 350);
   $('hk').textContent = s.k;
   $('h2').innerHTML = s.h;
   $('hp').textContent = s.p;
-  head.style.opacity = String(inK);
-  head.style.transform = `translateY(${(1 - inK) * 14}px)`;
+  head.style.opacity = String(tin * (1 - tout));
+  head.style.transform = `translateX(${(1 - tin) * -24}px)`;
 }
 
 (window as unknown as { __reel: unknown }).__reel = { total, render, ready: Promise.all([document.fonts.ready, loaded]) };
