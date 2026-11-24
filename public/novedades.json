@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-24T14:02:44Z",
+    "es": "Editar tabla: la línea de «Tiempo | Reps», el contador y los kg va alineada a la derecha, con kg o sin ellos.",
+    "ca": "Edita la taula: la línia de «Temps | Reps», el comptador i els kg va alineada a la dreta, amb kg o sense.",
+    "en": "Edit routine: the “Time | Reps”, counter and kg line is right-aligned, with or without kg."
+  },
+  {
     "fecha": "2026-11-24T13:59:30Z",
     "es": "App Android: el tamaño de letra del móvil ya no cambia la app; se ve siempre igual, como está pensada.",
     "ca": "App Android: la mida de lletra del mòbil ja no canvia l’app; es veu sempre igual, com està pensada.",
