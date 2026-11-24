@@ -1,7 +1,7 @@
 /*
  * Vídeo de presentación: Fit, quieto en el centro de la habitación. La cámara empieza de cerca (de pecho para arriba):
  * saluda y «habla» con bocadillos de cómic (sin voz) mientras la cámara se aleja hasta enseñar la habitación entera;
- * entonces hace unos curls con mancuernas y acaba sacando bíceps: «Som-hi?».
+ * entonces hace unas sentadillas con la pesa rusa, la deja en el suelo y acaba sacando bíceps: «Som-hi?».
  * Se graba igual que los otros: node tools/reels/record.cjs hola <carpeta>.
  */
 import '@fontsource/barlow/latin-500.css';
@@ -26,13 +26,15 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 // ── el guion (ms) ──────────────────────────────────────────────────────────────
 const T = {
   waveEnd: 2600, // saluda (cámara de cerca)
-  dbOn: 3000, // ya con las manos fuera de la imagen: aparecen las mancuernas
+  dbOn: 3000, // ya con las manos fuera de la imagen: aparece la pesa rusa
   zoomFrom: 2900, // la cámara empieza a alejarse…
   zoomTo: 8000, // …hasta enseñar la habitación entera
-  curlFrom: 8200, // curls
-  curlTo: 11900,
-  hiEnd: 14200, // «Som-hi?» sacando bíceps
-  end: 16800, // pantalla final
+  curlFrom: 8100, // abre las piernas y hace sentadillas sumo con la pesa rusa (3)
+  curlTo: 12500,
+  dropAt: 13000, // deja la pesa en el suelo…
+  upAt: 13500, // …se levanta
+  hiEnd: 16000, // «Som-hi?» sacando bíceps
+  end: 18600, // pantalla final
 };
 /** Dónde está Fit en la habitación (hacia la cámara desde el sitio de siempre): de cuerpo entero con la cámara lejos. */
 const FIG_Z = 190;
@@ -41,7 +43,7 @@ const BUBBLES: Array<{ from: number; to: number; text: string }> = [
   { from: 2750, to: 4450, text: 'A partir d’ara entrenarem junts' },
   { from: 4500, to: 6200, text: 'A casa i en català' },
   { from: 6250, to: 7950, text: 'Només uns minuts al dia' },
-  { from: 12050, to: 14200, text: 'Som-hi? <span class="em">💪</span>' },
+  { from: 13900, to: 16000, text: 'Som-hi? <span class="em">💪</span>' },
 ];
 
 // ── posturas (vista de frente; ángulos como en la app: 90 = hacia abajo, -90 = hacia arriba) ──
@@ -63,23 +65,30 @@ const smooth = (k: number) => { const c = Math.min(1, Math.max(0, k)); return c 
 function wave(ms: number): P {
   return { ...NEUTRAL, uaR: -25, faR: -85 + 20 * Math.sin((ms / 520) * Math.PI * 2), zHR: 6 };
 }
-/** De pie con las mancuernas, mientras habla: la cabeza se inclina un poco a ratos. */
+/** Las dos manos juntas delante, agarrando la pesa rusa por el asa (como en la sentadilla sumo de la app). */
+const HOLD: P = { uaL: 74, faL: 66, uaR: 106, faR: 114, zEL: 6, zER: 6, zHL: 14, zHR: 14 };
+/** Piernas abiertas (sumo), de pie y abajo; y abajo del todo para dejar la pesa en el suelo. */
+const SUMO: P = { thL: 118, snL: 118, thR: 62, snR: 62, ftL: 180, ftR: 0 };
+const SUMO_DOWN: P = { thL: 152, snL: 96, thR: 28, snR: 84, ftL: 180, ftR: 0, zKL: 9, zKR: 9, lean: 16 };
+const SUMO_FLOOR: P = { thL: 160, snL: 92, thR: 20, snR: 88, ftL: 180, ftR: 0, zKL: 11, zKR: 11, lean: 30, uaL: 80, faL: 76, uaR: 100, faR: 104, zEL: 12, zER: 12, zHL: 30, zHR: 30 };
+/** De pie con la pesa rusa, mientras habla: la cabeza se inclina un poco a ratos. */
 function stand(ms: number): P {
-  return { ...NEUTRAL, uaL: 95, faL: 92, uaR: 85, faR: 88, hd: -90 + 4 * Math.sin((ms / 1100) * Math.PI) };
+  return { ...NEUTRAL, ...HOLD, hd: -90 + 4 * Math.sin((ms / 1100) * Math.PI) };
 }
-/**
- * Curl de bíceps visto de frente: el codo pegado al cuerpo y el antebrazo sube hacia delante (hacia la cámara) hasta
- * arriba. Se hace con el antebrazo acortado en la pantalla (sf) y la profundidad que eso le da.
- */
-function curl(ms: number): P {
-  const u = (ms % 1200) / 1200;
-  const b = (140 * (1 - Math.cos(u * Math.PI * 2))) / 2; // 0 abajo → 140° arriba → 0
-  const r = (b * Math.PI) / 180, c = Math.cos(r);
-  return {
-    ...NEUTRAL, uaL: 95, uaR: 85,
-    faL: c >= 0 ? 92 : -92, sfL: Math.abs(c),
-    faR: c >= 0 ? 88 : -88, sfR: Math.abs(c),
-  };
+/** Abre las piernas (400 ms) y hace sentadillas sumo con la pesa (1,3 s cada una). */
+function squats(ms: number): P {
+  const open = smooth(ms / 400);
+  const base = mix({ ...NEUTRAL, ...HOLD }, { ...NEUTRAL, ...HOLD, ...SUMO }, open);
+  const t = Math.max(0, ms - 400);
+  const k = (1 - Math.cos((t / 1300) * Math.PI * 2)) / 2;
+  return mix(base, { ...NEUTRAL, ...HOLD, ...SUMO_DOWN }, k * open);
+}
+/** Baja a dejar la pesa en el suelo, la suelta y se levanta con las piernas juntas. */
+function drop(ms: number): P {
+  const down = { ...NEUTRAL, ...SUMO_FLOOR };
+  if (ms < T.dropAt) return mix({ ...NEUTRAL, ...HOLD, ...SUMO }, down, smooth((ms - T.curlTo) / (T.dropAt - T.curlTo)));
+  if (ms < T.upAt) return down;
+  return mix(down, NEUTRAL, smooth((ms - T.upAt) / 450));
 }
 /** Sacar bíceps con los dos brazos (con un pequeño apretón). */
 function flex(ms: number): P {
@@ -91,12 +100,13 @@ function flex(ms: number): P {
 function poseAt(ms: number): P {
   if (ms < T.waveEnd) return mix(NEUTRAL, wave(ms), smooth(ms / 300) * (1 - smooth((ms - (T.waveEnd - 350)) / 350)));
   if (ms < T.curlFrom) return stand(ms);
-  if (ms < T.curlTo) return curl(ms - T.curlFrom);
-  return mix(NEUTRAL, flex(ms), smooth((ms - T.curlTo) / 350));
+  if (ms < T.curlTo) return squats(ms - T.curlFrom);
+  if (ms < T.upAt + 450) return drop(ms);
+  return mix(NEUTRAL, flex(ms), smooth((ms - (T.upAt + 450)) / 400));
 }
 
 // ── la escena ──────────────────────────────────────────────────────────────────
-const spec: MotionSpec = { v: 'front', db: 'both', fn: (u: number) => poseAt(u * T.end), per: T.end } as MotionSpec;
+const spec: MotionSpec = { v: 'front', kb: 'both', fn: (u: number) => poseAt(u * T.end), per: T.end } as MotionSpec;
 const ms = new MannequinScene(spec);
 ms.setAspect(540 / 960);
 ms.mood = 'happy';
@@ -114,12 +124,27 @@ function placeCamera(t: number): void {
   ms.camera.updateMatrixWorld(true);
 }
 
-/** Las mancuernas: escondidas mientras saluda; aparecen cuando las manos ya no se ven (y cierra los puños). */
-const msAny = ms as unknown as { dumbbells: Array<{ bar: THREE.Object3D; p1: THREE.Object3D; p2: THREE.Object3D }>; grips: boolean };
-function showDumbbells(t: number): void {
-  const on = t >= T.dbOn;
-  msAny.grips = on;
-  for (const d of msAny.dumbbells) d.bar.visible = d.p1.visible = d.p2.visible = on;
+/**
+ * La pesa rusa: escondida mientras saluda; aparece cuando las manos ya no se ven (y cierra los puños). Al dejarla en el
+ * suelo se queda allí (una copia quieta) y él abre las manos.
+ */
+const msAny = ms as unknown as { gear: Record<string, THREE.Object3D[]>; grips: boolean };
+const kbParts = msAny.gear.kbL;
+const kbLeft = kbParts.map((m) => { const c = m.clone(); c.visible = false; ms.scene.add(c); return c; });
+let kbPlaced = false;
+function showKettlebell(t: number): void {
+  const held = t >= T.dbOn && t < T.dropAt;
+  msAny.grips = held;
+  if (t >= T.dropAt && !kbPlaced) {
+    // donde estaba en el momento de soltarla, apoyada en el suelo
+    ms.update(T.dropAt - 1, T.dropAt - 1);
+    const lift = kbParts[0].position.y - kbParts[0].scale.y;
+    kbLeft.forEach((c, i) => { c.position.copy(kbParts[i].position); c.position.y -= lift; c.rotation.copy(kbParts[i].rotation); c.scale.copy(kbParts[i].scale); });
+    kbPlaced = true;
+    ms.update(t, t);
+  }
+  for (const m of kbParts) m.visible = held;
+  kbLeft.forEach((c) => (c.visible = t >= T.dropAt));
 }
 
 // ── bíceps: dos «bultos» de músculo que crecen cuando saca bíceps al final ──
@@ -132,7 +157,7 @@ const biceps = (['L', 'R'] as const).map((s) => {
 });
 const Y = new THREE.Vector3(0, 1, 0);
 function placeBiceps(t: number): void {
-  const k = smooth((t - (T.curlTo + 150)) / 450);
+  const k = smooth((t - (T.upAt + 600)) / 450);
   for (const { s, m } of biceps) {
     m.visible = k > 0.01;
     if (!m.visible) continue;
@@ -186,12 +211,12 @@ function render(t: number): void {
     return;
   }
   end.hidden = true; brand.hidden = false;
-  showDumbbells(t);
   // «habla»: la boca se abre y se cierra mientras sale un bocadillo
   const b = BUBBLES.find((x) => t >= x.from && t < x.to);
   const speaking = b && t - b.from < Math.min(1400, (b.to - b.from) * 0.7);
   ms.mood = speaking && Math.floor(t / 110) % 2 === 0 ? 'effort' : 'happy';
   ms.update(t, t);
+  showKettlebell(t);
   placeCamera(t);
   placeBiceps(t);
   placeFeetShadows();
