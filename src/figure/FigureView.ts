@@ -53,7 +53,23 @@ export class FigureView {
     this.resize();
     this.renderAt(this.scene.motion.total * 0.4);
     pendingOverlay(canvas, exercise);
+    document.addEventListener('visibilitychange', this.onVisible);
   }
+
+  /**
+   * Al volver a la app desde otra (la música, por ejemplo), algunos móviles enseñan un momento una mancha blanca
+   * donde está el muñeco, hasta que se vuelve a pintar: se oculta el lienzo hasta tener el primer dibujo nuevo.
+   */
+  private readonly onVisible = (): void => {
+    if (document.visibilityState !== 'visible' || !this.canvas.isConnected) return;
+    this.canvas.style.transition = 'none';
+    this.canvas.style.opacity = '0';
+    this.renderAt(this.frozenAt ?? performance.now() - this.t0);
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      this.canvas.style.transition = 'opacity .15s';
+      this.canvas.style.opacity = '';
+    }));
+  };
 
   start(): void {
     if (this.raf) return;
@@ -106,6 +122,7 @@ export class FigureView {
   }
 
   dispose(): void {
+    document.removeEventListener('visibilitychange', this.onVisible);
     this.stop();
     this.resizeObs.disconnect();
     this.canvas.removeEventListener('pointerdown', this.onDown);

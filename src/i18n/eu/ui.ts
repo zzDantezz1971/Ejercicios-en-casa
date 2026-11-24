@@ -1294,4 +1294,5 @@ export const UI_EU: Record<string, string> = {
   "Pon la música y vuelve a Kasa Fit: el entrenamiento empezará entonces.": "Jarri musika eta itzuli Kasa Fitera: orduan hasiko da entrenamendua.",
   "Preguntar por la música": "Musikari buruz galdetu",
   "Antes de cada entrenamiento, «¿Quieres música?» para abrir Spotify o tu app de música.": "Entrenamendu bakoitzaren aurretik, «Musika nahi duzu?», Spotify edo zure musika-aplikazioa irekitzeko.",
+  "Pon la música y, cuando vuelvas a Kasa Fit, toca «Empezar».": "Jarri musika eta, Kasa Fitera itzultzean, sakatu «Hasi».",
 };

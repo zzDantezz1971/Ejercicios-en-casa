@@ -1294,4 +1294,5 @@ export const UI_GL: Record<string, string> = {
   "Pon la música y vuelve a Kasa Fit: el entrenamiento empezará entonces.": "Pon a música e volve a Kasa Fit: o adestramento comezará entón.",
   "Preguntar por la música": "Preguntar pola música",
   "Antes de cada entrenamiento, «¿Quieres música?» para abrir Spotify o tu app de música.": "Antes de cada adestramento, «Queres música?» para abrir Spotify ou a túa app de música.",
+  "Pon la música y, cuando vuelvas a Kasa Fit, toca «Empezar».": "Pon a música e, cando volvas a Kasa Fit, toca «Comezar».",
 };

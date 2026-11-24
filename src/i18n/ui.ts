@@ -1351,6 +1351,7 @@ const ROWS: Row[] = [
   ['Pon la música y vuelve a Kasa Fit: el entrenamiento empezará entonces.', 'Posa la música i torna a Kasa Fit: l’entrenament començarà llavors.', 'Put the music on and come back to Kasa Fit: the workout will start then.'],
   ['Preguntar por la música', 'Preguntar per la música', 'Ask about music'],
   ['Antes de cada entrenamiento, «¿Quieres música?» para abrir Spotify o tu app de música.', 'Abans de cada entrenament, «Vols música?» per obrir Spotify o la teva app de música.', 'Before each workout, “Want some music?” to open Spotify or your music app.'],
+  ['Pon la música y, cuando vuelvas a Kasa Fit, toca «Empezar».', 'Posa la música i, quan tornis a Kasa Fit, toca «Comença».', 'Put the music on and, when you come back to Kasa Fit, tap “Start”.'],
 ];
 
 export const UI_CA: Record<string, string> = Object.fromEntries(ROWS.map((r) => [r[0], r[1]]));

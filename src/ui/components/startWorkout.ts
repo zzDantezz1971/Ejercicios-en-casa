@@ -109,32 +109,26 @@ function musicDialog(app: App): Promise<void> {
       wrap.remove();
       resolve();
     };
-    // al volver a Kasa Fit (con la música ya puesta), empieza el entrenamiento
-    const waitBack = () => {
-      const back = () => {
-        if (document.visibilityState !== 'visible') return;
-        document.removeEventListener('visibilitychange', back);
-        finish();
-      };
-      document.addEventListener('visibilitychange', back);
-      return () => document.removeEventListener('visibilitychange', back);
-    };
+    // con la música abierta, el entrenamiento no empieza solo: al volver a Kasa Fit se toca «Empezar»
+    // (no se puede fiar de «ya has vuelto»: Chrome vuelve un instante a la pestaña al pasar la música a la app de Spotify)
     const opened = () => {
       status.hidden = false;
+      apps.remove();
+      openBtn.remove();
       skipBtn.replaceWith(startNow);
+      startNow.focus();
     };
     // abre una app de música (paquete) o, sin ella, la de siempre (Spotify o la del sistema; en la web, Spotify)
     const open = async (pkg?: string) => {
       app.haptics.tap();
-      const stop = waitBack();
       let ok = false;
       if (IS_NATIVE && pkg) {
         ok = (await KasaNative.openApp({ package: pkg }).catch(() => ({ opened: false }))).opened;
         if (ok) app.store.saveSettings({ ...app.store.settings, musicApp: pkg });
       }
       if (!ok && IS_NATIVE) ok = (await KasaNative.openMusic().catch(() => ({ opened: false }))).opened;
-      if (!ok) ok = !!window.open('https://open.spotify.com/', '_blank', 'noopener');
-      if (!ok) { stop(); finish(); return; }
+      // en la web, Spotify en otra pestaña (con «noopener», window.open devuelve null aunque se abra: no sirve para saberlo)
+      if (!ok) window.open('https://open.spotify.com/', '_blank', 'noopener');
       opened();
     };
     const openBtn = h('button', { class: 'btn primary', onclick: () => void open() }, icon('music'), 'Abrir la música');
@@ -150,8 +144,8 @@ function musicDialog(app: App): Promise<void> {
       openBtn.remove();
     }).catch(() => undefined);
     const skipBtn = h('button', { class: 'btn ghost', onclick: finish }, 'Empezar sin música');
-    const status = h('p', { class: 'muted small', hidden: true }, 'Pon la música y vuelve a Kasa Fit: el entrenamiento empezará entonces.');
-    const startNow = h('button', { class: 'btn ghost', onclick: finish }, icon('play'), 'Empezar ya');
+    const status = h('p', { class: 'muted small', hidden: true }, 'Pon la música y, cuando vuelvas a Kasa Fit, toca «Empezar».');
+    const startNow = h('button', { class: 'btn primary big', onclick: finish }, icon('play'), 'Empezar');
     const wrap = h('div', { class: 'dialog-wrap' },
       h('div', { class: 'dialog watch-dialog', role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': 'music-title' },
         h('div', { class: 'wd-head' },
