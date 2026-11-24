@@ -61,13 +61,30 @@ const smooth = (k: number) => { const c = Math.min(1, Math.max(0, k)); return c 
 /** Los saltos de tijera de la app (el mismo movimiento que en el ejercicio). */
 const JACKS = new Motion(CATALOG.get('saltos-de-tijera-jumping-jacks')!.motion);
 
-/** Caminar (las piernas y los brazos van y vienen hacia delante y hacia atrás). */
+/**
+ * Caminar: cada pierna va adelante y atrás y, al pasar por delante (sin apoyar), dobla la rodilla y levanta el pie;
+ * los brazos, al revés que las piernas. De frente, lo que va hacia delante es profundidad (hacia la cámara).
+ */
 function walk(ms: number, amount = 1): P {
-  const ph = (ms / 900) * Math.PI * 2, s = Math.sin(ph) * amount;
+  const ph = (ms / 900) * Math.PI * 2;
+  const TH = 34, SH = 33, rad = Math.PI / 180;
+  const depth = (scale: number, len: number) => len * Math.sqrt(Math.max(0, 1 - scale * scale));
+  const leg = (phase: number): P => {
+    const a = 24 * Math.sin(phase) * amount * rad; // muslo hacia delante (+) o hacia atrás (-)
+    // la rodilla se dobla sobre todo mientras la pierna pasa por delante sin apoyar; un poco al apoyar
+    const k = (8 + 52 * Math.pow(Math.max(0, Math.cos(phase)), 1.6)) * amount * rad;
+    const sTh = Math.cos(a), sSh = Math.cos(a - k);
+    const dk = depth(sTh, TH), ds = depth(sSh, SH);
+    const zK = TH * Math.sin(a) - dk;
+    const zA = TH * Math.sin(a) + SH * Math.sin(a - k) - dk - ds;
+    return { sTh, sSh, zK, zA };
+  };
+  const L = leg(ph), R = leg(ph + Math.PI), sw = Math.sin(ph) * amount;
   return {
     ...NEUTRAL,
-    zKL: 13 * s, zAL: 17 * s, zKR: -13 * s, zAR: -17 * s,
-    zHL: -13 * s, zEL: -5 * s, zHR: 13 * s, zER: 5 * s,
+    sThL: L.sTh, sShL: L.sSh, zKL: L.zK, zAL: L.zA,
+    sThR: R.sTh, sShR: R.sSh, zKR: R.zK, zAR: R.zA,
+    zHL: -13 * sw, zEL: -5 * sw, zHR: 13 * sw, zER: 5 * sw,
   };
 }
 /** Saludar con la mano derecha (la del lado derecho de la pantalla). */
