@@ -1,5 +1,5 @@
 import { LANG, LANGS } from '../../i18n';
-import { applyColor, applyFontSize, applyTheme, COLOR_INFO, COLOR_THEMES, FREE_COLORS, type ColorTheme } from '../../platform/theme';
+import { applyColor, applyTheme, COLOR_INFO, COLOR_THEMES, FREE_COLORS, type ColorTheme } from '../../platform/theme';
 import { flushDurable } from '../../platform/durable';
 import { showUpdateDialog, showVersionNews } from '../components/updateDialog';
 import { APP_BUILD, APP_VERSION, BUILD_TIME, checkForUpdate, updateReady } from '../../services/Updates';
@@ -104,17 +104,6 @@ export class SettingsScreen implements Screen {
   /** Idioma de la app: al cambiarlo se recarga para pintarlo todo de nuevo. */
   /** Modo oscuro, claro o el del sistema. */
   /** Personaliza el muñeco: abre su pantalla. */
-  /** Tamaño de la letra: el de siempre o más grande (toda la app). */
-  private fontCard(s: Settings): HTMLElement {
-    const opt = (f: Settings['fontSize'], label: string, cls: string) =>
-      h('button', { class: `seg ${cls}` + (s.fontSize === f ? ' on' : ''), 'aria-pressed': String(s.fontSize === f), onclick: () => { applyFontSize(f); this.update({ fontSize: f }); } }, label);
-    return h('section', { class: 'card setting rest-card lang-card' },
-      h('div', { class: 'rest-head' },
-        h('span', { class: 'set-icon' }, icon('text')),
-        h('div', { class: 'set-text' }, h('strong', {}, 'Tamaño de la letra'), h('p', { class: 'muted small' }, 'Grande hace más grandes los textos de toda la app.'))),
-      h('div', { class: 'segmented lang-segs' }, opt('normal', 'Normal', 'font-n'), opt('large', 'Grande', 'font-l')));
-  }
-
   private themeCard(s: Settings): HTMLElement {
     const pick = (t: Settings['theme']) => {
       this.update({ theme: t });
@@ -456,7 +445,7 @@ export class SettingsScreen implements Screen {
           icon('chevron'))),
       h('h3', { class: 'block-title' }, IS_NATIVE ? 'Suscripción' : 'Prémium'), this.accessCard(),
       h('h3', { class: 'block-title' }, 'Idioma'), this.langCard(),
-      h('h3', { class: 'block-title' }, 'Pantalla'), this.themeCard(s), this.fontCard(s), this.colorCard(s),
+      h('h3', { class: 'block-title' }, 'Pantalla'), this.themeCard(s), this.colorCard(s),
       // el muñeco no se despliega: va directo a su pantalla
       h('h3', { class: 'block-title', 'data-go': 'look' }, 'Muñeco'),
       h('h3', { class: 'block-title' }, 'Tiempos de los ejercicios'), this.restCard(s));

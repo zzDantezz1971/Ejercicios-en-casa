@@ -1902,9 +1902,6 @@ button.plan-row { cursor: pointer; }
 .tables-empty-icon .ico { width: 28px; height: 28px; }
 .tables-empty h2 { font-size: 1.4rem; text-transform: uppercase; }
 .voice-steps { margin: 0; padding-left: 1.3em; display: flex; flex-direction: column; gap: 4px; }
-/* Tamaño de la letra: «Grande» sube toda la app (casi todo va en rem) */
-html[data-font="large"] { font-size: 112.5%; }
-.font-l { font-size: 1.12em; }
 /* Serie dentro de un bloque (tablas por bloques): el mismo recuadro que en la tabla libre */
 .block-list > .sortable > .sort-row:has(.free-group) { background: none; border: 0; padding: 0; box-shadow: none; position: relative; }
 .block-list > .sortable > .sort-row:has(.free-group) > .sort-content { flex: 1; min-width: 0; }
@@ -1980,3 +1977,7 @@ html[data-font="large"] { font-size: 112.5%; }
 .mr-ctrls .stepper.inline .secs { min-width: 40px; font-size: .85rem; }
 .mr-ctrls .weight-btn.small { padding: 4px 7px; gap: 4px; font-size: .82rem; }
 .mr-ctrls .weight-btn.small .ico { width: 14px; height: 14px; }
+/* Al editar: + y − pegados al número, y «Tiempo | Reps» un poco más grandes */
+.mr-ctrls .stepper.inline { gap: 2px; }
+.mr-ctrls .stepper.inline .secs { min-width: 34px; }
+.mr-ctrls .amount-mode .seg { padding: 5px 10px; font-size: .8rem; }

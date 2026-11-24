@@ -23,7 +23,8 @@ export function amountCtrl(ex: ExerciseDef, a: Amount, change: (next: Amount) =>
   const stepper = reps
     ? h('div', { class: 'stepper inline maker-time' },
       h('button', { 'aria-label': 'Menos repeticiones', disabled: a.reps! <= MIN_REPS, onclick: () => set({ ...a, reps: Math.max(MIN_REPS, a.reps! - 1) }) }, '−'),
-      h('span', { class: 'secs' }, ex.oneSided ? `${a.reps} x lado` : `${a.reps} reps`),
+      // en los por lados, «por lados» ya se ve debajo del nombre: aquí solo el número (que es por lado)
+      h('span', { class: 'secs' }, `${a.reps} reps`),
       h('button', { 'aria-label': 'Más repeticiones', disabled: a.reps! >= MAX_REPS, onclick: () => set({ ...a, reps: Math.min(MAX_REPS, a.reps! + 1) }) }, '+'))
     : h('div', { class: 'stepper inline maker-time' },
       h('button', { 'aria-label': 'Menos tiempo', disabled: a.seconds <= MIN_SECONDS, onclick: () => set({ ...a, seconds: Math.max(MIN_SECONDS, a.seconds - STEP_SECONDS) }) }, '−'),

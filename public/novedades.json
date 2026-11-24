@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-24T13:52:15Z",
+    "es": "Editar tabla: el + y el − van pegados al número y los botones «Tiempo | Reps» son más grandes. Se quita la opción de letra grande de Ajustes (la app tiene un solo tamaño de letra).",
+    "ca": "Edita la taula: el + i el − van enganxats al número i els botons «Temps | Reps» són més grans. Es treu l’opció de lletra gran de Configuració (l’app té una sola mida de lletra).",
+    "en": "Edit routine: + and − sit right next to the number and the “Time | Reps” buttons are bigger. The large text option is removed from Settings (the app has a single text size)."
+  },
+  {
     "fecha": "2026-11-24T13:32:58Z",
     "es": "Editar tabla: cada ejercicio ocupa menos; arriba el nombre con cambiar y quitar, y debajo en una sola línea «Tiempo | Reps», el contador y los kg. Y las repeticiones se recuerdan aunque pases a tiempo y vuelvas a repeticiones.",
     "ca": "Edita la taula: cada exercici ocupa menys; a dalt el nom amb canviar i treure, i a sota en una sola línia «Temps | Reps», el comptador i els kg. I les repeticions es recorden encara que passis a temps i tornis a repeticions.",
