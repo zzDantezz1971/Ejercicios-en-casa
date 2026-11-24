@@ -10,7 +10,7 @@ import type { MannequinScene } from '../../src/figure/Mannequin';
 export const EYE = { target: 82, dist: 760, elev: 0.1 };
 
 const C = {
-  wallUp: '#F1ECE4', wallLow: '#A9BFAE', rail: '#C9A27A', base: '#F7F4EE',
+  wallUp: '#FBFBF9', wallLow: '#BCD0E6', rail: '#C9A27A', base: '#F7F4EE',
   frame: '#FAFAF8', wood: '#B88A5E', woodDark: '#8A6240', black: '#22262E', chrome: '#C9CED6',
   blue: '#2F5BEA', orange: '#F2A516', green: '#1F8A57', red: '#E5484D', purple: '#7B5CD6',
   leaf: '#2F7A4D', leaf2: '#3E8A5B', linen: '#EADFCD',
@@ -198,7 +198,7 @@ export function addRoom(ms: MannequinScene): void {
   add(plane(1400, 92, std('#ffffff', 0.9, 0, { map: PLASTER_LOW })), 0, 46, BACK + 0.4, false);
   add(boxM(1400, 4, 3, std(C.rail, 0.55)), 0, 92, BACK + 1.5, false);
   add(boxM(1400, 12, 2.5, std(C.base, 0.5)), 0, 6, BACK + 1.2, false);
-  const mould = std('#97AE9C', 0.8);
+  const mould = std('#A3BAD3', 0.8);
   for (let k = -6; k <= 6; k++) {
     const x0 = k * 52;
     for (const [w, h, x, y] of [[44, 1.6, 0, 76], [44, 1.6, 0, 22], [1.6, 54, -22, 49], [1.6, 54, 22, 49]] as const)
@@ -231,8 +231,8 @@ export function addRoom(ms: MannequinScene): void {
   }
 
   // ── póster enmarcado ───────────────────────────────────────────────────────
-  add(boxM(58, 80, 2.5, std(C.black, 0.5)), 18, 236, BACK + 1.5, false);
-  add(plane(52, 73, std('#ffffff', 0.9, 0, { map: posterTex() })), 18, 236, BACK + 2.9, false);
+  add(boxM(58, 80, 2.5, std(C.black, 0.5)), 18, 224, BACK + 1.5, false);
+  add(plane(52, 73, std('#ffffff', 0.9, 0, { map: posterTex() })), 18, 224, BACK + 2.9, false);
 
   // ── estanterías flotantes con libros, trofeo, altavoz, foto y plantas ──────
   const shelfM = std(C.wood, 0.55);
@@ -243,7 +243,7 @@ export function addRoom(ms: MannequinScene): void {
     b.rotation.z = tilt;
   };
   [[C.blue, 22], [C.orange, 25], [C.green, 21], [C.red, 24], ['#F3F5F8', 20]].forEach(([col, h], i) => book(64 + i * 6, 152, h as number, col as string));
-  book(98, 152, 22, '#1E2633', -0.35);
+  book(95, 151, 22, '#1E2633', 0.38);
   // planta colgante en la balda de abajo
   const hang = add(new THREE.Mesh(new THREE.CylinderGeometry(6, 4.6, 10, 18), std('#F4F1EC', 0.5)), 118, 157, BACK + 9);
   for (let k = 0; k < 14; k++) {
@@ -310,7 +310,8 @@ export function addRoom(ms: MannequinScene): void {
   const bottle = add(new THREE.Mesh(new THREE.CylinderGeometry(3.2, 3.2, 20, 16), std(C.blue, 0.3)), -62, 10, BACK + 24);
   add(new THREE.Mesh(new THREE.CylinderGeometry(2.2, 2.2, 3, 12), std('#F7F7F4', 0.4)), 0, 11.5, 0, true, bottle);
   // soporte con mancuernas hexagonales (tres pares)
-  const rack = add(new THREE.Group(), 62, 0, BACK + 30);
+  const rack = add(new THREE.Group(), 66, 0, BACK + 34);
+  rack.scale.setScalar(1.3);
   const steel = std(C.black, 0.4, 0.5);
   for (const sx of [-26, 26]) {
     for (const [y, z] of [[13, 6], [29, -6]] as const) { const arm = boxM(2, 2, 18, steel); arm.position.set(sx, y, z); rack.add(arm); }
@@ -358,10 +359,10 @@ export function addRoom(ms: MannequinScene): void {
 
   // ── sombras de contacto ────────────────────────────────────────────────────
   blob(-96, BACK + 40, 36, 30); blob(-78, BACK + 30, 28, 24); blob(-62, BACK + 24, 12, 12);
-  blob(-118, BACK + 22, 80, 26); blob(62, BACK + 30, 74, 40); blob(98, BACK + 80, 62, 46);
+  blob(-118, BACK + 22, 80, 26); blob(66, BACK + 34, 96, 50); blob(98, BACK + 80, 62, 46);
   blob(142, BACK + 20, 46, 46); blob(0, BACK + 4, 1400, 14, 0.7);
   wallBlob(92, 143, 80, 14); wallBlob(92, 198, 80, 14); wallBlob(WX, WY - WH / 2 - 14, WW + 30, 14, 0.4);
-  wallBlob(18, 232, 66, 90, 0.25); wallBlob(92, 259, 34, 34, 0.25);
+  wallBlob(18, 220, 66, 90, 0.25); wallBlob(92, 259, 34, 34, 0.25);
 
   // ── luces: cálida desde la ventana y un poco de luz de techo ───────────────
   const win = new THREE.PointLight(0xffe7c4, 0.35, 700, 0);
