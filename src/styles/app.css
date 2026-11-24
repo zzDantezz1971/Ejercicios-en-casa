@@ -1919,3 +1919,9 @@ html[data-font="large"] { font-size: 112.5%; }
 .maker-sec .sec-rounds.tv-rounds { margin-left: auto; }
 .wd-music { background: color-mix(in srgb, var(--accent) 16%, transparent); color: var(--accent); }
 .wd-music .ico { animation: none; }
+/* «¿Quieres música?»: un botón por app de música instalada, con su icono */
+.music-apps { display: flex; flex-direction: column; gap: 8px; }
+.music-apps:empty { display: none; }
+.music-app { justify-content: flex-start; gap: 12px; }
+.music-app:not(.primary) { background: var(--surface); color: var(--fg); border: 1px solid var(--line); }
+.music-icon { width: 28px; height: 28px; border-radius: 7px; flex: none; }

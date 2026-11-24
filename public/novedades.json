@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-24T09:07:48Z",
+    "es": "«¿Quieres música?» (app Android): un botón por cada app de música que tengas instalada (Spotify, YouTube Music, Amazon Music…), con su icono. La que elijas sale la primera la próxima vez y es la que abre el botón de música del entrenamiento.",
+    "ca": "«Vols música?» (app Android): un botó per cada app de música que tinguis instal·lada (Spotify, YouTube Music, Amazon Music…), amb la seva icona. La que triïs surt la primera la propera vegada i és la que obre el botó de música de l’entrenament.",
+    "en": "“Want some music?” (Android app): one button for each music app you have installed (Spotify, YouTube Music, Amazon Music…), with its icon. The one you choose comes first next time and is the one the music button opens during the workout."
+  },
+  {
     "fecha": "2026-11-24T09:00:02Z",
     "es": "Al empezar, después del reloj: «¿Quieres música?». Abre Spotify (o tu app de música) y el entrenamiento empieza cuando vuelves a Kasa Fit; o empieza sin música. Con «No volver a preguntar» no sale más (se cambia en Ajustes › Avisos). El botón de música del entrenamiento sigue estando.",
     "ca": "En començar, després del rellotge: «Vols música?». Obre Spotify (o la teva app de música) i l’entrenament comença quan tornes a Kasa Fit; o comença sense música. Amb «No ho tornis a preguntar» ja no surt (es canvia a Configuració › Avisos). El botó de música de l’entrenament hi continua sent.",

@@ -6,7 +6,11 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.util.Base64;
 import android.media.AudioAttributes;
 import android.media.AudioFocusRequest;
 import android.media.AudioManager;
@@ -29,10 +33,13 @@ import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Locale;
 
 /**
@@ -171,6 +178,79 @@ public class KasaNativePlugin extends Plugin {
         } catch (ActivityNotFoundException e) {
             r.put("opened", false);
         }
+        call.resolve(r);
+    }
+
+    /** Apps de música conocidas (por si no ofrecen el servicio de reproducción que se busca). */
+    private static final String[] KNOWN_MUSIC = { SPOTIFY, "com.google.android.apps.youtube.music", "com.amazon.mp3", "deezer.android.app",
+        "com.apple.android.music", "com.aspiro.tidal", "com.soundcloud.android", "com.sec.android.app.music" };
+
+    /**
+     * Apps de música instaladas: las que reproducen música para otras (servicio MediaBrowserService), la de música
+     * del sistema y las conocidas. Solo las que se pueden abrir. Para cada una: paquete, nombre e icono (PNG pequeño).
+     */
+    @PluginMethod
+    public void musicApps(PluginCall call) {
+        PackageManager pm = getContext().getPackageManager();
+        Map<String, Boolean> pkgs = new LinkedHashMap<>();
+        for (String k : KNOWN_MUSIC) pkgs.put(k, true);
+        try {
+            for (ResolveInfo ri : pm.queryIntentServices(new Intent("android.media.browse.MediaBrowserService"), 0))
+                if (ri.serviceInfo != null) pkgs.put(ri.serviceInfo.packageName, true);
+        } catch (RuntimeException ignored) { }
+        try {
+            for (ResolveInfo ri : pm.queryIntentActivities(Intent.makeMainSelectorActivity(Intent.ACTION_MAIN, Intent.CATEGORY_APP_MUSIC), 0))
+                if (ri.activityInfo != null) pkgs.put(ri.activityInfo.packageName, true);
+        } catch (RuntimeException ignored) { }
+        JSArray out = new JSArray();
+        String self = getContext().getPackageName();
+        for (String pkg : pkgs.keySet()) {
+            if (pkg.equals(self)) continue;
+            Intent launch = pm.getLaunchIntentForPackage(pkg);
+            if (launch == null) continue;
+            try {
+                CharSequence label = pm.getApplicationLabel(pm.getApplicationInfo(pkg, 0));
+                JSObject o = new JSObject();
+                o.put("package", pkg);
+                o.put("label", label == null ? pkg : label.toString());
+                String ic = iconPng(pm.getApplicationIcon(pkg));
+                if (ic != null) o.put("icon", ic);
+                out.put(o);
+            } catch (PackageManager.NameNotFoundException ignored) { }
+        }
+        JSObject r = new JSObject();
+        r.put("apps", out);
+        call.resolve(r);
+    }
+
+    /** Icono de una app como PNG pequeño (data URL), para ponerlo en el botón. */
+    private static String iconPng(Drawable d) {
+        try {
+            int size = 72;
+            Bitmap b = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
+            Canvas c = new Canvas(b);
+            d.setBounds(0, 0, size, size);
+            d.draw(c);
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            b.compress(Bitmap.CompressFormat.PNG, 100, bos);
+            return "data:image/png;base64," + Base64.encodeToString(bos.toByteArray(), Base64.NO_WRAP);
+        } catch (RuntimeException e) {
+            return null;
+        }
+    }
+
+    /** Abre una app concreta (la de música elegida). */
+    @PluginMethod
+    public void openApp(PluginCall call) {
+        JSObject r = new JSObject();
+        String pkg = call.getString("package", "");
+        Intent i = pkg == null || pkg.isEmpty() ? null : getContext().getPackageManager().getLaunchIntentForPackage(pkg);
+        boolean ok = false;
+        if (i != null) {
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            try { getContext().startActivity(i); ok = true; } catch (ActivityNotFoundException ignored) { }
+        }
+        r.put("opened", ok);
         call.resolve(r);
     }
 

@@ -109,24 +109,46 @@ function musicDialog(app: App): Promise<void> {
       wrap.remove();
       resolve();
     };
-    const openBtn = h('button', { class: 'btn primary' }, icon('music'), 'Abrir la música');
-    // en la app: si está Spotify, el botón lo dice
-    if (IS_NATIVE) void KasaNative.musicApp().then(({ spotify }) => { if (spotify) openBtn.replaceChildren(icon('music'), 'Abrir Spotify'); }).catch(() => undefined);
-    openBtn.addEventListener('click', async () => {
-      app.haptics.tap();
-      // al volver a Kasa Fit (con la música ya puesta), empieza el entrenamiento
+    // al volver a Kasa Fit (con la música ya puesta), empieza el entrenamiento
+    const waitBack = () => {
       const back = () => {
         if (document.visibilityState !== 'visible') return;
         document.removeEventListener('visibilitychange', back);
         finish();
       };
       document.addEventListener('visibilitychange', back);
-      let opened = false;
-      if (IS_NATIVE) opened = (await KasaNative.openMusic().catch(() => ({ opened: false }))).opened;
-      if (!opened) opened = !!window.open('https://open.spotify.com/', '_blank', 'noopener');
-      if (!opened) { document.removeEventListener('visibilitychange', back); finish(); return; }
+      return () => document.removeEventListener('visibilitychange', back);
+    };
+    const opened = () => {
       status.hidden = false;
-    });
+      skipBtn.replaceWith(startNow);
+    };
+    // abre una app de música (paquete) o, sin ella, la de siempre (Spotify o la del sistema; en la web, Spotify)
+    const open = async (pkg?: string) => {
+      app.haptics.tap();
+      const stop = waitBack();
+      let ok = false;
+      if (IS_NATIVE && pkg) {
+        ok = (await KasaNative.openApp({ package: pkg }).catch(() => ({ opened: false }))).opened;
+        if (ok) app.store.saveSettings({ ...app.store.settings, musicApp: pkg });
+      }
+      if (!ok && IS_NATIVE) ok = (await KasaNative.openMusic().catch(() => ({ opened: false }))).opened;
+      if (!ok) ok = !!window.open('https://open.spotify.com/', '_blank', 'noopener');
+      if (!ok) { stop(); finish(); return; }
+      opened();
+    };
+    const openBtn = h('button', { class: 'btn primary', onclick: () => void open() }, icon('music'), 'Abrir la música');
+    // en la app: un botón por cada app de música instalada (la elegida la última vez, la primera)
+    const apps = h('div', { class: 'music-apps' });
+    if (IS_NATIVE) void KasaNative.musicApps().then(({ apps: list }) => {
+      if (!list.length) return;
+      const last = app.store.settings.musicApp;
+      const sorted = [...list].sort((x, y) => Number(y.package === last) - Number(x.package === last));
+      apps.replaceChildren(...sorted.slice(0, 5).map((m, i) => h('button', { class: 'btn music-app' + (i === 0 ? ' primary' : ''), onclick: () => void open(m.package) },
+        m.icon ? h('img', { class: 'music-icon', src: m.icon, alt: '' }) : icon('music'),
+        h('span', { 'data-no-tr': '' }, m.label))));
+      openBtn.remove();
+    }).catch(() => undefined);
     const skipBtn = h('button', { class: 'btn ghost', onclick: finish }, 'Empezar sin música');
     const status = h('p', { class: 'muted small', hidden: true }, 'Pon la música y vuelve a Kasa Fit: el entrenamiento empezará entonces.');
     const startNow = h('button', { class: 'btn ghost', onclick: finish }, icon('play'), 'Empezar ya');
@@ -137,10 +159,8 @@ function musicDialog(app: App): Promise<void> {
           h('h2', { id: 'music-title' }, '¿Quieres música?')),
         h('p', { class: 'muted small' }, 'Pon tu música antes de empezar: así no tendrás que parar el entrenamiento para elegirla.'),
         status,
-        h('div', { class: 'wd-actions' }, openBtn, skipBtn),
+        h('div', { class: 'wd-actions' }, apps, openBtn, skipBtn),
         h('label', { class: 'wd-never', for: 'music-never' }, never, 'No volver a preguntar (se puede cambiar en Ajustes)')));
-    // si ya se ha abierto la música, «Empezar sin música» pasa a «Empezar ya»
-    openBtn.addEventListener('click', () => skipBtn.replaceWith(startNow));
     document.body.append(wrap);
     openBtn.focus();
   });

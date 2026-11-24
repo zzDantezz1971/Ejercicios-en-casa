@@ -229,6 +229,8 @@ export interface Settings {
   askWatch: boolean;
   /** Al empezar, preguntar si quieres música (abrir Spotify o la app de música). */
   askMusic: boolean;
+  /** App Android: la app de música elegida la última vez (paquete), para ponerla la primera y abrirla con el botón de música. */
+  musicApp?: string;
   /** Datos personales para calcular las calorías. */
   /** Aspecto del muñeco (Configuración › Personaliza el muñeco). */
   look?: Partial<import('../figure/look').Look>;

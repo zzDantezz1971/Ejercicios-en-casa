@@ -21,6 +21,10 @@ export interface KasaNative {
   closeApp(): Promise<void>;
   /** Abre Spotify o, si no está, la app de música del móvil. */
   openMusic(): Promise<{ opened: boolean }>;
+  /** Apps de música instaladas (paquete, nombre e icono en PNG). */
+  musicApps(): Promise<{ apps: Array<{ package: string; label: string; icon?: string }> }>;
+  /** Abre una app concreta por su paquete. */
+  openApp(o: { package: string }): Promise<{ opened: boolean }>;
   /** Abre la pantalla del móvil para instalar voces (o los ajustes de texto a voz). */
   openVoiceInstall(o?: { store?: string }): Promise<{ opened: boolean }>;
 }

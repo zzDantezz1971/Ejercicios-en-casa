@@ -58,6 +58,9 @@ export class WorkoutScreen implements Screen {
     this.app.haptics.tap();
     if (this.session.status === 'running') this.session.pause();
     if (IS_NATIVE) {
+      // la app de música elegida en «¿Quieres música?»; si no hay (o no se abre), Spotify o la del sistema
+      const pkg = this.app.store.settings.musicApp;
+      if (pkg && (await KasaNative.openApp({ package: pkg }).catch(() => ({ opened: false }))).opened) return;
       const { opened } = await KasaNative.openMusic().catch(() => ({ opened: false }));
       if (opened) return;
     }
