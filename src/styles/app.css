@@ -1914,3 +1914,7 @@ html[data-font="large"] { font-size: 112.5%; }
 .tv-list .free-group { margin: 4px 0; }
 .free-pickrow.picking-off { opacity: .5; cursor: default; }
 .set-group-go .set-group-chev { transform: none; }
+/* vueltas del bloque entero, al lado de su nombre (vista de la tabla) */
+.tv-head .maker-sec { display: flex; align-items: center; width: 100%; }
+.tv-rounds { margin-left: auto; display: inline-flex; align-items: center; gap: 6px; font: 700 .95rem var(--display); letter-spacing: .04em; color: var(--sec); background: color-mix(in srgb, var(--sec) 15%, transparent); border-radius: 999px; padding: 5px 12px; }
+.tv-rounds .ico { width: 16px; height: 16px; }

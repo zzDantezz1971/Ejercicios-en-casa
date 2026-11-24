@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-24T00:18:51Z",
+    "es": "Contenido de la tabla: si un bloque entero se repite, sus vueltas («3 vueltas») salen al lado del nombre del bloque.",
+    "ca": "Contingut de la taula: si un bloc sencer es repeteix, les seves voltes («3 voltes») surten al costat del nom del bloc.",
+    "en": "Routine contents: if a whole block repeats, its rounds (“3 rounds”) appear next to the block name."
+  },
+  {
     "fecha": "2026-11-24T00:10:20Z",
     "es": "Resumen de tablas y bloques más claro: «22 ejercicios, con repeticiones 28 - Total 25 min» (sin repeticiones, «4 ejercicios - Total 3 min»). La etiqueta x2, x3… ya no sale en la información de los bloques.",
     "ca": "Resum de taules i blocs més clar: «22 exercicis, amb repeticions 28 - Total 25 min» (sense repeticions, «4 exercicis - Total 3 min»). L’etiqueta x2, x3… ja no surt a la informació dels blocs.",

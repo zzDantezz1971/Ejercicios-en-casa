@@ -1,4 +1,4 @@
-import { WorkoutPlan } from '../../domain/WorkoutPlan';
+import { clampRounds, WorkoutPlan } from '../../domain/WorkoutPlan';
 import { blockRuns, sectionOrder, SECTION_TITLES, type ExerciseDef, type FreeEntry, type SectionId } from '../../domain/types';
 import type { App, Screen } from '../App';
 import { h, humanDuration, kg } from '../dom';
@@ -78,8 +78,10 @@ export class TableViewScreen implements Screen {
       const st = SECTION_STYLE[s];
       const bp = WorkoutPlan.forSection(table.routine, s, app.catalog, app.store.settings, table.rounds ?? {});
       // título del apartado como en Editar (grande, con su color), con el resumen al lado
+      // si el bloque entero se repite, sus vueltas al lado del nombre (las de una serie van en su recuadro)
+      const R = clampRounds(table.rounds?.[s]);
       const head = h('div', { class: 'tv-head' },
-        h('h2', { class: 'maker-sec' }, icon(st.icon), SECTION_TITLES[s]),
+        h('h2', { class: 'maker-sec' }, icon(st.icon), SECTION_TITLES[s], R > 1 ? h('span', { class: 'tv-rounds' }, icon('swap'), `${R} vueltas`) : null),
         h('span', { class: 'muted small tv-meta' }, planText(bp)));
       head.style.setProperty('--sec', st.color);
       const need = neededEquip(app, { routine: table.routine, rounds: table.rounds ?? {} }, [s]);
