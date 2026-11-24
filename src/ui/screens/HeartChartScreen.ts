@@ -55,9 +55,11 @@ function heartChart(e: HistoryEntry, W: number, H: number): SVGSVGElement {
   const hr = e.heart!;
   const s = hr.samples;
   // segundo de cada muestra desde el inicio (los entrenamientos antiguos no lo guardaban: una cada 5 s)
-  const T = hr.times && hr.times.length === s.length ? hr.times : s.map((_b, i) => i * 5);
+  // (y no guardaban nada en las pausas): se reparten a lo largo de todo el entrenamiento, para que la línea llegue al final
   const start = Date.parse(e.date);
-  const total = Math.max(T[T.length - 1] ?? 0, e.durationSec + (e.pausedSec ?? 0), 60);
+  const span = e.durationSec + (e.pausedSec ?? 0);
+  const T = hr.times && hr.times.length === s.length ? hr.times : s.map((_b, i) => (s.length > 1 ? (i / (s.length - 1)) * span : 0));
+  const total = Math.max(T[T.length - 1] ?? 0, span, 60);
   const pad = { l: 40, r: 14, t: 30, b: 28 };
   // la escala, con las muestras de verdad (por si el mínimo o el máximo guardados no coinciden)
   const sMin = Math.min(...s), sMax = Math.max(...s);

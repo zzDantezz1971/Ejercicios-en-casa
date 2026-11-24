@@ -1,5 +1,11 @@
 [
   {
+    "fecha": "2026-11-24T11:45:24Z",
+    "es": "Gráfica del pulso en grande: en los entrenamientos anteriores la línea ya llega hasta la hora de fin (las horas de en medio son aproximadas; los cambios de bloque solo salen en los nuevos).",
+    "ca": "Gràfica del pols en gran: als entrenaments anteriors la línia ja arriba fins a l’hora de fi (les hores del mig són aproximades; els canvis de bloc només surten als nous).",
+    "en": "Large heart rate chart: in earlier workouts the line now reaches the end time (times in between are approximate; block changes only show in new workouts)."
+  },
+  {
     "fecha": "2026-11-24T11:40:11Z",
     "es": "Historial › entrenamiento: al tocar la gráfica del pulso se abre en grande y en horizontal, con la hora de inicio y de fin, las horas a lo largo, y una línea en cada cambio de bloque con su nombre. Tocando o arrastrando el dedo se ve la hora y las pulsaciones de cada momento. Las horas exactas y los cambios de bloque se guardan a partir de ahora.",
     "ca": "Historial › entrenament: en tocar la gràfica del pols s’obre en gran i en horitzontal, amb l’hora d’inici i de fi, les hores al llarg, i una línia a cada canvi de bloc amb el seu nom. Tocant o arrossegant el dit es veu l’hora i les pulsacions de cada moment. Les hores exactes i els canvis de bloc es desen a partir d’ara.",
