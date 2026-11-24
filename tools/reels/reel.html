@@ -20,11 +20,16 @@
   .end p { margin: 0; font: 600 28px/1.2 "Barlow", sans-serif; }
   .end .play { margin-top: 10px; background: #141414; color: #F0C85A; border-radius: 999px; padding: 14px 28px; font: 700 26px/1 "Barlow Condensed", sans-serif; text-transform: uppercase; letter-spacing: .03em; }
   .end::before { content: ""; position: absolute; inset: 38px 46px 46px; border: 6px solid #141414; border-radius: 20px; pointer-events: none; box-shadow: 0 10px 28px rgb(60 35 0 / .45), inset 0 6px 18px rgb(60 35 0 / .25); }
+  /* nombre del ejercicio que hace Fit: arriba (por defecto) o dentro de la barra (#stage.ex-bar) */
+  .exname { position: absolute; top: 14px; left: 50%; transform: translateX(-50%); white-space: nowrap; font: 700 20px/1 "Barlow Condensed", sans-serif; text-transform: uppercase; letter-spacing: .03em; color: #fff; background: rgb(27 33 48 / .82); padding: 7px 14px 6px 12px; border-radius: 999px; box-shadow: 0 4px 14px rgb(0 0 0 / .18); }
+  .exname::before { content: "▶"; color: #F2A516; font-size: 13px; margin-right: 7px; vertical-align: 2px; }
+  #stage.ex-bar .exname { top: auto; bottom: 112px; left: 24px; transform: none; }
 </style>
 </head>
 <body>
 <div id="stage">
   <canvas id="c"></canvas>
+  <div class="exname" id="exname"></div>
   <div class="brand" id="brand"><img src="/icon-192.png" alt="Kasa Fit" /><div class="cap" id="cap"><span class="l1" id="l1"></span><span class="l2" id="l2"></span></div></div>
   <div class="end" id="end" hidden><img src="/icon-512.png" alt="" /><h1>Kasa Fit</h1><p id="endText">Entrena a casa, en català.<br />Sense anuncis.</p><span class="play">Gratis a Google Play</span></div>
 </div>

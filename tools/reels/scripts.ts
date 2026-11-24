@@ -1,5 +1,6 @@
 /** Guiones de los reels: cada clip, un ejercicio del muñeco con su texto. ms = duración del clip. */
-export interface Clip { ex: string; ms: number; l1: string; l2?: string; start?: number; span?: number; az?: number }
+/** name: el nombre que se enseña del ejercicio (si no, el del catálogo en catalán). */
+export interface Clip { ex: string; name?: string; ms: number; l1: string; l2?: string; start?: number; span?: number; az?: number }
 /** poster: la frase motivadora del cuadro de la habitación (líneas separadas por «|»; la última, en azul). */
 export interface Reel { clips: Clip[]; endMs: number; poster?: string }
 
