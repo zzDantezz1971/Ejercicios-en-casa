@@ -14,7 +14,8 @@ import { REELS, type Clip } from './scripts';
 
 const reel = REELS[new URLSearchParams(location.search).get('r') ?? 'presentacio'];
 // muñeco de Kasa Fit: con pelo corto y la camiseta azul de la app
-setLook({ hair: 'short', shirt: '#2F5BEA', shorts: '#1E2633', shoe: '#F2A516' }, () => true);
+// el muñeco de estos primeros vídeos (el mismo que lleva David en la app)
+setLook({ skin: '#C68B62', shirt: '#2F5BEA', shorts: '#7A1F2B', shoe: '#E5484D', glasses: 'sun', beard: 'stubble', hair: 'none', top: 'tank', bottom: 'leggings' }, () => true);
 
 const canvas = document.getElementById('c') as HTMLCanvasElement;
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: true });
